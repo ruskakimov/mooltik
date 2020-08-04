@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
 class Painter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {}
+  Painter({this.dots});
+
+  final List<Offset> dots;
 
   @override
-  bool shouldRepaint(Painter oldDelegate) => false;
+  void paint(Canvas canvas, Size size) {
+    final dotPaint = Paint()..color = Colors.red;
+    dots.forEach((position) => canvas.drawCircle(position, 10, dotPaint));
+  }
+
+  @override
+  bool shouldRepaint(Painter oldDelegate) => true;
 
   @override
   bool shouldRebuildSemantics(Painter oldDelegate) => false;
