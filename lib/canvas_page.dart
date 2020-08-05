@@ -12,24 +12,31 @@ class CanvasPage extends StatefulWidget {
 }
 
 class _CanvasPageState extends State<CanvasPage> {
-  final contactPoints = <Offset>[];
+  final List<List<Offset>> lines = [];
 
   @override
   Widget build(BuildContext context) {
     return Listener(
-      onPointerDown: (e) => _addContactPoint(e.localPosition),
-      onPointerMove: (e) => _addContactPoint(e.localPosition),
+      onPointerDown: (e) => _startNewLine(e.localPosition),
+      onPointerMove: (e) => _extendLastLine(e.localPosition),
       child: CustomPaint(
         painter: Painter(
-          dots: contactPoints,
+          lines: lines,
         ),
       ),
     );
   }
 
-  void _addContactPoint(Offset position) {
+  void _startNewLine(Offset point) {
     setState(() {
-      contactPoints.add(position);
+      lines.add([point]);
+    });
+  }
+
+  void _extendLastLine(Offset point) {
+    if (lines.last == null) return;
+    setState(() {
+      lines.last.add(point);
     });
   }
 }

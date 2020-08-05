@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 
 class Painter extends CustomPainter {
-  Painter({this.dots});
+  Painter({this.lines});
 
-  final List<Offset> dots;
+  final List<List<Offset>> lines;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final p = Path();
+    lines.forEach((line) => _paintLine(canvas, line));
+  }
 
-    p.moveTo(dots.first.dx, dots.first.dy);
-
-    dots.forEach((pos) => p.lineTo(pos.dx, pos.dy));
-
+  void _paintLine(Canvas canvas, List<Offset> line) {
+    final path = Path();
+    path.moveTo(line.first.dx, line.first.dy);
+    line.forEach((pos) => path.lineTo(pos.dx, pos.dy));
     canvas.drawPath(
-      p,
+      path,
       Paint()
         ..style = PaintingStyle.stroke
         ..color = Colors.red,
