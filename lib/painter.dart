@@ -7,8 +7,18 @@ class Painter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final dotPaint = Paint()..color = Colors.red;
-    dots.forEach((position) => canvas.drawCircle(position, 10, dotPaint));
+    final p = Path();
+
+    p.moveTo(dots.first.dx, dots.first.dy);
+
+    dots.forEach((pos) => p.lineTo(pos.dx, pos.dy));
+
+    canvas.drawPath(
+      p,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..color = Colors.red,
+    );
   }
 
   @override

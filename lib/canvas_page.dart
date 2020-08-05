@@ -17,8 +17,8 @@ class _CanvasPageState extends State<CanvasPage> {
   @override
   Widget build(BuildContext context) {
     return Listener(
-      onPointerDown: (e) => _addCircle(e.localPosition),
-      onPointerMove: (e) => _addCircle(e.localPosition),
+      onPointerDown: (e) => _addContactPoint(e.localPosition),
+      onPointerMove: (e) => _addContactPoint(e.localPosition),
       child: CustomPaint(
         painter: Painter(
           dots: contactPoints,
@@ -27,7 +27,7 @@ class _CanvasPageState extends State<CanvasPage> {
     );
   }
 
-  void _addCircle(Offset position) {
+  void _addContactPoint(Offset position) {
     setState(() {
       contactPoints.add(position);
     });
