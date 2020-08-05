@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'renderable.dart';
 
 class Line extends Renderable {
-  Line(this.points);
+  Line.fromStartPoint(Offset startPoint) : points = [startPoint];
 
   final List<Offset> points;
 
