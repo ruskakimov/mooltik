@@ -5,26 +5,33 @@ import 'package:flutter/material.dart';
 import 'renderable.dart';
 
 class Line extends Renderable {
-  Line.fromStartPoint(Offset startPoint) : points = [startPoint];
+  Line({
+    @required List<Offset> points,
+    @required double width,
+    @required Color color,
+  })  : _points = points,
+        _paint = Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = width
+          ..color = color;
 
-  final List<Offset> points;
+  final List<Offset> _points;
+  final Paint _paint;
 
-  void append(Offset point) {
-    points.add(point);
+  void add(Offset point) {
+    _points.add(point);
   }
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (points.isEmpty) return;
+    if (_points.isEmpty) return;
 
     final path = Path();
-    path.moveTo(points.first.dx, points.first.dy);
-    points.forEach((pos) => path.lineTo(pos.dx, pos.dy));
+    path.moveTo(_points.first.dx, _points.first.dy);
+    _points.forEach((pos) => path.lineTo(pos.dx, pos.dy));
     canvas.drawPath(
       path,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..color = Colors.red,
+      _paint,
     );
   }
 }

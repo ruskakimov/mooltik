@@ -30,14 +30,18 @@ class _CanvasPageState extends State<CanvasPage> {
 
   void _startNewLine(Offset point) {
     setState(() {
-      lines.add(Line.fromStartPoint(point));
+      lines.add(Line(
+        points: [point],
+        width: 2,
+        color: Colors.white,
+      ));
     });
   }
 
   void _extendLastLine(Offset point) {
     if (lines.last == null) return;
     setState(() {
-      lines.last.append(point);
+      lines.last.add(point);
     });
   }
 }
