@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'painter.dart';
-import 'renderables/line.dart';
 
 class CanvasPage extends StatefulWidget {
   const CanvasPage({
@@ -13,35 +12,22 @@ class CanvasPage extends StatefulWidget {
 }
 
 class _CanvasPageState extends State<CanvasPage> {
-  final List<Line> lines = [];
-
   @override
   Widget build(BuildContext context) {
     return Listener(
-      onPointerDown: (e) => _startNewLine(e.localPosition),
-      onPointerMove: (e) => _extendLastLine(e.localPosition),
+      onPointerDown: (e) => _handleMoveTo(e.localPosition),
+      onPointerMove: (e) => _handleDragTo(e.localPosition),
       child: CustomPaint(
-        painter: Painter(
-          lines: lines,
-        ),
+        painter: Painter(),
       ),
     );
   }
 
-  void _startNewLine(Offset point) {
-    setState(() {
-      lines.add(Line(
-        points: [point],
-        width: 2,
-        color: Colors.white,
-      ));
-    });
+  void _handleMoveTo(Offset point) {
+    print(point);
   }
 
-  void _extendLastLine(Offset point) {
-    if (lines.last == null) return;
-    setState(() {
-      lines.last.add(point);
-    });
+  void _handleDragTo(Offset point) {
+    print(point);
   }
 }
