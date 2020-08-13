@@ -11,7 +11,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Record painting',
-      home: CanvasPage(),
+      home: SafeArea(child: CanvasPage()),
     );
   }
 }
