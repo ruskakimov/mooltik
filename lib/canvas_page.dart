@@ -13,6 +13,7 @@ class CanvasPage extends StatefulWidget {
 }
 
 class _CanvasPageState extends State<CanvasPage> {
+  bool isRecording = true;
   final List<Instruction> instructions = [];
   int playIndex = 0;
   Duration lastTimestamp;
@@ -36,7 +37,7 @@ class _CanvasPageState extends State<CanvasPage> {
     return Column(
       children: <Widget>[
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             RaisedButton(
               child: Text('Play'),
@@ -44,17 +45,28 @@ class _CanvasPageState extends State<CanvasPage> {
                 playIndex = 0;
                 play();
               },
-            )
+            ),
+            RaisedButton(
+              child: Text('Record'),
+              color: isRecording ? Colors.red : null,
+              onPressed: () {
+                setState(() {
+                  isRecording = !isRecording;
+                });
+              },
+            ),
           ],
         ),
         Expanded(
           child: Listener(
             onPointerDown: (PointerDownEvent e) {
+              if (!isRecording) return;
               setState(() {
                 instructions.add(TeleportTo(e.localPosition));
               });
             },
             onPointerMove: (PointerMoveEvent e) {
+              if (!isRecording) return;
               final delay = e.timeStamp - (lastTimestamp ?? e.timeStamp);
               setState(() {
                 instructions.add(DragTo(e.localPosition, delay));
@@ -63,7 +75,7 @@ class _CanvasPageState extends State<CanvasPage> {
             },
             child: CustomPaint(
               size: Size.infinite,
-              painter: Painter(playIndex == 0
+              painter: Painter(isRecording
                   ? instructions
                   : instructions.sublist(0, playIndex)),
             ),
