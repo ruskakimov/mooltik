@@ -63,17 +63,21 @@ class _CanvasPageState extends State<CanvasPage> {
           child: Listener(
             onPointerDown: (PointerDownEvent e) {
               if (!isRecording) return;
+
               setState(() {
                 instructions.add(TeleportTo(e.localPosition));
+                lastTimestamp = e.timeStamp;
               });
             },
             onPointerMove: (PointerMoveEvent e) {
               if (!isRecording) return;
-              final delay = e.timeStamp - (lastTimestamp ?? e.timeStamp);
+
+              final delay = e.timeStamp - lastTimestamp;
+              lastTimestamp = e.timeStamp;
+
               setState(() {
                 instructions.add(DragTo(e.localPosition, delay));
               });
-              lastTimestamp = e.timeStamp;
             },
             child: CustomPaint(
               size: Size.infinite,
