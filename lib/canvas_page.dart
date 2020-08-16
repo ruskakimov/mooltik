@@ -41,10 +41,12 @@ class _CanvasPageState extends State<CanvasPage> {
           children: <Widget>[
             RaisedButton(
               child: Text('Play'),
-              onPressed: () {
-                playIndex = 0;
-                play();
-              },
+              onPressed: !isRecording
+                  ? () {
+                      playIndex = 0;
+                      play();
+                    }
+                  : null,
             ),
             RaisedButton(
               child: Text('Record'),
