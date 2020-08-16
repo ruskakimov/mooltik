@@ -13,7 +13,7 @@ class CanvasPage extends StatefulWidget {
 }
 
 class _CanvasPageState extends State<CanvasPage> {
-  bool isRecording = true;
+  bool isRecording = false;
   final List<Instruction> instructions = [];
   int playIndex = 0;
   Duration lastTimestamp;
