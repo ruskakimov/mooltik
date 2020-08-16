@@ -54,6 +54,7 @@ class _CanvasPageState extends State<CanvasPage> {
               onPressed: () {
                 setState(() {
                   isRecording = !isRecording;
+                  if (!isRecording) playIndex = instructions.length;
                 });
               },
             ),
