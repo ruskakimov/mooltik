@@ -43,29 +43,10 @@ class _CanvasPageState extends State<CanvasPage> {
     return Column(
       children: <Widget>[
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            RaisedButton(
-              child: Text('Play'),
-              onPressed: !isRecording
-                  ? () {
-                      if (isPlaying) return;
-                      isPlaying = true;
-                      playIndex = 0;
-                      play();
-                    }
-                  : null,
-            ),
-            RaisedButton(
-              child: Text('Record'),
-              color: isRecording ? Colors.red : null,
-              onPressed: () {
-                setState(() {
-                  isRecording = !isRecording;
-                  if (!isRecording) playIndex = instructions.length;
-                });
-              },
-            ),
+            if (!isRecording) _buildPlayButton(),
+            Spacer(),
+            _buildRecordButton(),
           ],
         ),
         Expanded(
@@ -97,6 +78,31 @@ class _CanvasPageState extends State<CanvasPage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildRecordButton() {
+    return RaisedButton(
+      child: Text('Record'),
+      color: isRecording ? Colors.red : null,
+      onPressed: () {
+        setState(() {
+          isRecording = !isRecording;
+          if (!isRecording) playIndex = instructions.length;
+        });
+      },
+    );
+  }
+
+  Widget _buildPlayButton() {
+    return RaisedButton(
+      child: Text('Play'),
+      onPressed: () {
+        if (isPlaying) return;
+        isPlaying = true;
+        playIndex = 0;
+        play();
+      },
     );
   }
 }
