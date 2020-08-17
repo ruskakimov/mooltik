@@ -15,11 +15,17 @@ class CanvasPage extends StatefulWidget {
 class _CanvasPageState extends State<CanvasPage> {
   bool isRecording = false;
   final List<Instruction> instructions = [];
-  int playIndex = 0;
   Duration lastTimestamp;
 
+  // Player state.
+  int playIndex = 0;
+  bool isPlaying = false;
+
   void play() {
-    if (playIndex >= instructions.length) return;
+    if (playIndex >= instructions.length) {
+      isPlaying = false;
+      return;
+    }
     final instruction = instructions[playIndex];
     setState(() {
       playIndex++;
@@ -43,6 +49,8 @@ class _CanvasPageState extends State<CanvasPage> {
               child: Text('Play'),
               onPressed: !isRecording
                   ? () {
+                      if (isPlaying) return;
+                      isPlaying = true;
                       playIndex = 0;
                       play();
                     }
