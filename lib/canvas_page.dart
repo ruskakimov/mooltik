@@ -23,7 +23,9 @@ class _CanvasPageState extends State<CanvasPage> {
 
   void play() {
     if (!isPlaying || playIndex >= instructions.length) {
-      isPlaying = false;
+      setState(() {
+        isPlaying = false;
+      });
       return;
     }
     final instruction = instructions[playIndex];
