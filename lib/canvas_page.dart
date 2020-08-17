@@ -107,7 +107,7 @@ class _CanvasPageState extends State<CanvasPage> {
         } else {
           setState(() {
             isPlaying = true;
-            playIndex = 0;
+            if (playIndex == instructions.length) playIndex = 0;
           });
           play();
         }
