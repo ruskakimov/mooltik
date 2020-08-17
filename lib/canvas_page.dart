@@ -22,7 +22,7 @@ class _CanvasPageState extends State<CanvasPage> {
   bool isPlaying = false;
 
   void play() {
-    if (playIndex >= instructions.length) {
+    if (!isPlaying || playIndex >= instructions.length) {
       isPlaying = false;
       return;
     }
@@ -96,12 +96,19 @@ class _CanvasPageState extends State<CanvasPage> {
 
   Widget _buildPlayButton() {
     return RaisedButton(
-      child: Text('Play'),
+      child: Text(isPlaying ? 'Pause' : 'Play'),
       onPressed: () {
-        if (isPlaying) return;
-        isPlaying = true;
-        playIndex = 0;
-        play();
+        if (isPlaying) {
+          setState(() {
+            isPlaying = false;
+          });
+        } else {
+          setState(() {
+            isPlaying = true;
+            playIndex = 0;
+          });
+          play();
+        }
       },
     );
   }
