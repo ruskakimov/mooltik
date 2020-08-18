@@ -46,12 +46,15 @@ class _CanvasPageState extends State<CanvasPage> {
       children: <Widget>[
         Row(
           children: <Widget>[
+            SizedBox(width: 16),
             if (!isRecording) _buildPlayButton(),
+            SizedBox(width: 16),
             Text('${instructions.length}'),
             Spacer(),
             _buildClearButton(),
             SizedBox(width: 16),
             _buildRecordButton(),
+            SizedBox(width: 16),
           ],
         ),
         Expanded(
