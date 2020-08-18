@@ -20,7 +20,7 @@ class Painter extends CustomPainter {
     canvas.drawPath(
       path,
       Paint()
-        ..color = Colors.white
+        ..color = Colors.black
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2,
     );
