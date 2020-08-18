@@ -49,7 +49,7 @@ class _CanvasPageState extends State<CanvasPage> {
             SizedBox(width: 16),
             if (!isRecording) _buildPlayButton(),
             SizedBox(width: 16),
-            Text('${instructions.length}'),
+            Text('${instructions.length * 24 / 1000} KB'),
             Spacer(),
             _buildClearButton(),
             SizedBox(width: 16),
