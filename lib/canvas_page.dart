@@ -47,6 +47,7 @@ class _CanvasPageState extends State<CanvasPage> {
         Row(
           children: <Widget>[
             if (!isRecording) _buildPlayButton(),
+            Text('${instructions.length}'),
             Spacer(),
             _buildClearButton(),
             SizedBox(width: 16),
