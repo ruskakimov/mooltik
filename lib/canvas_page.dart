@@ -48,6 +48,8 @@ class _CanvasPageState extends State<CanvasPage> {
           children: <Widget>[
             if (!isRecording) _buildPlayButton(),
             Spacer(),
+            _buildClearButton(),
+            SizedBox(width: 16),
             _buildRecordButton(),
           ],
         ),
@@ -111,6 +113,18 @@ class _CanvasPageState extends State<CanvasPage> {
           });
           play();
         }
+      },
+    );
+  }
+
+  Widget _buildClearButton() {
+    return RaisedButton(
+      child: Text('Clear'),
+      onPressed: () {
+        setState(() {
+          instructions.clear();
+          playIndex = 0;
+        });
       },
     );
   }
