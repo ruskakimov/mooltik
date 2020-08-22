@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'painter.dart';
 import 'stroke.dart';
 
-class CanvasPage extends StatefulWidget {
-  CanvasPage({Key key}) : super(key: key);
+class EditorPage extends StatefulWidget {
+  EditorPage({Key key}) : super(key: key);
 
   @override
-  _CanvasPageState createState() => _CanvasPageState();
+  _EditorPageState createState() => _EditorPageState();
 }
 
-class _CanvasPageState extends State<CanvasPage> {
+class _EditorPageState extends State<EditorPage> {
   final List<Stroke> strokes = [];
 
   @override
