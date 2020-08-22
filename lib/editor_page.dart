@@ -32,7 +32,7 @@ class _EditorPageState extends State<EditorPage> {
 
   Row _buildThumbnails() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         for (var i = 0; i < _frames.length; i++) _buildThumbnail(i),
       ],
@@ -40,19 +40,28 @@ class _EditorPageState extends State<EditorPage> {
   }
 
   Widget _buildThumbnail(int frameIndex) {
-    return Material(
-      elevation: 2,
-      color: Colors.white,
-      child: InkWell(
-        child: CustomPaint(
-          size: Size(60, 60),
-          painter: FramePainter(_frames[frameIndex]),
+    final isSelected = frameIndex == _frameIndex;
+
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 150),
+      margin: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
+      foregroundDecoration: BoxDecoration(
+        border: isSelected ? Border.all(color: Colors.red, width: 3) : null,
+      ),
+      child: Material(
+        elevation: 2,
+        color: Colors.white,
+        child: InkWell(
+          child: CustomPaint(
+            size: Size(60, 60),
+            painter: FramePainter(_frames[frameIndex]),
+          ),
+          onTap: () {
+            setState(() {
+              _frameIndex = frameIndex;
+            });
+          },
         ),
-        onTap: () {
-          setState(() {
-            _frameIndex = frameIndex;
-          });
-        },
       ),
     );
   }
