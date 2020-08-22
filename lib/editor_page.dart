@@ -56,6 +56,7 @@ class _EditorPageState extends State<EditorPage>
               onPressed: () {
                 if (_controller.isAnimating) {
                   _controller.stop();
+                  setState(() {});
                 } else {
                   _controller.forward(from: _selectedFrameIndex.toDouble());
                 }
