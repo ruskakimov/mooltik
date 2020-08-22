@@ -14,6 +14,15 @@ class _CanvasPageState extends State<CanvasPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFDDDDDD),
+      body: Center(
+        child: CustomPaint(
+          child: Container(
+            color: Colors.white,
+            height: 250,
+            width: 250,
+          ),
+        ),
+      ),
     );
   }
 }
