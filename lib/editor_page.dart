@@ -40,16 +40,20 @@ class _EditorPageState extends State<EditorPage> {
   }
 
   Widget _buildThumbnail(int frameIndex) {
-    return RaisedButton(
-      child: CustomPaint(
-        size: Size(50, 50),
-        painter: FramePainter(_frames[frameIndex]),
+    return Material(
+      elevation: 2,
+      color: Colors.white,
+      child: InkWell(
+        child: CustomPaint(
+          size: Size(60, 60),
+          painter: FramePainter(_frames[frameIndex]),
+        ),
+        onTap: () {
+          setState(() {
+            _frameIndex = frameIndex;
+          });
+        },
       ),
-      onPressed: () {
-        setState(() {
-          _frameIndex = frameIndex;
-        });
-      },
     );
   }
 }
