@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:record_painting/frame_canvas.dart';
+
+import 'frame_canvas.dart';
 
 class EditorPage extends StatelessWidget {
   const EditorPage({Key key}) : super(key: key);
