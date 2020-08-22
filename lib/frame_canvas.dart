@@ -30,8 +30,8 @@ class _FrameCanvasState extends State<FrameCanvas> {
         foregroundPainter: FramePainter(widget.frame),
         child: Container(
           color: Colors.white,
-          height: 250,
-          width: 250,
+          height: widget.frame.height,
+          width: widget.frame.width,
         ),
       ),
     );
