@@ -11,23 +11,64 @@ class EditorPage extends StatefulWidget {
   _EditorPageState createState() => _EditorPageState();
 }
 
-class _EditorPageState extends State<EditorPage> {
-  final List<Frame> _frames = [Frame(), Frame()];
-  int _selectedFrameIndex = 0;
+class _EditorPageState extends State<EditorPage>
+    with SingleTickerProviderStateMixin {
+  List<Frame> _frames;
+  int _selectedFrameIndex;
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _frames = [Frame(), Frame()];
+    _selectedFrameIndex = 0;
+    _controller = AnimationController(
+      lowerBound: 0,
+      upperBound: _frames.length.toDouble(),
+      duration: Duration(milliseconds: 1000 ~/ 16), // 16 FPS
+      vsync: this,
+    );
+
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        setState(() {
+          _selectedFrameIndex = (_selectedFrameIndex + 1) % _frames.length;
+        });
+        _controller.reset();
+        _controller.forward();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFDDDDDD),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Center(
-              child: FrameCanvas(frame: _frames[_selectedFrameIndex]),
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 24),
+            FloatingActionButton(
+              backgroundColor: Colors.red,
+              child: Icon(
+                _controller.isAnimating ? Icons.pause : Icons.play_arrow,
+              ),
+              onPressed: () {
+                if (_controller.isAnimating) {
+                  _controller.stop();
+                } else {
+                  _controller.forward(from: _selectedFrameIndex.toDouble());
+                }
+              },
             ),
-          ),
-          _buildThumbnails(),
-        ],
+            Expanded(
+              child: Center(
+                child: FrameCanvas(frame: _frames[_selectedFrameIndex]),
+              ),
+            ),
+            _buildThumbnails(),
+          ],
+        ),
       ),
     );
   }
