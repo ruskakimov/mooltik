@@ -11,8 +11,8 @@ class EditorPage extends StatefulWidget {
 }
 
 class _EditorPageState extends State<EditorPage> {
-  final List<Frame> frames = [Frame(), Frame()];
-  int frameIndex = 0;
+  final List<Frame> _frames = [Frame(), Frame()];
+  int _frameIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class _EditorPageState extends State<EditorPage> {
       body: Column(
         children: <Widget>[
           Expanded(
-            child: Center(child: FrameCanvas(frame: frames[frameIndex])),
+            child: Center(child: FrameCanvas(frame: _frames[_frameIndex])),
           ),
           _buildThumbnails(),
         ],
@@ -32,17 +32,20 @@ class _EditorPageState extends State<EditorPage> {
   Row _buildThumbnails() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        for (var i = 0; i < frames.length; i++)
-          RaisedButton(
-            child: Text('${i + 1}'),
-            onPressed: () {
-              setState(() {
-                frameIndex = i;
-              });
-            },
-          )
+      children: <Widget>[
+        for (var i = 0; i < _frames.length; i++) _buildThumbnail(i),
       ],
+    );
+  }
+
+  RaisedButton _buildThumbnail(int frameIndex) {
+    return RaisedButton(
+      child: Text('${frameIndex + 1}'),
+      onPressed: () {
+        setState(() {
+          _frameIndex = frameIndex;
+        });
+      },
     );
   }
 }
