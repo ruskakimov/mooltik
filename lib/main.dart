@@ -12,7 +12,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Record painting',
       home: Scaffold(
-        body: SafeArea(child: CanvasPage()),
+        body: CanvasPage(),
       ),
     );
   }
