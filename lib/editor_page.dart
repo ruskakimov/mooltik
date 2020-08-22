@@ -45,7 +45,7 @@ class _EditorPageState extends State<EditorPage> {
     final isSelected = frameIndex == _selectedFrameIndex;
 
     return AnimatedContainer(
-      duration: Duration(milliseconds: 150),
+      duration: Duration(milliseconds: 100),
       margin: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
       foregroundDecoration: BoxDecoration(
         border: isSelected ? Border.all(color: Colors.red, width: 3) : null,
