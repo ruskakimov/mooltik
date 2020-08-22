@@ -26,14 +26,12 @@ class _FrameCanvasState extends State<FrameCanvas> {
           widget.frame.extendLastStroke(details.localPosition);
         });
       },
-      child: ClipRect(
-        child: CustomPaint(
-          foregroundPainter: FramePainter(widget.frame),
-          child: Container(
-            color: Colors.white,
-            height: 250,
-            width: 250,
-          ),
+      child: CustomPaint(
+        foregroundPainter: FramePainter(widget.frame),
+        child: Container(
+          color: Colors.white,
+          height: 250,
+          width: 250,
         ),
       ),
     );

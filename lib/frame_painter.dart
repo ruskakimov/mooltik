@@ -9,6 +9,9 @@ class FramePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    // Clip paint outside canvas.
+    canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
+
     frame.paint(canvas);
   }
 
