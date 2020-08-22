@@ -41,6 +41,13 @@ class _EditorPageState extends State<EditorPage>
     });
   }
 
+  void _updateFps(int newFps) {
+    setState(() {
+      _fps = (newFps).clamp(1, 16);
+    });
+    _controller.duration = Duration(milliseconds: 1000 ~/ _fps);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,12 +76,7 @@ class _EditorPageState extends State<EditorPage>
                 SizedBox(width: 32),
                 IconButton(
                   icon: Icon(Icons.remove),
-                  onPressed: () {
-                    setState(() {
-                      _fps = (_fps - 1).clamp(1, 16);
-                    });
-                    _controller.duration = Duration(milliseconds: 1000 ~/ _fps);
-                  },
+                  onPressed: () => _updateFps(_fps - 1),
                 ),
                 Text(
                   '$_fps',
@@ -85,12 +87,7 @@ class _EditorPageState extends State<EditorPage>
                 ),
                 IconButton(
                   icon: Icon(Icons.add),
-                  onPressed: () {
-                    setState(() {
-                      _fps = (_fps + 1).clamp(1, 16);
-                    });
-                    _controller.duration = Duration(milliseconds: 1000 ~/ _fps);
-                  },
+                  onPressed: () => _updateFps(_fps + 1),
                 ),
               ],
             ),
