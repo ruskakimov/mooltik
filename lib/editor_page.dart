@@ -67,21 +67,29 @@ class _EditorPageState extends State<EditorPage>
                   },
                 ),
                 SizedBox(width: 32),
-                DropdownButton<int>(
-                  value: _fps,
-                  items: [
-                    for (int i = 1; i <= 16; i++)
-                      DropdownMenuItem<int>(
-                        value: i,
-                        child: Text('$i FPS'),
-                      ),
-                  ],
-                  onChanged: (int newFps) {
-                    _controller.duration =
-                        Duration(milliseconds: 1000 ~/ newFps);
+                IconButton(
+                  icon: Icon(Icons.remove),
+                  onPressed: () {
                     setState(() {
-                      _fps = newFps;
+                      _fps = (_fps - 1).clamp(1, 16);
                     });
+                    _controller.duration = Duration(milliseconds: 1000 ~/ _fps);
+                  },
+                ),
+                Text(
+                  '$_fps',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    setState(() {
+                      _fps = (_fps + 1).clamp(1, 16);
+                    });
+                    _controller.duration = Duration(milliseconds: 1000 ~/ _fps);
                   },
                 ),
               ],
