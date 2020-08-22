@@ -12,6 +12,9 @@ class FramePainter extends CustomPainter {
     // Clip paint outside canvas.
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
 
+    // Scale image to fit given size.
+    canvas.scale(size.width / frame.width, size.height / frame.height);
+
     frame.paint(canvas);
   }
 

@@ -7,6 +7,10 @@ class Frame {
 
   final List<Stroke> _strokes;
 
+  double get width => 250;
+
+  double get height => 250;
+
   void startStroke(Offset startPoint) {
     _strokes.add(Stroke(startPoint));
   }

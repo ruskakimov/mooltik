@@ -1,3 +1,4 @@
+import 'package:animation_app/frame_painter.dart';
 import 'package:flutter/material.dart';
 
 import 'frame.dart';
@@ -38,9 +39,12 @@ class _EditorPageState extends State<EditorPage> {
     );
   }
 
-  RaisedButton _buildThumbnail(int frameIndex) {
+  Widget _buildThumbnail(int frameIndex) {
     return RaisedButton(
-      child: Text('${frameIndex + 1}'),
+      child: CustomPaint(
+        size: Size(50, 50),
+        painter: FramePainter(_frames[frameIndex]),
+      ),
       onPressed: () {
         setState(() {
           _frameIndex = frameIndex;
