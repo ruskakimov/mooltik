@@ -14,6 +14,7 @@ class EditorPage extends StatefulWidget {
 class _EditorPageState extends State<EditorPage>
     with SingleTickerProviderStateMixin {
   List<Frame> _frames;
+  int _fps = 16;
   int _selectedFrameIndex;
   AnimationController _controller;
 
@@ -25,7 +26,7 @@ class _EditorPageState extends State<EditorPage>
     _controller = AnimationController(
       lowerBound: 0,
       upperBound: _frames.length.toDouble(),
-      duration: Duration(milliseconds: 1000 ~/ 16), // 16 FPS
+      duration: Duration(milliseconds: 1000 ~/ _fps),
       vsync: this,
     );
 
@@ -48,19 +49,42 @@ class _EditorPageState extends State<EditorPage>
         child: Column(
           children: <Widget>[
             SizedBox(height: 24),
-            FloatingActionButton(
-              backgroundColor: Colors.red,
-              child: Icon(
-                _controller.isAnimating ? Icons.pause : Icons.play_arrow,
-              ),
-              onPressed: () {
-                if (_controller.isAnimating) {
-                  _controller.stop();
-                  setState(() {});
-                } else {
-                  _controller.forward(from: _selectedFrameIndex.toDouble());
-                }
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                FloatingActionButton(
+                  backgroundColor: Colors.red,
+                  child: Icon(
+                    _controller.isAnimating ? Icons.pause : Icons.play_arrow,
+                  ),
+                  onPressed: () {
+                    if (_controller.isAnimating) {
+                      _controller.stop();
+                      setState(() {});
+                    } else {
+                      _controller.forward(from: _selectedFrameIndex.toDouble());
+                    }
+                  },
+                ),
+                SizedBox(width: 32),
+                DropdownButton<int>(
+                  value: _fps,
+                  items: [
+                    for (int i = 1; i <= 16; i++)
+                      DropdownMenuItem<int>(
+                        value: i,
+                        child: Text('$i FPS'),
+                      ),
+                  ],
+                  onChanged: (int newFps) {
+                    _controller.duration =
+                        Duration(milliseconds: 1000 ~/ newFps);
+                    setState(() {
+                      _fps = newFps;
+                    });
+                  },
+                ),
+              ],
             ),
             Expanded(
               child: Center(
