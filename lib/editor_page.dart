@@ -13,7 +13,7 @@ class EditorPage extends StatefulWidget {
 
 class _EditorPageState extends State<EditorPage> {
   final List<Frame> _frames = [Frame(), Frame()];
-  int _frameIndex = 0;
+  int _selectedFrameIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,9 @@ class _EditorPageState extends State<EditorPage> {
       body: Column(
         children: <Widget>[
           Expanded(
-            child: Center(child: FrameCanvas(frame: _frames[_frameIndex])),
+            child: Center(
+              child: FrameCanvas(frame: _frames[_selectedFrameIndex]),
+            ),
           ),
           _buildThumbnails(),
         ],
@@ -40,7 +42,7 @@ class _EditorPageState extends State<EditorPage> {
   }
 
   Widget _buildThumbnail(int frameIndex) {
-    final isSelected = frameIndex == _frameIndex;
+    final isSelected = frameIndex == _selectedFrameIndex;
 
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
@@ -58,7 +60,7 @@ class _EditorPageState extends State<EditorPage> {
           ),
           onTap: () {
             setState(() {
-              _frameIndex = frameIndex;
+              _selectedFrameIndex = frameIndex;
             });
           },
         ),
