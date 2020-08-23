@@ -76,28 +76,6 @@ class _EditorPageState extends State<EditorPage>
     );
   }
 
-  Widget _buildFpsStepper() {
-    return Row(
-      children: <Widget>[
-        IconButton(
-          icon: Icon(Icons.remove),
-          onPressed: () => _updateFps(_fps - 1),
-        ),
-        Text(
-          '$_fps',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () => _updateFps(_fps + 1),
-        ),
-      ],
-    );
-  }
-
   Widget _buildPlayButton() {
     return FloatingActionButton(
       backgroundColor: Colors.red,
@@ -112,6 +90,33 @@ class _EditorPageState extends State<EditorPage>
           _controller.forward(from: _selectedFrameIndex.toDouble());
         }
       },
+    );
+  }
+
+  Widget _buildFpsStepper() {
+    return Row(
+      children: <Widget>[
+        IconButton(
+          icon: Icon(Icons.remove),
+          onPressed: () => _updateFps(_fps - 1),
+        ),
+        SizedBox(
+          width: 32,
+          child: Center(
+            child: Text(
+              '$_fps',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _updateFps(_fps + 1),
+        ),
+      ],
     );
   }
 
