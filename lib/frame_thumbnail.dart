@@ -19,7 +19,7 @@ class FrameThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 100),
-      margin: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 8),
       foregroundDecoration: BoxDecoration(
         border: isSelected ? Border.all(color: Colors.red, width: 3) : null,
       ),
