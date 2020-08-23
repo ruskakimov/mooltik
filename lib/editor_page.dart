@@ -56,15 +56,15 @@ class _EditorPageState extends State<EditorPage>
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
+            Center(
+              child: FrameCanvas(frame: _frames[_selectedFrameIndex]),
+            ),
             Positioned.fill(
               top: 24,
               child: Align(
                 alignment: Alignment.topCenter,
                 child: _buildPlayButton(),
               ),
-            ),
-            Center(
-              child: FrameCanvas(frame: _frames[_selectedFrameIndex]),
             ),
             Positioned(
               bottom: 24,
