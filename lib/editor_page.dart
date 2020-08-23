@@ -61,21 +61,7 @@ class _EditorPageState extends State<EditorPage>
               children: <Widget>[
                 _buildPlayButton(),
                 SizedBox(width: 32),
-                IconButton(
-                  icon: Icon(Icons.remove),
-                  onPressed: () => _updateFps(_fps - 1),
-                ),
-                Text(
-                  '$_fps',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () => _updateFps(_fps + 1),
-                ),
+                _buildFpsStepper(),
               ],
             ),
             Expanded(
@@ -87,6 +73,28 @@ class _EditorPageState extends State<EditorPage>
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildFpsStepper() {
+    return Row(
+      children: <Widget>[
+        IconButton(
+          icon: Icon(Icons.remove),
+          onPressed: () => _updateFps(_fps - 1),
+        ),
+        Text(
+          '$_fps',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _updateFps(_fps + 1),
+        ),
+      ],
     );
   }
 
