@@ -1,4 +1,4 @@
-import 'package:animation_app/frame_painter.dart';
+import 'package:animation_app/frame_thumbnail.dart';
 import 'package:flutter/material.dart';
 
 import 'frame.dart';
@@ -107,35 +107,17 @@ class _EditorPageState extends State<EditorPage>
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        for (var i = 0; i < _frames.length; i++) _buildThumbnail(i),
-      ],
-    );
-  }
-
-  Widget _buildThumbnail(int frameIndex) {
-    final isSelected = frameIndex == _selectedFrameIndex;
-
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 100),
-      margin: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
-      foregroundDecoration: BoxDecoration(
-        border: isSelected ? Border.all(color: Colors.red, width: 3) : null,
-      ),
-      child: Material(
-        elevation: 2,
-        color: Colors.white,
-        child: InkWell(
-          child: CustomPaint(
-            size: Size(60, 60),
-            painter: FramePainter(_frames[frameIndex]),
+        for (var i = 0; i < _frames.length; i++)
+          FrameThumbnail(
+            frame: _frames[i],
+            isSelected: i == _selectedFrameIndex,
+            onTap: () {
+              setState(() {
+                _selectedFrameIndex = i;
+              });
+            },
           ),
-          onTap: () {
-            setState(() {
-              _selectedFrameIndex = frameIndex;
-            });
-          },
-        ),
-      ),
+      ],
     );
   }
 }
