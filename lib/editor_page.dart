@@ -102,14 +102,17 @@ class _EditorPageState extends State<EditorPage>
         ),
         SizedBox(
           width: 32,
-          child: Center(
-            child: Text(
-              '$_fps',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+          child: Column(
+            children: <Widget>[
+              Text(
+                '$_fps',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
+              Text('fps'),
+            ],
           ),
         ),
         IconButton(
