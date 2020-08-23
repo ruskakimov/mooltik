@@ -56,29 +56,27 @@ class _EditorPageState extends State<EditorPage>
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
-            Positioned(
+            Positioned.fill(
               top: 24,
-              left: 0,
-              right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  _buildPlayButton(),
-                  SizedBox(width: 32),
-                  _buildFpsStepper(),
-                ],
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: _buildPlayButton(),
               ),
             ),
             Center(
               child: FrameCanvas(frame: _frames[_selectedFrameIndex]),
             ),
-            if (!_controller.isAnimating)
-              Positioned(
-                bottom: 24,
-                left: 0,
-                right: 0,
-                child: _buildThumbnails(),
+            Positioned(
+              bottom: 24,
+              left: 0,
+              right: 0,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: _controller.isAnimating
+                    ? _buildFpsStepper()
+                    : _buildThumbnails(),
               ),
+            ),
           ],
         ),
       ),
@@ -104,6 +102,7 @@ class _EditorPageState extends State<EditorPage>
 
   Widget _buildFpsStepper() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         IconButton(
           icon: Icon(Icons.remove),
