@@ -59,20 +59,7 @@ class _EditorPageState extends State<EditorPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                FloatingActionButton(
-                  backgroundColor: Colors.red,
-                  child: Icon(
-                    _controller.isAnimating ? Icons.pause : Icons.play_arrow,
-                  ),
-                  onPressed: () {
-                    if (_controller.isAnimating) {
-                      _controller.stop();
-                      setState(() {});
-                    } else {
-                      _controller.forward(from: _selectedFrameIndex.toDouble());
-                    }
-                  },
-                ),
+                _buildPlayButton(),
                 SizedBox(width: 32),
                 IconButton(
                   icon: Icon(Icons.remove),
@@ -103,7 +90,24 @@ class _EditorPageState extends State<EditorPage>
     );
   }
 
-  Row _buildThumbnails() {
+  Widget _buildPlayButton() {
+    return FloatingActionButton(
+      backgroundColor: Colors.red,
+      child: Icon(
+        _controller.isAnimating ? Icons.pause : Icons.play_arrow,
+      ),
+      onPressed: () {
+        if (_controller.isAnimating) {
+          _controller.stop();
+          setState(() {});
+        } else {
+          _controller.forward(from: _selectedFrameIndex.toDouble());
+        }
+      },
+    );
+  }
+
+  Widget _buildThumbnails() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
