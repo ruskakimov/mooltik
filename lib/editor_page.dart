@@ -53,23 +53,32 @@ class _EditorPageState extends State<EditorPage>
     return Scaffold(
       backgroundColor: Color(0xFFDDDDDD),
       body: SafeArea(
-        child: Column(
+        child: Stack(
+          fit: StackFit.expand,
           children: <Widget>[
-            SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _buildPlayButton(),
-                SizedBox(width: 32),
-                _buildFpsStepper(),
-              ],
-            ),
-            Expanded(
-              child: Center(
-                child: FrameCanvas(frame: _frames[_selectedFrameIndex]),
+            Positioned(
+              top: 24,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  _buildPlayButton(),
+                  SizedBox(width: 32),
+                  _buildFpsStepper(),
+                ],
               ),
             ),
-            _buildThumbnails(),
+            Center(
+              child: FrameCanvas(frame: _frames[_selectedFrameIndex]),
+            ),
+            if (!_controller.isAnimating)
+              Positioned(
+                bottom: 24,
+                left: 0,
+                right: 0,
+                child: _buildThumbnails(),
+              ),
           ],
         ),
       ),
