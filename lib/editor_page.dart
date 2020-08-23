@@ -18,6 +18,8 @@ class _EditorPageState extends State<EditorPage>
   int _selectedFrameIndex;
   AnimationController _controller;
 
+  Frame get selectedFrame => _frames[_selectedFrameIndex];
+
   @override
   void initState() {
     super.initState();
@@ -57,7 +59,7 @@ class _EditorPageState extends State<EditorPage>
           fit: StackFit.expand,
           children: <Widget>[
             Center(
-              child: FrameCanvas(frame: _frames[_selectedFrameIndex]),
+              child: FrameCanvas(frame: selectedFrame),
             ),
             Positioned(
               top: 24,
@@ -69,7 +71,7 @@ class _EditorPageState extends State<EditorPage>
                   IconButton(
                     icon: Icon(Icons.clear),
                     onPressed: () {
-                      _frames[_selectedFrameIndex].clear();
+                      selectedFrame.clear();
                     },
                   ),
                   _buildPlayButton(),
