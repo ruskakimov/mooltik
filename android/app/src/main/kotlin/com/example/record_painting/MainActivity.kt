@@ -1,4 +1,4 @@
-package com.example.record_painting
+package com.example.animation_app
 
 import io.flutter.embedding.android.FlutterActivity
 
