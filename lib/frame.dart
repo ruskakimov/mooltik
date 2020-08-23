@@ -19,6 +19,10 @@ class Frame {
     _strokes.last.extend(point);
   }
 
+  void clear() {
+    _strokes.clear();
+  }
+
   void paint(Canvas canvas) {
     for (var stroke in _strokes) stroke.paint(canvas);
   }

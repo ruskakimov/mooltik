@@ -59,11 +59,21 @@ class _EditorPageState extends State<EditorPage>
             Center(
               child: FrameCanvas(frame: _frames[_selectedFrameIndex]),
             ),
-            Positioned.fill(
+            Positioned(
               top: 24,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: _buildPlayButton(),
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.clear),
+                    onPressed: () {
+                      _frames[_selectedFrameIndex].clear();
+                    },
+                  ),
+                  _buildPlayButton(),
+                ],
               ),
             ),
             Positioned(
