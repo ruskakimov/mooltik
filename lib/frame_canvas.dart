@@ -24,7 +24,11 @@ class _FrameCanvasState extends State<FrameCanvas> {
     return GestureDetector(
       onPanStart: (DragStartDetails details) {
         setState(() {
-          widget.frame.startPencilStroke(details.localPosition);
+          if (widget.selectedTool == Tool.pencil) {
+            widget.frame.startPencilStroke(details.localPosition);
+          } else if (widget.selectedTool == Tool.eraser) {
+            widget.frame.startEraserStroke(details.localPosition);
+          }
         });
       },
       onPanUpdate: (DragUpdateDetails details) {
