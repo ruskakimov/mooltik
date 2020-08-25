@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'frame.dart';
 import 'frame_canvas.dart';
 import 'toolbar.dart';
+import 'tools.dart';
 
 class EditorPage extends StatefulWidget {
   const EditorPage({Key key}) : super(key: key);

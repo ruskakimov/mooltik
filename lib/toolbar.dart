@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum Tool {
-  pencil,
-  eraser,
-}
+import 'tools.dart';
 
 class ToolBar extends StatelessWidget {
   const ToolBar({
