@@ -28,8 +28,8 @@ class Frame {
       startPoint,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 2
-        ..color = Colors.red,
+        ..strokeWidth = 20
+        ..blendMode = BlendMode.clear,
     ));
   }
 
