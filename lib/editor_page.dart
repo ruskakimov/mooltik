@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'frame.dart';
 import 'frame_canvas.dart';
+import 'toolbar.dart';
 
 class EditorPage extends StatefulWidget {
   const EditorPage({Key key}) : super(key: key);
@@ -68,12 +69,7 @@ class _EditorPageState extends State<EditorPage>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.clear),
-                    onPressed: () {
-                      selectedFrame.clear();
-                    },
-                  ),
+                  ToolBar(),
                   _buildPlayButton(),
                 ],
               ),
