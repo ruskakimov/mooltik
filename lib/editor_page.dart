@@ -125,7 +125,7 @@ class _EditorPageState extends State<EditorPage>
       maxValue: 16,
       onChanged: (int newFps) {
         setState(() {
-          _fps = (newFps).clamp(1, 16);
+          _fps = newFps;
         });
         _controller.duration = Duration(milliseconds: 1000 ~/ _fps);
       },
