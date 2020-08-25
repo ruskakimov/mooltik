@@ -28,7 +28,7 @@ class ToolBar extends StatelessWidget {
         ),
         IconButton(
           icon: Icon(
-            Icons.clear,
+            Icons.brush,
             color: value == Tool.eraser ? Colors.black : Colors.grey,
           ),
           onPressed: () => onChanged(Tool.eraser),
