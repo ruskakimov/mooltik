@@ -18,7 +18,7 @@ class FramePainter extends CustomPainter {
     // Scale image to fit the given size.
     canvas.scale(size.width / frame.width, size.height / frame.height);
 
-    frame.paint(canvas);
+    frame.paintOn(canvas);
 
     // Flatten layer. Combine drawing lines with erasing lines.
     canvas.restore();

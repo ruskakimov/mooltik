@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 import 'stroke.dart';
 
 class Frame {
@@ -12,7 +14,23 @@ class Frame {
   double get height => 250;
 
   void startPencilStroke(Offset startPoint) {
-    _strokes.add(Stroke(startPoint));
+    _strokes.add(Stroke(
+      startPoint,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2
+        ..color = Colors.black,
+    ));
+  }
+
+  void startEraserStroke(Offset startPoint) {
+    _strokes.add(Stroke(
+      startPoint,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2
+        ..color = Colors.red,
+    ));
   }
 
   void extendLastStroke(Offset point) {
@@ -23,7 +41,7 @@ class Frame {
     _strokes.clear();
   }
 
-  void paint(Canvas canvas) {
-    for (var stroke in _strokes) stroke.paint(canvas);
+  void paintOn(Canvas canvas) {
+    for (var stroke in _strokes) stroke.paintOn(canvas);
   }
 }
