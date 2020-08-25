@@ -70,14 +70,7 @@ class _EditorPageState extends State<EditorPage>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  ToolBar(
-                    value: _selectedTool,
-                    onChanged: (tool) {
-                      setState(() {
-                        _selectedTool = tool;
-                      });
-                    },
-                  ),
+                  _buildToolBar(),
                   _buildPlayButton(),
                 ],
               ),
@@ -96,6 +89,17 @@ class _EditorPageState extends State<EditorPage>
           ],
         ),
       ),
+    );
+  }
+
+  ToolBar _buildToolBar() {
+    return ToolBar(
+      value: _selectedTool,
+      onChanged: (tool) {
+        setState(() {
+          _selectedTool = tool;
+        });
+      },
     );
   }
 
