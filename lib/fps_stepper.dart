@@ -21,7 +21,7 @@ class FpsStepper extends StatelessWidget {
       children: <Widget>[
         IconButton(
           icon: Icon(Icons.remove),
-          onPressed: () => onChanged((value - 1).clamp(minValue, maxValue)),
+          onPressed: value > minValue ? () => onChanged(value - 1) : null,
         ),
         SizedBox(
           width: 32,
@@ -40,7 +40,7 @@ class FpsStepper extends StatelessWidget {
         ),
         IconButton(
           icon: Icon(Icons.add),
-          onPressed: () => onChanged((value + 1).clamp(minValue, maxValue)),
+          onPressed: value < maxValue ? () => onChanged(value + 1) : null,
         ),
       ],
     );
