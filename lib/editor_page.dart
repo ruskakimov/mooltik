@@ -121,6 +121,8 @@ class _EditorPageState extends State<EditorPage>
   Widget _buildFpsStepper() {
     return FpsStepper(
       value: _fps,
+      minValue: 1,
+      maxValue: 16,
       onChanged: (int newFps) {
         setState(() {
           _fps = (newFps).clamp(1, 16);

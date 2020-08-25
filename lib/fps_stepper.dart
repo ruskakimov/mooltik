@@ -4,10 +4,14 @@ class FpsStepper extends StatelessWidget {
   const FpsStepper({
     Key key,
     @required this.value,
+    @required this.minValue,
+    @required this.maxValue,
     @required this.onChanged,
   }) : super(key: key);
 
   final int value;
+  final int minValue;
+  final int maxValue;
   final ValueChanged<int> onChanged;
 
   @override
