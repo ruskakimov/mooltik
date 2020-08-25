@@ -1,11 +1,11 @@
-import 'package:animation_app/fps_stepper.dart';
-import 'package:animation_app/frame_thumbnail.dart';
+import 'package:animation_app/editor/ui/fps_stepper.dart';
+import 'package:animation_app/editor/ui/frame_thumbnail.dart';
 import 'package:flutter/material.dart';
 
-import 'frame.dart';
-import 'frame_canvas.dart';
-import 'toolbar.dart';
-import 'tools.dart';
+import 'frame/frame.dart';
+import 'frame/frame_canvas.dart';
+import 'ui/toolbar.dart';
+import 'models/tools.dart';
 
 class EditorPage extends StatefulWidget {
   const EditorPage({Key key}) : super(key: key);

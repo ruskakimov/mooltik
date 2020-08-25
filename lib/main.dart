@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'editor_page.dart';
+import 'editor/editor_page.dart';
 
 void main() {
   runApp(App());

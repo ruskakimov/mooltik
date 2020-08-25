@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'frame.dart';
-import 'frame_painter.dart';
+import '../frame/frame.dart';
+import '../frame/frame_painter.dart';
 
 class FrameThumbnail extends StatelessWidget {
   const FrameThumbnail({
