@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum Tools {
+enum Tool {
   pencil,
   eraser,
 }
@@ -8,7 +8,10 @@ enum Tools {
 class ToolBar extends StatelessWidget {
   const ToolBar({
     Key key,
+    @required this.selectedTool,
   }) : super(key: key);
+
+  final Tool selectedTool;
 
   @override
   Widget build(BuildContext context) {
