@@ -8,20 +8,30 @@ enum Tool {
 class ToolBar extends StatelessWidget {
   const ToolBar({
     Key key,
-    @required this.selectedTool,
+    @required this.value,
+    @required this.onChanged,
   }) : super(key: key);
 
-  final Tool selectedTool;
+  final Tool value;
+  final ValueChanged<Tool> onChanged;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
         IconButton(
-          icon: Icon(Icons.edit),
+          icon: Icon(
+            Icons.edit,
+            color: value == Tool.pencil ? Colors.black : Colors.grey,
+          ),
+          onPressed: () => onChanged(Tool.pencil),
         ),
         IconButton(
-          icon: Icon(Icons.clear),
+          icon: Icon(
+            Icons.clear,
+            color: value == Tool.eraser ? Colors.black : Colors.grey,
+          ),
+          onPressed: () => onChanged(Tool.eraser),
         ),
       ],
     );

@@ -17,6 +17,7 @@ class _EditorPageState extends State<EditorPage>
   List<Frame> _frames;
   int _fps = 16;
   int _selectedFrameIndex;
+  Tool _selectedTool = Tool.pencil;
   AnimationController _controller;
 
   Frame get selectedFrame => _frames[_selectedFrameIndex];
@@ -69,7 +70,14 @@ class _EditorPageState extends State<EditorPage>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  ToolBar(),
+                  ToolBar(
+                    value: _selectedTool,
+                    onChanged: (tool) {
+                      setState(() {
+                        _selectedTool = tool;
+                      });
+                    },
+                  ),
                   _buildPlayButton(),
                 ],
               ),
