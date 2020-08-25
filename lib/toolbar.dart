@@ -7,8 +7,15 @@ class ToolBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.clear),
+    return Row(
+      children: <Widget>[
+        IconButton(
+          icon: Icon(Icons.edit),
+        ),
+        IconButton(
+          icon: Icon(Icons.clear),
+        ),
+      ],
     );
   }
 }
