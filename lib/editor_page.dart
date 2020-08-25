@@ -1,3 +1,4 @@
+import 'package:animation_app/fps_stepper.dart';
 import 'package:animation_app/frame_thumbnail.dart';
 import 'package:flutter/material.dart';
 
@@ -125,33 +126,9 @@ class _EditorPageState extends State<EditorPage>
   }
 
   Widget _buildFpsStepper() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        IconButton(
-          icon: Icon(Icons.remove),
-          onPressed: () => _updateFps(_fps - 1),
-        ),
-        SizedBox(
-          width: 32,
-          child: Column(
-            children: <Widget>[
-              Text(
-                '$_fps',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text('fps'),
-            ],
-          ),
-        ),
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () => _updateFps(_fps + 1),
-        ),
-      ],
+    return FpsStepper(
+      value: _fps,
+      onChanged: _updateFps,
     );
   }
 
