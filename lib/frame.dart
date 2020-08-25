@@ -11,7 +11,7 @@ class Frame {
 
   double get height => 250;
 
-  void startStroke(Offset startPoint) {
+  void startPaintingStroke(Offset startPoint) {
     _strokes.add(Stroke(startPoint));
   }
 
