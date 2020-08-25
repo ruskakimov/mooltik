@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 
 import 'frame.dart';
 import 'frame_painter.dart';
+import 'tools.dart';
 
 class FrameCanvas extends StatefulWidget {
-  FrameCanvas({Key key, @required this.frame}) : super(key: key);
+  FrameCanvas({
+    Key key,
+    @required this.frame,
+    @required this.selectedTool,
+  }) : super(key: key);
 
   final Frame frame;
+  final Tool selectedTool;
 
   @override
   _FrameCanvasState createState() => _FrameCanvasState();
