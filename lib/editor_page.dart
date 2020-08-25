@@ -47,13 +47,6 @@ class _EditorPageState extends State<EditorPage>
     });
   }
 
-  void _updateFps(int newFps) {
-    setState(() {
-      _fps = (newFps).clamp(1, 16);
-    });
-    _controller.duration = Duration(milliseconds: 1000 ~/ _fps);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,7 +121,12 @@ class _EditorPageState extends State<EditorPage>
   Widget _buildFpsStepper() {
     return FpsStepper(
       value: _fps,
-      onChanged: _updateFps,
+      onChanged: (int newFps) {
+        setState(() {
+          _fps = (newFps).clamp(1, 16);
+        });
+        _controller.duration = Duration(milliseconds: 1000 ~/ _fps);
+      },
     );
   }
 
