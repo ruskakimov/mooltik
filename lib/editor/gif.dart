@@ -4,20 +4,36 @@ import 'package:image/image.dart';
 
 import 'frame/frame.dart';
 
-List<int> makeGif(List<Frame> frames, int fps) {
+Future<List<int>> makeGif(List<Frame> frames, int fps) async {
   if (frames.isEmpty) {
     throw ArgumentError.value(frames, 'frames', 'should not be empty');
   }
 
   final encoder = GifEncoder(delay: 1000 ~/ fps);
 
-  frames.forEach((frame) => encoder.addFrame(imageFromFrame(frame)));
+  for (final frame in frames) {
+    final img = await imageFromFrame(frame);
+    encoder.addFrame(img);
+  }
 
   return encoder.finish();
 }
 
-Image imageFromFrame(Frame frame) => imageFromPicture(pictureFromFrame(frame));
+Future<Image> imageFromFrame(Frame frame) async {
+  final w = frame.width.toInt();
+  final h = frame.height.toInt();
 
-ui.Picture pictureFromFrame(Frame frame) {}
+  final pic = pictureFromFrame(frame);
+  final img = await pic.toImage(w, h);
+  final byteData = await img.toByteData();
+  final bytes = byteData.buffer.asUint32List();
 
-Image imageFromPicture(ui.Picture picture) {}
+  return Image.fromBytes(w, h, bytes);
+}
+
+ui.Picture pictureFromFrame(Frame frame) {
+  final recorder = ui.PictureRecorder();
+  final canvas = ui.Canvas(recorder);
+  frame.paintOn(canvas);
+  return recorder.endRecording();
+}
