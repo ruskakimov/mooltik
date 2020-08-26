@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'frame.dart';
 import 'frame_painter.dart';
-import '../models/tools.dart';
+import '../toolbar/tools.dart';
 
 class FrameCanvas extends StatefulWidget {
   FrameCanvas({

@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import 'models/stroke.dart';
+import 'stroke.dart';
 
 class Frame {
   Frame() : _strokes = [];

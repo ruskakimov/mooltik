@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/tools.dart';
+import 'tools.dart';
 
 class ToolBar extends StatelessWidget {
   const ToolBar({
