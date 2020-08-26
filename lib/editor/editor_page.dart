@@ -70,6 +70,7 @@ class _EditorPageState extends State<EditorPage>
                 children: <Widget>[
                   _buildToolBar(),
                   _buildPlayButton(),
+                  _buildDownloadButton(),
                 ],
               ),
             ),
@@ -115,6 +116,13 @@ class _EditorPageState extends State<EditorPage>
           _controller.forward(from: _selectedFrameIndex.toDouble());
         }
       },
+    );
+  }
+
+  Widget _buildDownloadButton() {
+    return IconButton(
+      icon: Icon(Icons.file_download),
+      onPressed: () {},
     );
   }
 
