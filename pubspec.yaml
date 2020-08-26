@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  gifencoder: ^1.0.0
+  image: ^2.1.0
 
 dev_dependencies:
   flutter_test:

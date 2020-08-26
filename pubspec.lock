@@ -67,15 +67,8 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  gifencoder:
-    dependency: "direct main"
-    description:
-      name: gifencoder
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   image:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image
       url: "https://pub.dartlang.org"
