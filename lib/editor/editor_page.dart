@@ -127,10 +127,7 @@ class _EditorPageState extends State<EditorPage>
       icon: Icon(Icons.file_download),
       onPressed: () async {
         final bytes = await makeGif(_frames, _fps);
-        print(bytes.length);
         await Share.file('Share GIF', 'image.gif', bytes, 'image/gif');
-        // FlutterShare.shareFile(title: null, filePath: null)
-        print('done?');
       },
     );
   }
