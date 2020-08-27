@@ -43,6 +43,13 @@ class Frame {
 
   void paintOn(Canvas canvas) {
     canvas.drawColor(Colors.white, BlendMode.srcOver);
+
+    // Save layer to erase paintings on it with `BlendMode.clear`.
+    canvas.saveLayer(Rect.fromLTWH(0, 0, width, height), Paint());
+
     for (var stroke in _strokes) stroke.paintOn(canvas);
+
+    // Flatten layer. Combine drawing lines with erasing lines.
+    canvas.restore();
   }
 }
