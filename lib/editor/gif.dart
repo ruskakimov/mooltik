@@ -9,7 +9,7 @@ Future<List<int>> makeGif(List<Frame> frames, int fps) async {
     throw ArgumentError.value(frames, 'frames', 'should not be empty');
   }
 
-  final encoder = GifEncoder(delay: 1000 ~/ fps);
+  final encoder = GifEncoder(delay: 100 ~/ fps);
 
   for (final frame in frames) {
     final img = await imageFromFrame(frame);
