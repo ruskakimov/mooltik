@@ -1,6 +1,9 @@
 import 'package:animation_app/editor/fps_stepper.dart';
 import 'package:animation_app/editor/frame_thumbnail.dart';
+import 'package:animation_app/editor/gif.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 
 import 'frame/frame.dart';
 import 'frame/frame_canvas.dart';
@@ -122,7 +125,13 @@ class _EditorPageState extends State<EditorPage>
   Widget _buildDownloadButton() {
     return IconButton(
       icon: Icon(Icons.file_download),
-      onPressed: () {},
+      onPressed: () async {
+        final bytes = await makeGif(_frames, _fps);
+        print(bytes.length);
+        await Share.file('Share GIF', 'image.gif', bytes, 'image/gif');
+        // FlutterShare.shareFile(title: null, filePath: null)
+        print('done?');
+      },
     );
   }
 

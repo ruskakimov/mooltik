@@ -25,6 +25,9 @@ dependencies:
     sdk: flutter
   image: ^2.1.0
 
+  esys_flutter_share: ^1.0.2
+  flutter_share: ^1.0.2+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

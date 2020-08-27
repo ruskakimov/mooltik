@@ -42,6 +42,7 @@ class Frame {
   }
 
   void paintOn(Canvas canvas) {
+    canvas.drawColor(Colors.white, BlendMode.srcOver);
     for (var stroke in _strokes) stroke.paintOn(canvas);
   }
 }
