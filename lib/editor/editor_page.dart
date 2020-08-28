@@ -3,7 +3,6 @@ import 'package:animation_app/editor/frame_thumbnail.dart';
 import 'package:animation_app/editor/gif.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_share/flutter_share.dart';
 
 import 'frame/frame.dart';
 import 'frame/frame_canvas.dart';
