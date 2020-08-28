@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'frame.dart';
-import 'frame_painter.dart';
 import '../toolbar/tools.dart';
+import 'frame_painter.dart';
+import 'frame.dart';
+import 'single_pointer_pan_detector.dart';
 
 class FrameCanvas extends StatefulWidget {
   FrameCanvas({
@@ -19,44 +20,29 @@ class FrameCanvas extends StatefulWidget {
 }
 
 class _FrameCanvasState extends State<FrameCanvas> {
-  int _fingersOnScreen = 0;
-
   @override
   Widget build(BuildContext context) {
-    return Listener(
-      onPointerDown: (e) {
-        _fingersOnScreen += 1;
+    return SinglePointerPanDetector(
+      onPanStart: (DragStartDetails details) {
+        setState(() {
+          if (widget.selectedTool == Tool.pencil) {
+            widget.frame.startPencilStroke(details.localPosition);
+          } else if (widget.selectedTool == Tool.eraser) {
+            widget.frame.startEraserStroke(details.localPosition);
+          }
+        });
       },
-      onPointerUp: (e) {
-        _fingersOnScreen -= 1;
+      onPanUpdate: (DragUpdateDetails details) {
+        setState(() {
+          widget.frame.extendLastStroke(details.localPosition);
+        });
       },
-      onPointerCancel: (e) {
-        _fingersOnScreen -= 1;
-      },
-      child: GestureDetector(
-        onPanStart: (DragStartDetails details) {
-          if (_fingersOnScreen > 1) return;
-          setState(() {
-            if (widget.selectedTool == Tool.pencil) {
-              widget.frame.startPencilStroke(details.localPosition);
-            } else if (widget.selectedTool == Tool.eraser) {
-              widget.frame.startEraserStroke(details.localPosition);
-            }
-          });
-        },
-        onPanUpdate: (DragUpdateDetails details) {
-          if (_fingersOnScreen > 1) return;
-          setState(() {
-            widget.frame.extendLastStroke(details.localPosition);
-          });
-        },
-        child: CustomPaint(
-          foregroundPainter: FramePainter(widget.frame),
-          child: Container(
-            color: Colors.white,
-            height: widget.frame.height,
-            width: widget.frame.width,
-          ),
+      child: CustomPaint(
+        foregroundPainter: FramePainter(widget.frame),
+        child: Container(
+          color: Colors.white,
+          height: widget.frame.height,
+          width: widget.frame.width,
         ),
       ),
     );
