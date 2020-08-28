@@ -19,29 +19,44 @@ class FrameCanvas extends StatefulWidget {
 }
 
 class _FrameCanvasState extends State<FrameCanvas> {
+  int _fingersOnScreen = 0;
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onPanStart: (DragStartDetails details) {
-        setState(() {
-          if (widget.selectedTool == Tool.pencil) {
-            widget.frame.startPencilStroke(details.localPosition);
-          } else if (widget.selectedTool == Tool.eraser) {
-            widget.frame.startEraserStroke(details.localPosition);
-          }
-        });
+    return Listener(
+      onPointerDown: (e) {
+        _fingersOnScreen += 1;
       },
-      onPanUpdate: (DragUpdateDetails details) {
-        setState(() {
-          widget.frame.extendLastStroke(details.localPosition);
-        });
+      onPointerUp: (e) {
+        _fingersOnScreen -= 1;
       },
-      child: CustomPaint(
-        foregroundPainter: FramePainter(widget.frame),
-        child: Container(
-          color: Colors.white,
-          height: widget.frame.height,
-          width: widget.frame.width,
+      onPointerCancel: (e) {
+        _fingersOnScreen -= 1;
+      },
+      child: GestureDetector(
+        onPanStart: (DragStartDetails details) {
+          if (_fingersOnScreen > 1) return;
+          setState(() {
+            if (widget.selectedTool == Tool.pencil) {
+              widget.frame.startPencilStroke(details.localPosition);
+            } else if (widget.selectedTool == Tool.eraser) {
+              widget.frame.startEraserStroke(details.localPosition);
+            }
+          });
+        },
+        onPanUpdate: (DragUpdateDetails details) {
+          if (_fingersOnScreen > 1) return;
+          setState(() {
+            widget.frame.extendLastStroke(details.localPosition);
+          });
+        },
+        child: CustomPaint(
+          foregroundPainter: FramePainter(widget.frame),
+          child: Container(
+            color: Colors.white,
+            height: widget.frame.height,
+            width: widget.frame.width,
+          ),
         ),
       ),
     );
