@@ -20,6 +20,9 @@ class FrameCanvas extends StatefulWidget {
 }
 
 class _FrameCanvasState extends State<FrameCanvas> {
+  double _topOffset = 0;
+  Offset _lastFocal;
+
   @override
   Widget build(BuildContext context) {
     return CanvasGestureDetector(
@@ -37,11 +40,23 @@ class _FrameCanvasState extends State<FrameCanvas> {
           widget.frame.extendLastStroke(position);
         });
       },
+      onScaleStart: (ScaleStartDetails details) {
+        _lastFocal = details.localFocalPoint;
+      },
+      onScaleUpdate: (ScaleUpdateDetails details) {
+        final diff = details.localFocalPoint - _lastFocal;
+        _lastFocal = details.localFocalPoint;
+
+        setState(() {
+          _topOffset += diff.dy;
+        });
+      },
       child: Stack(
         fit: StackFit.expand,
         children: [
           Container(color: Colors.transparent),
           Positioned(
+            top: _topOffset,
             width: widget.frame.width,
             height: widget.frame.height,
             child: CustomPaint(
