@@ -29,15 +29,15 @@ class _FrameCanvasState extends State<FrameCanvas> {
       onStrokeStart: (Offset position) {
         setState(() {
           if (widget.selectedTool == Tool.pencil) {
-            widget.frame.startPencilStroke(position);
+            widget.frame.startPencilStroke(position - _frameOffset);
           } else if (widget.selectedTool == Tool.eraser) {
-            widget.frame.startEraserStroke(position);
+            widget.frame.startEraserStroke(position - _frameOffset);
           }
         });
       },
       onStrokeUpdate: (Offset position) {
         setState(() {
-          widget.frame.extendLastStroke(position);
+          widget.frame.extendLastStroke(position - _frameOffset);
         });
       },
       onScaleStart: (ScaleStartDetails details) {
