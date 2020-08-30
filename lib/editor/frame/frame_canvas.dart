@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../toolbar/tools.dart';
 import 'frame_painter.dart';
 import 'frame.dart';
-import 'single_pointer_pan_detector.dart';
+import 'canvas_gesture_detector.dart';
 
 class FrameCanvas extends StatefulWidget {
   FrameCanvas({
@@ -22,19 +22,19 @@ class FrameCanvas extends StatefulWidget {
 class _FrameCanvasState extends State<FrameCanvas> {
   @override
   Widget build(BuildContext context) {
-    return SinglePointerPanDetector(
-      onPanStart: (DragStartDetails details) {
+    return CanvasGestureDetector(
+      onStrokeStart: (Offset position) {
         setState(() {
           if (widget.selectedTool == Tool.pencil) {
-            widget.frame.startPencilStroke(details.localPosition);
+            widget.frame.startPencilStroke(position);
           } else if (widget.selectedTool == Tool.eraser) {
-            widget.frame.startEraserStroke(details.localPosition);
+            widget.frame.startEraserStroke(position);
           }
         });
       },
-      onPanUpdate: (DragUpdateDetails details) {
+      onStrokeUpdate: (Offset position) {
         setState(() {
-          widget.frame.extendLastStroke(details.localPosition);
+          widget.frame.extendLastStroke(position);
         });
       },
       child: Stack(
