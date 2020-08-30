@@ -37,13 +37,19 @@ class _FrameCanvasState extends State<FrameCanvas> {
           widget.frame.extendLastStroke(details.localPosition);
         });
       },
-      child: CustomPaint(
-        foregroundPainter: FramePainter(widget.frame),
-        child: Container(
-          color: Colors.white,
-          height: widget.frame.height,
-          width: widget.frame.width,
-        ),
+      child: Stack(
+        children: [
+          Positioned(
+            child: CustomPaint(
+              foregroundPainter: FramePainter(widget.frame),
+              child: Container(
+                color: Colors.white,
+                height: widget.frame.height,
+                width: widget.frame.width,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

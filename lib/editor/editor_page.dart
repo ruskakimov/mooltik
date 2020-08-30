@@ -57,7 +57,7 @@ class _EditorPageState extends State<EditorPage>
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
-            Center(
+            Positioned.fill(
               child: FrameCanvas(
                 frame: selectedFrame,
                 selectedTool: _selectedTool,
