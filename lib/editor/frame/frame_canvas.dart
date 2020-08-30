@@ -38,8 +38,12 @@ class _FrameCanvasState extends State<FrameCanvas> {
         });
       },
       child: Stack(
+        fit: StackFit.expand,
         children: [
+          Container(color: Colors.transparent),
           Positioned(
+            width: widget.frame.width,
+            height: widget.frame.height,
             child: CustomPaint(
               foregroundPainter: FramePainter(widget.frame),
               child: Container(
