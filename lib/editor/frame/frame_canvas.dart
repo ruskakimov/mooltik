@@ -30,9 +30,9 @@ class _FrameCanvasState extends State<FrameCanvas> {
   Widget build(BuildContext context) {
     return CanvasGestureDetector(
       onScaleStart: (ScaleStartDetails details) {
-        if (widget.selectedTool == Tool.hand) {
-          _prevScale = _scale;
-        } else if (widget.selectedTool == Tool.pencil) {
+        _prevScale = _scale;
+
+        if (widget.selectedTool == Tool.pencil) {
           final framePoint = toFramePoint(details.localFocalPoint);
           setState(() {
             widget.frame.startPencilStroke(framePoint);
@@ -57,14 +57,12 @@ class _FrameCanvasState extends State<FrameCanvas> {
         }
       },
       onScaleUpdate: (ScaleUpdateDetails details) {
-        if (widget.selectedTool == Tool.hand) {
-          final newScale = _prevScale * details.scale;
-          setState(() {
-            _offset = details.localFocalPoint -
-                toFramePoint(details.localFocalPoint) * newScale;
-            _scale = newScale;
-          });
-        }
+        final newScale = _prevScale * details.scale;
+        setState(() {
+          _offset = details.localFocalPoint -
+              toFramePoint(details.localFocalPoint) * newScale;
+          _scale = newScale;
+        });
       },
       child: Stack(
         fit: StackFit.expand,
