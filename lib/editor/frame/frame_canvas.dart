@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../toolbar/tools.dart';
 import 'frame_painter.dart';
 import 'frame.dart';
 import 'canvas_gesture_detector.dart';
+
+const twoPi = pi * 2;
 
 class FrameCanvas extends StatefulWidget {
   FrameCanvas({
@@ -21,6 +25,10 @@ class FrameCanvas extends StatefulWidget {
 
 class _FrameCanvasState extends State<FrameCanvas> {
   Offset _offset = Offset.zero;
+
+  double _rotation = 0;
+  double _prevRotation = 0;
+
   double _scale = 1;
   double _prevScale = 1;
 
@@ -33,6 +41,7 @@ class _FrameCanvasState extends State<FrameCanvas> {
     return CanvasGestureDetector(
       onScaleStart: (ScaleStartDetails details) {
         _prevScale = _scale;
+        _prevRotation = _rotation;
         _fixedFramePoint = toFramePoint(details.localFocalPoint);
 
         if (widget.selectedTool == Tool.pencil) {
@@ -56,6 +65,7 @@ class _FrameCanvasState extends State<FrameCanvas> {
       onScaleUpdate: (ScaleUpdateDetails details) {
         setState(() {
           _scale = _prevScale * details.scale;
+          _rotation = (_prevRotation + details.rotation) % twoPi;
           _offset = details.localFocalPoint - _fixedFramePoint * _scale;
         });
       },
@@ -68,13 +78,16 @@ class _FrameCanvasState extends State<FrameCanvas> {
             left: _offset.dx,
             width: widget.frame.width * _scale,
             height: widget.frame.height * _scale,
-            child: RepaintBoundary(
-              child: CustomPaint(
-                foregroundPainter: FramePainter(widget.frame),
-                child: Container(
-                  color: Colors.white,
-                  height: widget.frame.height,
-                  width: widget.frame.width,
+            child: Transform.rotate(
+              angle: _rotation,
+              child: RepaintBoundary(
+                child: CustomPaint(
+                  foregroundPainter: FramePainter(widget.frame),
+                  child: Container(
+                    color: Colors.white,
+                    height: widget.frame.height,
+                    width: widget.frame.width,
+                  ),
                 ),
               ),
             ),
