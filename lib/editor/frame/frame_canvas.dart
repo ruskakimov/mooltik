@@ -21,6 +21,8 @@ class FrameCanvas extends StatefulWidget {
 
 class _FrameCanvasState extends State<FrameCanvas> {
   Offset _frameOffset = Offset.zero;
+  double _scale = 1;
+  double _prevScale = 1;
   Offset _lastFocal;
 
   @override
@@ -42,6 +44,7 @@ class _FrameCanvasState extends State<FrameCanvas> {
       },
       onScaleStart: (ScaleStartDetails details) {
         _lastFocal = details.localFocalPoint;
+        _prevScale = _scale;
       },
       onScaleUpdate: (ScaleUpdateDetails details) {
         final diff = details.localFocalPoint - _lastFocal;
@@ -49,6 +52,7 @@ class _FrameCanvasState extends State<FrameCanvas> {
 
         setState(() {
           _frameOffset += diff;
+          _scale = _prevScale * details.scale;
         });
       },
       child: Stack(
@@ -58,8 +62,8 @@ class _FrameCanvasState extends State<FrameCanvas> {
           Positioned(
             top: _frameOffset.dy,
             left: _frameOffset.dx,
-            width: widget.frame.width,
-            height: widget.frame.height,
+            width: widget.frame.width * _scale,
+            height: widget.frame.height * _scale,
             child: CustomPaint(
               foregroundPainter: FramePainter(widget.frame),
               child: Container(
