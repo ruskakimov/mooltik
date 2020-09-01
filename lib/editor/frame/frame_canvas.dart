@@ -75,12 +75,14 @@ class _FrameCanvasState extends State<FrameCanvas> {
             left: _offset.dx,
             width: widget.frame.width * _scale,
             height: widget.frame.height * _scale,
-            child: CustomPaint(
-              foregroundPainter: FramePainter(widget.frame),
-              child: Container(
-                color: Colors.white,
-                height: widget.frame.height,
-                width: widget.frame.width,
+            child: RepaintBoundary(
+              child: CustomPaint(
+                foregroundPainter: FramePainter(widget.frame),
+                child: Container(
+                  color: Colors.white,
+                  height: widget.frame.height,
+                  width: widget.frame.width,
+                ),
               ),
             ),
           ),
