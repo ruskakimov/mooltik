@@ -30,6 +30,13 @@ class ToolBar extends StatelessWidget {
           ),
           onPressed: () => onChanged(Tool.eraser),
         ),
+        IconButton(
+          icon: Icon(
+            Icons.pan_tool,
+            color: value == Tool.hand ? Colors.black : Colors.grey,
+          ),
+          onPressed: () => onChanged(Tool.hand),
+        ),
       ],
     );
   }
