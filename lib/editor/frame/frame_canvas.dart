@@ -23,7 +23,6 @@ class _FrameCanvasState extends State<FrameCanvas> {
   Offset _frameOffset = Offset.zero;
   double _scale = 1;
   double _prevScale = 1;
-  Offset _lastFocal;
 
   Offset toFramePoint(Offset point) => (point - _frameOffset) / _scale;
 
@@ -32,7 +31,6 @@ class _FrameCanvasState extends State<FrameCanvas> {
     return CanvasGestureDetector(
       onScaleStart: (ScaleStartDetails details) {
         if (widget.selectedTool == Tool.hand) {
-          _lastFocal = details.localFocalPoint;
           _prevScale = _scale;
         } else if (widget.selectedTool == Tool.pencil) {
           final framePoint = toFramePoint(details.localFocalPoint);
@@ -60,11 +58,7 @@ class _FrameCanvasState extends State<FrameCanvas> {
       },
       onScaleUpdate: (ScaleUpdateDetails details) {
         if (widget.selectedTool == Tool.hand) {
-          final diff = details.localFocalPoint - _lastFocal;
-          _lastFocal = details.localFocalPoint;
-
           setState(() {
-            _frameOffset += diff;
             _scale = _prevScale * details.scale;
           });
         }
