@@ -48,16 +48,10 @@ class _FrameCanvasState extends State<FrameCanvas> {
         }
       },
       onPanUpdate: (DragUpdateDetails details) {
-        if (widget.selectedTool == Tool.hand) {
-          setState(() {
-            _offset += details.delta;
-          });
-        } else {
-          setState(() {
-            final framePoint = toFramePoint(details.localPosition);
-            widget.frame.extendLastStroke(framePoint);
-          });
-        }
+        setState(() {
+          final framePoint = toFramePoint(details.localPosition);
+          widget.frame.extendLastStroke(framePoint);
+        });
       },
       onScaleUpdate: (ScaleUpdateDetails details) {
         setState(() {
