@@ -25,6 +25,8 @@ class _FrameCanvasState extends State<FrameCanvas> {
   double _prevScale = 1;
   Offset _lastFocal;
 
+  Offset toFramePoint(Offset point) => (point - _frameOffset) / _scale;
+
   @override
   Widget build(BuildContext context) {
     return CanvasGestureDetector(
@@ -33,14 +35,14 @@ class _FrameCanvasState extends State<FrameCanvas> {
           _lastFocal = details.localFocalPoint;
           _prevScale = _scale;
         } else if (widget.selectedTool == Tool.pencil) {
+          final framePoint = toFramePoint(details.localFocalPoint);
           setState(() {
-            widget.frame
-                .startPencilStroke(details.localFocalPoint - _frameOffset);
+            widget.frame.startPencilStroke(framePoint);
           });
         } else if (widget.selectedTool == Tool.eraser) {
+          final framePoint = toFramePoint(details.localFocalPoint);
           setState(() {
-            widget.frame
-                .startEraserStroke(details.localFocalPoint - _frameOffset);
+            widget.frame.startEraserStroke(framePoint);
           });
         }
       },
@@ -51,7 +53,8 @@ class _FrameCanvasState extends State<FrameCanvas> {
           });
         } else {
           setState(() {
-            widget.frame.extendLastStroke(details.localPosition - _frameOffset);
+            final framePoint = toFramePoint(details.localPosition);
+            widget.frame.extendLastStroke(framePoint);
           });
         }
       },
