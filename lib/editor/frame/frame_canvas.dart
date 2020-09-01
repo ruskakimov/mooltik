@@ -20,11 +20,11 @@ class FrameCanvas extends StatefulWidget {
 }
 
 class _FrameCanvasState extends State<FrameCanvas> {
-  Offset _frameOffset = Offset.zero;
+  Offset _offset = Offset.zero;
   double _scale = 1;
   double _prevScale = 1;
 
-  Offset toFramePoint(Offset point) => (point - _frameOffset) / _scale;
+  Offset toFramePoint(Offset point) => (point - _offset) / _scale;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class _FrameCanvasState extends State<FrameCanvas> {
       onPanUpdate: (DragUpdateDetails details) {
         if (widget.selectedTool == Tool.hand) {
           setState(() {
-            _frameOffset += details.delta;
+            _offset += details.delta;
           });
         } else {
           setState(() {
@@ -58,8 +58,11 @@ class _FrameCanvasState extends State<FrameCanvas> {
       },
       onScaleUpdate: (ScaleUpdateDetails details) {
         if (widget.selectedTool == Tool.hand) {
+          final newScale = _prevScale * details.scale;
           setState(() {
-            _scale = _prevScale * details.scale;
+            _offset = details.localFocalPoint -
+                toFramePoint(details.localFocalPoint) * newScale;
+            _scale = newScale;
           });
         }
       },
@@ -68,8 +71,8 @@ class _FrameCanvasState extends State<FrameCanvas> {
         children: [
           Container(color: Colors.transparent),
           Positioned(
-            top: _frameOffset.dy,
-            left: _frameOffset.dx,
+            top: _offset.dy,
+            left: _offset.dx,
             width: widget.frame.width * _scale,
             height: widget.frame.height * _scale,
             child: CustomPaint(
