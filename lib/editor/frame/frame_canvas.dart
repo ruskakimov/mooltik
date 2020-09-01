@@ -56,13 +56,15 @@ class _FrameCanvasState extends State<FrameCanvas> {
         }
       },
       onScaleUpdate: (ScaleUpdateDetails details) {
-        final diff = details.localFocalPoint - _lastFocal;
-        _lastFocal = details.localFocalPoint;
+        if (widget.selectedTool == Tool.hand) {
+          final diff = details.localFocalPoint - _lastFocal;
+          _lastFocal = details.localFocalPoint;
 
-        setState(() {
-          _frameOffset += diff;
-          _scale = _prevScale * details.scale;
-        });
+          setState(() {
+            _frameOffset += diff;
+            _scale = _prevScale * details.scale;
+          });
+        }
       },
       child: Stack(
         fit: StackFit.expand,
