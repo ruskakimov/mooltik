@@ -7,17 +7,15 @@ class CanvasGestureDetector extends StatefulWidget {
   CanvasGestureDetector({
     Key key,
     this.child,
+    this.onPanUpdate,
     this.onScaleStart,
     this.onScaleUpdate,
-    this.onStrokeStart,
-    this.onStrokeUpdate,
   }) : super(key: key);
 
   final Widget child;
+  final GestureDragUpdateCallback onPanUpdate;
   final GestureScaleStartCallback onScaleStart;
   final GestureScaleUpdateCallback onScaleUpdate;
-  final StrokeStartCallback onStrokeStart;
-  final StrokeUpdateCallback onStrokeUpdate;
 
   @override
   _CanvasGestureDetectorState createState() => _CanvasGestureDetectorState();
@@ -25,6 +23,7 @@ class CanvasGestureDetector extends StatefulWidget {
 
 class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
   int _pointersOnScreen = 0;
+  Offset _lastContactPoint;
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +39,12 @@ class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
       },
       child: GestureDetector(
         onScaleStart: (ScaleStartDetails details) {
-          widget.onStrokeStart?.call(details.localFocalPoint);
+          _lastContactPoint = details.focalPoint;
           widget.onScaleStart?.call(details);
         },
         onScaleUpdate: (ScaleUpdateDetails details) {
           if (_pointersOnScreen == 1) {
-            widget.onStrokeUpdate?.call(details.localFocalPoint);
+            _onSingleFingerScaleUpdate(details);
           } else {
             widget.onScaleUpdate?.call(details);
           }
@@ -54,5 +53,17 @@ class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
         child: widget.child,
       ),
     );
+  }
+
+  void _onSingleFingerScaleUpdate(ScaleUpdateDetails details) {
+    final currentContactPoint = details.focalPoint;
+    final dragUpdateDetails = DragUpdateDetails(
+      delta: currentContactPoint - _lastContactPoint,
+      globalPosition: currentContactPoint,
+      localPosition: details.localFocalPoint,
+    );
+    _lastContactPoint = details.focalPoint;
+
+    widget.onPanUpdate?.call(dragUpdateDetails);
   }
 }

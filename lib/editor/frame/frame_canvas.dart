@@ -28,23 +28,32 @@ class _FrameCanvasState extends State<FrameCanvas> {
   @override
   Widget build(BuildContext context) {
     return CanvasGestureDetector(
-      onStrokeStart: (Offset position) {
-        setState(() {
-          if (widget.selectedTool == Tool.pencil) {
-            widget.frame.startPencilStroke(position - _frameOffset);
-          } else if (widget.selectedTool == Tool.eraser) {
-            widget.frame.startEraserStroke(position - _frameOffset);
-          }
-        });
-      },
-      onStrokeUpdate: (Offset position) {
-        setState(() {
-          widget.frame.extendLastStroke(position - _frameOffset);
-        });
-      },
       onScaleStart: (ScaleStartDetails details) {
-        _lastFocal = details.localFocalPoint;
-        _prevScale = _scale;
+        if (widget.selectedTool == Tool.hand) {
+          _lastFocal = details.localFocalPoint;
+          _prevScale = _scale;
+        } else if (widget.selectedTool == Tool.pencil) {
+          setState(() {
+            widget.frame
+                .startPencilStroke(details.localFocalPoint - _frameOffset);
+          });
+        } else if (widget.selectedTool == Tool.eraser) {
+          setState(() {
+            widget.frame
+                .startEraserStroke(details.localFocalPoint - _frameOffset);
+          });
+        }
+      },
+      onPanUpdate: (DragUpdateDetails details) {
+        if (widget.selectedTool == Tool.hand) {
+          setState(() {
+            _frameOffset += details.delta;
+          });
+        } else {
+          setState(() {
+            widget.frame.extendLastStroke(details.localPosition - _frameOffset);
+          });
+        }
       },
       onScaleUpdate: (ScaleUpdateDetails details) {
         final diff = details.localFocalPoint - _lastFocal;
