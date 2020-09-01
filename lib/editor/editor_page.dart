@@ -63,29 +63,9 @@ class _EditorPageState extends State<EditorPage>
                 selectedTool: _selectedTool,
               ),
             ),
-            Positioned(
-              top: 24,
-              left: 0,
-              right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  _buildToolBar(),
-                  _buildPlayButton(),
-                  _buildDownloadButton(),
-                ],
-              ),
-            ),
-            Positioned(
-              bottom: 24,
-              left: 0,
-              right: 0,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: _controller.isAnimating
-                    ? _buildFpsStepper()
-                    : _buildThumbnails(),
-              ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: _buildToolBar(),
             ),
           ],
         ),
