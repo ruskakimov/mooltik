@@ -34,7 +34,13 @@ class _FrameCanvasState extends State<FrameCanvas> {
 
   Offset _fixedFramePoint;
 
-  Offset toFramePoint(Offset point) => (point - _offset) / _scale;
+  Offset toFramePoint(Offset point) {
+    final p = (point - _offset) / _scale;
+    return Offset(
+      p.dx * cos(_rotation) + p.dy * sin(_rotation),
+      -p.dx * sin(_rotation) + p.dy * cos(_rotation),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +85,7 @@ class _FrameCanvasState extends State<FrameCanvas> {
             width: widget.frame.width * _scale,
             height: widget.frame.height * _scale,
             child: Transform.rotate(
+              alignment: Alignment.topLeft,
               angle: _rotation,
               child: RepaintBoundary(
                 child: CustomPaint(
