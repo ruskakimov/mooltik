@@ -37,6 +37,12 @@ class Frame {
     _strokes.last.extend(point);
   }
 
+  void cancelLastStroke() {
+    if (_strokes.isNotEmpty) {
+      _strokes.removeLast();
+    }
+  }
+
   void clear() {
     _strokes.clear();
   }

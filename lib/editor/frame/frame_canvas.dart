@@ -64,28 +64,34 @@ class _FrameCanvasState extends State<FrameCanvas> {
   @override
   Widget build(BuildContext context) {
     return CanvasGestureDetector(
-      onScaleStart: (ScaleStartDetails details) {
-        _prevScale = _scale;
-        _prevRotation = _rotation;
-        _fixedFramePoint = toFramePoint(details.localFocalPoint);
-
+      onStrokeStart: (DragStartDetails details) {
         if (widget.selectedTool == Tool.pencil) {
-          final framePoint = toFramePoint(details.localFocalPoint);
+          final framePoint = toFramePoint(details.localPosition);
           setState(() {
             widget.frame.startPencilStroke(framePoint);
           });
         } else if (widget.selectedTool == Tool.eraser) {
-          final framePoint = toFramePoint(details.localFocalPoint);
+          final framePoint = toFramePoint(details.localPosition);
           setState(() {
             widget.frame.startEraserStroke(framePoint);
           });
         }
       },
-      onPanUpdate: (DragUpdateDetails details) {
+      onStrokeUpdate: (DragUpdateDetails details) {
         setState(() {
           final framePoint = toFramePoint(details.localPosition);
           widget.frame.extendLastStroke(framePoint);
         });
+      },
+      onStrokeCancel: () {
+        setState(() {
+          widget.frame.cancelLastStroke();
+        });
+      },
+      onScaleStart: (ScaleStartDetails details) {
+        _prevScale = _scale;
+        _prevRotation = _rotation;
+        _fixedFramePoint = toFramePoint(details.localFocalPoint);
       },
       onScaleUpdate: (ScaleUpdateDetails details) {
         setState(() {

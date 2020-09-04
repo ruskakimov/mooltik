@@ -7,13 +7,17 @@ class CanvasGestureDetector extends StatefulWidget {
   CanvasGestureDetector({
     Key key,
     this.child,
-    this.onPanUpdate,
+    this.onStrokeStart,
+    this.onStrokeUpdate,
+    this.onStrokeCancel,
     this.onScaleStart,
     this.onScaleUpdate,
   }) : super(key: key);
 
   final Widget child;
-  final GestureDragUpdateCallback onPanUpdate;
+  final GestureDragStartCallback onStrokeStart;
+  final GestureDragUpdateCallback onStrokeUpdate;
+  final VoidCallback onStrokeCancel;
   final GestureScaleStartCallback onScaleStart;
   final GestureScaleUpdateCallback onScaleUpdate;
 
@@ -25,6 +29,7 @@ class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
   int _prevPointersOnScreen = 0;
   int _pointersOnScreen = 0;
   Offset _lastContactPoint;
+  bool _veryQuickStroke = false;
 
   void changePointerOnScreenBy(int count) {
     _prevPointersOnScreen = _pointersOnScreen;
@@ -40,12 +45,31 @@ class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
       child: GestureDetector(
         onScaleStart: (ScaleStartDetails details) {
           _lastContactPoint = details.focalPoint;
-          widget.onScaleStart?.call(details);
+
+          if (_pointersOnScreen == 1) {
+            _veryQuickStroke = true;
+
+            Future.delayed(Duration(milliseconds: 1000), () {
+              _veryQuickStroke = false;
+            });
+
+            widget.onStrokeStart?.call(DragStartDetails(
+              globalPosition: details.focalPoint,
+              localPosition: details.localFocalPoint,
+            ));
+          } else {
+            widget.onScaleStart?.call(details);
+          }
         },
         onScaleUpdate: (ScaleUpdateDetails details) {
           if (_pointersOnScreen == 1) {
             _onSinglePointerMove(details);
           } else {
+            if (_veryQuickStroke) {
+              _veryQuickStroke = false;
+              widget.onStrokeCancel?.call();
+            }
+
             widget.onScaleUpdate?.call(details);
           }
         },
@@ -65,6 +89,6 @@ class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
     );
     _lastContactPoint = details.focalPoint;
 
-    widget.onPanUpdate?.call(dragUpdateDetails);
+    widget.onStrokeUpdate?.call(dragUpdateDetails);
   }
 }
