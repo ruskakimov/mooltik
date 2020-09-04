@@ -22,21 +22,21 @@ class CanvasGestureDetector extends StatefulWidget {
 }
 
 class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
+  int _prevPointersOnScreen = 0;
   int _pointersOnScreen = 0;
   Offset _lastContactPoint;
+
+  void changePointerOnScreenBy(int count) {
+    _prevPointersOnScreen = _pointersOnScreen;
+    _pointersOnScreen = _pointersOnScreen + count;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Listener(
-      onPointerDown: (e) {
-        _pointersOnScreen += 1;
-      },
-      onPointerUp: (e) {
-        _pointersOnScreen -= 1;
-      },
-      onPointerCancel: (e) {
-        _pointersOnScreen -= 1;
-      },
+      onPointerDown: (e) => changePointerOnScreenBy(1),
+      onPointerUp: (e) => changePointerOnScreenBy(-1),
+      onPointerCancel: (e) => changePointerOnScreenBy(-1),
       child: GestureDetector(
         onScaleStart: (ScaleStartDetails details) {
           _lastContactPoint = details.focalPoint;
@@ -56,6 +56,7 @@ class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
   }
 
   void _onSinglePointerMove(ScaleUpdateDetails details) {
+    if (_prevPointersOnScreen != 0) return;
     final currentContactPoint = details.focalPoint;
     final dragUpdateDetails = DragUpdateDetails(
       delta: currentContactPoint - _lastContactPoint,
