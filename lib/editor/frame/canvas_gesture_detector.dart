@@ -44,7 +44,7 @@ class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
         },
         onScaleUpdate: (ScaleUpdateDetails details) {
           if (_pointersOnScreen == 1) {
-            _onSingleFingerScaleUpdate(details);
+            _onSinglePointerMove(details);
           } else {
             widget.onScaleUpdate?.call(details);
           }
@@ -55,7 +55,7 @@ class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
     );
   }
 
-  void _onSingleFingerScaleUpdate(ScaleUpdateDetails details) {
+  void _onSinglePointerMove(ScaleUpdateDetails details) {
     final currentContactPoint = details.focalPoint;
     final dragUpdateDetails = DragUpdateDetails(
       delta: currentContactPoint - _lastContactPoint,
