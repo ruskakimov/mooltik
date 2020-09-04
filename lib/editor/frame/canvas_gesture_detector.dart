@@ -49,7 +49,7 @@ class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
           if (_pointersOnScreen == 1) {
             _veryQuickStroke = true;
 
-            Future.delayed(Duration(milliseconds: 1000), () {
+            Future.delayed(Duration(milliseconds: 200), () {
               _veryQuickStroke = false;
             });
 
