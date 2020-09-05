@@ -19,6 +19,7 @@ class Frame {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2
+        ..strokeCap = StrokeCap.round
         ..color = Colors.black,
     ));
   }
@@ -29,6 +30,7 @@ class Frame {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = 20
+        ..strokeCap = StrokeCap.round
         ..blendMode = BlendMode.clear,
     ));
   }
