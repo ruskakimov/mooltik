@@ -16,7 +16,6 @@ class Frame {
   double get height => 250;
 
   void startPencilStroke(Offset startPoint) {
-    rasterize();
     _strokes.add(Stroke(
       startPoint,
       Paint()
@@ -28,7 +27,6 @@ class Frame {
   }
 
   void startEraserStroke(Offset startPoint) {
-    rasterize();
     _strokes.add(Stroke(
       startPoint,
       Paint()

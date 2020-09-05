@@ -9,6 +9,7 @@ class CanvasGestureDetector extends StatefulWidget {
     this.child,
     this.onStrokeStart,
     this.onStrokeUpdate,
+    this.onStrokeEnd,
     this.onStrokeCancel,
     this.onScaleStart,
     this.onScaleUpdate,
@@ -17,6 +18,7 @@ class CanvasGestureDetector extends StatefulWidget {
   final Widget child;
   final GestureDragStartCallback onStrokeStart;
   final GestureDragUpdateCallback onStrokeUpdate;
+  final VoidCallback onStrokeEnd;
   final VoidCallback onStrokeCancel;
   final GestureScaleStartCallback onScaleStart;
   final GestureScaleUpdateCallback onScaleUpdate;
@@ -73,7 +75,11 @@ class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
             widget.onScaleUpdate?.call(details);
           }
         },
-        onScaleEnd: (ScaleEndDetails details) {},
+        onScaleEnd: (ScaleEndDetails details) {
+          if (_pointersOnScreen == 0) {
+            widget.onStrokeEnd?.call();
+          }
+        },
         child: widget.child,
       ),
     );

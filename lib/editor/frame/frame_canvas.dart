@@ -83,6 +83,10 @@ class _FrameCanvasState extends State<FrameCanvas> {
           widget.frame.extendLastStroke(framePoint);
         });
       },
+      onStrokeEnd: () async {
+        await widget.frame.rasterize();
+        setState(() {});
+      },
       onStrokeCancel: () {
         setState(() {
           widget.frame.cancelLastStroke();
