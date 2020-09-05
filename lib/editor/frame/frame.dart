@@ -1,6 +1,7 @@
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
+import 'package:animation_app/editor/gif.dart' show pictureFromFrame;
+import 'package:flutter/material.dart' show Colors;
 
 import 'stroke.dart';
 
@@ -8,12 +9,17 @@ class Frame {
   Frame() : _strokes = [];
 
   final List<Stroke> _strokes;
+  Image _raster;
 
   double get width => 250;
 
   double get height => 250;
 
   void startPencilStroke(Offset startPoint) {
+    pictureFromFrame(this)
+        .toImage(width.toInt(), height.toInt())
+        .then((value) => _raster = value);
+
     _strokes.add(Stroke(
       startPoint,
       Paint()
@@ -55,7 +61,9 @@ class Frame {
     // Save layer to erase paintings on it with `BlendMode.clear`.
     canvas.saveLayer(Rect.fromLTWH(0, 0, width, height), Paint());
 
-    for (var stroke in _strokes) stroke.paintOn(canvas);
+    if (_raster != null) canvas.drawImage(_raster, Offset.zero, Paint());
+
+    if (_strokes.isNotEmpty) _strokes.last.paintOn(canvas);
 
     // Flatten layer. Combine drawing lines with erasing lines.
     canvas.restore();
