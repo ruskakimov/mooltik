@@ -16,10 +16,7 @@ class Frame {
   double get height => 250;
 
   void startPencilStroke(Offset startPoint) {
-    pictureFromFrame(this)
-        .toImage(width.toInt(), height.toInt())
-        .then((value) => _raster = value);
-
+    rasterize();
     _strokes.add(Stroke(
       startPoint,
       Paint()
@@ -49,6 +46,11 @@ class Frame {
     if (_strokes.isNotEmpty) {
       _strokes.removeLast();
     }
+  }
+
+  Future<void> rasterize() async {
+    final pic = pictureFromFrame(this);
+    _raster = await pic.toImage(width.toInt(), height.toInt());
   }
 
   void clear() {
