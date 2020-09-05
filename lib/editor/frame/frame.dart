@@ -28,6 +28,7 @@ class Frame {
   }
 
   void startEraserStroke(Offset startPoint) {
+    rasterize();
     _strokes.add(Stroke(
       startPoint,
       Paint()
