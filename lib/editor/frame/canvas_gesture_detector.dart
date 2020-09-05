@@ -49,16 +49,7 @@ class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
           _lastContactPoint = details.focalPoint;
 
           if (_pointersOnScreen == 1) {
-            _veryQuickStroke = true;
-
-            Future.delayed(Duration(milliseconds: 200), () {
-              _veryQuickStroke = false;
-            });
-
-            widget.onStrokeStart?.call(DragStartDetails(
-              globalPosition: details.focalPoint,
-              localPosition: details.localFocalPoint,
-            ));
+            _onSinglePointerStart(details);
           } else {
             widget.onScaleStart?.call(details);
           }
@@ -85,14 +76,31 @@ class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
     );
   }
 
+  void _onSinglePointerStart(ScaleStartDetails details) {
+    if (_prevPointersOnScreen != 0) return;
+
+    _veryQuickStroke = true;
+
+    Future.delayed(Duration(milliseconds: 200), () {
+      _veryQuickStroke = false;
+    });
+
+    widget.onStrokeStart?.call(DragStartDetails(
+      globalPosition: details.focalPoint,
+      localPosition: details.localFocalPoint,
+    ));
+  }
+
   void _onSinglePointerMove(ScaleUpdateDetails details) {
     if (_prevPointersOnScreen != 0) return;
+
     final currentContactPoint = details.focalPoint;
     final dragUpdateDetails = DragUpdateDetails(
       delta: currentContactPoint - _lastContactPoint,
       globalPosition: currentContactPoint,
       localPosition: details.localFocalPoint,
     );
+
     _lastContactPoint = details.focalPoint;
 
     widget.onStrokeUpdate?.call(dragUpdateDetails);

@@ -16,6 +16,7 @@ class Frame {
   double get height => 250;
 
   void startPencilStroke(Offset startPoint) {
+    print('start p');
     _strokes.add(Stroke(
       startPoint,
       Paint()
@@ -27,6 +28,7 @@ class Frame {
   }
 
   void startEraserStroke(Offset startPoint) {
+    print('start e');
     _strokes.add(Stroke(
       startPoint,
       Paint()
@@ -42,12 +44,14 @@ class Frame {
   }
 
   void cancelLastStroke() {
+    print('canceled');
     if (_strokes.isNotEmpty) {
       _strokes.removeLast();
     }
   }
 
   Future<void> rasterize() async {
+    print('raster');
     final pic = pictureFromFrame(this);
     _raster = await pic.toImage(width.toInt(), height.toInt());
   }
