@@ -10,6 +10,7 @@ class Frame {
 
   final List<Stroke> _strokes;
   Image _raster;
+  int _rasterisedUntil = 0;
 
   double get width => 250;
 
@@ -50,6 +51,7 @@ class Frame {
   Future<void> rasterize() async {
     final pic = pictureFromFrame(this);
     _raster = await pic.toImage(width.toInt(), height.toInt());
+    _rasterisedUntil = _strokes.length;
   }
 
   void clear() {
@@ -64,7 +66,9 @@ class Frame {
 
     if (_raster != null) canvas.drawImage(_raster, Offset.zero, Paint());
 
-    if (_strokes.isNotEmpty) _strokes.last.paintOn(canvas);
+    for (int i = _rasterisedUntil; i < _strokes.length; i++) {
+      _strokes[i].paintOn(canvas);
+    }
 
     // Flatten layer. Combine drawing lines with erasing lines.
     canvas.restore();
