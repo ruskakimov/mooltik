@@ -99,7 +99,7 @@ class _FrameCanvasState extends State<FrameCanvas> {
       },
       onScaleUpdate: (ScaleUpdateDetails details) {
         setState(() {
-          _scale = _prevScale * details.scale;
+          _scale = (_prevScale * details.scale).clamp(0.1, 8.0);
           _rotation = (_prevRotation + details.rotation) % twoPi;
           _offset = calcOffsetToMatchPoints(
               _fixedFramePoint, details.localFocalPoint);
