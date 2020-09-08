@@ -12,9 +12,9 @@ class Frame {
   Image _raster;
   int _rasterisedUntil = 0;
 
-  double get width => 250;
+  double get width => 1280;
 
-  double get height => 250;
+  double get height => 720;
 
   void startPencilStroke(Offset startPoint) {
     _strokes.add(Stroke(
