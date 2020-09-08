@@ -1,4 +1,4 @@
-import 'package:animation_app/editor/gif.dart';
+import 'package:mooltik/editor/gif.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

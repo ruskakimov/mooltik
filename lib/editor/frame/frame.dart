@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:animation_app/editor/gif.dart' show pictureFromFrame;
+import 'package:mooltik/editor/gif.dart' show pictureFromFrame;
 import 'package:flutter/material.dart' show Colors;
 
 import 'stroke.dart';

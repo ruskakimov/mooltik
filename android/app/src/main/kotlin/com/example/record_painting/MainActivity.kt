@@ -1,4 +1,4 @@
-package com.example.animation_app
+package com.example.mooltik
 
 import io.flutter.embedding.android.FlutterActivity
 
