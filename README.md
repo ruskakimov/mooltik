@@ -1,3 +1,3 @@
-# Animation app made with Flutter
+# mooltik - cartoon animation app
 
 Work in progress...
