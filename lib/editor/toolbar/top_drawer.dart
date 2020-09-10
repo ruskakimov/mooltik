@@ -74,11 +74,12 @@ class _DrawerArrow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 40,
-      width: 40,
-      child: GestureDetector(
-        onTap: onTap,
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        height: 40,
+        width: 40,
         child: Icon(up ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
       ),
     );
