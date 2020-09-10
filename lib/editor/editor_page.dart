@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'frame/frame.dart';
 import 'frame/frame_canvas.dart';
+import 'toolbar/top_drawer.dart';
 import 'toolbar/toolbar.dart';
 import 'toolbar/tools.dart';
 
@@ -65,7 +66,7 @@ class _EditorPageState extends State<EditorPage>
             ),
             Align(
               alignment: Alignment.topCenter,
-              child: _buildToolBar(),
+              child: _buildTopDrawer(),
             ),
           ],
         ),
@@ -73,14 +74,16 @@ class _EditorPageState extends State<EditorPage>
     );
   }
 
-  ToolBar _buildToolBar() {
-    return ToolBar(
-      value: _selectedTool,
-      onChanged: (tool) {
-        setState(() {
-          _selectedTool = tool;
-        });
-      },
+  Widget _buildTopDrawer() {
+    return TopDrawer(
+      child: ToolBar(
+        value: _selectedTool,
+        onChanged: (tool) {
+          setState(() {
+            _selectedTool = tool;
+          });
+        },
+      ),
     );
   }
 
