@@ -42,7 +42,7 @@ class _TopDrawerState extends State<TopDrawer> {
             widget.child,
             Align(
               alignment: Alignment.centerLeft,
-              child: _DrawerButton(
+              child: _DrawerArrow(
                 onTap: _toggleDrawer,
               ),
             ),
@@ -59,8 +59,8 @@ class _TopDrawerState extends State<TopDrawer> {
   }
 }
 
-class _DrawerButton extends StatelessWidget {
-  const _DrawerButton({
+class _DrawerArrow extends StatelessWidget {
+  const _DrawerArrow({
     Key key,
     this.onTap,
   }) : super(key: key);
