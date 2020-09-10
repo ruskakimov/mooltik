@@ -10,37 +10,71 @@ class TopDrawer extends StatefulWidget {
 }
 
 class _TopDrawerState extends State<TopDrawer> {
+  bool open = true;
+
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: _ClipShadowShadowPainter(
-        clipper: _EaselDrawerClipper(),
-        shadow: Shadow(
-          color: Colors.black26,
-          blurRadius: 8,
-        ),
-      ),
-      child: ClipPath(
-        clipper: _EaselDrawerClipper(),
-        child: Container(
-          width: double.infinity,
-          color: Colors.white,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              widget.child,
-              Align(
-                alignment: Alignment.centerLeft,
-                child: SizedBox(
-                  height: 40,
-                  width: 40,
-                  child: Icon(Icons.keyboard_arrow_up),
-                ),
-              ),
-            ],
+    return Transform.translate(
+      offset: Offset(0, open ? 0 : -52),
+      child: CustomPaint(
+        painter: _ClipShadowShadowPainter(
+          clipper: _EaselDrawerClipper(),
+          shadow: Shadow(
+            color: Colors.black26,
+            blurRadius: 8,
           ),
         ),
+        child: _buildDrawerBody(),
+      ),
+    );
+  }
+
+  ClipPath _buildDrawerBody() {
+    return ClipPath(
+      clipper: _EaselDrawerClipper(),
+      child: Container(
+        width: double.infinity,
+        color: Colors.white,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            widget.child,
+            Align(
+              alignment: Alignment.centerLeft,
+              child: _DrawerButton(
+                onTap: _toggleDrawer,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _toggleDrawer() {
+    setState(() {
+      open = !open;
+    });
+  }
+}
+
+class _DrawerButton extends StatelessWidget {
+  const _DrawerButton({
+    Key key,
+    this.onTap,
+  }) : super(key: key);
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40,
+      width: 40,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Icon(Icons.keyboard_arrow_up),
       ),
     );
   }
