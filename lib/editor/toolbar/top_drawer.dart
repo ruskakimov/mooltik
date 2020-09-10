@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const borderRadius = 8.0;
+
 class TopDrawer extends StatefulWidget {
   TopDrawer({Key key, this.child}) : super(key: key);
 
@@ -88,17 +90,16 @@ class _EaselDrawerClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     final buttonHeight = 40.0;
     final buttonWidth = 40.0;
-    final radius = 8.0;
     return Path()
       ..moveTo(0, 0)
       ..lineTo(size.width, 0)
       ..relativeLineTo(0, size.height - buttonHeight)
       // Start of inwards curve.
-      ..relativeLineTo(-size.width + buttonWidth + radius, 0)
-      ..relativeQuadraticBezierTo(-radius, 0, -radius, radius)
+      ..relativeLineTo(-size.width + buttonWidth + borderRadius, 0)
+      ..relativeQuadraticBezierTo(-borderRadius, 0, -borderRadius, borderRadius)
       // Start of outwards curve.
-      ..lineTo(buttonWidth, size.height - radius)
-      ..relativeQuadraticBezierTo(0, radius, -radius, radius)
+      ..lineTo(buttonWidth, size.height - borderRadius)
+      ..relativeQuadraticBezierTo(0, borderRadius, -borderRadius, borderRadius)
       ..lineTo(0, size.height)
       ..close();
   }
