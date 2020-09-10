@@ -24,13 +24,13 @@ class FrameCanvas extends StatefulWidget {
 }
 
 class _FrameCanvasState extends State<FrameCanvas> {
-  Offset _offset = Offset.zero;
+  Offset _offset;
 
   double _rotation = 0;
   double _prevRotation = 0;
 
-  double _scale = 1;
-  double _prevScale = 1;
+  double _scale;
+  double _prevScale;
 
   Offset _fixedFramePoint;
 
@@ -105,32 +105,40 @@ class _FrameCanvasState extends State<FrameCanvas> {
               _fixedFramePoint, details.localFocalPoint);
         });
       },
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Container(color: Colors.transparent),
-          Positioned(
-            top: _offset.dy,
-            left: _offset.dx,
-            width: widget.frame.width * _scale,
-            height: widget.frame.height * _scale,
-            child: Transform.rotate(
-              alignment: Alignment.topLeft,
-              angle: _rotation,
-              child: RepaintBoundary(
-                child: CustomPaint(
-                  foregroundPainter: FramePainter(widget.frame),
-                  child: Container(
-                    color: Colors.white,
-                    height: widget.frame.height,
-                    width: widget.frame.width,
+      child: LayoutBuilder(builder: (context, constraints) {
+        _scale ??= constraints.maxWidth / widget.frame.width;
+        _offset ??= Offset(
+          0,
+          (constraints.maxHeight - widget.frame.height * _scale) / 2,
+        );
+
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            Container(color: Colors.transparent),
+            Positioned(
+              top: _offset.dy,
+              left: _offset.dx,
+              width: widget.frame.width * _scale,
+              height: widget.frame.height * _scale,
+              child: Transform.rotate(
+                alignment: Alignment.topLeft,
+                angle: _rotation,
+                child: RepaintBoundary(
+                  child: CustomPaint(
+                    foregroundPainter: FramePainter(widget.frame),
+                    child: Container(
+                      color: Colors.white,
+                      height: widget.frame.height,
+                      width: widget.frame.width,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
     );
   }
 }
