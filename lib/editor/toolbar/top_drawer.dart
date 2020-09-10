@@ -43,6 +43,7 @@ class _TopDrawerState extends State<TopDrawer> {
             Align(
               alignment: Alignment.centerLeft,
               child: _DrawerArrow(
+                up: open,
                 onTap: _toggleDrawer,
               ),
             ),
@@ -62,9 +63,11 @@ class _TopDrawerState extends State<TopDrawer> {
 class _DrawerArrow extends StatelessWidget {
   const _DrawerArrow({
     Key key,
+    this.up,
     this.onTap,
   }) : super(key: key);
 
+  final bool up;
   final VoidCallback onTap;
 
   @override
@@ -74,7 +77,7 @@ class _DrawerArrow extends StatelessWidget {
       width: 40,
       child: GestureDetector(
         onTap: onTap,
-        child: Icon(Icons.keyboard_arrow_up),
+        child: Icon(up ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
       ),
     );
   }
