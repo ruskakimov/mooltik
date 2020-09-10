@@ -12,32 +12,41 @@ class TopDrawer extends StatefulWidget {
 class _TopDrawerState extends State<TopDrawer> {
   @override
   Widget build(BuildContext context) {
-    return ClipPath(
-      clipper: EaselDrawerClipper(),
-      child: Container(
-        width: double.infinity,
-        color: Colors.white,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            widget.child,
-            Align(
-              alignment: Alignment.centerLeft,
-              child: SizedBox(
-                height: 40,
-                width: 40,
-                child: Icon(Icons.keyboard_arrow_up),
+    return CustomPaint(
+      painter: _ClipShadowShadowPainter(
+        clipper: _EaselDrawerClipper(),
+        shadow: Shadow(
+          color: Colors.black26,
+          blurRadius: 8,
+        ),
+      ),
+      child: ClipPath(
+        clipper: _EaselDrawerClipper(),
+        child: Container(
+          width: double.infinity,
+          color: Colors.white,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              widget.child,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: Icon(Icons.keyboard_arrow_up),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class EaselDrawerClipper extends CustomClipper<Path> {
+class _EaselDrawerClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final buttonHeight = 40.0;
@@ -59,4 +68,23 @@ class EaselDrawerClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+class _ClipShadowShadowPainter extends CustomPainter {
+  final Shadow shadow;
+  final CustomClipper<Path> clipper;
+
+  _ClipShadowShadowPainter({@required this.shadow, @required this.clipper});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = shadow.toPaint();
+    var clipPath = clipper.getClip(size).shift(shadow.offset);
+    canvas.drawPath(clipPath, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
 }
