@@ -23,6 +23,7 @@ class _TopDrawerState extends State<TopDrawer>
     with SingleTickerProviderStateMixin {
   bool open = true;
   AnimationController _controller;
+  Animation _animation;
 
   @override
   void initState() {
@@ -30,6 +31,11 @@ class _TopDrawerState extends State<TopDrawer>
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 200),
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+      reverseCurve: Curves.easeIn,
     );
   }
 
@@ -42,7 +48,7 @@ class _TopDrawerState extends State<TopDrawer>
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _controller,
+      animation: _animation,
       child: CustomPaint(
         painter: _ClipShadowShadowPainter(
           clipper: _EaselDrawerClipper(),
@@ -55,7 +61,7 @@ class _TopDrawerState extends State<TopDrawer>
       ),
       builder: (context, child) {
         return Transform.translate(
-          offset: Offset(0, -widget.height * _controller.value),
+          offset: Offset(0, -widget.height * _animation.value),
           child: child,
         );
       },
