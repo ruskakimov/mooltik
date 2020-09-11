@@ -31,7 +31,7 @@ class _TopDrawerState extends State<TopDrawer> {
           clipper: _EaselDrawerClipper(),
           shadow: Shadow(
             color: Colors.black26,
-            blurRadius: 8,
+            blurRadius: 4,
           ),
         ),
         child: _buildDrawerBody(),
@@ -44,7 +44,7 @@ class _TopDrawerState extends State<TopDrawer> {
       clipper: _EaselDrawerClipper(),
       child: Container(
         width: double.infinity,
-        color: Colors.white,
+        color: Colors.blueGrey[900],
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -91,7 +91,10 @@ class _DrawerArrow extends StatelessWidget {
       child: SizedBox(
         height: 40,
         width: 40,
-        child: Icon(up ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
+        child: Icon(
+          up ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+          color: Colors.white,
+        ),
       ),
     );
   }
