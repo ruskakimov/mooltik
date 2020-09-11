@@ -23,7 +23,8 @@ class Frame {
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2
         ..strokeCap = StrokeCap.round
-        ..color = Colors.black,
+        ..color = Colors.black
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, 1),
     ));
   }
 
