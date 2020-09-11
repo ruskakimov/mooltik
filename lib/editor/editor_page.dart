@@ -76,6 +76,7 @@ class _EditorPageState extends State<EditorPage>
 
   Widget _buildTopDrawer() {
     return TopDrawer(
+      height: 100,
       child: ToolBar(
         value: _selectedTool,
         onChanged: (tool) {

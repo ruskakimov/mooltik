@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 const borderRadius = 8.0;
 
 class TopDrawer extends StatefulWidget {
-  TopDrawer({Key key, this.child}) : super(key: key);
+  TopDrawer({
+    Key key,
+    this.height,
+    this.child,
+  })  : assert(height != null),
+        assert(child != null),
+        super(key: key);
 
+  final double height;
   final Widget child;
 
   @override
@@ -17,7 +24,7 @@ class _TopDrawerState extends State<TopDrawer> {
   @override
   Widget build(BuildContext context) {
     return Transform.translate(
-      offset: Offset(0, open ? 0 : -52),
+      offset: Offset(0, open ? 0 : -widget.height),
       child: CustomPaint(
         painter: _ClipShadowShadowPainter(
           clipper: _EaselDrawerClipper(),
@@ -41,7 +48,10 @@ class _TopDrawerState extends State<TopDrawer> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            widget.child,
+            SizedBox(
+              height: widget.height,
+              child: widget.child,
+            ),
             Align(
               alignment: Alignment.centerLeft,
               child: _DrawerArrow(
