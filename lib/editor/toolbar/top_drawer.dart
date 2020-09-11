@@ -19,13 +19,30 @@ class TopDrawer extends StatefulWidget {
   _TopDrawerState createState() => _TopDrawerState();
 }
 
-class _TopDrawerState extends State<TopDrawer> {
+class _TopDrawerState extends State<TopDrawer>
+    with SingleTickerProviderStateMixin {
   bool open = true;
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 200),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Transform.translate(
-      offset: Offset(0, open ? 0 : -widget.height),
+    return AnimatedBuilder(
+      animation: _controller,
       child: CustomPaint(
         painter: _ClipShadowShadowPainter(
           clipper: _EaselDrawerClipper(),
@@ -36,6 +53,12 @@ class _TopDrawerState extends State<TopDrawer> {
         ),
         child: _buildDrawerBody(),
       ),
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0, -widget.height * _controller.value),
+          child: child,
+        );
+      },
     );
   }
 
@@ -70,6 +93,11 @@ class _TopDrawerState extends State<TopDrawer> {
     setState(() {
       open = !open;
     });
+    if (open) {
+      _controller.reverse();
+    } else {
+      _controller.forward();
+    }
   }
 }
 
