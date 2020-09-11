@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-const innerBorderRadius = 4.0;
-const outerBorderRadius = 8.0;
+const innerBorderRadius = 16.0;
+const outerBorderRadius = 16.0;
 
 class TopDrawer extends StatefulWidget {
   TopDrawer({
