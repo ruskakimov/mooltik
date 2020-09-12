@@ -11,6 +11,9 @@ class Stroke {
   final Paint paint;
 
   void extend(Offset point) {
+    if (points.isNotEmpty && point == points.last) {
+      return;
+    }
     points.add(point);
   }
 
