@@ -9,7 +9,7 @@ class Frame extends ChangeNotifier {
   Frame() : _strokes = [];
 
   final List<Stroke> _strokes;
-  ui.Image _raster;
+  List<ui.Image> _snapshots = [];
   int _rasterisedUntil = 0;
 
   double get width => 1280;
@@ -63,7 +63,8 @@ class Frame extends ChangeNotifier {
 
   Future<void> _rasterize() async {
     final pic = pictureFromFrame(this);
-    _raster = await pic.toImage(width.toInt(), height.toInt());
+    final snapshot = await pic.toImage(width.toInt(), height.toInt());
+    _snapshots.add(snapshot);
     _rasterisedUntil = _strokes.length;
     notifyListeners();
   }
@@ -79,7 +80,9 @@ class Frame extends ChangeNotifier {
     // Save layer to erase paintings on it with `BlendMode.clear`.
     canvas.saveLayer(Rect.fromLTWH(0, 0, width, height), Paint());
 
-    if (_raster != null) canvas.drawImage(_raster, Offset.zero, Paint());
+    if (_snapshots.isNotEmpty) {
+      canvas.drawImage(_snapshots.last, Offset.zero, Paint());
+    }
 
     for (int i = _rasterisedUntil; i < _strokes.length; i++) {
       _strokes[i].paintOn(canvas);
