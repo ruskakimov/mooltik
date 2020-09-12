@@ -30,7 +30,7 @@ class _EditorPageState extends State<EditorPage>
   @override
   void initState() {
     super.initState();
-    _frames = [Frame(), Frame()];
+    _frames = [Frame()];
     _selectedFrameIndex = 0;
     _controller = AnimationController(
       lowerBound: 0,
@@ -77,13 +77,19 @@ class _EditorPageState extends State<EditorPage>
   Widget _buildTopDrawer() {
     return TopDrawer(
       height: 100,
-      child: ToolBar(
-        value: _selectedTool,
-        onChanged: (tool) {
-          setState(() {
-            _selectedTool = tool;
-          });
-        },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ToolBar(
+            value: _selectedTool,
+            onChanged: (tool) {
+              setState(() {
+                _selectedTool = tool;
+              });
+            },
+          ),
+          _buildDownloadButton(),
+        ],
       ),
     );
   }
@@ -107,7 +113,10 @@ class _EditorPageState extends State<EditorPage>
 
   Widget _buildDownloadButton() {
     return IconButton(
-      icon: Icon(Icons.file_download),
+      icon: Icon(
+        Icons.file_download,
+        color: Colors.grey,
+      ),
       onPressed: () async {
         final bytes = await makeGif(_frames, _fps);
         await Share.file('Share GIF', 'image.gif', bytes, 'image/gif');
