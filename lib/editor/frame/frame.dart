@@ -69,6 +69,11 @@ class Frame extends ChangeNotifier {
     notifyListeners();
   }
 
+  void undo() {
+    _snapshots.removeLast();
+    notifyListeners();
+  }
+
   void paintOn(Canvas canvas) {
     canvas.drawColor(Colors.white, BlendMode.srcOver);
 

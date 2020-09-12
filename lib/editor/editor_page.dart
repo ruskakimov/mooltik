@@ -55,23 +55,23 @@ class _EditorPageState extends State<EditorPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFDDDDDD),
-      body: SafeArea(
-        child: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            Positioned.fill(
-              child: ChangeNotifierProvider.value(
-                value: selectedFrame,
+      body: ChangeNotifierProvider.value(
+        value: selectedFrame,
+        child: SafeArea(
+          child: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              Positioned.fill(
                 child: Easel(
                   selectedTool: _selectedTool,
                 ),
               ),
-            ),
-            Align(
-              alignment: Alignment.topCenter,
-              child: _buildTopDrawer(),
-            ),
-          ],
+              Align(
+                alignment: Alignment.topCenter,
+                child: _buildTopDrawer(),
+              ),
+            ],
+          ),
         ),
       ),
     );

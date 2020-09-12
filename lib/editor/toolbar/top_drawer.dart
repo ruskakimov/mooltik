@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../frame/frame.dart';
 
 const innerBorderRadius = 16.0;
 const outerBorderRadius = 16.0;
@@ -91,6 +94,9 @@ class _TopDrawerState extends State<TopDrawer>
                 Spacer(),
                 _DrawerIconButton(
                   icon: Icons.undo,
+                  onTap: () {
+                    context.read<Frame>().undo();
+                  },
                 ),
                 _DrawerIconButton(
                   icon: Icons.redo,
