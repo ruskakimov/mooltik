@@ -21,7 +21,7 @@ class Frame {
       startPoint,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 2
+        ..strokeWidth = 5
         ..strokeCap = StrokeCap.round
         ..color = Colors.black
         ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
