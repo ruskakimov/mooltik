@@ -82,12 +82,20 @@ class _TopDrawerState extends State<TopDrawer>
               height: widget.height,
               child: widget.child,
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: _DrawerArrow(
-                up: open,
-                onTap: _toggleDrawer,
-              ),
+            Row(
+              children: [
+                _DrawerArrow(
+                  up: open,
+                  onTap: _toggleDrawer,
+                ),
+                Spacer(),
+                _DrawerIconButton(
+                  icon: Icons.undo,
+                ),
+                _DrawerIconButton(
+                  icon: Icons.redo,
+                ),
+              ],
             ),
           ],
         ),
@@ -119,6 +127,25 @@ class _DrawerArrow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return _DrawerIconButton(
+      icon: up ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+      onTap: onTap,
+    );
+  }
+}
+
+class _DrawerIconButton extends StatelessWidget {
+  const _DrawerIconButton({
+    Key key,
+    this.icon,
+    this.onTap,
+  }) : super(key: key);
+
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -126,7 +153,7 @@ class _DrawerArrow extends StatelessWidget {
         height: 40,
         width: 40,
         child: Icon(
-          up ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+          icon,
           color: Colors.white,
         ),
       ),
