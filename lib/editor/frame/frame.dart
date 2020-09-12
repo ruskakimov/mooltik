@@ -49,6 +49,7 @@ class Frame extends ChangeNotifier {
   void finishLastStroke() {
     if (_strokes.isNotEmpty) {
       _strokes.last.finish();
+      _rasterize();
     }
     notifyListeners();
   }
@@ -60,7 +61,7 @@ class Frame extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> rasterize() async {
+  Future<void> _rasterize() async {
     final pic = pictureFromFrame(this);
     _raster = await pic.toImage(width.toInt(), height.toInt());
     _rasterisedUntil = _strokes.length;

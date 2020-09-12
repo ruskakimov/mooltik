@@ -78,9 +78,8 @@ class _FrameCanvasState extends State<FrameCanvas> {
         final framePoint = toFramePoint(details.localPosition);
         frame.extendLastStroke(framePoint);
       },
-      onStrokeEnd: () async {
+      onStrokeEnd: () {
         frame.finishLastStroke();
-        await frame.rasterize();
       },
       onStrokeCancel: () {
         frame.cancelLastStroke();
