@@ -43,6 +43,10 @@ class Frame {
     _strokes.last.extend(point);
   }
 
+  void finishLastStroke() {
+    _strokes.last.finish();
+  }
+
   void cancelLastStroke() {
     if (_strokes.isNotEmpty) {
       _strokes.removeLast();

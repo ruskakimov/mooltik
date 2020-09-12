@@ -17,6 +17,12 @@ class Stroke {
     points.add(point);
   }
 
+  void finish() {
+    if (points.length == 1) {
+      extend(points.first.translate(-0.1, 0.1));
+    }
+  }
+
   void paintOn(Canvas canvas) {
     final path = Path();
     path.moveTo(points.first.dx, points.first.dy);

@@ -84,6 +84,7 @@ class _FrameCanvasState extends State<FrameCanvas> {
         });
       },
       onStrokeEnd: () async {
+        widget.frame.finishLastStroke();
         await widget.frame.rasterize();
         setState(() {});
       },
