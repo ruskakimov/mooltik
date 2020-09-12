@@ -44,7 +44,9 @@ class Frame {
   }
 
   void finishLastStroke() {
-    _strokes.last.finish();
+    if (_strokes.isNotEmpty) {
+      _strokes.last.finish();
+    }
   }
 
   void cancelLastStroke() {
