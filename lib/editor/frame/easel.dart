@@ -64,7 +64,7 @@ class _EaselState extends State<Easel> {
   Widget build(BuildContext context) {
     final frame = context.watch<Frame>();
 
-    return CanvasGestureDetector(
+    return EaselGestureDetector(
       onStrokeStart: (DragStartDetails details) {
         if (widget.selectedTool == Tool.pencil) {
           final framePoint = toFramePoint(details.localPosition);
@@ -79,7 +79,6 @@ class _EaselState extends State<Easel> {
         frame.extendLastStroke(framePoint);
       },
       onStrokeEnd: () {
-        print('oi');
         frame.finishLastStroke();
       },
       onStrokeCancel: () {

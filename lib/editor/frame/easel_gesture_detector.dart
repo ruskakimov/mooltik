@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 typedef void StrokeStartCallback(Offset position);
 typedef void StrokeUpdateCallback(Offset position);
 
-class CanvasGestureDetector extends StatefulWidget {
-  CanvasGestureDetector({
+class EaselGestureDetector extends StatefulWidget {
+  EaselGestureDetector({
     Key key,
     this.child,
     this.onStrokeStart,
@@ -24,18 +24,24 @@ class CanvasGestureDetector extends StatefulWidget {
   final GestureScaleUpdateCallback onScaleUpdate;
 
   @override
-  _CanvasGestureDetectorState createState() => _CanvasGestureDetectorState();
+  _EaselGestureDetectorState createState() => _EaselGestureDetectorState();
 }
 
-class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
+class _EaselGestureDetectorState extends State<EaselGestureDetector> {
   int _prevPointersOnScreen = 0;
   int _pointersOnScreen = 0;
   Offset _lastContactPoint;
+  bool _startedStroke = false;
   bool _veryQuickStroke = false;
 
   void changePointerOnScreenBy(int count) {
     _prevPointersOnScreen = _pointersOnScreen;
     _pointersOnScreen = _pointersOnScreen + count;
+
+    if (_pointersOnScreen == 0 && _startedStroke) {
+      widget.onStrokeEnd?.call();
+      _startedStroke = false;
+    }
   }
 
   @override
@@ -61,14 +67,10 @@ class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
             if (_veryQuickStroke) {
               _veryQuickStroke = false;
               widget.onStrokeCancel?.call();
+              _startedStroke = false;
             }
 
             widget.onScaleUpdate?.call(details);
-          }
-        },
-        onScaleEnd: (ScaleEndDetails details) {
-          if (_pointersOnScreen == 0) {
-            widget.onStrokeEnd?.call();
           }
         },
         child: widget.child,
@@ -89,6 +91,8 @@ class _CanvasGestureDetectorState extends State<CanvasGestureDetector> {
       globalPosition: details.focalPoint,
       localPosition: details.localFocalPoint,
     ));
+
+    _startedStroke = true;
   }
 
   void _onSinglePointerMove(ScaleUpdateDetails details) {
