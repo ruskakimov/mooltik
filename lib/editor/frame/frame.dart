@@ -5,20 +5,31 @@ import 'package:flutter/material.dart';
 
 import 'stroke.dart';
 
+/// Maximum number of stored snapshots.
+///
+/// Each stroke generates a new snapshot.
+/// Snapshot is a bitmap image.
+/// This value minus 1 equals maximum number of undo's.
+const int maxSnapshotCount = 10;
+
 class Frame extends ChangeNotifier {
   Frame() : _strokes = [];
 
   final List<Stroke> _strokes;
 
-  List<ui.Image> _snapshots = [];
-  int _selectedSnapshotId = -1;
+  /// Must contain at least one snapshot. [null] represents an empty screen.
+  List<ui.Image> _snapshots = [null];
+
+  int _selectedSnapshotId = 0;
   int _rasterisedUntil = 0;
 
   double get width => 1280;
 
   double get height => 720;
 
-  bool get undoAvailable => _selectedSnapshotId >= 0;
+  ui.Image get snapshot => _snapshots[_selectedSnapshotId];
+
+  bool get undoAvailable => _selectedSnapshotId > 0;
 
   bool get redoAvailable => _selectedSnapshotId + 1 < _snapshots.length;
 
@@ -69,7 +80,7 @@ class Frame extends ChangeNotifier {
   void finishLastStroke() {
     if (_strokes.isNotEmpty) {
       _strokes.last.finish();
-      _rasterize();
+      _generateLastSnapshot();
     }
     notifyListeners();
   }
@@ -81,7 +92,7 @@ class Frame extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _rasterize() async {
+  Future<void> _generateLastSnapshot() async {
     final pic = pictureFromFrame(this);
     final snapshot = await pic.toImage(width.toInt(), height.toInt());
 
@@ -91,6 +102,9 @@ class Frame extends ChangeNotifier {
     }
 
     _snapshots.add(snapshot);
+    if (_snapshots.length > maxSnapshotCount) {
+      _snapshots.removeRange(0, _snapshots.length - maxSnapshotCount);
+    }
     _selectedSnapshotId = _snapshots.length - 1;
 
     _rasterisedUntil = _strokes.length;
@@ -103,8 +117,8 @@ class Frame extends ChangeNotifier {
     // Save layer to erase paintings on it with `BlendMode.clear`.
     canvas.saveLayer(Rect.fromLTWH(0, 0, width, height), Paint());
 
-    if (_selectedSnapshotId >= 0) {
-      canvas.drawImage(_snapshots[_selectedSnapshotId], Offset.zero, Paint());
+    if (snapshot != null) {
+      canvas.drawImage(snapshot, Offset.zero, Paint());
     }
 
     for (int i = _rasterisedUntil; i < _strokes.length; i++) {
