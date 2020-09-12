@@ -18,6 +18,24 @@ class Frame extends ChangeNotifier {
 
   double get height => 720;
 
+  bool get undoAvailable => _selectedSnapshotId >= 0;
+
+  bool get redoAvailable => _selectedSnapshotId + 1 < _snapshots.length;
+
+  void undo() {
+    if (undoAvailable) {
+      _selectedSnapshotId--;
+      notifyListeners();
+    }
+  }
+
+  void redo() {
+    if (redoAvailable) {
+      _selectedSnapshotId++;
+      notifyListeners();
+    }
+  }
+
   void startPencilStroke(Offset startPoint) {
     _strokes.add(Stroke(
       startPoint,
@@ -77,20 +95,6 @@ class Frame extends ChangeNotifier {
 
     _rasterisedUntil = _strokes.length;
     notifyListeners();
-  }
-
-  void undo() {
-    if (_selectedSnapshotId >= 0) {
-      _selectedSnapshotId--;
-      notifyListeners();
-    }
-  }
-
-  void redo() {
-    if (_selectedSnapshotId + 1 < _snapshots.length) {
-      _selectedSnapshotId++;
-      notifyListeners();
-    }
   }
 
   void paintOn(Canvas canvas) {

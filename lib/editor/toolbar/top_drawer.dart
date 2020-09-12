@@ -72,6 +72,8 @@ class _TopDrawerState extends State<TopDrawer>
   }
 
   ClipPath _buildDrawerBody() {
+    final frame = context.watch<Frame>();
+
     return ClipPath(
       clipper: _EaselDrawerClipper(),
       child: Container(
@@ -94,15 +96,11 @@ class _TopDrawerState extends State<TopDrawer>
                 Spacer(),
                 _DrawerIconButton(
                   icon: Icons.undo,
-                  onTap: () {
-                    context.read<Frame>().undo();
-                  },
+                  onTap: frame.undoAvailable ? frame.undo : null,
                 ),
                 _DrawerIconButton(
                   icon: Icons.redo,
-                  onTap: () {
-                    context.read<Frame>().redo();
-                  },
+                  onTap: frame.redoAvailable ? frame.redo : null,
                 ),
               ],
             ),
@@ -163,7 +161,7 @@ class _DrawerIconButton extends StatelessWidget {
         width: 40,
         child: Icon(
           icon,
-          color: Colors.white,
+          color: onTap != null ? Colors.white : Colors.grey,
         ),
       ),
     );
