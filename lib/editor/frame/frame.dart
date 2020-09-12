@@ -10,7 +10,7 @@ import 'stroke.dart';
 /// Each stroke generates a new snapshot.
 /// Snapshot is a bitmap image.
 /// This value minus 1 equals maximum number of undo's.
-const int maxSnapshotCount = 10;
+const int maxSnapshotCount = 16;
 
 class Frame extends ChangeNotifier {
   Frame() : _strokes = [];
