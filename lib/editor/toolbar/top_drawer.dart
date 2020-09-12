@@ -100,6 +100,9 @@ class _TopDrawerState extends State<TopDrawer>
                 ),
                 _DrawerIconButton(
                   icon: Icons.redo,
+                  onTap: () {
+                    context.read<Frame>().redo();
+                  },
                 ),
               ],
             ),

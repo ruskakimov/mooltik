@@ -9,7 +9,9 @@ class Frame extends ChangeNotifier {
   Frame() : _strokes = [];
 
   final List<Stroke> _strokes;
+
   List<ui.Image> _snapshots = [];
+  int _selectedSnapshotId = -1;
   int _rasterisedUntil = 0;
 
   double get width => 1280;
@@ -64,14 +66,31 @@ class Frame extends ChangeNotifier {
   Future<void> _rasterize() async {
     final pic = pictureFromFrame(this);
     final snapshot = await pic.toImage(width.toInt(), height.toInt());
+
+    // Remove redoable snapshots on new stroke.
+    if (_selectedSnapshotId >= 0) {
+      _snapshots.removeRange(_selectedSnapshotId + 1, _snapshots.length);
+    }
+
     _snapshots.add(snapshot);
+    _selectedSnapshotId = _snapshots.length - 1;
+
     _rasterisedUntil = _strokes.length;
     notifyListeners();
   }
 
   void undo() {
-    _snapshots.removeLast();
-    notifyListeners();
+    if (_selectedSnapshotId >= 0) {
+      _selectedSnapshotId--;
+      notifyListeners();
+    }
+  }
+
+  void redo() {
+    if (_selectedSnapshotId + 1 < _snapshots.length) {
+      _selectedSnapshotId++;
+      notifyListeners();
+    }
   }
 
   void paintOn(Canvas canvas) {
@@ -80,8 +99,8 @@ class Frame extends ChangeNotifier {
     // Save layer to erase paintings on it with `BlendMode.clear`.
     canvas.saveLayer(Rect.fromLTWH(0, 0, width, height), Paint());
 
-    if (_snapshots.isNotEmpty) {
-      canvas.drawImage(_snapshots.last, Offset.zero, Paint());
+    if (_selectedSnapshotId >= 0) {
+      canvas.drawImage(_snapshots[_selectedSnapshotId], Offset.zero, Paint());
     }
 
     for (int i = _rasterisedUntil; i < _strokes.length; i++) {
