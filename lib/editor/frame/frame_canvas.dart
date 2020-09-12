@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../toolbar/tools.dart';
 import 'frame_painter.dart';
@@ -12,11 +13,9 @@ const twoPi = pi * 2;
 class FrameCanvas extends StatefulWidget {
   FrameCanvas({
     Key key,
-    @required this.frame,
     @required this.selectedTool,
   }) : super(key: key);
 
-  final Frame frame;
   final Tool selectedTool;
 
   @override
@@ -63,35 +62,28 @@ class _FrameCanvasState extends State<FrameCanvas> {
 
   @override
   Widget build(BuildContext context) {
+    final frame = context.watch<Frame>();
+
     return CanvasGestureDetector(
       onStrokeStart: (DragStartDetails details) {
         if (widget.selectedTool == Tool.pencil) {
           final framePoint = toFramePoint(details.localPosition);
-          setState(() {
-            widget.frame.startPencilStroke(framePoint);
-          });
+          frame.startPencilStroke(framePoint);
         } else if (widget.selectedTool == Tool.eraser) {
           final framePoint = toFramePoint(details.localPosition);
-          setState(() {
-            widget.frame.startEraserStroke(framePoint);
-          });
+          frame.startEraserStroke(framePoint);
         }
       },
       onStrokeUpdate: (DragUpdateDetails details) {
-        setState(() {
-          final framePoint = toFramePoint(details.localPosition);
-          widget.frame.extendLastStroke(framePoint);
-        });
+        final framePoint = toFramePoint(details.localPosition);
+        frame.extendLastStroke(framePoint);
       },
       onStrokeEnd: () async {
-        widget.frame.finishLastStroke();
-        await widget.frame.rasterize();
-        setState(() {});
+        frame.finishLastStroke();
+        await frame.rasterize();
       },
       onStrokeCancel: () {
-        setState(() {
-          widget.frame.cancelLastStroke();
-        });
+        frame.cancelLastStroke();
       },
       onScaleStart: (ScaleStartDetails details) {
         _prevScale = _scale;
@@ -107,10 +99,10 @@ class _FrameCanvasState extends State<FrameCanvas> {
         });
       },
       child: LayoutBuilder(builder: (context, constraints) {
-        _scale ??= constraints.maxWidth / widget.frame.width;
+        _scale ??= constraints.maxWidth / frame.width;
         _offset ??= Offset(
           0,
-          (constraints.maxHeight - widget.frame.height * _scale) / 2,
+          (constraints.maxHeight - frame.height * _scale) / 2,
         );
 
         return Stack(
@@ -120,18 +112,18 @@ class _FrameCanvasState extends State<FrameCanvas> {
             Positioned(
               top: _offset.dy,
               left: _offset.dx,
-              width: widget.frame.width * _scale,
-              height: widget.frame.height * _scale,
+              width: frame.width * _scale,
+              height: frame.height * _scale,
               child: Transform.rotate(
                 alignment: Alignment.topLeft,
                 angle: _rotation,
                 child: RepaintBoundary(
                   child: CustomPaint(
-                    foregroundPainter: FramePainter(widget.frame),
+                    foregroundPainter: FramePainter(frame),
                     child: Container(
                       color: Colors.white,
-                      height: widget.frame.height,
-                      width: widget.frame.width,
+                      height: frame.height,
+                      width: frame.width,
                     ),
                   ),
                 ),

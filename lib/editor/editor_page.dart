@@ -3,6 +3,7 @@ import 'package:mooltik/editor/frame_thumbnail.dart';
 import 'package:mooltik/editor/gif.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'frame/frame.dart';
 import 'frame/frame_canvas.dart';
@@ -59,9 +60,11 @@ class _EditorPageState extends State<EditorPage>
           fit: StackFit.expand,
           children: <Widget>[
             Positioned.fill(
-              child: FrameCanvas(
-                frame: selectedFrame,
-                selectedTool: _selectedTool,
+              child: ChangeNotifierProvider.value(
+                value: selectedFrame,
+                child: FrameCanvas(
+                  selectedTool: _selectedTool,
+                ),
               ),
             ),
             Align(

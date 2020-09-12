@@ -1,15 +1,15 @@
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 import 'package:mooltik/editor/gif.dart' show pictureFromFrame;
-import 'package:flutter/material.dart' show Colors;
+import 'package:flutter/material.dart';
 
 import 'stroke.dart';
 
-class Frame {
+class Frame extends ChangeNotifier {
   Frame() : _strokes = [];
 
   final List<Stroke> _strokes;
-  Image _raster;
+  ui.Image _raster;
   int _rasterisedUntil = 0;
 
   double get width => 1280;
@@ -26,6 +26,7 @@ class Frame {
         ..color = Colors.black
         ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
     ));
+    notifyListeners();
   }
 
   void startEraserStroke(Offset startPoint) {
@@ -37,32 +38,38 @@ class Frame {
         ..strokeCap = StrokeCap.round
         ..blendMode = BlendMode.clear,
     ));
+    notifyListeners();
   }
 
   void extendLastStroke(Offset point) {
     _strokes.last.extend(point);
+    notifyListeners();
   }
 
   void finishLastStroke() {
     if (_strokes.isNotEmpty) {
       _strokes.last.finish();
     }
+    notifyListeners();
   }
 
   void cancelLastStroke() {
     if (_strokes.isNotEmpty) {
       _strokes.removeLast();
     }
+    notifyListeners();
   }
 
   Future<void> rasterize() async {
     final pic = pictureFromFrame(this);
     _raster = await pic.toImage(width.toInt(), height.toInt());
     _rasterisedUntil = _strokes.length;
+    notifyListeners();
   }
 
   void clear() {
     _strokes.clear();
+    notifyListeners();
   }
 
   void paintOn(Canvas canvas) {
