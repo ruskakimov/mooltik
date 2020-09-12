@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../toolbar/tools.dart';
 import 'frame_painter.dart';
 import 'frame.dart';
-import 'canvas_gesture_detector.dart';
+import 'easel_gesture_detector.dart';
 
 const twoPi = pi * 2;
 
@@ -79,6 +79,7 @@ class _EaselState extends State<Easel> {
         frame.extendLastStroke(framePoint);
       },
       onStrokeEnd: () {
+        print('oi');
         frame.finishLastStroke();
       },
       onStrokeCancel: () {
