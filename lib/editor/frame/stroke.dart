@@ -23,11 +23,20 @@ class Stroke {
     }
   }
 
+  Offset _midPoint(Offset p1, Offset p2) {
+    return p1 + (p2 - p1) / 2;
+  }
+
   void paintOn(Canvas canvas) {
     final path = Path();
     path.moveTo(points.first.dx, points.first.dy);
 
-    points.skip(1).forEach((p) => path.lineTo(p.dx, p.dy));
+    for (var i = 1; i < points.length; i++) {
+      final p1 = points[i - 1];
+      final p2 = points[i];
+      final mid = _midPoint(p1, p2);
+      path.quadraticBezierTo(p1.dx, p1.dy, mid.dx, mid.dy);
+    }
 
     canvas.drawPath(path, paint);
   }
