@@ -24,7 +24,7 @@ class Frame {
         ..strokeWidth = 2
         ..strokeCap = StrokeCap.round
         ..color = Colors.black
-        ..maskFilter = MaskFilter.blur(BlurStyle.normal, 1),
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
     ));
   }
 
