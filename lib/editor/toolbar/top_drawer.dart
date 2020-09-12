@@ -169,9 +169,18 @@ class _EaselDrawerClipper extends CustomClipper<Path> {
     return Path()
       ..moveTo(0, 0)
       ..lineTo(size.width, 0)
-      ..relativeLineTo(0, size.height - buttonHeight)
+      ..lineTo(size.width, size.height)
+      // Start of outwards curve.
+      ..lineTo(size.width - buttonWidth * 2 + outerBorderRadius, size.height)
+      ..relativeQuadraticBezierTo(
+          -outerBorderRadius, 0, -outerBorderRadius, -outerBorderRadius)
       // Start of inwards curve.
-      ..relativeLineTo(-size.width + buttonWidth + innerBorderRadius, 0)
+      ..lineTo(size.width - buttonWidth * 2,
+          size.height - buttonHeight + innerBorderRadius)
+      ..relativeQuadraticBezierTo(
+          0, -innerBorderRadius, -innerBorderRadius, -innerBorderRadius)
+      // Start of inwards curve.
+      ..lineTo(buttonWidth + innerBorderRadius, size.height - buttonHeight)
       ..relativeQuadraticBezierTo(
           -innerBorderRadius, 0, -innerBorderRadius, innerBorderRadius)
       // Start of outwards curve.
