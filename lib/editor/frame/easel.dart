@@ -10,8 +10,8 @@ import 'canvas_gesture_detector.dart';
 
 const twoPi = pi * 2;
 
-class FrameCanvas extends StatefulWidget {
-  FrameCanvas({
+class Easel extends StatefulWidget {
+  Easel({
     Key key,
     @required this.selectedTool,
   }) : super(key: key);
@@ -19,10 +19,10 @@ class FrameCanvas extends StatefulWidget {
   final Tool selectedTool;
 
   @override
-  _FrameCanvasState createState() => _FrameCanvasState();
+  _EaselState createState() => _EaselState();
 }
 
-class _FrameCanvasState extends State<FrameCanvas> {
+class _EaselState extends State<Easel> {
   Offset _offset;
 
   double _rotation = 0;

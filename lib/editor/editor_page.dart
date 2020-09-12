@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'frame/frame.dart';
-import 'frame/frame_canvas.dart';
+import 'frame/easel.dart';
 import 'toolbar/top_drawer.dart';
 import 'toolbar/toolbar.dart';
 import 'toolbar/tools.dart';
@@ -62,7 +62,7 @@ class _EditorPageState extends State<EditorPage>
             Positioned.fill(
               child: ChangeNotifierProvider.value(
                 value: selectedFrame,
-                child: FrameCanvas(
+                child: Easel(
                   selectedTool: _selectedTool,
                 ),
               ),
