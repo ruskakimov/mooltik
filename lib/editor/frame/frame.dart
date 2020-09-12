@@ -69,11 +69,6 @@ class Frame extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clear() {
-    _strokes.clear();
-    notifyListeners();
-  }
-
   void paintOn(Canvas canvas) {
     canvas.drawColor(Colors.white, BlendMode.srcOver);
 
