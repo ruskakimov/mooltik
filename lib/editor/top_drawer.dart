@@ -32,7 +32,11 @@ class TopDrawer extends StatelessWidget {
               _buildDownloadButton(model.frames),
             ],
           ),
-          _buildStrokeWidthButton(),
+          Row(
+            children: [
+              _buildStrokeWidthButton(),
+            ],
+          ),
         ],
       ),
       quickAccessButtons: [
