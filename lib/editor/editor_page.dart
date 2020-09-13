@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'frame/easel.dart';
-import 'toolbar/top_drawer.dart';
+import 'toolbar/drawer_icon_button.dart';
+import 'toolbar/editor_drawer.dart';
 import 'toolbar/toolbar.dart';
 
 class EditorPage extends StatefulWidget {
@@ -69,8 +70,9 @@ class _EditorPageState extends State<EditorPage>
 
   Widget _buildTopDrawer() {
     final model = context.watch<EditorModel>();
+    final frame = model.selectedFrame;
 
-    return TopDrawer(
+    return EditorDrawer(
       height: 100,
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -82,6 +84,16 @@ class _EditorPageState extends State<EditorPage>
           _buildDownloadButton(),
         ],
       ),
+      quickAccessButtons: [
+        DrawerIconButton(
+          icon: Icons.undo,
+          onTap: frame.undoAvailable ? frame.undo : null,
+        ),
+        DrawerIconButton(
+          icon: Icons.redo,
+          onTap: frame.redoAvailable ? frame.redo : null,
+        ),
+      ],
     );
   }
 

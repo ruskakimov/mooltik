@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../frame/frame.dart';
 import 'drawer_icon_button.dart';
 
 const innerBorderRadius = 16.0;
 const outerBorderRadius = 16.0;
 
-class TopDrawer extends StatefulWidget {
-  TopDrawer({
+class EditorDrawer extends StatefulWidget {
+  EditorDrawer({
     Key key,
     this.height,
     this.body,
+    this.quickAccessButtons,
   })  : assert(height != null),
         assert(body != null),
         super(key: key);
 
   final double height;
   final Widget body;
+  final List<DrawerIconButton> quickAccessButtons;
 
   @override
-  _TopDrawerState createState() => _TopDrawerState();
+  _EditorDrawerState createState() => _EditorDrawerState();
 }
 
-class _TopDrawerState extends State<TopDrawer>
+class _EditorDrawerState extends State<EditorDrawer>
     with SingleTickerProviderStateMixin {
   bool open = true;
   AnimationController _controller;
@@ -54,8 +54,8 @@ class _TopDrawerState extends State<TopDrawer>
     return AnimatedBuilder(
       animation: _animation,
       child: CustomPaint(
-        painter: _ClipShadowShadowPainter(
-          clipper: _EaselDrawerClipper(),
+        painter: _ClippedShadowPainter(
+          clipper: _DrawerClipper(),
           shadow: Shadow(
             color: Colors.black26,
             blurRadius: 4,
@@ -73,10 +73,8 @@ class _TopDrawerState extends State<TopDrawer>
   }
 
   ClipPath _buildDrawerBody() {
-    final frame = context.watch<Frame>();
-
     return ClipPath(
-      clipper: _EaselDrawerClipper(),
+      clipper: _DrawerClipper(),
       child: Container(
         width: double.infinity,
         color: Colors.blueGrey[900],
@@ -97,14 +95,7 @@ class _TopDrawerState extends State<TopDrawer>
                   onTap: _toggleDrawer,
                 ),
                 Spacer(),
-                DrawerIconButton(
-                  icon: Icons.undo,
-                  onTap: frame.undoAvailable ? frame.undo : null,
-                ),
-                DrawerIconButton(
-                  icon: Icons.redo,
-                  onTap: frame.redoAvailable ? frame.redo : null,
-                ),
+                ...widget.quickAccessButtons,
               ],
             ),
           ],
@@ -125,7 +116,7 @@ class _TopDrawerState extends State<TopDrawer>
   }
 }
 
-class _EaselDrawerClipper extends CustomClipper<Path> {
+class _DrawerClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final buttonHeight = 40.0;
@@ -159,11 +150,11 @@ class _EaselDrawerClipper extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
-class _ClipShadowShadowPainter extends CustomPainter {
+class _ClippedShadowPainter extends CustomPainter {
   final Shadow shadow;
   final CustomClipper<Path> clipper;
 
-  _ClipShadowShadowPainter({@required this.shadow, @required this.clipper});
+  _ClippedShadowPainter({@required this.shadow, @required this.clipper});
 
   @override
   void paint(Canvas canvas, Size size) {
