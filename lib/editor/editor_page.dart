@@ -1,13 +1,9 @@
 import 'package:mooltik/editor/editor_model.dart';
-import 'package:mooltik/editor/gif.dart';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/top_drawer.dart';
 import 'package:provider/provider.dart';
 
 import 'frame/easel.dart';
-import 'toolbar/drawer_icon_button.dart';
-import 'toolbar/editor_drawer.dart';
-import 'toolbar/toolbar.dart';
 
 class EditorPage extends StatefulWidget {
   const EditorPage({Key key}) : super(key: key);
@@ -59,41 +55,12 @@ class _EditorPageState extends State<EditorPage>
               ),
               Align(
                 alignment: Alignment.topCenter,
-                child: _buildTopDrawer(),
+                child: TopDrawer(),
               ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildTopDrawer() {
-    final model = context.watch<EditorModel>();
-    final frame = model.selectedFrame;
-
-    return EditorDrawer(
-      height: 100,
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          ToolBar(
-            value: model.selectedTool,
-            onChanged: model.selectTool,
-          ),
-          _buildDownloadButton(),
-        ],
-      ),
-      quickAccessButtons: [
-        DrawerIconButton(
-          icon: Icons.undo,
-          onTap: frame.undoAvailable ? frame.undo : null,
-        ),
-        DrawerIconButton(
-          icon: Icons.redo,
-          onTap: frame.redoAvailable ? frame.redo : null,
-        ),
-      ],
     );
   }
 
@@ -113,19 +80,4 @@ class _EditorPageState extends State<EditorPage>
   //     },
   //   );
   // }
-
-  Widget _buildDownloadButton() {
-    final frames = context.watch<EditorModel>().frames;
-
-    return IconButton(
-      icon: Icon(
-        Icons.file_download,
-        color: Colors.grey,
-      ),
-      onPressed: () async {
-        final bytes = await makeGif(frames, 24);
-        await Share.file('Share GIF', 'image.gif', bytes, 'image/gif');
-      },
-    );
-  }
 }
