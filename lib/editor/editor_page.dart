@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'frame/easel.dart';
 import 'toolbar/top_drawer.dart';
 import 'toolbar/toolbar.dart';
-import 'toolbar/tools.dart';
 
 class EditorPage extends StatefulWidget {
   const EditorPage({Key key}) : super(key: key);
@@ -18,8 +17,6 @@ class EditorPage extends StatefulWidget {
 
 class _EditorPageState extends State<EditorPage>
     with SingleTickerProviderStateMixin {
-  Tool _selectedTool = Tool.pencil;
-
   @override
   void initState() {
     super.initState();
@@ -56,7 +53,7 @@ class _EditorPageState extends State<EditorPage>
             children: <Widget>[
               Positioned.fill(
                 child: Easel(
-                  selectedTool: _selectedTool,
+                  selectedTool: model.selectedTool,
                 ),
               ),
               Align(
@@ -71,18 +68,16 @@ class _EditorPageState extends State<EditorPage>
   }
 
   Widget _buildTopDrawer() {
+    final model = context.watch<EditorModel>();
+
     return TopDrawer(
       height: 100,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ToolBar(
-            value: _selectedTool,
-            onChanged: (tool) {
-              setState(() {
-                _selectedTool = tool;
-              });
-            },
+            value: model.selectedTool,
+            onChanged: model.selectTool,
           ),
           _buildDownloadButton(),
         ],
