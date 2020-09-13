@@ -7,7 +7,13 @@ import 'editor/editor_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Remove system top and bottom bars.
   SystemChrome.setEnabledSystemUIOverlays([]);
+
+  // Lock to portrait mode.
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   runApp(App());
 }
 
