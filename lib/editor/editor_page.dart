@@ -1,5 +1,3 @@
-import 'package:mooltik/editor/fps_stepper.dart';
-import 'package:mooltik/editor/frame_thumbnail.dart';
 import 'package:mooltik/editor/gif.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
@@ -124,38 +122,6 @@ class _EditorPageState extends State<EditorPage>
         final bytes = await makeGif(_frames, _fps);
         await Share.file('Share GIF', 'image.gif', bytes, 'image/gif');
       },
-    );
-  }
-
-  Widget _buildFpsStepper() {
-    return FpsStepper(
-      value: _fps,
-      minValue: 1,
-      maxValue: 16,
-      onChanged: (int newFps) {
-        setState(() {
-          _fps = newFps;
-        });
-        _controller.duration = Duration(milliseconds: 1000 ~/ _fps);
-      },
-    );
-  }
-
-  Widget _buildThumbnails() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        for (var i = 0; i < _frames.length; i++)
-          FrameThumbnail(
-            frame: _frames[i],
-            isSelected: i == _selectedFrameIndex,
-            onTap: () {
-              setState(() {
-                _selectedFrameIndex = i;
-              });
-            },
-          ),
-      ],
     );
   }
 }
