@@ -19,14 +19,20 @@ class TopDrawer extends StatelessWidget {
 
     return EditorDrawer(
       height: 100,
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ToolBar(
-            value: model.selectedTool,
-            onChanged: model.selectTool,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ToolBar(
+                value: model.selectedTool,
+                onChanged: model.selectTool,
+              ),
+              _buildDownloadButton(model.frames),
+            ],
           ),
-          _buildDownloadButton(model.frames),
+          _buildStrokeWidthButton(),
         ],
       ),
       quickAccessButtons: [
@@ -39,6 +45,13 @@ class TopDrawer extends StatelessWidget {
           onTap: frame.redoAvailable ? frame.redo : null,
         ),
       ],
+    );
+  }
+
+  Widget _buildStrokeWidthButton() {
+    return DrawerIconButton(
+      icon: Icons.fiber_manual_record,
+      onTap: () {},
     );
   }
 
