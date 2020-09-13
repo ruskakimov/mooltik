@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
+import 'editor/editor_model.dart';
 import 'editor/editor_page.dart';
 
 void main() {
@@ -15,7 +17,10 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Animation app',
-      home: EditorPage(),
+      home: ChangeNotifierProvider(
+        create: (context) => EditorModel(),
+        child: EditorPage(),
+      ),
     );
   }
 }
