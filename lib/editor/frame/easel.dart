@@ -68,10 +68,25 @@ class _EaselState extends State<Easel> {
       onStrokeStart: (DragStartDetails details) {
         if (widget.selectedTool == Tool.pencil) {
           final framePoint = toFramePoint(details.localPosition);
-          frame.startPencilStroke(framePoint);
+          frame.startStroke(
+            framePoint,
+            Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 5
+              ..strokeCap = StrokeCap.round
+              ..color = Colors.black
+              ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
+          );
         } else if (widget.selectedTool == Tool.eraser) {
           final framePoint = toFramePoint(details.localPosition);
-          frame.startEraserStroke(framePoint);
+          frame.startStroke(
+            framePoint,
+            Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 20
+              ..strokeCap = StrokeCap.round
+              ..blendMode = BlendMode.clear,
+          );
         }
       },
       onStrokeUpdate: (DragUpdateDetails details) {

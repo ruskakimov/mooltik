@@ -51,29 +51,6 @@ class Frame extends ChangeNotifier {
     }
   }
 
-  void startPencilStroke(Offset startPoint) {
-    startStroke(
-      startPoint,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 5
-        ..strokeCap = StrokeCap.round
-        ..color = Colors.black
-        ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
-    );
-  }
-
-  void startEraserStroke(Offset startPoint) {
-    startStroke(
-      startPoint,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 20
-        ..strokeCap = StrokeCap.round
-        ..blendMode = BlendMode.clear,
-    );
-  }
-
   void startStroke(Offset startPoint, Paint strokePaint) {
     _strokes.add(Stroke(startPoint, strokePaint));
 
