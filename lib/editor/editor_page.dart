@@ -72,7 +72,7 @@ class _EditorPageState extends State<EditorPage>
 
     return TopDrawer(
       height: 100,
-      child: Row(
+      body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ToolBar(

@@ -10,13 +10,13 @@ class TopDrawer extends StatefulWidget {
   TopDrawer({
     Key key,
     this.height,
-    this.child,
+    this.body,
   })  : assert(height != null),
-        assert(child != null),
+        assert(body != null),
         super(key: key);
 
   final double height;
-  final Widget child;
+  final Widget body;
 
   @override
   _TopDrawerState createState() => _TopDrawerState();
@@ -85,7 +85,7 @@ class _TopDrawerState extends State<TopDrawer>
           children: [
             SizedBox(
               height: widget.height,
-              child: widget.child,
+              child: widget.body,
             ),
             Row(
               children: [
