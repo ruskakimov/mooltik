@@ -23,9 +23,13 @@ class Frame extends ChangeNotifier {
   int _selectedSnapshotId = 0;
   int _rasterisedUntil = 0;
 
+  bool _lastStrokeTouchesFrame;
+
   double get width => 1280;
 
   double get height => 720;
+
+  Rect get _frameArea => Rect.fromLTWH(0, 0, width, height);
 
   ui.Image get snapshot => _snapshots[_selectedSnapshotId];
 
@@ -48,7 +52,7 @@ class Frame extends ChangeNotifier {
   }
 
   void startPencilStroke(Offset startPoint) {
-    _strokes.add(Stroke(
+    startStroke(
       startPoint,
       Paint()
         ..style = PaintingStyle.stroke
@@ -56,33 +60,58 @@ class Frame extends ChangeNotifier {
         ..strokeCap = StrokeCap.round
         ..color = Colors.black
         ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
-    ));
-    notifyListeners();
+    );
   }
 
   void startEraserStroke(Offset startPoint) {
-    _strokes.add(Stroke(
+    startStroke(
       startPoint,
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = 20
         ..strokeCap = StrokeCap.round
         ..blendMode = BlendMode.clear,
-    ));
+    );
+  }
+
+  void startStroke(Offset startPoint, Paint strokePaint) {
+    _strokes.add(Stroke(startPoint, strokePaint));
+
+    final markArea = Rect.fromCenter(
+      center: startPoint,
+      width: strokePaint.strokeWidth,
+      height: strokePaint.strokeWidth,
+    );
+    _lastStrokeTouchesFrame = markArea.overlaps(_frameArea);
+
     notifyListeners();
   }
 
   void extendLastStroke(Offset point) {
     _strokes.last.extend(point);
+
+    if (!_lastStrokeTouchesFrame) {
+      final markArea = Rect.fromCenter(
+        center: point,
+        width: _strokes.last.paint.strokeWidth,
+        height: _strokes.last.paint.strokeWidth,
+      );
+      _lastStrokeTouchesFrame = markArea.overlaps(_frameArea);
+    }
+
     notifyListeners();
   }
 
   void finishLastStroke() {
-    if (_strokes.isNotEmpty) {
-      _strokes.last.finish();
+    if (_strokes.isEmpty) return;
+
+    _strokes.last.finish();
+
+    if (_lastStrokeTouchesFrame) {
       _generateLastSnapshot();
+    } else {
+      cancelLastStroke();
     }
-    notifyListeners();
   }
 
   void cancelLastStroke() {
