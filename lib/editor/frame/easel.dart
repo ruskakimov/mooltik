@@ -74,6 +74,7 @@ class _EaselState extends State<Easel> {
               ..style = PaintingStyle.stroke
               ..strokeWidth = 5
               ..strokeCap = StrokeCap.round
+              ..strokeJoin = StrokeJoin.round
               ..color = Colors.black
               ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
           );
@@ -85,6 +86,7 @@ class _EaselState extends State<Easel> {
               ..style = PaintingStyle.stroke
               ..strokeWidth = 20
               ..strokeCap = StrokeCap.round
+              ..strokeJoin = StrokeJoin.round
               ..blendMode = BlendMode.clear,
           );
         }
