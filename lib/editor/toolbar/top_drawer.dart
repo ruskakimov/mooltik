@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../frame/frame.dart';
+import 'drawer_icon_button.dart';
 
 const innerBorderRadius = 16.0;
 const outerBorderRadius = 16.0;
@@ -94,11 +95,11 @@ class _TopDrawerState extends State<TopDrawer>
                   onTap: _toggleDrawer,
                 ),
                 Spacer(),
-                _DrawerIconButton(
+                DrawerIconButton(
                   icon: Icons.undo,
                   onTap: frame.undoAvailable ? frame.undo : null,
                 ),
-                _DrawerIconButton(
+                DrawerIconButton(
                   icon: Icons.redo,
                   onTap: frame.redoAvailable ? frame.redo : null,
                 ),
@@ -134,36 +135,9 @@ class _DrawerArrow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _DrawerIconButton(
+    return DrawerIconButton(
       icon: up ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
       onTap: onTap,
-    );
-  }
-}
-
-class _DrawerIconButton extends StatelessWidget {
-  const _DrawerIconButton({
-    Key key,
-    this.icon,
-    this.onTap,
-  }) : super(key: key);
-
-  final IconData icon;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        height: 40,
-        width: 40,
-        child: Icon(
-          icon,
-          color: onTap != null ? Colors.white : Colors.grey,
-        ),
-      ),
     );
   }
 }
