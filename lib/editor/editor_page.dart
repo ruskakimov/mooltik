@@ -18,7 +18,6 @@ class EditorPage extends StatefulWidget {
 
 class _EditorPageState extends State<EditorPage>
     with SingleTickerProviderStateMixin {
-  int _fps = 16;
   Tool _selectedTool = Tool.pencil;
 
   @override
@@ -117,7 +116,7 @@ class _EditorPageState extends State<EditorPage>
         color: Colors.grey,
       ),
       onPressed: () async {
-        final bytes = await makeGif(frames, _fps);
+        final bytes = await makeGif(frames, 24);
         await Share.file('Share GIF', 'image.gif', bytes, 'image/gif');
       },
     );
