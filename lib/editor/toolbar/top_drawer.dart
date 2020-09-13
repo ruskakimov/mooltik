@@ -90,8 +90,10 @@ class _TopDrawerState extends State<TopDrawer>
             ),
             Row(
               children: [
-                _DrawerArrow(
-                  up: open,
+                DrawerIconButton(
+                  icon: open
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
                   onTap: _toggleDrawer,
                 ),
                 Spacer(),
@@ -120,25 +122,6 @@ class _TopDrawerState extends State<TopDrawer>
     } else {
       _controller.forward();
     }
-  }
-}
-
-class _DrawerArrow extends StatelessWidget {
-  const _DrawerArrow({
-    Key key,
-    this.up,
-    this.onTap,
-  }) : super(key: key);
-
-  final bool up;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return DrawerIconButton(
-      icon: up ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-      onTap: onTap,
-    );
   }
 }
 
