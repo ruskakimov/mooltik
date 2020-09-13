@@ -13,17 +13,15 @@ import 'stroke.dart';
 const int maxSnapshotCount = 16;
 
 class Frame extends ChangeNotifier {
-  Frame() : _strokes = [];
+  Frame() : _unrasterizedStrokes = [];
 
-  final List<Stroke> _strokes;
+  final List<Stroke> _unrasterizedStrokes;
+
+  bool _lastStrokeTouchesFrame;
 
   /// Must contain at least one snapshot. [null] represents an empty screen.
   List<ui.Image> _snapshots = [null];
-
   int _selectedSnapshotId = 0;
-  int _rasterisedUntil = 0;
-
-  bool _lastStrokeTouchesFrame;
 
   double get width => 1280;
 
@@ -52,7 +50,7 @@ class Frame extends ChangeNotifier {
   }
 
   void startStroke(Offset startPoint, Paint strokePaint) {
-    _strokes.add(Stroke(startPoint, strokePaint));
+    _unrasterizedStrokes.add(Stroke(startPoint, strokePaint));
 
     final markArea = Rect.fromCenter(
       center: startPoint,
@@ -65,13 +63,13 @@ class Frame extends ChangeNotifier {
   }
 
   void extendLastStroke(Offset point) {
-    _strokes.last.extend(point);
+    _unrasterizedStrokes.last.extend(point);
 
     if (!_lastStrokeTouchesFrame) {
       final markArea = Rect.fromCenter(
         center: point,
-        width: _strokes.last.paint.strokeWidth,
-        height: _strokes.last.paint.strokeWidth,
+        width: _unrasterizedStrokes.last.paint.strokeWidth,
+        height: _unrasterizedStrokes.last.paint.strokeWidth,
       );
       _lastStrokeTouchesFrame = markArea.overlaps(_frameArea);
     }
@@ -80,9 +78,9 @@ class Frame extends ChangeNotifier {
   }
 
   void finishLastStroke() {
-    if (_strokes.isEmpty) return;
+    if (_unrasterizedStrokes.isEmpty) return;
 
-    _strokes.last.finish();
+    _unrasterizedStrokes.last.finish();
 
     if (_lastStrokeTouchesFrame) {
       _generateLastSnapshot();
@@ -92,8 +90,8 @@ class Frame extends ChangeNotifier {
   }
 
   void cancelLastStroke() {
-    if (_strokes.isNotEmpty) {
-      _strokes.removeLast();
+    if (_unrasterizedStrokes.isNotEmpty) {
+      _unrasterizedStrokes.removeLast();
     }
     notifyListeners();
   }
@@ -113,7 +111,7 @@ class Frame extends ChangeNotifier {
     }
     _selectedSnapshotId = _snapshots.length - 1;
 
-    _rasterisedUntil = _strokes.length;
+    _unrasterizedStrokes.clear();
     notifyListeners();
   }
 
@@ -127,9 +125,7 @@ class Frame extends ChangeNotifier {
       canvas.drawImage(snapshot, Offset.zero, Paint());
     }
 
-    for (int i = _rasterisedUntil; i < _strokes.length; i++) {
-      _strokes[i].paintOn(canvas);
-    }
+    _unrasterizedStrokes.forEach((stroke) => stroke.paintOn(canvas));
 
     // Flatten layer. Combine drawing lines with erasing lines.
     canvas.restore();
