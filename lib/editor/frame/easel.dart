@@ -66,30 +66,8 @@ class _EaselState extends State<Easel> {
 
     return EaselGestureDetector(
       onStrokeStart: (DragStartDetails details) {
-        if (widget.selectedTool == Tool.pencil) {
-          final framePoint = toFramePoint(details.localPosition);
-          frame.startStroke(
-            framePoint,
-            Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 5
-              ..strokeCap = StrokeCap.round
-              ..strokeJoin = StrokeJoin.round
-              ..color = Colors.black
-              ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
-          );
-        } else if (widget.selectedTool == Tool.eraser) {
-          final framePoint = toFramePoint(details.localPosition);
-          frame.startStroke(
-            framePoint,
-            Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 20
-              ..strokeCap = StrokeCap.round
-              ..strokeJoin = StrokeJoin.round
-              ..blendMode = BlendMode.clear,
-          );
-        }
+        final framePoint = toFramePoint(details.localPosition);
+        frame.startStroke(framePoint, widget.selectedTool.paint);
       },
       onStrokeUpdate: (DragUpdateDetails details) {
         final framePoint = toFramePoint(details.localPosition);

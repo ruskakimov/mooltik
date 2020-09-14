@@ -20,16 +20,16 @@ class ToolBar extends StatelessWidget {
         IconButton(
           icon: Icon(
             Icons.edit,
-            color: value == Tool.pencil ? Colors.amberAccent : Colors.grey,
+            color: value is Pencil ? Colors.amberAccent : Colors.grey,
           ),
-          onPressed: () => onChanged(Tool.pencil),
+          // onPressed: () => onChanged(Tool.pencil),
         ),
         IconButton(
           icon: Icon(
             Icons.brush,
-            color: value == Tool.eraser ? Colors.amberAccent : Colors.grey,
+            color: value is Eraser ? Colors.amberAccent : Colors.grey,
           ),
-          onPressed: () => onChanged(Tool.eraser),
+          // onPressed: () => onChanged(Tool.eraser),
         ),
       ],
     );
