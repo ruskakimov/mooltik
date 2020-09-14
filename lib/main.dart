@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'editor/editor_model.dart';
 import 'editor/editor_page.dart';
+import 'editor/timeline.dart';
+import 'editor/toolbox.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,8 +24,11 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Animation app',
-      home: ChangeNotifierProvider(
-        create: (context) => EditorModel(),
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => Timeline()),
+          ChangeNotifierProvider(create: (context) => Toolbox()),
+        ],
         child: EditorPage(),
       ),
     );
