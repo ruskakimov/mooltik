@@ -1,6 +1,5 @@
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
-import 'package:mooltik/editor/toolbox.dart';
 import 'package:provider/provider.dart';
 
 import 'package:mooltik/editor/frame/frame.dart';
@@ -16,7 +15,6 @@ class TopDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timeline = context.watch<Timeline>();
-    final toolbox = context.watch<Toolbox>();
     final frame = context.watch<Frame>();
 
     return EditorDrawer(
@@ -27,10 +25,7 @@ class TopDrawer extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ToolBar(
-                value: toolbox.selectedTool,
-                onChanged: toolbox.selectTool,
-              ),
+              ToolBar(),
               _buildDownloadButton(timeline.frames),
             ],
           ),

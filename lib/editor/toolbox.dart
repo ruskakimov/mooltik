@@ -3,12 +3,17 @@ import 'package:flutter/material.dart';
 import 'toolbar/tools.dart';
 
 class Toolbox extends ChangeNotifier {
-  Tool _selectedTool = Pencil(strokeWidth: 5);
+  final List<Tool> _tools = [
+    Pencil(strokeWidth: 5),
+    Eraser(strokeWidth: 20),
+  ];
+  int _selectedToolId = 0;
 
-  Tool get selectedTool => _selectedTool;
+  List<Tool> get tools => _tools;
+  Tool get selectedTool => _tools[_selectedToolId];
 
-  void selectTool(Tool tool) {
-    _selectedTool = tool;
+  void selectTool(int toolId) {
+    _selectedToolId = toolId;
     notifyListeners();
   }
 }
