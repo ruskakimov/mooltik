@@ -1,6 +1,5 @@
 import 'package:mooltik/editor/timeline.dart';
 import 'package:flutter/material.dart';
-import 'package:mooltik/editor/toolbox.dart';
 import 'package:mooltik/editor/top_drawer.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +39,6 @@ class _EditorPageState extends State<EditorPage>
   @override
   Widget build(BuildContext context) {
     final timeline = context.watch<Timeline>();
-    final toolbox = context.watch<Toolbox>();
 
     return Scaffold(
       backgroundColor: Color(0xFFDDDDDD),
@@ -51,9 +49,7 @@ class _EditorPageState extends State<EditorPage>
             fit: StackFit.expand,
             children: <Widget>[
               Positioned.fill(
-                child: Easel(
-                  selectedTool: toolbox.selectedTool,
-                ),
+                child: Easel(),
               ),
               Align(
                 alignment: Alignment.topCenter,
