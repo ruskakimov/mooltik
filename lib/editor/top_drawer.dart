@@ -1,5 +1,6 @@
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/toolbox.dart';
 import 'package:provider/provider.dart';
 
 import 'package:mooltik/editor/frame/frame.dart';
@@ -15,6 +16,7 @@ class TopDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timeline = context.watch<Timeline>();
+    final toolbox = context.watch<Toolbox>();
     final frame = context.watch<Frame>();
 
     return EditorDrawer(
@@ -29,10 +31,13 @@ class TopDrawer extends StatelessWidget {
               _buildDownloadButton(timeline.frames),
             ],
           ),
-          Row(
-            children: [
-              _buildStrokeWidthButton(),
-            ],
+          Slider(
+            value: toolbox.selectedTool.paint.strokeWidth,
+            min: 2.0,
+            max: 100.0,
+            onChanged: (value) {
+              toolbox.changeStrokeWidth(value);
+            },
           ),
         ],
       ),
@@ -46,13 +51,6 @@ class TopDrawer extends StatelessWidget {
           onTap: frame.redoAvailable ? frame.redo : null,
         ),
       ],
-    );
-  }
-
-  Widget _buildStrokeWidthButton() {
-    return DrawerIconButton(
-      icon: Icons.fiber_manual_record,
-      onTap: () {},
     );
   }
 
