@@ -24,6 +24,10 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Animation app',
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.amber,
+      ),
       home: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => Timeline()),
