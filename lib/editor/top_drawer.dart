@@ -20,7 +20,7 @@ class TopDrawer extends StatelessWidget {
     final frame = context.watch<Frame>();
 
     return EditorDrawer(
-      height: 100,
+      height: 110,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
