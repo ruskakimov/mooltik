@@ -16,4 +16,9 @@ class Toolbox extends ChangeNotifier {
     _selectedToolId = toolId;
     notifyListeners();
   }
+
+  void changeStrokeWidth(double value) {
+    selectedTool.paint.strokeWidth = value;
+    notifyListeners();
+  }
 }
