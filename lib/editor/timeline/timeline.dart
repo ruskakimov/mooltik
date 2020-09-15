@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'frame/frame.dart';
+import '../frame/frame.dart';
 
 class Timeline extends ChangeNotifier {
   List<Frame> frames = [Frame()];

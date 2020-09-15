@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'toolbar/tools.dart';
+import 'tools.dart';
 
 class Toolbox extends ChangeNotifier {
   final List<Tool> _tools = [

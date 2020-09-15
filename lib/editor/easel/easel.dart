@@ -1,11 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:mooltik/editor/toolbox.dart';
+import 'package:mooltik/editor/toolbox/toolbox.dart';
 import 'package:provider/provider.dart';
 
-import 'frame_painter.dart';
-import 'frame.dart';
+import '../frame/frame_painter.dart';
+import '../frame/frame.dart';
 import 'easel_gesture_detector.dart';
 
 const twoPi = pi * 2;

@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'editor/editor_page.dart';
-import 'editor/timeline.dart';
-import 'editor/toolbox.dart';
+import 'editor/timeline/timeline.dart';
+import 'editor/toolbox/toolbox.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

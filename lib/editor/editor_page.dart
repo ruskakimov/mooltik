@@ -1,9 +1,9 @@
-import 'package:mooltik/editor/timeline.dart';
+import 'package:mooltik/editor/timeline/timeline.dart';
 import 'package:flutter/material.dart';
-import 'package:mooltik/editor/top_drawer.dart';
+import 'package:mooltik/editor/drawers/top_drawer/top_drawer.dart';
 import 'package:provider/provider.dart';
 
-import 'frame/easel.dart';
+import 'easel/easel.dart';
 
 class EditorPage extends StatefulWidget {
   const EditorPage({Key key}) : super(key: key);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:mooltik/editor/toolbox.dart';
+import 'package:mooltik/editor/toolbox/toolbox.dart';
 
 class ToolBar extends StatelessWidget {
   const ToolBar({Key key}) : super(key: key);
