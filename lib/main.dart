@@ -27,6 +27,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.amber,
+        dialogBackgroundColor: Colors.blueGrey[900],
       ),
       home: MultiProvider(
         providers: [
