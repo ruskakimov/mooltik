@@ -1,6 +1,6 @@
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:mooltik/editor/drawers/top_drawer/color_picker.dart';
 import 'package:mooltik/editor/toolbox/toolbox.dart';
 import 'package:mooltik/editor/toolbox/tools.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +36,7 @@ class _TopDrawerState extends State<TopDrawer> {
               ToolBar(),
               Spacer(),
               if (toolbox.selectedTool is Pencil)
-                _buildColorButton(toolbox.selectedTool.paint.color),
+                ColorPicker(color: toolbox.selectedTool.paint.color),
               SizedBox(width: 8),
               _buildDownloadButton(timeline.frames),
             ],
@@ -61,44 +61,6 @@ class _TopDrawerState extends State<TopDrawer> {
           onTap: frame.redoAvailable ? frame.redo : null,
         ),
       ],
-    );
-  }
-
-  Widget _buildColorButton(Color selectedColor) {
-    return GestureDetector(
-      onTap: _showColorPicker,
-      child: Container(
-        width: 24,
-        height: 24,
-        decoration: BoxDecoration(
-          color: selectedColor,
-          border: Border.all(
-            color: Colors.white,
-            width: 2,
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showColorPicker() {
-    final toolbox = context.read<Toolbox>();
-    showDialog(
-      context: context,
-      child: AlertDialog(
-        titlePadding: EdgeInsets.all(0.0),
-        contentPadding: EdgeInsets.all(0.0),
-        content: SingleChildScrollView(
-          child: ColorPicker(
-            pickerColor: toolbox.selectedTool.paint.color,
-            onColorChanged: (color) {
-              toolbox.changeColor(color);
-            },
-            showLabel: false,
-            pickerAreaHeightPercent: 0.8,
-          ),
-        ),
-      ),
     );
   }
 
