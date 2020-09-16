@@ -41,14 +41,7 @@ class _TopDrawerState extends State<TopDrawer> {
               _buildDownloadButton(timeline.frames),
             ],
           ),
-          Slider(
-            value: toolbox.selectedTool.paint.strokeWidth,
-            min: 2.0,
-            max: 100.0,
-            onChanged: (value) {
-              toolbox.changeStrokeWidth(value);
-            },
-          ),
+          _buildWidthSelector(toolbox),
         ],
       ),
       quickAccessButtons: [
@@ -59,6 +52,31 @@ class _TopDrawerState extends State<TopDrawer> {
         DrawerIconButton(
           icon: Icons.redo,
           onTap: frame.redoAvailable ? frame.redo : null,
+        ),
+      ],
+    );
+  }
+
+  Row _buildWidthSelector(Toolbox toolbox) {
+    final width = context.watch<Toolbox>().selectedTool.paint.strokeWidth;
+    return Row(
+      children: [
+        SizedBox(
+          width: 48,
+          child: Text(
+            '${width.toStringAsFixed(0)}',
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Expanded(
+          child: Slider(
+            value: width,
+            min: 1.0,
+            max: 100.0,
+            onChanged: (value) {
+              toolbox.changeStrokeWidth(value.round());
+            },
+          ),
         ),
       ],
     );
