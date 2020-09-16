@@ -21,4 +21,9 @@ class Toolbox extends ChangeNotifier {
     selectedTool.paint.strokeWidth = value;
     notifyListeners();
   }
+
+  void changeColor(Color color) {
+    selectedTool.paint.color = color;
+    notifyListeners();
+  }
 }
