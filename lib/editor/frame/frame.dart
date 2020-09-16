@@ -63,6 +63,8 @@ class Frame extends ChangeNotifier {
   }
 
   void extendLastStroke(Offset point) {
+    if (_unrasterizedStrokes.isEmpty) return;
+
     _unrasterizedStrokes.last.extend(point);
 
     if (!_lastStrokeTouchesFrame) {
