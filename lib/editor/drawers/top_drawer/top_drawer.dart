@@ -2,6 +2,7 @@ import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:mooltik/editor/toolbox/toolbox.dart';
+import 'package:mooltik/editor/toolbox/tools.dart';
 import 'package:provider/provider.dart';
 
 import 'package:mooltik/editor/frame/frame.dart';
@@ -34,7 +35,8 @@ class _TopDrawerState extends State<TopDrawer> {
             children: [
               ToolBar(),
               Spacer(),
-              _buildColorButton(toolbox.selectedTool.paint.color),
+              if (toolbox.selectedTool is Pencil)
+                _buildColorButton(toolbox.selectedTool.paint.color),
               SizedBox(width: 8),
               _buildDownloadButton(timeline.frames),
             ],
