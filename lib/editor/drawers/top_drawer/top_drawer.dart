@@ -23,11 +23,10 @@ class _TopDrawerState extends State<TopDrawer> {
   @override
   Widget build(BuildContext context) {
     final timeline = context.watch<Timeline>();
-    final toolbox = context.watch<Toolbox>();
     final frame = context.watch<Frame>();
 
     return EditorDrawer(
-      height: 110,
+      height: 48.0 * 3.0 + 8,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -35,13 +34,12 @@ class _TopDrawerState extends State<TopDrawer> {
             children: [
               ToolBar(),
               Spacer(),
-              if (toolbox.selectedTool is Pencil)
-                ColorPicker(color: toolbox.selectedTool.paint.color),
               SizedBox(width: 8),
               _buildDownloadButton(timeline.frames),
             ],
           ),
-          _buildWidthSelector(toolbox),
+          _buildWidthSelector(),
+          _buildColorSelector(),
         ],
       ),
       quickAccessButtons: [
@@ -57,8 +55,9 @@ class _TopDrawerState extends State<TopDrawer> {
     );
   }
 
-  Row _buildWidthSelector(Toolbox toolbox) {
-    final width = context.watch<Toolbox>().selectedTool.paint.strokeWidth;
+  Widget _buildWidthSelector() {
+    final toolbox = context.watch<Toolbox>();
+    final width = toolbox.selectedTool.paint.strokeWidth;
     return Row(
       children: [
         SizedBox(
@@ -76,6 +75,22 @@ class _TopDrawerState extends State<TopDrawer> {
             onChanged: (value) {
               toolbox.changeStrokeWidth(value.round());
             },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildColorSelector() {
+    final toolbox = context.watch<Toolbox>();
+    final color = toolbox.selectedTool.paint.color;
+    return Row(
+      children: [
+        ColorPicker(color: color),
+        Expanded(
+          child: Slider(
+            value: color.opacity,
+            onChanged: toolbox.changeOpacity,
           ),
         ),
       ],

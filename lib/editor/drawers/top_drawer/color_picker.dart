@@ -15,14 +15,20 @@ class ColorPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => _showColorPicker(context),
-      child: Container(
-        width: 24,
-        height: 24,
-        decoration: BoxDecoration(
-          color: color,
-          border: Border.all(
-            color: Colors.white,
-            width: 2,
+      child: SizedBox(
+        width: 48,
+        height: 48,
+        child: Center(
+          child: Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              color: color,
+              border: Border.all(
+                color: Colors.white,
+                width: 2,
+              ),
+            ),
           ),
         ),
       ),
