@@ -20,16 +20,21 @@ class ColorPicker extends StatelessWidget {
         width: 48,
         height: 48,
         child: Center(
-          child: Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              color: color,
-              border: Border.all(
-                color: Colors.white,
-                width: 2,
+          child: ClipOval(
+            child: CustomPaint(
+              painter: TileBackgroundPainter(),
+              child: Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: color,
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 2,
+                  ),
+                  shape: BoxShape.circle,
+                ),
               ),
-              shape: BoxShape.circle,
             ),
           ),
         ),
@@ -57,4 +62,24 @@ class ColorPicker extends StatelessWidget {
       ),
     );
   }
+}
+
+class TileBackgroundPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Size tileSize = Size(size.width / 7, size.height / 7);
+    final Paint greyPaint = Paint()..color = const Color(0xFFCCCCCC);
+    final Paint whitePaint = Paint()..color = Colors.white;
+    List.generate((size.height / tileSize.height).round(), (int y) {
+      List.generate((size.width / tileSize.width).round(), (int x) {
+        canvas.drawRect(
+          Offset(tileSize.width * x, tileSize.height * y) & tileSize,
+          (x + y) % 2 != 0 ? whitePaint : greyPaint,
+        );
+      });
+    });
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
