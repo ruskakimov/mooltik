@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/drawers/drawer_icon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/toolbox/toolbox.dart';
 
@@ -13,14 +14,10 @@ class ToolBar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         for (var i = 0; i < toolbox.tools.length; i++)
-          IconButton(
-            icon: Icon(
-              toolbox.tools[i].icon,
-              color: toolbox.tools[i] == toolbox.selectedTool
-                  ? Colors.amberAccent
-                  : Colors.grey,
-            ),
-            onPressed: () => toolbox.selectTool(i),
+          DrawerIconButton(
+            icon: toolbox.tools[i].icon,
+            selected: toolbox.tools[i] == toolbox.selectedTool,
+            onTap: () => toolbox.selectTool(i),
           ),
       ],
     );

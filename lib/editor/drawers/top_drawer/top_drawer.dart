@@ -100,12 +100,9 @@ class _TopDrawerState extends State<TopDrawer> {
   }
 
   Widget _buildDownloadButton(List<Frame> frames) {
-    return IconButton(
-      icon: Icon(
-        FontAwesomeIcons.ellipsisV,
-        color: Colors.grey,
-      ),
-      onPressed: () async {
+    return DrawerIconButton(
+      icon: FontAwesomeIcons.ellipsisV,
+      onTap: () async {
         final bytes = await makeGif(frames, 24);
         await Share.file('Share GIF', 'image.gif', bytes, 'image/gif');
       },

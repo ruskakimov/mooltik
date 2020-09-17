@@ -4,10 +4,12 @@ class DrawerIconButton extends StatelessWidget {
   const DrawerIconButton({
     Key key,
     this.icon,
+    this.selected = false,
     this.onTap,
   }) : super(key: key);
 
   final IconData icon;
+  final bool selected;
   final VoidCallback onTap;
 
   @override
@@ -20,9 +22,15 @@ class DrawerIconButton extends StatelessWidget {
         width: 48,
         child: Icon(
           icon,
-          color: onTap != null ? Colors.white : Colors.grey,
+          color: _getColor(),
         ),
       ),
     );
+  }
+
+  Color _getColor() {
+    if (selected) return Colors.amber;
+    if (onTap == null) return Colors.grey[600];
+    return Colors.grey[200];
   }
 }
