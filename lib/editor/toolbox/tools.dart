@@ -41,6 +41,6 @@ class Eraser extends Tool {
             ..style = PaintingStyle.stroke
             ..strokeCap = StrokeCap.round
             ..strokeJoin = StrokeJoin.round
-            ..blendMode = BlendMode.clear,
+            ..blendMode = BlendMode.dstOut,
         );
 }
