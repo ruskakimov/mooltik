@@ -25,13 +25,13 @@ class ColorPicker extends StatelessWidget {
             child: CustomPaint(
               painter: TileBackgroundPainter(),
               child: Container(
-                width: 24,
-                height: 24,
+                width: 28,
+                height: 28,
                 decoration: BoxDecoration(
                   color: color,
                   border: Border.all(
                     color: Colors.white,
-                    width: 2,
+                    width: 3,
                   ),
                   shape: BoxShape.circle,
                 ),
