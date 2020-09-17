@@ -16,8 +16,8 @@ class DrawerIconButton extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
-        height: 40,
-        width: 40,
+        height: 48,
+        width: 48,
         child: Icon(
           icon,
           color: onTap != null ? Colors.white : Colors.grey,

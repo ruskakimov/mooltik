@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'drawer_icon_button.dart';
 
@@ -90,8 +91,8 @@ class _EditorDrawerState extends State<EditorDrawer>
               children: [
                 DrawerIconButton(
                   icon: open
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down,
+                      ? FontAwesomeIcons.chevronUp
+                      : FontAwesomeIcons.chevronDown,
                   onTap: _toggleDrawer,
                 ),
                 Spacer(),
@@ -119,8 +120,8 @@ class _EditorDrawerState extends State<EditorDrawer>
 class _DrawerClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    final buttonHeight = 40.0;
-    final buttonWidth = 40.0;
+    final buttonHeight = 48.0;
+    final buttonWidth = 48.0;
     return Path()
       ..moveTo(0, 0)
       ..lineTo(size.width, 0)

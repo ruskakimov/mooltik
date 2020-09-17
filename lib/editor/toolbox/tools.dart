@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Tool {
   Tool(IconData icon, Paint paint)
@@ -19,7 +20,7 @@ class Pencil extends Tool {
   })  : assert(strokeWidth != null),
         assert(color != null),
         super(
-          Icons.edit,
+          FontAwesomeIcons.paintBrush,
           Paint()
             ..strokeWidth = strokeWidth
             ..color = color
@@ -34,7 +35,7 @@ class Eraser extends Tool {
   Eraser({double strokeWidth})
       : assert(strokeWidth != null),
         super(
-          Icons.brush,
+          FontAwesomeIcons.eraser,
           Paint()
             ..strokeWidth = strokeWidth
             ..style = PaintingStyle.stroke

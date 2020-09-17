@@ -1,5 +1,6 @@
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawers/top_drawer/color_picker.dart';
 import 'package:mooltik/editor/toolbox/toolbox.dart';
 import 'package:mooltik/editor/toolbox/tools.dart';
@@ -44,11 +45,11 @@ class _TopDrawerState extends State<TopDrawer> {
       ),
       quickAccessButtons: [
         DrawerIconButton(
-          icon: Icons.undo,
+          icon: FontAwesomeIcons.undo,
           onTap: frame.undoAvailable ? frame.undo : null,
         ),
         DrawerIconButton(
-          icon: Icons.redo,
+          icon: FontAwesomeIcons.redo,
           onTap: frame.redoAvailable ? frame.redo : null,
         ),
       ],
@@ -65,6 +66,7 @@ class _TopDrawerState extends State<TopDrawer> {
           child: Text(
             '${width.toStringAsFixed(0)}',
             textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16),
           ),
         ),
         Expanded(
@@ -100,7 +102,7 @@ class _TopDrawerState extends State<TopDrawer> {
   Widget _buildDownloadButton(List<Frame> frames) {
     return IconButton(
       icon: Icon(
-        Icons.file_download,
+        FontAwesomeIcons.ellipsisV,
         color: Colors.grey,
       ),
       onPressed: () async {

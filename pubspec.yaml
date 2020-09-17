@@ -27,6 +27,7 @@ dependencies:
   provider: ^4.3.2+2
   esys_flutter_share: ^1.0.2
   flutter_colorpicker: ^0.3.4
+  font_awesome_flutter: ^8.8.1
 
 dev_dependencies:
   flutter_test:
