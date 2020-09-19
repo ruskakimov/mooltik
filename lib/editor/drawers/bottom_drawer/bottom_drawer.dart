@@ -40,8 +40,30 @@ class BottomDrawer extends StatelessWidget {
           height: 56,
         ),
         Expanded(
+          child: Timeline(),
+        ),
+      ],
+    );
+  }
+}
+
+class Timeline extends StatelessWidget {
+  const Timeline({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        ColoredBox(
+          color: Colors.blueGrey[900],
+        ),
+        Center(
           child: Container(
-            color: Colors.blueGrey[900],
+            width: 1,
+            color: Colors.amber,
           ),
         ),
       ],
