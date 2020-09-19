@@ -89,9 +89,11 @@ class _EditorDrawerState extends State<EditorDrawer>
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
-              height: widget.height,
-              child: widget.body,
+            RepaintBoundary(
+              child: SizedBox(
+                height: widget.height,
+                child: widget.body,
+              ),
             ),
             Row(
               children: [
