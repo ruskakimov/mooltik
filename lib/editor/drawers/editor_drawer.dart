@@ -29,6 +29,7 @@ class _EditorDrawerState extends State<EditorDrawer>
   bool open = true;
   AnimationController _controller;
   Animation _animation;
+  CustomClipper _clipper;
 
   @override
   void initState() {
@@ -41,6 +42,10 @@ class _EditorDrawerState extends State<EditorDrawer>
       parent: _controller,
       curve: Curves.easeOut,
       reverseCurve: Curves.easeIn,
+    );
+    _clipper = _DrawerClipper(
+      buttonHeight: 48,
+      buttonWidth: 48,
     );
   }
 
@@ -56,7 +61,7 @@ class _EditorDrawerState extends State<EditorDrawer>
       animation: _animation,
       child: CustomPaint(
         painter: _ClippedShadowPainter(
-          clipper: _DrawerClipper(),
+          clipper: _clipper,
           shadow: Shadow(
             color: Colors.black26,
             blurRadius: 4,
@@ -75,7 +80,7 @@ class _EditorDrawerState extends State<EditorDrawer>
 
   ClipPath _buildDrawerBody() {
     return ClipPath(
-      clipper: _DrawerClipper(),
+      clipper: _clipper,
       child: Container(
         width: double.infinity,
         color: Colors.blueGrey[900],
@@ -96,7 +101,8 @@ class _EditorDrawerState extends State<EditorDrawer>
                   onTap: _toggleDrawer,
                 ),
                 Spacer(),
-                ...widget.quickAccessButtons,
+                if (widget.quickAccessButtons != null)
+                  ...widget.quickAccessButtons,
               ],
             ),
           ],
@@ -118,10 +124,16 @@ class _EditorDrawerState extends State<EditorDrawer>
 }
 
 class _DrawerClipper extends CustomClipper<Path> {
+  _DrawerClipper({
+    @required this.buttonHeight,
+    @required this.buttonWidth,
+  }) : super();
+
+  final double buttonHeight;
+  final double buttonWidth;
+
   @override
   Path getClip(Size size) {
-    final buttonHeight = 48.0;
-    final buttonWidth = 48.0;
     return Path()
       ..moveTo(0, 0)
       ..lineTo(size.width, 0)
