@@ -30,7 +30,7 @@ class DrawerIconButton extends StatelessWidget {
 
   Color _getColor() {
     if (selected) return Colors.amber;
-    if (onTap == null) return Colors.grey[600];
+    if (onTap == null) return Colors.grey[200].withOpacity(0.4);
     return Colors.grey[200];
   }
 }
