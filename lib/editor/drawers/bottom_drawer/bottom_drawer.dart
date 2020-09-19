@@ -36,8 +36,22 @@ class BottomDrawer extends StatelessWidget {
   Widget _buildDrawerBody() {
     return Column(
       children: [
-        Container(
+        SizedBox(
           height: 56,
+          child: Row(
+            children: [
+              DrawerIconButton(icon: FontAwesomeIcons.play),
+              Spacer(),
+              SizedBox(
+                width: 96,
+                child: Text(
+                  '1 F',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ],
+          ),
         ),
         Expanded(
           child: Timeline(),
