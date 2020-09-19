@@ -1,9 +1,10 @@
-import 'package:mooltik/editor/timeline/timeline.dart';
 import 'package:flutter/material.dart';
-import 'package:mooltik/editor/drawers/top_drawer/top_drawer.dart';
 import 'package:provider/provider.dart';
 
 import 'easel/easel.dart';
+import 'drawers/bottom_drawer/bottom_drawer.dart';
+import 'drawers/top_drawer/top_drawer.dart';
+import 'timeline/timeline.dart';
 
 class EditorPage extends StatefulWidget {
   const EditorPage({Key key}) : super(key: key);
@@ -54,6 +55,10 @@ class _EditorPageState extends State<EditorPage>
               Align(
                 alignment: Alignment.topCenter,
                 child: TopDrawer(),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: BottomDrawer(),
               ),
             ],
           ),
