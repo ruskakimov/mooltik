@@ -15,7 +15,7 @@ class BottomDrawer extends StatelessWidget {
       alignment: Alignment.center,
       transform: Matrix4.rotationX(math.pi),
       child: EditorDrawer(
-        height: 100,
+        height: 48 * 4.0 + 8,
         quickAccessButtons: [
           DrawerIconButton(
             icon: FontAwesomeIcons.stepBackward,
@@ -27,9 +27,24 @@ class BottomDrawer extends StatelessWidget {
         body: Transform(
           alignment: Alignment.center,
           transform: Matrix4.rotationX(math.pi),
-          child: Text('hello'),
+          child: _buildDrawerBody(),
         ),
       ),
+    );
+  }
+
+  Widget _buildDrawerBody() {
+    return Column(
+      children: [
+        Container(
+          height: 56,
+        ),
+        Expanded(
+          child: Container(
+            color: Colors.blueGrey[900],
+          ),
+        ),
+      ],
     );
   }
 }

@@ -84,7 +84,7 @@ class _EditorDrawerState extends State<EditorDrawer>
       clipper: _clipper,
       child: Container(
         width: double.infinity,
-        color: Colors.blueGrey[900],
+        color: Colors.blueGrey[800],
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
