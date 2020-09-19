@@ -38,23 +38,27 @@ class BottomDrawer extends StatelessWidget {
       children: [
         SizedBox(
           height: 56,
-          child: Row(
-            children: [
-              DrawerIconButton(icon: FontAwesomeIcons.play),
-              Spacer(),
-              SizedBox(
-                width: 96,
-                child: Text(
-                  '1 F',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-            ],
-          ),
+          child: _buildTimelineBar(),
         ),
         Expanded(
           child: Timeline(),
+        ),
+      ],
+    );
+  }
+
+  Row _buildTimelineBar() {
+    return Row(
+      children: [
+        DrawerIconButton(icon: FontAwesomeIcons.play),
+        Spacer(),
+        SizedBox(
+          width: 96,
+          child: Text(
+            '1 F',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16),
+          ),
         ),
       ],
     );
