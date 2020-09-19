@@ -46,6 +46,7 @@ class _EditorDrawerState extends State<EditorDrawer>
     _clipper = _DrawerClipper(
       buttonHeight: 48,
       buttonWidth: 48,
+      rightButtonCount: widget.quickAccessButtons?.length ?? 0,
     );
   }
 
@@ -127,10 +128,12 @@ class _DrawerClipper extends CustomClipper<Path> {
   _DrawerClipper({
     @required this.buttonHeight,
     @required this.buttonWidth,
+    this.rightButtonCount = 0,
   }) : super();
 
   final double buttonHeight;
   final double buttonWidth;
+  final int rightButtonCount;
 
   @override
   Path getClip(Size size) {
@@ -139,11 +142,12 @@ class _DrawerClipper extends CustomClipper<Path> {
       ..lineTo(size.width, 0)
       ..lineTo(size.width, size.height)
       // Start of outwards curve.
-      ..lineTo(size.width - buttonWidth * 2 + outerBorderRadius, size.height)
+      ..lineTo(size.width - buttonWidth * rightButtonCount + outerBorderRadius,
+          size.height)
       ..relativeQuadraticBezierTo(
           -outerBorderRadius, 0, -outerBorderRadius, -outerBorderRadius)
       // Start of inwards curve.
-      ..lineTo(size.width - buttonWidth * 2,
+      ..lineTo(size.width - buttonWidth * rightButtonCount,
           size.height - buttonHeight + innerBorderRadius)
       ..relativeQuadraticBezierTo(
           0, -innerBorderRadius, -innerBorderRadius, -innerBorderRadius)
