@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawers/top_drawer/color_picker.dart';
 import 'package:mooltik/editor/toolbox/toolbox.dart';
-import 'package:mooltik/editor/toolbox/tools.dart';
 import 'package:provider/provider.dart';
 
 import 'package:mooltik/editor/frame/frame.dart';
