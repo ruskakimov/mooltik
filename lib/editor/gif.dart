@@ -2,9 +2,9 @@ import 'dart:ui' as ui;
 
 import 'package:image/image.dart';
 
-import 'frame/frame.dart';
+import 'frame/frame_model.dart';
 
-Future<List<int>> makeGif(List<Frame> frames, int fps) async {
+Future<List<int>> makeGif(List<FrameModel> frames, int fps) async {
   if (frames.isEmpty) {
     throw ArgumentError.value(frames, 'frames', 'should not be empty');
   }
@@ -19,7 +19,7 @@ Future<List<int>> makeGif(List<Frame> frames, int fps) async {
   return encoder.finish();
 }
 
-Future<Image> imageFromFrame(Frame frame) async {
+Future<Image> imageFromFrame(FrameModel frame) async {
   final w = frame.width.toInt();
   final h = frame.height.toInt();
 
@@ -31,7 +31,7 @@ Future<Image> imageFromFrame(Frame frame) async {
   return Image.fromBytes(w, h, bytes);
 }
 
-ui.Picture pictureFromFrame(Frame frame) {
+ui.Picture pictureFromFrame(FrameModel frame) {
   final recorder = ui.PictureRecorder();
   final canvas = ui.Canvas(recorder);
   frame.paintOn(canvas);

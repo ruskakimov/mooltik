@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'editor/editor_page.dart';
-import 'editor/timeline/timeline.dart';
-import 'editor/toolbox/toolbox.dart';
+import 'editor/timeline/timeline_model.dart';
+import 'editor/toolbox/toolbox_model.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,8 +31,8 @@ class App extends StatelessWidget {
       ),
       home: MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => Timeline()),
-          ChangeNotifierProvider(create: (context) => Toolbox()),
+          ChangeNotifierProvider(create: (context) => TimelineModel()),
+          ChangeNotifierProvider(create: (context) => ToolboxModel()),
         ],
         child: EditorPage(),
       ),

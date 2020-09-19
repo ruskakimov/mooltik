@@ -1,11 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:mooltik/editor/toolbox/toolbox.dart';
+import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
 
 import '../frame/frame_painter.dart';
-import '../frame/frame.dart';
+import '../frame/frame_model.dart';
 import 'easel_gesture_detector.dart';
 
 const twoPi = pi * 2;
@@ -57,8 +57,8 @@ class _EaselState extends State<Easel> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedTool = context.watch<Toolbox>().selectedTool;
-    final frame = context.watch<Frame>();
+    final selectedTool = context.watch<ToolboxModel>().selectedTool;
+    final frame = context.watch<FrameModel>();
 
     return EaselGestureDetector(
       onStrokeStart: (DragStartDetails details) {

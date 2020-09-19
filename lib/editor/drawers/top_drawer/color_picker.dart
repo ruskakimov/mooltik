@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/editor/toolbox/toolbox.dart';
+import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:mooltik/editor/toolbox/tools.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart' as fcp;
@@ -44,7 +44,7 @@ class ColorPicker extends StatelessWidget {
   }
 
   void _showColorPicker(BuildContext context) {
-    final toolbox = context.read<Toolbox>();
+    final toolbox = context.read<ToolboxModel>();
     if (toolbox.selectedTool is! Pencil) return;
 
     showDialog(

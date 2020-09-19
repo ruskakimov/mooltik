@@ -2,14 +2,14 @@ import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawers/top_drawer/color_picker.dart';
-import 'package:mooltik/editor/toolbox/toolbox.dart';
+import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
 
-import 'package:mooltik/editor/frame/frame.dart';
+import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/gif.dart';
 import 'package:mooltik/editor/drawers/drawer_icon_button.dart';
 import 'package:mooltik/editor/drawers/top_drawer/toolbar.dart';
-import 'package:mooltik/editor/timeline/timeline.dart';
+import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:mooltik/editor/drawers/editor_drawer.dart';
 
 class TopDrawer extends StatefulWidget {
@@ -22,8 +22,8 @@ class TopDrawer extends StatefulWidget {
 class _TopDrawerState extends State<TopDrawer> {
   @override
   Widget build(BuildContext context) {
-    final timeline = context.watch<Timeline>();
-    final frame = context.watch<Frame>();
+    final timeline = context.watch<TimelineModel>();
+    final frame = context.watch<FrameModel>();
 
     return EditorDrawer(
       height: 48.0 * 3.0 + 8,
@@ -56,7 +56,7 @@ class _TopDrawerState extends State<TopDrawer> {
   }
 
   Widget _buildWidthSelector() {
-    final toolbox = context.watch<Toolbox>();
+    final toolbox = context.watch<ToolboxModel>();
     final width = toolbox.selectedTool.paint.strokeWidth;
     return Row(
       children: [
@@ -83,7 +83,7 @@ class _TopDrawerState extends State<TopDrawer> {
   }
 
   Widget _buildColorSelector() {
-    final toolbox = context.watch<Toolbox>();
+    final toolbox = context.watch<ToolboxModel>();
     final color = toolbox.selectedTool.paint.color;
     return Row(
       children: [
@@ -98,7 +98,7 @@ class _TopDrawerState extends State<TopDrawer> {
     );
   }
 
-  Widget _buildDownloadButton(List<Frame> frames) {
+  Widget _buildDownloadButton(List<FrameModel> frames) {
     return DrawerIconButton(
       icon: FontAwesomeIcons.ellipsisV,
       onTap: () async {

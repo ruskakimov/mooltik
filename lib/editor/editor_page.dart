@@ -4,14 +4,14 @@ import 'package:provider/provider.dart';
 import 'easel/easel.dart';
 import 'drawers/bottom_drawer/bottom_drawer.dart';
 import 'drawers/top_drawer/top_drawer.dart';
-import 'timeline/timeline.dart';
+import 'timeline/timeline_model.dart';
 
 class EditorPage extends StatelessWidget {
   const EditorPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final timeline = context.watch<Timeline>();
+    final timeline = context.watch<TimelineModel>();
 
     return Scaffold(
       backgroundColor: Color(0xFFDDDDDD),

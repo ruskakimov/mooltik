@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'frame.dart';
+import 'frame_model.dart';
 
 class FramePainter extends CustomPainter {
   FramePainter(this.frame);
 
-  final Frame frame;
+  final FrameModel frame;
 
   @override
   void paint(Canvas canvas, Size size) {

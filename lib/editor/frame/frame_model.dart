@@ -12,8 +12,8 @@ import 'stroke.dart';
 /// This value minus 1 equals maximum number of undo's.
 const int maxSnapshotCount = 16;
 
-class Frame extends ChangeNotifier {
-  Frame() : _unrasterizedStrokes = [];
+class FrameModel extends ChangeNotifier {
+  FrameModel() : _unrasterizedStrokes = [];
 
   final List<Stroke> _unrasterizedStrokes;
 
