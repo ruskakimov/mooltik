@@ -3,7 +3,6 @@ import 'package:mooltik/editor/easel/easel_model.dart';
 import 'package:provider/provider.dart';
 
 import '../frame/frame_painter.dart';
-import '../frame/frame_model.dart';
 import 'easel_gesture_detector.dart';
 
 class Easel extends StatefulWidget {
@@ -16,7 +15,6 @@ class Easel extends StatefulWidget {
 class _EaselState extends State<Easel> {
   @override
   Widget build(BuildContext context) {
-    final frame = context.watch<FrameModel>();
     final easel = context.watch<EaselModel>();
 
     return EaselGestureDetector(
@@ -43,11 +41,11 @@ class _EaselState extends State<Easel> {
                 angle: easel.canvasRotation,
                 child: RepaintBoundary(
                   child: CustomPaint(
-                    foregroundPainter: FramePainter(frame),
+                    foregroundPainter: FramePainter(easel.frame),
                     child: Container(
                       color: Colors.white,
-                      height: frame.height,
-                      width: frame.width,
+                      height: easel.frame.height,
+                      width: easel.frame.width,
                     ),
                   ),
                 ),
