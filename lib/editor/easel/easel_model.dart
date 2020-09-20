@@ -34,6 +34,12 @@ class EaselModel extends ChangeNotifier {
   /// Canvas rotation with top left as the anchor point.
   double get canvasRotation => rotation;
 
+  /// Canvas width at current scale.
+  double get canvasWidth => frame.width * scale;
+
+  /// Canvas height at current scale.
+  double get canvasHeight => frame.height * scale;
+
   void updateEaselArea(double width, double height) {
     scale ??= width / frame.width;
     offset ??= Offset(0, (height - frame.height * scale) / 2);

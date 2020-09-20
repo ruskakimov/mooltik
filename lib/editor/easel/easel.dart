@@ -48,8 +48,8 @@ class _EaselState extends State<Easel> {
             Positioned(
               top: easel.canvasTopOffset,
               left: easel.canvasLeftOffset,
-              width: frame.width * easel.scale,
-              height: frame.height * easel.scale,
+              width: easel.canvasWidth,
+              height: easel.canvasHeight,
               child: Transform.rotate(
                 alignment: Alignment.topLeft,
                 angle: easel.canvasRotation,
