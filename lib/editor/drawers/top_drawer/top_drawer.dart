@@ -35,6 +35,7 @@ class _TopDrawerState extends State<TopDrawer> {
               ToolBar(),
               Spacer(),
               SizedBox(width: 8),
+              _buildExpandButton(),
               _buildDownloadButton(timeline.frames),
             ],
           ),
@@ -52,6 +53,22 @@ class _TopDrawerState extends State<TopDrawer> {
           onTap: frame.redoAvailable ? frame.redo : null,
         ),
       ],
+    );
+  }
+
+  Widget _buildExpandButton() {
+    return DrawerIconButton(
+      icon: FontAwesomeIcons.expand,
+    );
+  }
+
+  Widget _buildDownloadButton(List<FrameModel> frames) {
+    return DrawerIconButton(
+      icon: FontAwesomeIcons.ellipsisV,
+      onTap: () async {
+        final bytes = await makeGif(frames, 24);
+        await Share.file('Share GIF', 'image.gif', bytes, 'image/gif');
+      },
     );
   }
 
@@ -95,16 +112,6 @@ class _TopDrawerState extends State<TopDrawer> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildDownloadButton(List<FrameModel> frames) {
-    return DrawerIconButton(
-      icon: FontAwesomeIcons.ellipsisV,
-      onTap: () async {
-        final bytes = await makeGif(frames, 24);
-        await Share.file('Share GIF', 'image.gif', bytes, 'image/gif');
-      },
     );
   }
 }
