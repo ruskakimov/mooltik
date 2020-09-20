@@ -99,22 +99,18 @@ class EaselModel extends ChangeNotifier {
   void onStrokeStart(DragStartDetails details) {
     final framePoint = _toFramePoint(details.localPosition);
     frame.startStroke(framePoint, selectedTool.paint);
-    notifyListeners();
   }
 
   void onStrokeUpdate(DragUpdateDetails details) {
     final framePoint = _toFramePoint(details.localPosition);
     frame.extendLastStroke(framePoint);
-    notifyListeners();
   }
 
   void onStrokeEnd() {
     frame.finishLastStroke();
-    notifyListeners();
   }
 
   void onStrokeCancel() {
     frame.cancelLastStroke();
-    notifyListeners();
   }
 }
