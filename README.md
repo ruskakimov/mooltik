@@ -1,3 +1,3 @@
-# mooltik - cartoon animation app
+# Mooltik - cartoon animation app
 
 Work in progress...
