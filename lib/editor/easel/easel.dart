@@ -50,13 +50,13 @@ class _EaselState extends State<Easel> {
           children: [
             Container(color: Colors.transparent),
             Positioned(
-              top: easel.offset.dy,
-              left: easel.offset.dx,
+              top: easel.canvasTopOffset,
+              left: easel.canvasLeftOffset,
               width: frame.width * easel.scale,
               height: frame.height * easel.scale,
               child: Transform.rotate(
                 alignment: Alignment.topLeft,
-                angle: easel.rotation,
+                angle: easel.canvasRotation,
                 child: RepaintBoundary(
                   child: CustomPaint(
                     foregroundPainter: FramePainter(frame),

@@ -15,6 +15,15 @@ class EaselModel extends ChangeNotifier {
 
   Offset _fixedFramePoint;
 
+  /// Canvas offset from top of the easel area.
+  double get canvasTopOffset => offset.dy;
+
+  /// Canvas offset from left of the easel area.
+  double get canvasLeftOffset => offset.dx;
+
+  /// Canvas rotation with top left as the anchor point.
+  double get canvasRotation => rotation;
+
   Offset toFramePoint(Offset point) {
     final p = (point - offset) / scale;
     return Offset(
