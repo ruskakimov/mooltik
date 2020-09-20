@@ -22,7 +22,6 @@ class TopDrawer extends StatefulWidget {
 class _TopDrawerState extends State<TopDrawer> {
   @override
   Widget build(BuildContext context) {
-    final timeline = context.watch<TimelineModel>();
     final frame = context.watch<FrameModel>();
 
     return EditorDrawer(
@@ -36,7 +35,7 @@ class _TopDrawerState extends State<TopDrawer> {
               Spacer(),
               SizedBox(width: 8),
               _buildExpandButton(),
-              _buildDownloadButton(timeline.frames),
+              _buildDownloadButton(),
             ],
           ),
           _buildWidthSelector(),
@@ -62,7 +61,8 @@ class _TopDrawerState extends State<TopDrawer> {
     );
   }
 
-  Widget _buildDownloadButton(List<FrameModel> frames) {
+  Widget _buildDownloadButton() {
+    final frames = context.watch<TimelineModel>().frames;
     return DrawerIconButton(
       icon: FontAwesomeIcons.ellipsisV,
       onTap: () async {
