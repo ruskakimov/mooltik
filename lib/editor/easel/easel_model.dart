@@ -15,6 +15,9 @@ class EaselModel extends ChangeNotifier {
   Tool selectedTool;
   final FrameModel frame;
 
+  double easelWidth;
+  double easelHeight;
+
   Offset _offset;
 
   double _rotation = 0;
@@ -40,9 +43,10 @@ class EaselModel extends ChangeNotifier {
   /// Canvas height at current scale.
   double get canvasHeight => frame.height * _scale;
 
-  void updateEaselArea(double width, double height) {
-    _scale ??= width / frame.width;
-    _offset ??= Offset(0, (height - frame.height * _scale) / 2);
+  void resetCanvasPosition() {
+    _scale = easelWidth / frame.width;
+    _offset = Offset(0, (easelHeight - frame.height * _scale) / 2);
+    notifyListeners();
   }
 
   void updateSelectedTool(Tool tool) {
