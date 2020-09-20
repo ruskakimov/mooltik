@@ -18,12 +18,12 @@ class EaselModel extends ChangeNotifier {
   double easelWidth;
   double easelHeight;
 
-  Offset _offset;
+  Offset _offset = Offset.zero;
 
   double _rotation = 0;
   double _prevRotation = 0;
 
-  double _scale;
+  double _scale = 1;
   double _prevScale;
 
   Offset _fixedFramePoint;

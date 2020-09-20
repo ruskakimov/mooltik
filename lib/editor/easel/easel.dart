@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/easel/easel_model.dart';
+import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:provider/provider.dart';
 
 import '../frame/frame_painter.dart';
@@ -16,6 +17,7 @@ class _EaselState extends State<Easel> {
   @override
   Widget build(BuildContext context) {
     final easel = context.watch<EaselModel>();
+    final frame = context.watch<FrameModel>();
 
     return EaselGestureDetector(
       onStrokeStart: easel.onStrokeStart,
@@ -44,11 +46,11 @@ class _EaselState extends State<Easel> {
                 angle: easel.canvasRotation,
                 child: RepaintBoundary(
                   child: CustomPaint(
-                    foregroundPainter: FramePainter(easel.frame),
+                    foregroundPainter: FramePainter(frame),
                     child: Container(
                       color: Colors.white,
-                      height: easel.frame.height,
-                      width: easel.frame.width,
+                      height: frame.height,
+                      width: frame.width,
                     ),
                   ),
                 ),
