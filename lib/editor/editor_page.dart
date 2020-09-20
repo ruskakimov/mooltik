@@ -14,17 +14,20 @@ class EditorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timeline = context.watch<TimelineModel>();
+    final toolbox = context.watch<ToolboxModel>();
 
     return Scaffold(
       backgroundColor: Color(0xFFDDDDDD),
       body: MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: timeline.selectedFrame),
-          ChangeNotifierProvider(
-            create: (context) => EaselModel(
+          ChangeNotifierProxyProvider<ToolboxModel, EaselModel>(
+            create: (_) => EaselModel(
               frame: timeline.selectedFrame,
-              selectedTool: context.read<ToolboxModel>().selectedTool,
+              selectedTool: toolbox.selectedTool,
             ),
+            update: (_, toolbox, easel) =>
+                easel..updateSelectedTool(toolbox.selectedTool),
           ),
         ],
         child: SafeArea(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/easel/easel_model.dart';
-import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
 
 import '../frame/frame_painter.dart';
@@ -17,25 +16,14 @@ class Easel extends StatefulWidget {
 class _EaselState extends State<Easel> {
   @override
   Widget build(BuildContext context) {
-    final selectedTool = context.watch<ToolboxModel>().selectedTool;
     final frame = context.watch<FrameModel>();
     final easel = context.watch<EaselModel>();
 
     return EaselGestureDetector(
-      onStrokeStart: (DragStartDetails details) {
-        final framePoint = easel.toFramePoint(details.localPosition);
-        frame.startStroke(framePoint, selectedTool.paint);
-      },
-      onStrokeUpdate: (DragUpdateDetails details) {
-        final framePoint = easel.toFramePoint(details.localPosition);
-        frame.extendLastStroke(framePoint);
-      },
-      onStrokeEnd: () {
-        frame.finishLastStroke();
-      },
-      onStrokeCancel: () {
-        frame.cancelLastStroke();
-      },
+      onStrokeStart: easel.onStrokeStart,
+      onStrokeUpdate: easel.onStrokeUpdate,
+      onStrokeEnd: easel.onStrokeEnd,
+      onStrokeCancel: easel.onStrokeCancel,
       onScaleStart: easel.onScaleStart,
       onScaleUpdate: easel.onScaleUpdate,
       child: LayoutBuilder(builder: (context, constraints) {
