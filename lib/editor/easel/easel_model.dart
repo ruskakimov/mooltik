@@ -46,6 +46,7 @@ class EaselModel extends ChangeNotifier {
   void resetCanvasPosition() {
     _scale = easelWidth / frame.width;
     _offset = Offset(0, (easelHeight - frame.height * _scale) / 2);
+    _rotation = 0;
     notifyListeners();
   }
 

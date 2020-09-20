@@ -2,6 +2,7 @@ import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawers/top_drawer/color_picker.dart';
+import 'package:mooltik/editor/easel/easel_model.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
 
@@ -56,8 +57,10 @@ class _TopDrawerState extends State<TopDrawer> {
   }
 
   Widget _buildExpandButton() {
+    final easel = context.watch<EaselModel>();
     return DrawerIconButton(
       icon: FontAwesomeIcons.expand,
+      onTap: easel.resetCanvasPosition,
     );
   }
 
