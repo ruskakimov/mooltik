@@ -60,7 +60,7 @@ class _TopDrawerState extends State<TopDrawer> {
     final easel = context.watch<EaselModel>();
     return DrawerIconButton(
       icon: FontAwesomeIcons.expand,
-      onTap: easel.resetCanvasPosition,
+      onTap: easel.onExpandTap,
     );
   }
 

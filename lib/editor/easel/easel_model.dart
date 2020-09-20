@@ -15,8 +15,7 @@ class EaselModel extends ChangeNotifier {
   Tool selectedTool;
   final FrameModel frame;
 
-  double easelWidth;
-  double easelHeight;
+  Size _screenSize;
 
   Offset _offset = Offset.zero;
 
@@ -43,11 +42,15 @@ class EaselModel extends ChangeNotifier {
   /// Canvas height at current scale.
   double get canvasHeight => frame.height * _scale;
 
-  void resetCanvasPosition() {
-    _scale = easelWidth / frame.width;
-    _offset = Offset(0, (easelHeight - frame.height * _scale) / 2);
+  void init(Size screenSize) {
+    _screenSize = screenSize;
+    _setDefaultCanvasPosition();
+  }
+
+  void _setDefaultCanvasPosition() {
+    _scale = _screenSize.width / frame.width;
+    _offset = Offset(0, (_screenSize.height - frame.height * _scale) / 2);
     _rotation = 0;
-    notifyListeners();
   }
 
   void updateSelectedTool(Tool tool) {
@@ -113,5 +116,10 @@ class EaselModel extends ChangeNotifier {
 
   void onStrokeCancel() {
     frame.cancelLastStroke();
+  }
+
+  void onExpandTap() {
+    _setDefaultCanvasPosition();
+    notifyListeners();
   }
 }
