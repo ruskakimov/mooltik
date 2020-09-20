@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/easel/easel_model.dart';
+import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
 
 import 'easel/easel.dart';
@@ -20,7 +21,10 @@ class EditorPage extends StatelessWidget {
         providers: [
           ChangeNotifierProvider.value(value: timeline.selectedFrame),
           ChangeNotifierProvider(
-            create: (context) => EaselModel(),
+            create: (context) => EaselModel(
+              frame: timeline.selectedFrame,
+              selectedTool: context.read<ToolboxModel>().selectedTool,
+            ),
           ),
         ],
         child: SafeArea(

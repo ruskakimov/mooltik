@@ -39,11 +39,7 @@ class _EaselState extends State<Easel> {
       onScaleStart: easel.onScaleStart,
       onScaleUpdate: easel.onScaleUpdate,
       child: LayoutBuilder(builder: (context, constraints) {
-        easel.scale ??= constraints.maxWidth / frame.width;
-        easel.offset ??= Offset(
-          0,
-          (constraints.maxHeight - frame.height * easel.scale) / 2,
-        );
+        easel.updateEaselArea(constraints.maxWidth, constraints.maxHeight);
 
         return Stack(
           fit: StackFit.expand,

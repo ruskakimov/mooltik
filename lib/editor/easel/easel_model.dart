@@ -1,10 +1,20 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/frame/frame_model.dart';
+import 'package:mooltik/editor/toolbox/tools.dart';
 
 const twoPi = pi * 2;
 
 class EaselModel extends ChangeNotifier {
+  EaselModel({
+    @required this.frame,
+    @required this.selectedTool,
+  });
+
+  final Tool selectedTool;
+  final FrameModel frame;
+
   Offset offset;
 
   double rotation = 0;
@@ -23,6 +33,11 @@ class EaselModel extends ChangeNotifier {
 
   /// Canvas rotation with top left as the anchor point.
   double get canvasRotation => rotation;
+
+  void updateEaselArea(double width, double height) {
+    scale ??= width / frame.width;
+    offset ??= Offset(0, (height - frame.height * scale) / 2);
+  }
 
   Offset toFramePoint(Offset point) {
     final p = (point - offset) / scale;
