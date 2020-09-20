@@ -1,14 +1,11 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/easel/easel_model.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
 
 import '../frame/frame_painter.dart';
 import '../frame/frame_model.dart';
 import 'easel_gesture_detector.dart';
-
-const twoPi = pi * 2;
 
 class Easel extends StatefulWidget {
   Easel({Key key}) : super(key: key);
@@ -18,55 +15,19 @@ class Easel extends StatefulWidget {
 }
 
 class _EaselState extends State<Easel> {
-  Offset _offset;
-
-  double _rotation = 0;
-  double _prevRotation = 0;
-
-  double _scale;
-  double _prevScale;
-
-  Offset _fixedFramePoint;
-
-  Offset toFramePoint(Offset point) {
-    final p = (point - _offset) / _scale;
-    return Offset(
-      p.dx * cos(_rotation) + p.dy * sin(_rotation),
-      -p.dx * sin(_rotation) + p.dy * cos(_rotation),
-    );
-  }
-
-  Offset calcOffsetToMatchPoints(Offset framePoint, Offset screenPoint) {
-    final a = screenPoint.dx;
-    final b = screenPoint.dy;
-    final c = framePoint.dx;
-    final d = framePoint.dy;
-    final si = sin(_rotation);
-    final co = cos(_rotation);
-    final ta = si / co;
-    final s = _scale;
-
-    final e = -d * s - a * si + b * co;
-    final f = -c * s + a * co + b * si;
-
-    final x = (f - e * ta) / (co + si * ta);
-    final y = (e + x * si) / co;
-
-    return Offset(x, y);
-  }
-
   @override
   Widget build(BuildContext context) {
     final selectedTool = context.watch<ToolboxModel>().selectedTool;
     final frame = context.watch<FrameModel>();
+    final easel = context.watch<EaselModel>();
 
     return EaselGestureDetector(
       onStrokeStart: (DragStartDetails details) {
-        final framePoint = toFramePoint(details.localPosition);
+        final framePoint = easel.toFramePoint(details.localPosition);
         frame.startStroke(framePoint, selectedTool.paint);
       },
       onStrokeUpdate: (DragUpdateDetails details) {
-        final framePoint = toFramePoint(details.localPosition);
+        final framePoint = easel.toFramePoint(details.localPosition);
         frame.extendLastStroke(framePoint);
       },
       onStrokeEnd: () {
@@ -75,24 +36,13 @@ class _EaselState extends State<Easel> {
       onStrokeCancel: () {
         frame.cancelLastStroke();
       },
-      onScaleStart: (ScaleStartDetails details) {
-        _prevScale = _scale;
-        _prevRotation = _rotation;
-        _fixedFramePoint = toFramePoint(details.localFocalPoint);
-      },
-      onScaleUpdate: (ScaleUpdateDetails details) {
-        setState(() {
-          _scale = (_prevScale * details.scale).clamp(0.1, 8.0);
-          _rotation = (_prevRotation + details.rotation) % twoPi;
-          _offset = calcOffsetToMatchPoints(
-              _fixedFramePoint, details.localFocalPoint);
-        });
-      },
+      onScaleStart: easel.onScaleStart,
+      onScaleUpdate: easel.onScaleUpdate,
       child: LayoutBuilder(builder: (context, constraints) {
-        _scale ??= constraints.maxWidth / frame.width;
-        _offset ??= Offset(
+        easel.scale ??= constraints.maxWidth / frame.width;
+        easel.offset ??= Offset(
           0,
-          (constraints.maxHeight - frame.height * _scale) / 2,
+          (constraints.maxHeight - frame.height * easel.scale) / 2,
         );
 
         return Stack(
@@ -100,13 +50,13 @@ class _EaselState extends State<Easel> {
           children: [
             Container(color: Colors.transparent),
             Positioned(
-              top: _offset.dy,
-              left: _offset.dx,
-              width: frame.width * _scale,
-              height: frame.height * _scale,
+              top: easel.offset.dy,
+              left: easel.offset.dx,
+              width: frame.width * easel.scale,
+              height: frame.height * easel.scale,
               child: Transform.rotate(
                 alignment: Alignment.topLeft,
-                angle: _rotation,
+                angle: easel.rotation,
                 child: RepaintBoundary(
                   child: CustomPaint(
                     foregroundPainter: FramePainter(frame),
