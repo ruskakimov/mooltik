@@ -82,7 +82,7 @@ class Timeline extends StatelessWidget {
           color: Colors.blueGrey[900],
         ),
         CustomPaint(
-          painter: TimelinePainter(),
+          painter: TimelinePainter(frameWidth: 40),
         ),
         Center(
           child: Container(

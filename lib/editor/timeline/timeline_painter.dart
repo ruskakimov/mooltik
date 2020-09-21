@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class TimelinePainter extends CustomPainter {
+  TimelinePainter({@required this.frameWidth});
+
+  final double frameWidth;
+
   final linePaint = Paint()
     ..color = Colors.grey[200]
     ..strokeWidth = 2
