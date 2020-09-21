@@ -20,17 +20,17 @@ class TimelinePainter extends CustomPainter {
       ..color = Colors.blueGrey[800]
       ..strokeWidth = 2;
 
-    for (var x = size.width / 2; x <= size.width; x += frameWidth) {
+    for (var x = size.width / 2 - offset; x <= size.width; x += frameWidth) {
       canvas.drawLine(Offset(x, 0), Offset(x, size.height), frameGridPaint);
     }
 
     canvas.drawCircle(
-      Offset(size.width / 2 + offset, size.height / 2),
+      Offset(size.width / 2 - offset, size.height / 2),
       8,
       linePaint,
     );
     canvas.drawLine(
-      Offset(size.width / 2 + 8, size.height / 2),
+      Offset(size.width / 2 - offset, size.height / 2),
       Offset(size.width, size.height / 2),
       linePaint,
     );

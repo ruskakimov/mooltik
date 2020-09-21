@@ -25,7 +25,7 @@ class _TimelineState extends State<Timeline> {
           onHorizontalDragUpdate: (details) {
             setState(() {
               _offset =
-                  (_offset + details.primaryDelta).clamp(0, double.infinity);
+                  (_offset - details.primaryDelta).clamp(0, double.infinity);
             });
           },
           child: CustomPaint(
