@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
 class TimelinePainter extends CustomPainter {
-  TimelinePainter({@required this.frameWidth});
+  TimelinePainter({
+    @required this.frameWidth,
+    @required this.offset,
+  });
 
   final double frameWidth;
+  final double offset;
 
   final linePaint = Paint()
     ..color = Colors.grey[200]
@@ -21,7 +25,7 @@ class TimelinePainter extends CustomPainter {
     }
 
     canvas.drawCircle(
-      Offset(size.width / 2, size.height / 2),
+      Offset(size.width / 2 + offset, size.height / 2),
       8,
       linePaint,
     );
@@ -33,7 +37,7 @@ class TimelinePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(TimelinePainter oldDelegate) => false;
+  bool shouldRepaint(TimelinePainter oldDelegate) => true;
 
   @override
   bool shouldRebuildSemantics(TimelinePainter oldDelegate) => false;
