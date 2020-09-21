@@ -20,6 +20,8 @@ class _TimelineState extends State<Timeline>
   AnimationController _controller;
   double _prevOffset;
 
+  final frameWidth = 40.0;
+
   @override
   void initState() {
     super.initState();
@@ -31,10 +33,10 @@ class _TimelineState extends State<Timeline>
         if (_prevOffset != null) {
           final left = min(_prevOffset, _controller.value);
           final right = max(_prevOffset, _controller.value);
-          final notch = right - right % 40;
+          final notch = right - right % frameWidth;
           if (left < notch) {
             Vibration.vibrate(duration: 20);
-            context.read<TimelineModel>().selectFrame(notch ~/ 40);
+            context.read<TimelineModel>().selectFrame(notch ~/ frameWidth);
           }
         }
         _prevOffset = _controller.value;
@@ -54,7 +56,8 @@ class _TimelineState extends State<Timeline>
             _controller.value -= details.primaryDelta;
           },
           onHorizontalDragEnd: (details) {
-            final snapTarget = _controller.value - _controller.value % 40;
+            final snapTarget =
+                _controller.value - _controller.value % frameWidth;
             _controller.animateTo(
               snapTarget,
               duration: Duration(milliseconds: 200),
@@ -66,7 +69,7 @@ class _TimelineState extends State<Timeline>
             builder: (context, child) {
               return CustomPaint(
                 painter: TimelinePainter(
-                  frameWidth: 40,
+                  frameWidth: frameWidth,
                   offset: _controller.value,
                 ),
               );
