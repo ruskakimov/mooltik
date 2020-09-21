@@ -1,8 +1,11 @@
 import 'dart:math' as math;
+import 'package:flutter/gestures.dart';
+import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawers/drawer_icon_button.dart';
 import 'package:mooltik/editor/drawers/editor_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/timeline/timeline_painter.dart';
 
 class BottomDrawer extends StatelessWidget {
   const BottomDrawer({
@@ -78,9 +81,12 @@ class Timeline extends StatelessWidget {
         ColoredBox(
           color: Colors.blueGrey[900],
         ),
+        CustomPaint(
+          painter: TimelinePainter(),
+        ),
         Center(
           child: Container(
-            width: 1,
+            width: 2,
             color: Colors.amber,
           ),
         ),
