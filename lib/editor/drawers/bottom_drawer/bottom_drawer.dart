@@ -17,7 +17,7 @@ class BottomDrawer extends StatelessWidget {
       alignment: Alignment.center,
       transform: Matrix4.rotationX(math.pi),
       child: EditorDrawer(
-        height: 48 * 4.0 + 8,
+        height: 200,
         quickAccessButtons: [
           DrawerIconButton(
             icon: FontAwesomeIcons.stepBackward,
