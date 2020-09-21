@@ -29,6 +29,7 @@ dependencies:
   flutter_colorpicker: ^0.3.4
   font_awesome_flutter: ^8.8.1
   after_init: ^0.1.2
+  vibration: ^1.5.0
 
 dev_dependencies:
   flutter_test:

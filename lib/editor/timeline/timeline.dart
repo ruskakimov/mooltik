@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/timeline/timeline_painter.dart';
+import 'package:vibration/vibration.dart';
 
 class Timeline extends StatefulWidget {
   const Timeline({
@@ -13,6 +16,7 @@ class Timeline extends StatefulWidget {
 class _TimelineState extends State<Timeline>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
+  double _prevOffset;
 
   @override
   void initState() {
@@ -21,7 +25,24 @@ class _TimelineState extends State<Timeline>
       vsync: this,
       lowerBound: 0,
       upperBound: double.infinity,
-    );
+    )..addListener(() {
+        if (_prevOffset != null) {
+          if (_controller.value > _prevOffset) {
+            final notch = _controller.value - _controller.value % 40;
+
+            if (_prevOffset < notch) {
+              Vibration.vibrate(duration: 20);
+            }
+          } else {
+            final notch = _prevOffset - _prevOffset % 40;
+
+            if (_controller.value < notch) {
+              Vibration.vibrate(duration: 20);
+            }
+          }
+        }
+        _prevOffset = _controller.value;
+      });
   }
 
   @override
