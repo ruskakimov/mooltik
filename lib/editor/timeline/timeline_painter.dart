@@ -14,7 +14,7 @@ class TimelinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final frameGridPaint = Paint()
       ..color = Colors.blueGrey[800]
-      ..strokeWidth = 1;
+      ..strokeWidth = 2;
 
     for (var x = size.width / 2; x <= size.width; x += frameWidth) {
       canvas.drawLine(Offset(x, 0), Offset(x, size.height), frameGridPaint);
