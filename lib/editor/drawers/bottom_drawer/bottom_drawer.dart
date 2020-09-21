@@ -72,7 +72,7 @@ class BottomDrawer extends StatelessWidget {
               ),
             ],
           ),
-          DrawerIconButton(icon: FontAwesomeIcons.briefcase),
+          DrawerIconButton(icon: FontAwesomeIcons.toolbox),
         ],
       );
     });
