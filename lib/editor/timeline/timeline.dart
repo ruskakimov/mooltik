@@ -33,15 +33,19 @@ class _TimelineState extends State<Timeline>
         if (_prevOffset != null) {
           final left = min(_prevOffset, _controller.value);
           final right = max(_prevOffset, _controller.value);
-          final notch = right - right % frameWidth;
+          final notch = _notchPositionBefore(right);
           if (left < notch) {
             Vibration.vibrate(duration: 20);
-            context.read<TimelineModel>().selectFrame(notch ~/ frameWidth);
+            context
+                .read<TimelineModel>()
+                .selectFrame(_controller.value ~/ frameWidth + 1);
           }
         }
         _prevOffset = _controller.value;
       });
   }
+
+  double _notchPositionBefore(double offset) => offset - offset % frameWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +60,7 @@ class _TimelineState extends State<Timeline>
             _controller.value -= details.primaryDelta;
           },
           onHorizontalDragEnd: (details) {
-            final snapTarget =
-                _controller.value - _controller.value % frameWidth;
+            final snapTarget = _notchPositionBefore(_controller.value);
             _controller.animateTo(
               snapTarget,
               duration: Duration(milliseconds: 200),
