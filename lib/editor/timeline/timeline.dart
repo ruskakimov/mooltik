@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:mooltik/editor/timeline/timeline_painter.dart';
 import 'package:vibration/vibration.dart';
 
@@ -32,6 +34,7 @@ class _TimelineState extends State<Timeline>
           final notch = right - right % 40;
           if (left < notch) {
             Vibration.vibrate(duration: 20);
+            context.read<TimelineModel>().selectFrame(notch ~/ 40);
           }
         }
         _prevOffset = _controller.value;

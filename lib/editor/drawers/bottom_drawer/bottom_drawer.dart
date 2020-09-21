@@ -1,10 +1,12 @@
 import 'dart:math' as math;
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawers/drawer_icon_button.dart';
 import 'package:mooltik/editor/drawers/editor_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/timeline/timeline.dart';
+import 'package:mooltik/editor/timeline/timeline_model.dart';
 
 class BottomDrawer extends StatelessWidget {
   const BottomDrawer({
@@ -49,20 +51,23 @@ class BottomDrawer extends StatelessWidget {
     );
   }
 
-  Row _buildTimelineBar() {
-    return Row(
-      children: [
-        DrawerIconButton(icon: FontAwesomeIcons.play),
-        Spacer(),
-        SizedBox(
-          width: 96,
-          child: Text(
-            '1 F',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+  Widget _buildTimelineBar() {
+    return Builder(builder: (context) {
+      final frameNumber = context.watch<TimelineModel>().frameNumber;
+      return Row(
+        children: [
+          DrawerIconButton(icon: FontAwesomeIcons.play),
+          Spacer(),
+          SizedBox(
+            width: 96,
+            child: Text(
+              '$frameNumber F',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16),
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 }
