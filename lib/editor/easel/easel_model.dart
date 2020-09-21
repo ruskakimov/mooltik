@@ -67,7 +67,7 @@ class EaselModel extends ChangeNotifier {
     );
   }
 
-  Offset calcOffsetToMatchPoints(Offset framePoint, Offset screenPoint) {
+  Offset _calcOffsetToMatchPoints(Offset framePoint, Offset screenPoint) {
     final a = screenPoint.dx;
     final b = screenPoint.dy;
     final c = framePoint.dx;
@@ -97,7 +97,7 @@ class EaselModel extends ChangeNotifier {
     _scale = (_prevScale * details.scale).clamp(0.1, 8.0);
     _rotation = (_prevRotation + details.rotation) % twoPi;
     _offset =
-        calcOffsetToMatchPoints(_fixedFramePoint, details.localFocalPoint);
+        _calcOffsetToMatchPoints(_fixedFramePoint, details.localFocalPoint);
     notifyListeners();
   }
 
