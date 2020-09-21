@@ -27,16 +27,26 @@ class TimelinePainter extends CustomPainter {
       );
     }
 
-    canvas.drawCircle(
-      Offset(size.width / 2 - offset, size.height / 2),
-      8,
-      linePaint,
-    );
+    canvas.saveLayer(Rect.fromLTWH(0, 0, size.width, size.height), Paint());
+
     canvas.drawLine(
       Offset(size.width / 2 - offset, size.height / 2),
       Offset(size.width, size.height / 2),
       linePaint,
     );
+
+    canvas.drawCircle(
+      Offset(size.width / 2 - offset, size.height / 2),
+      8,
+      Paint()..blendMode = BlendMode.clear,
+    );
+    canvas.drawCircle(
+      Offset(size.width / 2 - offset, size.height / 2),
+      8,
+      linePaint,
+    );
+
+    canvas.restore();
   }
 
   @override
