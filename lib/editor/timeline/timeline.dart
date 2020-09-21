@@ -10,8 +10,19 @@ class Timeline extends StatefulWidget {
   _TimelineState createState() => _TimelineState();
 }
 
-class _TimelineState extends State<Timeline> {
-  double _offset = 0;
+class _TimelineState extends State<Timeline>
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      lowerBound: 0,
+      upperBound: double.infinity,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +34,18 @@ class _TimelineState extends State<Timeline> {
         ),
         GestureDetector(
           onHorizontalDragUpdate: (details) {
-            setState(() {
-              _offset =
-                  (_offset - details.primaryDelta).clamp(0, double.infinity);
-            });
+            _controller.value -= details.primaryDelta;
           },
-          child: CustomPaint(
-            painter: TimelinePainter(
-              frameWidth: 40,
-              offset: _offset,
-            ),
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return CustomPaint(
+                painter: TimelinePainter(
+                  frameWidth: 40,
+                  offset: _controller.value,
+                ),
+              );
+            },
           ),
         ),
         Center(
