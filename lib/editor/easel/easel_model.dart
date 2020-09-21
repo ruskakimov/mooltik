@@ -54,13 +54,6 @@ class EaselModel extends ChangeNotifier {
     _rotation = 0;
   }
 
-  void _fitToScreenRotatedLeftCanvas() {
-    _scale = _screenSize.width / frame.height;
-    _offset =
-        Offset(0, _screenSize.height - (_screenSize.height - frame.height) / 2);
-    _rotation = -pi / 2;
-  }
-
   void updateSelectedTool(Tool tool) {
     _selectedTool = tool;
     notifyListeners();
@@ -127,8 +120,7 @@ class EaselModel extends ChangeNotifier {
   }
 
   void onExpandTap() {
-    // _fitToScreenUprightCanvas();
-    _fitToScreenRotatedLeftCanvas();
+    _fitToScreenUprightCanvas();
     notifyListeners();
   }
 }
