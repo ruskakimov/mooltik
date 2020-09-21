@@ -36,6 +36,14 @@ class _TimelineState extends State<Timeline>
           onHorizontalDragUpdate: (details) {
             _controller.value -= details.primaryDelta;
           },
+          onHorizontalDragEnd: (details) {
+            final snapTarget = _controller.value - _controller.value % 40;
+            _controller.animateTo(
+              snapTarget,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+            );
+          },
           child: AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
