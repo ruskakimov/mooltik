@@ -27,14 +27,17 @@ class TimelinePainter extends CustomPainter {
       );
     }
 
+    // Draw line and keyframes on a new frame, so they can be composited.
     canvas.saveLayer(Rect.fromLTWH(0, 0, size.width, size.height), Paint());
 
+    // Timeline.
     canvas.drawLine(
       Offset(size.width / 2 - offset, size.height / 2),
       Offset(size.width, size.height / 2),
       linePaint,
     );
 
+    // Empty keyframe.
     canvas.drawCircle(
       Offset(size.width / 2 - offset, size.height / 2),
       8,
@@ -46,7 +49,16 @@ class TimelinePainter extends CustomPainter {
       linePaint,
     );
 
+    // Merge and erase line inside empty keyframe.
     canvas.restore();
+
+    canvas.drawLine(
+      Offset(size.width / 2, 0),
+      Offset(size.width / 2, size.height),
+      Paint()
+        ..color = Colors.amber
+        ..strokeWidth = 2,
+    );
   }
 
   @override

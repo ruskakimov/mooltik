@@ -47,43 +47,34 @@ class _TimelineState extends State<Timeline>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        ColoredBox(
-          color: Colors.blueGrey[900],
-        ),
-        GestureDetector(
-          onHorizontalDragUpdate: (details) {
-            _controller.value -= details.primaryDelta;
-          },
-          onHorizontalDragEnd: (details) {
-            final snapTarget = _notchPositionBefore(_controller.value);
-            _controller.animateTo(
-              snapTarget,
-              duration: Duration(milliseconds: 200),
-              curve: Curves.easeOut,
+    return SizedBox.expand(
+      child: GestureDetector(
+        onHorizontalDragUpdate: (details) {
+          _controller.value -= details.primaryDelta;
+        },
+        onHorizontalDragEnd: (details) {
+          final snapTarget = _notchPositionBefore(_controller.value);
+          _controller.animateTo(
+            snapTarget,
+            duration: Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+          );
+        },
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            return CustomPaint(
+              child: ColoredBox(
+                color: Colors.blueGrey[900],
+              ),
+              foregroundPainter: TimelinePainter(
+                frameWidth: frameWidth,
+                offset: _controller.value,
+              ),
             );
           },
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return CustomPaint(
-                painter: TimelinePainter(
-                  frameWidth: frameWidth,
-                  offset: _controller.value,
-                ),
-              );
-            },
-          ),
         ),
-        Center(
-          child: Container(
-            width: 2,
-            color: Colors.amber,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
