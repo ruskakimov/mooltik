@@ -27,18 +27,11 @@ class _TimelineState extends State<Timeline>
       upperBound: double.infinity,
     )..addListener(() {
         if (_prevOffset != null) {
-          if (_controller.value > _prevOffset) {
-            final notch = _controller.value - _controller.value % 40;
-
-            if (_prevOffset < notch) {
-              Vibration.vibrate(duration: 20);
-            }
-          } else {
-            final notch = _prevOffset - _prevOffset % 40;
-
-            if (_controller.value < notch) {
-              Vibration.vibrate(duration: 20);
-            }
+          final left = min(_prevOffset, _controller.value);
+          final right = max(_prevOffset, _controller.value);
+          final notch = right - right % 40;
+          if (left < notch) {
+            Vibration.vibrate(duration: 20);
           }
         }
         _prevOffset = _controller.value;
