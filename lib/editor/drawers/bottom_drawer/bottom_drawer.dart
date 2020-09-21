@@ -54,18 +54,25 @@ class BottomDrawer extends StatelessWidget {
   Widget _buildTimelineBar() {
     return Builder(builder: (context) {
       final frameNumber = context.watch<TimelineModel>().frameNumber;
-      return Row(
+      return Stack(
+        alignment: Alignment.center,
         children: [
-          DrawerIconButton(icon: FontAwesomeIcons.play),
-          Spacer(),
-          SizedBox(
-            width: 96,
-            child: Text(
-              '$frameNumber F',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
-            ),
+          Row(
+            children: [
+              DrawerIconButton(icon: FontAwesomeIcons.play),
+              DrawerIconButton(icon: FontAwesomeIcons.layerGroup),
+              Spacer(),
+              SizedBox(
+                width: 96,
+                child: Text(
+                  '$frameNumber F',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ],
           ),
+          DrawerIconButton(icon: FontAwesomeIcons.briefcase),
         ],
       );
     });
