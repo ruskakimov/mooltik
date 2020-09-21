@@ -9,11 +9,12 @@ const twoPi = pi * 2;
 class EaselModel extends ChangeNotifier {
   EaselModel({
     @required this.frame,
-    @required this.selectedTool,
-  });
+    @required Tool selectedTool,
+  }) : _selectedTool = selectedTool;
 
-  Tool selectedTool;
   final FrameModel frame;
+
+  Tool _selectedTool;
 
   Size _screenSize;
 
@@ -54,7 +55,7 @@ class EaselModel extends ChangeNotifier {
   }
 
   void updateSelectedTool(Tool tool) {
-    selectedTool = tool;
+    _selectedTool = tool;
     notifyListeners();
   }
 
@@ -102,7 +103,7 @@ class EaselModel extends ChangeNotifier {
 
   void onStrokeStart(DragStartDetails details) {
     final framePoint = _toFramePoint(details.localPosition);
-    frame.startStroke(framePoint, selectedTool.paint);
+    frame.startStroke(framePoint, _selectedTool.paint);
   }
 
   void onStrokeUpdate(DragUpdateDetails details) {
