@@ -16,12 +16,15 @@ class TimelinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final frameGridPaint = Paint()
-      ..color = Colors.blueGrey[800]
-      ..strokeWidth = 2;
+    final gridPaint = Paint()..color = Colors.black.withOpacity(0.2);
 
-    for (var x = size.width / 2 - offset; x <= size.width; x += frameWidth) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), frameGridPaint);
+    for (var x = size.width / 2 - offset;
+        x <= size.width;
+        x += frameWidth * 2) {
+      canvas.drawRect(
+        Rect.fromLTWH(x, 0, frameWidth, size.height),
+        gridPaint,
+      );
     }
 
     canvas.drawCircle(
