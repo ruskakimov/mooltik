@@ -31,19 +31,19 @@ class _TimelineState extends State<Timeline>
       upperBound: double.infinity,
     )..addListener(() {
         if (_prevOffset != null) {
-          final left = min(_prevOffset, _controller.value);
-          final right = max(_prevOffset, _controller.value);
-          final notch = _notchPositionBefore(right);
-          if (left < notch) {
+          final prevFrameNumber = _frameNumber(_prevOffset);
+          final newFrameNumber = _frameNumber(_controller.value);
+
+          if (newFrameNumber != prevFrameNumber) {
             Vibration.vibrate(duration: 20);
-            context
-                .read<TimelineModel>()
-                .selectFrame(_controller.value ~/ frameWidth + 1);
+            context.read<TimelineModel>().selectFrame(newFrameNumber);
           }
         }
         _prevOffset = _controller.value;
       });
   }
+
+  int _frameNumber(double offset) => offset ~/ frameWidth + 1;
 
   double _notchPositionBefore(double offset) => offset - offset % frameWidth;
 
