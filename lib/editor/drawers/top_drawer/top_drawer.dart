@@ -65,7 +65,7 @@ class _TopDrawerState extends State<TopDrawer> {
   }
 
   Widget _buildDownloadButton() {
-    final frames = context.watch<TimelineModel>().frames;
+    final frames = context.watch<TimelineModel>().keyframes;
     return DrawerIconButton(
       icon: FontAwesomeIcons.ellipsisV,
       onTap: () async {

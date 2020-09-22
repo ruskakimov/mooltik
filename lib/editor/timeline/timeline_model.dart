@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import '../frame/frame_model.dart';
 
 class TimelineModel extends ChangeNotifier {
-  List<FrameModel> frames = [FrameModel()];
+  List<FrameModel> keyframes = [FrameModel()];
   int _selectedFrameIndex = 0;
 
-  int _frameNumber = 1;
+  int _selectedFrameNumber = 1;
 
-  int get selectedFrameNumber => _frameNumber;
+  int get selectedFrameNumber => _selectedFrameNumber;
 
-  FrameModel get selectedFrame => frames[_selectedFrameIndex];
+  FrameModel get selectedFrame => keyframes[_selectedFrameIndex];
 
   void selectFrame(int number) {
     assert(number > 0);
-    _frameNumber = number;
+    _selectedFrameNumber = number;
     notifyListeners();
   }
 }
