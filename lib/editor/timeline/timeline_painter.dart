@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class TimelinePainter extends CustomPainter {
@@ -34,7 +36,7 @@ class TimelinePainter extends CustomPainter {
 
     // Timeline.
     canvas.drawLine(
-      Offset(firstFrameX, midY),
+      Offset(max(firstFrameX, 0), midY),
       Offset(size.width, midY),
       linePaint,
     );
@@ -44,6 +46,7 @@ class TimelinePainter extends CustomPainter {
     // Merge and erase line inside empty keyframe.
     canvas.restore();
 
+    // Playhead.
     canvas.drawLine(
       Offset(midX, 0),
       Offset(midX, size.height),
