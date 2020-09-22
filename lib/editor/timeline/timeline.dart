@@ -47,6 +47,8 @@ class _TimelineState extends State<Timeline>
 
   @override
   Widget build(BuildContext context) {
+    final timeline = context.watch<TimelineModel>();
+
     return SizedBox.expand(
       child: GestureDetector(
         onHorizontalDragUpdate: (details) {
@@ -71,7 +73,7 @@ class _TimelineState extends State<Timeline>
                 frameWidth: frameWidth,
                 offset: _controller.value,
                 emptyKeyframes: [1],
-                keyframes: [3, 4, 8, 10],
+                keyframes: timeline.keyframes.map((f) => f.number).toList(),
                 animationDuration: 24,
               ),
             );
