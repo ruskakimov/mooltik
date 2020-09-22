@@ -74,6 +74,11 @@ class TimelinePainter extends CustomPainter {
     }
 
     // Playhead.
+    final trianglePath = Path()
+      ..moveTo(midX - 8, 0)
+      ..lineTo(midX, 8)
+      ..lineTo(midX + 8, 0);
+    canvas.drawPath(trianglePath, Paint()..color = Colors.amber);
     canvas.drawLine(
       Offset(midX, 0),
       Offset(midX, size.height),
