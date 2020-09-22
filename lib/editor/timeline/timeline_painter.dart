@@ -18,9 +18,11 @@ class TimelinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final gridPaint = Paint()..color = Colors.black.withOpacity(0.2);
 
-    for (var x = size.width / 2 - offset;
-        x <= size.width;
-        x += frameWidth * 2) {
+    final midX = size.width / 2;
+    final midY = size.height / 2;
+    final firstFrameX = midX - offset;
+
+    for (var x = firstFrameX; x <= size.width; x += frameWidth * 2) {
       canvas.drawRect(
         Rect.fromLTWH(x, 0, frameWidth, size.height),
         gridPaint,
@@ -32,19 +34,19 @@ class TimelinePainter extends CustomPainter {
 
     // Timeline.
     canvas.drawLine(
-      Offset(size.width / 2 - offset, size.height / 2),
-      Offset(size.width, size.height / 2),
+      Offset(firstFrameX, midY),
+      Offset(size.width, midY),
       linePaint,
     );
 
     // Empty keyframe.
     canvas.drawCircle(
-      Offset(size.width / 2 - offset, size.height / 2),
+      Offset(firstFrameX, midY),
       8,
       Paint()..blendMode = BlendMode.clear,
     );
     canvas.drawCircle(
-      Offset(size.width / 2 - offset, size.height / 2),
+      Offset(firstFrameX, midY),
       8,
       linePaint,
     );
@@ -53,8 +55,8 @@ class TimelinePainter extends CustomPainter {
     canvas.restore();
 
     canvas.drawLine(
-      Offset(size.width / 2, 0),
-      Offset(size.width / 2, size.height),
+      Offset(midX, 0),
+      Offset(midX, size.height),
       Paint()
         ..color = Colors.amber
         ..strokeWidth = 2,
