@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:provider/provider.dart';
 
 import 'editor/editor_page.dart';
@@ -31,7 +32,11 @@ class App extends StatelessWidget {
       ),
       home: MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => TimelineModel()),
+          ChangeNotifierProvider(
+            create: (context) => TimelineModel(
+              initialKeyframes: [FrameModel(1)],
+            ),
+          ),
           ChangeNotifierProvider(create: (context) => ToolboxModel()),
         ],
         child: EditorPage(),

@@ -13,8 +13,9 @@ import 'stroke.dart';
 const int maxSnapshotCount = 16;
 
 class FrameModel extends ChangeNotifier {
-  FrameModel() : _unrasterizedStrokes = [];
+  FrameModel(this.number) : _unrasterizedStrokes = [];
 
+  final int number;
   final List<Stroke> _unrasterizedStrokes;
 
   bool _lastStrokeTouchesFrame;

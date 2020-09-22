@@ -20,10 +20,10 @@ class EditorPage extends StatelessWidget {
       backgroundColor: Color(0xFFDDDDDD),
       body: MultiProvider(
         providers: [
-          ChangeNotifierProvider.value(value: timeline.selectedFrame),
+          ChangeNotifierProvider.value(value: timeline.visibleKeyframe),
           ChangeNotifierProxyProvider<ToolboxModel, EaselModel>(
             create: (_) => EaselModel(
-              frame: timeline.selectedFrame,
+              frame: timeline.visibleKeyframe,
               selectedTool: toolbox.selectedTool,
             ),
             update: (_, toolbox, easel) =>
