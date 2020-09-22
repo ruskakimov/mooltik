@@ -45,11 +45,11 @@ class TimelinePainter extends CustomPainter {
 
     final midX = size.width / 2;
     final midY = size.height / 2;
-    final firstFrameX = _frameX(1, midX);
+    final startX = _frameX(1, midX);
+    final endX = _frameX(animationDuration + 1, midX);
 
     // Frame grid.
-    final gridStart =
-        firstFrameX < 0 ? -(firstFrameX.abs() % (frameWidth * 2)) : firstFrameX;
+    final gridStart = startX < 0 ? -(startX.abs() % (frameWidth * 2)) : startX;
     for (var x = gridStart; x <= size.width; x += frameWidth * 2) {
       canvas.drawRect(
         Rect.fromLTWH(x, 0, frameWidth, size.height),
@@ -62,8 +62,13 @@ class TimelinePainter extends CustomPainter {
 
     // Timeline.
     canvas.drawLine(
-      Offset(max(firstFrameX, 0), midY),
-      Offset(size.width, midY),
+      Offset(max(startX, 0), midY),
+      Offset(min(endX, size.width), midY),
+      linePaint,
+    );
+    canvas.drawLine(
+      Offset(endX, 0),
+      Offset(endX, size.height),
       linePaint,
     );
 
