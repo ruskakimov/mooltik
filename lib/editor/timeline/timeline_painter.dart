@@ -24,7 +24,10 @@ class TimelinePainter extends CustomPainter {
     final midY = size.height / 2;
     final firstFrameX = midX - offset;
 
-    for (var x = firstFrameX; x <= size.width; x += frameWidth * 2) {
+    // Frame grid.
+    final gridStart =
+        firstFrameX < 0 ? -(firstFrameX.abs() % (frameWidth * 2)) : firstFrameX;
+    for (var x = gridStart; x <= size.width; x += frameWidth * 2) {
       canvas.drawRect(
         Rect.fromLTWH(x, 0, frameWidth, size.height),
         gridPaint,
