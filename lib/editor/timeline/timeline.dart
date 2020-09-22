@@ -72,6 +72,7 @@ class _TimelineState extends State<Timeline>
                 offset: _controller.value,
                 emptyKeyframes: [1],
                 keyframes: [3, 4, 8, 10],
+                animationDuration: 24,
               ),
             );
           },

@@ -8,12 +8,16 @@ class TimelinePainter extends CustomPainter {
     @required this.offset,
     @required this.emptyKeyframes,
     @required this.keyframes,
+    @required this.animationDuration,
   });
 
   final double frameWidth;
   final double offset;
   final List<int> emptyKeyframes;
   final List<int> keyframes;
+
+  /// Duration of the whole animation in frames.
+  final int animationDuration;
 
   final linePaint = Paint()
     ..color = Colors.grey[200]
