@@ -6,15 +6,25 @@ class TimelinePainter extends CustomPainter {
   TimelinePainter({
     @required this.frameWidth,
     @required this.offset,
+    @required this.keyframes,
   });
 
   final double frameWidth;
   final double offset;
+  final List<int> keyframes;
 
   final linePaint = Paint()
     ..color = Colors.grey[200]
     ..strokeWidth = 2
     ..style = PaintingStyle.stroke;
+
+  final keyframePaint = Paint()
+    ..color = Colors.grey[200]
+    ..style = PaintingStyle.fill;
+
+  double _frameX(int frameNumber, double midX) {
+    return midX - offset + (frameNumber - 1) * frameWidth;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -22,7 +32,7 @@ class TimelinePainter extends CustomPainter {
 
     final midX = size.width / 2;
     final midY = size.height / 2;
-    final firstFrameX = midX - offset;
+    final firstFrameX = _frameX(1, midX);
 
     // Frame grid.
     final gridStart =
@@ -49,6 +59,13 @@ class TimelinePainter extends CustomPainter {
     // Merge and erase line inside empty keyframe.
     canvas.restore();
 
+    for (final keyframeNumber in keyframes) {
+      _drawKeyframe(
+        canvas,
+        Offset(_frameX(keyframeNumber, midX), midY),
+      );
+    }
+
     // Playhead.
     canvas.drawLine(
       Offset(midX, 0),
@@ -62,6 +79,10 @@ class TimelinePainter extends CustomPainter {
   void _drawEmptyKeyframe(Canvas canvas, Offset center) {
     canvas.drawCircle(center, 8, Paint()..blendMode = BlendMode.clear);
     canvas.drawCircle(center, 8, linePaint);
+  }
+
+  void _drawKeyframe(Canvas canvas, Offset center) {
+    canvas.drawCircle(center, 8, keyframePaint);
   }
 
   @override
