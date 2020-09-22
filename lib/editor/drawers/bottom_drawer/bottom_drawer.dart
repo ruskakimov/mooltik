@@ -53,7 +53,7 @@ class BottomDrawer extends StatelessWidget {
 
   Widget _buildTimelineBar() {
     return Builder(builder: (context) {
-      final frameNumber = context.watch<TimelineModel>().frameNumber;
+      final frameNumber = context.watch<TimelineModel>().selectedFrameNumber;
       return Stack(
         alignment: Alignment.center,
         children: [
