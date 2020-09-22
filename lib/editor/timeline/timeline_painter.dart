@@ -29,7 +29,7 @@ class TimelinePainter extends CustomPainter {
       );
     }
 
-    // Draw line and keyframes on a new frame, so they can be composited.
+    // Draw line and keyframes on a new layer, so they can be composited.
     canvas.saveLayer(Rect.fromLTWH(0, 0, size.width, size.height), Paint());
 
     // Timeline.
