@@ -20,6 +20,7 @@ class EditorPage extends StatelessWidget {
       backgroundColor: Color(0xFFDDDDDD),
       body: MultiProvider(
         providers: [
+          // TODO: Frame is provided here since undo/redo buttons listen to it. Consider removing when undo stack is extracted and generalized.
           ChangeNotifierProvider.value(value: timeline.visibleKeyframe),
           ChangeNotifierProxyProvider2<TimelineModel, ToolboxModel, EaselModel>(
             create: (_) => EaselModel(
