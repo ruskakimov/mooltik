@@ -21,13 +21,14 @@ class EditorPage extends StatelessWidget {
       body: MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: timeline.visibleKeyframe),
-          ChangeNotifierProxyProvider<ToolboxModel, EaselModel>(
+          ChangeNotifierProxyProvider2<TimelineModel, ToolboxModel, EaselModel>(
             create: (_) => EaselModel(
               frame: timeline.visibleKeyframe,
               selectedTool: toolbox.selectedTool,
             ),
-            update: (_, toolbox, easel) =>
-                easel..updateSelectedTool(toolbox.selectedTool),
+            update: (_, timeline, toolbox, easel) => easel
+              ..updateFrame(timeline.visibleKeyframe)
+              ..updateSelectedTool(toolbox.selectedTool),
           ),
         ],
         child: SafeArea(

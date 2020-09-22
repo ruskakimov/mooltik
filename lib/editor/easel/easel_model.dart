@@ -8,11 +8,12 @@ const twoPi = pi * 2;
 
 class EaselModel extends ChangeNotifier {
   EaselModel({
-    @required this.frame,
+    @required FrameModel frame,
     @required Tool selectedTool,
-  }) : _selectedTool = selectedTool;
+  })  : _frame = frame,
+        _selectedTool = selectedTool;
 
-  final FrameModel frame;
+  FrameModel _frame;
 
   Tool _selectedTool;
 
@@ -38,25 +39,30 @@ class EaselModel extends ChangeNotifier {
   double get canvasRotation => _rotation;
 
   /// Canvas width at current scale.
-  double get canvasWidth => frame.width * _scale;
+  double get canvasWidth => _frame.width * _scale;
 
   /// Canvas height at current scale.
-  double get canvasHeight => frame.height * _scale;
+  double get canvasHeight => _frame.height * _scale;
 
   void init(Size screenSize) {
     _screenSize = screenSize;
     _fitToScreenUprightCanvas();
   }
 
-  void _fitToScreenUprightCanvas() {
-    _scale = _screenSize.width / frame.width;
-    _offset = Offset(0, (_screenSize.height - frame.height * _scale) / 2);
-    _rotation = 0;
-  }
-
   void updateSelectedTool(Tool tool) {
     _selectedTool = tool;
     notifyListeners();
+  }
+
+  void updateFrame(FrameModel frame) {
+    _frame = frame;
+    notifyListeners();
+  }
+
+  void _fitToScreenUprightCanvas() {
+    _scale = _screenSize.width / _frame.width;
+    _offset = Offset(0, (_screenSize.height - _frame.height * _scale) / 2);
+    _rotation = 0;
   }
 
   Offset _toFramePoint(Offset point) {
@@ -103,20 +109,20 @@ class EaselModel extends ChangeNotifier {
 
   void onStrokeStart(DragStartDetails details) {
     final framePoint = _toFramePoint(details.localPosition);
-    frame.startStroke(framePoint, _selectedTool.paint);
+    _frame.startStroke(framePoint, _selectedTool.paint);
   }
 
   void onStrokeUpdate(DragUpdateDetails details) {
     final framePoint = _toFramePoint(details.localPosition);
-    frame.extendLastStroke(framePoint);
+    _frame.extendLastStroke(framePoint);
   }
 
   void onStrokeEnd() {
-    frame.finishLastStroke();
+    _frame.finishLastStroke();
   }
 
   void onStrokeCancel() {
-    frame.cancelLastStroke();
+    _frame.cancelLastStroke();
   }
 
   void onExpandTap() {
