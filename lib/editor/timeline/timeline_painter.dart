@@ -11,9 +11,16 @@ class TimelinePainter extends CustomPainter {
     @required this.animationDuration,
   });
 
+  /// Width of a single frame in pixels on a timeline.
   final double frameWidth;
+
+  /// Pixel offset from the first frame.
   final double offset;
+
+  /// Sorted list of empty keyframes' numbers.
   final List<int> emptyKeyframes;
+
+  /// Sorted list of keyframes' numbers.
   final List<int> keyframes;
 
   /// Duration of the whole animation in frames.
