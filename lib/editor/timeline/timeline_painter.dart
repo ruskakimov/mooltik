@@ -39,17 +39,7 @@ class TimelinePainter extends CustomPainter {
       linePaint,
     );
 
-    // Empty keyframe.
-    canvas.drawCircle(
-      Offset(firstFrameX, midY),
-      8,
-      Paint()..blendMode = BlendMode.clear,
-    );
-    canvas.drawCircle(
-      Offset(firstFrameX, midY),
-      8,
-      linePaint,
-    );
+    _drawEmptyKeyframe(canvas, Offset(firstFrameX, midY));
 
     // Merge and erase line inside empty keyframe.
     canvas.restore();
@@ -61,6 +51,11 @@ class TimelinePainter extends CustomPainter {
         ..color = Colors.amber
         ..strokeWidth = 2,
     );
+  }
+
+  void _drawEmptyKeyframe(Canvas canvas, Offset center) {
+    canvas.drawCircle(center, 8, Paint()..blendMode = BlendMode.clear);
+    canvas.drawCircle(center, 8, linePaint);
   }
 
   @override
