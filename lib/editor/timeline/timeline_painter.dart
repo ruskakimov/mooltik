@@ -6,11 +6,13 @@ class TimelinePainter extends CustomPainter {
   TimelinePainter({
     @required this.frameWidth,
     @required this.offset,
+    @required this.emptyKeyframes,
     @required this.keyframes,
   });
 
   final double frameWidth;
   final double offset;
+  final List<int> emptyKeyframes;
   final List<int> keyframes;
 
   final linePaint = Paint()
@@ -44,7 +46,7 @@ class TimelinePainter extends CustomPainter {
       );
     }
 
-    // Draw line and keyframes on a new layer, so they can be composited.
+    // Draw timeline and empty keyframes on a new layer, so [BlendMode.clear] is applied.
     canvas.saveLayer(Rect.fromLTWH(0, 0, size.width, size.height), Paint());
 
     // Timeline.
@@ -54,7 +56,12 @@ class TimelinePainter extends CustomPainter {
       linePaint,
     );
 
-    _drawEmptyKeyframe(canvas, Offset(firstFrameX, midY));
+    for (final keyframeNumber in emptyKeyframes) {
+      _drawEmptyKeyframe(
+        canvas,
+        Offset(_frameX(keyframeNumber, midX), midY),
+      );
+    }
 
     // Merge and erase line inside empty keyframe.
     canvas.restore();

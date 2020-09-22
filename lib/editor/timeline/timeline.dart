@@ -70,6 +70,7 @@ class _TimelineState extends State<Timeline>
               foregroundPainter: TimelinePainter(
                 frameWidth: frameWidth,
                 offset: _controller.value,
+                emptyKeyframes: [1],
                 keyframes: [3, 4, 8, 10],
               ),
             );
