@@ -45,6 +45,15 @@ class TimelineModel extends ChangeNotifier {
     return newKeyframe;
   }
 
+  void deleteSelectedKeyframe() {
+    if (selectedKeyframe == null) return;
+
+    keyframes.remove(selectedKeyframe);
+    _updateVisibleKeyframe();
+
+    notifyListeners();
+  }
+
   void _updateVisibleKeyframe() {
     _visibleKeyframe = keyframes
         .lastWhere((keyframe) => keyframe.number <= _selectedFrameNumber);
