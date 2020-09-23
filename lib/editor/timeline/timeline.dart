@@ -33,7 +33,7 @@ class _TimelineState extends State<Timeline>
           final newFrameNumber = _frameNumber(_controller.value);
 
           if (newFrameNumber != prevFrameNumber) {
-            Vibration.vibrate(duration: 20);
+            Vibration.vibrate(duration: 10);
             context.read<TimelineModel>().selectFrame(newFrameNumber);
           }
         }
