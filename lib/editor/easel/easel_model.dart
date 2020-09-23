@@ -13,6 +13,7 @@ class EaselModel extends ChangeNotifier {
     @required this.frameWidth,
     @required this.frameHeight,
     @required this.createFrame,
+    @required this.deleteFrame,
   })  : _frame = frame,
         _selectedTool = selectedTool;
 
@@ -23,6 +24,7 @@ class EaselModel extends ChangeNotifier {
   final double frameWidth;
   final double frameHeight;
   final Function createFrame;
+  final Function deleteFrame;
 
   Size _screenSize;
 
@@ -35,6 +37,8 @@ class EaselModel extends ChangeNotifier {
   double _prevScale;
 
   Offset _fixedFramePoint;
+
+  bool _justCreatedFrame = false;
 
   /// Canvas offset from top of the easel area.
   double get canvasTopOffset => _offset.dy;
@@ -116,6 +120,7 @@ class EaselModel extends ChangeNotifier {
 
   void onStrokeStart(DragStartDetails details) {
     if (_frame == null) {
+      _justCreatedFrame = true;
       _frame = createFrame();
     }
     final framePoint = _toFramePoint(details.localPosition);
@@ -128,10 +133,14 @@ class EaselModel extends ChangeNotifier {
   }
 
   void onStrokeEnd() {
+    _justCreatedFrame = false;
     _frame.finishLastStroke();
   }
 
   void onStrokeCancel() {
+    if (_justCreatedFrame) {
+      deleteFrame();
+    }
     _frame.cancelLastStroke();
   }
 

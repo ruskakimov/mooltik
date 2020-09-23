@@ -21,6 +21,9 @@ class TimelineModel extends ChangeNotifier {
   FrameModel get selectedKeyframe =>
       visibleKeyframe.number == selectedFrameNumber ? visibleKeyframe : null;
 
+  bool get selectedCanBeDeleted =>
+      selectedKeyframe != null && selectedFrameNumber != 1;
+
   void selectFrame(int number) {
     assert(number > 0);
     _selectedFrameNumber = number;
@@ -46,7 +49,7 @@ class TimelineModel extends ChangeNotifier {
   }
 
   void deleteSelectedKeyframe() {
-    if (selectedKeyframe == null) return;
+    if (!selectedCanBeDeleted) return;
 
     keyframes.remove(selectedKeyframe);
     _updateVisibleKeyframe();

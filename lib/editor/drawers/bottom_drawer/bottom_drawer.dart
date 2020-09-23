@@ -74,7 +74,7 @@ class BottomDrawer extends StatelessWidget {
           ),
           DrawerIconButton(
             icon: FontAwesomeIcons.trashAlt,
-            onTap: timeline.selectedKeyframe != null
+            onTap: timeline.selectedCanBeDeleted
                 ? timeline.deleteSelectedKeyframe
                 : null,
           ),
