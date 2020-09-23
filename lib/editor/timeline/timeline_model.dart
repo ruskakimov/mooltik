@@ -14,6 +14,12 @@ class TimelineModel extends ChangeNotifier {
   int _selectedFrameNumber = 1;
   FrameModel _visibleKeyframe;
   int animationDuration = 24;
+  bool playing = false;
+
+  void togglePlay() {
+    playing = !playing;
+    notifyListeners();
+  }
 
   int get selectedFrameNumber => _selectedFrameNumber;
 

@@ -21,12 +21,14 @@ class _TimelineState extends State<Timeline>
   double _prevOffset;
 
   final frameWidth = 24.0;
-  bool _playing = false;
   int _animationFrames = 1;
+
+  bool get playing => context.read<TimelineModel>().playing;
 
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       vsync: this,
       lowerBound: 0,
@@ -37,7 +39,7 @@ class _TimelineState extends State<Timeline>
           final newFrameNumber = _frameNumber(_controller.value);
 
           if (newFrameNumber != prevFrameNumber) {
-            if (!_playing) Vibration.vibrate(duration: 10);
+            if (!playing) Vibration.vibrate(duration: 10);
             context.read<TimelineModel>().selectFrame(newFrameNumber);
           }
         }
@@ -45,7 +47,7 @@ class _TimelineState extends State<Timeline>
       });
 
     _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed && _playing) {
+      if (status == AnimationStatus.completed && playing) {
         _playFromStart();
       }
     });
@@ -129,14 +131,14 @@ class _TimelineState extends State<Timeline>
           Row(
             children: [
               DrawerIconButton(
-                icon: _playing ? FontAwesomeIcons.pause : FontAwesomeIcons.play,
+                icon: timeline.playing
+                    ? FontAwesomeIcons.pause
+                    : FontAwesomeIcons.play,
                 onTap: () {
-                  setState(() {
-                    _playing = !_playing;
-                  });
-                  if (_playing) {
+                  timeline.togglePlay();
+                  if (timeline.playing) {
                     _playFromStart();
-                  } else if (!_playing) {
+                  } else if (!timeline.playing) {
                     _controller.stop();
                     _snapToFrameStart();
                   }
