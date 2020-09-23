@@ -65,11 +65,12 @@ class _TopDrawerState extends State<TopDrawer> {
   }
 
   Widget _buildDownloadButton() {
-    final frames = context.watch<TimelineModel>().keyframes;
+    final timeline = context.watch<TimelineModel>();
     return DrawerIconButton(
       icon: FontAwesomeIcons.fileDownload,
       onTap: () async {
-        final bytes = await makeGif(frames, 24);
+        final bytes =
+            await makeGif(timeline.keyframes, timeline.animationDuration);
         await Share.file('Share GIF', 'image.gif', bytes, 'image/gif');
       },
     );

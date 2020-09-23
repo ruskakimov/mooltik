@@ -4,17 +4,28 @@ import 'package:image/image.dart';
 
 import 'frame/frame_model.dart';
 
-Future<List<int>> makeGif(List<FrameModel> frames, int fps) async {
-  if (frames.isEmpty) {
-    throw ArgumentError.value(frames, 'frames', 'should not be empty');
+Future<List<int>> makeGif(
+  List<FrameModel> keyframes,
+  int animationDuration,
+) async {
+  if (keyframes.isEmpty) {
+    throw ArgumentError.value(keyframes, 'frames', 'should not be empty');
   }
 
-  final encoder = GifEncoder(delay: 100 ~/ fps);
+  final encoder = GifEncoder();
 
-  for (final frame in frames) {
+  for (var i = 1; i < keyframes.length; i++) {
+    final frame = keyframes[i - 1];
+    final frameDuration = keyframes[i].number - frame.number;
     final img = await imageFromFrame(frame);
-    encoder.addFrame(img);
+    encoder.addFrame(img, duration: 4 * frameDuration);
   }
+
+  // TODO: Handle the case when frames are outside animation duration.
+  final lastFrame = keyframes.last;
+  final lastFrameDuration = animationDuration + 1 - lastFrame.number;
+  final img = await imageFromFrame(lastFrame);
+  encoder.addFrame(img, duration: 4 * lastFrameDuration);
 
   return encoder.finish();
 }

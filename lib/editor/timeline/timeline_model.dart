@@ -13,6 +13,7 @@ class TimelineModel extends ChangeNotifier {
   List<FrameModel> keyframes;
   int _selectedFrameNumber = 1;
   FrameModel _visibleKeyframe;
+  int animationDuration = 24;
 
   int get selectedFrameNumber => _selectedFrameNumber;
 
