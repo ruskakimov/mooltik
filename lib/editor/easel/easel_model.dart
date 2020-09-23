@@ -139,6 +139,7 @@ class EaselModel extends ChangeNotifier {
 
   void onStrokeCancel() {
     if (_justCreatedFrame) {
+      // TODO: Create frame onStrokeEnd, move unrasterised strokes to easel.
       deleteFrame();
     }
     _frame.cancelLastStroke();
