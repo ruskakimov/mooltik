@@ -31,7 +31,10 @@ class TimelineModel extends ChangeNotifier {
   FrameModel createKeyframeAtSelectedNumber() {
     if (selectedKeyframe != null) return selectedKeyframe;
 
-    final newKeyframe = FrameModel(selectedFrameNumber);
+    final newKeyframe = FrameModel(
+      selectedFrameNumber,
+      initialSnapshot: visibleKeyframe.snapshot,
+    );
 
     final index = keyframes.indexOf(visibleKeyframe);
     keyframes.insert(index + 1, newKeyframe);

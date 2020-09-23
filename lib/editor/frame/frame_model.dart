@@ -13,7 +13,10 @@ import 'stroke.dart';
 const int maxSnapshotCount = 16;
 
 class FrameModel extends ChangeNotifier {
-  FrameModel(this.number) : _unrasterizedStrokes = [];
+  FrameModel(this.number, {ui.Image initialSnapshot})
+      : _unrasterizedStrokes = [],
+        _snapshots = [initialSnapshot],
+        _selectedSnapshotId = 0;
 
   final int number;
   final List<Stroke> _unrasterizedStrokes;
@@ -21,8 +24,8 @@ class FrameModel extends ChangeNotifier {
   bool _lastStrokeTouchesFrame;
 
   /// Must contain at least one snapshot. [null] represents an empty screen.
-  List<ui.Image> _snapshots = [null];
-  int _selectedSnapshotId = 0;
+  List<ui.Image> _snapshots;
+  int _selectedSnapshotId;
 
   double get width => 1280;
 
