@@ -21,6 +21,8 @@ class _TimelineState extends State<Timeline>
   double _prevOffset;
 
   final frameWidth = 40.0;
+  bool _playing = false;
+  int _animationFrames = 1;
 
   @override
   void initState() {
@@ -35,12 +37,26 @@ class _TimelineState extends State<Timeline>
           final newFrameNumber = _frameNumber(_controller.value);
 
           if (newFrameNumber != prevFrameNumber) {
-            Vibration.vibrate(duration: 10);
+            if (!_playing) Vibration.vibrate(duration: 10);
             context.read<TimelineModel>().selectFrame(newFrameNumber);
           }
         }
         _prevOffset = _controller.value;
       });
+
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && _playing) {
+        _playFromStart();
+      }
+    });
+  }
+
+  void _playFromStart() {
+    _controller.reset();
+    _controller.animateTo(
+      _animationFrames * frameWidth,
+      duration: Duration(milliseconds: (1000 / 24 * _animationFrames).floor()),
+    );
   }
 
   int _frameNumber(double offset) => offset ~/ frameWidth + 1;
@@ -50,6 +66,8 @@ class _TimelineState extends State<Timeline>
   @override
   Widget build(BuildContext context) {
     final timeline = context.watch<TimelineModel>();
+    _animationFrames = timeline.animationDuration;
+
     return Column(
       children: [
         SizedBox(
@@ -106,7 +124,19 @@ class _TimelineState extends State<Timeline>
         children: [
           Row(
             children: [
-              DrawerIconButton(icon: FontAwesomeIcons.play),
+              DrawerIconButton(
+                icon: _playing ? FontAwesomeIcons.pause : FontAwesomeIcons.play,
+                onTap: () {
+                  setState(() {
+                    _playing = !_playing;
+                  });
+                  if (_playing) {
+                    _playFromStart();
+                  } else if (!_playing) {
+                    _controller.stop();
+                  }
+                },
+              ),
               DrawerIconButton(icon: FontAwesomeIcons.layerGroup),
               Spacer(),
               SizedBox(
