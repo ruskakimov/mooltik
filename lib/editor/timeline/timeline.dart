@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/editor/drawers/drawer_icon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:mooltik/editor/timeline/timeline_painter.dart';
@@ -48,7 +50,20 @@ class _TimelineState extends State<Timeline>
   @override
   Widget build(BuildContext context) {
     final timeline = context.watch<TimelineModel>();
+    return Column(
+      children: [
+        SizedBox(
+          height: 56,
+          child: _buildTimelineBar(),
+        ),
+        Expanded(
+          child: _buildTimelineViewport(timeline),
+        ),
+      ],
+    );
+  }
 
+  SizedBox _buildTimelineViewport(TimelineModel timeline) {
     return SizedBox.expand(
       child: GestureDetector(
         onHorizontalDragUpdate: (details) {
@@ -81,5 +96,37 @@ class _TimelineState extends State<Timeline>
         ),
       ),
     );
+  }
+
+  Widget _buildTimelineBar() {
+    return Builder(builder: (context) {
+      final timeline = context.watch<TimelineModel>();
+      return Stack(
+        alignment: Alignment.center,
+        children: [
+          Row(
+            children: [
+              DrawerIconButton(icon: FontAwesomeIcons.play),
+              DrawerIconButton(icon: FontAwesomeIcons.layerGroup),
+              Spacer(),
+              SizedBox(
+                width: 96,
+                child: Text(
+                  '${timeline.selectedFrameNumber} F',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ],
+          ),
+          DrawerIconButton(
+            icon: FontAwesomeIcons.trashAlt,
+            onTap: timeline.selectedCanBeDeleted
+                ? timeline.deleteSelectedKeyframe
+                : null,
+          ),
+        ],
+      );
+    });
   }
 }
