@@ -22,7 +22,7 @@ class EaselModel extends ChangeNotifier {
 
   final double frameWidth;
   final double frameHeight;
-  final VoidCallback createFrame;
+  final Function createFrame;
 
   Size _screenSize;
 
@@ -115,7 +115,9 @@ class EaselModel extends ChangeNotifier {
   }
 
   void onStrokeStart(DragStartDetails details) {
-    if (_frame == null) createFrame();
+    if (_frame == null) {
+      _frame = createFrame();
+    }
     final framePoint = _toFramePoint(details.localPosition);
     _frame.startStroke(framePoint, _selectedTool.paint);
   }

@@ -28,8 +28,9 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void createKeyframeAtSelectedNumber() {
-    if (selectedKeyframe != null) return;
+  FrameModel createKeyframeAtSelectedNumber() {
+    if (selectedKeyframe != null) return selectedKeyframe;
+
     final newKeyframe = FrameModel(selectedFrameNumber);
 
     final index = keyframes.indexOf(visibleKeyframe);
@@ -37,6 +38,8 @@ class TimelineModel extends ChangeNotifier {
 
     _visibleKeyframe = newKeyframe;
     notifyListeners();
+
+    return newKeyframe;
   }
 
   void _updateVisibleKeyframe() {
