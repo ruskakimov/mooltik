@@ -67,7 +67,7 @@ class _TopDrawerState extends State<TopDrawer> {
   Widget _buildDownloadButton() {
     final frames = context.watch<TimelineModel>().keyframes;
     return DrawerIconButton(
-      icon: FontAwesomeIcons.ellipsisV,
+      icon: FontAwesomeIcons.fileDownload,
       onTap: () async {
         final bytes = await makeGif(frames, 24);
         await Share.file('Share GIF', 'image.gif', bytes, 'image/gif');
