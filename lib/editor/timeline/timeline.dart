@@ -59,6 +59,15 @@ class _TimelineState extends State<Timeline>
     );
   }
 
+  void _snapToFrameStart() {
+    final snapTarget = _notchPositionBefore(_controller.value);
+    _controller.animateTo(
+      snapTarget,
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+    );
+  }
+
   int _frameNumber(double offset) => offset ~/ frameWidth + 1;
 
   double _notchPositionBefore(double offset) => offset - offset % frameWidth;
@@ -88,12 +97,7 @@ class _TimelineState extends State<Timeline>
           _controller.value -= details.primaryDelta;
         },
         onHorizontalDragEnd: (details) {
-          final snapTarget = _notchPositionBefore(_controller.value);
-          _controller.animateTo(
-            snapTarget,
-            duration: Duration(milliseconds: 200),
-            curve: Curves.easeOut,
-          );
+          _snapToFrameStart();
         },
         child: AnimatedBuilder(
           animation: _controller,
@@ -134,6 +138,7 @@ class _TimelineState extends State<Timeline>
                     _playFromStart();
                   } else if (!_playing) {
                     _controller.stop();
+                    _snapToFrameStart();
                   }
                 },
               ),
