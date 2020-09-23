@@ -18,10 +18,24 @@ class TimelineModel extends ChangeNotifier {
 
   FrameModel get visibleKeyframe => _visibleKeyframe;
 
+  FrameModel get selectedKeyframe =>
+      visibleKeyframe.number == selectedFrameNumber ? visibleKeyframe : null;
+
   void selectFrame(int number) {
     assert(number > 0);
     _selectedFrameNumber = number;
     _updateVisibleKeyframe();
+    notifyListeners();
+  }
+
+  void createKeyframeAtSelectedNumber() {
+    if (selectedKeyframe != null) return;
+    final newKeyframe = FrameModel(selectedFrameNumber);
+
+    final index = keyframes.indexOf(visibleKeyframe);
+    keyframes.insert(index + 1, newKeyframe);
+
+    _visibleKeyframe = newKeyframe;
     notifyListeners();
   }
 

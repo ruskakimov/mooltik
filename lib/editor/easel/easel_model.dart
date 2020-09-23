@@ -10,12 +10,19 @@ class EaselModel extends ChangeNotifier {
   EaselModel({
     @required FrameModel frame,
     @required Tool selectedTool,
+    @required this.frameWidth,
+    @required this.frameHeight,
+    @required this.createFrame,
   })  : _frame = frame,
         _selectedTool = selectedTool;
 
   FrameModel _frame;
 
   Tool _selectedTool;
+
+  final double frameWidth;
+  final double frameHeight;
+  final VoidCallback createFrame;
 
   Size _screenSize;
 
@@ -39,10 +46,10 @@ class EaselModel extends ChangeNotifier {
   double get canvasRotation => _rotation;
 
   /// Canvas width at current scale.
-  double get canvasWidth => _frame.width * _scale;
+  double get canvasWidth => frameWidth * _scale;
 
   /// Canvas height at current scale.
-  double get canvasHeight => _frame.height * _scale;
+  double get canvasHeight => frameHeight * _scale;
 
   void init(Size screenSize) {
     _screenSize = screenSize;
@@ -60,8 +67,8 @@ class EaselModel extends ChangeNotifier {
   }
 
   void _fitToScreenUprightCanvas() {
-    _scale = _screenSize.width / _frame.width;
-    _offset = Offset(0, (_screenSize.height - _frame.height * _scale) / 2);
+    _scale = _screenSize.width / frameWidth;
+    _offset = Offset(0, (_screenSize.height - frameHeight * _scale) / 2);
     _rotation = 0;
   }
 
@@ -108,6 +115,7 @@ class EaselModel extends ChangeNotifier {
   }
 
   void onStrokeStart(DragStartDetails details) {
+    if (_frame == null) createFrame();
     final framePoint = _toFramePoint(details.localPosition);
     _frame.startStroke(framePoint, _selectedTool.paint);
   }

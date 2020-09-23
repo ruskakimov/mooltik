@@ -24,11 +24,15 @@ class EditorPage extends StatelessWidget {
           ChangeNotifierProvider.value(value: timeline.visibleKeyframe),
           ChangeNotifierProxyProvider2<TimelineModel, ToolboxModel, EaselModel>(
             create: (_) => EaselModel(
-              frame: timeline.visibleKeyframe,
+              frame: timeline.selectedKeyframe,
+              // TODO: Pass frame width/height from a single source.
+              frameWidth: timeline.visibleKeyframe.width,
+              frameHeight: timeline.visibleKeyframe.height,
               selectedTool: toolbox.selectedTool,
+              createFrame: timeline.createKeyframeAtSelectedNumber,
             ),
             update: (_, timeline, toolbox, easel) => easel
-              ..updateFrame(timeline.visibleKeyframe)
+              ..updateFrame(timeline.selectedKeyframe)
               ..updateSelectedTool(toolbox.selectedTool),
           ),
         ],
