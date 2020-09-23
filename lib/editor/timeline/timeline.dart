@@ -20,7 +20,7 @@ class _TimelineState extends State<Timeline>
   AnimationController _controller;
   double _prevOffset;
 
-  final frameWidth = 40.0;
+  final frameWidth = 24.0;
   bool _playing = false;
   int _animationFrames = 1;
 
