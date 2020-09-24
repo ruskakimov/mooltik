@@ -24,7 +24,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Animation app',
+      title: 'Mooltik',
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.amber,
