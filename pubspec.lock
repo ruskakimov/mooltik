@@ -126,10 +126,12 @@ packages:
   image:
     dependency: "direct main"
     description:
-      name: image
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.12"
+      path: "."
+      ref: gif_variable_fps
+      resolved-ref: "6efd18dad3c6c13bb2cca31965bfc1bda8862035"
+      url: "git://github.com/ruskakimov/image.git"
+    source: git
+    version: "2.1.17"
   intl:
     dependency: transitive
     description:
@@ -199,7 +201,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.0"
+    version: "3.0.4"
   platform:
     dependency: transitive
     description:
@@ -309,7 +311,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.6.1"
+    version: "4.5.1"
 sdks:
   dart: ">=2.9.0-14.0.dev <3.0.0"
   flutter: ">=1.16.0 <2.0.0"
