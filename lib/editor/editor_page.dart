@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/drawer/editor_drawer.dart';
 import 'package:mooltik/editor/easel/easel_model.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
 
 import 'easel/easel.dart';
-import 'drawer/bottom_drawer/bottom_drawer.dart';
-import 'drawer/pallete_tab/pallete_tab.dart';
 import 'timeline/timeline_model.dart';
 
 class EditorPage extends StatelessWidget {
@@ -45,12 +44,8 @@ class EditorPage extends StatelessWidget {
                 child: Easel(),
               ),
               Align(
-                alignment: Alignment.topCenter,
-                child: PalleteTab(),
-              ),
-              Align(
                 alignment: Alignment.bottomCenter,
-                child: BottomDrawer(),
+                child: EditorDrawer(),
               ),
             ],
           ),

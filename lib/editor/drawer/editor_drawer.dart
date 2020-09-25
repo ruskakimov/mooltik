@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/drawer/pallete_tab/pallete_tab.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
@@ -8,15 +9,12 @@ import 'drawer_icon_button.dart';
 class EditorDrawer extends StatefulWidget {
   EditorDrawer({
     Key key,
-    this.height,
-    this.body,
+    this.height = 200,
     this.quickAccessButtons,
   })  : assert(height != null),
-        assert(body != null),
         super(key: key);
 
   final double height;
-  final Widget body;
   final List<DrawerIconButton> quickAccessButtons;
 
   @override
@@ -56,7 +54,7 @@ class _EditorDrawerState extends State<EditorDrawer>
       child: _buildDrawerBody(),
       builder: (context, child) {
         return Transform.translate(
-          offset: Offset(0, -widget.height * _animation.value),
+          offset: Offset(0, widget.height * _animation.value),
           child: child,
         );
       },
@@ -73,18 +71,12 @@ class _EditorDrawerState extends State<EditorDrawer>
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          RepaintBoundary(
-            child: SizedBox(
-              height: widget.height,
-              child: widget.body,
-            ),
-          ),
           Row(
             children: [
               DrawerIconButton(
                 icon: open
-                    ? FontAwesomeIcons.chevronUp
-                    : FontAwesomeIcons.chevronDown,
+                    ? FontAwesomeIcons.chevronDown
+                    : FontAwesomeIcons.chevronUp,
                 onTap: _toggleDrawer,
               ),
               Spacer(),
@@ -97,6 +89,12 @@ class _EditorDrawerState extends State<EditorDrawer>
                 onTap: frame.redoAvailable ? frame.redo : null,
               ),
             ],
+          ),
+          RepaintBoundary(
+            child: SizedBox(
+              height: widget.height,
+              child: PalleteTab(),
+            ),
           ),
         ],
       ),
