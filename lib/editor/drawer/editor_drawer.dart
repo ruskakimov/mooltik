@@ -85,18 +85,28 @@ class _EditorDrawerState extends State<EditorDrawer>
                 icon: FontAwesomeIcons.palette,
                 selected: open && _selectedTabIndex == 0,
                 onTap: () {
-                  setState(() {
-                    _selectedTabIndex = 0;
-                  });
+                  if (_selectedTabIndex == 0 && open) {
+                    _closeDrawer();
+                  } else {
+                    setState(() {
+                      _selectedTabIndex = 0;
+                    });
+                    if (!open) _openDrawer();
+                  }
                 },
               ),
               DrawerIconButton(
                 icon: FontAwesomeIcons.film,
                 selected: open && _selectedTabIndex == 1,
                 onTap: () {
-                  setState(() {
-                    _selectedTabIndex = 1;
-                  });
+                  if (_selectedTabIndex == 1 && open) {
+                    _closeDrawer();
+                  } else {
+                    setState(() {
+                      _selectedTabIndex = 1;
+                    });
+                    if (!open) _openDrawer();
+                  }
                 },
               ),
               Spacer(),
@@ -122,10 +132,21 @@ class _EditorDrawerState extends State<EditorDrawer>
     );
   }
 
-  void _toggleDrawer() {
+  void _openDrawer() {
     setState(() {
-      open = !open;
+      open = true;
     });
+    _animateDrawer();
+  }
+
+  void _closeDrawer() {
+    setState(() {
+      open = false;
+    });
+    _animateDrawer();
+  }
+
+  void _animateDrawer() {
     if (open) {
       _controller.reverse();
     } else {
