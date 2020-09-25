@@ -10,36 +10,32 @@ import 'package:mooltik/editor/gif.dart';
 import 'package:mooltik/editor/drawers/drawer_icon_button.dart';
 import 'package:mooltik/editor/drawers/top_drawer/toolbar.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
-import 'package:mooltik/editor/drawers/editor_drawer.dart';
 
-class TopDrawer extends StatefulWidget {
-  const TopDrawer({Key key}) : super(key: key);
+class PalleteTab extends StatefulWidget {
+  const PalleteTab({Key key}) : super(key: key);
 
   @override
-  _TopDrawerState createState() => _TopDrawerState();
+  _PalleteTabState createState() => _PalleteTabState();
 }
 
-class _TopDrawerState extends State<TopDrawer> {
+class _PalleteTabState extends State<PalleteTab> {
   @override
   Widget build(BuildContext context) {
-    return EditorDrawer(
-      height: 48.0 * 3.0 + 8,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              ToolBar(),
-              Spacer(),
-              SizedBox(width: 8),
-              _buildExpandButton(),
-              _buildDownloadButton(),
-            ],
-          ),
-          _buildWidthSelector(),
-          _buildColorSelector(),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            ToolBar(),
+            Spacer(),
+            SizedBox(width: 8),
+            _buildExpandButton(),
+            _buildDownloadButton(),
+          ],
+        ),
+        _buildWidthSelector(),
+        _buildColorSelector(),
+      ],
     );
   }
 

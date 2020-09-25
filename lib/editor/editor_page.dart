@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'easel/easel.dart';
 import 'drawers/bottom_drawer/bottom_drawer.dart';
-import 'drawers/top_drawer/top_drawer.dart';
+import 'drawers/pallete_tab.dart';
 import 'timeline/timeline_model.dart';
 
 class EditorPage extends StatelessWidget {
@@ -46,7 +46,7 @@ class EditorPage extends StatelessWidget {
               ),
               Align(
                 alignment: Alignment.topCenter,
-                child: TopDrawer(),
+                child: PalleteTab(),
               ),
               Align(
                 alignment: Alignment.bottomCenter,
