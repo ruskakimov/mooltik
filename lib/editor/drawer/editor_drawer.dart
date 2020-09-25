@@ -84,30 +84,12 @@ class _EditorDrawerState extends State<EditorDrawer>
               DrawerIconButton(
                 icon: FontAwesomeIcons.palette,
                 selected: open && _selectedTabIndex == 0,
-                onTap: () {
-                  if (_selectedTabIndex == 0 && open) {
-                    _closeDrawer();
-                  } else {
-                    setState(() {
-                      _selectedTabIndex = 0;
-                    });
-                    if (!open) _openDrawer();
-                  }
-                },
+                onTap: () => _onTabTap(0),
               ),
               DrawerIconButton(
                 icon: FontAwesomeIcons.film,
                 selected: open && _selectedTabIndex == 1,
-                onTap: () {
-                  if (_selectedTabIndex == 1 && open) {
-                    _closeDrawer();
-                  } else {
-                    setState(() {
-                      _selectedTabIndex = 1;
-                    });
-                    if (!open) _openDrawer();
-                  }
-                },
+                onTap: () => _onTabTap(1),
               ),
               Spacer(),
               DrawerIconButton(
@@ -130,6 +112,17 @@ class _EditorDrawerState extends State<EditorDrawer>
         ],
       ),
     );
+  }
+
+  void _onTabTap(int tabIndex) {
+    if (_selectedTabIndex == tabIndex && open) {
+      _closeDrawer();
+    } else {
+      setState(() {
+        _selectedTabIndex = tabIndex;
+      });
+      if (!open) _openDrawer();
+    }
   }
 
   void _openDrawer() {
