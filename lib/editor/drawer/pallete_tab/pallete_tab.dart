@@ -24,6 +24,8 @@ class _PalleteTabState extends State<PalleteTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        _buildWidthSelector(),
+        _buildColorSelector(),
         Row(
           children: [
             ToolBar(),
@@ -33,8 +35,6 @@ class _PalleteTabState extends State<PalleteTab> {
             _buildDownloadButton(),
           ],
         ),
-        _buildWidthSelector(),
-        _buildColorSelector(),
       ],
     );
   }

@@ -74,9 +74,12 @@ class _EditorDrawerState extends State<EditorDrawer>
           Row(
             children: [
               DrawerIconButton(
-                icon: open
-                    ? FontAwesomeIcons.chevronDown
-                    : FontAwesomeIcons.chevronUp,
+                icon: FontAwesomeIcons.palette,
+                onTap: _toggleDrawer,
+                selected: true,
+              ),
+              DrawerIconButton(
+                icon: FontAwesomeIcons.film,
                 onTap: _toggleDrawer,
               ),
               Spacer(),
@@ -91,8 +94,9 @@ class _EditorDrawerState extends State<EditorDrawer>
             ],
           ),
           RepaintBoundary(
-            child: SizedBox(
+            child: Container(
               height: widget.height,
+              color: Colors.blueGrey[900],
               child: PalleteTab(),
             ),
           ),
