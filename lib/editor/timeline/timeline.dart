@@ -157,7 +157,7 @@ class _TimelineState extends State<Timeline>
           ),
           DrawerIconButton(
             icon: FontAwesomeIcons.trashAlt,
-            onTap: timeline.selectedCanBeDeleted
+            onTap: timeline.selectedCanBeDeleted && !timeline.playing
                 ? timeline.deleteSelectedKeyframe
                 : null,
           ),
