@@ -3,9 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'drawer_icon_button.dart';
 
-const innerBorderRadius = 16.0;
-const outerBorderRadius = 16.0;
-
 class EditorDrawer extends StatefulWidget {
   EditorDrawer({
     Key key,
