@@ -106,7 +106,10 @@ class _EditorDrawerState extends State<EditorDrawer>
             child: Container(
               height: widget.height,
               color: Colors.blueGrey[800],
-              child: tabs[_selectedTabIndex],
+              child: IndexedStack(
+                index: _selectedTabIndex,
+                children: tabs,
+              ),
             ),
           ),
         ],
