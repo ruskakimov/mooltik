@@ -74,7 +74,7 @@ class _EditorDrawerState extends State<EditorDrawer>
 
     return Container(
       width: double.infinity,
-      color: Colors.blueGrey[800],
+      color: Colors.blueGrey[700],
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -105,7 +105,7 @@ class _EditorDrawerState extends State<EditorDrawer>
           RepaintBoundary(
             child: Container(
               height: widget.height,
-              color: Colors.blueGrey[900],
+              color: Colors.blueGrey[800],
               child: tabs[_selectedTabIndex],
             ),
           ),
