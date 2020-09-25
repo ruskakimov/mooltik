@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/editor/frame/frame_model.dart';
 
 import 'drawer_icon_button.dart';
 
@@ -62,6 +64,8 @@ class _EditorDrawerState extends State<EditorDrawer>
   }
 
   Widget _buildDrawerBody() {
+    final frame = context.watch<FrameModel>();
+
     return Container(
       width: double.infinity,
       color: Colors.blueGrey[800],
@@ -84,8 +88,14 @@ class _EditorDrawerState extends State<EditorDrawer>
                 onTap: _toggleDrawer,
               ),
               Spacer(),
-              if (widget.quickAccessButtons != null)
-                ...widget.quickAccessButtons,
+              DrawerIconButton(
+                icon: FontAwesomeIcons.undo,
+                onTap: frame.undoAvailable ? frame.undo : null,
+              ),
+              DrawerIconButton(
+                icon: FontAwesomeIcons.redo,
+                onTap: frame.redoAvailable ? frame.redo : null,
+              ),
             ],
           ),
         ],

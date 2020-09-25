@@ -6,7 +6,6 @@ import 'package:mooltik/editor/easel/easel_model.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
 
-import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/gif.dart';
 import 'package:mooltik/editor/drawers/drawer_icon_button.dart';
 import 'package:mooltik/editor/drawers/top_drawer/toolbar.dart';
@@ -23,8 +22,6 @@ class TopDrawer extends StatefulWidget {
 class _TopDrawerState extends State<TopDrawer> {
   @override
   Widget build(BuildContext context) {
-    final frame = context.watch<FrameModel>();
-
     return EditorDrawer(
       height: 48.0 * 3.0 + 8,
       body: Column(
@@ -43,16 +40,6 @@ class _TopDrawerState extends State<TopDrawer> {
           _buildColorSelector(),
         ],
       ),
-      quickAccessButtons: [
-        DrawerIconButton(
-          icon: FontAwesomeIcons.undo,
-          onTap: frame.undoAvailable ? frame.undo : null,
-        ),
-        DrawerIconButton(
-          icon: FontAwesomeIcons.redo,
-          onTap: frame.redoAvailable ? frame.redo : null,
-        ),
-      ],
     );
   }
 
