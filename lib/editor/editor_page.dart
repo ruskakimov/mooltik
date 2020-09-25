@@ -4,8 +4,8 @@ import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
 
 import 'easel/easel.dart';
-import 'drawers/bottom_drawer/bottom_drawer.dart';
-import 'drawers/pallete_tab.dart';
+import 'drawer/bottom_drawer/bottom_drawer.dart';
+import 'drawer/pallete_tab/pallete_tab.dart';
 import 'timeline/timeline_model.dart';
 
 class EditorPage extends StatelessWidget {
