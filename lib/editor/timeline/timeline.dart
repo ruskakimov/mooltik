@@ -16,7 +16,7 @@ class Timeline extends StatefulWidget {
 }
 
 class _TimelineState extends State<Timeline>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   AnimationController _controller;
   double _prevOffset;
 
@@ -166,4 +166,7 @@ class _TimelineState extends State<Timeline>
       );
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -1,5 +1,7 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/drawer/pallete_tab/pallete_tab.dart';
+import 'package:mooltik/editor/timeline/timeline.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
@@ -22,10 +24,16 @@ class EditorDrawer extends StatefulWidget {
 }
 
 class _EditorDrawerState extends State<EditorDrawer>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   bool open = true;
   AnimationController _controller;
-  Animation _animation;
+  Animation _openCloseAnimation;
+
+  final tabs = [
+    PalleteTab(),
+    Timeline(),
+  ];
+  int _selectedTabIndex = 0;
 
   @override
   void initState() {
@@ -34,7 +42,7 @@ class _EditorDrawerState extends State<EditorDrawer>
       vsync: this,
       duration: Duration(milliseconds: 200),
     );
-    _animation = CurvedAnimation(
+    _openCloseAnimation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeOut,
       reverseCurve: Curves.easeIn,
@@ -50,11 +58,11 @@ class _EditorDrawerState extends State<EditorDrawer>
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _animation,
+      animation: _openCloseAnimation,
       child: _buildDrawerBody(),
       builder: (context, child) {
         return Transform.translate(
-          offset: Offset(0, widget.height * _animation.value),
+          offset: Offset(0, widget.height * _openCloseAnimation.value),
           child: child,
         );
       },
@@ -75,12 +83,21 @@ class _EditorDrawerState extends State<EditorDrawer>
             children: [
               DrawerIconButton(
                 icon: FontAwesomeIcons.palette,
-                onTap: _toggleDrawer,
-                selected: true,
+                selected: open && _selectedTabIndex == 0,
+                onTap: () {
+                  setState(() {
+                    _selectedTabIndex = 0;
+                  });
+                },
               ),
               DrawerIconButton(
                 icon: FontAwesomeIcons.film,
-                onTap: _toggleDrawer,
+                selected: open && _selectedTabIndex == 1,
+                onTap: () {
+                  setState(() {
+                    _selectedTabIndex = 1;
+                  });
+                },
               ),
               Spacer(),
               DrawerIconButton(
@@ -97,7 +114,7 @@ class _EditorDrawerState extends State<EditorDrawer>
             child: Container(
               height: widget.height,
               color: Colors.blueGrey[900],
-              child: PalleteTab(),
+              child: tabs[_selectedTabIndex],
             ),
           ),
         ],
