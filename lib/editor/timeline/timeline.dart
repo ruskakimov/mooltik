@@ -95,6 +95,12 @@ class _TimelineState extends State<Timeline>
   SizedBox _buildTimelineViewport(TimelineModel timeline) {
     return SizedBox.expand(
       child: GestureDetector(
+        onHorizontalDragStart: (details) {
+          if (timeline.playing) {
+            timeline.togglePlay();
+            _controller.stop();
+          }
+        },
         onHorizontalDragUpdate: (details) {
           _controller.value -= details.primaryDelta;
         },
