@@ -144,7 +144,6 @@ class _TimelineState extends State<Timeline>
                   }
                 },
               ),
-              DrawerIconButton(icon: FontAwesomeIcons.layerGroup),
               Spacer(),
               SizedBox(
                 width: 96,
