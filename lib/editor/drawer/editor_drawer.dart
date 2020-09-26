@@ -82,7 +82,10 @@ class _EditorDrawerState extends State<EditorDrawer>
     return RepaintBoundary(
       child: Container(
         width: widget.width,
-        color: Colors.blueGrey[800],
+        decoration: BoxDecoration(
+          color: Colors.blueGrey[800],
+          boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 12)],
+        ),
         child: IndexedStack(
           index: _selectedTabIndex,
           children: tabs,
