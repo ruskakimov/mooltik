@@ -12,6 +12,8 @@ class Stroke {
   final Path _path;
   Offset _lastPoint;
 
+  Rect get boundingRect => _path.getBounds().inflate(paint.strokeWidth);
+
   void extend(Offset point) {
     if (_lastPoint == point) return;
     final mid = _midPoint(_lastPoint, point);
@@ -20,7 +22,7 @@ class Stroke {
   }
 
   void finish() {
-    // Extend by a small amount, so single point stroke is painted.
+    // Extend by a small amount, so a single point stroke is painted.
     extend(_lastPoint.translate(0.01, 0.01));
   }
 
