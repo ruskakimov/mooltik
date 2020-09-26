@@ -43,7 +43,7 @@ class _EditorDrawerState extends State<EditorDrawer>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 200),
+      duration: Duration(milliseconds: 100),
     );
     _openCloseAnimation = CurvedAnimation(
       parent: _controller,
