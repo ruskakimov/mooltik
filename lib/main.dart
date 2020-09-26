@@ -13,8 +13,11 @@ void main() {
   // Remove system top and bottom bars.
   SystemChrome.setEnabledSystemUIOverlays([]);
 
-  // Lock to portrait mode.
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  // Lock to landscape mode.
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeRight,
+    DeviceOrientation.landscapeLeft,
+  ]);
 
   runApp(App());
 }
