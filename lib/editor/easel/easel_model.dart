@@ -61,7 +61,7 @@ class EaselModel extends ChangeNotifier {
 
   void init(Size screenSize) {
     _screenSize = screenSize;
-    _fitToScreenUprightCanvas();
+    _fitToScreen();
   }
 
   void updateSelectedTool(Tool tool) {
@@ -74,9 +74,13 @@ class EaselModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _fitToScreenUprightCanvas() {
-    _scale = _screenSize.width / frameWidth;
-    _offset = Offset(0, (_screenSize.height - frameHeight * _scale) / 2);
+  void _fitToScreen() {
+    final verticalPadding = 16.0;
+    _scale = (_screenSize.height - verticalPadding * 2) / frameHeight;
+    _offset = Offset(
+      (_screenSize.width - frameWidth * _scale) / 2,
+      (_screenSize.height - frameHeight * _scale) / 2,
+    );
     _rotation = 0;
   }
 
@@ -150,11 +154,6 @@ class EaselModel extends ChangeNotifier {
 
   void onStrokeCancel() {
     _currentStroke = null;
-    notifyListeners();
-  }
-
-  void onExpandTap() {
-    _fitToScreenUprightCanvas();
     notifyListeners();
   }
 }
