@@ -11,10 +11,12 @@ class Stroke {
   final Paint paint;
   final Path _path;
   Offset _lastPoint;
+  bool _extended = false;
 
   Rect get boundingRect => _path.getBounds().inflate(paint.strokeWidth);
 
   void extend(Offset point) {
+    _extended = true;
     if (_lastPoint == point) return;
     final mid = _midPoint(_lastPoint, point);
     _path.quadraticBezierTo(_lastPoint.dx, _lastPoint.dy, mid.dx, mid.dy);
@@ -22,8 +24,10 @@ class Stroke {
   }
 
   void finish() {
-    // Extend by a small amount, so a single point stroke is painted.
-    extend(_lastPoint.translate(0.01, 0.01));
+    // Extend a single point stroke.
+    if (!_extended) {
+      extend(_lastPoint.translate(0.01, 0.01));
+    }
   }
 
   Offset _midPoint(Offset p1, Offset p2) {
