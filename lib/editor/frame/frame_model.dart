@@ -21,8 +21,6 @@ class FrameModel extends ChangeNotifier {
   final int number;
   final List<Stroke> unrasterizedStrokes;
 
-  bool _lastStrokeTouchesFrame;
-
   /// Must contain at least one snapshot. [null] represents an empty screen.
   List<ui.Image> _snapshots;
   int _selectedSnapshotId;
@@ -30,8 +28,6 @@ class FrameModel extends ChangeNotifier {
   double get width => 1280;
 
   double get height => 720;
-
-  Rect get _frameArea => Rect.fromLTWH(0, 0, width, height);
 
   ui.Image get snapshot => _snapshots[_selectedSnapshotId];
 
@@ -96,7 +92,6 @@ class FrameModel extends ChangeNotifier {
   // }
 
   void add(Stroke stroke) {
-    // TODO: Check if touches the frame area
     unrasterizedStrokes.add(stroke);
     _generateLastSnapshot();
   }

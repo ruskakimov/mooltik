@@ -57,6 +57,8 @@ class EaselModel extends ChangeNotifier {
   /// Canvas height at current scale.
   double get canvasHeight => frameHeight * _scale;
 
+  Rect get _frameArea => Rect.fromLTWH(0, 0, frameWidth, frameHeight);
+
   void init(Size screenSize) {
     _screenSize = screenSize;
     _fitToScreenUprightCanvas();
@@ -135,10 +137,12 @@ class EaselModel extends ChangeNotifier {
   void onStrokeEnd() {
     _currentStroke.finish();
 
-    if (_frame == null) {
-      _frame = createFrame();
+    if (_currentStroke.boundingRect.overlaps(_frameArea)) {
+      if (_frame == null) {
+        _frame = createFrame();
+      }
+      _frame.add(_currentStroke);
     }
-    _frame.add(_currentStroke);
 
     _currentStroke = null;
     notifyListeners();
