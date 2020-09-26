@@ -14,7 +14,6 @@ class EaselModel extends ChangeNotifier {
     @required this.frameWidth,
     @required this.frameHeight,
     @required this.createFrame,
-    @required this.deleteFrame,
   })  : _frame = frame,
         _selectedTool = selectedTool;
 
@@ -25,7 +24,6 @@ class EaselModel extends ChangeNotifier {
   final double frameWidth;
   final double frameHeight;
   final Function createFrame;
-  final Function deleteFrame;
 
   Size _screenSize;
 
@@ -38,8 +36,6 @@ class EaselModel extends ChangeNotifier {
   double _prevScale;
 
   Offset _fixedFramePoint;
-
-  bool _justCreatedFrame = false;
 
   Stroke _currentStroke;
 
@@ -125,10 +121,6 @@ class EaselModel extends ChangeNotifier {
   }
 
   void onStrokeStart(DragStartDetails details) {
-    if (_frame == null) {
-      _justCreatedFrame = true;
-      _frame = createFrame();
-    }
     final framePoint = _toFramePoint(details.localPosition);
     _currentStroke = Stroke(framePoint, _selectedTool.paint);
     notifyListeners();
@@ -141,18 +133,18 @@ class EaselModel extends ChangeNotifier {
   }
 
   void onStrokeEnd() {
-    _justCreatedFrame = false;
     _currentStroke.finish();
+
+    if (_frame == null) {
+      _frame = createFrame();
+    }
     _frame.add(_currentStroke);
+
     _currentStroke = null;
     notifyListeners();
   }
 
   void onStrokeCancel() {
-    if (_justCreatedFrame) {
-      // TODO: Create frame onStrokeEnd, move unrasterised strokes to easel.
-      deleteFrame();
-    }
     _currentStroke = null;
     notifyListeners();
   }
