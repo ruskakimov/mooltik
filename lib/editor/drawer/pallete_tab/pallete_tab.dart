@@ -31,19 +31,10 @@ class _PalleteTabState extends State<PalleteTab> {
             ToolBar(),
             Spacer(),
             SizedBox(width: 8),
-            _buildExpandButton(),
             _buildDownloadButton(),
           ],
         ),
       ],
-    );
-  }
-
-  Widget _buildExpandButton() {
-    final easel = context.watch<EaselModel>();
-    return DrawerIconButton(
-      icon: FontAwesomeIcons.expand,
-      onTap: easel.onExpandTap,
     );
   }
 
