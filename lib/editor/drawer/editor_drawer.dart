@@ -27,7 +27,7 @@ class EditorDrawer extends StatefulWidget {
 
 class _EditorDrawerState extends State<EditorDrawer>
     with TickerProviderStateMixin {
-  bool open = true;
+  bool open = false;
   AnimationController _controller;
   Animation _openCloseAnimation;
 
@@ -44,7 +44,7 @@ class _EditorDrawerState extends State<EditorDrawer>
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 100),
-    );
+    )..value = 1;
     _openCloseAnimation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeOut,
