@@ -43,7 +43,7 @@ class EditorPage extends StatelessWidget {
                 child: Easel(),
               ),
               Align(
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.topLeft,
                 child: EditorDrawer(),
               ),
             ],

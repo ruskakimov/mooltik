@@ -13,12 +13,12 @@ import 'drawer_icon_button.dart';
 class EditorDrawer extends StatefulWidget {
   EditorDrawer({
     Key key,
-    this.height = 200,
+    this.width = 200,
     this.quickAccessButtons,
-  })  : assert(height != null),
+  })  : assert(width != null),
         super(key: key);
 
-  final double height;
+  final double width;
   final List<DrawerIconButton> quickAccessButtons;
 
   @override
@@ -60,66 +60,68 @@ class _EditorDrawerState extends State<EditorDrawer>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _openCloseAnimation,
-      child: _buildDrawerBody(),
-      builder: (context, child) {
-        return Transform.translate(
-          offset: Offset(0, widget.height * _openCloseAnimation.value),
-          child: child,
-        );
-      },
+    return Stack(
+      alignment: Alignment.topLeft,
+      children: [
+        AnimatedBuilder(
+          animation: _openCloseAnimation,
+          child: _buildDrawerBody(),
+          builder: (context, child) {
+            return Transform.translate(
+              offset: Offset(48 - widget.width * _openCloseAnimation.value, 0),
+              child: child,
+            );
+          },
+        ),
+        _buildDrawerBar(),
+      ],
     );
   }
 
   Widget _buildDrawerBody() {
+    return RepaintBoundary(
+      child: Container(
+        width: widget.width,
+        color: Colors.blueGrey[800],
+        child: IndexedStack(
+          index: _selectedTabIndex,
+          children: tabs,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDrawerBar() {
     final frame = context.watch<FrameModel>();
     final playing = context.watch<TimelineModel>().playing;
 
     return Container(
-      width: double.infinity,
       color: Colors.blueGrey[700],
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              DrawerIconButton(
-                icon: FontAwesomeIcons.palette,
-                selected: open && _selectedTabIndex == 0,
-                onTap: () => _onTabTap(0),
-              ),
-              DrawerIconButton(
-                icon: FontAwesomeIcons.film,
-                selected: open && _selectedTabIndex == 1,
-                onTap: () => _onTabTap(1),
-              ),
-              DrawerIconButton(
-                icon: FontAwesomeIcons.fileDownload,
-                selected: open && _selectedTabIndex == 2,
-                onTap: () => _onTabTap(2),
-              ),
-              Spacer(),
-              DrawerIconButton(
-                icon: FontAwesomeIcons.undo,
-                onTap: frame.undoAvailable && !playing ? frame.undo : null,
-              ),
-              DrawerIconButton(
-                icon: FontAwesomeIcons.redo,
-                onTap: frame.redoAvailable && !playing ? frame.redo : null,
-              ),
-            ],
+          DrawerIconButton(
+            icon: FontAwesomeIcons.palette,
+            selected: open && _selectedTabIndex == 0,
+            onTap: () => _onTabTap(0),
           ),
-          RepaintBoundary(
-            child: Container(
-              height: widget.height,
-              color: Colors.blueGrey[800],
-              child: IndexedStack(
-                index: _selectedTabIndex,
-                children: tabs,
-              ),
-            ),
+          DrawerIconButton(
+            icon: FontAwesomeIcons.film,
+            selected: open && _selectedTabIndex == 1,
+            onTap: () => _onTabTap(1),
+          ),
+          DrawerIconButton(
+            icon: FontAwesomeIcons.fileDownload,
+            selected: open && _selectedTabIndex == 2,
+            onTap: () => _onTabTap(2),
+          ),
+          Spacer(),
+          DrawerIconButton(
+            icon: FontAwesomeIcons.undo,
+            onTap: frame.undoAvailable && !playing ? frame.undo : null,
+          ),
+          DrawerIconButton(
+            icon: FontAwesomeIcons.redo,
+            onTap: frame.redoAvailable && !playing ? frame.redo : null,
           ),
         ],
       ),
