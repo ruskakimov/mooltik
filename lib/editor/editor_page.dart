@@ -16,7 +16,7 @@ class EditorPage extends StatelessWidget {
     final toolbox = context.watch<ToolboxModel>();
 
     return Scaffold(
-      backgroundColor: Color(0xFFDDDDDD),
+      backgroundColor: Colors.grey[300],
       body: MultiProvider(
         providers: [
           // TODO: Frame is provided here since undo/redo buttons listen to it. Consider removing when undo stack is extracted and generalized.
