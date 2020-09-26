@@ -35,8 +35,8 @@ class TimelinePainter extends CustomPainter {
     ..color = Colors.grey[200]
     ..style = PaintingStyle.fill;
 
-  double _frameX(int frameNumber, double midX) {
-    return midX - offset + (frameNumber - 1) * frameWidth;
+  double _frameY(int frameNumber, double midY) {
+    return midY - offset + (frameNumber - 1) * frameWidth;
   }
 
   @override
@@ -45,68 +45,45 @@ class TimelinePainter extends CustomPainter {
 
     final midX = size.width / 2;
     final midY = size.height / 2;
-    final startX = _frameX(1, midX);
-    final endX = _frameX(animationDuration + 1, midX);
+    final startY = _frameY(1, midY);
+    final endY = _frameY(animationDuration + 1, midY);
 
     // Frame grid.
-    final gridStart = startX < 0 ? -(startX.abs() % (frameWidth * 2)) : startX;
-    for (var x = gridStart; x <= size.width; x += frameWidth * 2) {
+    final gridStart = startY < 0 ? -(startY.abs() % (frameWidth * 2)) : startY;
+    for (var y = gridStart; y <= size.height; y += frameWidth * 2) {
       canvas.drawRect(
-        Rect.fromLTWH(x, 0, frameWidth, size.height),
+        Rect.fromLTWH(0, y, size.width, frameWidth),
         gridPaint,
       );
     }
 
-    // Draw timeline and empty keyframes on a new layer, so [BlendMode.clear] is applied.
-    canvas.saveLayer(Rect.fromLTWH(0, 0, size.width, size.height), Paint());
-
     // Timeline.
     canvas.drawLine(
-      Offset(max(startX, 0), midY),
-      Offset(min(endX, size.width), midY),
+      Offset(midX, max(startY, 0)),
+      Offset(midX, min(endY, size.height)),
       linePaint,
     );
     canvas.drawLine(
-      Offset(endX, 0),
-      Offset(endX, size.height),
+      Offset(0, endY),
+      Offset(size.width, endY),
       linePaint,
     );
-
-    for (final keyframeNumber in emptyKeyframes) {
-      _drawEmptyKeyframe(
-        canvas,
-        Offset(_frameX(keyframeNumber, midX), midY),
-      );
-    }
-
-    // Merge and erase line inside empty keyframe.
-    canvas.restore();
 
     for (final keyframeNumber in keyframes) {
       _drawKeyframe(
         canvas,
-        Offset(_frameX(keyframeNumber, midX), midY),
+        Offset(midX, _frameY(keyframeNumber, midY)),
       );
     }
 
     // Playhead.
-    final trianglePath = Path()
-      ..moveTo(midX - 8, 0)
-      ..lineTo(midX, 8)
-      ..lineTo(midX + 8, 0);
-    canvas.drawPath(trianglePath, Paint()..color = Colors.amber);
     canvas.drawLine(
-      Offset(midX, 0),
-      Offset(midX, size.height),
+      Offset(0, midY),
+      Offset(size.width, midY),
       Paint()
         ..color = Colors.amber
         ..strokeWidth = 2,
     );
-  }
-
-  void _drawEmptyKeyframe(Canvas canvas, Offset center) {
-    canvas.drawCircle(center, 8, Paint()..blendMode = BlendMode.clear);
-    canvas.drawCircle(center, 8, linePaint);
   }
 
   void _drawKeyframe(Canvas canvas, Offset center) {

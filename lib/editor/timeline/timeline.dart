@@ -95,31 +95,33 @@ class _TimelineState extends State<Timeline>
   SizedBox _buildTimelineViewport(TimelineModel timeline) {
     return SizedBox.expand(
       child: GestureDetector(
-        onHorizontalDragStart: (details) {
+        onVerticalDragStart: (details) {
           if (timeline.playing) {
             timeline.togglePlay();
             _controller.stop();
           }
         },
-        onHorizontalDragUpdate: (details) {
+        onVerticalDragUpdate: (details) {
           _controller.value -= details.primaryDelta;
         },
-        onHorizontalDragEnd: (details) {
+        onVerticalDragEnd: (details) {
           _snapToFrameStart();
         },
         child: AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {
-            return CustomPaint(
-              child: ColoredBox(
-                color: Colors.blueGrey[900],
-              ),
-              foregroundPainter: TimelinePainter(
-                frameWidth: frameWidth,
-                offset: _controller.value,
-                emptyKeyframes: [1],
-                keyframes: timeline.keyframes.map((f) => f.number).toList(),
-                animationDuration: timeline.animationDuration,
+            return ClipRect(
+              child: CustomPaint(
+                child: ColoredBox(
+                  color: Colors.blueGrey[900],
+                ),
+                foregroundPainter: TimelinePainter(
+                  frameWidth: frameWidth,
+                  offset: _controller.value,
+                  emptyKeyframes: [1],
+                  keyframes: timeline.keyframes.map((f) => f.number).toList(),
+                  animationDuration: timeline.animationDuration,
+                ),
               ),
             );
           },
