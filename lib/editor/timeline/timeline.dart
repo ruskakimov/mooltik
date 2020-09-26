@@ -153,14 +153,12 @@ class _TimelineState extends State<Timeline>
                 },
               ),
               Spacer(),
-              SizedBox(
-                width: 96,
-                child: Text(
-                  '${timeline.selectedFrameNumber} F',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16),
-                ),
+              Text(
+                '${timeline.selectedFrameNumber} F',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16),
               ),
+              SizedBox(width: 12),
             ],
           ),
           DrawerIconButton(
