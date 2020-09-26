@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:image/image.dart';
+import 'package:mooltik/editor/frame/frame_painter.dart';
 
 import 'frame/frame_model.dart';
 
@@ -45,6 +46,6 @@ Future<Image> imageFromFrame(FrameModel frame) async {
 ui.Picture pictureFromFrame(FrameModel frame) {
   final recorder = ui.PictureRecorder();
   final canvas = ui.Canvas(recorder);
-  frame.paintOn(canvas);
+  FramePainter(frame).paint(canvas, ui.Size(frame.width, frame.height));
   return recorder.endRecording();
 }

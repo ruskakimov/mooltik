@@ -12,10 +12,22 @@ class FramePainter extends CustomPainter {
     // Clip paint outside canvas.
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
 
+    canvas.drawColor(Colors.white, BlendMode.srcOver);
+
     // Scale image to fit the given size.
     canvas.scale(size.width / frame.width, size.height / frame.height);
 
-    frame.paintOn(canvas);
+    // Save layer to erase paintings on it with `BlendMode.clear`.
+    canvas.saveLayer(Rect.fromLTWH(0, 0, frame.width, frame.height), Paint());
+
+    if (frame.snapshot != null) {
+      canvas.drawImage(frame.snapshot, Offset.zero, Paint());
+    }
+
+    frame.unrasterizedStrokes.forEach((stroke) => stroke.paintOn(canvas));
+
+    // Flatten layer. Combine drawing lines with erasing lines.
+    canvas.restore();
   }
 
   @override

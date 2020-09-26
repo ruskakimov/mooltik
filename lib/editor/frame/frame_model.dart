@@ -14,12 +14,12 @@ const int maxSnapshotCount = 16;
 
 class FrameModel extends ChangeNotifier {
   FrameModel(this.number, {ui.Image initialSnapshot})
-      : _unrasterizedStrokes = [],
+      : unrasterizedStrokes = [],
         _snapshots = [initialSnapshot],
         _selectedSnapshotId = 0;
 
   final int number;
-  final List<Stroke> _unrasterizedStrokes;
+  final List<Stroke> unrasterizedStrokes;
 
   bool _lastStrokeTouchesFrame;
 
@@ -54,7 +54,7 @@ class FrameModel extends ChangeNotifier {
   }
 
   void startStroke(Offset startPoint, Paint strokePaint) {
-    _unrasterizedStrokes.add(Stroke(startPoint, strokePaint));
+    unrasterizedStrokes.add(Stroke(startPoint, strokePaint));
 
     final markArea = Rect.fromCenter(
       center: startPoint,
@@ -67,15 +67,15 @@ class FrameModel extends ChangeNotifier {
   }
 
   void extendLastStroke(Offset point) {
-    if (_unrasterizedStrokes.isEmpty) return;
+    if (unrasterizedStrokes.isEmpty) return;
 
-    _unrasterizedStrokes.last.extend(point);
+    unrasterizedStrokes.last.extend(point);
 
     if (!_lastStrokeTouchesFrame) {
       final markArea = Rect.fromCenter(
         center: point,
-        width: _unrasterizedStrokes.last.paint.strokeWidth,
-        height: _unrasterizedStrokes.last.paint.strokeWidth,
+        width: unrasterizedStrokes.last.paint.strokeWidth,
+        height: unrasterizedStrokes.last.paint.strokeWidth,
       );
       _lastStrokeTouchesFrame = markArea.overlaps(_frameArea);
     }
@@ -84,9 +84,9 @@ class FrameModel extends ChangeNotifier {
   }
 
   void finishLastStroke() {
-    if (_unrasterizedStrokes.isEmpty) return;
+    if (unrasterizedStrokes.isEmpty) return;
 
-    _unrasterizedStrokes.last.finish();
+    unrasterizedStrokes.last.finish();
 
     if (_lastStrokeTouchesFrame) {
       _generateLastSnapshot();
@@ -96,8 +96,8 @@ class FrameModel extends ChangeNotifier {
   }
 
   void cancelLastStroke() {
-    if (_unrasterizedStrokes.isNotEmpty) {
-      _unrasterizedStrokes.removeLast();
+    if (unrasterizedStrokes.isNotEmpty) {
+      unrasterizedStrokes.removeLast();
     }
     notifyListeners();
   }
@@ -117,23 +117,7 @@ class FrameModel extends ChangeNotifier {
     }
     _selectedSnapshotId = _snapshots.length - 1;
 
-    _unrasterizedStrokes.clear();
+    unrasterizedStrokes.clear();
     notifyListeners();
-  }
-
-  void paintOn(Canvas canvas) {
-    canvas.drawColor(Colors.white, BlendMode.srcOver);
-
-    // Save layer to erase paintings on it with `BlendMode.clear`.
-    canvas.saveLayer(Rect.fromLTWH(0, 0, width, height), Paint());
-
-    if (snapshot != null) {
-      canvas.drawImage(snapshot, Offset.zero, Paint());
-    }
-
-    _unrasterizedStrokes.forEach((stroke) => stroke.paintOn(canvas));
-
-    // Flatten layer. Combine drawing lines with erasing lines.
-    canvas.restore();
   }
 }
