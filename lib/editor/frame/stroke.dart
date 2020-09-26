@@ -4,23 +4,24 @@ import 'package:flutter/material.dart';
 
 class Stroke {
   Stroke(Offset startingPoint, this.paint)
-      : points = [startingPoint],
-        assert(startingPoint != null);
+      : assert(startingPoint != null),
+        _path = Path()..moveTo(startingPoint.dx, startingPoint.dy),
+        _lastPoint = startingPoint;
 
-  final List<Offset> points;
   final Paint paint;
+  final Path _path;
+  Offset _lastPoint;
 
   void extend(Offset point) {
-    if (points.isNotEmpty && point == points.last) {
-      return;
-    }
-    points.add(point);
+    if (_lastPoint == point) return;
+    final mid = _midPoint(_lastPoint, point);
+    _path.quadraticBezierTo(_lastPoint.dx, _lastPoint.dy, mid.dx, mid.dy);
+    _lastPoint = point;
   }
 
   void finish() {
-    if (points.length == 1) {
-      extend(points.first.translate(-0.1, 0.1));
-    }
+    // Extend by a small amount, so single point stroke is painted.
+    extend(_lastPoint.translate(0.01, 0.01));
   }
 
   Offset _midPoint(Offset p1, Offset p2) {
@@ -28,16 +29,6 @@ class Stroke {
   }
 
   void paintOn(Canvas canvas) {
-    final path = Path();
-    path.moveTo(points.first.dx, points.first.dy);
-
-    for (var i = 1; i < points.length; i++) {
-      final p1 = points[i - 1];
-      final p2 = points[i];
-      final mid = _midPoint(p1, p2);
-      path.quadraticBezierTo(p1.dx, p1.dy, mid.dx, mid.dy);
-    }
-
-    canvas.drawPath(path, paint);
+    canvas.drawPath(_path, paint);
   }
 }
