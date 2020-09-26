@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/frame/stroke.dart';
 
 import 'frame_model.dart';
 
 class FramePainter extends CustomPainter {
-  FramePainter(this.frame);
+  FramePainter(this.frame, {this.strokes});
 
   final FrameModel frame;
+  final List<Stroke> strokes;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -25,6 +27,8 @@ class FramePainter extends CustomPainter {
     }
 
     frame.unrasterizedStrokes.forEach((stroke) => stroke.paintOn(canvas));
+
+    strokes?.forEach((stroke) => stroke?.paintOn(canvas));
 
     // Flatten layer. Combine drawing lines with erasing lines.
     canvas.restore();

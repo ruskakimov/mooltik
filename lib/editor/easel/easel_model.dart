@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
+import 'package:mooltik/editor/frame/stroke.dart';
 import 'package:mooltik/editor/toolbox/tools.dart';
 
 const twoPi = pi * 2;
@@ -39,6 +40,11 @@ class EaselModel extends ChangeNotifier {
   Offset _fixedFramePoint;
 
   bool _justCreatedFrame = false;
+
+  Stroke _currentStroke;
+
+  /// Current unfinished stroke.
+  Stroke get currentStroke => _currentStroke;
 
   /// Canvas offset from top of the easel area.
   double get canvasTopOffset => _offset.dy;
@@ -124,17 +130,22 @@ class EaselModel extends ChangeNotifier {
       _frame = createFrame();
     }
     final framePoint = _toFramePoint(details.localPosition);
-    _frame.startStroke(framePoint, _selectedTool.paint);
+    _currentStroke = Stroke(framePoint, _selectedTool.paint);
+    notifyListeners();
   }
 
   void onStrokeUpdate(DragUpdateDetails details) {
     final framePoint = _toFramePoint(details.localPosition);
-    _frame.extendLastStroke(framePoint);
+    _currentStroke.extend(framePoint);
+    notifyListeners();
   }
 
   void onStrokeEnd() {
     _justCreatedFrame = false;
-    _frame.finishLastStroke();
+    _currentStroke.finish();
+    _frame.add(_currentStroke);
+    _currentStroke = null;
+    notifyListeners();
   }
 
   void onStrokeCancel() {
@@ -142,7 +153,8 @@ class EaselModel extends ChangeNotifier {
       // TODO: Create frame onStrokeEnd, move unrasterised strokes to easel.
       deleteFrame();
     }
-    _frame.cancelLastStroke();
+    _currentStroke = null;
+    notifyListeners();
   }
 
   void onExpandTap() {

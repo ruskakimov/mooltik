@@ -49,7 +49,10 @@ class _EaselState extends State<Easel> with AfterInitMixin<Easel> {
               angle: easel.canvasRotation,
               child: RepaintBoundary(
                 child: CustomPaint(
-                  foregroundPainter: FramePainter(frame),
+                  foregroundPainter: FramePainter(
+                    frame,
+                    strokes: [easel.currentStroke],
+                  ),
                   child: Container(
                     color: Colors.white,
                     height: frame.height,
