@@ -49,59 +49,10 @@ class FrameModel extends ChangeNotifier {
     }
   }
 
-  // void startStroke(Offset startPoint, Paint strokePaint) {
-  //   unrasterizedStrokes.add(Stroke(startPoint, strokePaint));
-
-  //   final markArea = Rect.fromCenter(
-  //     center: startPoint,
-  //     width: strokePaint.strokeWidth,
-  //     height: strokePaint.strokeWidth,
-  //   );
-  //   _lastStrokeTouchesFrame = markArea.overlaps(_frameArea);
-
-  //   notifyListeners();
-  // }
-
-  // void extendLastStroke(Offset point) {
-  //   if (unrasterizedStrokes.isEmpty) return;
-
-  //   unrasterizedStrokes.last.extend(point);
-
-  //   if (!_lastStrokeTouchesFrame) {
-  //     final markArea = Rect.fromCenter(
-  //       center: point,
-  //       width: unrasterizedStrokes.last.paint.strokeWidth,
-  //       height: unrasterizedStrokes.last.paint.strokeWidth,
-  //     );
-  //     _lastStrokeTouchesFrame = markArea.overlaps(_frameArea);
-  //   }
-
-  //   notifyListeners();
-  // }
-
-  // void finishLastStroke() {
-  //   if (unrasterizedStrokes.isEmpty) return;
-
-  //   unrasterizedStrokes.last.finish();
-
-  //   if (_lastStrokeTouchesFrame) {
-  //     _generateLastSnapshot();
-  //   } else {
-  //     cancelLastStroke();
-  //   }
-  // }
-
   void add(Stroke stroke) {
     unrasterizedStrokes.add(stroke);
     _generateLastSnapshot();
   }
-
-  // void cancelLastStroke() {
-  //   if (unrasterizedStrokes.isNotEmpty) {
-  //     unrasterizedStrokes.removeLast();
-  //   }
-  //   notifyListeners();
-  // }
 
   Future<void> _generateLastSnapshot() async {
     final pic = pictureFromFrame(this);
