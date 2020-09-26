@@ -20,7 +20,7 @@ class _TimelineState extends State<Timeline>
   AnimationController _controller;
   double _prevOffset;
 
-  final frameWidth = 24.0;
+  final frameHeight = 48.0;
   int _animationFrames = 1;
 
   bool get playing => context.read<TimelineModel>().playing;
@@ -56,7 +56,7 @@ class _TimelineState extends State<Timeline>
   void _playFromStart() {
     _controller.reset();
     _controller.animateTo(
-      _animationFrames * frameWidth,
+      _animationFrames * frameHeight,
       duration: Duration(milliseconds: (1000 / 24 * _animationFrames).floor()),
     );
   }
@@ -70,9 +70,9 @@ class _TimelineState extends State<Timeline>
     );
   }
 
-  int _frameNumber(double offset) => offset ~/ frameWidth + 1;
+  int _frameNumber(double offset) => offset ~/ frameHeight + 1;
 
-  double _notchPositionBefore(double offset) => offset - offset % frameWidth;
+  double _notchPositionBefore(double offset) => offset - offset % frameHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +116,7 @@ class _TimelineState extends State<Timeline>
                   color: Colors.blueGrey[900],
                 ),
                 foregroundPainter: TimelinePainter(
-                  frameWidth: frameWidth,
+                  frameHeight: frameHeight,
                   offset: _controller.value,
                   emptyKeyframes: [1],
                   keyframes: timeline.keyframes.map((f) => f.number).toList(),

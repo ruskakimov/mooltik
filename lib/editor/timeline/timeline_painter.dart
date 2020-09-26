@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class TimelinePainter extends CustomPainter {
   TimelinePainter({
-    @required this.frameWidth,
+    @required this.frameHeight,
     @required this.offset,
     @required this.emptyKeyframes,
     @required this.keyframes,
@@ -12,7 +12,7 @@ class TimelinePainter extends CustomPainter {
   });
 
   /// Width of a single frame in pixels on a timeline.
-  final double frameWidth;
+  final double frameHeight;
 
   /// Pixel offset from the first frame.
   final double offset;
@@ -36,7 +36,7 @@ class TimelinePainter extends CustomPainter {
     ..style = PaintingStyle.fill;
 
   double _frameY(int frameNumber, double midY) {
-    return midY - offset + (frameNumber - 1) * frameWidth;
+    return midY - offset + (frameNumber - 1) * frameHeight;
   }
 
   @override
@@ -49,10 +49,10 @@ class TimelinePainter extends CustomPainter {
     final endY = _frameY(animationDuration + 1, midY);
 
     // Frame grid.
-    final gridStart = startY < 0 ? -(startY.abs() % (frameWidth * 2)) : startY;
-    for (var y = gridStart; y <= size.height; y += frameWidth * 2) {
+    final gridStart = startY < 0 ? -(startY.abs() % (frameHeight * 2)) : startY;
+    for (var y = gridStart; y <= size.height; y += frameHeight * 2) {
       canvas.drawRect(
-        Rect.fromLTWH(0, y, size.width, frameWidth),
+        Rect.fromLTWH(0, y, size.width, frameHeight),
         gridPaint,
       );
     }
