@@ -18,14 +18,16 @@ class _PalleteTabState extends State<PalleteTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            ToolBar(),
-            Spacer(),
-          ],
+        ToolBar(),
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildWidthSelector(),
+              _buildColorSelector(),
+            ],
+          ),
         ),
-        _buildWidthSelector(),
-        _buildColorSelector(),
       ],
     );
   }
@@ -33,24 +35,29 @@ class _PalleteTabState extends State<PalleteTab> {
   Widget _buildWidthSelector() {
     final toolbox = context.watch<ToolboxModel>();
     final width = toolbox.selectedTool.paint.strokeWidth;
-    return Row(
+    return Column(
       children: [
         SizedBox(
-          width: 48,
-          child: Text(
-            '${width.toStringAsFixed(0)}',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+          height: 48,
+          child: Center(
+            child: Text(
+              '${width.toStringAsFixed(0)}',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16),
+            ),
           ),
         ),
         Expanded(
-          child: Slider(
-            value: width,
-            min: 1.0,
-            max: 100.0,
-            onChanged: (value) {
-              toolbox.changeStrokeWidth(value.round());
-            },
+          child: RotatedBox(
+            quarterTurns: 3,
+            child: Slider(
+              value: width,
+              min: 1.0,
+              max: 100.0,
+              onChanged: (value) {
+                toolbox.changeStrokeWidth(value.round());
+              },
+            ),
           ),
         ),
       ],
@@ -60,13 +67,16 @@ class _PalleteTabState extends State<PalleteTab> {
   Widget _buildColorSelector() {
     final toolbox = context.watch<ToolboxModel>();
     final color = toolbox.selectedTool.paint.color;
-    return Row(
+    return Column(
       children: [
         ColorPicker(color: color),
         Expanded(
-          child: Slider(
-            value: color.opacity,
-            onChanged: toolbox.changeOpacity,
+          child: RotatedBox(
+            quarterTurns: 3,
+            child: Slider(
+              value: color.opacity,
+              onChanged: toolbox.changeOpacity,
+            ),
           ),
         ),
       ],
