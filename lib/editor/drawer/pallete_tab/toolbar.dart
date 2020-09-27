@@ -16,7 +16,7 @@ class ToolBar extends StatelessWidget {
     final playing = context.watch<TimelineModel>().playing;
 
     return ColoredBox(
-      color: Colors.blueGrey[900],
+      color: Colors.blueGrey[800],
       child: Column(
         children: <Widget>[
           for (var i = 0; i < toolbox.tools.length; i++)
