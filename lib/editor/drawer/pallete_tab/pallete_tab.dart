@@ -15,19 +15,11 @@ class PalleteTab extends StatefulWidget {
 class _PalleteTabState extends State<PalleteTab> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        ToolBar(),
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildWidthSelector(),
-              _buildColorSelector(),
-            ],
-          ),
-        ),
+        _buildWidthSelector(),
+        _buildColorSelector(),
       ],
     );
   }

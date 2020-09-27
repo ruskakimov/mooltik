@@ -10,16 +10,18 @@ class ToolBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        for (var i = 0; i < toolbox.tools.length; i++)
-          DrawerIconButton(
-            icon: toolbox.tools[i].icon,
-            selected: toolbox.tools[i] == toolbox.selectedTool,
-            onTap: () => toolbox.selectTool(i),
-          ),
-      ],
+    return ColoredBox(
+      color: Colors.blueGrey[900],
+      child: Column(
+        children: <Widget>[
+          for (var i = 0; i < toolbox.tools.length; i++)
+            DrawerIconButton(
+              icon: toolbox.tools[i].icon,
+              selected: toolbox.tools[i] == toolbox.selectedTool,
+              onTap: () => toolbox.selectTool(i),
+            ),
+        ],
+      ),
     );
   }
 }

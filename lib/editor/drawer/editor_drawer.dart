@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/drawer/export_tab.dart';
 import 'package:mooltik/editor/drawer/pallete_tab/pallete_tab.dart';
+import 'package:mooltik/editor/drawer/pallete_tab/toolbar.dart';
 import 'package:mooltik/editor/timeline/timeline.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:provider/provider.dart';
@@ -68,12 +69,17 @@ class _EditorDrawerState extends State<EditorDrawer>
           child: _buildDrawerBody(),
           builder: (context, child) {
             return Transform.translate(
-              offset: Offset(48 - widget.width * _openCloseAnimation.value, 0),
+              offset: Offset(96 - widget.width * _openCloseAnimation.value, 0),
               child: child,
             );
           },
         ),
-        _buildDrawerBar(),
+        Row(
+          children: [
+            ToolBar(),
+            _buildDrawerBar(),
+          ],
+        ),
       ],
     );
   }
