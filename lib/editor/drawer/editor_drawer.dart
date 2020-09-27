@@ -4,10 +4,7 @@ import 'package:mooltik/editor/drawer/export_tab.dart';
 import 'package:mooltik/editor/drawer/pallete_tab/pallete_tab.dart';
 import 'package:mooltik/editor/drawer/pallete_tab/toolbar.dart';
 import 'package:mooltik/editor/timeline/timeline.dart';
-import 'package:mooltik/editor/timeline/timeline_model.dart';
-import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mooltik/editor/frame/frame_model.dart';
 
 import 'drawer_icon_button.dart';
 
@@ -101,9 +98,6 @@ class _EditorDrawerState extends State<EditorDrawer>
   }
 
   Widget _buildDrawerBar() {
-    final frame = context.watch<FrameModel>();
-    final playing = context.watch<TimelineModel>().playing;
-
     return Container(
       color: Colors.blueGrey[700],
       child: Column(
@@ -122,15 +116,6 @@ class _EditorDrawerState extends State<EditorDrawer>
             icon: FontAwesomeIcons.fileDownload,
             selected: open && _selectedTabIndex == 2,
             onTap: () => _onTabTap(2),
-          ),
-          Spacer(),
-          DrawerIconButton(
-            icon: FontAwesomeIcons.undo,
-            onTap: frame.undoAvailable && !playing ? frame.undo : null,
-          ),
-          DrawerIconButton(
-            icon: FontAwesomeIcons.redo,
-            onTap: frame.redoAvailable && !playing ? frame.redo : null,
           ),
         ],
       ),
