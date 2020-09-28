@@ -66,17 +66,12 @@ class _EditorDrawerState extends State<EditorDrawer>
           child: _buildDrawerBody(),
           builder: (context, child) {
             return Transform.translate(
-              offset: Offset(96 - widget.width * _openCloseAnimation.value, 0),
+              offset: Offset(48 - widget.width * _openCloseAnimation.value, 0),
               child: child,
             );
           },
         ),
-        Row(
-          children: [
-            ToolBar(),
-            _buildDrawerBar(),
-          ],
-        ),
+        _buildDrawerBar(),
       ],
     );
   }
@@ -112,6 +107,7 @@ class _EditorDrawerState extends State<EditorDrawer>
             selected: open && _selectedTabIndex == 1,
             onTap: () => _onTabTap(1),
           ),
+          Spacer(),
           DrawerIconButton(
             icon: FontAwesomeIcons.fileDownload,
             selected: open && _selectedTabIndex == 2,

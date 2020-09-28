@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/drawer/editor_drawer.dart';
+import 'package:mooltik/editor/drawer/pallete_tab/toolbar.dart';
 import 'package:mooltik/editor/easel/easel_model.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
@@ -45,6 +46,10 @@ class EditorPage extends StatelessWidget {
               Align(
                 alignment: Alignment.topLeft,
                 child: EditorDrawer(),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: ToolBar(),
               ),
             ],
           ),
