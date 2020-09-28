@@ -62,15 +62,16 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
       ),
     );
 
-    return Stack(
-      alignment: Alignment.topRight,
+    return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         AnimatedBuilder(
           animation: _openCloseAnimation,
+          child: _buildDrawerBody(),
           builder: (context, child) {
             return Transform.translate(
-              offset: Offset(-48 + 64.0 * _openCloseAnimation.value, 0),
-              child: _buildDrawerBody(),
+              offset: Offset(64.0 * _openCloseAnimation.value, 0),
+              child: child,
             );
           },
         ),
