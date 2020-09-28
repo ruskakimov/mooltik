@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mooltik/editor/drawer/drawer_icon_button.dart';
+import 'package:mooltik/editor/drawer/bar_icon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:mooltik/editor/timeline/timeline_painter.dart';
@@ -138,7 +138,7 @@ class _TimelineState extends State<Timeline>
         children: [
           Row(
             children: [
-              DrawerIconButton(
+              BarIconButton(
                 icon: timeline.playing
                     ? FontAwesomeIcons.pause
                     : FontAwesomeIcons.play,
@@ -161,7 +161,7 @@ class _TimelineState extends State<Timeline>
               SizedBox(width: 12),
             ],
           ),
-          DrawerIconButton(
+          BarIconButton(
             icon: FontAwesomeIcons.trashAlt,
             onTap: timeline.selectedCanBeDeleted && !timeline.playing
                 ? timeline.deleteSelectedKeyframe

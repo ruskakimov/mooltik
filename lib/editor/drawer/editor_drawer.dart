@@ -6,7 +6,7 @@ import 'package:mooltik/editor/drawer/pallete_tab/pallete_tab.dart';
 import 'package:mooltik/editor/timeline/timeline.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'drawer_icon_button.dart';
+import 'bar_icon_button.dart';
 
 class EditorDrawer extends StatefulWidget {
   EditorDrawer({
@@ -17,7 +17,7 @@ class EditorDrawer extends StatefulWidget {
         super(key: key);
 
   final double width;
-  final List<DrawerIconButton> quickAccessButtons;
+  final List<BarIconButton> quickAccessButtons;
 
   @override
   _EditorDrawerState createState() => _EditorDrawerState();
@@ -98,18 +98,18 @@ class _EditorDrawerState extends State<EditorDrawer>
       child: Column(
         children: [
           ColorPicker(),
-          DrawerIconButton(
+          BarIconButton(
             icon: FontAwesomeIcons.palette,
             selected: open && _selectedTabIndex == 0,
             onTap: () => _onTabTap(0),
           ),
-          DrawerIconButton(
+          BarIconButton(
             icon: FontAwesomeIcons.film,
             selected: open && _selectedTabIndex == 1,
             onTap: () => _onTabTap(1),
           ),
           Spacer(),
-          DrawerIconButton(
+          BarIconButton(
             icon: FontAwesomeIcons.fileDownload,
             selected: open && _selectedTabIndex == 2,
             onTap: () => _onTabTap(2),
