@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/drawer/export_tab.dart';
 import 'package:mooltik/editor/drawer/pallete_tab/color_picker.dart';
-import 'package:mooltik/editor/drawer/pallete_tab/pallete_tab.dart';
 import 'package:mooltik/editor/timeline/timeline.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -30,7 +29,6 @@ class _EditorDrawerState extends State<EditorDrawer>
   Animation _openCloseAnimation;
 
   final tabs = [
-    PalleteTab(),
     Timeline(),
     ExportTab(),
   ];
@@ -99,20 +97,15 @@ class _EditorDrawerState extends State<EditorDrawer>
         children: [
           ColorPicker(),
           BarIconButton(
-            icon: FontAwesomeIcons.palette,
+            icon: FontAwesomeIcons.film,
             selected: open && _selectedTabIndex == 0,
             onTap: () => _onTabTap(0),
-          ),
-          BarIconButton(
-            icon: FontAwesomeIcons.film,
-            selected: open && _selectedTabIndex == 1,
-            onTap: () => _onTabTap(1),
           ),
           Spacer(),
           BarIconButton(
             icon: FontAwesomeIcons.fileDownload,
-            selected: open && _selectedTabIndex == 2,
-            onTap: () => _onTabTap(2),
+            selected: open && _selectedTabIndex == 1,
+            onTap: () => _onTabTap(1),
           ),
         ],
       ),
