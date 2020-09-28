@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/editor/drawer/pallete_tab/color_picker.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
-
-import 'package:mooltik/editor/drawer/pallete_tab/toolbar.dart';
 
 class PalleteTab extends StatefulWidget {
   const PalleteTab({Key key}) : super(key: key);
@@ -19,7 +16,6 @@ class _PalleteTabState extends State<PalleteTab> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _buildWidthSelector(),
-        _buildColorSelector(),
       ],
     );
   }
@@ -49,25 +45,6 @@ class _PalleteTabState extends State<PalleteTab> {
               onChanged: (value) {
                 toolbox.changeStrokeWidth(value.round());
               },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildColorSelector() {
-    final toolbox = context.watch<ToolboxModel>();
-    final color = toolbox.selectedTool.paint.color;
-    return Column(
-      children: [
-        ColorPicker(color: color),
-        Expanded(
-          child: RotatedBox(
-            quarterTurns: 3,
-            child: Slider(
-              value: color.opacity,
-              onChanged: toolbox.changeOpacity,
             ),
           ),
         ),

@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/drawer/export_tab.dart';
+import 'package:mooltik/editor/drawer/pallete_tab/color_picker.dart';
 import 'package:mooltik/editor/drawer/pallete_tab/pallete_tab.dart';
-import 'package:mooltik/editor/drawer/pallete_tab/toolbar.dart';
 import 'package:mooltik/editor/timeline/timeline.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -97,6 +97,7 @@ class _EditorDrawerState extends State<EditorDrawer>
       color: Colors.blueGrey[700],
       child: Column(
         children: [
+          ColorPicker(),
           DrawerIconButton(
             icon: FontAwesomeIcons.palette,
             selected: open && _selectedTabIndex == 0,

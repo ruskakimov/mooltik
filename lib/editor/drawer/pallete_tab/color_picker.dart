@@ -7,13 +7,12 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart' as fcp;
 class ColorPicker extends StatelessWidget {
   const ColorPicker({
     Key key,
-    @required this.color,
   }) : super(key: key);
-
-  final Color color;
 
   @override
   Widget build(BuildContext context) {
+    final toolbox = context.watch<ToolboxModel>();
+    final color = toolbox.selectedTool.paint.color;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => _showColorPicker(context),
