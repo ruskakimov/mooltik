@@ -24,7 +24,7 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 100),
-    );
+    )..value = 1.0;
     _openCloseAnimation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeOut,
@@ -47,7 +47,12 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
               icon: toolbox.tools[i].icon,
               selected: toolbox.tools[i] == toolbox.selectedTool,
               label: toolbox.tools[i].paint.strokeWidth.toStringAsFixed(0),
-              onTap: () => toolbox.selectTool(i),
+              onTap: () {
+                if (toolbox.tools[i] == toolbox.selectedTool) {
+                  _toggleDrawer();
+                }
+                toolbox.selectTool(i);
+              },
             ),
           Spacer(),
           BarIconButton(
@@ -91,6 +96,21 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
         child: SizeSelector(),
       ),
     );
+  }
+
+  void _toggleDrawer() {
+    setState(() {
+      open = !open;
+    });
+    _animateDrawer();
+  }
+
+  void _animateDrawer() {
+    if (open) {
+      _controller.reverse();
+    } else {
+      _controller.forward();
+    }
   }
 }
 
