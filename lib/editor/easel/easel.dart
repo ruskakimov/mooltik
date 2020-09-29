@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/editor/drawer/bar_icon_button.dart';
 import 'package:mooltik/editor/easel/easel_model.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
@@ -62,8 +64,60 @@ class _EaselState extends State<Easel> with AfterInitMixin<Easel> {
               ),
             ),
           ),
+          if (frame.undoAvailable)
+            Positioned(
+              top: 0,
+              left: 56,
+              child: EaselIconButton(
+                icon: FontAwesomeIcons.undo,
+                onTap: frame.undo,
+              ),
+            ),
+          if (frame.redoAvailable)
+            Positioned(
+              top: 0,
+              right: 56,
+              child: EaselIconButton(
+                icon: FontAwesomeIcons.redo,
+                onTap: frame.redo,
+              ),
+            ),
         ],
       ),
+    );
+  }
+}
+
+class EaselIconButton extends StatelessWidget {
+  const EaselIconButton({
+    Key key,
+    @required this.icon,
+    this.onTap,
+  }) : super(key: key);
+
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Transform.translate(
+          offset: Offset(2, 2),
+          child: Icon(
+            icon,
+            color: Colors.black26,
+          ),
+        ),
+        IconButton(
+          icon: Icon(
+            icon,
+            color: Colors.white,
+          ),
+          onPressed: onTap,
+        ),
+      ],
     );
   }
 }
