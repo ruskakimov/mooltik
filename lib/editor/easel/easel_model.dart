@@ -64,11 +64,13 @@ class EaselModel extends ChangeNotifier {
     _fitToScreen();
   }
 
+  /// Used by provider to update dependency.
   void updateSelectedTool(Tool tool) {
     _selectedTool = tool;
     notifyListeners();
   }
 
+  /// Used by provider to update dependency.
   void updateFrame(FrameModel frame) {
     _frame = frame;
     notifyListeners();

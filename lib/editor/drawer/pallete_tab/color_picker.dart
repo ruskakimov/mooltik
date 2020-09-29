@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
-import 'package:mooltik/editor/toolbox/tools.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart' as fcp;
 
