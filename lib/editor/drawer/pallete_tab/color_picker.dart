@@ -12,7 +12,7 @@ class ColorPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
-    final color = toolbox.selectedTool.paint.color;
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => _showColorPicker(context),
@@ -27,7 +27,7 @@ class ColorPicker extends StatelessWidget {
                 width: 28,
                 height: 28,
                 decoration: BoxDecoration(
-                  color: color,
+                  color: toolbox.selectedColor,
                   border: Border.all(
                     color: Colors.white,
                     width: 3,
@@ -44,7 +44,6 @@ class ColorPicker extends StatelessWidget {
 
   void _showColorPicker(BuildContext context) {
     final toolbox = context.read<ToolboxModel>();
-    if (toolbox.selectedTool is! Pencil) return;
 
     showDialog(
       context: context,
@@ -53,7 +52,7 @@ class ColorPicker extends StatelessWidget {
         contentPadding: EdgeInsets.all(0.0),
         content: SingleChildScrollView(
           child: fcp.ColorPicker(
-            pickerColor: toolbox.selectedTool.paint.color,
+            pickerColor: toolbox.selectedColor,
             onColorChanged: (color) {
               toolbox.changeColor(color);
             },
