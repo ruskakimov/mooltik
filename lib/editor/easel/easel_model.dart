@@ -20,6 +20,7 @@ class EaselModel extends ChangeNotifier {
   FrameModel _frame;
 
   Tool _selectedTool;
+  Color _selectedColor;
 
   final double frameWidth;
   final double frameHeight;
@@ -67,6 +68,12 @@ class EaselModel extends ChangeNotifier {
   /// Used by provider to update dependency.
   void updateSelectedTool(Tool tool) {
     _selectedTool = tool;
+    notifyListeners();
+  }
+
+  /// Used by provider to update dependency.
+  void updateSelectedColor(Color color) {
+    _selectedColor = color;
     notifyListeners();
   }
 
@@ -130,7 +137,7 @@ class EaselModel extends ChangeNotifier {
 
   void onStrokeStart(DragStartDetails details) {
     final framePoint = _toFramePoint(details.localPosition);
-    _currentStroke = Stroke(framePoint, _selectedTool.paint);
+    _currentStroke = _selectedTool.makeStroke(framePoint, _selectedColor);
     notifyListeners();
   }
 

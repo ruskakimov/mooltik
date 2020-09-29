@@ -33,7 +33,8 @@ class EditorPage extends StatelessWidget {
             ),
             update: (_, timeline, toolbox, easel) => easel
               ..updateFrame(timeline.selectedKeyframe)
-              ..updateSelectedTool(toolbox.selectedTool),
+              ..updateSelectedTool(toolbox.selectedTool)
+              ..updateSelectedColor(toolbox.selectedColor),
           ),
         ],
         child: SafeArea(

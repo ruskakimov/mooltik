@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/editor/frame/stroke.dart';
 
-class Tool {
+abstract class Tool {
   Tool(IconData icon, Paint paint)
       : _icon = icon,
         _paint = paint;
@@ -11,6 +12,8 @@ class Tool {
 
   IconData get icon => _icon;
   Paint get paint => _paint;
+
+  Stroke makeStroke(Offset startPoint, Color color);
 }
 
 class Pencil extends Tool {
@@ -29,6 +32,11 @@ class Pencil extends Tool {
             ..strokeJoin = StrokeJoin.round
             ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
         );
+
+  @override
+  Stroke makeStroke(Offset startPoint, Color color) {
+    return Stroke(startPoint, _paint..color = color);
+  }
 }
 
 class Eraser extends Tool {
@@ -43,4 +51,9 @@ class Eraser extends Tool {
             ..strokeJoin = StrokeJoin.round
             ..blendMode = BlendMode.dstOut,
         );
+
+  @override
+  Stroke makeStroke(Offset startPoint, Color color) {
+    return Stroke(startPoint, _paint);
+  }
 }
