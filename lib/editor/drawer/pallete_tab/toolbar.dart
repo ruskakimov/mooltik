@@ -141,7 +141,7 @@ class SizeSelector extends StatelessWidget {
               min: 1.0,
               max: 100.0,
               onChanged: (value) {
-                toolbox.changeStrokeWidth(value.round());
+                toolbox.changeToolWidth(value.round());
               },
             ),
           ),

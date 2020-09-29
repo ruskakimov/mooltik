@@ -19,17 +19,17 @@ class ToolboxModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeStrokeWidth(int value) {
-    selectedTool.paint.strokeWidth = value.toDouble();
-    notifyListeners();
-  }
-
-  void changeColor(Color color) {
+  void selectColor(Color color) {
     _selectedColor = color;
     notifyListeners();
   }
 
-  void changeOpacity(double value) {
+  void changeToolWidth(int value) {
+    selectedTool.paint.strokeWidth = value.toDouble();
+    notifyListeners();
+  }
+
+  void changeToolOpacity(double value) {
     assert(value >= 0.0 && value <= 1.0);
     selectedTool.paint.color = selectedTool.paint.color.withOpacity(value);
     notifyListeners();

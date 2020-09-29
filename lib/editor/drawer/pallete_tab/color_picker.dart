@@ -54,7 +54,7 @@ class ColorPicker extends StatelessWidget {
           child: fcp.ColorPicker(
             pickerColor: toolbox.selectedColor,
             onColorChanged: (color) {
-              toolbox.changeColor(color);
+              toolbox.selectColor(color);
             },
             showLabel: false,
             pickerAreaHeightPercent: 0.8,
