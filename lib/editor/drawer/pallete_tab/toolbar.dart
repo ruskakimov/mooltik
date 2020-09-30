@@ -83,13 +83,9 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Positioned(
-            top: 0,
-            left: 56,
-            child: HoveringIconButton(
-              icon: FontAwesomeIcons.redo,
-              onTap: frame.redoAvailable ? frame.redo : null,
-            ),
+          HoveringIconButton(
+            icon: FontAwesomeIcons.redo,
+            onTap: frame.redoAvailable ? frame.redo : null,
           ),
           Container(
             width: 64,

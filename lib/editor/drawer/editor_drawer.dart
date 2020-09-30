@@ -99,13 +99,9 @@ class _EditorDrawerState extends State<EditorDrawer>
               children: tabs,
             ),
           ),
-          Positioned(
-            top: 0,
-            left: 56,
-            child: HoveringIconButton(
-              icon: FontAwesomeIcons.undo,
-              onTap: frame.undoAvailable ? frame.undo : null,
-            ),
+          HoveringIconButton(
+            icon: FontAwesomeIcons.undo,
+            onTap: frame.undoAvailable ? frame.undo : null,
           ),
         ],
       ),
