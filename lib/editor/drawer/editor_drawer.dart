@@ -99,15 +99,14 @@ class _EditorDrawerState extends State<EditorDrawer>
               children: tabs,
             ),
           ),
-          if (frame.undoAvailable)
-            Positioned(
-              top: 0,
-              left: 56,
-              child: EaselIconButton(
-                icon: FontAwesomeIcons.undo,
-                onTap: frame.undo,
-              ),
+          Positioned(
+            top: 0,
+            left: 56,
+            child: EaselIconButton(
+              icon: FontAwesomeIcons.undo,
+              onTap: frame.undoAvailable ? frame.undo : null,
             ),
+          ),
         ],
       ),
     );

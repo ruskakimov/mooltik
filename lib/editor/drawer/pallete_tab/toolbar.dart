@@ -83,15 +83,14 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (frame.redoAvailable)
-            Positioned(
-              top: 0,
-              left: 56,
-              child: EaselIconButton(
-                icon: FontAwesomeIcons.redo,
-                onTap: frame.redo,
-              ),
+          Positioned(
+            top: 0,
+            left: 56,
+            child: EaselIconButton(
+              icon: FontAwesomeIcons.redo,
+              onTap: frame.redoAvailable ? frame.redo : null,
             ),
+          ),
           Container(
             width: 64,
             decoration: BoxDecoration(

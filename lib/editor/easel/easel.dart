@@ -87,7 +87,7 @@ class EaselIconButton extends StatelessWidget {
           offset: Offset(2, 2),
           child: Icon(
             icon,
-            color: Colors.black26,
+            color: onTap != null ? Colors.blueGrey : Colors.transparent,
           ),
         ),
         IconButton(
