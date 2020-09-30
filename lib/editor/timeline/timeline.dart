@@ -9,6 +9,9 @@ class Timeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Update when selected frame is painted on.
+    context.watch<FrameModel>();
+
     final keyframes = context.watch<TimelineModel>().keyframes;
     final thumbnailSize = Size(
       150,
