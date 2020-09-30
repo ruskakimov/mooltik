@@ -55,7 +55,6 @@ class _EditorDrawerState extends State<EditorDrawer>
 
   @override
   Widget build(BuildContext context) {
-    // Replace stack with row
     return Stack(
       alignment: Alignment.topLeft,
       children: [
