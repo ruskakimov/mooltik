@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/drawer/bar_icon_button.dart';
+import 'package:mooltik/editor/drawer/pallete_tab/color_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 
@@ -37,6 +38,7 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
       color: Colors.blueGrey[700],
       child: Column(
         children: <Widget>[
+          ColorPicker(),
           for (var i = 0; i < toolbox.tools.length; i++)
             BarIconButton(
               icon: toolbox.tools[i].icon,
