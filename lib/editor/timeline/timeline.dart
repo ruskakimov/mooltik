@@ -9,10 +9,19 @@ class Timeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final timeline = context.watch<TimelineModel>();
+    final keyframes = context.watch<TimelineModel>().keyframes;
+    final thumbnailSize = Size(
+      150,
+      150 / keyframes.first.width * keyframes.first.height,
+    );
 
-    return FrameThumbnail(
-      frame: timeline.selectedKeyframe,
+    return ListWheelScrollView(
+      physics: BouncingScrollPhysics(),
+      itemExtent: thumbnailSize.height,
+      children: [
+        for (var frame in keyframes)
+          FrameThumbnail(frame: frame, size: thumbnailSize)
+      ],
     );
   }
 }
@@ -20,15 +29,17 @@ class Timeline extends StatelessWidget {
 class FrameThumbnail extends StatelessWidget {
   const FrameThumbnail({
     Key key,
+    @required this.size,
     @required this.frame,
   }) : super(key: key);
 
+  final Size size;
   final FrameModel frame;
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      size: Size(150, 150 / frame.width * frame.height),
+      size: size,
       painter: FramePainter(frame),
     );
   }
