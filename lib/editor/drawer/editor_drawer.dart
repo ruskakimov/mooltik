@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/drawer/export_tab.dart';
-import 'package:mooltik/editor/easel/easel.dart';
+import 'package:mooltik/editor/easel/hovering_icon_button.dart';
 import 'package:mooltik/editor/timeline/timeline.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -102,7 +102,7 @@ class _EditorDrawerState extends State<EditorDrawer>
           Positioned(
             top: 0,
             left: 56,
-            child: EaselIconButton(
+            child: HoveringIconButton(
               icon: FontAwesomeIcons.undo,
               onTap: frame.undoAvailable ? frame.undo : null,
             ),

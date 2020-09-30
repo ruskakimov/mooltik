@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/bar_icon_button.dart';
 import 'package:mooltik/editor/drawer/pallete_tab/color_picker.dart';
-import 'package:mooltik/editor/easel/easel.dart';
+import 'package:mooltik/editor/easel/hovering_icon_button.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
@@ -86,7 +86,7 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
           Positioned(
             top: 0,
             left: 56,
-            child: EaselIconButton(
+            child: HoveringIconButton(
               icon: FontAwesomeIcons.redo,
               onTap: frame.redoAvailable ? frame.redo : null,
             ),
