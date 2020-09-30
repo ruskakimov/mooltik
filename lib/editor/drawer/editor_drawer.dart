@@ -59,15 +59,20 @@ class _EditorDrawerState extends State<EditorDrawer>
     return Stack(
       alignment: Alignment.topLeft,
       children: [
-        AnimatedBuilder(
-          animation: _openCloseAnimation,
-          child: _buildDrawerBody(),
-          builder: (context, child) {
-            return Transform.translate(
-              offset: Offset(48 - widget.width * _openCloseAnimation.value, 0),
-              child: child,
-            );
-          },
+        Row(
+          children: [
+            SizedBox(width: 48),
+            AnimatedBuilder(
+              animation: _openCloseAnimation,
+              child: _buildDrawerBody(),
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(-widget.width * _openCloseAnimation.value, 0),
+                  child: child,
+                );
+              },
+            ),
+          ],
         ),
         _buildDrawerBar(),
       ],
