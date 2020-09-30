@@ -27,7 +27,7 @@ class _EditorDrawerState extends State<EditorDrawer>
   AnimationController _controller;
   Animation _openCloseAnimation;
 
-  final tabs = [
+  final tabs = <Widget>[
     Timeline(),
     ExportTab(),
   ];
