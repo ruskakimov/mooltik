@@ -64,15 +64,6 @@ class _EaselState extends State<Easel> with AfterInitMixin<Easel> {
               ),
             ),
           ),
-          if (frame.undoAvailable)
-            Positioned(
-              top: 0,
-              left: 56,
-              child: EaselIconButton(
-                icon: FontAwesomeIcons.undo,
-                onTap: frame.undo,
-              ),
-            ),
           if (frame.redoAvailable)
             Positioned(
               top: 0,

@@ -1,6 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/frame/frame_model.dart';
+import 'package:provider/provider.dart';
 import 'package:mooltik/editor/drawer/export_tab.dart';
+import 'package:mooltik/editor/easel/easel.dart';
 import 'package:mooltik/editor/timeline/timeline.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -79,17 +82,33 @@ class _EditorDrawerState extends State<EditorDrawer>
   }
 
   Widget _buildDrawerBody() {
+    final frame = context.watch<FrameModel>();
+
     return RepaintBoundary(
-      child: Container(
-        width: widget.width,
-        decoration: BoxDecoration(
-          color: Colors.blueGrey[800],
-          boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 12)],
-        ),
-        child: IndexedStack(
-          index: _selectedTabIndex,
-          children: tabs,
-        ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: widget.width,
+            decoration: BoxDecoration(
+              color: Colors.blueGrey[800],
+              boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 12)],
+            ),
+            child: IndexedStack(
+              index: _selectedTabIndex,
+              children: tabs,
+            ),
+          ),
+          if (frame.undoAvailable)
+            Positioned(
+              top: 0,
+              left: 56,
+              child: EaselIconButton(
+                icon: FontAwesomeIcons.undo,
+                onTap: frame.undo,
+              ),
+            ),
+        ],
       ),
     );
   }
