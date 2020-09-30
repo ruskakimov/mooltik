@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mooltik/editor/drawer/bar_icon_button.dart';
 import 'package:mooltik/editor/easel/easel_model.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
@@ -64,15 +62,6 @@ class _EaselState extends State<Easel> with AfterInitMixin<Easel> {
               ),
             ),
           ),
-          if (frame.redoAvailable)
-            Positioned(
-              top: 0,
-              right: 56,
-              child: EaselIconButton(
-                icon: FontAwesomeIcons.redo,
-                onTap: frame.redo,
-              ),
-            ),
         ],
       ),
     );
