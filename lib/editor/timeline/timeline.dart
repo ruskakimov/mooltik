@@ -16,8 +16,6 @@ class Timeline extends StatefulWidget {
 
 class _TimelineState extends State<Timeline> {
   FixedExtentScrollController controller;
-  Key _keyCupertino =
-      GlobalKey(); // hack to force wheel to update, https://github.com/flutter/flutter/issues/22999
   int _selectedId;
 
   @override
@@ -33,13 +31,11 @@ class _TimelineState extends State<Timeline> {
     final timeline = context.read<TimelineModel>();
     if (timeline.selectedKeyframeId != _selectedId) {
       _selectedId = timeline.selectedKeyframeId;
-      print('should animate to $_selectedId');
-      // controller.jumpToItem(_selectedId);
-      // controller.animateToItem(
-      //   _selectedId,
-      //   duration: Duration(milliseconds: 100),
-      //   curve: Curves.easeOut,
-      // );
+      controller.animateToItem(
+        _selectedId,
+        duration: Duration(milliseconds: 100),
+        curve: Curves.easeOut,
+      );
     }
   }
 
@@ -64,7 +60,6 @@ class _TimelineState extends State<Timeline> {
       children: [
         Expanded(
           child: CupertinoPicker.builder(
-            key: _keyCupertino,
             scrollController: controller,
             useMagnifier: false,
             diameterRatio: 2,
@@ -79,15 +74,20 @@ class _TimelineState extends State<Timeline> {
           ),
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             BarIconButton(
               icon: FontAwesomeIcons.plusCircle,
               onTap: () {
                 timeline.addEmptyFrame();
-                _keyCupertino = GlobalKey(); // hack
               },
-            )
+            ),
+            Spacer(),
+            BarIconButton(
+              icon: FontAwesomeIcons.trashAlt,
+              onTap: () {
+                timeline.deleteSelectedFrame();
+              },
+            ),
           ],
         ),
       ],

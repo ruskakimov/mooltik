@@ -22,6 +22,16 @@ class TimelineModel extends ChangeNotifier {
 
   void addEmptyFrame() {
     keyframes.insert(_selectedKeyframeId + 1, FrameModel());
+    _selectedKeyframeId++;
+    notifyListeners();
+  }
+
+  void deleteSelectedFrame() {
+    if (keyframes.length <= 2) return;
+
+    keyframes.removeAt(_selectedKeyframeId);
+    if (_selectedKeyframeId != 0) _selectedKeyframeId--;
+
     notifyListeners();
   }
 }
