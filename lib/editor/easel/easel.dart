@@ -26,13 +26,12 @@ class _EaselState extends State<Easel> with AfterInitMixin<Easel> {
   Widget build(BuildContext context) {
     final easel = context.watch<EaselModel>();
     final frame = context.watch<FrameModel>();
-    final timeline = context.watch<TimelineModel>();
 
     return EaselGestureDetector(
-      onStrokeStart: timeline.playing ? null : easel.onStrokeStart,
-      onStrokeUpdate: timeline.playing ? null : easel.onStrokeUpdate,
-      onStrokeEnd: timeline.playing ? null : easel.onStrokeEnd,
-      onStrokeCancel: timeline.playing ? null : easel.onStrokeCancel,
+      onStrokeStart: easel.onStrokeStart,
+      onStrokeUpdate: easel.onStrokeUpdate,
+      onStrokeEnd: easel.onStrokeEnd,
+      onStrokeCancel: easel.onStrokeCancel,
       onScaleStart: easel.onScaleStart,
       onScaleUpdate: easel.onScaleUpdate,
       child: Stack(

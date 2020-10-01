@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/frame/frame_painter.dart';
@@ -12,19 +13,24 @@ class Timeline extends StatelessWidget {
     // Update when selected frame is painted on.
     context.watch<FrameModel>();
 
-    final keyframes = context.watch<TimelineModel>().keyframes;
+    final timeline = context.watch<TimelineModel>();
+    final keyframes = timeline.keyframes;
     final thumbnailSize = Size(
       150,
       150 / keyframes.first.width * keyframes.first.height,
     );
 
-    return ListWheelScrollView(
-      physics: BouncingScrollPhysics(),
+    return CupertinoPicker.builder(
+      useMagnifier: false,
+      diameterRatio: 2,
+      squeeze: 1,
+      onSelectedItemChanged: timeline.selectFrame,
       itemExtent: thumbnailSize.height,
-      children: [
-        for (var frame in keyframes)
-          FrameThumbnail(frame: frame, size: thumbnailSize)
-      ],
+      childCount: keyframes.length,
+      itemBuilder: (context, index) => FrameThumbnail(
+        frame: keyframes[index],
+        size: thumbnailSize,
+      ),
     );
   }
 }

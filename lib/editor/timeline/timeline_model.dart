@@ -6,66 +6,16 @@ class TimelineModel extends ChangeNotifier {
   TimelineModel({
     @required initialKeyframes,
   })  : assert(initialKeyframes.isNotEmpty),
-        keyframes = initialKeyframes,
-        _selectedFrameNumber = 1,
-        _visibleKeyframe = initialKeyframes.first;
+        keyframes = initialKeyframes;
 
   List<FrameModel> keyframes;
-  int _selectedFrameNumber = 1;
-  FrameModel _visibleKeyframe;
-  int animationDuration = 24;
-  bool playing = false;
+  int _selectedKeyframeId = 0;
 
-  void togglePlay() {
-    playing = !playing;
+  FrameModel get selectedKeyframe => keyframes[_selectedKeyframeId];
+
+  void selectFrame(int id) {
+    assert(id >= 0 && id <= keyframes.length);
+    _selectedKeyframeId = id;
     notifyListeners();
-  }
-
-  int get selectedFrameNumber => _selectedFrameNumber;
-
-  FrameModel get visibleKeyframe => _visibleKeyframe;
-
-  FrameModel get selectedKeyframe =>
-      visibleKeyframe.number == selectedFrameNumber ? visibleKeyframe : null;
-
-  bool get selectedCanBeDeleted =>
-      selectedKeyframe != null && selectedFrameNumber != 1;
-
-  void selectFrame(int number) {
-    assert(number > 0);
-    _selectedFrameNumber = number;
-    _updateVisibleKeyframe();
-    notifyListeners();
-  }
-
-  FrameModel createKeyframeAtSelectedNumber() {
-    if (selectedKeyframe != null) return selectedKeyframe;
-
-    final newKeyframe = FrameModel(
-      selectedFrameNumber,
-      initialSnapshot: visibleKeyframe.snapshot,
-    );
-
-    final index = keyframes.indexOf(visibleKeyframe);
-    keyframes.insert(index + 1, newKeyframe);
-
-    _visibleKeyframe = newKeyframe;
-    notifyListeners();
-
-    return newKeyframe;
-  }
-
-  void deleteSelectedKeyframe() {
-    if (!selectedCanBeDeleted) return;
-
-    keyframes.remove(selectedKeyframe);
-    _updateVisibleKeyframe();
-
-    notifyListeners();
-  }
-
-  void _updateVisibleKeyframe() {
-    _visibleKeyframe = keyframes
-        .lastWhere((keyframe) => keyframe.number <= _selectedFrameNumber);
   }
 }

@@ -20,8 +20,7 @@ class ExportTab extends StatelessWidget {
           ),
         ),
         onPressed: () async {
-          final bytes =
-              await makeGif(timeline.keyframes, timeline.animationDuration);
+          final bytes = await makeGif(timeline.keyframes);
           await Share.file('Share GIF', 'image.gif', bytes, 'image/gif');
         },
       ),
