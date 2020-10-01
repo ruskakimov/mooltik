@@ -11,11 +11,17 @@ class TimelineModel extends ChangeNotifier {
   List<FrameModel> keyframes;
   int _selectedKeyframeId = 0;
 
+  int get selectedKeyframeId => _selectedKeyframeId;
   FrameModel get selectedKeyframe => keyframes[_selectedKeyframeId];
 
   void selectFrame(int id) {
     assert(id >= 0 && id <= keyframes.length);
     _selectedKeyframeId = id;
+    notifyListeners();
+  }
+
+  void addEmptyFrame() {
+    keyframes.insert(_selectedKeyframeId + 1, FrameModel());
     notifyListeners();
   }
 }

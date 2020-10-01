@@ -37,7 +37,7 @@ class App extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(
             create: (context) => TimelineModel(
-              initialKeyframes: [for (var i = 1; i <= 100; i++) FrameModel(i)],
+              initialKeyframes: [FrameModel()],
             ),
           ),
           ChangeNotifierProvider(create: (context) => ToolboxModel()),
