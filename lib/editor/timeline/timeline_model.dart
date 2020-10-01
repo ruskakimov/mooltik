@@ -26,6 +26,15 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addCopyFrame() {
+    keyframes.insert(
+      _selectedKeyframeId + 1,
+      FrameModel(initialSnapshot: selectedKeyframe.snapshot),
+    );
+    _selectedKeyframeId++;
+    notifyListeners();
+  }
+
   void deleteSelectedFrame() {
     if (keyframes.length <= 2) return;
 

@@ -84,6 +84,12 @@ class _TimelineState extends State<Timeline> {
                 timeline.addEmptyFrame();
               },
             ),
+            BarIconButton(
+              icon: FontAwesomeIcons.copy,
+              onTap: () {
+                timeline.addCopyFrame();
+              },
+            ),
             Spacer(),
             BarIconButton(
               icon: FontAwesomeIcons.trashAlt,
