@@ -59,18 +59,21 @@ class _TimelineState extends State<Timeline> {
     return Column(
       children: [
         Expanded(
-          child: CupertinoPicker.builder(
-            scrollController: controller,
+          child: ListWheelScrollView.useDelegate(
+            childDelegate: ListWheelChildBuilderDelegate(
+              builder: (context, index) => FrameThumbnail(
+                frame: timeline.keyframes[index],
+                size: thumbnailSize,
+              ),
+              childCount: timeline.keyframes.length,
+            ),
+            controller: controller,
             useMagnifier: false,
             diameterRatio: 2,
             squeeze: 1,
             onSelectedItemChanged: timeline.selectFrame,
             itemExtent: thumbnailSize.height,
-            childCount: timeline.keyframes.length,
-            itemBuilder: (context, index) => FrameThumbnail(
-              frame: timeline.keyframes[index],
-              size: thumbnailSize,
-            ),
+            overAndUnderCenterOpacity: 0.5,
           ),
         ),
         Row(
