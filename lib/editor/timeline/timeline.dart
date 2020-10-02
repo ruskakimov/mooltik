@@ -17,6 +17,7 @@ class Timeline extends StatefulWidget {
 class _TimelineState extends State<Timeline> {
   FixedExtentScrollController controller;
   int _selectedId;
+  double _squeeze = 1;
 
   @override
   void initState() {
@@ -45,6 +46,16 @@ class _TimelineState extends State<Timeline> {
     super.dispose();
   }
 
+  void _forceLayout() {
+    setState(() {
+      if (_squeeze == 1) {
+        _squeeze = 1.000000000000001;
+      } else {
+        _squeeze = 1;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Update when selected frame is painted on.
@@ -70,7 +81,7 @@ class _TimelineState extends State<Timeline> {
             controller: controller,
             useMagnifier: false,
             diameterRatio: 2,
-            squeeze: 1,
+            squeeze: _squeeze,
             onSelectedItemChanged: timeline.selectFrame,
             itemExtent: thumbnailSize.height,
             overAndUnderCenterOpacity: 0.5,
@@ -82,12 +93,14 @@ class _TimelineState extends State<Timeline> {
               icon: FontAwesomeIcons.plusCircle,
               onTap: () {
                 timeline.addEmptyFrame();
+                _forceLayout();
               },
             ),
             BarIconButton(
               icon: FontAwesomeIcons.copy,
               onTap: () {
                 timeline.addCopyFrame();
+                _forceLayout();
               },
             ),
             Spacer(),
