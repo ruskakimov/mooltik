@@ -36,7 +36,7 @@ class TimelineModel extends ChangeNotifier {
   }
 
   void deleteSelectedFrame() {
-    if (keyframes.length <= 2) return;
+    if (keyframes.length == 1) return;
 
     keyframes.removeAt(_selectedKeyframeId);
     if (_selectedKeyframeId != 0) _selectedKeyframeId--;
