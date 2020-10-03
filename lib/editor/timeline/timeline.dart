@@ -82,7 +82,10 @@ class _TimelineState extends State<Timeline> {
             useMagnifier: false,
             diameterRatio: 2,
             squeeze: _squeeze,
-            onSelectedItemChanged: timeline.selectFrame,
+            onSelectedItemChanged: (int index) {
+              timeline.selectFrame(index);
+              _selectedId = index;
+            },
             itemExtent: thumbnailSize.height,
             overAndUnderCenterOpacity: 0.5,
           ),
