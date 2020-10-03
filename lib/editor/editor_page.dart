@@ -43,16 +43,21 @@ class EditorPage extends StatelessWidget {
               Positioned.fill(
                 child: Easel(),
               ),
-              if (!timeline.playing)
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: EditorDrawer(),
-                ),
-              if (!timeline.playing)
-                Align(
-                  alignment: Alignment.topRight,
+              Align(
+                alignment: Alignment.topLeft,
+                child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 200),
+                    opacity: timeline.playing ? 0 : 1,
+                    child: EditorDrawer()),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: AnimatedOpacity(
+                  duration: Duration(milliseconds: 200),
+                  opacity: timeline.playing ? 0 : 1,
                   child: ToolBar(),
                 ),
+              ),
               if (timeline.playing)
                 Listener(
                   behavior: HitTestBehavior.opaque,
