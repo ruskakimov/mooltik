@@ -12,24 +12,19 @@ class HoveringIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Transform.translate(
-          offset: Offset(2, 2),
-          child: Icon(
-            icon,
-            color: onTap != null ? Colors.blueGrey : Colors.transparent,
-          ),
+    return Transform.scale(
+      scale: 0.6,
+      child: Container(
+        decoration: ShapeDecoration(
+          color: Colors.grey.withOpacity(0.5),
+          shape: CircleBorder(),
         ),
-        IconButton(
-          icon: Icon(
-            icon,
-            color: Colors.white,
-          ),
+        child: IconButton(
+          icon: Icon(icon),
+          color: Colors.white,
           onPressed: onTap,
         ),
-      ],
+      ),
     );
   }
 }
