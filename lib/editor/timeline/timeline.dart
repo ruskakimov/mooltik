@@ -72,9 +72,13 @@ class _TimelineState extends State<Timeline> {
         Expanded(
           child: ListWheelScrollView.useDelegate(
             childDelegate: ListWheelChildBuilderDelegate(
-              builder: (context, index) => FrameThumbnail(
-                frame: timeline.keyframes[index],
-                size: thumbnailSize,
+              builder: (context, index) => AnimatedOpacity(
+                duration: Duration(milliseconds: 100),
+                opacity: index == _selectedId ? 1 : 0.5,
+                child: FrameThumbnail(
+                  frame: timeline.keyframes[index],
+                  size: thumbnailSize,
+                ),
               ),
               childCount: timeline.keyframes.length,
             ),
@@ -87,7 +91,7 @@ class _TimelineState extends State<Timeline> {
               _selectedId = index;
             },
             itemExtent: thumbnailSize.height,
-            overAndUnderCenterOpacity: 0.5,
+            physics: BouncingScrollPhysics(),
           ),
         ),
         Row(
