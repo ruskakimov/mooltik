@@ -30,7 +30,7 @@ class _TimelineState extends State<Timeline> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final timeline = context.read<TimelineModel>();
-    if (timeline.selectedKeyframeId != _selectedId) {
+    if (!timeline.playing && timeline.selectedKeyframeId != _selectedId) {
       _selectedId = timeline.selectedKeyframeId;
       controller.animateToItem(
         _selectedId,
