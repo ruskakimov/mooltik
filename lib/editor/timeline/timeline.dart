@@ -98,6 +98,7 @@ class _TimelineState extends State<Timeline> {
           ),
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             BarIconButton(
               icon: FontAwesomeIcons.plusCircle,
@@ -113,7 +114,6 @@ class _TimelineState extends State<Timeline> {
                 _forceLayout();
               },
             ),
-            Spacer(),
             BarIconButton(
               icon: FontAwesomeIcons.trashAlt,
               onTap: () {
