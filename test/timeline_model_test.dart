@@ -79,5 +79,45 @@ void main() {
         model.stop();
       });
     });
+
+    test('should loop animation correctly', () {
+      final model = TimelineModel(initialKeyframes: [
+        FrameModel()..duration = 24,
+        FrameModel()..duration = 12,
+        FrameModel()..duration = 6,
+      ]);
+
+      FakeAsync().run((async) {
+        model.play();
+
+        void loop() {
+          expect(model.selectedKeyframeId, 0);
+          async.elapse(Duration(milliseconds: 999));
+          expect(model.selectedKeyframeId, 0);
+          async.elapse(Duration(milliseconds: 1));
+
+          expect(model.selectedKeyframeId, 1);
+          async.elapse(Duration(milliseconds: 499));
+          expect(model.selectedKeyframeId, 1);
+          async.elapse(Duration(milliseconds: 1));
+
+          expect(model.selectedKeyframeId, 2);
+          async.elapse(Duration(milliseconds: 249));
+          expect(model.selectedKeyframeId, 2);
+          async.elapse(Duration(milliseconds: 1));
+
+          expect(model.selectedKeyframeId, 0);
+        }
+
+        loop();
+        loop();
+        loop();
+        loop();
+        loop();
+        loop();
+
+        model.stop();
+      });
+    });
   });
 }
