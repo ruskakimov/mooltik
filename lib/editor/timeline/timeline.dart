@@ -78,7 +78,9 @@ class _TimelineState extends State<Timeline> {
           children: [
             BarIconButton(
               icon: FontAwesomeIcons.minus,
-              onTap: () {},
+              onTap: () {
+                timeline.setSelectedFrameDuration(selectedFrameDuration - 1);
+              },
             ),
             Text(
               '$selectedFrameDuration frame${selectedFrameDuration == 1 ? '' : 's'}',
@@ -86,7 +88,9 @@ class _TimelineState extends State<Timeline> {
             ),
             BarIconButton(
               icon: FontAwesomeIcons.plus,
-              onTap: () {},
+              onTap: () {
+                timeline.setSelectedFrameDuration(selectedFrameDuration + 1);
+              },
             ),
           ],
         ),

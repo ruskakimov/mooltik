@@ -37,6 +37,10 @@ class FrameModel extends ChangeNotifier {
 
   int get duration => _duration;
   int _duration;
+  set duration(int value) {
+    _duration = value;
+    notifyListeners();
+  }
 
   void undo() {
     if (undoAvailable) {

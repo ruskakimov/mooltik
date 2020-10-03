@@ -75,4 +75,10 @@ class TimelineModel extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void setSelectedFrameDuration(int value) {
+    if (value < 1) return;
+    selectedKeyframe.duration = value;
+    notifyListeners();
+  }
 }
