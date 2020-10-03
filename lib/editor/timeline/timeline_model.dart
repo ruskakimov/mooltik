@@ -17,8 +17,10 @@ class TimelineModel extends ChangeNotifier {
 
   bool get playing => _playing;
   bool _playing = false;
+  int _selectedKeyframeIdBeforePlaying;
 
   void play() {
+    _selectedKeyframeIdBeforePlaying = _selectedKeyframeId;
     _playing = true;
     _animate();
     notifyListeners();
@@ -40,6 +42,7 @@ class TimelineModel extends ChangeNotifier {
 
   void stop() {
     _playing = false;
+    _selectedKeyframeId = _selectedKeyframeIdBeforePlaying;
     notifyListeners();
   }
 
