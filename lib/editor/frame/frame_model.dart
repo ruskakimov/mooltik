@@ -16,7 +16,8 @@ class FrameModel extends ChangeNotifier {
   FrameModel({ui.Image initialSnapshot})
       : unrasterizedStrokes = [],
         _snapshots = [initialSnapshot],
-        _selectedSnapshotId = 0;
+        _selectedSnapshotId = 0,
+        _duration = 1;
 
   final List<Stroke> unrasterizedStrokes;
 
@@ -33,6 +34,9 @@ class FrameModel extends ChangeNotifier {
   bool get undoAvailable => _selectedSnapshotId > 0;
 
   bool get redoAvailable => _selectedSnapshotId + 1 < _snapshots.length;
+
+  int get duration => _duration;
+  int _duration;
 
   void undo() {
     if (undoAvailable) {
