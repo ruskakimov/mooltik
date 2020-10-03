@@ -69,9 +69,27 @@ class _TimelineState extends State<Timeline> {
           timeline.keyframes.first.width *
           timeline.keyframes.first.height,
     );
+    final selectedFrameDuration = timeline.selectedKeyframe.duration;
 
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            BarIconButton(
+              icon: FontAwesomeIcons.minus,
+              onTap: () {},
+            ),
+            Text(
+              '$selectedFrameDuration frame${selectedFrameDuration == 1 ? '' : 's'}',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            BarIconButton(
+              icon: FontAwesomeIcons.plus,
+              onTap: () {},
+            ),
+          ],
+        ),
         Expanded(
           child: ListWheelScrollView.useDelegate(
             childDelegate: ListWheelChildBuilderDelegate(
