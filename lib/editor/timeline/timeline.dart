@@ -62,9 +62,12 @@ class _TimelineState extends State<Timeline> {
     context.watch<FrameModel>();
 
     final timeline = context.watch<TimelineModel>();
+    final _thumbnailHeight = 150.0;
     final thumbnailSize = Size(
-      150,
-      150 / timeline.keyframes.first.width * timeline.keyframes.first.height,
+      _thumbnailHeight,
+      _thumbnailHeight /
+          timeline.keyframes.first.width *
+          timeline.keyframes.first.height,
     );
 
     return Column(
