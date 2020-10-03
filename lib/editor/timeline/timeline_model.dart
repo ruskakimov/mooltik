@@ -18,6 +18,16 @@ class TimelineModel extends ChangeNotifier {
   bool get playing => _playing;
   bool _playing = false;
 
+  void play() {
+    _playing = true;
+    notifyListeners();
+  }
+
+  void stop() {
+    _playing = false;
+    notifyListeners();
+  }
+
   void selectFrame(int id) {
     assert(id >= 0 && id <= keyframes.length);
     _selectedKeyframeId = id;

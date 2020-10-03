@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
+import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/drawer/export_tab.dart';
 import 'package:mooltik/editor/easel/hovering_icon_button.dart';
@@ -109,6 +110,8 @@ class _EditorDrawerState extends State<EditorDrawer>
   }
 
   Widget _buildDrawerBar() {
+    final timeline = context.watch<TimelineModel>();
+
     return Container(
       color: Colors.blueGrey[700],
       child: Column(
@@ -121,7 +124,7 @@ class _EditorDrawerState extends State<EditorDrawer>
           Spacer(),
           BarIconButton(
             icon: FontAwesomeIcons.play,
-            onTap: () {},
+            onTap: timeline.play,
           ),
           Spacer(),
           BarIconButton(
