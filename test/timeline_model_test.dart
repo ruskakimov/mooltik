@@ -16,7 +16,7 @@ void main() {
       expect(model.playing, isFalse);
     });
 
-    test('should show frames in sequence with correct duration', () {
+    test('should show frames in sequence with correct duration (2 frames)', () {
       final model = TimelineModel(initialKeyframes: [
         FrameModel()..duration = 24,
         FrameModel()..duration = 12,
@@ -33,6 +33,48 @@ void main() {
         async.elapse(Duration(milliseconds: 499));
         expect(model.selectedKeyframeId, 1);
         async.elapse(Duration(milliseconds: 1));
+
+        expect(model.selectedKeyframeId, 0);
+        model.stop();
+      });
+    });
+
+    test('should show frames in sequence with correct duration (5 frames)', () {
+      final model = TimelineModel(initialKeyframes: [
+        FrameModel()..duration = 6,
+        FrameModel()..duration = 12,
+        FrameModel()..duration = 6,
+        FrameModel()..duration = 48,
+        FrameModel()..duration = 6,
+      ]);
+
+      FakeAsync().run((async) {
+        model.play();
+        expect(model.selectedKeyframeId, 0);
+        async.elapse(Duration(milliseconds: 249));
+        expect(model.selectedKeyframeId, 0);
+        async.elapse(Duration(milliseconds: 1));
+
+        expect(model.selectedKeyframeId, 1);
+        async.elapse(Duration(milliseconds: 499));
+        expect(model.selectedKeyframeId, 1);
+        async.elapse(Duration(milliseconds: 1));
+
+        expect(model.selectedKeyframeId, 2);
+        async.elapse(Duration(milliseconds: 249));
+        expect(model.selectedKeyframeId, 2);
+        async.elapse(Duration(milliseconds: 1));
+
+        expect(model.selectedKeyframeId, 3);
+        async.elapse(Duration(milliseconds: 1999));
+        expect(model.selectedKeyframeId, 3);
+        async.elapse(Duration(milliseconds: 1));
+
+        expect(model.selectedKeyframeId, 4);
+        async.elapse(Duration(milliseconds: 249));
+        expect(model.selectedKeyframeId, 4);
+        async.elapse(Duration(milliseconds: 1));
+
         expect(model.selectedKeyframeId, 0);
         model.stop();
       });
