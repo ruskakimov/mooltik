@@ -119,5 +119,37 @@ void main() {
         model.stop();
       });
     });
+
+    test('should notify listeners at the right time, with the right id', () {
+      final model = TimelineModel(initialKeyframes: [
+        FrameModel()..duration = 2,
+        FrameModel()..duration = 2,
+        FrameModel()..duration = 2,
+        FrameModel()..duration = 2,
+        FrameModel()..duration = 2,
+        FrameModel()..duration = 2,
+      ]);
+
+      FakeAsync().run((async) {
+        final clock = async.getClock(DateTime.fromMillisecondsSinceEpoch(0));
+
+        String timestamps = '';
+
+        model.addListener(() {
+          timestamps += model.selectedKeyframeId.toString() +
+              '-' +
+              clock.now().millisecondsSinceEpoch.toString() +
+              ';';
+        });
+
+        model.play();
+
+        async.elapse(Duration(seconds: 2));
+        expect(timestamps,
+            '0-0;1-83;2-166;3-249;4-332;5-415;0-498;1-581;2-664;3-747;4-830;5-913;0-996;1-1079;2-1162;3-1245;4-1328;5-1411;0-1494;1-1577;2-1660;3-1743;4-1826;5-1909;0-1992;');
+
+        model.stop();
+      });
+    });
   });
 }
