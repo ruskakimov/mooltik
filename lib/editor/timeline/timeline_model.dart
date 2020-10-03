@@ -20,7 +20,22 @@ class TimelineModel extends ChangeNotifier {
 
   void play() {
     _playing = true;
+    _animate();
     notifyListeners();
+  }
+
+  Duration _calcDuration(int frames, int fps) =>
+      Duration(milliseconds: (1000 * frames / fps).round());
+
+  void _animate() async {
+    if (!_playing) return;
+    await Future.delayed(_calcDuration(selectedKeyframe.duration, 24));
+    if (!_playing) return;
+
+    _selectedKeyframeId = (_selectedKeyframeId + 1) % keyframes.length;
+    notifyListeners();
+
+    _animate();
   }
 
   void stop() {
