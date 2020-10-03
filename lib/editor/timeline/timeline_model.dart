@@ -9,10 +9,14 @@ class TimelineModel extends ChangeNotifier {
         keyframes = initialKeyframes;
 
   List<FrameModel> keyframes;
-  int _selectedKeyframeId = 0;
 
   int get selectedKeyframeId => _selectedKeyframeId;
+  int _selectedKeyframeId = 0;
+
   FrameModel get selectedKeyframe => keyframes[_selectedKeyframeId];
+
+  bool get playing => _playing;
+  bool _playing = false;
 
   void selectFrame(int id) {
     assert(id >= 0 && id <= keyframes.length);
