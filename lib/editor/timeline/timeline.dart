@@ -22,7 +22,7 @@ class _TimelineState extends State<Timeline> {
   @override
   void initState() {
     super.initState();
-    _selectedId = 0;
+    _selectedId = context.read<TimelineModel>().selectedKeyframeId;
     controller = FixedExtentScrollController(initialItem: _selectedId);
   }
 
