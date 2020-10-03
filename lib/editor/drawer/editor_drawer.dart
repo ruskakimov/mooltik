@@ -120,6 +120,11 @@ class _EditorDrawerState extends State<EditorDrawer>
           ),
           Spacer(),
           BarIconButton(
+            icon: FontAwesomeIcons.play,
+            onTap: () {},
+          ),
+          Spacer(),
+          BarIconButton(
             icon: FontAwesomeIcons.fileDownload,
             selected: open && _selectedTabIndex == 1,
             onTap: () => _onTabTap(1),
