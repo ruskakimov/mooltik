@@ -10,7 +10,7 @@ Future<List<int>> makeGif(List<FrameModel> keyframes) async {
     throw ArgumentError.value(keyframes, 'frames', 'should not be empty');
   }
 
-  final encoder = GifEncoder();
+  final encoder = GifEncoder(samplingFactor: 1000);
 
   for (final frame in keyframes) {
     final img = await imageFromFrame(frame);
