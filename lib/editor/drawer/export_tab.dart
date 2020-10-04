@@ -1,7 +1,11 @@
-import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mooltik/editor/gif.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class ExportTab extends StatelessWidget {
@@ -20,8 +24,13 @@ class ExportTab extends StatelessWidget {
           ),
         ),
         onPressed: () async {
-          final bytes = await makeGif(timeline.keyframes);
-          await Share.file('Share GIF', 'image.gif', bytes, 'image/gif');
+          if (await Permission.storage.request().isGranted) {
+            final bytes = await makeGif(timeline.keyframes);
+            final dir = await getTemporaryDirectory();
+            final file = File(dir.path + '/animation.gif');
+            await file.writeAsBytes(bytes);
+            await ImageGallerySaver.saveFile(file.path);
+          }
         },
       ),
     );

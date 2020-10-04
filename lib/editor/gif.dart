@@ -12,18 +12,10 @@ Future<List<int>> makeGif(List<FrameModel> keyframes) async {
 
   final encoder = GifEncoder();
 
-  // for (var i = 1; i < keyframes.length; i++) {
-  //   final frame = keyframes[i - 1];
-  //   final frameDuration = keyframes[i].number - frame.number;
-  //   final img = await imageFromFrame(frame);
-  //   encoder.addFrame(img, duration: 4 * frameDuration);
-  // }
-
-  // // TODO: Handle the case when frames are outside animation duration.
-  // final lastFrame = keyframes.last;
-  // final lastFrameDuration = animationDuration + 1 - lastFrame.number;
-  // final img = await imageFromFrame(lastFrame);
-  // encoder.addFrame(img, duration: 4 * lastFrameDuration);
+  for (final frame in keyframes) {
+    final img = await imageFromFrame(frame);
+    encoder.addFrame(img, duration: 4 * frame.duration);
+  }
 
   return encoder.finish();
 }

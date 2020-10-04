@@ -29,7 +29,9 @@ dependencies:
       url: git://github.com/ruskakimov/image.git
       ref: gif_variable_fps
   provider: ^4.3.2+2
-  esys_flutter_share: ^1.0.2
+  path_provider: ^1.6.18
+  image_gallery_saver: ^1.5.0
+  permission_handler: ^5.0.1+1
   flutter_colorpicker: ^0.3.4
   font_awesome_flutter: ^8.8.1
   after_init: ^0.1.2
