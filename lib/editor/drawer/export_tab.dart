@@ -30,7 +30,7 @@ class _ExportTabState extends State<ExportTab> {
     return Center(
       child: RaisedButton(
         child: Text(
-          'Export GIF',
+          'Save GIF',
           style: TextStyle(
             color: Colors.blueGrey[900],
             fontWeight: FontWeight.bold,
