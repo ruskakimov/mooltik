@@ -36,6 +36,7 @@ dependencies:
   font_awesome_flutter: ^8.8.1
   after_init: ^0.1.2
   vibration: ^1.5.0
+  flutter_ffmpeg: ^0.3.0
 
 dev_dependencies:
   flutter_test:
