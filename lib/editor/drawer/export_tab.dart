@@ -28,32 +28,36 @@ class _ExportTabState extends State<ExportTab> {
 
     final timeline = context.watch<TimelineModel>();
     return Center(
-      child: RaisedButton(
-        child: Text(
-          'Save GIF',
-          style: TextStyle(
-            color: Colors.blueGrey[900],
-            fontWeight: FontWeight.bold,
-          ),
+      child: _buildSaveGifButton(timeline),
+    );
+  }
+
+  Widget _buildSaveGifButton(TimelineModel timeline) {
+    return RaisedButton(
+      child: Text(
+        'Save GIF',
+        style: TextStyle(
+          color: Colors.blueGrey[900],
+          fontWeight: FontWeight.bold,
         ),
-        onPressed: () async {
-          setState(() {
-            _saving = true;
-          });
-
-          if (await Permission.storage.request().isGranted) {
-            final bytes = await makeGif(timeline.keyframes);
-            final dir = await getTemporaryDirectory();
-            final file = File(dir.path + '/animation.gif');
-            await file.writeAsBytes(bytes);
-            await ImageGallerySaver.saveFile(file.path);
-          }
-
-          setState(() {
-            _saving = false;
-          });
-        },
       ),
+      onPressed: () async {
+        setState(() {
+          _saving = true;
+        });
+
+        if (await Permission.storage.request().isGranted) {
+          final bytes = await makeGif(timeline.keyframes);
+          final dir = await getTemporaryDirectory();
+          final file = File(dir.path + '/animation.gif');
+          await file.writeAsBytes(bytes);
+          await ImageGallerySaver.saveFile(file.path);
+        }
+
+        setState(() {
+          _saving = false;
+        });
+      },
     );
   }
 }
