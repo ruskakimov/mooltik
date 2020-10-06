@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/gif.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:path_provider/path_provider.dart';
@@ -28,36 +29,67 @@ class _ExportTabState extends State<ExportTab> {
 
     final timeline = context.watch<TimelineModel>();
     return Center(
-      child: _buildSaveGifButton(timeline),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          RaisedButton(
+            child: Text(
+              'Save GIF',
+              style: TextStyle(
+                color: Colors.blueGrey[900],
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onPressed: () async {
+              setState(() {
+                _saving = true;
+              });
+              await _saveGif(timeline.keyframes);
+              setState(() {
+                _saving = false;
+              });
+            },
+          ),
+          RaisedButton(
+            child: Text(
+              'Save video',
+              style: TextStyle(
+                color: Colors.blueGrey[900],
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onPressed: () async {
+              setState(() {
+                _saving = true;
+              });
+              await _saveVideo(timeline.keyframes);
+              setState(() {
+                _saving = false;
+              });
+            },
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildSaveGifButton(TimelineModel timeline) {
-    return RaisedButton(
-      child: Text(
-        'Save GIF',
-        style: TextStyle(
-          color: Colors.blueGrey[900],
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      onPressed: () async {
-        setState(() {
-          _saving = true;
-        });
+  Future<void> _saveGif(List<FrameModel> keyframes) async {
+    if (await Permission.storage.request().isGranted) {
+      final bytes = await makeGif(keyframes);
+      final dir = await getTemporaryDirectory();
+      final file = File(dir.path + '/animation.gif');
+      await file.writeAsBytes(bytes);
+      await ImageGallerySaver.saveFile(file.path);
+    }
+  }
 
-        if (await Permission.storage.request().isGranted) {
-          final bytes = await makeGif(timeline.keyframes);
-          final dir = await getTemporaryDirectory();
-          final file = File(dir.path + '/animation.gif');
-          await file.writeAsBytes(bytes);
-          await ImageGallerySaver.saveFile(file.path);
-        }
-
-        setState(() {
-          _saving = false;
-        });
-      },
-    );
+  Future<void> _saveVideo(List<FrameModel> keyframes) async {
+    if (await Permission.storage.request().isGranted) {
+      // final bytes = await makeGif(keyframes);
+      // final dir = await getTemporaryDirectory();
+      // final file = File(dir.path + '/animation.gif');
+      // await file.writeAsBytes(bytes);
+      // await ImageGallerySaver.saveFile(file.path);
+    }
   }
 }
