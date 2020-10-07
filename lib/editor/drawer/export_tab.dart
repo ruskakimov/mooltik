@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/gif.dart';
@@ -85,11 +86,16 @@ class _ExportTabState extends State<ExportTab> {
 
   Future<void> _saveVideo(List<FrameModel> keyframes) async {
     if (await Permission.storage.request().isGranted) {
-      // final bytes = await makeGif(keyframes);
-      // final dir = await getTemporaryDirectory();
-      // final file = File(dir.path + '/animation.gif');
-      // await file.writeAsBytes(bytes);
-      // await ImageGallerySaver.saveFile(file.path);
+      final dir = await getTemporaryDirectory();
+      final gif = File(dir.path + '/animation.gif');
+      final video = File(dir.path + '/mooltik_video2.mp4');
+
+      final ffmpeg = FlutterFFmpeg();
+      final rc = await ffmpeg.execute(
+          '-i ${gif.path} -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" ${video.path}');
+      print('>>> result: $rc');
+
+      await ImageGallerySaver.saveFile(video.path);
     }
   }
 }
