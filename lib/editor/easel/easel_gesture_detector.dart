@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 typedef void StrokeStartCallback(Offset position);
 typedef void StrokeUpdateCallback(Offset position);
 
+const veryQuickStrokeMaxDuration = Duration(milliseconds: 500);
+
 class EaselGestureDetector extends StatefulWidget {
   EaselGestureDetector({
     Key key,
@@ -83,7 +85,7 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
 
     _veryQuickStroke = true;
 
-    Future.delayed(Duration(milliseconds: 200), () {
+    Future.delayed(veryQuickStrokeMaxDuration, () {
       _veryQuickStroke = false;
     });
 
