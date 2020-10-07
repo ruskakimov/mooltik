@@ -107,17 +107,19 @@ class _ExportTabState extends State<ExportTab> {
       final concatDemuxer = File(dir.path + '/concat.txt');
       String content = '';
       for (int i = 0; i < keyframes.length; i++) {
-        content += 'file \'${pngFiles[i].path}\'\nduration 1\n';
+        final durationInSeconds = keyframes[i].duration / 24.0;
+        content +=
+            'file \'${pngFiles[i].path}\'\nduration ${durationInSeconds.toStringAsFixed(6)}\n';
       }
-      content += 'file \'${pngFiles.last.path}\'\nduration 1\n';
+      content += 'file \'${pngFiles.last.path}\'';
       await concatDemuxer.writeAsString(content);
 
       // Output video file.
-      final video = File(dir.path + '/mooltik_video3.mp4');
+      final video = File(dir.path + '/mooltik_video.mp4');
 
       final ffmpeg = FlutterFFmpeg();
       final rc = await ffmpeg.execute(
-          '-f concat -safe 0 -i ${concatDemuxer.path} -vf fps=24 -pix_fmt yuv420p ${video.path}');
+          '-y -f concat -safe 0 -i ${concatDemuxer.path} -vf fps=24 -pix_fmt yuv420p ${video.path}');
       print('>>> result: $rc');
 
       await ImageGallerySaver.saveFile(video.path);
