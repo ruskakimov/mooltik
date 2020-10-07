@@ -70,6 +70,9 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
               _veryQuickStroke = false;
               widget.onStrokeCancel?.call();
               _startedStroke = false;
+            } else if (_startedStroke) {
+              widget.onStrokeEnd?.call();
+              _startedStroke = false;
             }
 
             widget.onScaleUpdate?.call(details);
