@@ -41,7 +41,7 @@ class FramePainter extends CustomPainter {
         canvas,
         strokes.last.lastPoint,
         strokes.last.width / 2,
-        1 / scale,
+        0.5 / scale,
       );
     }
 
@@ -66,7 +66,8 @@ class FramePainter extends CustomPainter {
       radius,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = lineWidth,
+        ..strokeWidth = lineWidth
+        ..color = Colors.grey.withOpacity(0.5),
     );
   }
 }
