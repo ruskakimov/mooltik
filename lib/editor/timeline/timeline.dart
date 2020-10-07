@@ -163,7 +163,7 @@ class FrameThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       size: size,
-      painter: FramePainter(frame),
+      painter: FramePainter(frame: frame),
     );
   }
 }

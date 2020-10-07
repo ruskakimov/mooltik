@@ -35,6 +35,6 @@ Future<Image> imageFromFrame(FrameModel frame) async {
 ui.Picture pictureFromFrame(FrameModel frame) {
   final recorder = ui.PictureRecorder();
   final canvas = ui.Canvas(recorder);
-  FramePainter(frame).paint(canvas, ui.Size(frame.width, frame.height));
+  FramePainter(frame: frame).paint(canvas, ui.Size(frame.width, frame.height));
   return recorder.endRecording();
 }

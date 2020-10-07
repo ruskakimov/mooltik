@@ -10,10 +10,16 @@ class Stroke {
 
   final Paint paint;
   final Path _path;
-  Offset _lastPoint;
-  bool _extended = false;
 
   Rect get boundingRect => _path.getBounds().inflate(paint.strokeWidth);
+
+  Offset get lastPoint => _lastPoint;
+  Offset _lastPoint;
+
+  bool get extended => _extended;
+  bool _extended = false;
+
+  double get width => paint.strokeWidth;
 
   void extend(Offset point) {
     _extended = true;

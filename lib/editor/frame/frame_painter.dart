@@ -4,10 +4,15 @@ import 'package:mooltik/editor/frame/stroke.dart';
 import 'frame_model.dart';
 
 class FramePainter extends CustomPainter {
-  FramePainter(this.frame, {this.strokes});
+  FramePainter({
+    @required this.frame,
+    this.strokes,
+    this.showCursor = false,
+  });
 
   final FrameModel frame;
   final List<Stroke> strokes;
+  final bool showCursor;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -28,7 +33,17 @@ class FramePainter extends CustomPainter {
 
     frame.unrasterizedStrokes.forEach((stroke) => stroke.paintOn(canvas));
 
-    strokes?.forEach((stroke) => stroke?.paintOn(canvas));
+    strokes?.forEach((stroke) => stroke.paintOn(canvas));
+
+    if (showCursor && strokes.isNotEmpty) {
+      final scale = size.width / frame.width;
+      _drawCursor(
+        canvas,
+        strokes.last.lastPoint,
+        strokes.last.width / 2,
+        1 / scale,
+      );
+    }
 
     // Flatten layer. Combine drawing lines with erasing lines.
     canvas.restore();
@@ -39,4 +54,19 @@ class FramePainter extends CustomPainter {
 
   @override
   bool shouldRebuildSemantics(FramePainter oldDelegate) => false;
+
+  void _drawCursor(
+    Canvas canvas,
+    Offset center,
+    double radius,
+    double lineWidth,
+  ) {
+    canvas.drawCircle(
+      center,
+      radius,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = lineWidth,
+    );
+  }
 }

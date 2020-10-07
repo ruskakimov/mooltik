@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/easel/easel_model.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
-import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:provider/provider.dart';
 import 'package:after_init/after_init.dart';
 
@@ -49,8 +48,11 @@ class _EaselState extends State<Easel> with AfterInitMixin<Easel> {
               child: RepaintBoundary(
                 child: CustomPaint(
                   foregroundPainter: FramePainter(
-                    frame,
-                    strokes: [easel.currentStroke],
+                    frame: frame,
+                    strokes: [
+                      if (easel.currentStroke != null) easel.currentStroke,
+                    ],
+                    showCursor: true,
                   ),
                   child: Container(
                     color: Colors.white,
