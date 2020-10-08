@@ -93,6 +93,7 @@ class _TimelineState extends State<Timeline> {
                 child: FrameThumbnail(
                   frame: timeline.keyframes[index],
                   size: thumbnailSize,
+                  number: index + 1,
                 ),
               ),
               childCount: timeline.keyframes.length,
@@ -135,16 +136,31 @@ class FrameThumbnail extends StatelessWidget {
     Key key,
     @required this.size,
     @required this.frame,
+    @required this.number,
   }) : super(key: key);
 
   final Size size;
   final FrameModel frame;
+  final int number;
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      size: size,
-      painter: FramePainter(frame: frame),
+    return Stack(
+      children: [
+        CustomPaint(
+          size: size,
+          painter: FramePainter(frame: frame),
+        ),
+        Positioned(
+          top: 2,
+          left: 2,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 2),
+            color: Colors.blueGrey[800],
+            child: Text('$number', style: TextStyle(fontSize: 10)),
+          ),
+        ),
+      ],
     );
   }
 }
