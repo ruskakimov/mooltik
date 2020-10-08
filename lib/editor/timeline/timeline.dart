@@ -160,6 +160,15 @@ class FrameThumbnail extends StatelessWidget {
             child: Text('$number', style: TextStyle(fontSize: 10)),
           ),
         ),
+        Positioned(
+          top: 2,
+          right: 2,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 2),
+            color: Colors.amber,
+            child: Text('${frame.duration}', style: TextStyle(fontSize: 10)),
+          ),
+        ),
       ],
     );
   }
