@@ -62,10 +62,10 @@ class _TimelineState extends State<Timeline> {
     context.watch<FrameModel>();
 
     final timeline = context.watch<TimelineModel>();
-    final _thumbnailHeight = 150.0;
+    final _thumbnailWidth = 104.0;
     final thumbnailSize = Size(
-      _thumbnailHeight,
-      _thumbnailHeight /
+      _thumbnailWidth,
+      _thumbnailWidth /
           timeline.keyframes.first.width *
           timeline.keyframes.first.height,
     );
@@ -74,22 +74,12 @@ class _TimelineState extends State<Timeline> {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             BarIconButton(
-              icon: FontAwesomeIcons.minus,
+              icon: FontAwesomeIcons.trashAlt,
               onTap: () {
-                timeline.setSelectedFrameDuration(selectedFrameDuration - 1);
-              },
-            ),
-            Text(
-              '$selectedFrameDuration frame${selectedFrameDuration == 1 ? '' : 's'}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            BarIconButton(
-              icon: FontAwesomeIcons.plus,
-              onTap: () {
-                timeline.setSelectedFrameDuration(selectedFrameDuration + 1);
+                timeline.deleteSelectedFrame();
               },
             ),
           ],
@@ -123,23 +113,14 @@ class _TimelineState extends State<Timeline> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             BarIconButton(
-              icon: FontAwesomeIcons.plusCircle,
+              icon: FontAwesomeIcons.minusSquare,
+              onTap: () {},
+            ),
+            BarIconButton(
+              icon: FontAwesomeIcons.plusSquare,
               onTap: () {
                 timeline.addEmptyFrame();
                 _forceLayout();
-              },
-            ),
-            BarIconButton(
-              icon: FontAwesomeIcons.copy,
-              onTap: () {
-                timeline.addCopyFrame();
-                _forceLayout();
-              },
-            ),
-            BarIconButton(
-              icon: FontAwesomeIcons.trashAlt,
-              onTap: () {
-                timeline.deleteSelectedFrame();
               },
             ),
           ],
