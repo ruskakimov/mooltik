@@ -26,19 +26,20 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Duration _calcDuration(int frames, int fps) =>
-      Duration(milliseconds: (1000 * frames / fps).round());
-
   void _animate() async {
     if (!_playing) return;
     await Future.delayed(_calcDuration(selectedFrame.duration, 24));
     if (!_playing) return;
 
-    _selectedFrameId = (_selectedFrameId + 1) % frames.length;
+    _selectedFrameId =
+        (_selectedFrameId + selectedFrame.duration) % frames.length;
     notifyListeners();
 
     _animate();
   }
+
+  Duration _calcDuration(int frames, int fps) =>
+      Duration(milliseconds: (1000 * frames / fps).round());
 
   void stop() {
     _playing = false;
@@ -52,18 +53,18 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addEmptyFrame() {
-    frames.insert(_selectedFrameId + 1, FrameModel());
-    _selectedFrameId++;
+  void addFrameSlot() {
+    frames.insert(_selectedFrameId + 1, null);
+    // TODO: Update visible frame duration.
     notifyListeners();
   }
 
-  void addCopyFrame() {
-    frames.insert(
-      _selectedFrameId + 1,
-      FrameModel(initialSnapshot: selectedFrame.snapshot),
-    );
-    _selectedFrameId++;
+  void removeFrameSlot() {
+    if (selectedFrame == frames.last) return;
+    if (frames[_selectedFrameId + 1] != null) return;
+
+    frames.removeAt(_selectedFrameId + 1);
+    // TODO: Update visible frame duration.
     notifyListeners();
   }
 

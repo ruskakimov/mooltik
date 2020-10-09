@@ -125,14 +125,12 @@ class _TimelineState extends State<Timeline> {
             BarIconButton(
               icon: FontAwesomeIcons.plusCircle,
               onTap: () {
-                timeline.addEmptyFrame();
                 _forceLayout();
               },
             ),
             BarIconButton(
               icon: FontAwesomeIcons.copy,
               onTap: () {
-                timeline.addCopyFrame();
                 _forceLayout();
               },
             ),
