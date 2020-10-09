@@ -158,7 +158,9 @@ class FrameThumbnail extends StatelessWidget {
           Container(
             height: size.height,
             width: size.width,
-            color: Colors.red,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white),
+            ),
           ),
         Positioned(
           top: 2,
