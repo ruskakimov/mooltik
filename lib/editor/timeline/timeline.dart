@@ -22,7 +22,7 @@ class _TimelineState extends State<Timeline> {
   @override
   void initState() {
     super.initState();
-    _selectedId = context.read<TimelineModel>().selectedKeyframeId;
+    _selectedId = context.read<TimelineModel>().selectedFrameId;
     controller = FixedExtentScrollController(initialItem: _selectedId);
   }
 
@@ -30,8 +30,8 @@ class _TimelineState extends State<Timeline> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final timeline = context.read<TimelineModel>();
-    if (!timeline.playing && timeline.selectedKeyframeId != _selectedId) {
-      _selectedId = timeline.selectedKeyframeId;
+    if (!timeline.playing && timeline.selectedFrameId != _selectedId) {
+      _selectedId = timeline.selectedFrameId;
       controller.animateToItem(
         _selectedId,
         duration: Duration(milliseconds: 100),
@@ -66,10 +66,10 @@ class _TimelineState extends State<Timeline> {
     final thumbnailSize = Size(
       _thumbnailHeight,
       _thumbnailHeight /
-          timeline.keyframes.first.width *
-          timeline.keyframes.first.height,
+          timeline.frames.first.width *
+          timeline.frames.first.height,
     );
-    final selectedFrameDuration = timeline.selectedKeyframe.duration;
+    final selectedFrameDuration = timeline.selectedFrame.duration;
 
     return Column(
       children: [
@@ -101,11 +101,11 @@ class _TimelineState extends State<Timeline> {
                 duration: Duration(milliseconds: 100),
                 opacity: index == _selectedId ? 1 : 0.5,
                 child: FrameThumbnail(
-                  frame: timeline.keyframes[index],
+                  frame: timeline.frames[index],
                   size: thumbnailSize,
                 ),
               ),
-              childCount: timeline.keyframes.length,
+              childCount: timeline.frames.length,
             ),
             controller: controller,
             useMagnifier: false,

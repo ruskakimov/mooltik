@@ -6,7 +6,7 @@ import 'package:quiver/testing/async.dart';
 void main() {
   group('TimelineModel', () {
     test('should toggle playing state on play/stop', () {
-      final model = TimelineModel(initialKeyframes: [
+      final model = TimelineModel(initialFrames: [
         FrameModel()..duration = 24,
         FrameModel()..duration = 12,
       ]);
@@ -17,30 +17,30 @@ void main() {
     });
 
     test('should show frames in sequence with correct duration (2 frames)', () {
-      final model = TimelineModel(initialKeyframes: [
+      final model = TimelineModel(initialFrames: [
         FrameModel()..duration = 24,
         FrameModel()..duration = 12,
       ]);
 
       FakeAsync().run((async) {
         model.play();
-        expect(model.selectedKeyframeId, 0);
+        expect(model.selectedFrameId, 0);
         async.elapse(Duration(milliseconds: 999));
-        expect(model.selectedKeyframeId, 0);
+        expect(model.selectedFrameId, 0);
         async.elapse(Duration(milliseconds: 1));
 
-        expect(model.selectedKeyframeId, 1);
+        expect(model.selectedFrameId, 1);
         async.elapse(Duration(milliseconds: 499));
-        expect(model.selectedKeyframeId, 1);
+        expect(model.selectedFrameId, 1);
         async.elapse(Duration(milliseconds: 1));
 
-        expect(model.selectedKeyframeId, 0);
+        expect(model.selectedFrameId, 0);
         model.stop();
       });
     });
 
     test('should show frames in sequence with correct duration (5 frames)', () {
-      final model = TimelineModel(initialKeyframes: [
+      final model = TimelineModel(initialFrames: [
         FrameModel()..duration = 6,
         FrameModel()..duration = 12,
         FrameModel()..duration = 6,
@@ -50,38 +50,38 @@ void main() {
 
       FakeAsync().run((async) {
         model.play();
-        expect(model.selectedKeyframeId, 0);
+        expect(model.selectedFrameId, 0);
         async.elapse(Duration(milliseconds: 249));
-        expect(model.selectedKeyframeId, 0);
+        expect(model.selectedFrameId, 0);
         async.elapse(Duration(milliseconds: 1));
 
-        expect(model.selectedKeyframeId, 1);
+        expect(model.selectedFrameId, 1);
         async.elapse(Duration(milliseconds: 499));
-        expect(model.selectedKeyframeId, 1);
+        expect(model.selectedFrameId, 1);
         async.elapse(Duration(milliseconds: 1));
 
-        expect(model.selectedKeyframeId, 2);
+        expect(model.selectedFrameId, 2);
         async.elapse(Duration(milliseconds: 249));
-        expect(model.selectedKeyframeId, 2);
+        expect(model.selectedFrameId, 2);
         async.elapse(Duration(milliseconds: 1));
 
-        expect(model.selectedKeyframeId, 3);
+        expect(model.selectedFrameId, 3);
         async.elapse(Duration(milliseconds: 1999));
-        expect(model.selectedKeyframeId, 3);
+        expect(model.selectedFrameId, 3);
         async.elapse(Duration(milliseconds: 1));
 
-        expect(model.selectedKeyframeId, 4);
+        expect(model.selectedFrameId, 4);
         async.elapse(Duration(milliseconds: 249));
-        expect(model.selectedKeyframeId, 4);
+        expect(model.selectedFrameId, 4);
         async.elapse(Duration(milliseconds: 1));
 
-        expect(model.selectedKeyframeId, 0);
+        expect(model.selectedFrameId, 0);
         model.stop();
       });
     });
 
     test('should loop animation correctly', () {
-      final model = TimelineModel(initialKeyframes: [
+      final model = TimelineModel(initialFrames: [
         FrameModel()..duration = 24,
         FrameModel()..duration = 12,
         FrameModel()..duration = 6,
@@ -91,22 +91,22 @@ void main() {
         model.play();
 
         void loop() {
-          expect(model.selectedKeyframeId, 0);
+          expect(model.selectedFrameId, 0);
           async.elapse(Duration(milliseconds: 999));
-          expect(model.selectedKeyframeId, 0);
+          expect(model.selectedFrameId, 0);
           async.elapse(Duration(milliseconds: 1));
 
-          expect(model.selectedKeyframeId, 1);
+          expect(model.selectedFrameId, 1);
           async.elapse(Duration(milliseconds: 499));
-          expect(model.selectedKeyframeId, 1);
+          expect(model.selectedFrameId, 1);
           async.elapse(Duration(milliseconds: 1));
 
-          expect(model.selectedKeyframeId, 2);
+          expect(model.selectedFrameId, 2);
           async.elapse(Duration(milliseconds: 249));
-          expect(model.selectedKeyframeId, 2);
+          expect(model.selectedFrameId, 2);
           async.elapse(Duration(milliseconds: 1));
 
-          expect(model.selectedKeyframeId, 0);
+          expect(model.selectedFrameId, 0);
         }
 
         loop();
@@ -121,7 +121,7 @@ void main() {
     });
 
     test('should notify listeners at the right time, with the right id', () {
-      final model = TimelineModel(initialKeyframes: [
+      final model = TimelineModel(initialFrames: [
         FrameModel()..duration = 2,
         FrameModel()..duration = 2,
         FrameModel()..duration = 2,
@@ -136,7 +136,7 @@ void main() {
         String timestamps = '';
 
         model.addListener(() {
-          timestamps += model.selectedKeyframeId.toString() +
+          timestamps += model.selectedFrameId.toString() +
               '-' +
               clock.now().millisecondsSinceEpoch.toString() +
               ';';
