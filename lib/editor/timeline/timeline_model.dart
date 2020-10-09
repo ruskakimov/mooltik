@@ -61,7 +61,7 @@ class TimelineModel extends ChangeNotifier {
 
   void addFrameSlot() {
     frames.insert(_selectedFrameId + 1, null);
-    // TODO: Update visible frame duration.
+    visibleFrame.duration += 1;
     notifyListeners();
   }
 
@@ -70,7 +70,7 @@ class TimelineModel extends ChangeNotifier {
     if (frames[_selectedFrameId + 1] != null) return;
 
     frames.removeAt(_selectedFrameId + 1);
-    // TODO: Update visible frame duration.
+    visibleFrame.duration -= 1;
     notifyListeners();
   }
 
@@ -80,12 +80,6 @@ class TimelineModel extends ChangeNotifier {
     frames.removeAt(_selectedFrameId);
     if (_selectedFrameId != 0) _selectedFrameId--;
 
-    notifyListeners();
-  }
-
-  void setSelectedFrameDuration(int value) {
-    if (value < 1) return;
-    selectedFrame.duration = value;
     notifyListeners();
   }
 }
