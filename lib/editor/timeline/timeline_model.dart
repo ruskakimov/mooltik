@@ -4,81 +4,87 @@ import '../frame/frame_model.dart';
 
 class TimelineModel extends ChangeNotifier {
   TimelineModel({
-    @required initialKeyframes,
-  })  : assert(initialKeyframes.isNotEmpty),
-        keyframes = initialKeyframes;
+    @required initialFrames,
+  })  : assert(initialFrames.isNotEmpty),
+        frames = initialFrames;
 
-  List<FrameModel> keyframes;
+  List<FrameModel> frames;
 
-  int get selectedKeyframeId => _selectedKeyframeId;
-  int _selectedKeyframeId = 0;
+  int get selectedFrameId => _selectedFrameId;
+  int _selectedFrameId = 0;
 
-  FrameModel get selectedKeyframe => keyframes[_selectedKeyframeId];
+  FrameModel get selectedFrame => frames[_selectedFrameId];
+
+  FrameModel get visibleFrame {
+    int i = _selectedFrameId;
+    while (frames[i] == null) i--;
+    return frames[i];
+  }
 
   bool get playing => _playing;
   bool _playing = false;
-  int _selectedKeyframeIdBeforePlaying;
+  int _selectedFrameIdBeforePlaying;
 
   void play() {
-    _selectedKeyframeIdBeforePlaying = _selectedKeyframeId;
+    _selectedFrameIdBeforePlaying = _selectedFrameId;
     _playing = true;
     _animate();
     notifyListeners();
   }
 
-  Duration _calcDuration(int frames, int fps) =>
-      Duration(milliseconds: (1000 * frames / fps).round());
-
   void _animate() async {
     if (!_playing) return;
-    await Future.delayed(_calcDuration(selectedKeyframe.duration, 24));
+    await Future.delayed(_calcDuration(selectedFrame.duration, 24));
     if (!_playing) return;
 
-    _selectedKeyframeId = (_selectedKeyframeId + 1) % keyframes.length;
+    _selectedFrameId =
+        (_selectedFrameId + selectedFrame.duration) % frames.length;
     notifyListeners();
 
     _animate();
   }
 
+  Duration _calcDuration(int frames, int fps) =>
+      Duration(milliseconds: (1000 * frames / fps).round());
+
   void stop() {
     _playing = false;
-    _selectedKeyframeId = _selectedKeyframeIdBeforePlaying;
+    _selectedFrameId = _selectedFrameIdBeforePlaying;
     notifyListeners();
   }
 
   void selectFrame(int id) {
-    assert(id >= 0 && id <= keyframes.length);
-    _selectedKeyframeId = id;
+    assert(id >= 0 && id <= frames.length);
+    _selectedFrameId = id;
     notifyListeners();
   }
 
-  void addEmptyFrame() {
-    keyframes.insert(_selectedKeyframeId + 1, FrameModel());
-    _selectedKeyframeId++;
+  void addFrameSlot() {
+    frames.insert(_selectedFrameId + 1, null);
+    visibleFrame.duration += 1;
     notifyListeners();
   }
 
-  void addCopyFrame() {
-    keyframes.insert(
-      _selectedKeyframeId + 1,
-      FrameModel(initialSnapshot: selectedKeyframe.snapshot),
-    );
-    _selectedKeyframeId++;
+  bool get canRemoveFrameSlot =>
+      _selectedFrameId != frames.length - 1 &&
+      frames[_selectedFrameId + 1] == null;
+
+  void removeFrameSlot() {
+    if (!canRemoveFrameSlot) return;
+
+    frames.removeAt(_selectedFrameId + 1);
+    visibleFrame.duration -= 1;
     notifyListeners();
   }
+
+  bool get canDeleteSelectedFrame => frames.length > 1;
 
   void deleteSelectedFrame() {
-    if (keyframes.length == 1) return;
+    if (!canDeleteSelectedFrame) return;
 
-    keyframes.removeAt(_selectedKeyframeId);
-    if (_selectedKeyframeId != 0) _selectedKeyframeId--;
+    frames.removeAt(_selectedFrameId);
+    if (_selectedFrameId != 0) _selectedFrameId--;
 
-    notifyListeners();
-  }
-
-  void setSelectedFrameDuration(int value) {
-    if (value < 1) return;
-    selectedKeyframe.duration = value;
     notifyListeners();
   }
 }

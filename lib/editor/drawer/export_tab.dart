@@ -46,7 +46,7 @@ class _ExportTabState extends State<ExportTab> {
               setState(() {
                 _saving = true;
               });
-              await _saveGif(timeline.keyframes);
+              await _saveGif(timeline.frames);
               setState(() {
                 _saving = false;
               });
@@ -64,7 +64,7 @@ class _ExportTabState extends State<ExportTab> {
               setState(() {
                 _saving = true;
               });
-              await _saveVideo(timeline.keyframes);
+              await _saveVideo(timeline.frames);
               setState(() {
                 _saving = false;
               });
