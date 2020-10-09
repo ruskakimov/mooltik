@@ -181,7 +181,7 @@ class FrameThumbnail extends StatelessWidget {
             right: 2,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 2),
-              color: Colors.amber,
+              color: Colors.blueGrey[800],
               child: Text('$duration', style: TextStyle(fontSize: 10)),
             ),
           ),
