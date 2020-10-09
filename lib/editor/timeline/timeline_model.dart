@@ -15,11 +15,13 @@ class TimelineModel extends ChangeNotifier {
 
   FrameModel get selectedFrame => frames[_selectedFrameId];
 
-  FrameModel get visibleFrame {
+  int get _visibleFrameId {
     int i = _selectedFrameId;
     while (frames[i] == null) i--;
-    return frames[i];
+    return i;
   }
+
+  FrameModel get visibleFrame => frames[_visibleFrameId];
 
   bool get playing => _playing;
   bool _playing = false;
@@ -86,5 +88,18 @@ class TimelineModel extends ChangeNotifier {
     if (_selectedFrameId != 0) _selectedFrameId--;
 
     notifyListeners();
+  }
+
+  FrameModel createFrameInSelectedSlot() {
+    if (selectedFrame != null) return null;
+
+    visibleFrame.duration = _selectedFrameId - _visibleFrameId;
+
+    frames[_selectedFrameId] = FrameModel(
+      initialSnapshot: visibleFrame.snapshot,
+    );
+
+    notifyListeners();
+    return frames[_selectedFrameId];
   }
 }

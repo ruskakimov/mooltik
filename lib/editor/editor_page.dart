@@ -29,6 +29,7 @@ class EditorPage extends StatelessWidget {
               frameWidth: timeline.selectedFrame.width,
               frameHeight: timeline.selectedFrame.height,
               selectedTool: toolbox.selectedTool,
+              createFrame: timeline.createFrameInSelectedSlot,
             ),
             update: (_, timeline, toolbox, easel) => easel
               ..updateFrame(timeline.selectedFrame)
