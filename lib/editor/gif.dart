@@ -12,10 +12,11 @@ Future<List<int>> makeGif(List<FrameModel> keyframes) async {
 
   final encoder = GifEncoder(samplingFactor: 1000);
 
-  for (final frame in keyframes) {
-    final img = await imageFromFrame(frame);
-    encoder.addFrame(img, duration: 4 * frame.duration);
-  }
+  // TODO: Get durations
+  // for (final frame in keyframes) {
+  //   final img = await imageFromFrame(frame);
+  //   encoder.addFrame(img, duration: 4 * frame.duration);
+  // }
 
   return encoder.finish();
 }

@@ -106,11 +106,12 @@ class _ExportTabState extends State<ExportTab> {
       // Create concat demuxer file for ffmpeg.
       final concatDemuxer = File(dir.path + '/concat.txt');
       String content = '';
-      for (int i = 0; i < keyframes.length; i++) {
-        final durationInSeconds = keyframes[i].duration / 24.0;
-        content +=
-            'file \'${pngFiles[i].path}\'\nduration ${durationInSeconds.toStringAsFixed(6)}\n';
-      }
+      // TODO: Get durations
+      // for (int i = 0; i < keyframes.length; i++) {
+      //   final durationInSeconds = keyframes[i].duration / 24.0;
+      //   content +=
+      //       'file \'${pngFiles[i].path}\'\nduration ${durationInSeconds.toStringAsFixed(6)}\n';
+      // }
       content += 'file \'${pngFiles.last.path}\'';
       await concatDemuxer.writeAsString(content);
 

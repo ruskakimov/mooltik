@@ -69,6 +69,7 @@ class _TimelineState extends State<Timeline> {
           timeline.frames.first.width *
           timeline.frames.first.height,
     );
+    final frameDurations = timeline.frameDurations;
 
     return Column(
       children: [
@@ -93,6 +94,7 @@ class _TimelineState extends State<Timeline> {
                   frame: timeline.frames[index],
                   size: thumbnailSize,
                   number: index + 1,
+                  duration: frameDurations[index],
                 ),
               ),
               childCount: timeline.frames.length,
@@ -139,11 +141,13 @@ class FrameThumbnail extends StatelessWidget {
     @required this.size,
     @required this.frame,
     @required this.number,
+    @required this.duration,
   }) : super(key: key);
 
   final Size size;
   final FrameModel frame;
   final int number;
+  final int duration;
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +182,7 @@ class FrameThumbnail extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 2),
               color: Colors.amber,
-              child: Text('${frame.duration}', style: TextStyle(fontSize: 10)),
+              child: Text('$duration', style: TextStyle(fontSize: 10)),
             ),
           ),
       ],

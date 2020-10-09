@@ -23,6 +23,22 @@ class TimelineModel extends ChangeNotifier {
 
   FrameModel get visibleFrame => frames[_visibleFrameId];
 
+  List<int> get frameDurations {
+    final durations = <int>[];
+    int c = 1;
+
+    for (final frame in frames.reversed) {
+      if (frame == null) {
+        durations.add(0);
+        c++;
+      } else {
+        durations.add(c);
+        c = 1;
+      }
+    }
+    return durations.reversed.toList();
+  }
+
   bool get playing => _playing;
   bool _playing = false;
   int _selectedFrameIdBeforePlaying;
@@ -36,18 +52,14 @@ class TimelineModel extends ChangeNotifier {
 
   void _animate() async {
     if (!_playing) return;
-    await Future.delayed(_calcDuration(selectedFrame.duration, 24));
+    await Future.delayed(const Duration(microseconds: 41666));
     if (!_playing) return;
 
-    _selectedFrameId =
-        (_selectedFrameId + selectedFrame.duration) % frames.length;
+    _selectedFrameId = (_selectedFrameId + 1) % frames.length;
     notifyListeners();
 
     _animate();
   }
-
-  Duration _calcDuration(int frames, int fps) =>
-      Duration(milliseconds: (1000 * frames / fps).round());
 
   void stop() {
     _playing = false;
@@ -63,7 +75,6 @@ class TimelineModel extends ChangeNotifier {
 
   void addFrameSlot() {
     frames.insert(_selectedFrameId + 1, null);
-    visibleFrame.duration++;
     notifyListeners();
   }
 
@@ -75,7 +86,6 @@ class TimelineModel extends ChangeNotifier {
     if (!canRemoveFrameSlot) return;
 
     frames.removeAt(_selectedFrameId + 1);
-    visibleFrame.duration--;
     notifyListeners();
   }
 
@@ -83,10 +93,6 @@ class TimelineModel extends ChangeNotifier {
 
   void deleteSelectedFrame() {
     if (!canDeleteSelectedFrame) return;
-
-    if (selectedFrame == null) {
-      visibleFrame.duration--;
-    }
 
     frames.removeAt(_selectedFrameId);
     if (_selectedFrameId != 0) _selectedFrameId--;
@@ -96,8 +102,6 @@ class TimelineModel extends ChangeNotifier {
 
   FrameModel createFrameInSelectedSlot() {
     if (selectedFrame != null) return null;
-
-    visibleFrame.duration = _selectedFrameId - _visibleFrameId;
 
     frames[_selectedFrameId] = FrameModel(
       initialSnapshot: visibleFrame.snapshot,
