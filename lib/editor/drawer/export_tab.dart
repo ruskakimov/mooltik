@@ -64,7 +64,7 @@ class _ExportTabState extends State<ExportTab> {
               setState(() {
                 _saving = true;
               });
-              await _saveVideo(timeline.frames);
+              await _saveVideo(timeline.frames, timeline.frameDurations);
               setState(() {
                 _saving = false;
               });
@@ -85,19 +85,23 @@ class _ExportTabState extends State<ExportTab> {
     }
   }
 
-  Future<void> _saveVideo(List<FrameModel> keyframes) async {
+  Future<void> _saveVideo(
+    List<FrameModel> frames,
+    List<int> durations,
+  ) async {
     if (await Permission.storage.request().isGranted) {
       final dir = await getTemporaryDirectory();
 
       final pngFiles = <File>[];
 
+      frames.removeWhere((f) => f == null);
+      durations.removeWhere((d) => d == 0);
+
       // Save frames as PNG images.
-      int i = 1;
-      for (final frame in keyframes) {
-        final img = await imageFromFrame(frame);
+      for (int i = 0; i < frames.length; i++) {
+        final img = await imageFromFrame(frames[i]);
         final pngBytes = encodePng(img, level: 0);
         final frameFile = File(dir.path + '/frame$i.png');
-        i++;
         await frameFile.writeAsBytes(pngBytes);
         pngFiles.add(frameFile);
         print(frameFile.path);
@@ -106,12 +110,11 @@ class _ExportTabState extends State<ExportTab> {
       // Create concat demuxer file for ffmpeg.
       final concatDemuxer = File(dir.path + '/concat.txt');
       String content = '';
-      // TODO: Get durations
-      // for (int i = 0; i < keyframes.length; i++) {
-      //   final durationInSeconds = keyframes[i].duration / 24.0;
-      //   content +=
-      //       'file \'${pngFiles[i].path}\'\nduration ${durationInSeconds.toStringAsFixed(6)}\n';
-      // }
+      for (int i = 0; i < frames.length; i++) {
+        final durationInSeconds = durations[i] / 24.0;
+        content +=
+            'file \'${pngFiles[i].path}\'\nduration ${durationInSeconds.toStringAsFixed(6)}\n';
+      }
       content += 'file \'${pngFiles.last.path}\'';
       await concatDemuxer.writeAsString(content);
 
