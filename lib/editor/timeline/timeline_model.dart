@@ -65,9 +65,12 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get canRemoveFrameSlot =>
+      _selectedFrameId != frames.length - 1 &&
+      frames[_selectedFrameId + 1] == null;
+
   void removeFrameSlot() {
-    if (selectedFrame == frames.last) return;
-    if (frames[_selectedFrameId + 1] != null) return;
+    if (!canRemoveFrameSlot) return;
 
     frames.removeAt(_selectedFrameId + 1);
     visibleFrame.duration -= 1;
