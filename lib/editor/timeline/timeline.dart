@@ -116,10 +116,12 @@ class _TimelineState extends State<Timeline> {
           children: [
             BarIconButton(
               icon: FontAwesomeIcons.minusSquare,
-              onTap: () {
-                timeline.removeFrameSlot();
-                _forceLayout();
-              },
+              onTap: timeline.canRemoveFrameSlot
+                  ? () {
+                      timeline.removeFrameSlot();
+                      _forceLayout();
+                    }
+                  : null,
             ),
             BarIconButton(
               icon: FontAwesomeIcons.plusSquare,
