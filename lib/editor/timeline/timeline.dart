@@ -69,7 +69,6 @@ class _TimelineState extends State<Timeline> {
           timeline.frames.first.width *
           timeline.frames.first.height,
     );
-    final selectedFrameDuration = timeline.selectedFrame.duration;
 
     return Column(
       children: [
@@ -116,12 +115,14 @@ class _TimelineState extends State<Timeline> {
             BarIconButton(
               icon: FontAwesomeIcons.minusSquare,
               onTap: () {
+                timeline.removeFrameSlot();
                 _forceLayout();
               },
             ),
             BarIconButton(
               icon: FontAwesomeIcons.plusSquare,
               onTap: () {
+                timeline.addFrameSlot();
                 _forceLayout();
               },
             ),
@@ -148,10 +149,17 @@ class FrameThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        CustomPaint(
-          size: size,
-          painter: FramePainter(frame: frame),
-        ),
+        if (frame != null)
+          CustomPaint(
+            size: size,
+            painter: FramePainter(frame: frame),
+          )
+        else
+          Container(
+            height: size.height,
+            width: size.width,
+            color: Colors.red,
+          ),
         Positioned(
           top: 2,
           left: 2,
@@ -161,15 +169,16 @@ class FrameThumbnail extends StatelessWidget {
             child: Text('$number', style: TextStyle(fontSize: 10)),
           ),
         ),
-        Positioned(
-          top: 2,
-          right: 2,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 2),
-            color: Colors.amber,
-            child: Text('${frame.duration}', style: TextStyle(fontSize: 10)),
+        if (frame != null)
+          Positioned(
+            top: 2,
+            right: 2,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 2),
+              color: Colors.amber,
+              child: Text('${frame.duration}', style: TextStyle(fontSize: 10)),
+            ),
           ),
-        ),
       ],
     );
   }
