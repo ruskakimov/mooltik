@@ -77,8 +77,10 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get canDeleteSelectedFrame => frames.length > 1;
+
   void deleteSelectedFrame() {
-    if (frames.length == 1) return;
+    if (!canDeleteSelectedFrame) return;
 
     frames.removeAt(_selectedFrameId);
     if (_selectedFrameId != 0) _selectedFrameId--;
