@@ -89,6 +89,7 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // TODO: Prevent removing last non-empty frame.
   bool get canDeleteSelectedFrame => frames.length > 1;
 
   void deleteSelectedFrame() {

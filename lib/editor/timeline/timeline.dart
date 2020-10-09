@@ -78,9 +78,9 @@ class _TimelineState extends State<Timeline> {
           children: [
             BarIconButton(
               icon: FontAwesomeIcons.trashAlt,
-              onTap: () {
-                timeline.deleteSelectedFrame();
-              },
+              onTap: timeline.canDeleteSelectedFrame
+                  ? timeline.deleteSelectedFrame
+                  : null,
             ),
           ],
         ),
