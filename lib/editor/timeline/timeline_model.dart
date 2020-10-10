@@ -15,7 +15,11 @@ class TimelineModel extends ChangeNotifier {
 
   FrameModel get selectedFrame => frames[_selectedFrameId];
 
-  FrameModel get visibleFrameBefore => frames.first;
+  FrameModel get visibleFrameBefore {
+    int i = _selectedFrameId - 1;
+    while (i >= 0 && frames[i] == null) i--;
+    return i >= 0 ? frames[i] : null;
+  }
 
   int get _visibleFrameId {
     int i = _selectedFrameId;
