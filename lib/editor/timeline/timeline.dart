@@ -177,7 +177,7 @@ class FrameThumbnail extends StatelessWidget {
             child: Text('$number', style: TextStyle(fontSize: 10)),
           ),
         ),
-        if (frame != null)
+        if (duration > 0)
           Positioned(
             top: 2,
             right: 2,
