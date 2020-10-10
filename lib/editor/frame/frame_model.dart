@@ -1,6 +1,6 @@
 import 'dart:ui' as ui;
 
-import 'package:mooltik/editor/gif.dart' show pictureFromFrame;
+import 'package:mooltik/editor/frame/frame_painter.dart';
 import 'package:flutter/material.dart';
 
 import 'stroke.dart';
@@ -54,7 +54,13 @@ class FrameModel extends ChangeNotifier {
   }
 
   Future<void> _generateLastSnapshot() async {
-    final pic = pictureFromFrame(this);
+    final recorder = ui.PictureRecorder();
+    final canvas = ui.Canvas(recorder);
+    FramePainter(
+      frame: this,
+      background: Colors.transparent,
+    ).paint(canvas, ui.Size(width, height));
+    final pic = recorder.endRecording();
     final snapshot = await pic.toImage(width.toInt(), height.toInt());
 
     // Remove redoable snapshots on new stroke.

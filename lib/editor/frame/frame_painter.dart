@@ -8,18 +8,20 @@ class FramePainter extends CustomPainter {
     @required this.frame,
     this.strokes,
     this.showCursor = false,
+    this.background = Colors.white,
   });
 
   final FrameModel frame;
   final List<Stroke> strokes;
   final bool showCursor;
+  final Color background;
 
   @override
   void paint(Canvas canvas, Size size) {
     // Clip paint outside canvas.
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
 
-    canvas.drawColor(Colors.white, BlendMode.srcOver);
+    canvas.drawColor(background, BlendMode.srcOver);
 
     // Scale image to fit the given size.
     canvas.scale(size.width / frame.width, size.height / frame.height);

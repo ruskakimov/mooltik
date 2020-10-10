@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/easel/easel_model.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
+import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:provider/provider.dart';
 import 'package:after_init/after_init.dart';
 
@@ -25,6 +26,7 @@ class _EaselState extends State<Easel> with AfterInitMixin<Easel> {
   Widget build(BuildContext context) {
     final easel = context.watch<EaselModel>();
     final frame = context.watch<FrameModel>();
+    final timeline = context.watch<TimelineModel>();
 
     return EaselGestureDetector(
       onStrokeStart: easel.onStrokeStart,
@@ -46,19 +48,37 @@ class _EaselState extends State<Easel> with AfterInitMixin<Easel> {
               alignment: Alignment.topLeft,
               angle: easel.canvasRotation,
               child: RepaintBoundary(
-                child: CustomPaint(
-                  foregroundPainter: FramePainter(
-                    frame: frame,
-                    strokes: [
-                      if (easel.currentStroke != null) easel.currentStroke,
-                    ],
-                    showCursor: true,
-                  ),
-                  child: Container(
-                    color: Colors.white,
-                    height: frame.height,
-                    width: frame.width,
-                  ),
+                child: Stack(
+                  children: [
+                    Container(
+                      width: frame.width,
+                      height: frame.height,
+                      color: Colors.white,
+                    ),
+                    if (!timeline.playing &&
+                        timeline.visibleFrameBefore != null)
+                      Opacity(
+                        opacity: 0.3,
+                        child: CustomPaint(
+                          size: Size(frame.width, frame.height),
+                          foregroundPainter: FramePainter(
+                            frame: timeline.visibleFrameBefore,
+                            background: Colors.transparent,
+                          ),
+                        ),
+                      ),
+                    CustomPaint(
+                      size: Size(frame.width, frame.height),
+                      foregroundPainter: FramePainter(
+                        frame: frame,
+                        strokes: [
+                          if (easel.currentStroke != null) easel.currentStroke,
+                        ],
+                        showCursor: true,
+                        background: Colors.transparent,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
