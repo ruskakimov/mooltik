@@ -21,6 +21,12 @@ class TimelineModel extends ChangeNotifier {
     return i >= 0 ? frames[i] : null;
   }
 
+  FrameModel get visibleFrameAfter {
+    int i = _selectedFrameId + 1;
+    while (i < frames.length && frames[i] == null) i++;
+    return i < frames.length ? frames[i] : null;
+  }
+
   int get _visibleFrameId {
     int i = _selectedFrameId;
     while (frames[i] == null) i--;

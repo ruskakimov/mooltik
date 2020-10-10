@@ -49,6 +49,7 @@ class _EaselState extends State<Easel> with AfterInitMixin<Easel> {
               angle: easel.canvasRotation,
               child: RepaintBoundary(
                 child: Stack(
+                  fit: StackFit.expand,
                   children: [
                     Container(
                       width: frame.width,
@@ -63,6 +64,17 @@ class _EaselState extends State<Easel> with AfterInitMixin<Easel> {
                           size: Size(frame.width, frame.height),
                           foregroundPainter: FramePainter(
                             frame: timeline.visibleFrameBefore,
+                            background: Colors.transparent,
+                          ),
+                        ),
+                      ),
+                    if (!timeline.playing && timeline.visibleFrameAfter != null)
+                      Opacity(
+                        opacity: 0.1,
+                        child: CustomPaint(
+                          size: Size(frame.width, frame.height),
+                          foregroundPainter: FramePainter(
+                            frame: timeline.visibleFrameAfter,
                             background: Colors.transparent,
                           ),
                         ),
