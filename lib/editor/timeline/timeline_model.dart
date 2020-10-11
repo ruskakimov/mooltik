@@ -15,15 +15,22 @@ class TimelineModel extends ChangeNotifier {
 
   FrameModel get selectedFrame => frames[_selectedFrameId];
 
+  bool get onion => _onion;
+  bool _onion = false;
+  set onion(bool value) {
+    _onion = value;
+    notifyListeners();
+  }
+
   FrameModel get visibleFrameBefore {
-    if (playing) return null;
+    if (playing || !onion) return null;
     int i = _selectedFrameId - 1;
     while (i >= 0 && frames[i] == null) i--;
     return i >= 0 ? frames[i] : null;
   }
 
   FrameModel get visibleFrameAfter {
-    if (playing) return null;
+    if (playing || !onion) return null;
     int i = _selectedFrameId + 1;
     while (i < frames.length && frames[i] == null) i++;
     return i < frames.length ? frames[i] : null;

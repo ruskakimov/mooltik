@@ -121,6 +121,13 @@ class _EditorDrawerState extends State<EditorDrawer>
             selected: open && _selectedTabIndex == 0,
             onTap: () => _onTabTap(0),
           ),
+          BarIconButton(
+            icon: FontAwesomeIcons.solidClone,
+            selected: timeline.onion,
+            onTap: () {
+              timeline.onion = !timeline.onion;
+            },
+          ),
           Spacer(),
           BarIconButton(
             icon: FontAwesomeIcons.play,
