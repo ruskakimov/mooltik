@@ -134,6 +134,7 @@ class _EditorDrawerState extends State<EditorDrawer>
             onTap: timeline.play,
           ),
           Spacer(),
+          SizedBox(height: 48),
           BarIconButton(
             icon: FontAwesomeIcons.fileDownload,
             selected: open && _selectedTabIndex == 1,
