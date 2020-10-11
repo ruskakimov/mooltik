@@ -56,8 +56,7 @@ class _EaselState extends State<Easel> with AfterInitMixin<Easel> {
                       height: frame.height,
                       color: Colors.white,
                     ),
-                    if (!timeline.playing &&
-                        timeline.visibleFrameBefore != null)
+                    if (timeline.visibleFrameBefore != null)
                       Opacity(
                         opacity: 0.3,
                         child: CustomPaint(
@@ -68,7 +67,7 @@ class _EaselState extends State<Easel> with AfterInitMixin<Easel> {
                           ),
                         ),
                       ),
-                    if (!timeline.playing && timeline.visibleFrameAfter != null)
+                    if (timeline.visibleFrameAfter != null)
                       Opacity(
                         opacity: 0.1,
                         child: CustomPaint(
