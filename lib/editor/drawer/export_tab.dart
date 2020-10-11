@@ -46,7 +46,7 @@ class _ExportTabState extends State<ExportTab> {
               setState(() {
                 _saving = true;
               });
-              await _saveGif(timeline.frames);
+              await _saveGif(timeline.frames, timeline.frameDurations);
               setState(() {
                 _saving = false;
               });
@@ -75,9 +75,12 @@ class _ExportTabState extends State<ExportTab> {
     );
   }
 
-  Future<void> _saveGif(List<FrameModel> keyframes) async {
+  Future<void> _saveGif(
+    List<FrameModel> frames,
+    List<int> durations,
+  ) async {
     if (await Permission.storage.request().isGranted) {
-      final bytes = await makeGif(keyframes);
+      final bytes = await makeGif(frames, durations);
       final dir = await getTemporaryDirectory();
       final file = File(dir.path + '/animation.gif');
       await file.writeAsBytes(bytes);

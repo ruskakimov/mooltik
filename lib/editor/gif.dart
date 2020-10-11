@@ -5,18 +5,18 @@ import 'package:mooltik/editor/frame/frame_painter.dart';
 
 import 'frame/frame_model.dart';
 
-Future<List<int>> makeGif(List<FrameModel> keyframes) async {
-  if (keyframes.isEmpty) {
-    throw ArgumentError.value(keyframes, 'frames', 'should not be empty');
+Future<List<int>> makeGif(List<FrameModel> frames, List<int> durations) async {
+  if (frames.isEmpty) {
+    throw ArgumentError.value(frames, 'frames', 'should not be empty');
   }
 
   final encoder = GifEncoder(samplingFactor: 1000);
 
-  // TODO: Get durations
-  // for (final frame in keyframes) {
-  //   final img = await imageFromFrame(frame);
-  //   encoder.addFrame(img, duration: 4 * frame.duration);
-  // }
+  for (int i = 0; i < frames.length; i++) {
+    if (frames[i] == null) continue;
+    final img = await imageFromFrame(frames[i]);
+    encoder.addFrame(img, duration: 4 * durations[i]);
+  }
 
   return encoder.finish();
 }
