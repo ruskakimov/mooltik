@@ -9,12 +9,14 @@ class FramePainter extends CustomPainter {
     this.strokes,
     this.showCursor = false,
     this.background = Colors.white,
+    this.filter,
   });
 
   final FrameModel frame;
   final List<Stroke> strokes;
   final bool showCursor;
   final Color background;
+  final ColorFilter filter;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -30,7 +32,11 @@ class FramePainter extends CustomPainter {
     canvas.saveLayer(Rect.fromLTWH(0, 0, frame.width, frame.height), Paint());
 
     if (frame.snapshot != null) {
-      canvas.drawImage(frame.snapshot, Offset.zero, Paint());
+      canvas.drawImage(
+        frame.snapshot,
+        Offset.zero,
+        Paint()..colorFilter = filter,
+      );
     }
 
     frame.unrasterizedStrokes.forEach((stroke) => stroke.paintOn(canvas));
