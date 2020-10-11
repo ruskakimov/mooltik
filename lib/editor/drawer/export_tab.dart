@@ -97,8 +97,8 @@ class _ExportTabState extends State<ExportTab> {
 
       final pngFiles = <File>[];
 
-      frames.removeWhere((f) => f == null);
-      durations.removeWhere((d) => d == 0);
+      frames = frames.where((f) => f != null).toList();
+      durations = durations.where((d) => d > 0).toList();
 
       // Save frames as PNG images.
       for (int i = 0; i < frames.length; i++) {
