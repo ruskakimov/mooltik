@@ -62,14 +62,21 @@ class _TimelineState extends State<Timeline> {
     context.watch<FrameModel>();
 
     final timeline = context.watch<TimelineModel>();
-    final _thumbnailWidth = 104.0;
+    final _thumbnailWidth = 120.0;
     final thumbnailSize = Size(
       _thumbnailWidth,
       _thumbnailWidth /
           timeline.frames.first.width *
           timeline.frames.first.height,
     );
-    final frameDurations = timeline.frameDurations;
+
+    var visibleFrame = timeline.frames.first;
+    final visibleFrames = timeline.frames.map((f) {
+      if (f != null) {
+        visibleFrame = f;
+      }
+      return visibleFrame;
+    }).toList();
 
     return Column(
       children: [
@@ -87,21 +94,17 @@ class _TimelineState extends State<Timeline> {
         Expanded(
           child: ListWheelScrollView.useDelegate(
             childDelegate: ListWheelChildBuilderDelegate(
-              builder: (context, index) => AnimatedOpacity(
-                duration: Duration(milliseconds: 100),
-                opacity: index == _selectedId ? 1 : 0.5,
-                child: FrameThumbnail(
-                  frame: timeline.frames[index],
-                  size: thumbnailSize,
-                  number: index + 1,
-                  duration: frameDurations[index],
-                ),
+              builder: (context, index) => FrameThumbnail(
+                frame: visibleFrames[index],
+                size: thumbnailSize,
+                selected: index == timeline.selectedFrameId,
+                copy: timeline.frames[index] == null,
               ),
               childCount: timeline.frames.length,
             ),
             controller: controller,
             useMagnifier: false,
-            diameterRatio: 2,
+            diameterRatio: 100,
             squeeze: _squeeze,
             onSelectedItemChanged: (int index) {
               timeline.selectFrame(index);
@@ -142,49 +145,32 @@ class FrameThumbnail extends StatelessWidget {
     Key key,
     @required this.size,
     @required this.frame,
-    @required this.number,
-    @required this.duration,
+    @required this.selected,
+    @required this.copy,
   }) : super(key: key);
 
   final Size size;
   final FrameModel frame;
-  final int number;
-  final int duration;
+  final bool selected;
+  final bool copy;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        if (frame != null)
-          CustomPaint(
+        Opacity(
+          opacity: copy ? 0.5 : 1,
+          child: CustomPaint(
             size: size,
             painter: FramePainter(frame: frame),
-          )
-        else
+          ),
+        ),
+        if (selected)
           Container(
             height: size.height,
             width: size.width,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.white),
-            ),
-          ),
-        Positioned(
-          top: 2,
-          left: 2,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 2),
-            color: Colors.blueGrey[800],
-            child: Text('$number', style: TextStyle(fontSize: 10)),
-          ),
-        ),
-        if (duration > 0)
-          Positioned(
-            top: 2,
-            right: 2,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 2),
-              color: Colors.blueGrey[800],
-              child: Text('$duration', style: TextStyle(fontSize: 10)),
+              border: Border.all(color: Colors.amber, width: 4),
             ),
           ),
       ],
