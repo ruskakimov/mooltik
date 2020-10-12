@@ -8,7 +8,7 @@ class ToolboxModel extends ChangeNotifier {
     Eraser(strokeWidth: 20),
   ];
   int _selectedToolId = 0;
-  Color _selectedColor = Colors.grey;
+  Color _selectedColor = Colors.black;
 
   List<Tool> get tools => _tools;
   Tool get selectedTool => _tools[_selectedToolId];
