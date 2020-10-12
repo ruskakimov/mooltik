@@ -46,7 +46,6 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
             BarIconButton(
               icon: toolbox.tools[i].icon,
               selected: toolbox.tools[i] == toolbox.selectedTool,
-              label: toolbox.tools[i].paint.strokeWidth.toStringAsFixed(0),
               onTap: () {
                 if (toolbox.tools[i] == toolbox.selectedTool) {
                   _toggleDrawer();
