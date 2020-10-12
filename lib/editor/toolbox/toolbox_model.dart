@@ -5,7 +5,7 @@ import 'tools.dart';
 class ToolboxModel extends ChangeNotifier {
   final List<Tool> _tools = [
     Pencil(strokeWidth: 10),
-    Eraser(strokeWidth: 50),
+    Eraser(strokeWidth: 100),
   ];
   int _selectedToolId = 0;
   Color _selectedColor = Colors.black;
