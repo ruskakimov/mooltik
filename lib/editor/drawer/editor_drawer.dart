@@ -121,6 +121,13 @@ class _EditorDrawerState extends State<EditorDrawer>
             selected: open && _selectedTabIndex == 0,
             onTap: () => _onTabTap(0),
           ),
+          SizedBox(height: 48),
+          Spacer(),
+          BarIconButton(
+            icon: FontAwesomeIcons.play,
+            onTap: timeline.play,
+          ),
+          Spacer(),
           BarIconButton(
             icon: FontAwesomeIcons.solidClone,
             selected: timeline.onion,
@@ -128,13 +135,6 @@ class _EditorDrawerState extends State<EditorDrawer>
               timeline.onion = !timeline.onion;
             },
           ),
-          Spacer(),
-          BarIconButton(
-            icon: FontAwesomeIcons.play,
-            onTap: timeline.play,
-          ),
-          Spacer(),
-          SizedBox(height: 48),
           BarIconButton(
             icon: FontAwesomeIcons.fileDownload,
             selected: open && _selectedTabIndex == 1,
