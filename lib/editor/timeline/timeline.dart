@@ -7,7 +7,7 @@ import 'package:mooltik/editor/frame/frame_painter.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 
-const thumbnailSize = Size(128, 72);
+const thumbnailSize = Size(112, 64);
 
 class Timeline extends StatefulWidget {
   const Timeline({Key key}) : super(key: key);

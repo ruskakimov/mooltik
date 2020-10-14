@@ -13,7 +13,7 @@ import 'bar_icon_button.dart';
 class EditorDrawer extends StatefulWidget {
   EditorDrawer({
     Key key,
-    this.width = 128,
+    this.width = 112,
     this.quickAccessButtons,
   })  : assert(width != null),
         super(key: key);
