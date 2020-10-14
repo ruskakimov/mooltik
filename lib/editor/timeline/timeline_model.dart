@@ -110,8 +110,7 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool canDeleteFrameAt(int id) =>
-      frames.length > 1 && !(id == 0 && frames[1] == null);
+  bool canDeleteFrameAt(int id) => frames.length > 1 && frames[id] != null;
 
   void deleteFrameAt(int id) {
     assert(id >= 0 && id <= frames.length);

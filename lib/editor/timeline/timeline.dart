@@ -73,8 +73,11 @@ class _TimelineState extends State<Timeline> {
                       curve: Curves.easeOut,
                     );
                   },
-                  onHorizontalDragEnd: (_) {
-                    timeline.deleteFrameAt(index);
+                  onHorizontalDragEnd: (dragDetails) {
+                    final toLeft = dragDetails.velocity.pixelsPerSecond.dx < 0;
+                    if (toLeft) {
+                      timeline.deleteFrameAt(index);
+                    }
                   },
                   child: FrameThumbnail(
                     frame: visibleFrames[index],
