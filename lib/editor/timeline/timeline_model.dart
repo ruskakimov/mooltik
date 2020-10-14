@@ -123,6 +123,13 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void createFrameAt(int id) {
+    assert(id >= 0 && id <= frames.length);
+
+    frames[id] = FrameModel();
+    notifyListeners();
+  }
+
   void copy(int id) {
     assert(id >= 0 && id <= frames.length);
     _copiedFrame = frames[id];

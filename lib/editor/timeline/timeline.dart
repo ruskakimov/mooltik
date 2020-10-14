@@ -78,11 +78,7 @@ class _TimelineState extends State<Timeline> {
                     if (toLeft) {
                       timeline.deleteFrameAt(index);
                     } else {
-                      if (timeline.frames[index] == null) {
-                        timeline.paste(index);
-                      } else {
-                        timeline.copy(index);
-                      }
+                      timeline.createFrameAt(index);
                     }
                   },
                   child: FrameThumbnail(
