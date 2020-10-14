@@ -127,8 +127,9 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void createFrameAt(int id) {
+  void createOrRestoreFrameAt(int id) {
     assert(id >= 0 && id <= frames.length);
+    if (frames[id] != null) return;
 
     if (_lastDeletedId == id && _lastDeleted != null) {
       frames[id] = _lastDeleted;

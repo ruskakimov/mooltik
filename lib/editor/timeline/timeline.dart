@@ -80,10 +80,7 @@ class _TimelineState extends State<Timeline> {
                       timeline.deleteFrameAt(index);
                     } else {
                       // swipe to right
-                      final frame = timeline.frames[index];
-                      if (frame == null) {
-                        timeline.createFrameAt(index);
-                      }
+                      timeline.createOrRestoreFrameAt(index);
                     }
                   },
                   child: FrameThumbnail(
