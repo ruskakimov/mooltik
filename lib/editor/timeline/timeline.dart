@@ -77,6 +77,12 @@ class _TimelineState extends State<Timeline> {
                     final toLeft = dragDetails.velocity.pixelsPerSecond.dx < 0;
                     if (toLeft) {
                       timeline.deleteFrameAt(index);
+                    } else {
+                      if (timeline.frames[index] == null) {
+                        timeline.paste(index);
+                      } else {
+                        timeline.copy(index);
+                      }
                     }
                   },
                   child: FrameThumbnail(

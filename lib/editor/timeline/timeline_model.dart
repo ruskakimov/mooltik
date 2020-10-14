@@ -15,6 +15,8 @@ class TimelineModel extends ChangeNotifier {
 
   FrameModel get selectedFrame => frames[_selectedFrameId];
 
+  FrameModel _copiedFrame;
+
   bool get onion => _onion;
   bool _onion = false;
   set onion(bool value) {
@@ -117,6 +119,19 @@ class TimelineModel extends ChangeNotifier {
     if (!canDeleteFrameAt(id)) return;
 
     frames[id] = null;
+    notifyListeners();
+  }
+
+  void copy(int id) {
+    assert(id >= 0 && id <= frames.length);
+    _copiedFrame = frames[id];
+    notifyListeners();
+  }
+
+  void paste(int id) {
+    assert(id >= 0 && id <= frames.length);
+    if (_copiedFrame == null) return;
+    frames[id] = FrameModel(initialSnapshot: _copiedFrame.snapshot);
     notifyListeners();
   }
 
