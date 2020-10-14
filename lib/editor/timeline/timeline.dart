@@ -76,10 +76,10 @@ class _TimelineState extends State<Timeline> {
                   onHorizontalDragEnd: (dragDetails) {
                     final toLeft = dragDetails.velocity.pixelsPerSecond.dx < 0;
                     if (toLeft) {
-                      // swipe to left
+                      // Swiped to left.
                       timeline.deleteFrameAt(index);
                     } else {
-                      // swipe to right
+                      // Swiped to right.
                       timeline.createOrRestoreFrameAt(index);
                     }
                   },
