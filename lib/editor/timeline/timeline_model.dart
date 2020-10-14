@@ -110,14 +110,14 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get canDeleteSelectedFrame =>
-      frames.length > 1 &&
-      !(_selectedFrameId == 0 && frames[_selectedFrameId + 1] == null);
+  bool canDeleteFrameAt(int id) =>
+      frames.length > 1 && !(id == 0 && frames[1] == null);
 
-  void deleteSelectedFrame() {
-    if (!canDeleteSelectedFrame) return;
+  void deleteFrameAt(int id) {
+    assert(id >= 0 && id <= frames.length);
+    if (!canDeleteFrameAt(id)) return;
 
-    frames[_selectedFrameId] = null;
+    frames[id] = null;
     notifyListeners();
   }
 

@@ -54,17 +54,6 @@ class _TimelineState extends State<Timeline> {
 
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            BarIconButton(
-              icon: FontAwesomeIcons.trashAlt,
-              onTap: timeline.canDeleteSelectedFrame
-                  ? timeline.deleteSelectedFrame
-                  : null,
-            ),
-          ],
-        ),
         Expanded(
           child: LayoutBuilder(builder: (context, constraints) {
             final padding = (constraints.maxHeight - thumbnailSize.height) / 2;
@@ -85,7 +74,7 @@ class _TimelineState extends State<Timeline> {
                     );
                   },
                   onHorizontalDragEnd: (_) {
-                    timeline.deleteSelectedFrame();
+                    timeline.deleteFrameAt(index);
                   },
                   child: FrameThumbnail(
                     frame: visibleFrames[index],
