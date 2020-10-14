@@ -7,6 +7,8 @@ import 'package:mooltik/editor/frame/frame_painter.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 
+const thumbnailSize = Size(128, 72);
+
 class Timeline extends StatefulWidget {
   const Timeline({Key key}) : super(key: key);
 
@@ -15,29 +17,18 @@ class Timeline extends StatefulWidget {
 }
 
 class _TimelineState extends State<Timeline> {
-  FixedExtentScrollController controller;
-  int _selectedId;
-  double _squeeze = 1;
+  ScrollController controller;
 
   @override
   void initState() {
     super.initState();
-    _selectedId = context.read<TimelineModel>().selectedFrameId;
-    controller = FixedExtentScrollController(initialItem: _selectedId);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+    // _selectedId = context.read<TimelineModel>().selectedFrameId;
     final timeline = context.read<TimelineModel>();
-    if (!timeline.playing && timeline.selectedFrameId != _selectedId) {
-      _selectedId = timeline.selectedFrameId;
-      controller.animateToItem(
-        _selectedId,
-        duration: Duration(milliseconds: 100),
-        curve: Curves.easeOut,
-      );
-    }
+    controller = ScrollController()
+      ..addListener(() {
+        int i = (controller.offset / thumbnailSize.height).round();
+        timeline.selectFrame(i);
+      });
   }
 
   @override
@@ -46,29 +37,12 @@ class _TimelineState extends State<Timeline> {
     super.dispose();
   }
 
-  void _forceLayout() {
-    setState(() {
-      if (_squeeze == 1) {
-        _squeeze = 1.000000000000001;
-      } else {
-        _squeeze = 1;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // Update when selected frame is painted on.
     context.watch<FrameModel>();
 
     final timeline = context.watch<TimelineModel>();
-    final _thumbnailWidth = 120.0;
-    final thumbnailSize = Size(
-      _thumbnailWidth,
-      _thumbnailWidth /
-          timeline.frames.first.width *
-          timeline.frames.first.height,
-    );
 
     var visibleFrame = timeline.frames.first;
     final visibleFrames = timeline.frames.map((f) {
@@ -92,46 +66,51 @@ class _TimelineState extends State<Timeline> {
           ],
         ),
         Expanded(
-          child: ListWheelScrollView.useDelegate(
-            childDelegate: ListWheelChildBuilderDelegate(
-              builder: (context, index) => FrameThumbnail(
-                frame: visibleFrames[index],
-                size: thumbnailSize,
-                selected: index == timeline.selectedFrameId,
-                copy: timeline.frames[index] == null,
+          child: LayoutBuilder(builder: (context, constraints) {
+            final padding = (constraints.maxHeight - thumbnailSize.height) / 2;
+            final lastIndex = timeline.frames.length - 1;
+
+            return ListView.builder(
+              itemBuilder: (context, index) => Padding(
+                padding: EdgeInsets.only(
+                  top: index == 0 ? padding : 0,
+                  bottom: index == lastIndex ? padding : 0,
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    controller.animateTo(
+                      index * thumbnailSize.height,
+                      duration: Duration(milliseconds: 150),
+                      curve: Curves.easeOut,
+                    );
+                  },
+                  onHorizontalDragEnd: (_) {
+                    timeline.deleteSelectedFrame();
+                  },
+                  child: FrameThumbnail(
+                    frame: visibleFrames[index],
+                    size: thumbnailSize,
+                    selected: index == timeline.selectedFrameId,
+                    copy: timeline.frames[index] == null,
+                  ),
+                ),
               ),
-              childCount: timeline.frames.length,
-            ),
-            controller: controller,
-            useMagnifier: false,
-            diameterRatio: 100,
-            squeeze: _squeeze,
-            onSelectedItemChanged: (int index) {
-              timeline.selectFrame(index);
-              _selectedId = index;
-            },
-            itemExtent: thumbnailSize.height,
-            physics: BouncingScrollPhysics(),
-          ),
+              itemCount: timeline.frames.length,
+              controller: controller,
+            );
+          }),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             BarIconButton(
               icon: FontAwesomeIcons.minusSquare,
-              onTap: timeline.canRemoveFrameSlot
-                  ? () {
-                      timeline.removeFrameSlot();
-                      _forceLayout();
-                    }
-                  : null,
+              onTap:
+                  timeline.canRemoveFrameSlot ? timeline.removeFrameSlot : null,
             ),
             BarIconButton(
               icon: FontAwesomeIcons.plusSquare,
-              onTap: () {
-                timeline.addFrameSlot();
-                _forceLayout();
-              },
+              onTap: timeline.addFrameSlot,
             ),
           ],
         ),
