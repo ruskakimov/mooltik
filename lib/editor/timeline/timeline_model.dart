@@ -16,6 +16,8 @@ class TimelineModel extends ChangeNotifier {
   FrameModel get selectedFrame => frames[_selectedFrameId];
 
   FrameModel _copiedFrame;
+  FrameModel _lastDeleted;
+  int _lastDeletedId;
 
   bool get onion => _onion;
   bool _onion = false;
@@ -119,6 +121,8 @@ class TimelineModel extends ChangeNotifier {
     assert(id >= 0 && id <= frames.length);
     if (!canDeleteFrameAt(id)) return;
 
+    _lastDeleted = frames[id];
+    _lastDeletedId = id;
     frames[id] = null;
     notifyListeners();
   }
@@ -126,7 +130,11 @@ class TimelineModel extends ChangeNotifier {
   void createFrameAt(int id) {
     assert(id >= 0 && id <= frames.length);
 
-    frames[id] = FrameModel();
+    if (_lastDeletedId == id && _lastDeleted != null) {
+      frames[id] = _lastDeleted;
+    } else {
+      frames[id] = FrameModel();
+    }
     notifyListeners();
   }
 

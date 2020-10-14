@@ -76,9 +76,14 @@ class _TimelineState extends State<Timeline> {
                   onHorizontalDragEnd: (dragDetails) {
                     final toLeft = dragDetails.velocity.pixelsPerSecond.dx < 0;
                     if (toLeft) {
+                      // swipe to left
                       timeline.deleteFrameAt(index);
                     } else {
-                      timeline.createFrameAt(index);
+                      // swipe to right
+                      final frame = timeline.frames[index];
+                      if (frame == null) {
+                        timeline.createFrameAt(index);
+                      }
                     }
                   },
                   child: FrameThumbnail(
