@@ -52,9 +52,9 @@ class _TimelineState extends State<Timeline> {
       return visibleFrame;
     }).toList();
 
-    return Column(
+    return Stack(
       children: [
-        Expanded(
+        Positioned.fill(
           child: LayoutBuilder(builder: (context, constraints) {
             final padding = (constraints.maxHeight - thumbnailSize.height) / 2;
             final lastIndex = timeline.frames.length - 1;
@@ -96,19 +96,46 @@ class _TimelineState extends State<Timeline> {
             );
           }),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            BarIconButton(
-              icon: FontAwesomeIcons.minusSquare,
-              onTap:
-                  timeline.canRemoveFrameSlot ? timeline.removeFrameSlot : null,
-            ),
-            BarIconButton(
-              icon: FontAwesomeIcons.plusSquare,
-              onTap: timeline.addFrameSlot,
-            ),
-          ],
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  if (timeline.canRemoveFrameSlot)
+                    Container(
+                      color: Colors.blueGrey[800],
+                      width: 18,
+                      height: 18,
+                    ),
+                  BarIconButton(
+                    icon: FontAwesomeIcons.minusSquare,
+                    onTap: timeline.canRemoveFrameSlot
+                        ? timeline.removeFrameSlot
+                        : null,
+                  ),
+                ],
+              ),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    color: Colors.blueGrey[800],
+                    width: 18,
+                    height: 18,
+                  ),
+                  BarIconButton(
+                    icon: FontAwesomeIcons.plusSquare,
+                    onTap: timeline.addFrameSlot,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ],
     );
