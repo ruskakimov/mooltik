@@ -37,7 +37,7 @@ class App extends StatelessWidget {
       initialRoute: '/editor',
       routes: {
         '/': (context) => Text('home page'),
-        '/editor': (context) => EditorPage(),
+        EditorPage.routeName: (context) => EditorPage(),
       },
     );
   }

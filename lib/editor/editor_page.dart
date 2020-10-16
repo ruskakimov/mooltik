@@ -10,6 +10,8 @@ import 'easel/easel.dart';
 import 'timeline/timeline_model.dart';
 
 class EditorPage extends StatelessWidget {
+  static const routeName = '/editor';
+
   const EditorPage({Key key}) : super(key: key);
 
   @override
