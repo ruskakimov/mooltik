@@ -37,18 +37,7 @@ class App extends StatelessWidget {
       initialRoute: '/editor',
       routes: {
         '/': (context) => Text('home page'),
-        '/editor': (context) => MultiProvider(
-              providers: [
-                ChangeNotifierProvider(
-                  create: (context) =>
-                      TimelineModel(initialFrames: [FrameModel()]),
-                ),
-                ChangeNotifierProvider(
-                  create: (context) => ToolboxModel(),
-                ),
-              ],
-              child: EditorPage(),
-            ),
+        '/editor': (context) => EditorPage(),
       },
     );
   }
