@@ -37,11 +37,11 @@ class App extends StatelessWidget {
       home: MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (context) => TimelineModel(
-              initialFrames: [FrameModel()],
-            ),
+            create: (context) => TimelineModel(initialFrames: [FrameModel()]),
           ),
-          ChangeNotifierProvider(create: (context) => ToolboxModel()),
+          ChangeNotifierProvider(
+            create: (context) => ToolboxModel(),
+          ),
         ],
         child: EditorPage(),
       ),
