@@ -34,17 +34,22 @@ class App extends StatelessWidget {
         accentColor: Colors.amber,
         dialogBackgroundColor: Colors.blueGrey[900],
       ),
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (context) => TimelineModel(initialFrames: [FrameModel()]),
-          ),
-          ChangeNotifierProvider(
-            create: (context) => ToolboxModel(),
-          ),
-        ],
-        child: EditorPage(),
-      ),
+      initialRoute: '/editor',
+      routes: {
+        '/': (context) => Text('home page'),
+        '/editor': (context) => MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  create: (context) =>
+                      TimelineModel(initialFrames: [FrameModel()]),
+                ),
+                ChangeNotifierProvider(
+                  create: (context) => ToolboxModel(),
+                ),
+              ],
+              child: EditorPage(),
+            ),
+      },
     );
   }
 }
