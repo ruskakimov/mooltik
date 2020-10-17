@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mooltik/editor/frame/frame_model.dart';
-import 'package:provider/provider.dart';
 
 import 'editor/editor_page.dart';
-import 'editor/timeline/timeline_model.dart';
-import 'editor/toolbox/toolbox_model.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

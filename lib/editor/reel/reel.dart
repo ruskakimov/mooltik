@@ -5,29 +5,29 @@ import 'package:mooltik/editor/drawer/bar_icon_button.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/frame/frame_painter.dart';
 import 'package:provider/provider.dart';
-import 'package:mooltik/editor/timeline/timeline_model.dart';
+import 'package:mooltik/editor/reel/reel_model.dart';
 
 const thumbnailSize = Size(112, 64);
 
-class Timeline extends StatefulWidget {
-  const Timeline({Key key}) : super(key: key);
+class Reel extends StatefulWidget {
+  const Reel({Key key}) : super(key: key);
 
   @override
-  _TimelineState createState() => _TimelineState();
+  _ReelState createState() => _ReelState();
 }
 
-class _TimelineState extends State<Timeline> {
+class _ReelState extends State<Reel> {
   ScrollController controller;
 
   @override
   void initState() {
     super.initState();
-    // _selectedId = context.read<TimelineModel>().selectedFrameId;
-    final timeline = context.read<TimelineModel>();
+    // _selectedId = context.read<reelModel>().selectedFrameId;
+    final reel = context.read<ReelModel>();
     controller = ScrollController()
       ..addListener(() {
         int i = (controller.offset / thumbnailSize.height).round();
-        timeline.selectFrame(i);
+        reel.selectFrame(i);
       });
   }
 
@@ -42,10 +42,10 @@ class _TimelineState extends State<Timeline> {
     // Update when selected frame is painted on.
     context.watch<FrameModel>();
 
-    final timeline = context.watch<TimelineModel>();
+    final reel = context.watch<ReelModel>();
 
-    var visibleFrame = timeline.frames.first;
-    final visibleFrames = timeline.frames.map((f) {
+    var visibleFrame = reel.frames.first;
+    final visibleFrames = reel.frames.map((f) {
       if (f != null) {
         visibleFrame = f;
       }
@@ -57,7 +57,7 @@ class _TimelineState extends State<Timeline> {
         Positioned.fill(
           child: LayoutBuilder(builder: (context, constraints) {
             final padding = (constraints.maxHeight - thumbnailSize.height) / 2;
-            final lastIndex = timeline.frames.length - 1;
+            final lastIndex = reel.frames.length - 1;
 
             return ListView.builder(
               itemBuilder: (context, index) => Padding(
@@ -77,21 +77,21 @@ class _TimelineState extends State<Timeline> {
                     final toLeft = dragDetails.velocity.pixelsPerSecond.dx < 0;
                     if (toLeft) {
                       // Swiped to left.
-                      timeline.deleteFrameAt(index);
+                      reel.deleteFrameAt(index);
                     } else {
                       // Swiped to right.
-                      timeline.createOrRestoreFrameAt(index);
+                      reel.createOrRestoreFrameAt(index);
                     }
                   },
                   child: FrameThumbnail(
                     frame: visibleFrames[index],
                     size: thumbnailSize,
-                    selected: index == timeline.selectedFrameId,
-                    copy: timeline.frames[index] == null,
+                    selected: index == reel.selectedFrameId,
+                    copy: reel.frames[index] == null,
                   ),
                 ),
               ),
-              itemCount: timeline.frames.length,
+              itemCount: reel.frames.length,
               controller: controller,
             );
           }),
@@ -106,7 +106,7 @@ class _TimelineState extends State<Timeline> {
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  if (timeline.canRemoveFrameSlot)
+                  if (reel.canRemoveFrameSlot)
                     Container(
                       color: Colors.blueGrey[800],
                       width: 18,
@@ -114,9 +114,8 @@ class _TimelineState extends State<Timeline> {
                     ),
                   BarIconButton(
                     icon: FontAwesomeIcons.minusSquare,
-                    onTap: timeline.canRemoveFrameSlot
-                        ? timeline.removeFrameSlot
-                        : null,
+                    onTap:
+                        reel.canRemoveFrameSlot ? reel.removeFrameSlot : null,
                   ),
                 ],
               ),
@@ -130,7 +129,7 @@ class _TimelineState extends State<Timeline> {
                   ),
                   BarIconButton(
                     icon: FontAwesomeIcons.plusSquare,
-                    onTap: timeline.addFrameSlot,
+                    onTap: reel.addFrameSlot,
                   ),
                 ],
               ),

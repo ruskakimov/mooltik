@@ -1,11 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
-import 'package:mooltik/editor/timeline/timeline_model.dart';
+import 'package:mooltik/editor/reel/reel_model.dart';
+import 'package:mooltik/editor/reel/reel.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/drawer/export_tab.dart';
 import 'package:mooltik/editor/easel/hovering_icon_button.dart';
-import 'package:mooltik/editor/timeline/timeline.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'bar_icon_button.dart';
@@ -32,7 +32,7 @@ class _EditorDrawerState extends State<EditorDrawer>
   Animation _openCloseAnimation;
 
   final tabs = <Widget>[
-    Timeline(),
+    Reel(),
     ExportTab(),
   ];
   int _selectedTabIndex = 0;
@@ -110,7 +110,7 @@ class _EditorDrawerState extends State<EditorDrawer>
   }
 
   Widget _buildDrawerBar() {
-    final timeline = context.watch<TimelineModel>();
+    final reel = context.watch<ReelModel>();
 
     return Container(
       color: Colors.blueGrey[700],
@@ -125,14 +125,14 @@ class _EditorDrawerState extends State<EditorDrawer>
           Spacer(),
           BarIconButton(
             icon: FontAwesomeIcons.play,
-            onTap: timeline.play,
+            onTap: reel.play,
           ),
           Spacer(),
           BarIconButton(
             icon: FontAwesomeIcons.solidClone,
-            selected: timeline.onion,
+            selected: reel.onion,
             onTap: () {
-              timeline.onion = !timeline.onion;
+              reel.onion = !reel.onion;
             },
           ),
           BarIconButton(

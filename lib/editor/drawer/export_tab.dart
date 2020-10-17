@@ -7,7 +7,7 @@ import 'package:image/image.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/gif.dart';
-import 'package:mooltik/editor/timeline/timeline_model.dart';
+import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +29,7 @@ class _ExportTabState extends State<ExportTab> {
         child: Text('Saving...'),
       );
 
-    final timeline = context.watch<TimelineModel>();
+    final reel = context.watch<ReelModel>();
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -46,7 +46,7 @@ class _ExportTabState extends State<ExportTab> {
               setState(() {
                 _saving = true;
               });
-              await _saveGif(timeline.frames, timeline.frameDurations);
+              await _saveGif(reel.frames, reel.frameDurations);
               setState(() {
                 _saving = false;
               });
@@ -64,7 +64,7 @@ class _ExportTabState extends State<ExportTab> {
               setState(() {
                 _saving = true;
               });
-              await _saveVideo(timeline.frames, timeline.frameDurations);
+              await _saveVideo(reel.frames, reel.frameDurations);
               setState(() {
                 _saving = false;
               });

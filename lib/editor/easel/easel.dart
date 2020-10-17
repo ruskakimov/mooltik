@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/easel/easel_model.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
-import 'package:mooltik/editor/timeline/timeline_model.dart';
+import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
 import 'package:after_init/after_init.dart';
 
@@ -26,7 +26,7 @@ class _EaselState extends State<Easel> with AfterInitMixin<Easel> {
   Widget build(BuildContext context) {
     final easel = context.watch<EaselModel>();
     final frame = context.watch<FrameModel>();
-    final timeline = context.watch<TimelineModel>();
+    final reel = context.watch<ReelModel>();
 
     return EaselGestureDetector(
       onStrokeStart: easel.onStrokeStart,
@@ -56,13 +56,13 @@ class _EaselState extends State<Easel> with AfterInitMixin<Easel> {
                       height: frame.height,
                       color: Colors.white,
                     ),
-                    if (timeline.visibleFrameBefore != null)
+                    if (reel.visibleFrameBefore != null)
                       Opacity(
                         opacity: 0.2,
                         child: CustomPaint(
                           size: Size(frame.width, frame.height),
                           foregroundPainter: FramePainter(
-                            frame: timeline.visibleFrameBefore,
+                            frame: reel.visibleFrameBefore,
                             background: Colors.transparent,
                             filter: ColorFilter.mode(
                               Colors.red,
@@ -71,13 +71,13 @@ class _EaselState extends State<Easel> with AfterInitMixin<Easel> {
                           ),
                         ),
                       ),
-                    if (timeline.visibleFrameAfter != null)
+                    if (reel.visibleFrameAfter != null)
                       Opacity(
                         opacity: 0.2,
                         child: CustomPaint(
                           size: Size(frame.width, frame.height),
                           foregroundPainter: FramePainter(
-                            frame: timeline.visibleFrameAfter,
+                            frame: reel.visibleFrameAfter,
                             background: Colors.transparent,
                             filter: ColorFilter.mode(
                               Colors.green,

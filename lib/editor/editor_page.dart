@@ -7,7 +7,7 @@ import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
 
 import 'easel/easel.dart';
-import 'timeline/timeline_model.dart';
+import 'reel/reel_model.dart';
 
 class EditorPage extends StatelessWidget {
   static const routeName = '/editor';
@@ -19,14 +19,14 @@ class EditorPage extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (context) => TimelineModel(initialFrames: [FrameModel()]),
+            create: (context) => ReelModel(initialFrames: [FrameModel()]),
           ),
           ChangeNotifierProvider(
             create: (context) => ToolboxModel(),
           ),
         ],
         builder: (context, child) {
-          final timeline = context.watch<TimelineModel>();
+          final reel = context.watch<ReelModel>();
           final toolbox = context.watch<ToolboxModel>();
 
           return Scaffold(
@@ -34,19 +34,19 @@ class EditorPage extends StatelessWidget {
             body: MultiProvider(
               providers: [
                 // TODO: Frame is provided here since undo/redo buttons listen to it. Consider removing when undo stack is extracted and generalized.
-                ChangeNotifierProvider.value(value: timeline.visibleFrame),
-                ChangeNotifierProxyProvider2<TimelineModel, ToolboxModel,
+                ChangeNotifierProvider.value(value: reel.visibleFrame),
+                ChangeNotifierProxyProvider2<ReelModel, ToolboxModel,
                     EaselModel>(
                   create: (_) => EaselModel(
-                    frame: timeline.selectedFrame,
+                    frame: reel.selectedFrame,
                     // TODO: Pass frame width/height from a single source.
-                    frameWidth: timeline.selectedFrame.width,
-                    frameHeight: timeline.selectedFrame.height,
+                    frameWidth: reel.selectedFrame.width,
+                    frameHeight: reel.selectedFrame.height,
                     selectedTool: toolbox.selectedTool,
-                    createFrame: timeline.createFrameInSelectedSlot,
+                    createFrame: reel.createFrameInSelectedSlot,
                   ),
-                  update: (_, timeline, toolbox, easel) => easel
-                    ..updateFrame(timeline.selectedFrame)
+                  update: (_, reel, toolbox, easel) => easel
+                    ..updateFrame(reel.selectedFrame)
                     ..updateSelectedTool(toolbox.selectedTool)
                     ..updateSelectedColor(toolbox.selectedColor),
                 ),
@@ -62,21 +62,21 @@ class EditorPage extends StatelessWidget {
                       alignment: Alignment.topLeft,
                       child: AnimatedOpacity(
                           duration: Duration(milliseconds: 200),
-                          opacity: timeline.playing ? 0 : 1,
+                          opacity: reel.playing ? 0 : 1,
                           child: EditorDrawer()),
                     ),
                     Align(
                       alignment: Alignment.topRight,
                       child: AnimatedOpacity(
                         duration: Duration(milliseconds: 200),
-                        opacity: timeline.playing ? 0 : 1,
+                        opacity: reel.playing ? 0 : 1,
                         child: ToolBar(),
                       ),
                     ),
-                    if (timeline.playing)
+                    if (reel.playing)
                       Listener(
                         behavior: HitTestBehavior.opaque,
-                        onPointerUp: (_) => timeline.stop(),
+                        onPointerUp: (_) => reel.stop(),
                       ),
                   ],
                 ),

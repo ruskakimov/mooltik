@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
-import 'package:mooltik/editor/timeline/timeline_model.dart';
+import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:quiver/testing/async.dart';
 
 void main() {
-  group('TimelineModel', () {
+  group('reelModel', () {
     test('should toggle playing state on play/stop', () {
-      final model = TimelineModel(initialFrames: [
+      final model = ReelModel(initialFrames: [
         FrameModel()..duration = 24,
         FrameModel()..duration = 12,
       ]);
@@ -17,7 +17,7 @@ void main() {
     });
 
     test('should show frames in sequence with correct duration (2 frames)', () {
-      final model = TimelineModel(initialFrames: [
+      final model = ReelModel(initialFrames: [
         FrameModel()..duration = 24,
         FrameModel()..duration = 12,
       ]);
@@ -40,7 +40,7 @@ void main() {
     });
 
     test('should show frames in sequence with correct duration (5 frames)', () {
-      final model = TimelineModel(initialFrames: [
+      final model = ReelModel(initialFrames: [
         FrameModel()..duration = 6,
         FrameModel()..duration = 12,
         FrameModel()..duration = 6,
@@ -81,7 +81,7 @@ void main() {
     });
 
     test('should loop animation correctly', () {
-      final model = TimelineModel(initialFrames: [
+      final model = ReelModel(initialFrames: [
         FrameModel()..duration = 24,
         FrameModel()..duration = 12,
         FrameModel()..duration = 6,
@@ -121,7 +121,7 @@ void main() {
     });
 
     test('should notify listeners at the right time, with the right id', () {
-      final model = TimelineModel(initialFrames: [
+      final model = ReelModel(initialFrames: [
         FrameModel()..duration = 2,
         FrameModel()..duration = 2,
         FrameModel()..duration = 2,

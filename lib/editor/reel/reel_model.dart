@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../frame/frame_model.dart';
 
-class TimelineModel extends ChangeNotifier {
-  TimelineModel({
+class ReelModel extends ChangeNotifier {
+  ReelModel({
     @required initialFrames,
   })  : assert(initialFrames.isNotEmpty),
         frames = initialFrames;
