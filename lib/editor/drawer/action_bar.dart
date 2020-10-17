@@ -10,8 +10,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'bar_icon_button.dart';
 
-class EditorDrawer extends StatefulWidget {
-  EditorDrawer({
+class ActionBar extends StatefulWidget {
+  ActionBar({
     Key key,
     this.width = 112,
     this.quickAccessButtons,
@@ -22,11 +22,10 @@ class EditorDrawer extends StatefulWidget {
   final List<BarIconButton> quickAccessButtons;
 
   @override
-  _EditorDrawerState createState() => _EditorDrawerState();
+  _ActionBarState createState() => _ActionBarState();
 }
 
-class _EditorDrawerState extends State<EditorDrawer>
-    with TickerProviderStateMixin {
+class _ActionBarState extends State<ActionBar> with TickerProviderStateMixin {
   bool open = false;
   AnimationController _controller;
   Animation _openCloseAnimation;

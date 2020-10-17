@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/editor/drawer/editor_drawer.dart';
+import 'package:mooltik/editor/drawer/action_bar.dart';
 import 'package:mooltik/editor/drawer/pallete_tab/toolbar.dart';
 import 'package:mooltik/editor/easel/easel_model.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
@@ -63,7 +63,7 @@ class EditorPage extends StatelessWidget {
                       child: AnimatedOpacity(
                           duration: Duration(milliseconds: 200),
                           opacity: reel.playing ? 0 : 1,
-                          child: EditorDrawer()),
+                          child: ActionBar()),
                     ),
                     Align(
                       alignment: Alignment.topRight,
