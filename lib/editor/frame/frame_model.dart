@@ -13,8 +13,11 @@ import 'stroke.dart';
 const int maxSnapshotCount = 16;
 
 class FrameModel extends ChangeNotifier {
-  FrameModel({ui.Image initialSnapshot})
-      : unrasterizedStrokes = [],
+  FrameModel({
+    ui.Image initialSnapshot,
+    Size size = const Size(1280, 720),
+  })  : _size = size,
+        unrasterizedStrokes = [],
         _snapshots = [initialSnapshot],
         _selectedSnapshotId = 0;
 
@@ -24,9 +27,11 @@ class FrameModel extends ChangeNotifier {
   List<ui.Image> _snapshots;
   int _selectedSnapshotId;
 
-  double get width => 1280;
+  final Size _size;
 
-  double get height => 720;
+  double get width => _size.width;
+
+  double get height => _size.height;
 
   ui.Image get snapshot => _snapshots[_selectedSnapshotId];
 
