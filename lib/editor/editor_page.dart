@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/drawer/action_bar.dart';
 import 'package:mooltik/editor/drawer/pallete_tab/toolbar.dart';
-import 'package:mooltik/editor/easel/easel_model.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +26,6 @@ class EditorPage extends StatelessWidget {
         ],
         builder: (context, child) {
           final reel = context.watch<ReelModel>();
-          final toolbox = context.watch<ToolboxModel>();
 
           return Scaffold(
             backgroundColor: Colors.grey[300],
@@ -35,21 +33,6 @@ class EditorPage extends StatelessWidget {
               providers: [
                 // TODO: Frame is provided here since undo/redo buttons listen to it. Consider removing when undo stack is extracted and generalized.
                 ChangeNotifierProvider.value(value: reel.visibleFrame),
-                ChangeNotifierProxyProvider2<ReelModel, ToolboxModel,
-                    EaselModel>(
-                  create: (_) => EaselModel(
-                    frame: reel.selectedFrame,
-                    // TODO: Pass frame width/height from a single source.
-                    frameWidth: reel.selectedFrame.width,
-                    frameHeight: reel.selectedFrame.height,
-                    selectedTool: toolbox.selectedTool,
-                    createFrame: reel.createFrameInSelectedSlot,
-                  ),
-                  update: (_, reel, toolbox, easel) => easel
-                    ..updateFrame(reel.selectedFrame)
-                    ..updateSelectedTool(toolbox.selectedTool)
-                    ..updateSelectedColor(toolbox.selectedColor),
-                ),
               ],
               child: SafeArea(
                 child: Stack(

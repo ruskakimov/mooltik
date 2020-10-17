@@ -14,8 +14,12 @@ class EaselModel extends ChangeNotifier {
     @required this.frameWidth,
     @required this.frameHeight,
     @required this.createFrame,
+    @required Size screenSize,
   })  : _frame = frame,
-        _selectedTool = selectedTool;
+        _selectedTool = selectedTool,
+        _screenSize = screenSize {
+    _fitToScreen();
+  }
 
   FrameModel _frame;
 
@@ -59,11 +63,6 @@ class EaselModel extends ChangeNotifier {
   double get canvasHeight => frameHeight * _scale;
 
   Rect get _frameArea => Rect.fromLTWH(0, 0, frameWidth, frameHeight);
-
-  void init(Size screenSize) {
-    _screenSize = screenSize;
-    _fitToScreen();
-  }
 
   /// Used by provider to update dependency.
   void updateSelectedTool(Tool tool) {
