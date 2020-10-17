@@ -14,8 +14,8 @@ const int maxSnapshotCount = 16;
 
 class FrameModel extends ChangeNotifier {
   FrameModel({
+    @required Size size,
     ui.Image initialSnapshot,
-    Size size = const Size(1280, 720),
   })  : _size = size,
         unrasterizedStrokes = [],
         _snapshots = [initialSnapshot],

@@ -4,9 +4,12 @@ import '../frame/frame_model.dart';
 
 class ReelModel extends ChangeNotifier {
   ReelModel({
-    @required initialFrames,
-  })  : assert(initialFrames.isNotEmpty),
-        frames = initialFrames;
+    this.frameSize = const Size(1280, 720),
+    List<FrameModel> initialFrames,
+  })  : assert(frameSize != null),
+        frames = initialFrames ?? [FrameModel(size: frameSize)];
+
+  final Size frameSize;
 
   List<FrameModel> frames;
 
@@ -134,7 +137,7 @@ class ReelModel extends ChangeNotifier {
     if (_lastDeletedId == id && _lastDeleted != null) {
       frames[id] = _lastDeleted;
     } else {
-      frames[id] = FrameModel();
+      frames[id] = FrameModel(size: frameSize);
     }
     notifyListeners();
   }
@@ -148,7 +151,10 @@ class ReelModel extends ChangeNotifier {
   void paste(int id) {
     assert(id >= 0 && id <= frames.length);
     if (_copiedFrame == null) return;
-    frames[id] = FrameModel(initialSnapshot: _copiedFrame.snapshot);
+    frames[id] = FrameModel(
+      size: frameSize,
+      initialSnapshot: _copiedFrame.snapshot,
+    );
     notifyListeners();
   }
 
@@ -156,6 +162,7 @@ class ReelModel extends ChangeNotifier {
     if (selectedFrame != null) return null;
 
     frames[_selectedFrameId] = FrameModel(
+      size: frameSize,
       initialSnapshot: visibleFrame.snapshot,
     );
 

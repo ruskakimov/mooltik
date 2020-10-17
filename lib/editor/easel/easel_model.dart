@@ -10,9 +10,8 @@ const twoPi = pi * 2;
 class EaselModel extends ChangeNotifier {
   EaselModel({
     @required FrameModel frame,
+    @required this.frameSize,
     @required Tool selectedTool,
-    @required this.frameWidth,
-    @required this.frameHeight,
     @required this.createFrame,
     @required Size screenSize,
   })  : _frame = frame,
@@ -26,9 +25,8 @@ class EaselModel extends ChangeNotifier {
   Tool _selectedTool;
   Color _selectedColor;
 
-  final double frameWidth;
-  final double frameHeight;
   final Function createFrame;
+  final Size frameSize;
 
   Size _screenSize;
 
@@ -57,12 +55,12 @@ class EaselModel extends ChangeNotifier {
   double get canvasRotation => _rotation;
 
   /// Canvas width at current scale.
-  double get canvasWidth => frameWidth * _scale;
+  double get canvasWidth => frameSize.width * _scale;
 
   /// Canvas height at current scale.
-  double get canvasHeight => frameHeight * _scale;
+  double get canvasHeight => frameSize.height * _scale;
 
-  Rect get _frameArea => Rect.fromLTWH(0, 0, frameWidth, frameHeight);
+  Rect get _frameArea => Rect.fromLTWH(0, 0, frameSize.width, frameSize.height);
 
   /// Used by provider to update dependency.
   void updateSelectedTool(Tool tool) {
@@ -84,10 +82,10 @@ class EaselModel extends ChangeNotifier {
 
   void _fitToScreen() {
     final verticalPadding = 16.0;
-    _scale = (_screenSize.height - verticalPadding * 2) / frameHeight;
+    _scale = (_screenSize.height - verticalPadding * 2) / frameSize.height;
     _offset = Offset(
-      (_screenSize.width - frameWidth * _scale) / 2,
-      (_screenSize.height - frameHeight * _scale) / 2,
+      (_screenSize.width - frameSize.width * _scale) / 2,
+      (_screenSize.height - frameSize.height * _scale) / 2,
     );
     _rotation = 0;
   }

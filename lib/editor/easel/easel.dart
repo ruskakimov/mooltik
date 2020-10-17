@@ -24,9 +24,7 @@ class _EaselState extends State<Easel> {
     return ChangeNotifierProxyProvider2<ReelModel, ToolboxModel, EaselModel>(
       create: (_) => EaselModel(
         frame: reel.selectedFrame,
-        // TODO: Pass frame width/height from a single source.
-        frameWidth: reel.selectedFrame.width,
-        frameHeight: reel.selectedFrame.height,
+        frameSize: reel.frameSize,
         selectedTool: toolbox.selectedTool,
         createFrame: reel.createFrameInSelectedSlot,
         screenSize: MediaQuery.of(context).size,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/drawer/action_bar.dart';
 import 'package:mooltik/editor/drawer/pallete_tab/toolbar.dart';
-import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +17,7 @@ class EditorPage extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (context) => ReelModel(initialFrames: [FrameModel()]),
+            create: (context) => ReelModel(),
           ),
           ChangeNotifierProvider(
             create: (context) => ToolboxModel(),
