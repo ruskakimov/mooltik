@@ -19,16 +19,38 @@ class Reel extends StatefulWidget {
 class _ReelState extends State<Reel> {
   ScrollController controller;
 
+  ReelModel get reel => context.read<ReelModel>();
+
+  int get selectedId => (controller.offset / thumbnailSize.height).round();
+
   @override
   void initState() {
     super.initState();
-    // _selectedId = context.read<reelModel>().selectedFrameId;
-    final reel = context.read<ReelModel>();
-    controller = ScrollController()
-      ..addListener(() {
-        int i = (controller.offset / thumbnailSize.height).round();
-        reel.selectFrame(i);
-      });
+    controller = ScrollController(
+      initialScrollOffset: reel.selectedFrameId * thumbnailSize.height,
+    )..addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    reel.selectFrame(selectedId);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (controller.hasClients && selectedId != reel.selectedFrameId) {
+      controller.removeListener(_onScroll);
+      _scrollTo(reel.selectedFrameId);
+      controller.addListener(_onScroll);
+    }
+  }
+
+  void _scrollTo(int index) {
+    controller.animateTo(
+      index * thumbnailSize.height,
+      duration: Duration(milliseconds: 150),
+      curve: Curves.easeOut,
+    );
   }
 
   @override
@@ -59,84 +81,100 @@ class _ReelState extends State<Reel> {
             final padding = (constraints.maxHeight - thumbnailSize.height) / 2;
             final lastIndex = reel.frames.length - 1;
 
-            return ListView.builder(
-              itemBuilder: (context, index) => Padding(
-                padding: EdgeInsets.only(
-                  top: index == 0 ? padding : 0,
-                  bottom: index == lastIndex ? padding : 0,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    controller.animateTo(
-                      index * thumbnailSize.height,
-                      duration: Duration(milliseconds: 150),
-                      curve: Curves.easeOut,
-                    );
-                  },
-                  onHorizontalDragEnd: (dragDetails) {
-                    final toLeft = dragDetails.velocity.pixelsPerSecond.dx < 0;
-                    if (toLeft) {
-                      // Swiped to left.
-                      reel.deleteFrameAt(index);
-                    } else {
-                      // Swiped to right.
-                      reel.createOrRestoreFrameAt(index);
-                    }
-                  },
-                  child: FrameThumbnail(
-                    frame: visibleFrames[index],
-                    size: thumbnailSize,
-                    selected: index == reel.selectedFrameId,
-                    copy: reel.frames[index] == null,
+            final before = SizedBox(height: padding);
+            final after = SizedBox(
+              height: padding,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: thumbnailSize.height,
+                    child: BarIconButton(
+                      icon: FontAwesomeIcons.plusCircle,
+                      onTap: () {
+                        reel.addFrame();
+                      },
+                    ),
                   ),
-                ),
+                ],
+              ),
+            );
+
+            return ListView.builder(
+              itemBuilder: (context, index) => Column(
+                children: [
+                  if (index == 0) before,
+                  GestureDetector(
+                    onTap: () => _scrollTo(index),
+                    onHorizontalDragEnd: (dragDetails) {
+                      final toLeft =
+                          dragDetails.velocity.pixelsPerSecond.dx < 0;
+                      if (toLeft) {
+                        // Swiped to left.
+                        reel.deleteFrameAt(index);
+                      } else {
+                        // Swiped to right.
+                        reel.createOrRestoreFrameAt(index);
+                      }
+                    },
+                    child: FrameThumbnail(
+                      frame: visibleFrames[index],
+                      size: thumbnailSize,
+                      selected: index == reel.selectedFrameId,
+                      copy: reel.frames[index] == null,
+                    ),
+                  ),
+                  if (index == lastIndex) after,
+                ],
               ),
               itemCount: reel.frames.length,
               controller: controller,
             );
           }),
         ),
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+        // _buildCloneButtons(reel),
+      ],
+    );
+  }
+
+  Positioned _buildCloneButtons(ReelModel reel) {
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Stack(
+            alignment: Alignment.center,
             children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  if (reel.canRemoveFrameSlot)
-                    Container(
-                      color: Colors.blueGrey[800],
-                      width: 18,
-                      height: 18,
-                    ),
-                  BarIconButton(
-                    icon: FontAwesomeIcons.minusSquare,
-                    onTap:
-                        reel.canRemoveFrameSlot ? reel.removeFrameSlot : null,
-                  ),
-                ],
-              ),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    color: Colors.blueGrey[800],
-                    width: 18,
-                    height: 18,
-                  ),
-                  BarIconButton(
-                    icon: FontAwesomeIcons.plusSquare,
-                    onTap: reel.addFrameSlot,
-                  ),
-                ],
+              if (reel.canRemoveFrameSlot)
+                Container(
+                  color: Colors.blueGrey[800],
+                  width: 18,
+                  height: 18,
+                ),
+              BarIconButton(
+                icon: FontAwesomeIcons.minusSquare,
+                onTap: reel.canRemoveFrameSlot ? reel.removeFrameSlot : null,
               ),
             ],
           ),
-        ),
-      ],
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                color: Colors.blueGrey[800],
+                width: 18,
+                height: 18,
+              ),
+              BarIconButton(
+                icon: FontAwesomeIcons.plusSquare,
+                onTap: reel.addFrameSlot,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

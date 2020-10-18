@@ -106,6 +106,12 @@ class ReelModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addFrame() {
+    frames.insert(_selectedFrameId + 1, FrameModel(size: frameSize));
+    _selectedFrameId = frames.length - 1;
+    notifyListeners();
+  }
+
   bool get canRemoveFrameSlot =>
       _selectedFrameId != frames.length - 1 &&
       frames[_selectedFrameId + 1] == null;
