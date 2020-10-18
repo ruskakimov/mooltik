@@ -118,11 +118,14 @@ class _ReelState extends State<Reel> {
                         reel.createOrRestoreFrameAt(index);
                       }
                     },
-                    child: FrameThumbnail(
-                      frame: visibleFrames[index],
-                      size: thumbnailSize,
-                      selected: index == reel.selectedFrameId,
-                      copy: reel.frames[index] == null,
+                    child: Transform.scale(
+                      scale: 0.99,
+                      child: FrameThumbnail(
+                        frame: visibleFrames[index],
+                        size: thumbnailSize,
+                        selected: index == reel.selectedFrameId,
+                        copy: reel.frames[index] == null,
+                      ),
                     ),
                   ),
                   if (index == lastIndex) after,
