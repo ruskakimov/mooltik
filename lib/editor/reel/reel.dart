@@ -38,7 +38,9 @@ class _ReelState extends State<Reel> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (controller.hasClients && selectedId != reel.selectedFrameId) {
+    if (controller.hasClients &&
+        selectedId != reel.selectedFrameId &&
+        !reel.playing) {
       controller.removeListener(_onScroll);
       _scrollTo(reel.selectedFrameId);
       controller.addListener(_onScroll);
