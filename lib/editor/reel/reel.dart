@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 
 const thumbnailSize = Size(112, 64);
+const durationModeScrollUnit = 20.0;
 
 class Reel extends StatefulWidget {
   const Reel({Key key}) : super(key: key);
@@ -18,6 +19,8 @@ class Reel extends StatefulWidget {
 
 class _ReelState extends State<Reel> {
   ScrollController controller;
+  bool _durationMode = false;
+  double _draggedInDurationMode = 0;
 
   ReelModel get reel => context.read<ReelModel>();
 
@@ -102,84 +105,66 @@ class _ReelState extends State<Reel> {
             );
 
             return ListView.builder(
-              itemBuilder: (context, index) => Column(
-                children: [
-                  if (index == 0) before,
-                  GestureDetector(
-                    onTap: () => _scrollTo(index),
-                    onHorizontalDragEnd: (dragDetails) {
-                      final toLeft =
-                          dragDetails.velocity.pixelsPerSecond.dx < 0;
-                      if (toLeft) {
-                        // Swiped to left.
-                        reel.deleteFrameAt(index);
-                      } else {
-                        // Swiped to right.
-                        reel.createOrRestoreFrameAt(index);
-                      }
-                    },
-                    child: Transform.scale(
-                      scale: 0.99,
-                      child: FrameThumbnail(
-                        frame: visibleFrames[index],
-                        size: thumbnailSize,
-                        selected: index == reel.selectedFrameId,
-                        copy: reel.frames[index] == null,
+              itemBuilder: (context, index) {
+                final selected = index == reel.selectedFrameId;
+                return Column(
+                  children: [
+                    if (index == 0) before,
+                    GestureDetector(
+                      onTap: () {
+                        _scrollTo(index);
+                        if (selected) {
+                          setState(() {
+                            _durationMode = !_durationMode;
+                          });
+                        }
+                      },
+                      onHorizontalDragEnd: (dragDetails) {
+                        final toLeft =
+                            dragDetails.velocity.pixelsPerSecond.dx < 0;
+                        if (toLeft) {
+                          // Swiped to left.
+                          reel.deleteFrameAt(index);
+                        } else {
+                          // Swiped to right.
+                          reel.createOrRestoreFrameAt(index);
+                        }
+                      },
+                      child: Transform.scale(
+                        scale: 0.99,
+                        child: FrameThumbnail(
+                          frame: visibleFrames[index],
+                          size: thumbnailSize,
+                          selected: selected,
+                          copy: reel.frames[index] == null,
+                          duration: _durationMode ? 4 : null,
+                        ),
                       ),
                     ),
-                  ),
-                  if (index == lastIndex) after,
-                ],
-              ),
+                    if (index == lastIndex) after,
+                  ],
+                );
+              },
               itemCount: reel.frames.length,
               controller: controller,
             );
           }),
         ),
-        // _buildCloneButtons(reel),
-      ],
-    );
-  }
+        if (_durationMode)
+          GestureDetector(
+            onVerticalDragUpdate: (details) {
+              _draggedInDurationMode += details.primaryDelta;
 
-  Positioned _buildCloneButtons(ReelModel reel) {
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              if (reel.canRemoveFrameSlot)
-                Container(
-                  color: Colors.blueGrey[800],
-                  width: 18,
-                  height: 18,
-                ),
-              BarIconButton(
-                icon: FontAwesomeIcons.minusSquare,
-                onTap: reel.canRemoveFrameSlot ? reel.removeFrameSlot : null,
-              ),
-            ],
+              if (_draggedInDurationMode >= durationModeScrollUnit) {
+                _draggedInDurationMode -= durationModeScrollUnit;
+                reel.addFrameSlot();
+              } else if (_draggedInDurationMode <= -durationModeScrollUnit) {
+                _draggedInDurationMode += durationModeScrollUnit;
+                reel.removeFrameSlot();
+              }
+            },
           ),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                color: Colors.blueGrey[800],
-                width: 18,
-                height: 18,
-              ),
-              BarIconButton(
-                icon: FontAwesomeIcons.plusSquare,
-                onTap: reel.addFrameSlot,
-              ),
-            ],
-          ),
-        ],
-      ),
+      ],
     );
   }
 }
@@ -191,12 +176,14 @@ class FrameThumbnail extends StatelessWidget {
     @required this.frame,
     @required this.selected,
     @required this.copy,
+    this.duration,
   }) : super(key: key);
 
   final Size size;
   final FrameModel frame;
   final bool selected;
   final bool copy;
+  final int duration;
 
   @override
   Widget build(BuildContext context) {
@@ -215,7 +202,21 @@ class FrameThumbnail extends StatelessWidget {
             width: size.width,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.amber, width: 4),
+              color: duration != null
+                  ? Colors.amber.withOpacity(0.8)
+                  : Colors.transparent,
             ),
+            child: duration != null
+                ? Center(
+                    child: Text(
+                      '$duration',
+                      style: TextStyle(
+                        fontSize: 42,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  )
+                : null,
           ),
       ],
     );
