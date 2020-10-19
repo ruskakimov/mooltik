@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 
 const thumbnailSize = Size(112, 64);
-const durationModeScrollUnit = 20.0;
+const durationModeScrollUnit = 24.0;
 
 class Reel extends StatefulWidget {
   const Reel({Key key}) : super(key: key);
@@ -79,6 +79,17 @@ class _ReelState extends State<Reel> {
       return visibleFrame;
     }).toList();
 
+    final durations = [];
+    int i = 1;
+    reel.frames.reversed.forEach((f) {
+      durations.insert(0, i);
+      if (f == null) {
+        i++;
+      } else {
+        i = 1;
+      }
+    });
+
     return Stack(
       children: [
         Positioned.fill(
@@ -137,7 +148,7 @@ class _ReelState extends State<Reel> {
                           size: thumbnailSize,
                           selected: selected,
                           copy: reel.frames[index] == null,
-                          duration: _durationMode ? 4 : null,
+                          duration: _durationMode ? durations[index] : null,
                         ),
                       ),
                     ),
