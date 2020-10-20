@@ -59,25 +59,18 @@ class DurationIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          children: [
-            Icon(
-              FontAwesomeIcons.angleUp,
-              color: Colors.blueGrey[900],
-              size: 12,
-            ),
-            Spacer(),
-            Icon(
-              FontAwesomeIcons.angleDown,
-              color: Colors.blueGrey[900],
-              size: 12,
-            ),
-          ],
+        Padding(
+          padding: const EdgeInsets.only(top: 4.0),
+          child: Icon(
+            FontAwesomeIcons.thumbtack,
+            color: Colors.blueGrey[900],
+            size: 14,
+          ),
         ),
         Spacer(),
         Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
@@ -88,7 +81,7 @@ class DurationIndicator extends StatelessWidget {
                 color: Colors.blueGrey[900],
               ),
             ),
-            SizedBox(height: 4),
+            Spacer(),
             Text(
               time(duration),
               style: TextStyle(
@@ -97,6 +90,7 @@ class DurationIndicator extends StatelessWidget {
                 color: Colors.blueGrey[900],
               ),
             ),
+            SizedBox(height: 4),
           ],
         ),
         SizedBox(width: 4),
