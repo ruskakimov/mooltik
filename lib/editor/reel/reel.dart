@@ -20,7 +20,7 @@ class Reel extends StatefulWidget {
 
 class _ReelState extends State<Reel> {
   ScrollController controller;
-  bool _durationMode = false;
+  bool _pinned = false;
   double _draggedInDurationMode = 0;
 
   ReelModel get reel => context.read<ReelModel>();
@@ -128,7 +128,7 @@ class _ReelState extends State<Reel> {
                         _scrollTo(index);
                         if (selected && !copy) {
                           setState(() {
-                            _durationMode = !_durationMode;
+                            _pinned = !_pinned;
                           });
                         }
                       },
@@ -150,7 +150,7 @@ class _ReelState extends State<Reel> {
                           size: thumbnailSize,
                           selected: selected,
                           copy: copy,
-                          duration: _durationMode ? durations[index] : null,
+                          duration: _pinned ? durations[index] : null,
                         ),
                       ),
                     ),
@@ -163,7 +163,7 @@ class _ReelState extends State<Reel> {
             );
           }),
         ),
-        if (_durationMode)
+        if (_pinned)
           GestureDetector(
             onVerticalDragUpdate: (details) {
               _draggedInDurationMode += details.primaryDelta;
