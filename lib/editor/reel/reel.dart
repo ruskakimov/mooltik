@@ -126,7 +126,7 @@ class _ReelState extends State<Reel> {
                     GestureDetector(
                       onTap: () {
                         _scrollTo(index);
-                        if (selected && !copy) {
+                        if (_pinned || selected && !copy) {
                           setState(() {
                             _pinned = !_pinned;
                           });
