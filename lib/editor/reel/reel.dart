@@ -135,8 +135,6 @@ class _ReelState extends State<Reel> {
                           setState(() {
                             _pinned = !_pinned;
                           });
-                        } else if (selected && copy) {
-                          reel.createFrameInSelectedSlot();
                         }
                       },
                       onHorizontalDragEnd: (dragDetails) {
