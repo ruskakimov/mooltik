@@ -119,13 +119,14 @@ class _ReelState extends State<Reel> {
             return ListView.builder(
               itemBuilder: (context, index) {
                 final selected = index == reel.selectedFrameId;
+                final copy = reel.frames[index] == null;
                 return Column(
                   children: [
                     if (index == 0) before,
                     GestureDetector(
                       onTap: () {
                         _scrollTo(index);
-                        if (selected) {
+                        if (selected && !copy) {
                           setState(() {
                             _durationMode = !_durationMode;
                           });
@@ -148,7 +149,7 @@ class _ReelState extends State<Reel> {
                           frame: visibleFrames[index],
                           size: thumbnailSize,
                           selected: selected,
-                          copy: reel.frames[index] == null,
+                          copy: copy,
                           duration: _durationMode ? durations[index] : null,
                         ),
                       ),
