@@ -109,6 +109,11 @@ class _ReelState extends State<Reel> {
                       icon: FontAwesomeIcons.plusCircle,
                       onTap: () {
                         reel.addFrame();
+                        if (_pinned) {
+                          setState(() {
+                            _pinned = false;
+                          });
+                        }
                       },
                     ),
                   ),
