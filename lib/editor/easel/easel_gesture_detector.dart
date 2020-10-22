@@ -46,19 +46,24 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
     _prevPointersOnScreen = _pointersOnScreen;
     _pointersOnScreen = _pointersOnScreen + count;
 
+    // First pointer down.
+    if (_prevPointersOnScreen == 0 && _pointersOnScreen == 1) {
+      //
+    }
+
     // Second pointer down.
-    if (_prevPointersOnScreen == 1 && _pointersOnScreen == 2) {
+    else if (_prevPointersOnScreen == 1 && _pointersOnScreen == 2) {
       _twoTapPossible = true;
     }
 
     // Third pointer down.
-    if (_prevPointersOnScreen == 2 && _pointersOnScreen == 3) {
+    else if (_prevPointersOnScreen == 2 && _pointersOnScreen == 3) {
       _twoTapPossible = false;
       _threeTapPossible = true;
     }
 
     // Last pointer up.
-    if (_pointersOnScreen == 0) {
+    else if (_pointersOnScreen == 0) {
       if (_startedStroke) {
         widget.onStrokeEnd?.call();
       } else if (_twoTapPossible) {
