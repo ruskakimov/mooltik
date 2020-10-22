@@ -76,25 +76,14 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
   }
 
   Widget _buildDrawerBody() {
-    final frame = context.watch<FrameModel>();
-
     return RepaintBoundary(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          HoveringIconButton(
-            icon: FontAwesomeIcons.redo,
-            onTap: frame.redoAvailable ? frame.redo : null,
-          ),
-          Container(
-            width: 64,
-            decoration: BoxDecoration(
-              color: Colors.blueGrey[800],
-              boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 12)],
-            ),
-            child: SizeSelector(),
-          ),
-        ],
+      child: Container(
+        width: 64,
+        decoration: BoxDecoration(
+          color: Colors.blueGrey[800],
+          boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 12)],
+        ),
+        child: SizeSelector(),
       ),
     );
   }

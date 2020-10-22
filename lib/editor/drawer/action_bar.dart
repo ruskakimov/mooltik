@@ -82,28 +82,17 @@ class _ActionBarState extends State<ActionBar> with TickerProviderStateMixin {
   }
 
   Widget _buildDrawerBody() {
-    final frame = context.watch<FrameModel>();
-
     return RepaintBoundary(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: widget.width,
-            decoration: BoxDecoration(
-              color: Colors.blueGrey[800],
-              boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 12)],
-            ),
-            child: IndexedStack(
-              index: _selectedTabIndex,
-              children: tabs,
-            ),
-          ),
-          HoveringIconButton(
-            icon: FontAwesomeIcons.undo,
-            onTap: frame.undoAvailable ? frame.undo : null,
-          ),
-        ],
+      child: Container(
+        width: widget.width,
+        decoration: BoxDecoration(
+          color: Colors.blueGrey[800],
+          boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 12)],
+        ),
+        child: IndexedStack(
+          index: _selectedTabIndex,
+          children: tabs,
+        ),
       ),
     );
   }
