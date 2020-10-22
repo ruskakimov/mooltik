@@ -75,8 +75,9 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
           }
         },
         onScaleUpdate: (ScaleUpdateDetails details) {
-          // Don't trigger two finger tap if they moved.
-          if (details.scale != 1.0) {
+          // Cancel two finger tap on stroke or scale.
+          if (details.scale != 1.0 ||
+              (details.focalPoint - _lastContactPoint).distanceSquared > 0) {
             _twoTap = false;
           }
 
