@@ -16,6 +16,7 @@ class EaselGestureDetector extends StatefulWidget {
     this.onScaleStart,
     this.onScaleUpdate,
     this.onTwoFingerTap,
+    this.onThreeFingerTap,
   }) : super(key: key);
 
   final Widget child;
@@ -26,6 +27,7 @@ class EaselGestureDetector extends StatefulWidget {
   final GestureScaleStartCallback onScaleStart;
   final GestureScaleUpdateCallback onScaleUpdate;
   final VoidCallback onTwoFingerTap;
+  final VoidCallback onThreeFingerTap;
 
   @override
   _EaselGestureDetectorState createState() => _EaselGestureDetectorState();
@@ -38,6 +40,7 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
   bool _startedStroke = false;
   bool _veryQuickStroke = false;
   bool _twoTap = false;
+  bool _threeTap = false;
 
   void changePointerOnScreenBy(int count) {
     _prevPointersOnScreen = _pointersOnScreen;
@@ -55,6 +58,16 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
     if (_pointersOnScreen == 0 && _twoTap) {
       widget.onTwoFingerTap?.call();
       _twoTap = false;
+    }
+
+    // Detect three finger tap.
+    if (_prevPointersOnScreen == 2 && _pointersOnScreen == 3) {
+      _twoTap = false;
+      _threeTap = true;
+    }
+    if (_pointersOnScreen == 0 && _threeTap) {
+      widget.onThreeFingerTap?.call();
+      _threeTap = false;
     }
   }
 
@@ -75,10 +88,11 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
           }
         },
         onScaleUpdate: (ScaleUpdateDetails details) {
-          // Cancel two finger tap on stroke or scale.
+          // Cancel two and three finger tap on stroke or scale.
           if (details.scale != 1.0 ||
               (details.focalPoint - _lastContactPoint).distanceSquared > 0) {
             _twoTap = false;
+            _threeTap = false;
           }
 
           if (_pointersOnScreen == 1) {
