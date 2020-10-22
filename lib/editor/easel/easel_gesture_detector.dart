@@ -48,11 +48,23 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
 
     // First pointer down.
     if (_prevPointersOnScreen == 0 && _pointersOnScreen == 1) {
-      //
+      _veryQuickStroke = true;
+      Future.delayed(veryQuickStrokeMaxDuration, () {
+        _veryQuickStroke = false;
+      });
+      _startedStroke = true;
     }
 
     // Second pointer down.
     else if (_prevPointersOnScreen == 1 && _pointersOnScreen == 2) {
+      if (_veryQuickStroke) {
+        widget.onStrokeCancel?.call();
+        _veryQuickStroke = false;
+        _startedStroke = false;
+      } else if (_startedStroke) {
+        widget.onStrokeEnd?.call();
+        _startedStroke = false;
+      }
       _twoTapPossible = true;
     }
 
@@ -88,9 +100,9 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
         onScaleStart: (ScaleStartDetails details) {
           _lastContactPoint = details.focalPoint;
 
-          if (_pointersOnScreen == 1) {
+          if (_prevPointersOnScreen == 0 && _pointersOnScreen == 1) {
             _onSinglePointerStart(details);
-          } else {
+          } else if (_prevPointersOnScreen == 1 && _pointersOnScreen == 2) {
             widget.onScaleStart?.call(details);
           }
         },
@@ -104,18 +116,9 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
             _threeTapPossible = false;
           }
 
-          if (_pointersOnScreen == 1) {
+          if (_prevPointersOnScreen == 0 && _pointersOnScreen == 1) {
             _onSinglePointerMove(details);
-          } else {
-            if (_veryQuickStroke) {
-              _veryQuickStroke = false;
-              widget.onStrokeCancel?.call();
-              _startedStroke = false;
-            } else if (_startedStroke) {
-              widget.onStrokeEnd?.call();
-              _startedStroke = false;
-            }
-
+          } else if (_prevPointersOnScreen == 1 && _pointersOnScreen == 2) {
             widget.onScaleUpdate?.call(details);
           }
         },
@@ -125,25 +128,13 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
   }
 
   void _onSinglePointerStart(ScaleStartDetails details) {
-    if (_prevPointersOnScreen != 0) return;
-
-    _veryQuickStroke = true;
-
-    Future.delayed(veryQuickStrokeMaxDuration, () {
-      _veryQuickStroke = false;
-    });
-
     widget.onStrokeStart?.call(DragStartDetails(
       globalPosition: details.focalPoint,
       localPosition: details.localFocalPoint,
     ));
-
-    _startedStroke = true;
   }
 
   void _onSinglePointerMove(ScaleUpdateDetails details) {
-    if (_prevPointersOnScreen != 0) return;
-
     final currentContactPoint = details.focalPoint;
     final dragUpdateDetails = DragUpdateDetails(
       delta: currentContactPoint - _lastContactPoint,
