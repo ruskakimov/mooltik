@@ -39,35 +39,37 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
   Offset _lastContactPoint;
   bool _startedStroke = false;
   bool _veryQuickStroke = false;
-  bool _twoTap = false;
-  bool _threeTap = false;
+  bool _twoTapPossible = false;
+  bool _threeTapPossible = false;
 
   void changePointerOnScreenBy(int count) {
     _prevPointersOnScreen = _pointersOnScreen;
     _pointersOnScreen = _pointersOnScreen + count;
 
-    if (_pointersOnScreen == 0 && _startedStroke) {
-      widget.onStrokeEnd?.call();
-      _startedStroke = false;
-    }
-
-    // Detect two finger tap.
+    // Second pointer down.
     if (_prevPointersOnScreen == 1 && _pointersOnScreen == 2) {
-      _twoTap = true;
-    }
-    if (_pointersOnScreen == 0 && _twoTap) {
-      widget.onTwoFingerTap?.call();
-      _twoTap = false;
+      _twoTapPossible = true;
     }
 
-    // Detect three finger tap.
+    // Third pointer down.
     if (_prevPointersOnScreen == 2 && _pointersOnScreen == 3) {
-      _twoTap = false;
-      _threeTap = true;
+      _twoTapPossible = false;
+      _threeTapPossible = true;
     }
-    if (_pointersOnScreen == 0 && _threeTap) {
-      widget.onThreeFingerTap?.call();
-      _threeTap = false;
+
+    // Last pointer up.
+    if (_pointersOnScreen == 0) {
+      if (_startedStroke) {
+        widget.onStrokeEnd?.call();
+      } else if (_twoTapPossible) {
+        widget.onTwoFingerTap?.call();
+      } else if (_threeTapPossible) {
+        widget.onThreeFingerTap?.call();
+      }
+      // Reset state.
+      _startedStroke = false;
+      _twoTapPossible = false;
+      _threeTapPossible = false;
     }
   }
 
@@ -88,11 +90,13 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
           }
         },
         onScaleUpdate: (ScaleUpdateDetails details) {
+          print(details);
+
           // Cancel two and three finger tap on stroke or scale.
           if (details.scale != 1.0 ||
               (details.focalPoint - _lastContactPoint).distanceSquared > 0) {
-            _twoTap = false;
-            _threeTap = false;
+            _twoTapPossible = false;
+            _threeTapPossible = false;
           }
 
           if (_pointersOnScreen == 1) {
