@@ -42,12 +42,19 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
   bool _twoTapPossible = false;
   bool _threeTapPossible = false;
 
+  bool get _firstPointerDown =>
+      _prevPointersOnScreen == 0 && _pointersOnScreen == 1;
+  bool get _secondPointerDown =>
+      _prevPointersOnScreen == 1 && _pointersOnScreen == 2;
+  bool get _thirdPointerDown =>
+      _prevPointersOnScreen == 2 && _pointersOnScreen == 3;
+
   void changePointerOnScreenBy(int count) {
     _prevPointersOnScreen = _pointersOnScreen;
     _pointersOnScreen = _pointersOnScreen + count;
 
     // First pointer down.
-    if (_prevPointersOnScreen == 0 && _pointersOnScreen == 1) {
+    if (_firstPointerDown) {
       _veryQuickStroke = true;
       Future.delayed(veryQuickStrokeMaxDuration, () {
         _veryQuickStroke = false;
@@ -56,7 +63,7 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
     }
 
     // Second pointer down.
-    else if (_prevPointersOnScreen == 1 && _pointersOnScreen == 2) {
+    else if (_secondPointerDown) {
       if (_veryQuickStroke) {
         widget.onStrokeCancel?.call();
         _veryQuickStroke = false;
@@ -69,7 +76,7 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
     }
 
     // Third pointer down.
-    else if (_prevPointersOnScreen == 2 && _pointersOnScreen == 3) {
+    else if (_thirdPointerDown) {
       _twoTapPossible = false;
       _threeTapPossible = true;
     }
@@ -100,9 +107,9 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
         onScaleStart: (ScaleStartDetails details) {
           _lastContactPoint = details.focalPoint;
 
-          if (_prevPointersOnScreen == 0 && _pointersOnScreen == 1) {
+          if (_firstPointerDown) {
             _onSinglePointerStart(details);
-          } else if (_prevPointersOnScreen == 1 && _pointersOnScreen == 2) {
+          } else if (_secondPointerDown) {
             widget.onScaleStart?.call(details);
           }
         },
@@ -116,9 +123,9 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
             _threeTapPossible = false;
           }
 
-          if (_prevPointersOnScreen == 0 && _pointersOnScreen == 1) {
+          if (_firstPointerDown) {
             _onSinglePointerMove(details);
-          } else if (_prevPointersOnScreen == 1 && _pointersOnScreen == 2) {
+          } else if (_secondPointerDown) {
             widget.onScaleUpdate?.call(details);
           }
         },
