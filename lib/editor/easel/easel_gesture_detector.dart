@@ -56,22 +56,23 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
     // First pointer down.
     if (_firstPointerDown) {
       _veryQuickStroke = true;
+      _startedStroke = true;
       Future.delayed(veryQuickStrokeMaxDuration, () {
         _veryQuickStroke = false;
       });
-      _startedStroke = true;
     }
 
     // Second pointer down.
     else if (_secondPointerDown) {
       if (_veryQuickStroke) {
         widget.onStrokeCancel?.call();
-        _veryQuickStroke = false;
-        _startedStroke = false;
+        print('cancel stroke');
       } else if (_startedStroke) {
         widget.onStrokeEnd?.call();
-        _startedStroke = false;
+        print('end stroke 1');
       }
+      _veryQuickStroke = false;
+      _startedStroke = false;
       _twoTapPossible = true;
     }
 
@@ -85,10 +86,13 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
     else if (_pointersOnScreen == 0) {
       if (_startedStroke) {
         widget.onStrokeEnd?.call();
+        print('end stroke 2');
       } else if (_twoTapPossible) {
         widget.onTwoFingerTap?.call();
+        print('undo');
       } else if (_threeTapPossible) {
         widget.onThreeFingerTap?.call();
+        print('redo');
       }
       // Reset state.
       _startedStroke = false;
@@ -114,13 +118,12 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
           }
         },
         onScaleUpdate: (ScaleUpdateDetails details) {
-          print(details);
-
           // Cancel two and three finger tap on stroke or scale.
           if (details.scale != 1.0 ||
               (details.focalPoint - _lastContactPoint).distanceSquared > 0) {
             _twoTapPossible = false;
             _threeTapPossible = false;
+            print('moved');
           }
 
           if (_firstPointerDown) {
@@ -139,6 +142,7 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
       globalPosition: details.focalPoint,
       localPosition: details.localFocalPoint,
     ));
+    print('start stroke');
   }
 
   void _onSinglePointerMove(ScaleUpdateDetails details) {
