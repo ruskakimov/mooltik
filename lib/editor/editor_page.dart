@@ -43,18 +43,18 @@ class EditorPage extends StatelessWidget {
                     Align(
                       alignment: Alignment.topLeft,
                       child: AnimatedOpacity(
-                          duration: Duration(milliseconds: 200),
-                          opacity: reel.playing ? 0 : 1,
-                          child: ActionBar()),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: AnimatedOpacity(
                         duration: Duration(milliseconds: 200),
                         opacity: reel.playing ? 0 : 1,
                         child: ToolBar(),
                       ),
                     ),
+                    // Align(
+                    //   alignment: Alignment.topLeft,
+                    //   child: AnimatedOpacity(
+                    //       duration: Duration(milliseconds: 200),
+                    //       opacity: reel.playing ? 0 : 1,
+                    //       child: ActionBar()),
+                    // ),
                     if (reel.playing)
                       Listener(
                         behavior: HitTestBehavior.opaque,

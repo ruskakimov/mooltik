@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/bar_icon_button.dart';
 import 'package:mooltik/editor/drawer/pallete_tab/color_picker.dart';
-import 'package:mooltik/editor/easel/hovering_icon_button.dart';
-import 'package:mooltik/editor/frame/frame_model.dart';
+import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 
@@ -36,12 +35,34 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
+    final reel = context.watch<ReelModel>();
 
     final bar = ColoredBox(
-      color: Colors.blueGrey[700],
-      child: Column(
+      color: Colors.black.withOpacity(0.8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          ColorPicker(),
+          BarIconButton(
+            icon: FontAwesomeIcons.film,
+            onTap: () {},
+          ),
+          BarIconButton(
+            icon: FontAwesomeIcons.solidLemon,
+            selected: reel.onion,
+            onTap: () {
+              reel.onion = !reel.onion;
+            },
+          ),
+          BarIconButton(
+            icon: FontAwesomeIcons.fileDownload,
+            onTap: () {},
+          ),
+          Spacer(),
+          BarIconButton(
+            icon: FontAwesomeIcons.play,
+            onTap: reel.play,
+          ),
+          Spacer(),
           for (var i = 0; i < toolbox.tools.length; i++)
             BarIconButton(
               icon: toolbox.tools[i].icon,
@@ -53,24 +74,40 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
                 toolbox.selectTool(i);
               },
             ),
+          ColorPicker(),
         ],
       ),
     );
 
-    return Row(
+    return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        AnimatedBuilder(
-          animation: _openCloseAnimation,
-          child: _buildDrawerBody(),
-          builder: (context, child) {
-            return Transform.translate(
-              offset: Offset(64.0 * _openCloseAnimation.value, 0),
-              child: child,
-            );
-          },
-        ),
         bar,
+        Expanded(
+          child: _buildDrawerArea(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDrawerArea() {
+    return Stack(
+      children: [
+        Positioned(
+          right: 0,
+          top: 0,
+          bottom: 0,
+          child: AnimatedBuilder(
+            animation: _openCloseAnimation,
+            child: _buildDrawerBody(),
+            builder: (context, child) {
+              return Transform.translate(
+                offset: Offset(64.0 * _openCloseAnimation.value, 0),
+                child: child,
+              );
+            },
+          ),
+        ),
       ],
     );
   }
@@ -79,10 +116,7 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
     return RepaintBoundary(
       child: Container(
         width: 64,
-        decoration: BoxDecoration(
-          color: Colors.blueGrey[800],
-          boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 12)],
-        ),
+        color: Colors.black.withOpacity(0.6),
         child: SizeSelector(),
       ),
     );
