@@ -16,15 +16,15 @@ class ColorPicker extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () => _showColorPicker(context),
       child: SizedBox(
-        width: 48,
-        height: 48,
+        width: 44,
+        height: 44,
         child: Center(
           child: ClipOval(
             child: CustomPaint(
               painter: TileBackgroundPainter(),
               child: Container(
-                width: 28,
-                height: 28,
+                width: 24,
+                height: 24,
                 decoration: BoxDecoration(
                   color: toolbox.selectedColor,
                   border: Border.all(

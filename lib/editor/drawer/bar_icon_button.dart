@@ -20,14 +20,15 @@ class BarIconButton extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
-        height: 48,
-        width: 48,
+        height: 44,
+        width: 44,
         child: Stack(
           alignment: Alignment.center,
           children: [
             Icon(
               icon,
               color: _getColor(),
+              size: 20,
             ),
             if (label != null)
               Positioned(
