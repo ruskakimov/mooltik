@@ -1,11 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:mooltik/editor/reel/reel.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/drawer/export_tab.dart';
-import 'package:mooltik/editor/easel/hovering_icon_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'bar_icon_button.dart';
