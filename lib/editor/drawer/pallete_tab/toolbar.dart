@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/bar_icon_button.dart';
 import 'package:mooltik/editor/drawer/pallete_tab/color_picker.dart';
+import 'package:mooltik/editor/reel/reel.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
@@ -13,20 +14,34 @@ class ToolBar extends StatefulWidget {
   _ToolBarState createState() => _ToolBarState();
 }
 
-class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
-  bool open = false;
-  AnimationController _controller;
-  Animation _openCloseAnimation;
+class _ToolBarState extends State<ToolBar> with TickerProviderStateMixin {
+  bool rightOpen = false;
+  AnimationController _rightController;
+  Animation _rightAnimation;
+
+  bool leftOpen = false;
+  AnimationController _leftController;
+  Animation _leftAnimation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    _rightController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 100),
     )..value = 1.0;
-    _openCloseAnimation = CurvedAnimation(
-      parent: _controller,
+    _rightAnimation = CurvedAnimation(
+      parent: _rightController,
+      curve: Curves.easeOut,
+      reverseCurve: Curves.easeIn,
+    );
+
+    _leftController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 100),
+    )..value = 1.0;
+    _leftAnimation = CurvedAnimation(
+      parent: _leftController,
       curve: Curves.easeOut,
       reverseCurve: Curves.easeIn,
     );
@@ -38,13 +53,20 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
     final reel = context.watch<ReelModel>();
 
     final bar = ColoredBox(
-      color: Colors.black.withOpacity(0.8),
+      color: Colors.blueGrey[900],
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           BarIconButton(
-            icon: FontAwesomeIcons.film,
+            icon: FontAwesomeIcons.bars,
             onTap: () {},
+          ),
+          BarIconButton(
+            icon: FontAwesomeIcons.film,
+            selected: leftOpen,
+            onTap: () {
+              _toggleLeftDrawer();
+            },
           ),
           BarIconButton(
             icon: FontAwesomeIcons.solidLemon,
@@ -52,10 +74,6 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
             onTap: () {
               reel.onion = !reel.onion;
             },
-          ),
-          BarIconButton(
-            icon: FontAwesomeIcons.fileDownload,
-            onTap: () {},
           ),
           Spacer(),
           BarIconButton(
@@ -69,7 +87,7 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
               selected: toolbox.tools[i] == toolbox.selectedTool,
               onTap: () {
                 if (toolbox.tools[i] == toolbox.selectedTool) {
-                  _toggleDrawer();
+                  _toggleRightDrawer();
                 }
                 toolbox.selectTool(i);
               },
@@ -94,15 +112,34 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
     return Stack(
       children: [
         Positioned(
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: 112,
+          child: AnimatedBuilder(
+            animation: _leftAnimation,
+            child: Container(
+              color: Colors.blueGrey[800],
+              child: Reel(),
+            ),
+            builder: (context, child) {
+              return Transform.translate(
+                offset: Offset(-112.0 * _leftAnimation.value, 0),
+                child: child,
+              );
+            },
+          ),
+        ),
+        Positioned(
           right: 0,
           top: 0,
           bottom: 0,
           child: AnimatedBuilder(
-            animation: _openCloseAnimation,
+            animation: _rightAnimation,
             child: _buildDrawerBody(),
             builder: (context, child) {
               return Transform.translate(
-                offset: Offset(64.0 * _openCloseAnimation.value, 0),
+                offset: Offset(64.0 * _rightAnimation.value, 0),
                 child: child,
               );
             },
@@ -122,18 +159,33 @@ class _ToolBarState extends State<ToolBar> with SingleTickerProviderStateMixin {
     );
   }
 
-  void _toggleDrawer() {
+  void _toggleRightDrawer() {
     setState(() {
-      open = !open;
+      rightOpen = !rightOpen;
     });
-    _animateDrawer();
+    _animateRightDrawer();
   }
 
-  void _animateDrawer() {
-    if (open) {
-      _controller.reverse();
+  void _animateRightDrawer() {
+    if (rightOpen) {
+      _rightController.reverse();
     } else {
-      _controller.forward();
+      _rightController.forward();
+    }
+  }
+
+  void _toggleLeftDrawer() {
+    setState(() {
+      leftOpen = !leftOpen;
+    });
+    _animateLeftDrawer();
+  }
+
+  void _animateLeftDrawer() {
+    if (leftOpen) {
+      _leftController.reverse();
+    } else {
+      _leftController.forward();
     }
   }
 }
