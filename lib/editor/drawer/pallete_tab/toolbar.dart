@@ -153,7 +153,7 @@ class _ToolBarState extends State<ToolBar> with TickerProviderStateMixin {
     return RepaintBoundary(
       child: Container(
         width: 64,
-        color: Colors.black.withOpacity(0.6),
+        color: Colors.blueGrey[800],
         child: SizeSelector(),
       ),
     );
