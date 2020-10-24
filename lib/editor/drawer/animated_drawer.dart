@@ -7,8 +7,8 @@ enum DrawerPosition {
   right,
 }
 
-class EditorDrawer extends StatelessWidget {
-  const EditorDrawer({
+class AnimatedDrawer extends StatelessWidget {
+  const AnimatedDrawer({
     Key key,
     @required this.width,
     @required this.position,

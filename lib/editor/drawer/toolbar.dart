@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/bar_icon_button.dart';
 import 'package:mooltik/editor/drawer/color_picker.dart';
-import 'package:mooltik/editor/drawer/editor_drawer.dart';
+import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/reel/reel.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
@@ -83,13 +83,13 @@ class _ToolBarState extends State<ToolBar> with TickerProviderStateMixin {
   Widget _buildDrawerArea() {
     return Stack(
       children: [
-        EditorDrawer(
+        AnimatedDrawer(
           width: 112,
           position: DrawerPosition.left,
           open: leftOpen,
           child: Reel(),
         ),
-        EditorDrawer(
+        AnimatedDrawer(
           width: 64,
           position: DrawerPosition.right,
           open: rightOpen,
