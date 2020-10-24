@@ -7,6 +7,8 @@ import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 
+const drawerTransitionDuration = Duration(milliseconds: 200);
+
 class ToolBar extends StatefulWidget {
   const ToolBar({Key key}) : super(key: key);
 
@@ -16,36 +18,7 @@ class ToolBar extends StatefulWidget {
 
 class _ToolBarState extends State<ToolBar> with TickerProviderStateMixin {
   bool rightOpen = false;
-  AnimationController _rightController;
-  Animation _rightAnimation;
-
   bool leftOpen = false;
-  AnimationController _leftController;
-  Animation _leftAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _rightController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 100),
-    )..value = 1.0;
-    _rightAnimation = CurvedAnimation(
-      parent: _rightController,
-      curve: Curves.easeOut,
-      reverseCurve: Curves.easeIn,
-    );
-
-    _leftController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 100),
-    )..value = 1.0;
-    _leftAnimation = CurvedAnimation(
-      parent: _leftController,
-      curve: Curves.easeOut,
-      reverseCurve: Curves.easeIn,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,51 +84,29 @@ class _ToolBarState extends State<ToolBar> with TickerProviderStateMixin {
   Widget _buildDrawerArea() {
     return Stack(
       children: [
-        Positioned(
-          left: 0,
+        AnimatedPositioned(
+          duration: drawerTransitionDuration,
+          left: leftOpen ? 0 : -112.0,
           top: 0,
           bottom: 0,
           width: 112,
-          child: AnimatedBuilder(
-            animation: _leftAnimation,
-            child: Container(
-              color: Colors.blueGrey[800],
-              child: Reel(),
-            ),
-            builder: (context, child) {
-              return Transform.translate(
-                offset: Offset(-112.0 * _leftAnimation.value, 0),
-                child: child,
-              );
-            },
+          child: Container(
+            color: Colors.blueGrey[800],
+            child: Reel(),
           ),
         ),
-        Positioned(
-          right: 0,
+        AnimatedPositioned(
+          duration: drawerTransitionDuration,
+          right: rightOpen ? 0 : -64.0,
           top: 0,
           bottom: 0,
-          child: AnimatedBuilder(
-            animation: _rightAnimation,
-            child: _buildDrawerBody(),
-            builder: (context, child) {
-              return Transform.translate(
-                offset: Offset(64.0 * _rightAnimation.value, 0),
-                child: child,
-              );
-            },
+          width: 64,
+          child: Container(
+            color: Colors.blueGrey[800],
+            child: SizeSelector(),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildDrawerBody() {
-    return RepaintBoundary(
-      child: Container(
-        width: 64,
-        color: Colors.blueGrey[800],
-        child: SizeSelector(),
-      ),
     );
   }
 
@@ -163,30 +114,12 @@ class _ToolBarState extends State<ToolBar> with TickerProviderStateMixin {
     setState(() {
       rightOpen = !rightOpen;
     });
-    _animateRightDrawer();
-  }
-
-  void _animateRightDrawer() {
-    if (rightOpen) {
-      _rightController.reverse();
-    } else {
-      _rightController.forward();
-    }
   }
 
   void _toggleLeftDrawer() {
     setState(() {
       leftOpen = !leftOpen;
     });
-    _animateLeftDrawer();
-  }
-
-  void _animateLeftDrawer() {
-    if (leftOpen) {
-      _leftController.reverse();
-    } else {
-      _leftController.forward();
-    }
   }
 }
 
