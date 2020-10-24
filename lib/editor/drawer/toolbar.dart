@@ -15,7 +15,7 @@ class ToolBar extends StatefulWidget {
   _ToolBarState createState() => _ToolBarState();
 }
 
-class _ToolBarState extends State<ToolBar> with TickerProviderStateMixin {
+class _ToolBarState extends State<ToolBar> {
   bool rightOpen = false;
   bool leftOpen = false;
 
