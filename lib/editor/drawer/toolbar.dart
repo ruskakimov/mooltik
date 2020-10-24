@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/bar_icon_button.dart';
 import 'package:mooltik/editor/drawer/color_picker.dart';
+import 'package:mooltik/editor/drawer/editor_drawer.dart';
 import 'package:mooltik/editor/reel/reel.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
-
-const drawerTransitionDuration = Duration(milliseconds: 200);
 
 class ToolBar extends StatefulWidget {
   const ToolBar({Key key}) : super(key: key);
@@ -84,27 +83,17 @@ class _ToolBarState extends State<ToolBar> with TickerProviderStateMixin {
   Widget _buildDrawerArea() {
     return Stack(
       children: [
-        AnimatedPositioned(
-          duration: drawerTransitionDuration,
-          left: leftOpen ? 0 : -112.0,
-          top: 0,
-          bottom: 0,
+        EditorDrawer(
           width: 112,
-          child: Container(
-            color: Colors.blueGrey[800],
-            child: Reel(),
-          ),
+          position: DrawerPosition.left,
+          open: leftOpen,
+          child: Reel(),
         ),
-        AnimatedPositioned(
-          duration: drawerTransitionDuration,
-          right: rightOpen ? 0 : -64.0,
-          top: 0,
-          bottom: 0,
+        EditorDrawer(
           width: 64,
-          child: Container(
-            color: Colors.blueGrey[800],
-            child: SizeSelector(),
-          ),
+          position: DrawerPosition.right,
+          open: rightOpen,
+          child: SizeSelector(),
         ),
       ],
     );
