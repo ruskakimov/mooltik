@@ -3,10 +3,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/bar_icon_button.dart';
 import 'package:mooltik/editor/drawer/color_picker.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
+import 'package:mooltik/editor/drawer/export_tab.dart';
 import 'package:mooltik/editor/reel/reel.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
+
+enum LeftDrawer {
+  menu,
+  reel,
+}
 
 class ToolBar extends StatefulWidget {
   const ToolBar({Key key}) : super(key: key);
@@ -17,7 +23,7 @@ class ToolBar extends StatefulWidget {
 
 class _ToolBarState extends State<ToolBar> {
   bool rightOpen = false;
-  bool leftOpen = false;
+  LeftDrawer leftOpen;
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +37,20 @@ class _ToolBarState extends State<ToolBar> {
         children: <Widget>[
           BarIconButton(
             icon: FontAwesomeIcons.bars,
-            onTap: () {},
+            selected: leftOpen == LeftDrawer.menu,
+            onTap: () {
+              setState(() {
+                leftOpen = leftOpen == LeftDrawer.menu ? null : LeftDrawer.menu;
+              });
+            },
           ),
           BarIconButton(
             icon: FontAwesomeIcons.film,
-            selected: leftOpen,
+            selected: leftOpen == LeftDrawer.reel,
             onTap: () {
-              _toggleLeftDrawer();
+              setState(() {
+                leftOpen = leftOpen == LeftDrawer.reel ? null : LeftDrawer.reel;
+              });
             },
           ),
           BarIconButton(
@@ -85,8 +98,13 @@ class _ToolBarState extends State<ToolBar> {
       children: [
         AnimatedLeftDrawer(
           width: 112,
-          open: leftOpen,
+          open: leftOpen == LeftDrawer.reel,
           child: Reel(),
+        ),
+        AnimatedLeftDrawer(
+          width: 150,
+          open: leftOpen == LeftDrawer.menu,
+          child: ExportTab(),
         ),
         AnimatedRightDrawer(
           width: 64,
@@ -100,12 +118,6 @@ class _ToolBarState extends State<ToolBar> {
   void _toggleRightDrawer() {
     setState(() {
       rightOpen = !rightOpen;
-    });
-  }
-
-  void _toggleLeftDrawer() {
-    setState(() {
-      leftOpen = !leftOpen;
     });
   }
 }
