@@ -95,7 +95,7 @@ class _ToolBarState extends State<ToolBar> {
           child: Reel(),
         ),
         AnimatedLeftDrawer(
-          width: 150,
+          width: 200,
           open: leftOpen == LeftDrawer.menu,
           child: ExportTab(),
         ),

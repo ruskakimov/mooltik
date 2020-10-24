@@ -30,68 +30,48 @@ class _ExportTabState extends State<ExportTab> {
       );
 
     final reel = context.watch<ReelModel>();
-    return Center(
-      child: Column(
-        children: [
-          Material(
-            color: Colors.transparent,
-            child: ListTile(
-              contentPadding: EdgeInsets.only(left: 12, right: 4),
-              title: Text('Onion'),
-              trailing: Switch(
-                activeColor: Colors.amber,
-                value: reel.onion,
-                onChanged: (value) => reel.onion = value,
-              ),
-              onTap: () {
-                reel.onion = !reel.onion;
-              },
-            ),
+    return Column(
+      children: [
+        MenuListTile(
+          icon: Icons.lightbulb_outline,
+          title: 'Onion',
+          trailing: Switch(
+            activeColor: Colors.amber,
+            value: reel.onion,
+            onChanged: (value) => reel.onion = value,
           ),
-          Spacer(),
-          ListTile(
-            contentPadding: EdgeInsets.only(left: 12, right: 12),
-            title: Text('Save GIF'),
-            trailing: Icon(Icons.image),
-          ),
-          RaisedButton(
-            child: Text(
-              'Save GIF',
-              style: TextStyle(
-                color: Colors.blueGrey[900],
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onPressed: () async {
-              setState(() {
-                _saving = true;
-              });
-              await _saveGif(reel.frames, reel.frameDurations);
-              setState(() {
-                _saving = false;
-              });
-            },
-          ),
-          RaisedButton(
-            child: Text(
-              'Save video',
-              style: TextStyle(
-                color: Colors.blueGrey[900],
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onPressed: () async {
-              setState(() {
-                _saving = true;
-              });
-              await _saveVideo(reel.frames, reel.frameDurations);
-              setState(() {
-                _saving = false;
-              });
-            },
-          ),
-        ],
-      ),
+          onTap: () {
+            reel.onion = !reel.onion;
+          },
+        ),
+        Spacer(),
+        MenuListTile(
+          icon: Icons.image,
+          title: 'Save GIF',
+          onTap: () async {
+            setState(() {
+              _saving = true;
+            });
+            await _saveGif(reel.frames, reel.frameDurations);
+            setState(() {
+              _saving = false;
+            });
+          },
+        ),
+        MenuListTile(
+          icon: Icons.videocam,
+          title: 'Save MP4',
+          onTap: () async {
+            setState(() {
+              _saving = true;
+            });
+            await _saveVideo(reel.frames, reel.frameDurations);
+            setState(() {
+              _saving = false;
+            });
+          },
+        ),
+      ],
     );
   }
 
@@ -151,5 +131,37 @@ class _ExportTabState extends State<ExportTab> {
 
       await ImageGallerySaver.saveFile(video.path);
     }
+  }
+}
+
+class MenuListTile extends StatelessWidget {
+  const MenuListTile({
+    Key key,
+    this.icon,
+    this.title,
+    this.onTap,
+    this.trailing,
+  }) : super(key: key);
+
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+  final Widget trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+        leading: Icon(icon),
+        title: Transform.translate(
+          offset: Offset(-18, 0),
+          child: Text(title),
+        ),
+        onTap: onTap,
+        trailing: trailing,
+      ),
+    );
   }
 }
