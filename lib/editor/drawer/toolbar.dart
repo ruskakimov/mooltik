@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/bar_icon_button.dart';
-import 'package:mooltik/editor/drawer/pallete_tab/color_picker.dart';
+import 'package:mooltik/editor/drawer/color_picker.dart';
 import 'package:mooltik/editor/reel/reel.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
