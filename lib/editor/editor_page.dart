@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/editor/drawer/action_bar.dart';
 import 'package:mooltik/editor/drawer/toolbar.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
