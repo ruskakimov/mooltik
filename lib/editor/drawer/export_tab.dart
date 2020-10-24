@@ -32,8 +32,28 @@ class _ExportTabState extends State<ExportTab> {
     final reel = context.watch<ReelModel>();
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          Material(
+            color: Colors.transparent,
+            child: ListTile(
+              contentPadding: EdgeInsets.only(left: 12, right: 4),
+              title: Text('Onion'),
+              trailing: Switch(
+                activeColor: Colors.amber,
+                value: reel.onion,
+                onChanged: (value) => reel.onion = value,
+              ),
+              onTap: () {
+                reel.onion = !reel.onion;
+              },
+            ),
+          ),
+          Spacer(),
+          ListTile(
+            contentPadding: EdgeInsets.only(left: 12, right: 12),
+            title: Text('Save GIF'),
+            trailing: Icon(Icons.image),
+          ),
           RaisedButton(
             child: Text(
               'Save GIF',

@@ -53,13 +53,6 @@ class _ToolBarState extends State<ToolBar> {
               });
             },
           ),
-          BarIconButton(
-            icon: FontAwesomeIcons.solidLemon,
-            selected: reel.onion,
-            onTap: () {
-              reel.onion = !reel.onion;
-            },
-          ),
           Spacer(),
           BarIconButton(
             icon: FontAwesomeIcons.play,
