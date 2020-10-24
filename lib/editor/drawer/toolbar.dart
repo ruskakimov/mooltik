@@ -83,15 +83,13 @@ class _ToolBarState extends State<ToolBar> with TickerProviderStateMixin {
   Widget _buildDrawerArea() {
     return Stack(
       children: [
-        AnimatedDrawer(
+        AnimatedLeftDrawer(
           width: 112,
-          position: DrawerPosition.left,
           open: leftOpen,
           child: Reel(),
         ),
-        AnimatedDrawer(
+        AnimatedRightDrawer(
           width: 64,
-          position: DrawerPosition.right,
           open: rightOpen,
           child: SizeSelector(),
         ),

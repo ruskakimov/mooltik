@@ -7,7 +7,7 @@ enum DrawerPosition {
   right,
 }
 
-class AnimatedDrawer extends StatelessWidget {
+abstract class AnimatedDrawer extends StatelessWidget {
   const AnimatedDrawer({
     Key key,
     @required this.width,
@@ -41,4 +41,34 @@ class AnimatedDrawer extends StatelessWidget {
       ),
     );
   }
+}
+
+class AnimatedLeftDrawer extends AnimatedDrawer {
+  const AnimatedLeftDrawer({
+    Key key,
+    @required double width,
+    @required bool open,
+    Widget child,
+  }) : super(
+          key: key,
+          width: width,
+          position: DrawerPosition.left,
+          open: open,
+          child: child,
+        );
+}
+
+class AnimatedRightDrawer extends AnimatedDrawer {
+  const AnimatedRightDrawer({
+    Key key,
+    @required double width,
+    @required bool open,
+    Widget child,
+  }) : super(
+          key: key,
+          width: width,
+          position: DrawerPosition.right,
+          open: open,
+          child: child,
+        );
 }
