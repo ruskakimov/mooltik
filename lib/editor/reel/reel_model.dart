@@ -96,7 +96,8 @@ class ReelModel extends ChangeNotifier {
   }
 
   void selectFrame(int id) {
-    assert(id >= 0 && id <= frames.length);
+    assert(id >= 0 && id < frames.length);
+    if (id < 0 || id >= frames.length) return;
     _selectedFrameId = id;
     notifyListeners();
   }
