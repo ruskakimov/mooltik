@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/frame/stroke.dart';
-import 'package:mooltik/editor/toolbox/tools.dart';
+import 'package:mooltik/editor/toolbox/tools/tool.dart';
 
 const twoPi = pi * 2;
 
