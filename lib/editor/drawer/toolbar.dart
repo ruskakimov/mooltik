@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/bar_icon_button.dart';
 import 'package:mooltik/editor/drawer/color_picker.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
-import 'package:mooltik/editor/drawer/export_tab.dart';
+import 'package:mooltik/editor/drawer/menu.dart';
 import 'package:mooltik/editor/reel/reel.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
@@ -97,7 +97,7 @@ class _ToolBarState extends State<ToolBar> {
         AnimatedLeftDrawer(
           width: 200,
           open: leftOpen == LeftDrawer.menu,
-          child: ExportTab(),
+          child: Menu(),
         ),
         AnimatedRightDrawer(
           width: 64,
