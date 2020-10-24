@@ -23,7 +23,7 @@ class ReelModel extends ChangeNotifier {
   int _lastDeletedId;
 
   bool get onion => _onion;
-  bool _onion = false;
+  bool _onion = true;
   set onion(bool value) {
     _onion = value;
     notifyListeners();
