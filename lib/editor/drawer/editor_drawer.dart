@@ -32,9 +32,11 @@ class EditorDrawer extends StatelessWidget {
       top: 0,
       bottom: 0,
       width: width,
-      child: ColoredBox(
-        color: Colors.blueGrey[800],
-        child: child,
+      child: RepaintBoundary(
+        child: ColoredBox(
+          color: Colors.blueGrey[800],
+          child: child,
+        ),
       ),
     );
   }
