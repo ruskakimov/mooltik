@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const drawerTransitionDuration = Duration(milliseconds: 100);
+const drawerTransitionDuration = Duration(milliseconds: 150);
 
 enum DrawerPosition {
   left,
@@ -27,6 +27,7 @@ class EditorDrawer extends StatelessWidget {
 
     return AnimatedPositioned(
       duration: drawerTransitionDuration,
+      curve: Curves.easeInOut,
       left: position == DrawerPosition.left ? sideOffset : null,
       right: position == DrawerPosition.right ? sideOffset : null,
       top: 0,
