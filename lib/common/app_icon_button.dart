@@ -14,16 +14,19 @@ class AppIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        height: 44,
-        width: 44,
-        child: Icon(
-          icon,
-          color: _getColor(),
-          size: 20,
+    return Material(
+      type: MaterialType.transparency,
+      child: InkResponse(
+        splashColor: Colors.transparent,
+        onTap: onTap,
+        child: SizedBox(
+          height: 44,
+          width: 44,
+          child: Icon(
+            icon,
+            color: _getColor(),
+            size: 20,
+          ),
         ),
       ),
     );
