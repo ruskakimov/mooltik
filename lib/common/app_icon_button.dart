@@ -6,13 +6,11 @@ class AppIconButton extends StatelessWidget {
     this.icon,
     this.selected = false,
     this.onTap,
-    this.label,
   }) : super(key: key);
 
   final IconData icon;
   final bool selected;
   final VoidCallback onTap;
-  final String label;
 
   @override
   Widget build(BuildContext context) {
@@ -22,27 +20,10 @@ class AppIconButton extends StatelessWidget {
       child: SizedBox(
         height: 44,
         width: 44,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Icon(
-              icon,
-              color: _getColor(),
-              size: 20,
-            ),
-            if (label != null)
-              Positioned(
-                top: 8,
-                left: 4,
-                child: Text(
-                  '$label',
-                  style: TextStyle(
-                    fontSize: 10,
-                    shadows: [Shadow(color: Colors.black, blurRadius: 4)],
-                  ),
-                ),
-              ),
-          ],
+        child: Icon(
+          icon,
+          color: _getColor(),
+          size: 20,
         ),
       ),
     );
