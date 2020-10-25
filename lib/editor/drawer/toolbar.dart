@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/editor/drawer/app_vertical_slider.dart';
 import 'package:mooltik/editor/drawer/bar_icon_button.dart';
 import 'package:mooltik/editor/drawer/color_picker.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
@@ -118,32 +119,12 @@ class SizeSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
     final width = toolbox.selectedTool.paint.strokeWidth;
-    return Column(
-      children: [
-        SizedBox(
-          height: 48,
-          child: Center(
-            child: Text(
-              '${width.toStringAsFixed(0)}',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-        ),
-        Expanded(
-          child: RotatedBox(
-            quarterTurns: 3,
-            child: Slider(
-              value: width,
-              min: 1.0,
-              max: 100.0,
-              onChanged: (value) {
-                toolbox.changeToolWidth(value.round());
-              },
-            ),
-          ),
-        ),
-      ],
+
+    return AppVerticalSlider(
+      value: width,
+      onChanged: (value) {
+        toolbox.changeToolWidth(value.round());
+      },
     );
   }
 }
