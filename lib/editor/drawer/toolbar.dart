@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/app_vertical_slider.dart';
 import 'package:mooltik/common/app_icon_button.dart';
-import 'package:mooltik/editor/drawer/color_picker.dart';
+import 'package:mooltik/editor/drawer/color_picker_button.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
+import 'package:mooltik/editor/drawer/color_picker_drawer.dart';
 import 'package:mooltik/editor/drawer/menu_drawer.dart';
 import 'package:mooltik/editor/reel/reel_drawer.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
@@ -15,6 +16,11 @@ enum LeftDrawer {
   reel,
 }
 
+enum RightDrawer {
+  strokeSize,
+  color,
+}
+
 class ToolBar extends StatefulWidget {
   const ToolBar({Key key}) : super(key: key);
 
@@ -23,8 +29,8 @@ class ToolBar extends StatefulWidget {
 }
 
 class _ToolBarState extends State<ToolBar> {
-  bool rightOpen = false;
   LeftDrawer leftOpen;
+  RightDrawer rightOpen;
 
   @override
   Widget build(BuildContext context) {
@@ -66,12 +72,23 @@ class _ToolBarState extends State<ToolBar> {
               selected: toolbox.tools[i] == toolbox.selectedTool,
               onTap: () {
                 if (toolbox.tools[i] == toolbox.selectedTool) {
-                  _toggleRightDrawer();
+                  setState(() {
+                    rightOpen = rightOpen == RightDrawer.strokeSize
+                        ? null
+                        : RightDrawer.strokeSize;
+                  });
                 }
                 toolbox.selectTool(i);
               },
             ),
-          ColorPicker(),
+          ColorPickerButton(
+            onTap: () {
+              setState(() {
+                rightOpen =
+                    rightOpen == RightDrawer.color ? null : RightDrawer.color;
+              });
+            },
+          ),
         ],
       ),
     );
@@ -97,16 +114,13 @@ class _ToolBarState extends State<ToolBar> {
           open: leftOpen == LeftDrawer.menu,
         ),
         StrokeSizeDrawer(
-          open: rightOpen,
+          open: rightOpen == RightDrawer.strokeSize,
+        ),
+        ColorPickerDrawer(
+          open: rightOpen == RightDrawer.color,
         ),
       ],
     );
-  }
-
-  void _toggleRightDrawer() {
-    setState(() {
-      rightOpen = !rightOpen;
-    });
   }
 }
 
