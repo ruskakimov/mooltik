@@ -4,7 +4,7 @@ import 'package:mooltik/editor/drawer/bar_icon_button.dart';
 import 'package:mooltik/editor/drawer/color_picker.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/drawer/menu_drawer.dart';
-import 'package:mooltik/editor/reel/reel.dart';
+import 'package:mooltik/editor/reel/reel_drawer.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
@@ -89,10 +89,8 @@ class _ToolBarState extends State<ToolBar> {
   Widget _buildDrawerArea() {
     return Stack(
       children: [
-        AnimatedLeftDrawer(
-          width: 112,
+        ReelDrawer(
           open: leftOpen == LeftDrawer.reel,
-          child: Reel(),
         ),
         MenuDrawer(
           open: leftOpen == LeftDrawer.menu,
