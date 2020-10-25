@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
-import 'package:mooltik/editor/drawer/bar_icon_button.dart';
+import 'package:mooltik/editor/drawer/app_icon_button.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
@@ -115,7 +115,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
                   children: [
                     SizedBox(
                       height: thumbnailSize.height,
-                      child: BarIconButton(
+                      child: AppIconButton(
                         icon: FontAwesomeIcons.plusCircle,
                         onTap: () {
                           reel.addFrame();

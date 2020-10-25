@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/app_vertical_slider.dart';
-import 'package:mooltik/editor/drawer/bar_icon_button.dart';
+import 'package:mooltik/editor/drawer/app_icon_button.dart';
 import 'package:mooltik/editor/drawer/color_picker.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/drawer/menu_drawer.dart';
@@ -36,7 +36,7 @@ class _ToolBarState extends State<ToolBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          BarIconButton(
+          AppIconButton(
             icon: FontAwesomeIcons.bars,
             selected: leftOpen == LeftDrawer.menu,
             onTap: () {
@@ -45,7 +45,7 @@ class _ToolBarState extends State<ToolBar> {
               });
             },
           ),
-          BarIconButton(
+          AppIconButton(
             icon: FontAwesomeIcons.film,
             selected: leftOpen == LeftDrawer.reel,
             onTap: () {
@@ -55,13 +55,13 @@ class _ToolBarState extends State<ToolBar> {
             },
           ),
           Spacer(),
-          BarIconButton(
+          AppIconButton(
             icon: FontAwesomeIcons.play,
             onTap: reel.play,
           ),
           Spacer(),
           for (var i = 0; i < toolbox.tools.length; i++)
-            BarIconButton(
+            AppIconButton(
               icon: toolbox.tools[i].icon,
               selected: toolbox.tools[i] == toolbox.selectedTool,
               onTap: () {

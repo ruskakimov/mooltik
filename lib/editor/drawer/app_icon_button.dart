@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class BarIconButton extends StatelessWidget {
-  const BarIconButton({
+class AppIconButton extends StatelessWidget {
+  const AppIconButton({
     Key key,
     this.icon,
     this.selected = false,
