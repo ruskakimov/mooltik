@@ -6,6 +6,11 @@ import 'editor/editor_page.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
+
   // Remove system top and bottom bars.
   SystemChrome.setEnabledSystemUIOverlays([]);
 
