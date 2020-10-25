@@ -30,59 +30,62 @@ class _MenuDrawerState extends State<MenuDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    if (_saving)
-      return Center(
-        child: Text('Saving...'),
-      );
-
-    final reel = context.watch<ReelModel>();
-
     return AnimatedLeftDrawer(
       width: 200,
       open: widget.open,
-      child: Column(
-        children: [
-          MenuListTile(
-            icon: Icons.lightbulb_outline,
-            title: 'Onion',
-            trailing: Switch(
-              activeColor: Colors.amber,
-              value: reel.onion,
-              onChanged: (value) => reel.onion = value,
-            ),
-            onTap: () {
-              reel.onion = !reel.onion;
-            },
+      child: _saving
+          ? Center(
+              child: Text('Saving...'),
+            )
+          : _buildMenu(),
+    );
+  }
+
+  Widget _buildMenu() {
+    final reel = context.watch<ReelModel>();
+
+    return Column(
+      children: [
+        MenuListTile(
+          icon: Icons.lightbulb_outline,
+          title: 'Onion',
+          trailing: Switch(
+            activeColor: Colors.amber,
+            value: reel.onion,
+            onChanged: (value) => reel.onion = value,
           ),
-          Spacer(),
-          MenuListTile(
-            icon: Icons.image,
-            title: 'Save GIF',
-            onTap: () async {
-              setState(() {
-                _saving = true;
-              });
-              await _saveGif(reel.frames, reel.frameDurations);
-              setState(() {
-                _saving = false;
-              });
-            },
-          ),
-          MenuListTile(
-            icon: Icons.videocam,
-            title: 'Save MP4',
-            onTap: () async {
-              setState(() {
-                _saving = true;
-              });
-              await _saveVideo(reel.frames, reel.frameDurations);
-              setState(() {
-                _saving = false;
-              });
-            },
-          ),
-        ],
-      ),
+          onTap: () {
+            reel.onion = !reel.onion;
+          },
+        ),
+        Spacer(),
+        MenuListTile(
+          icon: Icons.image,
+          title: 'Save GIF',
+          onTap: () async {
+            setState(() {
+              _saving = true;
+            });
+            await _saveGif(reel.frames, reel.frameDurations);
+            setState(() {
+              _saving = false;
+            });
+          },
+        ),
+        MenuListTile(
+          icon: Icons.videocam,
+          title: 'Save MP4',
+          onTap: () async {
+            setState(() {
+              _saving = true;
+            });
+            await _saveVideo(reel.frames, reel.frameDurations);
+            setState(() {
+              _saving = false;
+            });
+          },
+        ),
+      ],
     );
   }
 
