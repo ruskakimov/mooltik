@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:image/image.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/gif.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
@@ -12,14 +13,19 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-class Menu extends StatefulWidget {
-  const Menu({Key key}) : super(key: key);
+class MenuDrawer extends StatefulWidget {
+  const MenuDrawer({
+    Key key,
+    this.open,
+  }) : super(key: key);
+
+  final bool open;
 
   @override
-  _MenuState createState() => _MenuState();
+  _MenuDrawerState createState() => _MenuDrawerState();
 }
 
-class _MenuState extends State<Menu> {
+class _MenuDrawerState extends State<MenuDrawer> {
   bool _saving = false;
 
   @override
@@ -30,48 +36,53 @@ class _MenuState extends State<Menu> {
       );
 
     final reel = context.watch<ReelModel>();
-    return Column(
-      children: [
-        MenuListTile(
-          icon: Icons.lightbulb_outline,
-          title: 'Onion',
-          trailing: Switch(
-            activeColor: Colors.amber,
-            value: reel.onion,
-            onChanged: (value) => reel.onion = value,
+
+    return AnimatedLeftDrawer(
+      width: 200,
+      open: widget.open,
+      child: Column(
+        children: [
+          MenuListTile(
+            icon: Icons.lightbulb_outline,
+            title: 'Onion',
+            trailing: Switch(
+              activeColor: Colors.amber,
+              value: reel.onion,
+              onChanged: (value) => reel.onion = value,
+            ),
+            onTap: () {
+              reel.onion = !reel.onion;
+            },
           ),
-          onTap: () {
-            reel.onion = !reel.onion;
-          },
-        ),
-        Spacer(),
-        MenuListTile(
-          icon: Icons.image,
-          title: 'Save GIF',
-          onTap: () async {
-            setState(() {
-              _saving = true;
-            });
-            await _saveGif(reel.frames, reel.frameDurations);
-            setState(() {
-              _saving = false;
-            });
-          },
-        ),
-        MenuListTile(
-          icon: Icons.videocam,
-          title: 'Save MP4',
-          onTap: () async {
-            setState(() {
-              _saving = true;
-            });
-            await _saveVideo(reel.frames, reel.frameDurations);
-            setState(() {
-              _saving = false;
-            });
-          },
-        ),
-      ],
+          Spacer(),
+          MenuListTile(
+            icon: Icons.image,
+            title: 'Save GIF',
+            onTap: () async {
+              setState(() {
+                _saving = true;
+              });
+              await _saveGif(reel.frames, reel.frameDurations);
+              setState(() {
+                _saving = false;
+              });
+            },
+          ),
+          MenuListTile(
+            icon: Icons.videocam,
+            title: 'Save MP4',
+            onTap: () async {
+              setState(() {
+                _saving = true;
+              });
+              await _saveVideo(reel.frames, reel.frameDurations);
+              setState(() {
+                _saving = false;
+              });
+            },
+          ),
+        ],
+      ),
     );
   }
 

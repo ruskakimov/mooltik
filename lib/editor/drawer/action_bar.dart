@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:mooltik/editor/reel/reel.dart';
 import 'package:provider/provider.dart';
-import 'package:mooltik/editor/drawer/menu.dart';
+import 'package:mooltik/editor/drawer/menu_drawer.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'bar_icon_button.dart';
@@ -30,7 +30,7 @@ class _ActionBarState extends State<ActionBar> with TickerProviderStateMixin {
 
   final tabs = <Widget>[
     Reel(),
-    Menu(),
+    MenuDrawer(),
   ];
   int _selectedTabIndex = 0;
 
