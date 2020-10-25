@@ -96,10 +96,8 @@ class _ToolBarState extends State<ToolBar> {
         MenuDrawer(
           open: leftOpen == LeftDrawer.menu,
         ),
-        AnimatedRightDrawer(
-          width: 64,
+        StrokeSizeDrawer(
           open: rightOpen,
-          child: SizeSelector(),
         ),
       ],
     );
@@ -112,19 +110,28 @@ class _ToolBarState extends State<ToolBar> {
   }
 }
 
-class SizeSelector extends StatelessWidget {
-  const SizeSelector({Key key}) : super(key: key);
+class StrokeSizeDrawer extends StatelessWidget {
+  const StrokeSizeDrawer({
+    Key key,
+    this.open,
+  }) : super(key: key);
+
+  final bool open;
 
   @override
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
     final width = toolbox.selectedTool.paint.strokeWidth;
 
-    return AppVerticalSlider(
-      value: width,
-      onChanged: (value) {
-        toolbox.changeToolWidth(value.round());
-      },
+    return AnimatedRightDrawer(
+      width: 64,
+      open: open,
+      child: AppVerticalSlider(
+        value: width,
+        onChanged: (value) {
+          toolbox.changeToolWidth(value.round());
+        },
+      ),
     );
   }
 }
