@@ -38,7 +38,7 @@ class _ToolBarState extends State<ToolBar> {
     final reel = context.watch<ReelModel>();
 
     final bar = ColoredBox(
-      color: Colors.blueGrey[900],
+      color: Colors.grey[850],
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[

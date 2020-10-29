@@ -26,7 +26,7 @@ class EditorPage extends StatelessWidget {
           final reel = context.watch<ReelModel>();
 
           return Scaffold(
-            backgroundColor: Colors.grey[300],
+            backgroundColor: Colors.grey[900],
             body: MultiProvider(
               providers: [
                 // TODO: Frame is provided here since undo/redo buttons listen to it. Consider removing when undo stack is extracted and generalized.
@@ -47,13 +47,6 @@ class EditorPage extends StatelessWidget {
                         child: ToolBar(),
                       ),
                     ),
-                    // Align(
-                    //   alignment: Alignment.topLeft,
-                    //   child: AnimatedOpacity(
-                    //       duration: Duration(milliseconds: 200),
-                    //       opacity: reel.playing ? 0 : 1,
-                    //       child: ActionBar()),
-                    // ),
                     if (reel.playing)
                       Listener(
                         behavior: HitTestBehavior.opaque,
