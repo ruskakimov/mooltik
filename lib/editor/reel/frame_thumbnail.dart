@@ -37,7 +37,7 @@ class FrameThumbnail extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(color: Colors.amber, width: 4),
               color: duration != null
-                  ? Colors.amber.withOpacity(0.8)
+                  ? Colors.amber[600].withOpacity(0.8)
                   : Colors.transparent,
             ),
             child:
@@ -65,7 +65,7 @@ class DurationIndicator extends StatelessWidget {
           padding: const EdgeInsets.only(top: 4.0),
           child: Icon(
             FontAwesomeIcons.thumbtack,
-            color: Colors.blueGrey[900],
+            color: Colors.white,
             size: 14,
           ),
         ),
@@ -78,7 +78,7 @@ class DurationIndicator extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w900,
-                color: Colors.blueGrey[900],
+                color: Colors.white,
               ),
             ),
             Spacer(),
@@ -87,7 +87,7 @@ class DurationIndicator extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w900,
-                color: Colors.blueGrey[900],
+                color: Colors.white,
               ),
             ),
             SizedBox(height: 4),
