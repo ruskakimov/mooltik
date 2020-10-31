@@ -11,6 +11,7 @@ import 'frame_thumbnail.dart';
 
 const double thumbnailHeight = 64.0;
 const double gap = 1.0;
+const double menuWidth = 120.0;
 
 class ReelDrawer extends StatefulWidget {
   const ReelDrawer({
@@ -81,6 +82,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
       child: Stack(
         alignment: Alignment.center,
         clipBehavior: Clip.none,
+        overflow: Overflow.visible,
         children: [
           _buildMenu(),
           ColoredBox(
@@ -93,25 +95,55 @@ class _ReelDrawerState extends State<ReelDrawer> {
   }
 
   AnimatedPositioned _buildMenu() {
+    final frame = context.watch<ReelModel>().selectedFrame;
+
     return AnimatedPositioned(
       duration: Duration(milliseconds: 150),
       curve: Curves.easeOut,
-      right: _menuOpen ? -200 : 0,
+      right: _menuOpen ? -menuWidth : 0,
       child: Container(
-        width: 200,
+        width: menuWidth,
         height: 64,
         decoration: BoxDecoration(
-            color: Colors.amber,
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(4),
-              bottomRight: Radius.circular(4),
+          color: Colors.amber,
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(4),
+            bottomRight: Radius.circular(4),
+          ),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 2,
+              color: Colors.black12,
             ),
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 2,
-                color: Colors.black12,
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(
+                FontAwesomeIcons.plus,
+                color: Colors.grey[850],
+                size: 22,
               ),
-            ]),
+              onPressed: () {
+                print('plus');
+                frame.duration++;
+              },
+            ),
+            IconButton(
+              icon: Icon(
+                FontAwesomeIcons.minus,
+                color: Colors.grey[850],
+                size: 22,
+              ),
+              onPressed: () {
+                print('minus');
+                frame.duration--;
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
