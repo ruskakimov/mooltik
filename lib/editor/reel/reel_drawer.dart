@@ -78,17 +78,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
     return AnimatedLeftDrawer(
       width: drawerWidth,
       open: widget.open,
-      child: Stack(
-        alignment: Alignment.center,
-        clipBehavior: Clip.none,
-        overflow: Overflow.visible,
-        children: [
-          ColoredBox(
-            color: Colors.grey[850],
-            child: _buildList(),
-          ),
-        ],
-      ),
+      child: _buildList(),
     );
   }
 
