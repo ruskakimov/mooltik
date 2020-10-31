@@ -121,40 +121,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
               children: [
                 if (index == 0) before,
                 GestureDetector(
-                  onTap: () {
-                    _scrollTo(index);
-                  },
-                  // onHorizontalDragEnd: (dragDetails) {
-                  //   final toLeft = dragDetails.velocity.pixelsPerSecond.dx < 0;
-                  //   if (toLeft) {
-                  //     // Swiped to left.
-                  //     reel.deleteFrameAt(index);
-                  //   } else {
-                  //     // Swiped to right.
-                  //     reel.createOrRestoreFrameAt(index);
-                  //   }
-                  // },
-                  onVerticalDragUpdate: selected
-                      ? (DragUpdateDetails details) {
-                          _draggedInDurationMode += details.primaryDelta;
-
-                          if (_draggedInDurationMode >=
-                              durationModeScrollUnit) {
-                            _draggedInDurationMode -= durationModeScrollUnit;
-                            // TODO: increment duration
-                            // reel.addFrameSlot();
-                            frame.duration -= 1;
-                            setState(() {});
-                          } else if (_draggedInDurationMode <=
-                              -durationModeScrollUnit) {
-                            _draggedInDurationMode += durationModeScrollUnit;
-                            // TODO: decrement duration
-                            // reel.removeFrameSlot();
-                            frame.duration += 1;
-                            setState(() {});
-                          }
-                        }
-                      : null,
+                  onTap: () => _scrollTo(index),
                   child: FrameThumbnail(
                     frame: frame,
                     size: thumbnailSize,
