@@ -26,6 +26,7 @@ class FrameModel extends ChangeNotifier {
   int get duration => _duration;
   int _duration;
   set duration(int value) {
+    if (value <= 0) return;
     _duration = value;
     notifyListeners();
   }
