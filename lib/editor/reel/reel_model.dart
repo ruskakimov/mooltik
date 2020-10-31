@@ -59,7 +59,9 @@ class ReelModel extends ChangeNotifier {
 
   void _animate() async {
     if (!_playing) return;
-    await Future.delayed(const Duration(microseconds: 41666));
+    await Future.delayed(
+      Duration(microseconds: 41666 * selectedFrame.duration),
+    );
     if (!_playing) return;
 
     _selectedFrameId = (_selectedFrameId + 1) % frames.length;
