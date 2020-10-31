@@ -21,18 +21,7 @@ class FrameThumbnail extends StatelessWidget {
         color: selected ? Colors.amber : Colors.transparent,
         child: Row(
           children: [
-            Expanded(
-              child: Center(
-                child: Text(
-                  '${frame.duration}',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: selected ? Colors.grey[850] : Colors.white,
-                    fontWeight: selected ? FontWeight.w900 : FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
+            // SizedBox(width: borderWidth),
             Stack(
               children: [
                 CustomPaint(
@@ -46,8 +35,16 @@ class FrameThumbnail extends StatelessWidget {
                   Positioned.fill(
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        border: Border.symmetric(
-                          vertical: BorderSide(
+                        border: Border(
+                          top: BorderSide(
+                            width: borderWidth,
+                            color: Colors.amber,
+                          ),
+                          bottom: BorderSide(
+                            width: borderWidth,
+                            color: Colors.amber,
+                          ),
+                          left: BorderSide(
                             width: borderWidth,
                             color: Colors.amber,
                           ),
@@ -57,7 +54,18 @@ class FrameThumbnail extends StatelessWidget {
                   ),
               ],
             ),
-            SizedBox(width: borderWidth),
+            Expanded(
+              child: Center(
+                child: Text(
+                  '${frame.duration}',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: selected ? Colors.grey[850] : Colors.white,
+                    fontWeight: selected ? FontWeight.w900 : FontWeight.normal,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       );
