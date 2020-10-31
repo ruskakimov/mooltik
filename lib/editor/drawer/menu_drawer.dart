@@ -66,8 +66,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
             setState(() {
               _saving = true;
             });
-            // TODO: Fix later
-            // await _saveGif(reel.frames, reel.frameDurations);
+            await _saveGif(reel.frames);
             setState(() {
               _saving = false;
             });
@@ -80,8 +79,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
             setState(() {
               _saving = true;
             });
-            // TODO: Fix later
-            // await _saveVideo(reel.frames, reel.frameDurations);
+            await _saveVideo(reel.frames);
             setState(() {
               _saving = false;
             });
@@ -91,12 +89,9 @@ class _MenuDrawerState extends State<MenuDrawer> {
     );
   }
 
-  Future<void> _saveGif(
-    List<FrameModel> frames,
-    List<int> durations,
-  ) async {
+  Future<void> _saveGif(List<FrameModel> frames) async {
     if (await Permission.storage.request().isGranted) {
-      final bytes = await makeGif(frames, durations);
+      final bytes = await makeGif(frames);
       final dir = await getTemporaryDirectory();
       final file = File(dir.path + '/animation.gif');
       await file.writeAsBytes(bytes);
@@ -104,17 +99,11 @@ class _MenuDrawerState extends State<MenuDrawer> {
     }
   }
 
-  Future<void> _saveVideo(
-    List<FrameModel> frames,
-    List<int> durations,
-  ) async {
+  Future<void> _saveVideo(List<FrameModel> frames) async {
     if (await Permission.storage.request().isGranted) {
       final dir = await getTemporaryDirectory();
 
       final pngFiles = <File>[];
-
-      frames = frames.where((f) => f != null).toList();
-      durations = durations.where((d) => d > 0).toList();
 
       // Save frames as PNG images.
       for (int i = 0; i < frames.length; i++) {
@@ -130,7 +119,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
       final concatDemuxer = File(dir.path + '/concat.txt');
       String content = '';
       for (int i = 0; i < frames.length; i++) {
-        final durationInSeconds = durations[i] / 24.0;
+        final durationInSeconds = frames[i].duration / 24.0;
         content +=
             'file \'${pngFiles[i].path}\'\nduration ${durationInSeconds.toStringAsFixed(6)}\n';
       }
