@@ -109,6 +109,8 @@ class _ReelDrawerState extends State<ReelDrawer> {
         );
 
         return ListView.builder(
+          controller: controller,
+          itemCount: reel.frames.length,
           itemBuilder: (context, index) {
             final selected = index == reel.selectedFrameId;
             return Column(
@@ -141,8 +143,6 @@ class _ReelDrawerState extends State<ReelDrawer> {
               ],
             );
           },
-          itemCount: reel.frames.length,
-          controller: controller,
         );
       }),
     );
