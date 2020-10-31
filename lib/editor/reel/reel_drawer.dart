@@ -11,7 +11,6 @@ import 'frame_thumbnail.dart';
 
 const double thumbnailHeight = 64.0;
 const double gap = 1.0;
-const double durationModeScrollUnit = 24.0;
 
 class ReelDrawer extends StatefulWidget {
   const ReelDrawer({
