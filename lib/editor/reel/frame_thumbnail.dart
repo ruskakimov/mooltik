@@ -23,16 +23,12 @@ class FrameThumbnail extends StatelessWidget {
           children: [
             Expanded(
               child: Center(
-                child: RotatedBox(
-                  quarterTurns: 3,
-                  child: Text(
-                    '${frame.duration}',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: selected ? Colors.grey[850] : Colors.white,
-                      fontWeight:
-                          selected ? FontWeight.w900 : FontWeight.normal,
-                    ),
+                child: Text(
+                  '${frame.duration}',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: selected ? Colors.grey[850] : Colors.white,
+                    fontWeight: selected ? FontWeight.w900 : FontWeight.normal,
                   ),
                 ),
               ),
