@@ -41,6 +41,7 @@ class FrameMenu extends StatelessWidget {
             Material(
               color: Colors.amber,
               child: IconButton(
+                tooltip: 'Increase duration',
                 icon: Icon(
                   FontAwesomeIcons.plus,
                   color: Colors.grey[850],
@@ -54,6 +55,7 @@ class FrameMenu extends StatelessWidget {
             Material(
               color: Colors.amber,
               child: IconButton(
+                tooltip: 'Decrease duration',
                 icon: Icon(
                   FontAwesomeIcons.minus,
                   color: Colors.grey[850],
