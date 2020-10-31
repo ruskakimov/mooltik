@@ -26,6 +26,7 @@ class ReelDrawer extends StatefulWidget {
 
 class _ReelDrawerState extends State<ReelDrawer> {
   ScrollController controller;
+  bool _menuOpen = false;
 
   ReelModel get reel => context.read<ReelModel>();
 
@@ -74,57 +75,99 @@ class _ReelDrawerState extends State<ReelDrawer> {
     // Update when selected frame is painted on.
     context.watch<FrameModel>();
 
-    final reel = context.watch<ReelModel>();
-
     return AnimatedLeftDrawer(
       width: 140,
       open: widget.open,
-      child: LayoutBuilder(builder: (context, constraints) {
-        final padding = (constraints.maxHeight - thumbnailHeight) / 2;
-        final lastIndex = reel.frames.length - 1;
+      child: Stack(
+        alignment: Alignment.center,
+        clipBehavior: Clip.none,
+        children: [
+          _buildMenu(),
+          ColoredBox(
+            color: Colors.grey[850],
+            child: _buildList(),
+          ),
+        ],
+      ),
+    );
+  }
 
-        final before = SizedBox(height: padding);
-        final after = SizedBox(
-          height: padding,
-          child: Column(
+  AnimatedPositioned _buildMenu() {
+    return AnimatedPositioned(
+      duration: Duration(milliseconds: 200),
+      right: _menuOpen ? -200 : 0,
+      child: Container(
+        width: 200,
+        height: 64,
+        decoration: BoxDecoration(
+            color: Colors.amber,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(4),
+              bottomRight: Radius.circular(4),
+            ),
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 2,
+                color: Colors.black12,
+              ),
+            ]),
+      ),
+    );
+  }
+
+  Widget _buildList() {
+    final reel = context.watch<ReelModel>();
+
+    return LayoutBuilder(builder: (context, constraints) {
+      final padding = (constraints.maxHeight - thumbnailHeight) / 2;
+      final lastIndex = reel.frames.length - 1;
+
+      final before = SizedBox(height: padding);
+      final after = SizedBox(
+        height: padding,
+        child: Column(
+          children: [
+            SizedBox(
+              height: thumbnailHeight,
+              child: AppIconButton(
+                icon: FontAwesomeIcons.plusCircle,
+                onTap: reel.addFrame,
+              ),
+            ),
+          ],
+        ),
+      );
+
+      return ListView.separated(
+        controller: controller,
+        itemCount: reel.frames.length,
+        separatorBuilder: (context, index) => SizedBox(height: gap),
+        itemBuilder: (context, index) {
+          final frame = reel.frames[index];
+          final selected = index == reel.selectedFrameId;
+          return Column(
             children: [
+              if (index == 0) before,
               SizedBox(
                 height: thumbnailHeight,
-                child: AppIconButton(
-                  icon: FontAwesomeIcons.plusCircle,
-                  onTap: reel.addFrame,
-                ),
-              ),
-            ],
-          ),
-        );
-
-        return ListView.separated(
-          controller: controller,
-          itemCount: reel.frames.length,
-          separatorBuilder: (context, index) => SizedBox(height: gap),
-          itemBuilder: (context, index) {
-            final frame = reel.frames[index];
-            final selected = index == reel.selectedFrameId;
-            return Column(
-              children: [
-                if (index == 0) before,
-                SizedBox(
-                  height: thumbnailHeight,
-                  child: GestureDetector(
-                    onTap: () => _scrollTo(index),
-                    child: FrameThumbnail(
-                      frame: frame,
-                      selected: selected,
-                    ),
+                child: GestureDetector(
+                  onTap: () {
+                    if (selected) {
+                      setState(() => _menuOpen = !_menuOpen);
+                    }
+                    _scrollTo(index);
+                  },
+                  child: FrameThumbnail(
+                    frame: frame,
+                    selected: selected,
                   ),
                 ),
-                if (index == lastIndex) after,
-              ],
-            );
-          },
-        );
-      }),
-    );
+              ),
+              if (index == lastIndex) after,
+            ],
+          );
+        },
+      );
+    });
   }
 }
