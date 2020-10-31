@@ -43,22 +43,6 @@ class ReelModel extends ChangeNotifier {
     return i < frames.length ? frames[i] : null;
   }
 
-  List<int> get frameDurations {
-    final durations = <int>[];
-    int c = 1;
-
-    for (final frame in frames.reversed) {
-      if (frame == null) {
-        durations.add(0);
-        c++;
-      } else {
-        durations.add(c);
-        c = 1;
-      }
-    }
-    return durations.reversed.toList();
-  }
-
   bool get playing => _playing;
   bool _playing = false;
   int _selectedFrameIdBeforePlaying;

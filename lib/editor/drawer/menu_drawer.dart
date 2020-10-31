@@ -66,7 +66,8 @@ class _MenuDrawerState extends State<MenuDrawer> {
             setState(() {
               _saving = true;
             });
-            await _saveGif(reel.frames, reel.frameDurations);
+            // TODO: Fix later
+            // await _saveGif(reel.frames, reel.frameDurations);
             setState(() {
               _saving = false;
             });
@@ -79,7 +80,8 @@ class _MenuDrawerState extends State<MenuDrawer> {
             setState(() {
               _saving = true;
             });
-            await _saveVideo(reel.frames, reel.frameDurations);
+            // TODO: Fix later
+            // await _saveVideo(reel.frames, reel.frameDurations);
             setState(() {
               _saving = false;
             });

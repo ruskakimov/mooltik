@@ -15,12 +15,14 @@ const int maxSnapshotCount = 16;
 class FrameModel extends ChangeNotifier {
   FrameModel({
     @required Size size,
+    this.duration = 1,
     ui.Image initialSnapshot,
   })  : _size = size,
         unrasterizedStrokes = [],
         _snapshots = [initialSnapshot],
         _selectedSnapshotId = 0;
 
+  final int duration;
   final List<Stroke> unrasterizedStrokes;
 
   /// Must contain at least one snapshot. [null] represents an empty screen.
