@@ -45,7 +45,7 @@ class FrameMenu extends StatelessWidget {
                 icon: Icon(
                   FontAwesomeIcons.plus,
                   color: Colors.grey[850],
-                  size: 22,
+                  size: 18,
                 ),
                 onPressed: () {
                   frame.duration++;
@@ -59,7 +59,7 @@ class FrameMenu extends StatelessWidget {
                 icon: Icon(
                   FontAwesomeIcons.minus,
                   color: Colors.grey[850],
-                  size: 22,
+                  size: 18,
                 ),
                 onPressed: () {
                   frame.duration--;
