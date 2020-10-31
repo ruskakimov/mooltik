@@ -45,7 +45,6 @@ class FrameMenu extends StatelessWidget {
                 size: 22,
               ),
               onPressed: () {
-                print('plus');
                 frame.duration++;
               },
             ),
@@ -56,7 +55,6 @@ class FrameMenu extends StatelessWidget {
                 size: 22,
               ),
               onPressed: () {
-                print('minus');
                 frame.duration--;
               },
             ),
