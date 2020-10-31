@@ -78,25 +78,6 @@ class _ReelDrawerState extends State<ReelDrawer> {
 
     final reel = context.watch<ReelModel>();
 
-    var visibleFrame = reel.frames.first;
-    final visibleFrames = reel.frames.map((f) {
-      if (f != null) {
-        visibleFrame = f;
-      }
-      return visibleFrame;
-    }).toList();
-
-    final durations = [];
-    int i = 1;
-    reel.frames.reversed.forEach((f) {
-      durations.insert(0, i);
-      if (f == null) {
-        i++;
-      } else {
-        i = 1;
-      }
-    });
-
     return AnimatedLeftDrawer(
       width: thumbnailSize.width,
       open: widget.open,
@@ -134,18 +115,12 @@ class _ReelDrawerState extends State<ReelDrawer> {
               return ListView.builder(
                 itemBuilder: (context, index) {
                   final selected = index == reel.selectedFrameId;
-                  final copy = reel.frames[index] == null;
                   return Column(
                     children: [
                       if (index == 0) before,
                       GestureDetector(
                         onTap: () {
                           _scrollTo(index);
-                          if (_pinned || selected && !copy) {
-                            setState(() {
-                              _pinned = !_pinned;
-                            });
-                          }
                         },
                         onHorizontalDragEnd: (dragDetails) {
                           final toLeft =
@@ -161,11 +136,9 @@ class _ReelDrawerState extends State<ReelDrawer> {
                         child: Transform.scale(
                           scale: 0.99,
                           child: FrameThumbnail(
-                            frame: visibleFrames[index],
+                            frame: reel.frames[index],
                             size: thumbnailSize,
                             selected: selected,
-                            copy: copy,
-                            duration: _pinned ? durations[index] : null,
                           ),
                         ),
                       ),
