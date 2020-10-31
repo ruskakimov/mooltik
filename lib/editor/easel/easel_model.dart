@@ -12,7 +12,6 @@ class EaselModel extends ChangeNotifier {
     @required FrameModel frame,
     @required this.frameSize,
     @required Tool selectedTool,
-    @required this.createFrame,
     @required Size screenSize,
   })  : _frame = frame,
         _selectedTool = selectedTool,
@@ -25,7 +24,6 @@ class EaselModel extends ChangeNotifier {
   Tool _selectedTool;
   Color _selectedColor;
 
-  final Function createFrame;
   final Size frameSize;
 
   Size _screenSize;
@@ -148,9 +146,6 @@ class EaselModel extends ChangeNotifier {
     _currentStroke.finish();
 
     if (_currentStroke.boundingRect.overlaps(_frameArea)) {
-      if (_frame == null) {
-        _frame = createFrame();
-      }
       _frame.add(_currentStroke);
     }
 

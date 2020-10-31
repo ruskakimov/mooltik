@@ -43,14 +43,6 @@ class ReelModel extends ChangeNotifier {
     return i < frames.length ? frames[i] : null;
   }
 
-  int get _visibleFrameId {
-    int i = _selectedFrameId;
-    while (frames[i] == null) i--;
-    return i;
-  }
-
-  FrameModel get visibleFrame => frames[_visibleFrameId];
-
   List<int> get frameDurations {
     final durations = <int>[];
     int c = 1;
@@ -163,17 +155,5 @@ class ReelModel extends ChangeNotifier {
       initialSnapshot: _copiedFrame.snapshot,
     );
     notifyListeners();
-  }
-
-  FrameModel createFrameInSelectedSlot() {
-    if (selectedFrame != null) return null;
-
-    frames[_selectedFrameId] = FrameModel(
-      size: frameSize,
-      initialSnapshot: visibleFrame.snapshot,
-    );
-
-    notifyListeners();
-    return frames[_selectedFrameId];
   }
 }

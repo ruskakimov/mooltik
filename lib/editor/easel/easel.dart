@@ -26,7 +26,6 @@ class _EaselState extends State<Easel> {
         frame: reel.selectedFrame,
         frameSize: reel.frameSize,
         selectedTool: toolbox.selectedTool,
-        createFrame: reel.createFrameInSelectedSlot,
         screenSize: MediaQuery.of(context).size,
       ),
       update: (_, reel, toolbox, easel) => easel
