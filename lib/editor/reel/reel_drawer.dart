@@ -9,8 +9,9 @@ import 'package:mooltik/editor/reel/reel_model.dart';
 
 import 'frame_thumbnail.dart';
 
-const thumbnailSize = Size(112, 64);
-const durationModeScrollUnit = 24.0;
+const Size thumbnailSize = Size(112, 64);
+const double gap = 1.0;
+const double durationModeScrollUnit = 24.0;
 
 class ReelDrawer extends StatefulWidget {
   const ReelDrawer({
@@ -31,7 +32,8 @@ class _ReelDrawerState extends State<ReelDrawer> {
 
   ReelModel get reel => context.read<ReelModel>();
 
-  int get selectedId => (controller.offset / thumbnailSize.height).round();
+  int get selectedId =>
+      (controller.offset / (thumbnailSize.height + gap)).round();
 
   @override
   void initState() {
@@ -111,7 +113,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
         return ListView.separated(
           controller: controller,
           itemCount: reel.frames.length,
-          separatorBuilder: (context, index) => SizedBox(height: 1),
+          separatorBuilder: (context, index) => SizedBox(height: gap),
           itemBuilder: (context, index) {
             final selected = index == reel.selectedFrameId;
             return Column(
