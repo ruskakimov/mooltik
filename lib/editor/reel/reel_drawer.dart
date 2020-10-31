@@ -61,7 +61,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
 
   void _scrollTo(int index) {
     controller.animateTo(
-      index * thumbnailSize.height,
+      index * (thumbnailSize.height + gap),
       duration: Duration(milliseconds: 150),
       curve: Curves.easeOut,
     );
@@ -115,6 +115,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
           itemCount: reel.frames.length,
           separatorBuilder: (context, index) => SizedBox(height: gap),
           itemBuilder: (context, index) {
+            final frame = reel.frames[index];
             final selected = index == reel.selectedFrameId;
             return Column(
               children: [
@@ -123,18 +124,39 @@ class _ReelDrawerState extends State<ReelDrawer> {
                   onTap: () {
                     _scrollTo(index);
                   },
-                  onHorizontalDragEnd: (dragDetails) {
-                    final toLeft = dragDetails.velocity.pixelsPerSecond.dx < 0;
-                    if (toLeft) {
-                      // Swiped to left.
-                      reel.deleteFrameAt(index);
-                    } else {
-                      // Swiped to right.
-                      reel.createOrRestoreFrameAt(index);
-                    }
-                  },
+                  // onHorizontalDragEnd: (dragDetails) {
+                  //   final toLeft = dragDetails.velocity.pixelsPerSecond.dx < 0;
+                  //   if (toLeft) {
+                  //     // Swiped to left.
+                  //     reel.deleteFrameAt(index);
+                  //   } else {
+                  //     // Swiped to right.
+                  //     reel.createOrRestoreFrameAt(index);
+                  //   }
+                  // },
+                  onVerticalDragUpdate: selected
+                      ? (DragUpdateDetails details) {
+                          _draggedInDurationMode += details.primaryDelta;
+
+                          if (_draggedInDurationMode >=
+                              durationModeScrollUnit) {
+                            _draggedInDurationMode -= durationModeScrollUnit;
+                            // TODO: increment duration
+                            // reel.addFrameSlot();
+                            frame.duration -= 1;
+                            setState(() {});
+                          } else if (_draggedInDurationMode <=
+                              -durationModeScrollUnit) {
+                            _draggedInDurationMode += durationModeScrollUnit;
+                            // TODO: decrement duration
+                            // reel.removeFrameSlot();
+                            frame.duration += 1;
+                            setState(() {});
+                          }
+                        }
+                      : null,
                   child: FrameThumbnail(
-                    frame: reel.frames[index],
+                    frame: frame,
                     size: thumbnailSize,
                     selected: selected,
                   ),
@@ -146,19 +168,5 @@ class _ReelDrawerState extends State<ReelDrawer> {
         );
       }),
     );
-  }
-
-  void _onDurationDrag(DragUpdateDetails details) {
-    _draggedInDurationMode += details.primaryDelta;
-
-    if (_draggedInDurationMode >= durationModeScrollUnit) {
-      _draggedInDurationMode -= durationModeScrollUnit;
-      // TODO: increment duration
-      // reel.addFrameSlot();
-    } else if (_draggedInDurationMode <= -durationModeScrollUnit) {
-      _draggedInDurationMode += durationModeScrollUnit;
-      // TODO: decrement duration
-      // reel.removeFrameSlot();
-    }
   }
 }

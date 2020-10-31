@@ -22,7 +22,7 @@ class FrameModel extends ChangeNotifier {
         _snapshots = [initialSnapshot],
         _selectedSnapshotId = 0;
 
-  final int duration;
+  int duration;
   final List<Stroke> unrasterizedStrokes;
 
   /// Must contain at least one snapshot. [null] represents an empty screen.
