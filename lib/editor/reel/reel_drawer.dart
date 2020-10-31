@@ -41,6 +41,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
   }
 
   void _onScroll() {
+    reel.menuOpen = false;
     reel.selectFrame(selectedId);
   }
 
