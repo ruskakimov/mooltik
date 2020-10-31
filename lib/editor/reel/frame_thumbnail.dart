@@ -16,20 +16,31 @@ class FrameThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Row(
       children: [
         CustomPaint(
           size: size,
           painter: FramePainter(frame: frame),
         ),
-        if (selected)
-          Container(
+        Expanded(
+          child: Container(
             height: size.height,
-            width: size.width,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.amber, width: 4),
+            color: selected ? Colors.amber : Colors.transparent,
+            child: Center(
+              child: RotatedBox(
+                quarterTurns: 3,
+                child: Text(
+                  '${frame.duration}',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: selected ? Colors.grey[850] : Colors.white,
+                    fontWeight: selected ? FontWeight.w900 : FontWeight.normal,
+                  ),
+                ),
+              ),
             ),
           ),
+        ),
       ],
     );
   }

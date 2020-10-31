@@ -79,7 +79,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
     final reel = context.watch<ReelModel>();
 
     return AnimatedLeftDrawer(
-      width: thumbnailSize.width,
+      width: thumbnailSize.width + 20,
       open: widget.open,
       child: LayoutBuilder(builder: (context, constraints) {
         final padding = (constraints.maxHeight - thumbnailSize.height) / 2;
