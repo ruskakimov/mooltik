@@ -9,7 +9,7 @@ import 'package:mooltik/editor/reel/reel_model.dart';
 
 import 'frame_thumbnail.dart';
 
-const Size thumbnailSize = Size(112, 64);
+const double thumbnailHeight = 64.0;
 const double gap = 1.0;
 const double durationModeScrollUnit = 24.0;
 
@@ -27,19 +27,16 @@ class ReelDrawer extends StatefulWidget {
 
 class _ReelDrawerState extends State<ReelDrawer> {
   ScrollController controller;
-  bool _pinned = false;
-  double _draggedInDurationMode = 0;
 
   ReelModel get reel => context.read<ReelModel>();
 
-  int get selectedId =>
-      (controller.offset / (thumbnailSize.height + gap)).round();
+  int get selectedId => (controller.offset / (thumbnailHeight + gap)).round();
 
   @override
   void initState() {
     super.initState();
     controller = ScrollController(
-      initialScrollOffset: reel.selectedFrameId * thumbnailSize.height,
+      initialScrollOffset: reel.selectedFrameId * thumbnailHeight,
     )..addListener(_onScroll);
   }
 
@@ -61,7 +58,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
 
   void _scrollTo(int index) {
     controller.animateTo(
-      index * (thumbnailSize.height + gap),
+      index * (thumbnailHeight + gap),
       duration: Duration(milliseconds: 150),
       curve: Curves.easeOut,
     );
@@ -81,10 +78,10 @@ class _ReelDrawerState extends State<ReelDrawer> {
     final reel = context.watch<ReelModel>();
 
     return AnimatedLeftDrawer(
-      width: thumbnailSize.width + 20,
+      width: 140,
       open: widget.open,
       child: LayoutBuilder(builder: (context, constraints) {
-        final padding = (constraints.maxHeight - thumbnailSize.height) / 2;
+        final padding = (constraints.maxHeight - thumbnailHeight) / 2;
         final lastIndex = reel.frames.length - 1;
 
         final before = SizedBox(height: padding);
@@ -93,17 +90,10 @@ class _ReelDrawerState extends State<ReelDrawer> {
           child: Column(
             children: [
               SizedBox(
-                height: thumbnailSize.height,
+                height: thumbnailHeight,
                 child: AppIconButton(
                   icon: FontAwesomeIcons.plusCircle,
-                  onTap: () {
-                    reel.addFrame();
-                    if (_pinned) {
-                      setState(() {
-                        _pinned = false;
-                      });
-                    }
-                  },
+                  onTap: reel.addFrame,
                 ),
               ),
             ],
@@ -120,12 +110,14 @@ class _ReelDrawerState extends State<ReelDrawer> {
             return Column(
               children: [
                 if (index == 0) before,
-                GestureDetector(
-                  onTap: () => _scrollTo(index),
-                  child: FrameThumbnail(
-                    frame: frame,
-                    size: thumbnailSize,
-                    selected: selected,
+                SizedBox(
+                  height: thumbnailHeight,
+                  child: GestureDetector(
+                    onTap: () => _scrollTo(index),
+                    child: FrameThumbnail(
+                      frame: frame,
+                      selected: selected,
+                    ),
                   ),
                 ),
                 if (index == lastIndex) after,
