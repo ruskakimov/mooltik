@@ -20,10 +20,6 @@ class FrameThumbnail extends StatelessWidget {
       color: selected ? Colors.amber : Colors.transparent,
       child: Row(
         children: [
-          CustomPaint(
-            size: size,
-            painter: FramePainter(frame: frame),
-          ),
           Expanded(
             child: Center(
               child: RotatedBox(
@@ -39,6 +35,25 @@ class FrameThumbnail extends StatelessWidget {
               ),
             ),
           ),
+          Stack(
+            children: [
+              CustomPaint(
+                size: size,
+                painter: FramePainter(frame: frame),
+              ),
+              if (selected)
+                Positioned.fill(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      border: Border.symmetric(
+                        vertical: BorderSide(width: 4, color: Colors.amber),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          SizedBox(width: 4),
         ],
       ),
     );
