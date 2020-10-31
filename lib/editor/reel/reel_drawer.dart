@@ -185,10 +185,12 @@ class _ReelDrawerState extends State<ReelDrawer> {
 
                 if (_draggedInDurationMode >= durationModeScrollUnit) {
                   _draggedInDurationMode -= durationModeScrollUnit;
-                  reel.addFrameSlot();
+                  // TODO: increment duration
+                  // reel.addFrameSlot();
                 } else if (_draggedInDurationMode <= -durationModeScrollUnit) {
                   _draggedInDurationMode += durationModeScrollUnit;
-                  reel.removeFrameSlot();
+                  // TODO: decrement duration
+                  // reel.removeFrameSlot();
                 }
               },
             ),
