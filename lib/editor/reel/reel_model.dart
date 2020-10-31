@@ -29,18 +29,14 @@ class ReelModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  FrameModel get visibleFrameBefore {
-    if (playing || !onion) return null;
-    int i = _selectedFrameId - 1;
-    while (i >= 0 && frames[i] == null) i--;
-    return i >= 0 ? frames[i] : null;
+  FrameModel get frameBefore {
+    if (playing || !onion || _selectedFrameId == 0) return null;
+    return frames[_selectedFrameId - 1];
   }
 
-  FrameModel get visibleFrameAfter {
-    if (playing || !onion) return null;
-    int i = _selectedFrameId + 1;
-    while (i < frames.length && frames[i] == null) i++;
-    return i < frames.length ? frames[i] : null;
+  FrameModel get frameAfter {
+    if (playing || !onion || _selectedFrameId == frames.length - 1) return null;
+    return frames[_selectedFrameId + 1];
   }
 
   bool get playing => _playing;

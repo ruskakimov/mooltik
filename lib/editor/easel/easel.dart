@@ -67,13 +67,13 @@ class _EaselState extends State<Easel> {
                           height: frame.height,
                           color: Colors.white,
                         ),
-                        if (reel.visibleFrameBefore != null)
+                        if (reel.frameBefore != null)
                           Opacity(
                             opacity: 0.2,
                             child: CustomPaint(
                               size: Size(frame.width, frame.height),
                               foregroundPainter: FramePainter(
-                                frame: reel.visibleFrameBefore,
+                                frame: reel.frameBefore,
                                 background: Colors.transparent,
                                 filter: ColorFilter.mode(
                                   Colors.red,
@@ -82,13 +82,13 @@ class _EaselState extends State<Easel> {
                               ),
                             ),
                           ),
-                        if (reel.visibleFrameAfter != null)
+                        if (reel.frameAfter != null)
                           Opacity(
                             opacity: 0.2,
                             child: CustomPaint(
                               size: Size(frame.width, frame.height),
                               foregroundPainter: FramePainter(
-                                frame: reel.visibleFrameAfter,
+                                frame: reel.frameAfter,
                                 background: Colors.transparent,
                                 filter: ColorFilter.mode(
                                   Colors.green,
