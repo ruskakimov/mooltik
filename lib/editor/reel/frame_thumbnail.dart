@@ -16,16 +16,15 @@ class FrameThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        CustomPaint(
-          size: size,
-          painter: FramePainter(frame: frame),
-        ),
-        Expanded(
-          child: Container(
-            height: size.height,
-            color: selected ? Colors.amber : Colors.transparent,
+    return Container(
+      color: selected ? Colors.amber : Colors.transparent,
+      child: Row(
+        children: [
+          CustomPaint(
+            size: size,
+            painter: FramePainter(frame: frame),
+          ),
+          Expanded(
             child: Center(
               child: RotatedBox(
                 quarterTurns: 3,
@@ -40,8 +39,8 @@ class FrameThumbnail extends StatelessWidget {
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

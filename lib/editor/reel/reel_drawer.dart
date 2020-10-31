@@ -108,9 +108,10 @@ class _ReelDrawerState extends State<ReelDrawer> {
           ),
         );
 
-        return ListView.builder(
+        return ListView.separated(
           controller: controller,
           itemCount: reel.frames.length,
+          separatorBuilder: (context, index) => SizedBox(height: 1),
           itemBuilder: (context, index) {
             final selected = index == reel.selectedFrameId;
             return Column(
@@ -130,13 +131,10 @@ class _ReelDrawerState extends State<ReelDrawer> {
                       reel.createOrRestoreFrameAt(index);
                     }
                   },
-                  child: Transform.scale(
-                    scale: 0.99,
-                    child: FrameThumbnail(
-                      frame: reel.frames[index],
-                      size: thumbnailSize,
-                      selected: selected,
-                    ),
+                  child: FrameThumbnail(
+                    frame: reel.frames[index],
+                    size: thumbnailSize,
+                    selected: selected,
                   ),
                 ),
                 if (index == lastIndex) after,
