@@ -38,25 +38,31 @@ class FrameMenu extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            IconButton(
-              icon: Icon(
-                FontAwesomeIcons.plus,
-                color: Colors.grey[850],
-                size: 22,
+            Material(
+              color: Colors.amber,
+              child: IconButton(
+                icon: Icon(
+                  FontAwesomeIcons.plus,
+                  color: Colors.grey[850],
+                  size: 22,
+                ),
+                onPressed: () {
+                  frame.duration++;
+                },
               ),
-              onPressed: () {
-                frame.duration++;
-              },
             ),
-            IconButton(
-              icon: Icon(
-                FontAwesomeIcons.minus,
-                color: Colors.grey[850],
-                size: 22,
+            Material(
+              color: Colors.amber,
+              child: IconButton(
+                icon: Icon(
+                  FontAwesomeIcons.minus,
+                  color: Colors.grey[850],
+                  size: 22,
+                ),
+                onPressed: () {
+                  frame.duration--;
+                },
               ),
-              onPressed: () {
-                frame.duration--;
-              },
             ),
           ],
         ),

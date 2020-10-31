@@ -28,6 +28,7 @@ class App extends StatelessWidget {
         primarySwatch: Colors.amber,
         accentColor: Colors.amber,
         dialogBackgroundColor: Colors.blueGrey[900],
+        highlightColor: Colors.white,
       ),
       initialRoute: '/editor',
       routes: {
