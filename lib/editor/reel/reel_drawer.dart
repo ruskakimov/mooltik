@@ -81,94 +81,84 @@ class _ReelDrawerState extends State<ReelDrawer> {
     return AnimatedLeftDrawer(
       width: thumbnailSize.width,
       open: widget.open,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: LayoutBuilder(builder: (context, constraints) {
-              final padding =
-                  (constraints.maxHeight - thumbnailSize.height) / 2;
-              final lastIndex = reel.frames.length - 1;
+      child: LayoutBuilder(builder: (context, constraints) {
+        final padding = (constraints.maxHeight - thumbnailSize.height) / 2;
+        final lastIndex = reel.frames.length - 1;
 
-              final before = SizedBox(height: padding);
-              final after = SizedBox(
-                height: padding,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: thumbnailSize.height,
-                      child: AppIconButton(
-                        icon: FontAwesomeIcons.plusCircle,
-                        onTap: () {
-                          reel.addFrame();
-                          if (_pinned) {
-                            setState(() {
-                              _pinned = false;
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                  ],
+        final before = SizedBox(height: padding);
+        final after = SizedBox(
+          height: padding,
+          child: Column(
+            children: [
+              SizedBox(
+                height: thumbnailSize.height,
+                child: AppIconButton(
+                  icon: FontAwesomeIcons.plusCircle,
+                  onTap: () {
+                    reel.addFrame();
+                    if (_pinned) {
+                      setState(() {
+                        _pinned = false;
+                      });
+                    }
+                  },
                 ),
-              );
-
-              return ListView.builder(
-                itemBuilder: (context, index) {
-                  final selected = index == reel.selectedFrameId;
-                  return Column(
-                    children: [
-                      if (index == 0) before,
-                      GestureDetector(
-                        onTap: () {
-                          _scrollTo(index);
-                        },
-                        onHorizontalDragEnd: (dragDetails) {
-                          final toLeft =
-                              dragDetails.velocity.pixelsPerSecond.dx < 0;
-                          if (toLeft) {
-                            // Swiped to left.
-                            reel.deleteFrameAt(index);
-                          } else {
-                            // Swiped to right.
-                            reel.createOrRestoreFrameAt(index);
-                          }
-                        },
-                        child: Transform.scale(
-                          scale: 0.99,
-                          child: FrameThumbnail(
-                            frame: reel.frames[index],
-                            size: thumbnailSize,
-                            selected: selected,
-                          ),
-                        ),
-                      ),
-                      if (index == lastIndex) after,
-                    ],
-                  );
-                },
-                itemCount: reel.frames.length,
-                controller: controller,
-              );
-            }),
+              ),
+            ],
           ),
-          if (_pinned)
-            GestureDetector(
-              onVerticalDragUpdate: (details) {
-                _draggedInDurationMode += details.primaryDelta;
+        );
 
-                if (_draggedInDurationMode >= durationModeScrollUnit) {
-                  _draggedInDurationMode -= durationModeScrollUnit;
-                  // TODO: increment duration
-                  // reel.addFrameSlot();
-                } else if (_draggedInDurationMode <= -durationModeScrollUnit) {
-                  _draggedInDurationMode += durationModeScrollUnit;
-                  // TODO: decrement duration
-                  // reel.removeFrameSlot();
-                }
-              },
-            ),
-        ],
-      ),
+        return ListView.builder(
+          itemBuilder: (context, index) {
+            final selected = index == reel.selectedFrameId;
+            return Column(
+              children: [
+                if (index == 0) before,
+                GestureDetector(
+                  onTap: () {
+                    _scrollTo(index);
+                  },
+                  onHorizontalDragEnd: (dragDetails) {
+                    final toLeft = dragDetails.velocity.pixelsPerSecond.dx < 0;
+                    if (toLeft) {
+                      // Swiped to left.
+                      reel.deleteFrameAt(index);
+                    } else {
+                      // Swiped to right.
+                      reel.createOrRestoreFrameAt(index);
+                    }
+                  },
+                  child: Transform.scale(
+                    scale: 0.99,
+                    child: FrameThumbnail(
+                      frame: reel.frames[index],
+                      size: thumbnailSize,
+                      selected: selected,
+                    ),
+                  ),
+                ),
+                if (index == lastIndex) after,
+              ],
+            );
+          },
+          itemCount: reel.frames.length,
+          controller: controller,
+        );
+      }),
     );
+  }
+
+  void _onDurationDrag(DragUpdateDetails details) {
+    _draggedInDurationMode += details.primaryDelta;
+
+    if (_draggedInDurationMode >= durationModeScrollUnit) {
+      _draggedInDurationMode -= durationModeScrollUnit;
+      // TODO: increment duration
+      // reel.addFrameSlot();
+    } else if (_draggedInDurationMode <= -durationModeScrollUnit) {
+      _draggedInDurationMode += durationModeScrollUnit;
+      // TODO: decrement duration
+      // reel.removeFrameSlot();
+    }
   }
 }
