@@ -94,7 +94,8 @@ class _ReelDrawerState extends State<ReelDrawer> {
 
   AnimatedPositioned _buildMenu() {
     return AnimatedPositioned(
-      duration: Duration(milliseconds: 200),
+      duration: Duration(milliseconds: 150),
+      curve: Curves.easeOut,
       right: _menuOpen ? -200 : 0,
       child: Container(
         width: 200,
