@@ -17,34 +17,59 @@ class ReelContextMenu extends StatelessWidget {
     return Transform.translate(
       offset: Offset(8, 0),
       child: Material(
-        color: Colors.grey[800],
+        color: Colors.grey[700],
         elevation: 5,
         borderRadius: BorderRadius.circular(8),
         child: SizedBox(
           width: menuWidth,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              IconButton(
-                icon: Icon(
-                  FontAwesomeIcons.plus,
-                  size: 18,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    FontAwesomeIcons.trashAlt,
+                    size: 18,
+                  ),
+                  onPressed: reel.deleteSelectedFrame,
                 ),
-                onPressed: () {
-                  frame.duration++;
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  FontAwesomeIcons.minus,
-                  size: 18,
+                Divider(),
+                IconButton(
+                  icon: Icon(
+                    Icons.copy,
+                    size: 20,
+                  ),
+                  onPressed: reel.copySelectedFrame,
                 ),
-                onPressed: () {
-                  frame.duration--;
-                },
-              ),
-            ],
+                IconButton(
+                  icon: Icon(
+                    Icons.paste,
+                    size: 20,
+                  ),
+                  onPressed: reel.pasteInSelectedFrame,
+                ),
+                Divider(),
+                IconButton(
+                  icon: Icon(
+                    FontAwesomeIcons.plus,
+                    size: 18,
+                  ),
+                  onPressed: () {
+                    frame.duration++;
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
+                    FontAwesomeIcons.minus,
+                    size: 18,
+                  ),
+                  onPressed: () {
+                    frame.duration--;
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

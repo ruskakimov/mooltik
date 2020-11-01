@@ -19,8 +19,6 @@ class ReelModel extends ChangeNotifier {
   FrameModel get selectedFrame => frames[_selectedFrameId];
 
   FrameModel _copiedFrame;
-  FrameModel _lastDeleted;
-  int _lastDeletedId;
 
   bool get onion => _onion;
   bool _onion = true;
@@ -82,41 +80,24 @@ class ReelModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool canDeleteFrameAt(int id) =>
-      id != 0 && frames.length > 1 && frames[id] != null;
+  // Context menu operations:
 
-  void deleteFrameAt(int id) {
-    assert(id >= 0 && id <= frames.length);
-    if (!canDeleteFrameAt(id)) return;
+  bool get canDeleteSelectedFrame => frames.length > 1;
 
-    _lastDeleted = frames[id];
-    _lastDeletedId = id;
-    frames[id] = null;
+  void deleteSelectedFrame() {
+    if (!canDeleteSelectedFrame) return;
+    frames.removeAt(_selectedFrameId);
     notifyListeners();
   }
 
-  void createOrRestoreFrameAt(int id) {
-    assert(id >= 0 && id <= frames.length);
-    if (frames[id] != null) return;
-
-    if (_lastDeletedId == id && _lastDeleted != null) {
-      frames[id] = _lastDeleted;
-    } else {
-      frames[id] = FrameModel(size: frameSize);
-    }
+  void copySelectedFrame() {
+    _copiedFrame = selectedFrame;
     notifyListeners();
   }
 
-  void copy(int id) {
-    assert(id >= 0 && id <= frames.length);
-    _copiedFrame = frames[id];
-    notifyListeners();
-  }
-
-  void paste(int id) {
-    assert(id >= 0 && id <= frames.length);
+  void pasteInSelectedFrame() {
     if (_copiedFrame == null) return;
-    frames[id] = FrameModel(
+    frames[_selectedFrameId] = FrameModel(
       size: frameSize,
       initialSnapshot: _copiedFrame.snapshot,
     );
