@@ -32,7 +32,9 @@ class ReelContextMenu extends StatelessWidget {
                     FontAwesomeIcons.trashAlt,
                     size: 18,
                   ),
-                  onPressed: reel.deleteSelectedFrame,
+                  onPressed: reel.canDeleteSelectedFrame
+                      ? reel.deleteSelectedFrame
+                      : null,
                 ),
                 Divider(),
                 IconButton(
