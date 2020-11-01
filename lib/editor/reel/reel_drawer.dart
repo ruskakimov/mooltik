@@ -83,10 +83,21 @@ class _ReelDrawerState extends State<ReelDrawer> {
       open: widget.open,
       child: PortalEntry(
         visible: _contextMenuOpen,
-        portalAnchor: Alignment.centerLeft,
-        childAnchor: Alignment.centerRight,
-        portal: ReelContextMenu(),
-        child: _buildList(),
+        portal: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            setState(() {
+              _contextMenuOpen = false;
+            });
+          },
+        ),
+        child: PortalEntry(
+          visible: _contextMenuOpen,
+          portalAnchor: Alignment.centerLeft,
+          childAnchor: Alignment.centerRight,
+          portal: ReelContextMenu(),
+          child: _buildList(),
+        ),
       ),
     );
   }
@@ -129,7 +140,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
                 child: GestureDetector(
                   onTap: () {
                     if (selected) {
-                      setState(() => _contextMenuOpen = !_contextMenuOpen);
+                      setState(() => _contextMenuOpen = true);
                     }
                     _scrollTo(index);
                   },
