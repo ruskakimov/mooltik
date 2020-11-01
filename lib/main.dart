@@ -29,8 +29,8 @@ class App extends StatelessWidget {
           brightness: Brightness.dark,
           primarySwatch: Colors.amber,
           accentColor: Colors.amber,
-          dialogBackgroundColor: Colors.blueGrey[900],
-          highlightColor: Colors.white,
+          dialogBackgroundColor: Colors.grey[800],
+          highlightColor: Colors.white.withOpacity(0.2),
         ),
         initialRoute: '/editor',
         routes: {
