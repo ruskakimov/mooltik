@@ -66,9 +66,11 @@ class ReelContextMenu extends StatelessWidget {
                     FontAwesomeIcons.minus,
                     size: 18,
                   ),
-                  onPressed: () {
-                    frame.duration--;
-                  },
+                  onPressed: frame.duration > 1
+                      ? () {
+                          frame.duration--;
+                        }
+                      : null,
                 ),
               ],
             ),
