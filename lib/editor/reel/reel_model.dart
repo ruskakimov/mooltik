@@ -87,7 +87,11 @@ class ReelModel extends ChangeNotifier {
   void deleteSelectedFrame() {
     if (!canDeleteSelectedFrame) return;
     frames.removeAt(_selectedFrameId);
-    _selectedFrameId--;
+
+    // Update index on removing the last frame.
+    if (_selectedFrameId == frames.length) {
+      _selectedFrameId = frames.length - 1;
+    }
     notifyListeners();
   }
 
