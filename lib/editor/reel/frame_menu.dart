@@ -3,9 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'reel_model.dart';
-import 'reel_drawer.dart';
 
-const double menuWidth = 120.0;
+const double menuWidth = 64.0;
 
 class ReelContextMenu extends StatelessWidget {
   const ReelContextMenu({Key key}) : super(key: key);
@@ -17,7 +16,6 @@ class ReelContextMenu extends StatelessWidget {
 
     return Container(
       width: menuWidth,
-      height: thumbnailHeight,
       decoration: BoxDecoration(
         color: Colors.amber,
         borderRadius: BorderRadius.only(
@@ -31,23 +29,10 @@ class ReelContextMenu extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Material(
-            color: Colors.amber,
-            child: IconButton(
-              tooltip: 'Decrease duration',
-              icon: Icon(
-                FontAwesomeIcons.minus,
-                color: Colors.grey[850],
-                size: 18,
-              ),
-              onPressed: () {
-                frame.duration--;
-              },
-            ),
-          ),
           Material(
             color: Colors.amber,
             child: IconButton(
@@ -59,6 +44,20 @@ class ReelContextMenu extends StatelessWidget {
               ),
               onPressed: () {
                 frame.duration++;
+              },
+            ),
+          ),
+          Material(
+            color: Colors.amber,
+            child: IconButton(
+              tooltip: 'Decrease duration',
+              icon: Icon(
+                FontAwesomeIcons.minus,
+                color: Colors.grey[850],
+                size: 18,
+              ),
+              onPressed: () {
+                frame.duration--;
               },
             ),
           ),
