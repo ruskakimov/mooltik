@@ -6,7 +6,6 @@ import 'package:mooltik/editor/drawer/color_picker_button.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/drawer/color_picker_drawer.dart';
 import 'package:mooltik/editor/drawer/menu_drawer.dart';
-import 'package:mooltik/editor/reel/frame_menu.dart';
 import 'package:mooltik/editor/reel/reel_drawer.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
@@ -109,7 +108,6 @@ class _ToolBarState extends State<ToolBar> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        if (leftOpen == LeftDrawer.reel) FrameMenu(),
         ReelDrawer(
           open: leftOpen == LeftDrawer.reel,
         ),

@@ -15,59 +15,54 @@ class FrameMenu extends StatelessWidget {
     final reel = context.watch<ReelModel>();
     final frame = reel.selectedFrame;
 
-    return AnimatedPositioned(
-      duration: Duration(milliseconds: 150),
-      curve: Curves.easeOut,
-      left: reel.menuOpen ? drawerWidth : -menuWidth + drawerWidth,
-      child: Container(
-        width: menuWidth,
-        height: thumbnailHeight,
-        decoration: BoxDecoration(
-          color: Colors.amber,
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(4),
-            bottomRight: Radius.circular(4),
+    return Container(
+      width: menuWidth,
+      height: thumbnailHeight,
+      decoration: BoxDecoration(
+        color: Colors.amber,
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(4),
+          bottomRight: Radius.circular(4),
+        ),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 2,
+            color: Colors.black12,
           ),
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 2,
-              color: Colors.black12,
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Material(
-              color: Colors.amber,
-              child: IconButton(
-                tooltip: 'Decrease duration',
-                icon: Icon(
-                  FontAwesomeIcons.minus,
-                  color: Colors.grey[850],
-                  size: 18,
-                ),
-                onPressed: () {
-                  frame.duration--;
-                },
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Material(
+            color: Colors.amber,
+            child: IconButton(
+              tooltip: 'Decrease duration',
+              icon: Icon(
+                FontAwesomeIcons.minus,
+                color: Colors.grey[850],
+                size: 18,
               ),
+              onPressed: () {
+                frame.duration--;
+              },
             ),
-            Material(
-              color: Colors.amber,
-              child: IconButton(
-                tooltip: 'Increase duration',
-                icon: Icon(
-                  FontAwesomeIcons.plus,
-                  color: Colors.grey[850],
-                  size: 18,
-                ),
-                onPressed: () {
-                  frame.duration++;
-                },
+          ),
+          Material(
+            color: Colors.amber,
+            child: IconButton(
+              tooltip: 'Increase duration',
+              icon: Icon(
+                FontAwesomeIcons.plus,
+                color: Colors.grey[850],
+                size: 18,
               ),
+              onPressed: () {
+                frame.duration++;
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

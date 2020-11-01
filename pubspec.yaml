@@ -33,6 +33,7 @@ dependencies:
   after_init: ^0.1.2
   vibration: ^1.5.0
   flutter_ffmpeg: ^0.3.0
+  flutter_portal: ^0.3.0
 
 dev_dependencies:
   flutter_test:

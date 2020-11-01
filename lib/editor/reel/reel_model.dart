@@ -29,14 +29,6 @@ class ReelModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get menuOpen => _menuOpen;
-  bool _menuOpen = true;
-  set menuOpen(bool value) {
-    if (value == _menuOpen) return;
-    _menuOpen = value;
-    notifyListeners();
-  }
-
   FrameModel get frameBefore {
     if (playing || !onion || _selectedFrameId == 0) return null;
     return frames[_selectedFrameId - 1];

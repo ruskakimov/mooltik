@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_portal/flutter_portal.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/common/app_icon_button.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
+import 'package:mooltik/editor/reel/frame_menu.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 
@@ -27,6 +29,7 @@ class ReelDrawer extends StatefulWidget {
 
 class _ReelDrawerState extends State<ReelDrawer> {
   ScrollController controller;
+  bool _menuOpen = false;
 
   ReelModel get reel => context.read<ReelModel>();
 
@@ -41,7 +44,6 @@ class _ReelDrawerState extends State<ReelDrawer> {
   }
 
   void _onScroll() {
-    reel.menuOpen = false;
     reel.selectFrame(selectedId);
   }
 
@@ -121,13 +123,19 @@ class _ReelDrawerState extends State<ReelDrawer> {
                 child: GestureDetector(
                   onTap: () {
                     if (selected) {
-                      setState(() => reel.menuOpen = !reel.menuOpen);
+                      setState(() => _menuOpen = !_menuOpen);
                     }
                     _scrollTo(index);
                   },
-                  child: FrameThumbnail(
-                    frame: frame,
-                    selected: selected,
+                  child: PortalEntry(
+                    visible: selected && _menuOpen,
+                    portalAnchor: Alignment.centerLeft,
+                    childAnchor: Alignment.centerRight,
+                    portal: FrameMenu(),
+                    child: FrameThumbnail(
+                      frame: frame,
+                      selected: selected,
+                    ),
                   ),
                 ),
               ),
