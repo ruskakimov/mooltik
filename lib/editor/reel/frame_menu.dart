@@ -7,8 +7,8 @@ import 'reel_drawer.dart';
 
 const double menuWidth = 120.0;
 
-class FrameMenu extends StatelessWidget {
-  const FrameMenu({Key key}) : super(key: key);
+class ReelContextMenu extends StatelessWidget {
+  const ReelContextMenu({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

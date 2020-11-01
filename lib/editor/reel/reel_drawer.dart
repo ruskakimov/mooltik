@@ -29,7 +29,7 @@ class ReelDrawer extends StatefulWidget {
 
 class _ReelDrawerState extends State<ReelDrawer> {
   ScrollController controller;
-  bool _menuOpen = false;
+  bool _contextMenuOpen = false;
 
   ReelModel get reel => context.read<ReelModel>();
 
@@ -81,7 +81,13 @@ class _ReelDrawerState extends State<ReelDrawer> {
     return AnimatedLeftDrawer(
       width: drawerWidth,
       open: widget.open,
-      child: _buildList(),
+      child: PortalEntry(
+        visible: _contextMenuOpen,
+        portalAnchor: Alignment.centerLeft,
+        childAnchor: Alignment.centerRight,
+        portal: ReelContextMenu(),
+        child: _buildList(),
+      ),
     );
   }
 
@@ -123,19 +129,13 @@ class _ReelDrawerState extends State<ReelDrawer> {
                 child: GestureDetector(
                   onTap: () {
                     if (selected) {
-                      setState(() => _menuOpen = !_menuOpen);
+                      setState(() => _contextMenuOpen = !_contextMenuOpen);
                     }
                     _scrollTo(index);
                   },
-                  child: PortalEntry(
-                    visible: selected && _menuOpen,
-                    portalAnchor: Alignment.centerLeft,
-                    childAnchor: Alignment.centerRight,
-                    portal: FrameMenu(),
-                    child: FrameThumbnail(
-                      frame: frame,
-                      selected: selected,
-                    ),
+                  child: FrameThumbnail(
+                    frame: frame,
+                    selected: selected,
                   ),
                 ),
               ),
