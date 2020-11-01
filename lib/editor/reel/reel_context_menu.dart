@@ -14,54 +14,39 @@ class ReelContextMenu extends StatelessWidget {
     final reel = context.watch<ReelModel>();
     final frame = reel.selectedFrame;
 
-    return Container(
-      width: menuWidth,
-      decoration: BoxDecoration(
-        color: Colors.amber,
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(4),
-          bottomRight: Radius.circular(4),
+    return Transform.translate(
+      offset: Offset(8, 0),
+      child: Material(
+        color: Colors.grey[800],
+        elevation: 5,
+        borderRadius: BorderRadius.circular(8),
+        child: SizedBox(
+          width: menuWidth,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                icon: Icon(
+                  FontAwesomeIcons.plus,
+                  size: 18,
+                ),
+                onPressed: () {
+                  frame.duration++;
+                },
+              ),
+              IconButton(
+                icon: Icon(
+                  FontAwesomeIcons.minus,
+                  size: 18,
+                ),
+                onPressed: () {
+                  frame.duration--;
+                },
+              ),
+            ],
+          ),
         ),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 2,
-            color: Colors.black12,
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Material(
-            color: Colors.amber,
-            child: IconButton(
-              tooltip: 'Increase duration',
-              icon: Icon(
-                FontAwesomeIcons.plus,
-                color: Colors.grey[850],
-                size: 18,
-              ),
-              onPressed: () {
-                frame.duration++;
-              },
-            ),
-          ),
-          Material(
-            color: Colors.amber,
-            child: IconButton(
-              tooltip: 'Decrease duration',
-              icon: Icon(
-                FontAwesomeIcons.minus,
-                color: Colors.grey[850],
-                size: 18,
-              ),
-              onPressed: () {
-                frame.duration--;
-              },
-            ),
-          ),
-        ],
       ),
     );
   }
