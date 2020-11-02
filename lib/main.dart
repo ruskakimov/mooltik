@@ -34,7 +34,7 @@ class App extends StatelessWidget {
             onPrimary: Colors.grey[900],
             primaryVariant: Colors.amberAccent,
             // Secondary
-            secondary: Colors.grey[700],
+            secondary: Colors.grey[600],
             onSecondary: Colors.white,
             secondaryVariant: Colors.grey[800],
             // Surface
