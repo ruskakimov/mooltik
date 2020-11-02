@@ -29,18 +29,23 @@ class App extends StatelessWidget {
           highlightColor: Colors.white.withOpacity(0.2),
           colorScheme: ColorScheme(
             brightness: Brightness.dark,
+            // Primary
             primary: Colors.amber,
+            onPrimary: Colors.grey[900],
             primaryVariant: Colors.amberAccent,
+            // Secondary
             secondary: Colors.grey[700],
+            onSecondary: Colors.white,
             secondaryVariant: Colors.grey[800],
+            // Surface
             surface: Colors.grey[850],
+            onSurface: Colors.grey[100],
+            // Background
             background: Colors.grey[900],
+            onBackground: Colors.grey[100],
+            // Error
             error: Colors.redAccent,
-            onPrimary: Colors.white,
-            onBackground: Colors.white,
             onError: Colors.white,
-            onSecondary: Colors.black,
-            onSurface: Colors.white,
           ),
         ),
         initialRoute: '/editor',
