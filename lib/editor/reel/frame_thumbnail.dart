@@ -62,7 +62,9 @@ class FrameThumbnail extends StatelessWidget {
                   '${frame.duration}',
                   style: TextStyle(
                     fontSize: 14,
-                    color: selected ? Colors.grey[850] : Colors.white,
+                    color: selected
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : Theme.of(context).colorScheme.onSurface,
                     fontWeight: selected ? FontWeight.w900 : FontWeight.normal,
                   ),
                 ),

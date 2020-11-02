@@ -27,7 +27,7 @@ class ColorPickerButton extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: toolbox.selectedColor,
                   border: Border.all(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.onSurface,
                     width: 3,
                   ),
                   shape: BoxShape.circle,

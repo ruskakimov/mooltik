@@ -34,7 +34,7 @@ class AppIconButton extends StatelessWidget {
 
   Color _getColor(BuildContext context) {
     if (selected) return Theme.of(context).colorScheme.primary;
-    if (onTap == null) return Colors.grey[200].withOpacity(0.4);
-    return Colors.grey[200];
+    if (onTap == null) return Theme.of(context).disabledColor;
+    return Theme.of(context).colorScheme.onSurface;
   }
 }

@@ -26,7 +26,7 @@ class EditorPage extends StatelessWidget {
           final reel = context.watch<ReelModel>();
 
           return Scaffold(
-            backgroundColor: Colors.grey[900],
+            backgroundColor: Theme.of(context).colorScheme.background,
             body: MultiProvider(
               providers: [
                 // TODO: Frame is provided here since undo/redo buttons listen to it. Consider removing when undo stack is extracted and generalized.
