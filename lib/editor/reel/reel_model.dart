@@ -20,6 +20,10 @@ class ReelModel extends ChangeNotifier {
 
   FrameModel _copiedFrame;
 
+  /*
+  Onion:
+  */
+
   bool get onion => _onion;
   bool _onion = true;
   set onion(bool value) {
@@ -36,6 +40,10 @@ class ReelModel extends ChangeNotifier {
     if (playing || !onion || _selectedFrameId == frames.length - 1) return null;
     return frames[_selectedFrameId + 1];
   }
+
+  /*
+  Playback:
+  */
 
   bool get playing => _playing;
   bool _playing = false;
@@ -67,6 +75,10 @@ class ReelModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /*
+  Navigation:
+  */
+
   void selectFrame(int id) {
     assert(id >= 0 && id < frames.length);
     if (id < 0 || id >= frames.length) return;
@@ -74,13 +86,26 @@ class ReelModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /*
+  Operations:
+  */
+
   void addFrame() {
     frames.add(FrameModel(size: frameSize));
     _selectedFrameId = frames.length - 1;
     notifyListeners();
   }
 
-  // Context menu operations:
+  void addFrameBeforeSelected() {
+    frames.insert(_selectedFrameId, FrameModel(size: frameSize));
+    notifyListeners();
+  }
+
+  void addFrameAfterSelected() {
+    frames.insert(_selectedFrameId + 1, FrameModel(size: frameSize));
+    _selectedFrameId++;
+    notifyListeners();
+  }
 
   bool get canDeleteSelectedFrame => frames.length > 1;
 

@@ -146,7 +146,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
                         size: 13,
                         color: Theme.of(context).colorScheme.onSecondary,
                       ),
-                      onPressed: () {},
+                      onPressed: reel.addFrameBeforeSelected,
                     ),
                     child: PortalEntry(
                       visible:
@@ -163,7 +163,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
                           size: 13,
                           color: Theme.of(context).colorScheme.onSecondary,
                         ),
-                        onPressed: () {},
+                        onPressed: reel.addFrameAfterSelected,
                       ),
                       child: FrameThumbnail(
                         frame: frame,
