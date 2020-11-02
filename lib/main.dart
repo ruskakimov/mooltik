@@ -26,6 +26,9 @@ class App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Mooltik',
         theme: ThemeData(
+          // Overscroll
+          accentColor: Colors.amber,
+          // Splash
           highlightColor: Colors.white.withOpacity(0.2),
           colorScheme: ColorScheme(
             brightness: Brightness.dark,
