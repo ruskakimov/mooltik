@@ -24,7 +24,7 @@ class AppIconButton extends StatelessWidget {
           width: 44,
           child: Icon(
             icon,
-            color: _getColor(),
+            color: _getColor(context),
             size: 20,
           ),
         ),
@@ -32,8 +32,8 @@ class AppIconButton extends StatelessWidget {
     );
   }
 
-  Color _getColor() {
-    if (selected) return Colors.amber;
+  Color _getColor(BuildContext context) {
+    if (selected) return Theme.of(context).colorScheme.primary;
     if (onTap == null) return Colors.grey[200].withOpacity(0.4);
     return Colors.grey[200];
   }

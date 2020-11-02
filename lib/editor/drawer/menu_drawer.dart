@@ -50,7 +50,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
           icon: Icons.lightbulb_outline,
           title: 'Onion',
           trailing: Switch(
-            activeColor: Colors.amber,
+            activeColor: Theme.of(context).colorScheme.primary,
             value: reel.onion,
             onChanged: (value) => reel.onion = value,
           ),

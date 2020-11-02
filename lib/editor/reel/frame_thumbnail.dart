@@ -18,7 +18,9 @@ class FrameThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return Container(
-        color: selected ? Colors.amber : Colors.transparent,
+        color: selected
+            ? Theme.of(context).colorScheme.primary
+            : Colors.transparent,
         child: Row(
           children: [
             // SizedBox(width: borderWidth),
@@ -38,15 +40,15 @@ class FrameThumbnail extends StatelessWidget {
                         border: Border(
                           top: BorderSide(
                             width: borderWidth,
-                            color: Colors.amber,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                           bottom: BorderSide(
                             width: borderWidth,
-                            color: Colors.amber,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                           left: BorderSide(
                             width: borderWidth,
-                            color: Colors.amber,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                       ),
