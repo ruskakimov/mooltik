@@ -14,65 +14,76 @@ class ReelContextMenu extends StatelessWidget {
     final reel = context.watch<ReelModel>();
     final frame = reel.selectedFrame;
 
-    return Transform.translate(
-      offset: Offset(8, 0),
-      child: Material(
-        color: Colors.grey[700],
-        elevation: 5,
-        borderRadius: BorderRadius.circular(8),
-        child: SizedBox(
-          width: menuWidth,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Icon(
-                    FontAwesomeIcons.trashAlt,
-                    size: 18,
+    return Theme(
+      data: ThemeData(
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.onSecondary,
+        ),
+        disabledColor:
+            Theme.of(context).colorScheme.onSecondary.withOpacity(0.5),
+        dividerColor:
+            Theme.of(context).colorScheme.onSecondary.withOpacity(0.1),
+      ),
+      child: Transform.translate(
+        offset: Offset(8, 0),
+        child: Material(
+          color: Theme.of(context).colorScheme.secondary,
+          elevation: 5,
+          borderRadius: BorderRadius.circular(8),
+          child: SizedBox(
+            width: menuWidth,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      FontAwesomeIcons.trashAlt,
+                      size: 18,
+                    ),
+                    onPressed: reel.canDeleteSelectedFrame
+                        ? reel.deleteSelectedFrame
+                        : null,
                   ),
-                  onPressed: reel.canDeleteSelectedFrame
-                      ? reel.deleteSelectedFrame
-                      : null,
-                ),
-                Divider(),
-                IconButton(
-                  icon: Icon(
-                    Icons.copy,
-                    size: 20,
+                  Divider(),
+                  IconButton(
+                    icon: Icon(
+                      Icons.copy,
+                      size: 20,
+                    ),
+                    onPressed: reel.copySelectedFrame,
                   ),
-                  onPressed: reel.copySelectedFrame,
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.paste,
-                    size: 20,
+                  IconButton(
+                    icon: Icon(
+                      Icons.paste,
+                      size: 20,
+                    ),
+                    onPressed: reel.pasteInSelectedFrame,
                   ),
-                  onPressed: reel.pasteInSelectedFrame,
-                ),
-                Divider(),
-                IconButton(
-                  icon: Icon(
-                    FontAwesomeIcons.plus,
-                    size: 18,
+                  Divider(),
+                  IconButton(
+                    icon: Icon(
+                      FontAwesomeIcons.plus,
+                      size: 18,
+                    ),
+                    onPressed: () {
+                      frame.duration++;
+                    },
                   ),
-                  onPressed: () {
-                    frame.duration++;
-                  },
-                ),
-                IconButton(
-                  icon: Icon(
-                    FontAwesomeIcons.minus,
-                    size: 18,
+                  IconButton(
+                    icon: Icon(
+                      FontAwesomeIcons.minus,
+                      size: 18,
+                    ),
+                    onPressed: frame.duration > 1
+                        ? () {
+                            frame.duration--;
+                          }
+                        : null,
                   ),
-                  onPressed: frame.duration > 1
-                      ? () {
-                          frame.duration--;
-                        }
-                      : null,
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

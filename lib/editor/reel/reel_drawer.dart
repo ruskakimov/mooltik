@@ -151,11 +151,11 @@ class _ReelDrawerState extends State<ReelDrawer> {
                     portal: FloatingActionButton(
                       mini: true,
                       elevation: 5,
-                      backgroundColor: Colors.grey[700],
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
                       child: Icon(
                         FontAwesomeIcons.plus,
                         size: 13,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onSecondary,
                       ),
                       onPressed: () {},
                     ),
@@ -167,11 +167,12 @@ class _ReelDrawerState extends State<ReelDrawer> {
                       portal: FloatingActionButton(
                         mini: true,
                         elevation: 5,
-                        backgroundColor: Colors.grey[700],
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
                         child: Icon(
                           FontAwesomeIcons.plus,
                           size: 13,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onSecondary,
                         ),
                         onPressed: () {},
                       ),
