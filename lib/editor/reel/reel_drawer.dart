@@ -144,9 +144,42 @@ class _ReelDrawerState extends State<ReelDrawer> {
                     }
                     _scrollTo(index);
                   },
-                  child: FrameThumbnail(
-                    frame: frame,
-                    selected: selected,
+                  child: PortalEntry(
+                    visible: selected && _contextMenuOpen,
+                    childAnchor: Alignment.topCenter,
+                    portalAnchor: Alignment.center,
+                    portal: FloatingActionButton(
+                      mini: true,
+                      elevation: 5,
+                      backgroundColor: Colors.grey[700],
+                      child: Icon(
+                        FontAwesomeIcons.plus,
+                        size: 13,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {},
+                    ),
+                    child: PortalEntry(
+                      visible:
+                          selected && _contextMenuOpen && index != lastIndex,
+                      childAnchor: Alignment.bottomCenter,
+                      portalAnchor: Alignment.center,
+                      portal: FloatingActionButton(
+                        mini: true,
+                        elevation: 5,
+                        backgroundColor: Colors.grey[700],
+                        child: Icon(
+                          FontAwesomeIcons.plus,
+                          size: 13,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {},
+                      ),
+                      child: FrameThumbnail(
+                        frame: frame,
+                        selected: selected,
+                      ),
+                    ),
                   ),
                 ),
               ),
