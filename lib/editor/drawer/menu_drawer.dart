@@ -85,6 +85,13 @@ class _MenuDrawerState extends State<MenuDrawer> {
             });
           },
         ),
+        MenuListTile(
+          icon: Icons.exit_to_app,
+          title: 'Exit',
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ],
     );
   }
