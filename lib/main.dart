@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_portal/flutter_portal.dart';
+import 'package:mooltik/home/home_page.dart';
 
 import 'editor/editor_page.dart';
 
@@ -51,9 +52,8 @@ class App extends StatelessWidget {
             onError: Colors.white,
           ),
         ),
-        initialRoute: '/editor',
         routes: {
-          '/': (context) => Text('home page'),
+          Navigator.defaultRouteName: (context) => HomePage(),
           EditorPage.routeName: (context) => EditorPage(),
         },
       ),
