@@ -43,6 +43,12 @@ abstract class AnimatedDrawer extends StatelessWidget {
                 color: Theme.of(context).colorScheme.background,
               ),
             ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 8,
+              )
+            ],
           ),
           child: child,
         ),
