@@ -15,7 +15,6 @@ class ProjectsManagerModel extends ChangeNotifier {
 
   Future<void> _readProjects() async {
     _projects = [];
-
     await for (final FileSystemEntity dir in _directory.list()) {
       if (dir is Directory && p.basename(dir.path).startsWith('project_')) {
         _projects.insert(0, Project(dir));
