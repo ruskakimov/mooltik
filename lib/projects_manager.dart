@@ -23,8 +23,9 @@ class ProjectsManager {
   Future<Project> addProject() async {
     if (_projects == null) throw Exception('Read projects first.');
 
+    final String folder = 'project_${_projects.length}';
     final Directory dir =
-        await Directory(p.join(directory.path, 'project_0')).create();
+        await Directory(p.join(directory.path, folder)).create();
     final Project project = Project(dir);
 
     _projects.insert(0, project);
