@@ -1,11 +1,38 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/editor_page.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/frame/frame_painter.dart';
+import 'package:mooltik/projects_manager.dart';
 
-class HomePage extends StatelessWidget {
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  ProjectsManager manager;
+
+  @override
+  void initState() {
+    super.initState();
+    _initProjectsManager();
+  }
+
+  Future<void> _initProjectsManager() async {
+    if (await Permission.storage.request().isGranted) {
+      final Directory dir = await getApplicationDocumentsDirectory();
+      manager = ProjectsManager(dir);
+      await manager.readProjects();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +62,10 @@ class HomePage extends StatelessWidget {
 class AddProjectButton extends StatelessWidget {
   const AddProjectButton({
     Key key,
+    this.onPressed,
   }) : super(key: key);
+
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +76,7 @@ class AddProjectButton extends StatelessWidget {
         size: 18,
         color: Theme.of(context).colorScheme.onPrimary,
       ),
-      onPressed: () {},
+      onPressed: onPressed,
     );
   }
 }
