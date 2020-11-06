@@ -8,7 +8,7 @@ class ProjectsManager {
 
   List<Project> _projects;
 
-  int get numberOfProjects => _projects?.length ?? 0;
+  int get numberOfProjects => _projects?.length;
 
   Future<void> readProjects() async {
     _projects = [];
@@ -21,6 +21,8 @@ class ProjectsManager {
   }
 
   Future<Project> addProject() async {
+    if (_projects == null) throw Exception('Read projects first.');
+
     final Directory dir =
         await Directory(p.join(directory.path, 'project_0')).create();
     final Project project = Project(dir);
