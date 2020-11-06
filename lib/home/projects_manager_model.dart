@@ -31,6 +31,8 @@ class ProjectsManagerModel extends ChangeNotifier {
     final Project project = Project(dir);
 
     _projects.insert(0, project);
+
+    notifyListeners();
     return project;
   }
 }
