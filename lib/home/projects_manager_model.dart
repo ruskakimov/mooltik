@@ -21,6 +21,9 @@ class ProjectsManagerModel extends ChangeNotifier {
       }
     }
 
+    // Recent projects first.
+    _projects.sort((p1, p2) => p2.id - p1.id);
+
     notifyListeners();
   }
 
