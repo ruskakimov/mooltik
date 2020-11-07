@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mooltik/home/add_project_button.dart';
+import 'package:mooltik/home/home_bar.dart';
 import 'package:mooltik/home/projects_gallery.dart';
 import 'package:mooltik/home/projects_manager_model.dart';
 import 'package:path_provider/path_provider.dart';
@@ -37,7 +38,13 @@ class _HomePageState extends State<HomePage> {
       value: manager,
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: ProjectGallery(),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            HomeBar(),
+            Expanded(child: ProjectGallery()),
+          ],
+        ),
         floatingActionButton: AddProjectButton(),
       ),
     );
