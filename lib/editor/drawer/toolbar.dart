@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/app_vertical_slider.dart';
 import 'package:mooltik/common/app_icon_button.dart';
+import 'package:mooltik/common/surface.dart';
 import 'package:mooltik/editor/drawer/color_picker_button.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/drawer/color_picker_drawer.dart';
@@ -37,16 +38,7 @@ class _ToolBarState extends State<ToolBar> {
     final toolbox = context.watch<ToolboxModel>();
     final reel = context.watch<ReelModel>();
 
-    final bar = DecoratedBox(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 8,
-          )
-        ],
-      ),
+    final bar = Surface(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[

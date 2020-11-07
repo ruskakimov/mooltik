@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/surface.dart';
 
 const drawerTransitionDuration = Duration(milliseconds: 150);
 
@@ -36,21 +37,16 @@ abstract class AnimatedDrawer extends StatelessWidget {
       child: RepaintBoundary(
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
             border: Border(
               top: BorderSide(
                 width: 1.0,
                 color: Theme.of(context).colorScheme.background,
               ),
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 8,
-              )
-            ],
           ),
-          child: child,
+          child: Surface(
+            child: child,
+          ),
         ),
       ),
     );
