@@ -20,7 +20,7 @@ class ProjectGallery extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 32),
       scrollDirection: Axis.horizontal,
       itemCount: manager.numberOfProjects,
-      itemBuilder: (context, index) => ProjectThumbnail(),
+      itemBuilder: (context, index) => Center(child: ProjectThumbnail()),
       separatorBuilder: (context, index) => const SizedBox(width: 24),
     );
   }
@@ -33,19 +33,17 @@ class ProjectThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: GestureDetector(
-        onTap: () {
-          // TODO: Read files here.
-          // TODO: Pass frames.
-          Navigator.of(context).pushNamed(EditorPage.routeName);
-        },
-        child: CustomPaint(
-          size: Size(200, 200),
-          painter: FramePainter(
-            // TODO: First project frame.
-            frame: FrameModel(size: Size(200, 200)),
-          ),
+    return GestureDetector(
+      onTap: () {
+        // TODO: Read files here.
+        // TODO: Pass frames.
+        Navigator.of(context).pushNamed(EditorPage.routeName);
+      },
+      child: CustomPaint(
+        size: Size(200, 200),
+        painter: FramePainter(
+          // TODO: First project frame.
+          frame: FrameModel(size: Size(200, 200)),
         ),
       ),
     );
