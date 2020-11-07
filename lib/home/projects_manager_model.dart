@@ -12,23 +12,24 @@ class ProjectsManagerModel extends ChangeNotifier {
 
   Future<void> init(Directory directory) async {
     _directory = directory;
-    await _readProjects();
-    await _readNextId();
+    _projects = await _readProjects();
+    _nextId = await _readNextId();
     notifyListeners();
   }
 
-  Future<void> _readProjects() async {
-    _projects = [];
+  Future<List<Project>> _readProjects() async {
+    final List<Project> projects = [];
     await for (final FileSystemEntity dir in _directory.list()) {
       if (dir is Directory && p.basename(dir.path).startsWith('project_')) {
-        _projects.add(Project(dir));
+        projects.add(Project(dir));
       }
     }
     // Recent projects first.
-    _projects.sort((p1, p2) => p2.id - p1.id);
+    projects.sort((p1, p2) => p2.id - p1.id);
+    return projects;
   }
 
-  Future<void> _readNextId() async {
+  Future<int> _readNextId() async {
     final File idFile = File(p.join(_directory.path, 'next_id.txt'));
 
     if (!await idFile.exists()) {
@@ -37,7 +38,7 @@ class ProjectsManagerModel extends ChangeNotifier {
     }
 
     final String contents = await idFile.readAsString();
-    _nextId = int.parse(contents);
+    return int.parse(contents);
   }
 
   Project getProject(int index) => _projects[index];
