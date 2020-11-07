@@ -14,6 +14,25 @@ class ProjectGallery extends StatelessWidget {
   Widget build(BuildContext context) {
     final manager = context.watch<ProjectsManagerModel>();
 
+    if (manager.numberOfProjects == null) return Container();
+
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 32),
+      scrollDirection: Axis.horizontal,
+      itemCount: manager.numberOfProjects,
+      itemBuilder: (context, index) => ProjectThumbnail(),
+      separatorBuilder: (context, index) => const SizedBox(width: 24),
+    );
+  }
+}
+
+class ProjectThumbnail extends StatelessWidget {
+  const ProjectThumbnail({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Center(
       child: GestureDetector(
         onTap: () {

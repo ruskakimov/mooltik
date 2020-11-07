@@ -20,7 +20,10 @@ class ProjectsManagerModel extends ChangeNotifier {
         _projects.insert(0, Project(dir));
       }
     }
+    notifyListeners();
   }
+
+  Project getProject(int index) => _projects[index];
 
   Future<Project> addProject() async {
     if (_projects == null) throw Exception('Read projects first.');
