@@ -43,4 +43,10 @@ class ProjectsManagerModel extends ChangeNotifier {
     notifyListeners();
     return project;
   }
+
+  Future<void> deleteProject(int index) async {
+    final Project project = _projects.removeAt(index);
+    await project.directory.delete(recursive: true);
+    notifyListeners();
+  }
 }
