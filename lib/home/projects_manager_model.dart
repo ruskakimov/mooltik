@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:mooltik/home/project.dart';
 import 'package:path/path.dart' as p;
 
 class ProjectsManagerModel extends ChangeNotifier {
@@ -42,13 +43,4 @@ class ProjectsManagerModel extends ChangeNotifier {
     notifyListeners();
     return project;
   }
-}
-
-class Project {
-  Project(this.directory)
-      : id = int.parse(p.basename(directory.path).split('_').last);
-
-  final Directory directory;
-
-  final int id;
 }
