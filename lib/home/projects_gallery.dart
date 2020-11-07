@@ -20,7 +20,11 @@ class ProjectGallery extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 32),
       scrollDirection: Axis.horizontal,
       itemCount: manager.numberOfProjects,
-      itemBuilder: (context, index) => Center(child: ProjectThumbnail()),
+      itemBuilder: (context, index) => Center(
+        child: ProjectThumbnail(
+          project: manager.getProject(index),
+        ),
+      ),
       separatorBuilder: (context, index) => const SizedBox(width: 24),
     );
   }
@@ -29,10 +33,14 @@ class ProjectGallery extends StatelessWidget {
 class ProjectThumbnail extends StatelessWidget {
   const ProjectThumbnail({
     Key key,
+    @required this.project,
   }) : super(key: key);
+
+  final Project project;
 
   @override
   Widget build(BuildContext context) {
+    return Text('${project.id}');
     return GestureDetector(
       onTap: () {
         // TODO: Read files here.

@@ -17,9 +17,10 @@ class ProjectsManagerModel extends ChangeNotifier {
     _projects = [];
     await for (final FileSystemEntity dir in _directory.list()) {
       if (dir is Directory && p.basename(dir.path).startsWith('project_')) {
-        _projects.insert(0, Project(dir));
+        _projects.add(Project(dir));
       }
     }
+
     notifyListeners();
   }
 
@@ -41,7 +42,10 @@ class ProjectsManagerModel extends ChangeNotifier {
 }
 
 class Project {
-  Project(this.directory);
+  Project(this.directory)
+      : id = int.parse(p.basename(directory.path).split('_').last);
 
   final Directory directory;
+
+  final int id;
 }
