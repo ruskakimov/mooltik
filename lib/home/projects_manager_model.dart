@@ -6,14 +6,14 @@ import 'package:path/path.dart' as p;
 class ProjectsManagerModel extends ChangeNotifier {
   Directory _directory;
   List<Project> _projects;
-  IdGenerator _idGenerator;
+  _IdGenerator _idGenerator;
 
   int get numberOfProjects => _projects?.length;
 
   Future<void> init(Directory directory) async {
     _directory = directory;
     _projects = await _readProjects();
-    _idGenerator = IdGenerator(directory);
+    _idGenerator = _IdGenerator(directory);
     notifyListeners();
   }
 
@@ -58,8 +58,8 @@ class ProjectsManagerModel extends ChangeNotifier {
   }
 }
 
-class IdGenerator {
-  IdGenerator(this.directory)
+class _IdGenerator {
+  _IdGenerator(this.directory)
       : _file = File(p.join(directory.path, 'last_id.txt'));
 
   final Directory directory;
