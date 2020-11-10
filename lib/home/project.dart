@@ -25,7 +25,7 @@ class Project {
     }
   }
 
-  Future<void> write() async {}
+  Future<void> save() async {}
 
   void close() {
     _projectData = null;
