@@ -13,6 +13,7 @@ class Project {
 
   final int id;
 
+  ReelModel get reel => _reel;
   ReelModel _reel;
 
   Future<void> open() async {
