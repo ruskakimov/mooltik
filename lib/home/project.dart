@@ -24,6 +24,13 @@ class Project {
       _projectData = _ProjectData.fromJson(jsonDecode(contents));
     }
   }
+
+  Future<void> write() async {}
+
+  void close() {
+    _projectData = null;
+    _reel = null;
+  }
 }
 
 class _ProjectData {
