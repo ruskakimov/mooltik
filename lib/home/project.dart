@@ -13,7 +13,6 @@ class Project {
 
   final int id;
 
-  _ProjectData _projectData;
   ReelModel _reel;
 
   Future<void> open() async {
@@ -21,14 +20,14 @@ class Project {
 
     if (await dataFile.exists()) {
       final String contents = await dataFile.readAsString();
-      _projectData = _ProjectData.fromJson(jsonDecode(contents));
+      final _ProjectData data = _ProjectData.fromJson(jsonDecode(contents));
+      // TODO: Read images and init ReelModel.
     }
   }
 
   Future<void> save() async {}
 
   void close() {
-    _projectData = null;
     _reel = null;
   }
 }
