@@ -37,8 +37,8 @@ class ProjectsManagerModel extends ChangeNotifier {
   Future<Project> addProject() async {
     if (_projects == null) throw Exception('Read projects first.');
 
-    final int id = DateTime.now().millisecondsSinceEpoch;
-    final String folderName = 'project_$id';
+    final int epoch = DateTime.now().millisecondsSinceEpoch;
+    final String folderName = 'project_$epoch';
     final Directory dir =
         await Directory(p.join(_directory.path, folderName)).create();
     final Project project = Project(dir);
