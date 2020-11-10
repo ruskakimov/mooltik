@@ -19,8 +19,16 @@ class Project {
 }
 
 class _ProjectData {
-  _ProjectData(this.width, this.height);
+  _ProjectData(this.width, this.height, this.drawings);
 
   final double width;
   final double height;
+  final List<_DrawingData> drawings;
+}
+
+class _DrawingData {
+  _DrawingData(this.duration, this.id);
+
+  final int duration;
+  final int id;
 }
