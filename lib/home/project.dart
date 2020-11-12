@@ -40,8 +40,13 @@ class Project {
     final ProjectData data = ProjectData(
       width: _reel.frameSize.width,
       height: _reel.frameSize.height,
-      // TODO: Get id from FrameModel
-      drawings: frames.map((f) => DrawingData(f.duration, 0)).toList(),
+      drawings: frames
+          .map((f) => DrawingData(
+                // TODO: Get id from FrameModel
+                id: 0,
+                duration: f.duration,
+              ))
+          .toList(),
     );
     await _dataFile.writeAsString(jsonEncode(data));
 

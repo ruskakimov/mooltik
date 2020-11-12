@@ -8,7 +8,7 @@ void main() {
     final data = ProjectData(
       width: 200,
       height: 100,
-      drawings: [DrawingData(3, 0)],
+      drawings: [DrawingData(id: 0, duration: 3)],
     );
     expect(jsonEncode(data), '{"width":200.0,"height":100.0}');
   });

@@ -3,7 +3,7 @@ class ProjectData {
     this.width,
     this.height,
     this.drawings,
-    this.layers = const [LayerData(0)],
+    this.layers = const [LayerData(id: 0)],
   });
 
   ProjectData.fromJson(Map<String, dynamic> json)
@@ -26,14 +26,14 @@ class ProjectData {
 }
 
 class DrawingData {
-  const DrawingData(this.duration, this.id);
+  const DrawingData({this.id, this.duration});
 
-  final int duration;
   final int id;
+  final int duration;
 }
 
 class LayerData {
-  const LayerData(this.id);
+  const LayerData({this.id});
 
   final int id;
 }
