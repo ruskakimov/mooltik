@@ -1,5 +1,10 @@
 class ProjectData {
-  ProjectData(this.width, this.height, this.drawings, this.layers);
+  ProjectData({
+    this.width,
+    this.height,
+    this.drawings,
+    this.layers = const [LayerData(0)],
+  });
 
   ProjectData.fromJson(Map<String, dynamic> json)
       : width = json['width'],
@@ -10,8 +15,8 @@ class ProjectData {
   Map<String, dynamic> toJson() => {
         'width': width,
         'height': height,
-        'drawings': drawings,
-        'layers': layers,
+        // 'drawings': drawings,
+        // 'layers': layers,
       };
 
   final double width;
@@ -21,14 +26,14 @@ class ProjectData {
 }
 
 class DrawingData {
-  DrawingData(this.duration, this.id);
+  const DrawingData(this.duration, this.id);
 
   final int duration;
   final int id;
 }
 
 class LayerData {
-  LayerData(this.id);
+  const LayerData(this.id);
 
   final int id;
 }

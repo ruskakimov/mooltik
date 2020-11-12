@@ -38,11 +38,10 @@ class Project {
 
     // Write project data.
     final ProjectData data = ProjectData(
-      _reel.frameSize.width,
-      _reel.frameSize.height,
+      width: _reel.frameSize.width,
+      height: _reel.frameSize.height,
       // TODO: Get id from FrameModel
-      frames.map((f) => DrawingData(f.duration, 0)).toList(),
-      [LayerData(0)],
+      drawings: frames.map((f) => DrawingData(f.duration, 0)).toList(),
     );
     await _dataFile.writeAsString(jsonEncode(data));
 
