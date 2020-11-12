@@ -51,7 +51,6 @@ class Project {
     for (final FrameModel frame in frames) {
       final img = await imageFromFrame(frame);
       final pngBytes = encodePng(img, level: 0);
-      // TODO: Get id from FrameModel
       final file = File(p.join(directory.path, 'drawing${frame.id}.png'));
       await file.writeAsBytes(pngBytes);
     }
