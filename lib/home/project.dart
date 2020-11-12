@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:image/image.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/gif.dart';
@@ -24,10 +25,26 @@ class Project {
   Future<void> open() async {
     if (await _dataFile.exists()) {
       // Existing project.
-      final String contents = await _dataFile.readAsString();
-      final ProjectSaveData data =
-          ProjectSaveData.fromJson(jsonDecode(contents));
-      // TODO: Read images and init ReelModel.
+      final contents = await _dataFile.readAsString();
+      final data = ProjectSaveData.fromJson(jsonDecode(contents));
+      final drawingSize = Size(data.width, data.height);
+
+      for (final drawing in data.drawings) {
+        final file = _getDrawingFile(drawing.id);
+        final bytes = await file.readAsBytes();
+        decodePng(bytes);
+        FrameModel(
+          id: drawing.id,
+          duration: drawing.duration,
+          size: drawingSize,
+          // TODO: Convert image.Image to ui.Image
+          // initialSnapshot: decodePng(bytes),
+        );
+      }
+      _reel = ReelModel(
+        frameSize: drawingSize,
+        initialFrames: [],
+      );
     } else {
       // New project.
       _reel = ReelModel();
@@ -38,7 +55,7 @@ class Project {
     final List<FrameModel> frames = _reel.frames;
 
     // Write project data.
-    final ProjectSaveData data = ProjectSaveData(
+    final data = ProjectSaveData(
       width: _reel.frameSize.width,
       height: _reel.frameSize.height,
       drawings: frames
@@ -48,10 +65,10 @@ class Project {
     await _dataFile.writeAsString(jsonEncode(data));
 
     // Write images.
-    for (final FrameModel frame in frames) {
+    for (final frame in frames) {
       final img = await imageFromFrame(frame);
       final pngBytes = encodePng(img, level: 0);
-      final file = File(p.join(directory.path, 'drawing${frame.id}.png'));
+      final file = _getDrawingFile(frame.id);
       await file.writeAsBytes(pngBytes);
     }
   }
@@ -59,4 +76,7 @@ class Project {
   void close() {
     _reel = null;
   }
+
+  File _getDrawingFile(int id) =>
+      File(p.join(directory.path, 'drawing$id.png'));
 }
