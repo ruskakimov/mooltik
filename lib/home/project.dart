@@ -4,6 +4,7 @@ import 'package:image/image.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/gif.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
+import 'package:mooltik/home/project_data.dart';
 import 'package:path/path.dart' as p;
 
 class Project {
@@ -24,7 +25,7 @@ class Project {
     if (await _dataFile.exists()) {
       // Existing project.
       final String contents = await _dataFile.readAsString();
-      final _ProjectData data = _ProjectData.fromJson(jsonDecode(contents));
+      final ProjectData data = ProjectData.fromJson(jsonDecode(contents));
       // TODO: Read images and init ReelModel.
     } else {
       // New project.
@@ -36,12 +37,12 @@ class Project {
     final List<FrameModel> frames = _reel.frames;
 
     // Write project data.
-    final _ProjectData data = _ProjectData(
+    final ProjectData data = ProjectData(
       _reel.frameSize.width,
       _reel.frameSize.height,
       // TODO: Get id from FrameModel
-      frames.map((f) => _DrawingData(f.duration, 0)).toList(),
-      [_LayerData(0)],
+      frames.map((f) => DrawingData(f.duration, 0)).toList(),
+      [LayerData(0)],
     );
     await _dataFile.writeAsString(jsonEncode(data));
 
@@ -59,39 +60,4 @@ class Project {
   void close() {
     _reel = null;
   }
-}
-
-class _ProjectData {
-  _ProjectData(this.width, this.height, this.drawings, this.layers);
-
-  _ProjectData.fromJson(Map<String, dynamic> json)
-      : width = json['width'],
-        height = json['height'],
-        drawings = json['drawings'],
-        layers = json['layers'];
-
-  Map<String, dynamic> toJson() => {
-        'width': width,
-        'height': height,
-        'drawings': drawings,
-        'layers': layers,
-      };
-
-  final double width;
-  final double height;
-  final List<_DrawingData> drawings;
-  final List<_LayerData> layers;
-}
-
-class _DrawingData {
-  _DrawingData(this.duration, this.id);
-
-  final int duration;
-  final int id;
-}
-
-class _LayerData {
-  _LayerData(this.id);
-
-  final int id;
 }
