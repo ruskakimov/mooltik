@@ -10,20 +10,21 @@ import 'package:path/path.dart' as p;
 // Scenario 2: existing project (read from files)
 class Project {
   Project(this.directory)
-      : id = int.parse(p.basename(directory.path).split('_').last);
+      : id = int.parse(p.basename(directory.path).split('_').last),
+        _dataFile = File(p.join(directory.path, 'project_data.json'));
 
   final Directory directory;
 
   final int id;
 
+  final File _dataFile;
+
   ReelModel get reel => _reel;
   ReelModel _reel;
 
   Future<void> open() async {
-    final File dataFile = File(p.join(directory.path, 'project_data.json'));
-
-    if (await dataFile.exists()) {
-      final String contents = await dataFile.readAsString();
+    if (await _dataFile.exists()) {
+      final String contents = await _dataFile.readAsString();
       final _ProjectData data = _ProjectData.fromJson(jsonDecode(contents));
       // TODO: Read images and init ReelModel.
     }
