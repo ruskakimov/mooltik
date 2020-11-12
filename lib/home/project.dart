@@ -40,7 +40,7 @@ class Project {
       _reel.frameSize.width,
       _reel.frameSize.height,
       // TODO: Get id from FrameModel
-      _reel.frames.map((f) => _DrawingData(f.duration, 0)).toList(),
+      frames.map((f) => _DrawingData(f.duration, 0)).toList(),
       [_LayerData(0)],
     );
     await _dataFile.writeAsString(jsonEncode(data));
