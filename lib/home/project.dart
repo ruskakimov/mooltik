@@ -42,21 +42,17 @@ class Project {
       width: _reel.frameSize.width,
       height: _reel.frameSize.height,
       drawings: frames
-          .map((f) => DrawingSaveData(
-                // TODO: Get id from FrameModel
-                id: 0,
-                duration: f.duration,
-              ))
+          .map((f) => DrawingSaveData(id: f.id, duration: f.duration))
           .toList(),
     );
     await _dataFile.writeAsString(jsonEncode(data));
 
     // Write images.
-    for (int i = 0; i < frames.length; i++) {
-      final img = await imageFromFrame(frames[i]);
+    for (final FrameModel frame in frames) {
+      final img = await imageFromFrame(frame);
       final pngBytes = encodePng(img, level: 0);
       // TODO: Get id from FrameModel
-      final file = File(p.join(directory.path, 'frame$i.png'));
+      final file = File(p.join(directory.path, 'drawing${frame.id}.png'));
       await file.writeAsBytes(pngBytes);
     }
   }
