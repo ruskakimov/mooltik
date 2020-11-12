@@ -15,8 +15,8 @@ class ProjectSaveData {
   Map<String, dynamic> toJson() => {
         'width': width,
         'height': height,
-        // 'drawings': drawings,
-        // 'layers': layers,
+        'drawings': drawings.map((d) => d.toJson()).toList(),
+        'layers': layers.map((l) => l.toJson()).toList(),
       };
 
   final double width;
@@ -28,12 +28,21 @@ class ProjectSaveData {
 class DrawingSaveData {
   const DrawingSaveData({this.id, this.duration});
 
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'duration': duration,
+      };
+
   final int id;
   final int duration;
 }
 
 class LayerSaveData {
   const LayerSaveData({this.id});
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+      };
 
   final int id;
 }
