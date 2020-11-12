@@ -41,7 +41,7 @@ class Project {
       _reel.frames.map((f) => _DrawingData(f.duration, 0)).toList(),
       [_LayerData(0)],
     );
-    // TODO: Write _ProjectData
+    await _dataFile.writeAsString(jsonEncode(data));
 
     // Write images.
     for (int i = 0; i < frames.length; i++) {
@@ -67,6 +67,13 @@ class _ProjectData {
         height = json['height'],
         drawings = json['drawings'],
         layers = json['layers'];
+
+  Map<String, dynamic> toJson() => {
+        'width': width,
+        'height': height,
+        'drawings': drawings,
+        'layers': layers,
+      };
 
   final double width;
   final double height;
