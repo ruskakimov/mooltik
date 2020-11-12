@@ -4,7 +4,7 @@ import 'package:image/image.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/gif.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
-import 'package:mooltik/home/project_data.dart';
+import 'package:mooltik/home/project_save_data.dart';
 import 'package:path/path.dart' as p;
 
 class Project {
@@ -25,7 +25,8 @@ class Project {
     if (await _dataFile.exists()) {
       // Existing project.
       final String contents = await _dataFile.readAsString();
-      final ProjectData data = ProjectData.fromJson(jsonDecode(contents));
+      final ProjectSaveData data =
+          ProjectSaveData.fromJson(jsonDecode(contents));
       // TODO: Read images and init ReelModel.
     } else {
       // New project.
@@ -37,11 +38,11 @@ class Project {
     final List<FrameModel> frames = _reel.frames;
 
     // Write project data.
-    final ProjectData data = ProjectData(
+    final ProjectSaveData data = ProjectSaveData(
       width: _reel.frameSize.width,
       height: _reel.frameSize.height,
       drawings: frames
-          .map((f) => DrawingData(
+          .map((f) => DrawingSaveData(
                 // TODO: Get id from FrameModel
                 id: 0,
                 duration: f.duration,
