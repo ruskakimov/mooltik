@@ -6,8 +6,6 @@ import 'package:mooltik/editor/gif.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:path/path.dart' as p;
 
-// Scenario 1: new project
-// Scenario 2: existing project (read from files)
 class Project {
   Project(this.directory)
       : id = int.parse(p.basename(directory.path).split('_').last),
@@ -24,9 +22,13 @@ class Project {
 
   Future<void> open() async {
     if (await _dataFile.exists()) {
+      // Existing project.
       final String contents = await _dataFile.readAsString();
       final _ProjectData data = _ProjectData.fromJson(jsonDecode(contents));
       // TODO: Read images and init ReelModel.
+    } else {
+      // New project.
+      _reel = ReelModel();
     }
   }
 
