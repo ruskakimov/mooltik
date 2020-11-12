@@ -21,21 +21,25 @@ class ProjectGallery extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 32),
       scrollDirection: Axis.horizontal,
       itemCount: manager.numberOfProjects,
-      itemBuilder: (context, index) => Center(
-        child: GestureDetector(
-          onTap: () {
-            // TODO: Read files here.
-            // TODO: Pass frames.
-            Navigator.of(context).pushNamed(EditorPage.routeName);
-          },
-          onLongPress: () {
-            manager.deleteProject(index);
-          },
-          child: ProjectThumbnail(
-            project: manager.getProject(index),
+      itemBuilder: (context, index) {
+        final Project project = manager.getProject(index);
+
+        return Center(
+          child: GestureDetector(
+            onTap: () async {
+              await project.open();
+              // TODO: Pass reel to editor.
+              Navigator.of(context).pushNamed(EditorPage.routeName);
+            },
+            onLongPress: () {
+              manager.deleteProject(index);
+            },
+            child: ProjectThumbnail(
+              project: project,
+            ),
           ),
-        ),
-      ),
+        );
+      },
       separatorBuilder: (context, index) => const SizedBox(width: 24),
     );
   }

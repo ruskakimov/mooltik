@@ -6,14 +6,12 @@ import 'package:path/path.dart' as p;
 class ProjectsManagerModel extends ChangeNotifier {
   Directory _directory;
   List<Project> _projects;
-  _IdGenerator _idGenerator;
 
   int get numberOfProjects => _projects?.length;
 
   Future<void> init(Directory directory) async {
     _directory = directory;
     _projects = await _readProjects();
-    _idGenerator = _IdGenerator(directory);
     notifyListeners();
   }
 
@@ -39,7 +37,7 @@ class ProjectsManagerModel extends ChangeNotifier {
   Future<Project> addProject() async {
     if (_projects == null) throw Exception('Read projects first.');
 
-    final int id = await _idGenerator.generateId();
+    final int id = DateTime.now().millisecondsSinceEpoch;
     final String folderName = 'project_$id';
     final Directory dir =
         await Directory(p.join(_directory.path, folderName)).create();
@@ -55,33 +53,5 @@ class ProjectsManagerModel extends ChangeNotifier {
     final Project project = _projects.removeAt(index);
     await project.directory.delete(recursive: true);
     notifyListeners();
-  }
-}
-
-class _IdGenerator {
-  _IdGenerator(this.directory)
-      : _file = File(p.join(directory.path, 'last_id.txt'));
-
-  final Directory directory;
-  final File _file;
-
-  Future<int> generateId() async {
-    final int id = await _readLastId() + 1;
-    _writeLastId(id);
-    return id;
-  }
-
-  Future<int> _readLastId() async {
-    if (!await _file.exists()) return -1;
-
-    final String contents = await _file.readAsString();
-    return int.parse(contents);
-  }
-
-  Future<void> _writeLastId(int lastId) async {
-    if (!await _file.exists()) {
-      await _file.create();
-    }
-    await _file.writeAsString('$lastId');
   }
 }
