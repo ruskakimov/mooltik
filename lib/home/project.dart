@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:image/image.dart';
+import 'package:mooltik/editor/frame/frame_model.dart';
+import 'package:mooltik/editor/gif.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:path/path.dart' as p;
 
@@ -26,7 +29,29 @@ class Project {
     }
   }
 
-  Future<void> save() async {}
+  Future<void> save() async {
+    final List<FrameModel> frames = _reel.frames;
+
+    // Write project data.
+    final _ProjectData data = _ProjectData(
+      _reel.frameSize.width,
+      _reel.frameSize.height,
+      // TODO: Get id from FrameModel
+      _reel.frames.map((f) => _DrawingData(f.duration, 0)).toList(),
+      [_LayerData(0)],
+    );
+    // TODO: Write _ProjectData
+
+    // Write images.
+    for (int i = 0; i < frames.length; i++) {
+      final img = await imageFromFrame(frames[i]);
+      final pngBytes = encodePng(img, level: 0);
+      // TODO: Create a folder `/drawing_$id`
+      // TODO: Get id from FrameModel
+      final file = File(p.join(directory.path, 'frame$i.png'));
+      await file.writeAsBytes(pngBytes);
+    }
+  }
 
   void close() {
     _reel = null;
