@@ -55,7 +55,6 @@ class Project {
     for (int i = 0; i < frames.length; i++) {
       final img = await imageFromFrame(frames[i]);
       final pngBytes = encodePng(img, level: 0);
-      // TODO: Create a folder `/drawing_$id`
       // TODO: Get id from FrameModel
       final file = File(p.join(directory.path, 'frame$i.png'));
       await file.writeAsBytes(pngBytes);
