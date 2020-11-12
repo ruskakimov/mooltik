@@ -29,26 +29,29 @@ class Project {
       final data = ProjectSaveData.fromJson(jsonDecode(contents));
       final drawingSize = Size(data.width, data.height);
 
-      for (final drawing in data.drawings) {
-        final file = _getDrawingFile(drawing.id);
-        final bytes = await file.readAsBytes();
-        decodePng(bytes);
-        FrameModel(
-          id: drawing.id,
-          duration: drawing.duration,
-          size: drawingSize,
-          // TODO: Convert image.Image to ui.Image
-          // initialSnapshot: decodePng(bytes),
-        );
-      }
       _reel = ReelModel(
         frameSize: drawingSize,
-        initialFrames: [],
+        initialFrames: await Future.wait(
+          data.drawings.map((drawing) => _getFrame(drawing, drawingSize)),
+        ),
       );
     } else {
       // New project.
       _reel = ReelModel();
     }
+  }
+
+  Future<FrameModel> _getFrame(DrawingSaveData drawing, Size size) async {
+    final file = _getDrawingFile(drawing.id);
+    final bytes = await file.readAsBytes();
+    decodePng(bytes);
+    return FrameModel(
+      id: drawing.id,
+      duration: drawing.duration,
+      size: size,
+      // TODO: Convert image.Image to ui.Image
+      // initialSnapshot: decodePng(bytes),
+    );
   }
 
   Future<void> save() async {
