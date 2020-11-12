@@ -14,11 +14,12 @@ const int maxSnapshotCount = 16;
 
 class FrameModel extends ChangeNotifier {
   FrameModel({
-    @required this.id,
+    int id,
     @required Size size,
     int duration = 1,
     ui.Image initialSnapshot,
-  })  : _size = size,
+  })  : id = id ?? DateTime.now().millisecondsSinceEpoch,
+        _size = size,
         _duration = duration,
         unrasterizedStrokes = [],
         _snapshots = [initialSnapshot],

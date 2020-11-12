@@ -128,6 +128,7 @@ class ReelModel extends ChangeNotifier {
   void pasteInSelectedFrame() {
     if (_copiedFrame == null) return;
     frames[_selectedFrameId] = FrameModel(
+      id: selectedFrame.id,
       size: frameSize,
       initialSnapshot: _copiedFrame.snapshot,
     );
