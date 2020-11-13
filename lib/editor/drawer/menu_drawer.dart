@@ -88,7 +88,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
         ),
         MenuListTile(
           icon: Icons.exit_to_app,
-          title: 'Exit',
+          title: 'Save and exit',
           onTap: () async {
             final project = context.read<Project>();
             await project.save();
