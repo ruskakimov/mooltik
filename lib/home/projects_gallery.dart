@@ -28,8 +28,11 @@ class ProjectGallery extends StatelessWidget {
           child: GestureDetector(
             onTap: () async {
               await project.open();
-              // TODO: Pass reel to editor.
-              Navigator.of(context).pushNamed(EditorPage.routeName);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => EditorPage(reel: project.reel),
+                ),
+              );
             },
             onLongPress: () {
               manager.deleteProject(index);

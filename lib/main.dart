@@ -3,8 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:mooltik/home/home_page.dart';
 
-import 'editor/editor_page.dart';
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -54,7 +52,6 @@ class App extends StatelessWidget {
         ),
         routes: {
           Navigator.defaultRouteName: (context) => HomePage(),
-          EditorPage.routeName: (context) => EditorPage(),
         },
       ),
     );

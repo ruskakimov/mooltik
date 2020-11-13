@@ -9,14 +9,19 @@ import 'reel/reel_model.dart';
 class EditorPage extends StatelessWidget {
   static const routeName = '/editor';
 
-  const EditorPage({Key key}) : super(key: key);
+  const EditorPage({
+    Key key,
+    @required this.reel,
+  }) : super(key: key);
+
+  final ReelModel reel;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(
-            create: (context) => ReelModel(),
+          ChangeNotifierProvider.value(
+            value: reel,
           ),
           ChangeNotifierProvider(
             create: (context) => ToolboxModel(),
