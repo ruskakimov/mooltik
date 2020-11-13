@@ -8,4 +8,7 @@ Future<Image> pngRead(File pngFile) async {
   return frame.image;
 }
 
-Future<File> pngWrite(File pngFile, Image image) async {}
+Future<File> pngWrite(File pngFile, Image image) async {
+  final byteData = await image.toByteData(format: ImageByteFormat.png);
+  await pngFile.writeAsBytes(byteData.buffer.asUint8List());
+}

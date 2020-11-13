@@ -68,10 +68,8 @@ class Project {
 
     // Write images.
     for (final frame in frames) {
-      final img = await imageFromFrame(frame);
-      final pngBytes = encodePng(img, level: 0);
       final file = _getDrawingFile(frame.id);
-      await file.writeAsBytes(pngBytes);
+      await pngWrite(file, frame.snapshot);
     }
   }
 
