@@ -67,10 +67,14 @@ class Project {
     await _dataFile.writeAsString(jsonEncode(data));
 
     // Write images.
-    for (final frame in frames) {
-      final file = _getDrawingFile(frame.id);
-      await pngWrite(file, frame.snapshot);
-    }
+    await Future.wait(
+      frames.map(
+        (frame) => pngWrite(
+          _getDrawingFile(frame.id),
+          frame.snapshot,
+        ),
+      ),
+    );
   }
 
   void close() {
