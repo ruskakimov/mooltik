@@ -9,6 +9,7 @@ import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/gif.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
+import 'package:mooltik/home/project.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -88,7 +89,9 @@ class _MenuDrawerState extends State<MenuDrawer> {
         MenuListTile(
           icon: Icons.exit_to_app,
           title: 'Exit',
-          onTap: () {
+          onTap: () async {
+            final project = context.read<Project>();
+            await project.save();
             Navigator.of(context).pop();
           },
         ),
