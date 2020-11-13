@@ -30,7 +30,10 @@ class ProjectGallery extends StatelessWidget {
               await project.open();
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => EditorPage(reel: project.reel),
+                  builder: (context) => Provider<Project>.value(
+                    value: project,
+                    child: EditorPage(reel: project.reel),
+                  ),
                 ),
               );
             },
