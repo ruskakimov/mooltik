@@ -92,6 +92,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
           onTap: () async {
             final project = context.read<Project>();
             await project.save();
+            project.close();
             Navigator.of(context).pop();
           },
         ),
