@@ -6,6 +6,7 @@ import 'package:image/image.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/gif.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
+import 'package:mooltik/home/png.dart';
 import 'package:mooltik/home/project_save_data.dart';
 import 'package:path/path.dart' as p;
 
@@ -44,14 +45,11 @@ class Project {
 
   Future<FrameModel> _getFrame(DrawingSaveData drawing, Size size) async {
     final file = _getDrawingFile(drawing.id);
-    final bytes = await file.readAsBytes();
-    final codec = await instantiateImageCodec(bytes);
-    final frame = await codec.getNextFrame();
     return FrameModel(
       id: drawing.id,
       duration: drawing.duration,
       size: size,
-      initialSnapshot: frame.image,
+      initialSnapshot: await pngRead(file),
     );
   }
 
