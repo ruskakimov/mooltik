@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
@@ -44,13 +45,13 @@ class Project {
   Future<FrameModel> _getFrame(DrawingSaveData drawing, Size size) async {
     final file = _getDrawingFile(drawing.id);
     final bytes = await file.readAsBytes();
-    decodePng(bytes);
+    final codec = await instantiateImageCodec(bytes);
+    final frame = await codec.getNextFrame();
     return FrameModel(
       id: drawing.id,
       duration: drawing.duration,
       size: size,
-      // TODO: Convert image.Image to ui.Image
-      // initialSnapshot: decodePng(bytes),
+      initialSnapshot: frame.image,
     );
   }
 
