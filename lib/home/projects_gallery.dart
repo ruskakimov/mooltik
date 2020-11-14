@@ -1,9 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mooltik/home/project.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/editor_page.dart';
-import 'package:mooltik/editor/frame/frame_model.dart';
-import 'package:mooltik/editor/frame/frame_painter.dart';
 import 'package:mooltik/home/projects_manager_model.dart';
 
 class ProjectGallery extends StatelessWidget {
@@ -40,9 +40,7 @@ class ProjectGallery extends StatelessWidget {
             onLongPress: () {
               manager.deleteProject(index);
             },
-            child: ProjectThumbnail(
-              project: project,
-            ),
+            child: ProjectThumbnail(thumbnail: project.thumbnail),
           ),
         );
       },
@@ -54,25 +52,23 @@ class ProjectGallery extends StatelessWidget {
 class ProjectThumbnail extends StatelessWidget {
   const ProjectThumbnail({
     Key key,
-    @required this.project,
+    @required this.thumbnail,
   }) : super(key: key);
 
-  final Project project;
+  final File thumbnail;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text('${project.id}'),
-        CustomPaint(
-          size: Size(200, 200),
-          painter: FramePainter(
-            // TODO: First project frame.
-            frame: FrameModel(size: Size(200, 200)),
-          ),
-        ),
-      ],
+    return Container(
+      width: 200,
+      height: 200,
+      color: Colors.white,
+      child: thumbnail.existsSync()
+          ? Image.file(
+              thumbnail,
+              fit: BoxFit.cover,
+            )
+          : null,
     );
   }
 }

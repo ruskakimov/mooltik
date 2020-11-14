@@ -11,11 +11,14 @@ import 'package:path/path.dart' as p;
 class Project {
   Project(this.directory)
       : id = int.parse(p.basename(directory.path).split('_').last),
+        thumbnail = File(p.join(directory.path, 'thumbnail.png')),
         _dataFile = File(p.join(directory.path, 'project_data.json'));
 
   final Directory directory;
 
   final int id;
+
+  final File thumbnail;
 
   final File _dataFile;
 
@@ -73,6 +76,9 @@ class Project {
         ),
       ),
     );
+
+    // Write thumbnail.
+    await pngWrite(thumbnail, frames.first.snapshot);
   }
 
   void close() {
