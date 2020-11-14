@@ -37,9 +37,6 @@ class ProjectGallery extends StatelessWidget {
                 ),
               );
             },
-            onLongPress: () {
-              manager.deleteProject(index);
-            },
             child: ChangeNotifierProvider<Project>.value(
               value: project,
               child: ProjectThumbnail(thumbnail: project.thumbnail),
