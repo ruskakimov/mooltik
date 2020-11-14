@@ -27,12 +27,12 @@ class Project {
       // Existing project.
       final contents = await _dataFile.readAsString();
       final data = ProjectSaveData.fromJson(jsonDecode(contents));
-      final drawingSize = Size(data.width, data.height);
+      final frameSize = Size(data.width, data.height);
 
       _reel = ReelModel(
-        frameSize: drawingSize,
+        frameSize: frameSize,
         initialFrames: await Future.wait(
-          data.drawings.map((drawing) => _getFrame(drawing, drawingSize)),
+          data.frames.map((frameData) => _getFrame(frameData, frameSize)),
         ),
       );
     } else {
@@ -41,11 +41,11 @@ class Project {
     }
   }
 
-  Future<FrameModel> _getFrame(DrawingSaveData drawing, Size size) async {
-    final file = _getDrawingFile(drawing.id);
+  Future<FrameModel> _getFrame(FrameSaveData frameData, Size size) async {
+    final file = _getFrameFile(frameData.id);
     return FrameModel(
-      id: drawing.id,
-      duration: drawing.duration,
+      id: frameData.id,
+      duration: frameData.duration,
       size: size,
       initialSnapshot: await pngRead(file),
     );
@@ -58,8 +58,8 @@ class Project {
     final data = ProjectSaveData(
       width: _reel.frameSize.width,
       height: _reel.frameSize.height,
-      drawings: frames
-          .map((f) => DrawingSaveData(id: f.id, duration: f.duration))
+      frames: frames
+          .map((f) => FrameSaveData(id: f.id, duration: f.duration))
           .toList(),
     );
     await _dataFile.writeAsString(jsonEncode(data));
@@ -68,7 +68,7 @@ class Project {
     await Future.wait(
       frames.map(
         (frame) => pngWrite(
-          _getDrawingFile(frame.id),
+          _getFrameFile(frame.id),
           frame.snapshot,
         ),
       ),
@@ -79,6 +79,5 @@ class Project {
     _reel = null;
   }
 
-  File _getDrawingFile(int id) =>
-      File(p.join(directory.path, 'drawing$id.png'));
+  File _getFrameFile(int id) => File(p.join(directory.path, 'frame$id.png'));
 }

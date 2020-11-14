@@ -2,31 +2,31 @@ class ProjectSaveData {
   ProjectSaveData({
     this.width,
     this.height,
-    this.drawings,
+    this.frames,
   });
 
   ProjectSaveData.fromJson(Map<String, dynamic> json)
       : width = json['width'],
         height = json['height'],
-        drawings = (json['drawings'] as List<dynamic>)
-            .map((d) => DrawingSaveData.fromJson(d))
+        frames = (json['frames'] as List<dynamic>)
+            .map((d) => FrameSaveData.fromJson(d))
             .toList();
 
   Map<String, dynamic> toJson() => {
         'width': width,
         'height': height,
-        'drawings': drawings.map((d) => d.toJson()).toList(),
+        'frames': frames.map((d) => d.toJson()).toList(),
       };
 
   final double width;
   final double height;
-  final List<DrawingSaveData> drawings;
+  final List<FrameSaveData> frames;
 }
 
-class DrawingSaveData {
-  const DrawingSaveData({this.id, this.duration});
+class FrameSaveData {
+  const FrameSaveData({this.id, this.duration});
 
-  DrawingSaveData.fromJson(Map<String, dynamic> json)
+  FrameSaveData.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         duration = json['duration'];
 

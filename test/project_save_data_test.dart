@@ -9,16 +9,16 @@ void main() {
       final data = ProjectSaveData(
         width: 200,
         height: 100,
-        drawings: [DrawingSaveData(id: 0, duration: 3)],
+        frames: [FrameSaveData(id: 0, duration: 3)],
       );
       expect(
         jsonEncode(data),
-        '{"width":200.0,"height":100.0,"drawings":[{"id":0,"duration":3}],"layers":[{"id":0}]}',
+        '{"width":200.0,"height":100.0,"frames":[{"id":0,"duration":3}],"layers":[{"id":0}]}',
       );
     });
     test('decode and encode back', () {
       final json =
-          '{"width":200.0,"height":100.0,"drawings":[{"id":0,"duration":3}],"layers":[{"id":0}]}';
+          '{"width":200.0,"height":100.0,"frames":[{"id":0,"duration":3}],"layers":[{"id":0}]}';
       final data = ProjectSaveData.fromJson(jsonDecode(json));
       expect(jsonEncode(data), json);
     });
