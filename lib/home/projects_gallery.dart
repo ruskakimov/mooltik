@@ -64,8 +64,9 @@ class ProjectThumbnail extends StatelessWidget {
       height: 200,
       color: Colors.white,
       child: thumbnail.existsSync()
-          ? Image.file(
-              thumbnail,
+          ? Image.memory(
+              // Temporary fix for this issue https://github.com/flutter/flutter/issues/17419
+              thumbnail.readAsBytesSync(),
               fit: BoxFit.cover,
             )
           : null,
