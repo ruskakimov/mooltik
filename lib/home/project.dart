@@ -46,11 +46,12 @@ class Project extends ChangeNotifier {
 
   Future<FrameModel> _getFrame(FrameSaveData frameData, Size size) async {
     final file = _getFrameFile(frameData.id);
+    final image = file.existsSync() ? await pngRead(file) : null;
     return FrameModel(
       id: frameData.id,
       duration: frameData.duration,
       size: size,
-      initialSnapshot: await pngRead(file),
+      initialSnapshot: image,
     );
   }
 
@@ -69,7 +70,9 @@ class Project extends ChangeNotifier {
 
     // Write images.
     await Future.wait(
-      frames.map(
+      frames.where((frame) {
+        return frame.snapshot != null;
+      }).map(
         (frame) => pngWrite(
           _getFrameFile(frame.id),
           frame.snapshot,
@@ -78,7 +81,11 @@ class Project extends ChangeNotifier {
     );
 
     // Write thumbnail.
-    await pngWrite(thumbnail, frames.first.snapshot);
+    if (frames.first.snapshot != null) {
+      await pngWrite(thumbnail, frames.first.snapshot);
+    }
+
+    // Refresh gallery thumbnails.
     notifyListeners();
   }
 
