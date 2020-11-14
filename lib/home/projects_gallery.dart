@@ -30,7 +30,7 @@ class ProjectGallery extends StatelessWidget {
               await project.open();
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => Provider<Project>.value(
+                  builder: (context) => ChangeNotifierProvider<Project>.value(
                     value: project,
                     child: EditorPage(reel: project.reel),
                   ),
@@ -40,7 +40,10 @@ class ProjectGallery extends StatelessWidget {
             onLongPress: () {
               manager.deleteProject(index);
             },
-            child: ProjectThumbnail(thumbnail: project.thumbnail),
+            child: ChangeNotifierProvider<Project>.value(
+              value: project,
+              child: ProjectThumbnail(thumbnail: project.thumbnail),
+            ),
           ),
         );
       },
@@ -59,6 +62,8 @@ class ProjectThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<Project>();
+
     return Container(
       width: 200,
       height: 200,

@@ -8,7 +8,7 @@ import 'package:mooltik/home/png.dart';
 import 'package:mooltik/home/project_save_data.dart';
 import 'package:path/path.dart' as p;
 
-class Project {
+class Project extends ChangeNotifier {
   Project(this.directory)
       : id = int.parse(p.basename(directory.path).split('_').last),
         thumbnail = File(p.join(directory.path, 'thumbnail.png')),
@@ -79,6 +79,7 @@ class Project {
 
     // Write thumbnail.
     await pngWrite(thumbnail, frames.first.snapshot);
+    notifyListeners();
   }
 
   void close() {
