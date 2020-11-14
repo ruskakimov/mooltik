@@ -9,15 +9,12 @@ class HomeBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Surface(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-        child: Text(
-          'Mooltik',
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onBackground,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+      child: Center(
+        child: Container(
+          width: 56,
+          height: 56,
+          color: Theme.of(context).colorScheme.primary,
+          child: Image.asset('assets/logo_foreground.png', fit: BoxFit.cover),
         ),
       ),
     );
