@@ -35,59 +35,21 @@ class _ToolBarState extends State<ToolBar> {
 
   @override
   Widget build(BuildContext context) {
-    final toolbox = context.watch<ToolboxModel>();
     final reel = context.watch<ReelModel>();
 
     final bar = Surface(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          AppIconButton(
-            icon: FontAwesomeIcons.bars,
-            selected: leftOpen == LeftDrawer.menu,
-            onTap: () {
-              setState(() {
-                leftOpen = leftOpen == LeftDrawer.menu ? null : LeftDrawer.menu;
-              });
-            },
+          Expanded(
+            child: _buildLeftActions(),
           ),
-          AppIconButton(
-            icon: FontAwesomeIcons.film,
-            selected: leftOpen == LeftDrawer.reel,
-            onTap: () {
-              setState(() {
-                leftOpen = leftOpen == LeftDrawer.reel ? null : LeftDrawer.reel;
-              });
-            },
-          ),
-          Spacer(),
           AppIconButton(
             icon: FontAwesomeIcons.play,
             onTap: reel.play,
           ),
-          Spacer(),
-          for (var i = 0; i < toolbox.tools.length; i++)
-            AppIconButton(
-              icon: toolbox.tools[i].icon,
-              selected: toolbox.tools[i] == toolbox.selectedTool,
-              onTap: () {
-                if (toolbox.tools[i] == toolbox.selectedTool) {
-                  setState(() {
-                    rightOpen = rightOpen == RightDrawer.strokeSize
-                        ? null
-                        : RightDrawer.strokeSize;
-                  });
-                }
-                toolbox.selectTool(i);
-              },
-            ),
-          ColorPickerButton(
-            onTap: () {
-              setState(() {
-                rightOpen =
-                    rightOpen == RightDrawer.color ? null : RightDrawer.color;
-              });
-            },
+          Expanded(
+            child: _buildRightActions(),
           ),
         ],
       ),
@@ -99,6 +61,64 @@ class _ToolBarState extends State<ToolBar> {
         bar,
         Expanded(
           child: _buildDrawerArea(),
+        ),
+      ],
+    );
+  }
+
+  Row _buildRightActions() {
+    final toolbox = context.watch<ToolboxModel>();
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        for (var i = 0; i < toolbox.tools.length; i++)
+          AppIconButton(
+            icon: toolbox.tools[i].icon,
+            selected: toolbox.tools[i] == toolbox.selectedTool,
+            onTap: () {
+              if (toolbox.tools[i] == toolbox.selectedTool) {
+                setState(() {
+                  rightOpen = rightOpen == RightDrawer.strokeSize
+                      ? null
+                      : RightDrawer.strokeSize;
+                });
+              }
+              toolbox.selectTool(i);
+            },
+          ),
+        ColorPickerButton(
+          onTap: () {
+            setState(() {
+              rightOpen =
+                  rightOpen == RightDrawer.color ? null : RightDrawer.color;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  Row _buildLeftActions() {
+    return Row(
+      children: [
+        AppIconButton(
+          icon: FontAwesomeIcons.bars,
+          selected: leftOpen == LeftDrawer.menu,
+          onTap: () {
+            setState(() {
+              leftOpen = leftOpen == LeftDrawer.menu ? null : LeftDrawer.menu;
+            });
+          },
+        ),
+        AppIconButton(
+          icon: FontAwesomeIcons.film,
+          selected: leftOpen == LeftDrawer.reel,
+          onTap: () {
+            setState(() {
+              leftOpen = leftOpen == LeftDrawer.reel ? null : LeftDrawer.reel;
+            });
+          },
         ),
       ],
     );
