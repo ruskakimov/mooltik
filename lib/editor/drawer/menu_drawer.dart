@@ -9,6 +9,7 @@ import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/gif.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
+import 'package:mooltik/home/png.dart';
 import 'package:mooltik/home/project.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -124,12 +125,14 @@ class _MenuDrawerState extends State<MenuDrawer> {
 
       // Save frames as PNG images.
       for (int i = 0; i < frames.length; i++) {
-        final img = await imageFromFrame(frames[i]);
-        final pngBytes = encodePng(img, level: 0);
+        final frame = frames[i];
+        final picture = pictureFromFrame(frame);
         final frameFile = File(dir.path + '/frame$i.png');
-        await frameFile.writeAsBytes(pngBytes);
+        pngWrite(
+          frameFile,
+          await picture.toImage(frame.width.toInt(), frame.height.toInt()),
+        );
         pngFiles.add(frameFile);
-        print(frameFile.path);
       }
 
       // Create concat demuxer file for ffmpeg.
