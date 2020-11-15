@@ -35,16 +35,16 @@ abstract class AnimatedDrawer extends StatelessWidget {
       bottom: 0,
       width: width,
       child: RepaintBoundary(
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                width: 1.0,
-                color: Theme.of(context).colorScheme.background,
+        child: Surface(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  width: 1.0,
+                  color: Theme.of(context).colorScheme.background,
+                ),
               ),
             ),
-          ),
-          child: Surface(
             child: child,
           ),
         ),
