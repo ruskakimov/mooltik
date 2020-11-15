@@ -67,12 +67,6 @@ class _ColorPickerState extends State<ColorPicker> {
     currentHsvColor = HSVColor.fromColor(widget.pickerColor);
   }
 
-  @override
-  void didUpdateWidget(ColorPicker oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    currentHsvColor = HSVColor.fromColor(widget.pickerColor);
-  }
-
   Widget colorPickerSlider(TrackType trackType) {
     return ColorPickerSlider(
       trackType,
