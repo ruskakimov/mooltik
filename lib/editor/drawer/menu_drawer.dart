@@ -90,10 +90,16 @@ class _MenuDrawerState extends State<MenuDrawer> {
           icon: Icons.exit_to_app,
           title: 'Save and exit',
           onTap: () async {
+            setState(() {
+              _saving = true;
+            });
             final project = context.read<Project>();
             await project.save();
             project.close();
             Navigator.of(context).pop();
+            setState(() {
+              _saving = false;
+            });
           },
         ),
       ],
