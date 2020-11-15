@@ -35,7 +35,10 @@ class FramePainter extends CustomPainter {
       canvas.drawImage(
         frame.snapshot,
         Offset.zero,
-        Paint()..colorFilter = filter,
+        Paint()
+          ..colorFilter = filter
+          ..isAntiAlias = true
+          ..filterQuality = FilterQuality.high,
       );
     }
 
