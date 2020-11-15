@@ -38,7 +38,7 @@ class FramePainter extends CustomPainter {
         Paint()
           ..colorFilter = filter
           ..isAntiAlias = true
-          ..filterQuality = FilterQuality.high,
+          ..filterQuality = FilterQuality.low,
       );
     }
 
