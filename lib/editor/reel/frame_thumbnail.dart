@@ -56,22 +56,26 @@ class FrameThumbnail extends StatelessWidget {
               ],
             ),
             Expanded(
-              child: Center(
-                child: Text(
-                  '${frame.duration}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: selected
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : Theme.of(context).colorScheme.onSurface,
-                    fontWeight: selected ? FontWeight.w900 : FontWeight.normal,
-                  ),
-                ),
-              ),
+              child: _buildDuration(context),
             ),
           ],
         ),
       );
     });
+  }
+
+  Widget _buildDuration(BuildContext context) {
+    return Center(
+      child: Text(
+        '${frame.duration}',
+        style: TextStyle(
+          fontSize: 14,
+          color: selected
+              ? Theme.of(context).colorScheme.onPrimary
+              : Theme.of(context).colorScheme.onSurface,
+          fontWeight: selected ? FontWeight.w900 : FontWeight.normal,
+        ),
+      ),
+    );
   }
 }
