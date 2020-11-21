@@ -17,13 +17,12 @@ class FrameThumbnail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      return Container(
+      return ColoredBox(
         color: selected
             ? Theme.of(context).colorScheme.primary
             : Colors.transparent,
         child: Row(
           children: [
-            // SizedBox(width: borderWidth),
             Stack(
               children: [
                 CustomPaint(
