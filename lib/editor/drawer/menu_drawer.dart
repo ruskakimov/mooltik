@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
-import 'package:image/image.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
