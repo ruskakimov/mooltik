@@ -26,7 +26,12 @@ class FrameThumbnail extends StatelessWidget {
           SizedBox(
             width: 48,
             child: selected
-                ? _DurationPicker(initialValue: frame.duration)
+                ? _DurationPicker(
+                    initialValue: frame.duration,
+                    onSelectedItemChanged: (int value) {
+                      frame.duration = value;
+                    },
+                  )
                 : _buildDurationLabel(context),
           ),
         ],
@@ -51,9 +56,11 @@ class _DurationPicker extends StatefulWidget {
   const _DurationPicker({
     Key key,
     @required this.initialValue,
+    @required this.onSelectedItemChanged,
   }) : super(key: key);
 
   final int initialValue;
+  final void Function(int) onSelectedItemChanged;
 
   @override
   _DurationPickerState createState() => _DurationPickerState();
@@ -80,7 +87,8 @@ class _DurationPickerState extends State<_DurationPicker> {
     return CupertinoPicker.builder(
       scrollController: _controller,
       itemExtent: 20,
-      onSelectedItemChanged: (int value) {},
+      onSelectedItemChanged: (int index) =>
+          widget.onSelectedItemChanged?.call(index + 1),
       childCount: 24,
       useMagnifier: false,
       magnification: 1,
