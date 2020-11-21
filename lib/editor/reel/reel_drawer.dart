@@ -11,7 +11,7 @@ import 'package:mooltik/editor/reel/reel_model.dart';
 
 import 'frame_thumbnail.dart';
 
-const double drawerWidth = 140.0;
+const double drawerWidth = 160.0;
 const double thumbnailHeight = 64.0;
 const double gap = 1.0;
 

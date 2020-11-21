@@ -12,7 +12,6 @@ class ReelContextMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final reel = context.watch<ReelModel>();
-    final frame = reel.selectedFrame;
 
     return Theme(
       data: ThemeData(
@@ -60,27 +59,6 @@ class ReelContextMenu extends StatelessWidget {
                       size: 20,
                     ),
                     onPressed: reel.pasteInSelectedFrame,
-                  ),
-                  Divider(),
-                  IconButton(
-                    icon: Icon(
-                      FontAwesomeIcons.plus,
-                      size: 18,
-                    ),
-                    onPressed: () {
-                      frame.duration++;
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      FontAwesomeIcons.minus,
-                      size: 18,
-                    ),
-                    onPressed: frame.duration > 1
-                        ? () {
-                            frame.duration--;
-                          }
-                        : null,
                   ),
                 ],
               ),
