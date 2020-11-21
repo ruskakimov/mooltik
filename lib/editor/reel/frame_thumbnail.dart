@@ -23,45 +23,58 @@ class FrameThumbnail extends StatelessWidget {
             : Colors.transparent,
         child: Row(
           children: [
-            Stack(
-              children: [
-                CustomPaint(
-                  size: Size(
-                    constraints.maxWidth - 24 - borderWidth,
-                    constraints.maxHeight,
-                  ),
-                  painter: FramePainter(frame: frame),
-                ),
-                if (selected)
-                  Positioned.fill(
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(
-                            width: borderWidth,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          bottom: BorderSide(
-                            width: borderWidth,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          left: BorderSide(
-                            width: borderWidth,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
             Expanded(
+              child: _buildImage(constraints, context),
+            ),
+            SizedBox(
+              width: 48,
               child: _buildDuration(context),
             ),
           ],
         ),
       );
     });
+  }
+
+  Widget _buildImage(BoxConstraints constraints, BuildContext context) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: FittedBox(
+            alignment: Alignment.center,
+            fit: BoxFit.cover,
+            child: CustomPaint(
+              size: Size(
+                constraints.maxHeight / frame.height * frame.width,
+                constraints.maxHeight,
+              ),
+              painter: FramePainter(frame: frame),
+            ),
+          ),
+        ),
+        if (selected)
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    width: borderWidth,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  bottom: BorderSide(
+                    width: borderWidth,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  left: BorderSide(
+                    width: borderWidth,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
   }
 
   Widget _buildDuration(BuildContext context) {
