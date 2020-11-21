@@ -10,5 +10,5 @@ Future<Image> pngRead(File pngFile) async {
 
 Future<void> pngWrite(File pngFile, Image image) async {
   final byteData = await image.toByteData(format: ImageByteFormat.png);
-  await pngFile.writeAsBytes(byteData.buffer.asUint8List());
+  await pngFile.writeAsBytes(byteData.buffer.asUint8List(), flush: true);
 }
