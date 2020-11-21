@@ -60,7 +60,7 @@ class _DurationSlider extends StatelessWidget {
     return CupertinoPicker.builder(
       itemExtent: 20,
       onSelectedItemChanged: (int value) {},
-      childCount: 100,
+      childCount: 24,
       useMagnifier: false,
       magnification: 1,
       squeeze: 1,
