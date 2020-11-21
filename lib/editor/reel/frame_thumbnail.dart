@@ -14,36 +14,55 @@ class FrameThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return ColoredBox(
-        color: selected
-            ? Theme.of(context).colorScheme.primary
-            : Colors.transparent,
-        child: Row(
-          children: [
-            Expanded(
-              child: _Thumbnail(frame: frame),
-            ),
-            SizedBox(
-              width: 48,
-              child: _buildDuration(context),
-            ),
-          ],
-        ),
-      );
-    });
+    return ColoredBox(
+      color:
+          selected ? Theme.of(context).colorScheme.primary : Colors.transparent,
+      child: Row(
+        children: [
+          Expanded(
+            child: _Thumbnail(frame: frame),
+          ),
+          SizedBox(
+            width: 48,
+            child: selected
+                ? _DurationSlider(value: frame.duration)
+                : _buildDurationLabel(context),
+          ),
+        ],
+      ),
+    );
   }
 
-  Widget _buildDuration(BuildContext context) {
+  Widget _buildDurationLabel(BuildContext context) {
     return Center(
       child: Text(
         '${frame.duration}',
         style: TextStyle(
           fontSize: 14,
-          color: selected
-              ? Theme.of(context).colorScheme.onPrimary
-              : Theme.of(context).colorScheme.onSurface,
-          fontWeight: selected ? FontWeight.w900 : FontWeight.normal,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+    );
+  }
+}
+
+class _DurationSlider extends StatelessWidget {
+  const _DurationSlider({
+    Key key,
+    @required this.value,
+  }) : super(key: key);
+
+  final int value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        '$value',
+        style: TextStyle(
+          fontSize: 14,
+          color: Theme.of(context).colorScheme.onPrimary,
+          fontWeight: FontWeight.w900,
         ),
       ),
     );
