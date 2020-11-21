@@ -56,13 +56,21 @@ class _DurationSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        '$value',
-        style: TextStyle(
-          fontSize: 14,
-          color: Theme.of(context).colorScheme.onPrimary,
-          fontWeight: FontWeight.w900,
+    return GestureDetector(
+      onVerticalDragUpdate: (details) {
+        print(details);
+      },
+      child: Material(
+        color: Colors.transparent,
+        child: Center(
+          child: Text(
+            '$value',
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
         ),
       ),
     );
