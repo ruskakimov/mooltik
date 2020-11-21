@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/frame/frame_painter.dart';
@@ -56,21 +57,19 @@ class _DurationSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onVerticalDragUpdate: (details) {
-        print(details);
-      },
-      child: Material(
-        color: Colors.transparent,
-        child: Center(
-          child: Text(
-            '$value',
-            style: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.onPrimary,
-              fontWeight: FontWeight.w900,
-            ),
-          ),
+    return CupertinoPicker.builder(
+      itemExtent: 20,
+      onSelectedItemChanged: (int value) {},
+      childCount: 100,
+      useMagnifier: false,
+      magnification: 1,
+      squeeze: 1,
+      itemBuilder: (context, index) => Text(
+        '${index + 1}',
+        style: TextStyle(
+          fontSize: 16,
+          color: Theme.of(context).colorScheme.onPrimary,
+          fontWeight: FontWeight.w900,
         ),
       ),
     );
