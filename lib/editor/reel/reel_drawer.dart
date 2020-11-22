@@ -133,30 +133,14 @@ class _ReelDrawerState extends State<ReelDrawer> {
                 visible: selected && _contextMenuOpen,
                 childAnchor: Alignment.topCenter,
                 portalAnchor: Alignment.center,
-                portal: FloatingActionButton(
-                  mini: true,
-                  elevation: 5,
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                  child: Icon(
-                    FontAwesomeIcons.plus,
-                    size: 13,
-                    color: Theme.of(context).colorScheme.onSecondary,
-                  ),
+                portal: AddInBetweenButton(
                   onPressed: reel.addFrameBeforeSelected,
                 ),
                 child: PortalEntry(
                   visible: selected && _contextMenuOpen && index != lastIndex,
                   childAnchor: Alignment.bottomCenter,
                   portalAnchor: Alignment.center,
-                  portal: FloatingActionButton(
-                    mini: true,
-                    elevation: 5,
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
-                    child: Icon(
-                      FontAwesomeIcons.plus,
-                      size: 13,
-                      color: Theme.of(context).colorScheme.onSecondary,
-                    ),
+                  portal: AddInBetweenButton(
                     onPressed: reel.addFrameAfterSelected,
                   ),
                   child: FrameThumbnail(
@@ -170,5 +154,29 @@ class _ReelDrawerState extends State<ReelDrawer> {
         },
       );
     });
+  }
+}
+
+class AddInBetweenButton extends StatelessWidget {
+  const AddInBetweenButton({
+    Key key,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      mini: true,
+      elevation: 5,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
+      child: Icon(
+        FontAwesomeIcons.plus,
+        size: 13,
+        color: Theme.of(context).colorScheme.onSecondary,
+      ),
+      onPressed: onPressed,
+    );
   }
 }
