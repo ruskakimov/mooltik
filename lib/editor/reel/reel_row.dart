@@ -42,7 +42,7 @@ class ReelRow extends StatelessWidget {
   Widget _buildDurationLabel(BuildContext context) {
     return Center(
       child: Text(
-        '${frame.duration}',
+        labelFor(frame.duration),
         style: TextStyle(
           fontSize: 14,
           color: Theme.of(context).colorScheme.onSurface,
@@ -88,13 +88,13 @@ class _DurationPickerState extends State<_DurationPicker> {
       scrollController: _controller,
       itemExtent: 20,
       onSelectedItemChanged: (int index) =>
-          widget.onSelectedItemChanged?.call(index + 1),
-      childCount: 24,
+          widget.onSelectedItemChanged?.call(framesAt(index)),
+      childCount: 33, // 1-23 frames and 1-10 seconds
       useMagnifier: false,
       magnification: 1,
       squeeze: 1,
       itemBuilder: (context, index) => Text(
-        '${index + 1}',
+        labelFor(framesAt(index)),
         style: TextStyle(
           fontSize: 16,
           color: Theme.of(context).colorScheme.onPrimary,
@@ -103,4 +103,20 @@ class _DurationPickerState extends State<_DurationPicker> {
       ),
     );
   }
+}
+
+int framesAt(int index) {
+  // TODO: Convert to tests
+  // 0 -> 1
+  // 1 -> 2
+  // ...
+  // 23 -> 24
+  // 24 -> 48
+  // 25 -> 72
+  return (index + 1).clamp(1, 24) + (index - 23).clamp(0, double.infinity) * 24;
+}
+
+String labelFor(int frames) {
+  if (frames % 24 == 0) return '${frames ~/ 24}s';
+  return '$frames';
 }
