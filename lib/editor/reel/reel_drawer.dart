@@ -108,70 +108,64 @@ class _ReelDrawerState extends State<ReelDrawer> {
 
       return ListView.separated(
         controller: controller,
-        itemCount: reel.frames.length,
+        itemCount: reel.frames.length + 1,
         separatorBuilder: (context, index) => SizedBox(height: gap),
         padding: EdgeInsets.only(
           top: padding,
           bottom: padding - thumbnailHeight,
         ),
         itemBuilder: (context, index) {
+          if (index == reel.frames.length) return after;
+
           final frame = reel.frames[index];
           final selected = index == reel.selectedFrameId;
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(
-                height: thumbnailHeight,
-                child: GestureDetector(
-                  onTap: () {
-                    if (selected) {
-                      setState(() => _contextMenuOpen = !_contextMenuOpen);
-                    }
-                    _scrollTo(index);
-                  },
-                  child: PortalEntry(
-                    visible: selected && _contextMenuOpen,
-                    childAnchor: Alignment.topCenter,
-                    portalAnchor: Alignment.center,
-                    portal: FloatingActionButton(
-                      mini: true,
-                      elevation: 5,
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                      child: Icon(
-                        FontAwesomeIcons.plus,
-                        size: 13,
-                        color: Theme.of(context).colorScheme.onSecondary,
-                      ),
-                      onPressed: reel.addFrameBeforeSelected,
+          return SizedBox(
+            height: thumbnailHeight,
+            child: GestureDetector(
+              onTap: () {
+                if (selected) {
+                  setState(() => _contextMenuOpen = !_contextMenuOpen);
+                }
+                _scrollTo(index);
+              },
+              child: PortalEntry(
+                visible: selected && _contextMenuOpen,
+                childAnchor: Alignment.topCenter,
+                portalAnchor: Alignment.center,
+                portal: FloatingActionButton(
+                  mini: true,
+                  elevation: 5,
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  child: Icon(
+                    FontAwesomeIcons.plus,
+                    size: 13,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
+                  onPressed: reel.addFrameBeforeSelected,
+                ),
+                child: PortalEntry(
+                  visible: selected && _contextMenuOpen && index != lastIndex,
+                  childAnchor: Alignment.bottomCenter,
+                  portalAnchor: Alignment.center,
+                  portal: FloatingActionButton(
+                    mini: true,
+                    elevation: 5,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    child: Icon(
+                      FontAwesomeIcons.plus,
+                      size: 13,
+                      color: Theme.of(context).colorScheme.onSecondary,
                     ),
-                    child: PortalEntry(
-                      visible:
-                          selected && _contextMenuOpen && index != lastIndex,
-                      childAnchor: Alignment.bottomCenter,
-                      portalAnchor: Alignment.center,
-                      portal: FloatingActionButton(
-                        mini: true,
-                        elevation: 5,
-                        backgroundColor:
-                            Theme.of(context).colorScheme.secondary,
-                        child: Icon(
-                          FontAwesomeIcons.plus,
-                          size: 13,
-                          color: Theme.of(context).colorScheme.onSecondary,
-                        ),
-                        onPressed: reel.addFrameAfterSelected,
-                      ),
-                      child: FrameThumbnail(
-                        frame: frame,
-                        selected: selected,
-                      ),
-                    ),
+                    onPressed: reel.addFrameAfterSelected,
+                  ),
+                  child: FrameThumbnail(
+                    frame: frame,
+                    selected: selected,
                   ),
                 ),
               ),
-              if (index == lastIndex) after,
-            ],
+            ),
           );
         },
       );
