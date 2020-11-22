@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
-import 'package:mooltik/editor/frame/frame_painter.dart';
+import 'package:mooltik/editor/frame/frame_thumbnail.dart';
 
-class FrameThumbnail extends StatelessWidget {
-  const FrameThumbnail({
+class ReelRow extends StatelessWidget {
+  const ReelRow({
     Key key,
     @required this.frame,
     @required this.selected,
@@ -21,7 +21,7 @@ class FrameThumbnail extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: _Thumbnail(frame: frame),
+            child: FrameThumbnail(frame: frame),
           ),
           SizedBox(
             width: 48,
@@ -101,34 +101,6 @@ class _DurationPickerState extends State<_DurationPicker> {
           fontWeight: FontWeight.w900,
         ),
       ),
-    );
-  }
-}
-
-class _Thumbnail extends StatelessWidget {
-  const _Thumbnail({
-    Key key,
-    @required this.frame,
-  }) : super(key: key);
-
-  final FrameModel frame;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return FittedBox(
-          alignment: Alignment.center,
-          fit: BoxFit.cover,
-          child: CustomPaint(
-            size: Size(
-              constraints.maxHeight / frame.height * frame.width,
-              constraints.maxHeight,
-            ),
-            painter: FramePainter(frame: frame),
-          ),
-        );
-      },
     );
   }
 }

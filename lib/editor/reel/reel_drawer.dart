@@ -9,7 +9,7 @@ import 'package:mooltik/editor/reel/reel_context_menu.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 
-import 'frame_thumbnail.dart';
+import 'reel_row.dart';
 
 const double drawerWidth = 160.0;
 const double thumbnailHeight = 64.0;
@@ -143,7 +143,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
                   portal: AddInBetweenButton(
                     onPressed: reel.addFrameAfterSelected,
                   ),
-                  child: FrameThumbnail(
+                  child: ReelRow(
                     frame: frame,
                     selected: selected,
                   ),
