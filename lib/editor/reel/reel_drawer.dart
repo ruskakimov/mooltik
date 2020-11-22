@@ -98,19 +98,11 @@ class _ReelDrawerState extends State<ReelDrawer> {
       final padding = (constraints.maxHeight - thumbnailHeight) / 2;
       final lastIndex = reel.frames.length - 1;
 
-      final before = SizedBox(height: padding);
       final after = SizedBox(
-        height: padding,
-        child: Column(
-          children: [
-            SizedBox(
-              height: thumbnailHeight,
-              child: AppIconButton(
-                icon: FontAwesomeIcons.plusCircle,
-                onTap: reel.addFrame,
-              ),
-            ),
-          ],
+        height: thumbnailHeight,
+        child: AppIconButton(
+          icon: FontAwesomeIcons.plusCircle,
+          onTap: reel.addFrame,
         ),
       );
 
@@ -118,12 +110,17 @@ class _ReelDrawerState extends State<ReelDrawer> {
         controller: controller,
         itemCount: reel.frames.length,
         separatorBuilder: (context, index) => SizedBox(height: gap),
+        padding: EdgeInsets.only(
+          top: padding,
+          bottom: padding - thumbnailHeight,
+        ),
         itemBuilder: (context, index) {
           final frame = reel.frames[index];
           final selected = index == reel.selectedFrameId;
+
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (index == 0) before,
               SizedBox(
                 height: thumbnailHeight,
                 child: GestureDetector(
