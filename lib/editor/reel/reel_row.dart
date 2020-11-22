@@ -73,7 +73,7 @@ class _DurationPickerState extends State<_DurationPicker> {
   void initState() {
     super.initState();
     _controller =
-        FixedExtentScrollController(initialItem: widget.initialValue - 1);
+        FixedExtentScrollController(initialItem: indexFor(widget.initialValue));
   }
 
   @override
@@ -103,6 +103,10 @@ class _DurationPickerState extends State<_DurationPicker> {
       ),
     );
   }
+}
+
+int indexFor(int frames) {
+  return (frames - 1) % 24 + (frames - 1) ~/ 24;
 }
 
 int framesAt(int index) {
