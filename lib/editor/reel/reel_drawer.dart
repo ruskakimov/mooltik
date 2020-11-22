@@ -98,14 +98,6 @@ class _ReelDrawerState extends State<ReelDrawer> {
       final padding = (constraints.maxHeight - thumbnailHeight) / 2;
       final lastIndex = reel.frames.length - 1;
 
-      final after = SizedBox(
-        height: thumbnailHeight,
-        child: AppIconButton(
-          icon: FontAwesomeIcons.plusCircle,
-          onTap: reel.addFrame,
-        ),
-      );
-
       return ListView.separated(
         controller: controller,
         itemCount: reel.frames.length + 1,
@@ -115,7 +107,15 @@ class _ReelDrawerState extends State<ReelDrawer> {
           bottom: padding - thumbnailHeight,
         ),
         itemBuilder: (context, index) {
-          if (index == reel.frames.length) return after;
+          // Add frame button.
+          if (index == reel.frames.length)
+            return SizedBox(
+              height: thumbnailHeight,
+              child: AppIconButton(
+                icon: FontAwesomeIcons.plusCircle,
+                onTap: reel.addFrame,
+              ),
+            );
 
           final frame = reel.frames[index];
           final selected = index == reel.selectedFrameId;
