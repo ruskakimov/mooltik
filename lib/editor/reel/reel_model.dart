@@ -91,7 +91,10 @@ class ReelModel extends ChangeNotifier {
   */
 
   void addFrame() {
-    frames.add(FrameModel(size: frameSize));
+    frames.add(FrameModel(
+      size: frameSize,
+      duration: frames.last.duration,
+    ));
     _selectedFrameId = frames.length - 1;
     notifyListeners();
   }
