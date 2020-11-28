@@ -14,14 +14,11 @@ class Playhead extends StatelessWidget {
     );
 
     return Center(
-      child: Row(
+      child: Column(
         children: [
           Material(
             color: Theme.of(context).colorScheme.primary,
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(4),
-              bottomRight: Radius.circular(4),
-            ),
+            borderRadius: BorderRadius.circular(4),
             elevation: 1,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
@@ -37,7 +34,7 @@ class Playhead extends StatelessWidget {
           ),
           Expanded(
             child: SizedBox(
-              height: 2,
+              width: 2,
               child: Material(
                 color: Theme.of(context).colorScheme.primary,
                 elevation: 1,
