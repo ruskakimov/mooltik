@@ -134,13 +134,13 @@ class Playhead extends StatelessWidget {
         children: [
           Material(
             color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topRight: Radius.circular(4),
               bottomRight: Radius.circular(4),
             ),
             elevation: 1,
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
               child: Text(
                 '00:00.00',
                 style: TextStyle(
