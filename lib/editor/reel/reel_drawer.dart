@@ -75,7 +75,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
     context.watch<FrameModel>();
 
     return AnimatedBottomDrawer(
-      height: 160,
+      height: 120,
       open: widget.open,
       child: PortalEntry(
         visible: _contextMenuOpen,
@@ -123,14 +123,17 @@ class _ReelDrawerState extends State<ReelDrawer> {
           final frame = reel.frames[index];
           final selected = index == reel.selectedFrameId;
 
-          return Container(
-            width: durationToPx(frame.duration),
-            decoration: BoxDecoration(
-              color: selected ? Colors.white : Colors.white.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: Theme.of(context).colorScheme.surface,
-                width: 0.5,
+          return Center(
+            child: Container(
+              height: 60,
+              width: durationToPx(frame.duration),
+              decoration: BoxDecoration(
+                color: selected ? Colors.white : Colors.white.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.surface,
+                  width: 0.5,
+                ),
               ),
             ),
           );
