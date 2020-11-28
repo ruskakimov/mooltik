@@ -27,6 +27,8 @@ class _ReelDrawerState extends State<ReelDrawer> {
 
   ReelModel get reel => context.read<ReelModel>();
 
+  double msPerPx = 20;
+
   @override
   void initState() {
     super.initState();
@@ -35,11 +37,13 @@ class _ReelDrawerState extends State<ReelDrawer> {
   }
 
   void _onScroll() {
-    reel.playheadPosition = offsetToDuration(controller.offset);
+    reel.playheadPosition = pxToDuration(controller.offset);
   }
 
-  Duration offsetToDuration(double offset) =>
-      Duration(milliseconds: (offset * 20).floor());
+  Duration pxToDuration(double offset) =>
+      Duration(milliseconds: (offset * msPerPx).floor());
+
+  double durationToPx(Duration duration) => duration.inMilliseconds / msPerPx;
 
   @override
   void didChangeDependencies() {
