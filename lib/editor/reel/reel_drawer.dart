@@ -86,7 +86,12 @@ class _ReelDrawerState extends State<ReelDrawer> {
         portalAnchor: Alignment.centerLeft,
         childAnchor: Alignment.centerRight,
         portal: ReelContextMenu(),
-        child: _buildList(),
+        child: Stack(
+          children: [
+            _buildList(),
+            Playhead(),
+          ],
+        ),
       ),
     );
   }
@@ -154,6 +159,28 @@ class _ReelDrawerState extends State<ReelDrawer> {
         },
       );
     });
+  }
+}
+
+class Playhead extends StatelessWidget {
+  const Playhead({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        height: 2,
+        color: Theme.of(context).colorScheme.background,
+        child: Center(
+          child: Container(
+            height: 1.5,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+      ),
+    );
   }
 }
 
