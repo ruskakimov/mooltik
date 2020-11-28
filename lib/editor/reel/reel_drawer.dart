@@ -74,8 +74,8 @@ class _ReelDrawerState extends State<ReelDrawer> {
     // Update when selected frame is painted on.
     context.watch<FrameModel>();
 
-    return AnimatedLeftDrawer(
-      width: 160,
+    return AnimatedBottomDrawer(
+      height: 160,
       open: widget.open,
       child: PortalEntry(
         visible: _contextMenuOpen,
