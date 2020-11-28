@@ -138,7 +138,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
       final concatDemuxer = File(dir.path + '/concat.txt');
       String content = '';
       for (int i = 0; i < frames.length; i++) {
-        final durationInSeconds = frames[i].duration / 24.0;
+        final durationInSeconds = frames[i].duration.inMilliseconds / 1000;
         content +=
             'file \'${pngFiles[i].path}\'\nduration ${durationInSeconds.toStringAsFixed(6)}\n';
       }

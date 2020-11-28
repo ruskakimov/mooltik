@@ -14,7 +14,7 @@ Future<List<int>> makeGif(List<FrameModel> frames) async {
 
   for (final frame in frames) {
     final img = await imageFromFrame(frame);
-    encoder.addFrame(img, duration: 4 * frame.duration);
+    encoder.addFrame(img, duration: frame.duration.inMilliseconds ~/ 10);
   }
 
   return encoder.finish();
