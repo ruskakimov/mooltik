@@ -27,7 +27,9 @@ class _ReelDrawerState extends State<ReelDrawer> {
 
   ReelModel get reel => context.read<ReelModel>();
 
-  double msPerPx = 20;
+  double msPerPx = 10;
+  double _prevMsPerPx = 10;
+  double _scaleOffset;
 
   @override
   void initState() {
@@ -80,11 +82,25 @@ class _ReelDrawerState extends State<ReelDrawer> {
         portalAnchor: Alignment.centerLeft,
         childAnchor: Alignment.centerRight,
         portal: ReelContextMenu(),
-        child: Stack(
-          children: [
-            _buildList(),
-            Playhead(),
-          ],
+        child: GestureDetector(
+          onScaleStart: (ScaleStartDetails details) {
+            _prevMsPerPx = msPerPx;
+          },
+          onScaleUpdate: (ScaleUpdateDetails details) {
+            _scaleOffset ??= 1 - details.scale;
+            setState(() {
+              msPerPx = _prevMsPerPx / (details.scale + _scaleOffset);
+            });
+          },
+          onScaleEnd: (ScaleEndDetails details) {
+            _scaleOffset = null;
+          },
+          child: Stack(
+            children: [
+              _buildList(),
+              Playhead(),
+            ],
+          ),
         ),
       ),
     );
