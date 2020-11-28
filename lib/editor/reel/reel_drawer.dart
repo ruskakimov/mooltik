@@ -85,15 +85,18 @@ class _ReelDrawerState extends State<ReelDrawer> {
         child: GestureDetector(
           onScaleStart: (ScaleStartDetails details) {
             _prevMsPerPx = msPerPx;
+            controller.removeListener(_onScroll);
           },
           onScaleUpdate: (ScaleUpdateDetails details) {
             _scaleOffset ??= 1 - details.scale;
             setState(() {
               msPerPx = _prevMsPerPx / (details.scale + _scaleOffset);
+              controller.jumpTo(durationToPx(reel.playheadPosition));
             });
           },
           onScaleEnd: (ScaleEndDetails details) {
             _scaleOffset = null;
+            controller.addListener(_onScroll);
           },
           child: Stack(
             children: [
