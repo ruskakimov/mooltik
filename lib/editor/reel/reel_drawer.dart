@@ -113,13 +113,24 @@ class _ReelDrawerState extends State<ReelDrawer> {
     final reel = context.watch<ReelModel>();
 
     return LayoutBuilder(builder: (context, constraints) {
+      final double halfWidth = constraints.maxWidth / 2;
+
       return ListView.builder(
         scrollDirection: Axis.horizontal,
         physics: BouncingScrollPhysics(),
         controller: controller,
-        itemCount: reel.frames.length,
-        padding: EdgeInsets.symmetric(horizontal: constraints.maxWidth / 2),
+        itemCount: reel.frames.length + 1,
+        padding: EdgeInsets.only(
+          left: halfWidth,
+          right: halfWidth - 60,
+        ),
         itemBuilder: (context, index) {
+          if (index == reel.frames.length) {
+            return Center(
+              child: AddFrameButton(),
+            );
+          }
+
           final frame = reel.frames[index];
           final selected = index == reel.selectedFrameId;
 
@@ -140,6 +151,37 @@ class _ReelDrawerState extends State<ReelDrawer> {
         },
       );
     });
+  }
+}
+
+class AddFrameButton extends StatelessWidget {
+  const AddFrameButton({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        context.read<ReelModel>().addFrame();
+      },
+      child: Container(
+        height: 60,
+        width: 60,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.secondaryVariant,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.surface,
+            width: 0.5,
+          ),
+        ),
+        child: Icon(
+          Icons.add,
+          color: Theme.of(context).colorScheme.onSecondary,
+        ),
+      ),
+    );
   }
 }
 
