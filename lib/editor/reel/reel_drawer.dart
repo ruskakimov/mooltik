@@ -33,7 +33,12 @@ class _ReelDrawerState extends State<ReelDrawer> {
       ..addListener(_onScroll);
   }
 
-  void _onScroll() {}
+  void _onScroll() {
+    reel.playheadPosition = offsetToDuration(controller.offset);
+  }
+
+  Duration offsetToDuration(double offset) =>
+      Duration(milliseconds: (offset * 20).floor());
 
   @override
   void didChangeDependencies() {
@@ -122,16 +127,40 @@ class Playhead extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final reel = context.watch<ReelModel>();
+
     return Center(
-      child: Container(
-        height: 2,
-        color: Theme.of(context).colorScheme.background,
-        child: Center(
-          child: Container(
-            height: 1.5,
+      child: Row(
+        children: [
+          Material(
             color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(4),
+              bottomRight: Radius.circular(4),
+            ),
+            elevation: 1,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+              child: Text(
+                '00:00.00',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ),
-        ),
+          Expanded(
+            child: SizedBox(
+              height: 2,
+              child: Material(
+                color: Theme.of(context).colorScheme.primary,
+                elevation: 1,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

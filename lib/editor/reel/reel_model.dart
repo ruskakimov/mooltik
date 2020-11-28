@@ -45,6 +45,13 @@ class ReelModel extends ChangeNotifier {
   Playback:
   */
 
+  Duration get playheadPosition => _playheadPosition;
+  Duration _playheadPosition = Duration.zero;
+  set playheadPosition(Duration position) {
+    _playheadPosition = position;
+    notifyListeners();
+  }
+
   bool get playing => _playing;
   bool _playing = false;
   int _selectedFrameIdBeforePlaying;
