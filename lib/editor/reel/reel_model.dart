@@ -48,7 +48,9 @@ class ReelModel extends ChangeNotifier {
   Duration get playheadPosition => _playheadPosition;
   Duration _playheadPosition = Duration.zero;
   set playheadPosition(Duration position) {
-    _playheadPosition = position;
+    _playheadPosition = Duration(
+      milliseconds: position.inMilliseconds.clamp(0, 12000),
+    );
     notifyListeners();
   }
 
