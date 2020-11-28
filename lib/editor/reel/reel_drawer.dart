@@ -104,7 +104,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
           final selected = index == reel.selectedFrameId;
 
           return Container(
-            height: frame.duration * 60.0,
+            height: frame.duration * 120.0,
             decoration: BoxDecoration(
               color: selected ? Colors.white : Colors.white.withOpacity(0.5),
               borderRadius: BorderRadius.circular(8),
@@ -127,7 +127,9 @@ class Playhead extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reel = context.watch<ReelModel>();
+    final Duration playheadPosition = context.select<ReelModel, Duration>(
+      (ReelModel reel) => reel.playheadPosition,
+    );
 
     return Center(
       child: Row(
@@ -142,7 +144,7 @@ class Playhead extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
               child: Text(
-                '00:00.00',
+                durationToLabel(playheadPosition),
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onPrimary,
                   fontSize: 14,
@@ -163,6 +165,14 @@ class Playhead extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String durationToLabel(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String min = twoDigits(duration.inMinutes);
+    String sec = twoDigits(duration.inSeconds.remainder(60));
+    String secFr = twoDigits(duration.inMilliseconds.remainder(1000) ~/ 10);
+    return '$min:$sec.$secFr';
   }
 }
 
