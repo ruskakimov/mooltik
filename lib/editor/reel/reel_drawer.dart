@@ -122,12 +122,15 @@ class _ReelDrawerState extends State<ReelDrawer> {
         itemCount: reel.frames.length + 1,
         padding: EdgeInsets.only(
           left: halfWidth,
-          right: halfWidth - 60,
+          right: halfWidth - 62,
         ),
         itemBuilder: (context, index) {
           if (index == reel.frames.length) {
             return Center(
-              child: AddFrameButton(),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 2.0),
+                child: AddFrameButton(),
+              ),
             );
           }
 
@@ -161,24 +164,21 @@ class AddFrameButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.read<ReelModel>().addFrame();
-      },
-      child: Container(
-        height: 60,
-        width: 60,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondaryVariant,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: Theme.of(context).colorScheme.surface,
-            width: 0.5,
+    return Material(
+      color: Theme.of(context).colorScheme.secondaryVariant,
+      borderRadius: BorderRadius.circular(8),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () {
+          context.read<ReelModel>().addFrame();
+        },
+        child: SizedBox(
+          height: 60,
+          width: 60,
+          child: Icon(
+            Icons.add,
+            color: Theme.of(context).colorScheme.onSecondary,
           ),
-        ),
-        child: Icon(
-          Icons.add,
-          color: Theme.of(context).colorScheme.onSecondary,
         ),
       ),
     );
