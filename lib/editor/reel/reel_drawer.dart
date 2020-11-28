@@ -87,6 +87,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
       final padding = constraints.maxHeight / 2;
 
       return ListView.builder(
+        physics: BouncingScrollPhysics(),
         controller: controller,
         itemCount: reel.frames.length,
         padding: EdgeInsets.only(
