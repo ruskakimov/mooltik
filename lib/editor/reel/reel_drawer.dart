@@ -113,22 +113,18 @@ class _ReelDrawerState extends State<ReelDrawer> {
     final reel = context.watch<ReelModel>();
 
     return LayoutBuilder(builder: (context, constraints) {
-      final padding = constraints.maxHeight / 2;
-
       return ListView.builder(
+        scrollDirection: Axis.horizontal,
         physics: BouncingScrollPhysics(),
         controller: controller,
         itemCount: reel.frames.length,
-        padding: EdgeInsets.only(
-          top: padding,
-          bottom: padding,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: constraints.maxWidth / 2),
         itemBuilder: (context, index) {
           final frame = reel.frames[index];
           final selected = index == reel.selectedFrameId;
 
           return Container(
-            height: durationToPx(frame.duration),
+            width: durationToPx(frame.duration),
             decoration: BoxDecoration(
               color: selected ? Colors.white : Colors.white.withOpacity(0.5),
               borderRadius: BorderRadius.circular(8),
