@@ -98,8 +98,15 @@ class _ReelDrawerState extends State<ReelDrawer> {
           final selected = index == reel.selectedFrameId;
 
           return Container(
-            height: frame.duration * 24.0,
-            color: selected ? Colors.white : Colors.white.withOpacity(0.5),
+            height: frame.duration * 60.0,
+            decoration: BoxDecoration(
+              color: selected ? Colors.white : Colors.white.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.surface,
+                width: 0.5,
+              ),
+            ),
           );
         },
       );
