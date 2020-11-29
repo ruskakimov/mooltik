@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/frame/frame_painter.dart';
+import 'package:mooltik/editor/frame/frame_thumbnail.dart';
 
 class FrameSliver extends StatelessWidget {
   const FrameSliver({
@@ -33,13 +34,7 @@ class FrameSliver extends StatelessWidget {
         ),
         child: Align(
           alignment: Alignment.centerLeft,
-          child: CustomPaint(
-            size: Size(
-              height / frame.height * frame.width,
-              height,
-            ),
-            painter: FramePainter(frame: frame),
-          ),
+          child: FrameThumbnail(frame: frame),
         ),
       ),
     );
