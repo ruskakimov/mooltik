@@ -21,20 +21,22 @@ class FrameSliver extends StatelessWidget {
   Widget build(BuildContext context) {
     return Opacity(
       opacity: selected ? 1 : 0.5,
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: Theme.of(context).colorScheme.surface,
-            width: 0.5,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: Theme.of(context).colorScheme.surface,
+              width: 0.5,
+            ),
           ),
-        ),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: FrameThumbnail(frame: frame),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: FrameThumbnail(frame: frame),
+          ),
         ),
       ),
     );
