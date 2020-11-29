@@ -11,6 +11,10 @@ class ReelModel extends ChangeNotifier {
     _selectedFrameId = 0;
     _selectedFrameStart = Duration.zero;
     _selectedFrameEnd = frames.first.duration;
+    _totalDuration = initialFrames.fold(
+      Duration.zero,
+      (total, frame) => total + frame.duration,
+    );
   }
 
   final Size frameSize;
@@ -27,6 +31,8 @@ class ReelModel extends ChangeNotifier {
   int _selectedFrameId;
   Duration _selectedFrameStart;
   Duration _selectedFrameEnd;
+
+  Duration _totalDuration;
 
   FrameModel get selectedFrame => frames[_selectedFrameId];
 
@@ -50,8 +56,7 @@ class ReelModel extends ChangeNotifier {
     _playheadPosition = Duration(
       milliseconds: position.inMilliseconds.clamp(
         0,
-        // TODO: Use total duration
-        12000,
+        _totalDuration.inMilliseconds,
       ),
     );
     if (_playheadPosition < _selectedFrameStart) {
@@ -99,10 +104,12 @@ class ReelModel extends ChangeNotifier {
   */
 
   void addFrame() {
+    final newFrameDuration = frames.last.duration;
     frames.add(FrameModel(
       size: frameSize,
-      duration: frames.last.duration,
+      duration: newFrameDuration,
     ));
+    _totalDuration += newFrameDuration;
     notifyListeners();
   }
 
