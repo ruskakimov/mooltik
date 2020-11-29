@@ -7,14 +7,20 @@ class ReelModel extends ChangeNotifier {
     this.frameSize = const Size(1280, 720),
     List<FrameModel> initialFrames,
   })  : assert(frameSize != null),
-        frames = initialFrames ?? [FrameModel(size: frameSize)];
+        frames = initialFrames ?? [FrameModel(size: frameSize)] {
+    _selectedFrameId = 0;
+    _selectedFrameStart = Duration.zero;
+    _selectedFrameEnd = frames.first.duration;
+  }
 
   final Size frameSize;
 
   List<FrameModel> frames;
 
   int get selectedFrameId => _selectedFrameId;
-  int _selectedFrameId = 0;
+  int _selectedFrameId;
+  Duration _selectedFrameStart;
+  Duration _selectedFrameEnd;
 
   FrameModel get selectedFrame => frames[_selectedFrameId];
 
