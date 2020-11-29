@@ -17,6 +17,12 @@ class ReelModel extends ChangeNotifier {
 
   List<FrameModel> frames;
 
+  FrameModel _copiedFrame;
+
+  /*
+  Navigation:
+  */
+
   int get selectedFrameId => _selectedFrameId;
   int _selectedFrameId;
   Duration _selectedFrameStart;
@@ -24,32 +30,19 @@ class ReelModel extends ChangeNotifier {
 
   FrameModel get selectedFrame => frames[_selectedFrameId];
 
-  FrameModel _copiedFrame;
-
-  /*
-  Onion:
-  */
-
-  bool get onion => _onion;
-  bool _onion = true;
-  set onion(bool value) {
-    _onion = value;
-    notifyListeners();
+  void _selectNextFrame() {
+    if (_selectedFrameId == frames.length - 1) return;
+    _selectedFrameId++;
+    _selectedFrameStart = _selectedFrameEnd;
+    _selectedFrameEnd += selectedFrame.duration;
   }
 
-  FrameModel get frameBefore {
-    if (playing || !onion || _selectedFrameId == 0) return null;
-    return frames[_selectedFrameId - 1];
+  void _selectPrevFrame() {
+    if (_selectedFrameId == 0) return;
+    _selectedFrameId--;
+    _selectedFrameEnd = _selectedFrameStart;
+    _selectedFrameStart -= selectedFrame.duration;
   }
-
-  FrameModel get frameAfter {
-    if (playing || !onion || _selectedFrameId == frames.length - 1) return null;
-    return frames[_selectedFrameId + 1];
-  }
-
-  /*
-  Playback:
-  */
 
   Duration get playheadPosition => _playheadPosition;
   Duration _playheadPosition = Duration.zero;
@@ -61,8 +54,17 @@ class ReelModel extends ChangeNotifier {
         12000,
       ),
     );
+    if (_playheadPosition < _selectedFrameStart) {
+      _selectPrevFrame();
+    } else if (_selectedFrameEnd < _playheadPosition) {
+      _selectNextFrame();
+    }
     notifyListeners();
   }
+
+  /*
+  Playback:
+  */
 
   bool get playing => _playing;
   bool _playing = false;
@@ -93,17 +95,6 @@ class ReelModel extends ChangeNotifier {
   }
 
   /*
-  Navigation:
-  */
-
-  void selectFrame(int id) {
-    assert(id >= 0 && id < frames.length);
-    if (id < 0 || id >= frames.length) return;
-    _selectedFrameId = id;
-    notifyListeners();
-  }
-
-  /*
   Operations:
   */
 
@@ -112,7 +103,6 @@ class ReelModel extends ChangeNotifier {
       size: frameSize,
       duration: frames.last.duration,
     ));
-    _selectedFrameId = frames.length - 1;
     notifyListeners();
   }
 
@@ -153,5 +143,26 @@ class ReelModel extends ChangeNotifier {
       initialSnapshot: _copiedFrame.snapshot,
     );
     notifyListeners();
+  }
+
+  /*
+  Onion:
+  */
+
+  bool get onion => _onion;
+  bool _onion = true;
+  set onion(bool value) {
+    _onion = value;
+    notifyListeners();
+  }
+
+  FrameModel get frameBefore {
+    if (playing || !onion || _selectedFrameId == 0) return null;
+    return frames[_selectedFrameId - 1];
+  }
+
+  FrameModel get frameAfter {
+    if (playing || !onion || _selectedFrameId == frames.length - 1) return null;
+    return frames[_selectedFrameId + 1];
   }
 }
