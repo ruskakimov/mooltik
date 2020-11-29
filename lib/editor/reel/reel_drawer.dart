@@ -127,6 +127,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
         itemBuilder: (context, index) {
           if (index == reel.frames.length) {
             return Center(
+              key: Key('add'),
               child: Padding(
                 padding: const EdgeInsets.only(left: 2.0),
                 child: AddFrameButton(),
@@ -138,6 +139,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
           final selected = index == reel.selectedFrameId;
 
           return Center(
+            key: Key('${frame.id}'),
             child: Container(
               height: 60,
               width: durationToPx(frame.duration),
