@@ -4,9 +4,10 @@ import 'package:flutter_portal/flutter_portal.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
-import 'package:mooltik/editor/frame/frame_painter.dart';
-import 'package:mooltik/editor/reel/playhead.dart';
-import 'package:mooltik/editor/reel/reel_context_menu.dart';
+import 'package:mooltik/editor/reel/widgets/add_frame_button.dart';
+import 'package:mooltik/editor/reel/widgets/frame_sliver.dart';
+import 'package:mooltik/editor/reel/widgets/playhead.dart';
+import 'package:mooltik/editor/reel/widgets/reel_context_menu.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 
@@ -149,78 +150,6 @@ class _ReelDrawerState extends State<ReelDrawer> {
         },
       );
     });
-  }
-}
-
-class FrameSliver extends StatelessWidget {
-  const FrameSliver({
-    Key key,
-    @required this.frame,
-    @required this.width,
-    this.height = 60,
-    @required this.selected,
-  }) : super(key: key);
-
-  final FrameModel frame;
-  final double width;
-  final double height;
-  final bool selected;
-
-  @override
-  Widget build(BuildContext context) {
-    return Opacity(
-      opacity: selected ? 1 : 0.5,
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: Theme.of(context).colorScheme.surface,
-            width: 0.5,
-          ),
-        ),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: CustomPaint(
-            size: Size(
-              height / frame.height * frame.width,
-              height,
-            ),
-            painter: FramePainter(frame: frame),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class AddFrameButton extends StatelessWidget {
-  const AddFrameButton({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Theme.of(context).colorScheme.secondaryVariant,
-      borderRadius: BorderRadius.circular(8),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () {
-          context.read<ReelModel>().addFrame();
-        },
-        child: SizedBox(
-          height: 60,
-          width: 60,
-          child: Icon(
-            Icons.add,
-            color: Theme.of(context).colorScheme.onSecondary,
-          ),
-        ),
-      ),
-    );
   }
 }
 
