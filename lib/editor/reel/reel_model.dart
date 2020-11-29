@@ -11,7 +11,7 @@ class ReelModel extends ChangeNotifier {
     _selectedFrameId = 0;
     _selectedFrameStart = Duration.zero;
     _selectedFrameEnd = frames.first.duration;
-    _totalDuration = initialFrames.fold(
+    _totalDuration = frames.fold(
       Duration.zero,
       (total, frame) => total + frame.duration,
     );
