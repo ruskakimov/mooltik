@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
-import 'package:mooltik/editor/frame/frame_painter.dart';
 import 'package:mooltik/editor/frame/frame_thumbnail.dart';
 
 class FrameSliver extends StatelessWidget {
