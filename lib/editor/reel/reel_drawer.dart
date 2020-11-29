@@ -4,6 +4,7 @@ import 'package:flutter_portal/flutter_portal.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
+import 'package:mooltik/editor/frame/frame_painter.dart';
 import 'package:mooltik/editor/reel/playhead.dart';
 import 'package:mooltik/editor/reel/reel_context_menu.dart';
 import 'package:provider/provider.dart';
@@ -156,24 +157,39 @@ class FrameSliver extends StatelessWidget {
     Key key,
     @required this.frame,
     @required this.width,
+    this.height = 60,
     @required this.selected,
   }) : super(key: key);
 
   final FrameModel frame;
   final double width;
+  final double height;
   final bool selected;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      width: width,
-      decoration: BoxDecoration(
-        color: selected ? Colors.white : Colors.white.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.surface,
-          width: 0.5,
+    return Opacity(
+      opacity: selected ? 1 : 0.5,
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.surface,
+            width: 0.5,
+          ),
+        ),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: CustomPaint(
+            size: Size(
+              height / frame.height * frame.width,
+              height,
+            ),
+            painter: FramePainter(frame: frame),
+          ),
         ),
       ),
     );
