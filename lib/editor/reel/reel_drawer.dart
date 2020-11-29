@@ -136,26 +136,47 @@ class _ReelDrawerState extends State<ReelDrawer> {
           }
 
           final frame = reel.frames[index];
-          final selected = index == reel.selectedFrameId;
 
           return Center(
             key: Key('${frame.id}'),
-            child: Container(
-              height: 60,
+            child: FrameSliver(
+              frame: frame,
               width: durationToPx(frame.duration),
-              decoration: BoxDecoration(
-                color: selected ? Colors.white : Colors.white.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.surface,
-                  width: 0.5,
-                ),
-              ),
+              selected: index == reel.selectedFrameId,
             ),
           );
         },
       );
     });
+  }
+}
+
+class FrameSliver extends StatelessWidget {
+  const FrameSliver({
+    Key key,
+    @required this.frame,
+    @required this.width,
+    @required this.selected,
+  }) : super(key: key);
+
+  final FrameModel frame;
+  final double width;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 60,
+      width: width,
+      decoration: BoxDecoration(
+        color: selected ? Colors.white : Colors.white.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.surface,
+          width: 0.5,
+        ),
+      ),
+    );
   }
 }
 
