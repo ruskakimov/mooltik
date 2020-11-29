@@ -43,7 +43,7 @@ class _ReelDrawerState extends State<ReelDrawer> {
   }
 
   Duration pxToDuration(double offset) =>
-      Duration(milliseconds: (offset * msPerPx).floor());
+      Duration(milliseconds: (offset * msPerPx).round());
 
   double durationToPx(Duration duration) => duration.inMilliseconds / msPerPx;
 
