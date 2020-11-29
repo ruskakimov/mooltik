@@ -3,17 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
-import 'package:mooltik/common/app_icon_button.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
-import 'package:mooltik/editor/reel/reel_context_menu.dart';
+import 'package:mooltik/editor/reel/widgets/add_frame_button.dart';
+import 'package:mooltik/editor/reel/widgets/frame_sliver.dart';
+import 'package:mooltik/editor/reel/widgets/playhead.dart';
+import 'package:mooltik/editor/reel/widgets/reel_context_menu.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
-
-import 'reel_row.dart';
-
-const double drawerWidth = 160.0;
-const double thumbnailHeight = 64.0;
-const double gap = 1.0;
 
 class ReelDrawer extends StatefulWidget {
   const ReelDrawer({
@@ -33,38 +29,36 @@ class _ReelDrawerState extends State<ReelDrawer> {
 
   ReelModel get reel => context.read<ReelModel>();
 
-  int get selectedId => (controller.offset / (thumbnailHeight + gap)).round();
+  double msPerPx = 10;
+  double _prevMsPerPx = 10;
+  double _scaleOffset;
 
   @override
   void initState() {
     super.initState();
-    controller = ScrollController(
-      initialScrollOffset: reel.selectedFrameId * thumbnailHeight,
-    )..addListener(_onScroll);
+    controller = ScrollController(initialScrollOffset: 0)
+      ..addListener(_onScroll);
   }
 
   void _onScroll() {
-    reel.selectFrame(selectedId);
+    reel.playheadPosition = pxToDuration(controller.offset);
   }
+
+  Duration pxToDuration(double offset) =>
+      Duration(milliseconds: (offset * msPerPx).round());
+
+  double durationToPx(Duration duration) => duration.inMilliseconds / msPerPx;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (controller.hasClients &&
-        selectedId != reel.selectedFrameId &&
-        !reel.playing) {
-      controller.removeListener(_onScroll);
-      _scrollTo(reel.selectedFrameId);
-      controller.addListener(_onScroll);
-    }
-  }
-
-  void _scrollTo(int index) {
-    controller.animateTo(
-      index * (thumbnailHeight + gap),
-      duration: Duration(milliseconds: 150),
-      curve: Curves.easeOut,
-    );
+    // if (controller.hasClients &&
+    //     selectedId != reel.selectedFrameId &&
+    //     !reel.playing) {
+    //   controller.removeListener(_onScroll);
+    //   _scrollTo(reel.selectedFrameId);
+    //   controller.addListener(_onScroll);
+    // }
   }
 
   @override
@@ -73,20 +67,46 @@ class _ReelDrawerState extends State<ReelDrawer> {
     super.dispose();
   }
 
+  void toggleMenu() {
+    setState(() => _contextMenuOpen = !_contextMenuOpen);
+  }
+
   @override
   Widget build(BuildContext context) {
     // Update when selected frame is painted on.
     context.watch<FrameModel>();
 
-    return AnimatedLeftDrawer(
-      width: drawerWidth,
+    return AnimatedBottomDrawer(
+      height: 120,
       open: widget.open,
       child: PortalEntry(
         visible: _contextMenuOpen,
         portalAnchor: Alignment.centerLeft,
         childAnchor: Alignment.centerRight,
         portal: ReelContextMenu(),
-        child: _buildList(),
+        child: GestureDetector(
+          onScaleStart: (ScaleStartDetails details) {
+            _prevMsPerPx = msPerPx;
+            controller.removeListener(_onScroll);
+          },
+          onScaleUpdate: (ScaleUpdateDetails details) {
+            _scaleOffset ??= 1 - details.scale;
+            setState(() {
+              msPerPx = _prevMsPerPx / (details.scale + _scaleOffset);
+              controller.jumpTo(durationToPx(reel.playheadPosition));
+            });
+          },
+          onScaleEnd: (ScaleEndDetails details) {
+            _scaleOffset = null;
+            controller.addListener(_onScroll);
+          },
+          child: Stack(
+            children: [
+              _buildList(),
+              Playhead(),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -95,60 +115,36 @@ class _ReelDrawerState extends State<ReelDrawer> {
     final reel = context.watch<ReelModel>();
 
     return LayoutBuilder(builder: (context, constraints) {
-      final padding = (constraints.maxHeight - thumbnailHeight) / 2;
-      final lastIndex = reel.frames.length - 1;
+      final double halfWidth = constraints.maxWidth / 2;
 
-      return ListView.separated(
+      return ListView.builder(
+        scrollDirection: Axis.horizontal,
+        physics: BouncingScrollPhysics(),
         controller: controller,
         itemCount: reel.frames.length + 1,
-        separatorBuilder: (context, index) => SizedBox(height: gap),
         padding: EdgeInsets.only(
-          top: padding,
-          bottom: padding - thumbnailHeight,
+          left: halfWidth,
+          right: halfWidth - 62,
         ),
         itemBuilder: (context, index) {
-          // Add frame button.
-          if (index == reel.frames.length)
-            return SizedBox(
-              height: thumbnailHeight,
-              child: AppIconButton(
-                icon: FontAwesomeIcons.plusCircle,
-                onTap: reel.addFrame,
+          if (index == reel.frames.length) {
+            return Center(
+              key: Key('add'),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 2.0),
+                child: AddFrameButton(),
               ),
             );
+          }
 
           final frame = reel.frames[index];
-          final selected = index == reel.selectedFrameId;
 
-          return SizedBox(
-            height: thumbnailHeight,
-            child: GestureDetector(
-              onTap: () {
-                if (selected) {
-                  setState(() => _contextMenuOpen = !_contextMenuOpen);
-                }
-                _scrollTo(index);
-              },
-              child: PortalEntry(
-                visible: selected && _contextMenuOpen,
-                childAnchor: Alignment.topCenter,
-                portalAnchor: Alignment.center,
-                portal: AddInBetweenButton(
-                  onPressed: reel.addFrameBeforeSelected,
-                ),
-                child: PortalEntry(
-                  visible: selected && _contextMenuOpen && index != lastIndex,
-                  childAnchor: Alignment.bottomCenter,
-                  portalAnchor: Alignment.center,
-                  portal: AddInBetweenButton(
-                    onPressed: reel.addFrameAfterSelected,
-                  ),
-                  child: ReelRow(
-                    frame: frame,
-                    selected: selected,
-                  ),
-                ),
-              ),
+          return Center(
+            key: Key('${frame.id}'),
+            child: FrameSliver(
+              frame: frame,
+              width: durationToPx(frame.duration),
+              selected: index == reel.selectedFrameId,
             ),
           );
         },

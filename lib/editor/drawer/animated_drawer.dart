@@ -8,8 +8,8 @@ enum DrawerPosition {
   right,
 }
 
-abstract class AnimatedDrawer extends StatelessWidget {
-  const AnimatedDrawer({
+abstract class AnimatedSideDrawer extends StatelessWidget {
+  const AnimatedSideDrawer({
     Key key,
     @required this.width,
     @required this.position,
@@ -53,7 +53,7 @@ abstract class AnimatedDrawer extends StatelessWidget {
   }
 }
 
-class AnimatedLeftDrawer extends AnimatedDrawer {
+class AnimatedLeftDrawer extends AnimatedSideDrawer {
   const AnimatedLeftDrawer({
     Key key,
     @required double width,
@@ -68,7 +68,7 @@ class AnimatedLeftDrawer extends AnimatedDrawer {
         );
 }
 
-class AnimatedRightDrawer extends AnimatedDrawer {
+class AnimatedRightDrawer extends AnimatedSideDrawer {
   const AnimatedRightDrawer({
     Key key,
     @required double width,
@@ -81,4 +81,36 @@ class AnimatedRightDrawer extends AnimatedDrawer {
           open: open,
           child: child,
         );
+}
+
+class AnimatedBottomDrawer extends StatelessWidget {
+  const AnimatedBottomDrawer({
+    Key key,
+    @required this.height,
+    @required this.open,
+    this.child,
+  }) : super(key: key);
+
+  final double height;
+  final bool open;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final double bottomOffset = open ? 0 : -height;
+
+    return AnimatedPositioned(
+      duration: drawerTransitionDuration,
+      curve: Curves.easeInOut,
+      left: 0,
+      right: 0,
+      bottom: bottomOffset,
+      height: height,
+      child: RepaintBoundary(
+        child: Surface(
+          child: child,
+        ),
+      ),
+    );
+  }
 }

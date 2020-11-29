@@ -7,38 +7,64 @@ class ReelModel extends ChangeNotifier {
     this.frameSize = const Size(1280, 720),
     List<FrameModel> initialFrames,
   })  : assert(frameSize != null),
-        frames = initialFrames ?? [FrameModel(size: frameSize)];
+        frames = initialFrames ?? [FrameModel(size: frameSize)] {
+    _selectedFrameId = 0;
+    _selectedFrameStart = Duration.zero;
+    _selectedFrameEnd = frames.first.duration;
+    _totalDuration = initialFrames.fold(
+      Duration.zero,
+      (total, frame) => total + frame.duration,
+    );
+  }
 
   final Size frameSize;
 
   List<FrameModel> frames;
 
-  int get selectedFrameId => _selectedFrameId;
-  int _selectedFrameId = 0;
-
-  FrameModel get selectedFrame => frames[_selectedFrameId];
-
   FrameModel _copiedFrame;
 
   /*
-  Onion:
+  Navigation:
   */
 
-  bool get onion => _onion;
-  bool _onion = true;
-  set onion(bool value) {
-    _onion = value;
+  int get selectedFrameId => _selectedFrameId;
+  int _selectedFrameId;
+  Duration _selectedFrameStart;
+  Duration _selectedFrameEnd;
+
+  Duration _totalDuration;
+
+  FrameModel get selectedFrame => frames[_selectedFrameId];
+
+  void _selectNextFrame() {
+    if (_selectedFrameId == frames.length - 1) return;
+    _selectedFrameId++;
+    _selectedFrameStart = _selectedFrameEnd;
+    _selectedFrameEnd += selectedFrame.duration;
+  }
+
+  void _selectPrevFrame() {
+    if (_selectedFrameId == 0) return;
+    _selectedFrameId--;
+    _selectedFrameEnd = _selectedFrameStart;
+    _selectedFrameStart -= selectedFrame.duration;
+  }
+
+  Duration get playheadPosition => _playheadPosition;
+  Duration _playheadPosition = Duration.zero;
+  set playheadPosition(Duration position) {
+    _playheadPosition = Duration(
+      milliseconds: position.inMilliseconds.clamp(
+        0,
+        _totalDuration.inMilliseconds,
+      ),
+    );
+    if (_playheadPosition < _selectedFrameStart) {
+      _selectPrevFrame();
+    } else if (_selectedFrameEnd < _playheadPosition) {
+      _selectNextFrame();
+    }
     notifyListeners();
-  }
-
-  FrameModel get frameBefore {
-    if (playing || !onion || _selectedFrameId == 0) return null;
-    return frames[_selectedFrameId - 1];
-  }
-
-  FrameModel get frameAfter {
-    if (playing || !onion || _selectedFrameId == frames.length - 1) return null;
-    return frames[_selectedFrameId + 1];
   }
 
   /*
@@ -58,9 +84,7 @@ class ReelModel extends ChangeNotifier {
 
   void _animate() async {
     if (!_playing) return;
-    await Future.delayed(
-      Duration(microseconds: 41666 * selectedFrame.duration),
-    );
+    await Future.delayed(selectedFrame.duration);
     if (!_playing) return;
 
     _selectedFrameId = (_selectedFrameId + 1) % frames.length;
@@ -76,26 +100,16 @@ class ReelModel extends ChangeNotifier {
   }
 
   /*
-  Navigation:
-  */
-
-  void selectFrame(int id) {
-    assert(id >= 0 && id < frames.length);
-    if (id < 0 || id >= frames.length) return;
-    _selectedFrameId = id;
-    notifyListeners();
-  }
-
-  /*
   Operations:
   */
 
   void addFrame() {
+    final newFrameDuration = frames.last.duration;
     frames.add(FrameModel(
       size: frameSize,
-      duration: frames.last.duration,
+      duration: newFrameDuration,
     ));
-    _selectedFrameId = frames.length - 1;
+    _totalDuration += newFrameDuration;
     notifyListeners();
   }
 
@@ -136,5 +150,26 @@ class ReelModel extends ChangeNotifier {
       initialSnapshot: _copiedFrame.snapshot,
     );
     notifyListeners();
+  }
+
+  /*
+  Onion:
+  */
+
+  bool get onion => _onion;
+  bool _onion = true;
+  set onion(bool value) {
+    _onion = value;
+    notifyListeners();
+  }
+
+  FrameModel get frameBefore {
+    if (playing || !onion || _selectedFrameId == 0) return null;
+    return frames[_selectedFrameId - 1];
+  }
+
+  FrameModel get frameAfter {
+    if (playing || !onion || _selectedFrameId == frames.length - 1) return null;
+    return frames[_selectedFrameId + 1];
   }
 }

@@ -16,7 +16,7 @@ class FrameModel extends ChangeNotifier {
   FrameModel({
     int id,
     @required Size size,
-    int duration = 1,
+    Duration duration = const Duration(seconds: 1),
     ui.Image initialSnapshot,
   })  : id = id ?? DateTime.now().millisecondsSinceEpoch,
         _size = size,
@@ -27,10 +27,10 @@ class FrameModel extends ChangeNotifier {
 
   final int id;
 
-  int get duration => _duration;
-  int _duration;
-  set duration(int value) {
-    if (value <= 0) return;
+  Duration get duration => _duration;
+  Duration _duration;
+  set duration(Duration value) {
+    if (value <= Duration.zero) return;
     _duration = value;
     notifyListeners();
   }
