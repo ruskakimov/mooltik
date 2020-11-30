@@ -45,7 +45,7 @@ class Project extends ChangeNotifier {
   }
 
   Future<FrameModel> _getFrame(FrameSaveData frameData, Size size) async {
-    final file = _getFrameFile(frameData.id);
+    final file = getFrameFile(frameData.id);
     final image = file.existsSync() ? await pngRead(file) : null;
     return FrameModel(
       id: frameData.id,
@@ -74,7 +74,7 @@ class Project extends ChangeNotifier {
         return frame.snapshot != null;
       }).map(
         (frame) => pngWrite(
-          _getFrameFile(frame.id),
+          getFrameFile(frame.id),
           frame.snapshot,
         ),
       ),
@@ -93,5 +93,5 @@ class Project extends ChangeNotifier {
     _reel = null;
   }
 
-  File _getFrameFile(int id) => File(p.join(directory.path, 'frame$id.png'));
+  File getFrameFile(int id) => File(p.join(directory.path, 'frame$id.png'));
 }

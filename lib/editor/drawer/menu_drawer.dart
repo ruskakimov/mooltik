@@ -118,35 +118,24 @@ class _MenuDrawerState extends State<MenuDrawer> {
 
   Future<void> _saveVideo(List<FrameModel> frames) async {
     if (await Permission.storage.request().isGranted) {
-      final dir = await getTemporaryDirectory();
+      final tempDir = await getTemporaryDirectory();
 
-      final pngFiles = <File>[];
-
-      // Save frames as PNG images.
-      for (int i = 0; i < frames.length; i++) {
-        final frame = frames[i];
-        final picture = pictureFromFrame(frame);
-        final frameFile = File(dir.path + '/frame$i.png');
-        pngWrite(
-          frameFile,
-          await picture.toImage(frame.width.toInt(), frame.height.toInt()),
-        );
-        pngFiles.add(frameFile);
-      }
+      final project = context.read<Project>();
+      await project.save();
 
       // Create concat demuxer file for ffmpeg.
-      final concatDemuxer = File(dir.path + '/concat.txt');
+      final concatDemuxer = File(tempDir.path + '/concat.txt');
       String content = '';
-      for (int i = 0; i < frames.length; i++) {
-        final durationInSeconds = frames[i].duration.inMilliseconds / 1000;
+      for (final frame in frames) {
+        final durationInSeconds = frame.duration.inMilliseconds / 1000;
         content +=
-            'file \'${pngFiles[i].path}\'\nduration ${durationInSeconds.toStringAsFixed(6)}\n';
+            'file \'${project.getFrameFile(frame.id).path}\'\nduration ${durationInSeconds.toStringAsFixed(6)}\n';
       }
-      content += 'file \'${pngFiles.last.path}\'';
+      content += 'file \'${project.getFrameFile(frames.last.id)}\'';
       await concatDemuxer.writeAsString(content);
 
       // Output video file.
-      final video = File(dir.path + '/mooltik_video.mp4');
+      final video = File(tempDir.path + '/mooltik_video.mp4');
 
       final ffmpeg = FlutterFFmpeg();
       final rc = await ffmpeg.execute(
