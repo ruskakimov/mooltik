@@ -120,18 +120,32 @@ class _MenuDrawerState extends State<MenuDrawer> {
     if (await Permission.storage.request().isGranted) {
       final tempDir = await getTemporaryDirectory();
 
-      final project = context.read<Project>();
-      await project.save();
+      final pngFiles = <File>[];
+      final futures = <Future<void>>[];
+
+      // Save frames as PNG images.
+      for (int i = 0; i < frames.length; i++) {
+        final frame = frames[i];
+        final picture = pictureFromFrame(frame);
+        final frameFile = File(tempDir.path + '/frame$i.png');
+        final future = pngWrite(
+          frameFile,
+          await picture.toImage(frame.width.toInt(), frame.height.toInt()),
+        );
+        futures.add(future);
+        pngFiles.add(frameFile);
+      }
+      await Future.wait(futures);
 
       // Create concat demuxer file for ffmpeg.
       final concatDemuxer = File(tempDir.path + '/concat.txt');
       String content = '';
-      for (final frame in frames) {
-        final durationInSeconds = frame.duration.inMilliseconds / 1000;
+      for (int i = 0; i < frames.length; i++) {
+        final durationInSeconds = frames[i].duration.inMilliseconds / 1000;
         content +=
-            'file \'${project.getFrameFile(frame.id).path}\'\nduration ${durationInSeconds.toStringAsFixed(6)}\n';
+            'file \'${pngFiles[i].path}\'\nduration ${durationInSeconds.toStringAsFixed(6)}\n';
       }
-      content += 'file \'${project.getFrameFile(frames.last.id)}\'';
+      content += 'file \'${pngFiles.last.path}\'';
       await concatDemuxer.writeAsString(content);
 
       // Output video file.
