@@ -118,24 +118,27 @@ class _MenuDrawerState extends State<MenuDrawer> {
 
   Future<void> _saveVideo(List<FrameModel> frames) async {
     if (await Permission.storage.request().isGranted) {
-      final dir = await getTemporaryDirectory();
+      final tempDir = await getTemporaryDirectory();
 
       final pngFiles = <File>[];
+      final futures = <Future<void>>[];
 
       // Save frames as PNG images.
       for (int i = 0; i < frames.length; i++) {
         final frame = frames[i];
         final picture = pictureFromFrame(frame);
-        final frameFile = File(dir.path + '/frame$i.png');
-        pngWrite(
+        final frameFile = File(tempDir.path + '/frame$i.png');
+        final future = pngWrite(
           frameFile,
           await picture.toImage(frame.width.toInt(), frame.height.toInt()),
         );
+        futures.add(future);
         pngFiles.add(frameFile);
       }
+      await Future.wait(futures);
 
       // Create concat demuxer file for ffmpeg.
-      final concatDemuxer = File(dir.path + '/concat.txt');
+      final concatDemuxer = File(tempDir.path + '/concat.txt');
       String content = '';
       for (int i = 0; i < frames.length; i++) {
         final durationInSeconds = frames[i].duration.inMilliseconds / 1000;
@@ -146,7 +149,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
       await concatDemuxer.writeAsString(content);
 
       // Output video file.
-      final video = File(dir.path + '/mooltik_video.mp4');
+      final video = File(tempDir.path + '/mooltik_video.mp4');
 
       final ffmpeg = FlutterFFmpeg();
       final rc = await ffmpeg.execute(
