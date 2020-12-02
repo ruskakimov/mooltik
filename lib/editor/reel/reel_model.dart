@@ -32,6 +32,7 @@ class ReelModel extends ChangeNotifier {
   Duration _selectedFrameStart;
   Duration _selectedFrameEnd;
 
+  Duration get totalDuration => _totalDuration;
   Duration _totalDuration;
 
   FrameModel get selectedFrame => frames[_selectedFrameId];
