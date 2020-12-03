@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
-import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/reel/timeline.dart';
 import 'package:mooltik/editor/reel/widgets/playhead.dart';
 import 'package:mooltik/editor/reel/widgets/reel_context_menu.dart';
@@ -23,48 +22,9 @@ class ReelDrawer extends StatefulWidget {
 }
 
 class _ReelDrawerState extends State<ReelDrawer> {
-  ScrollController controller;
   bool _contextMenuOpen = false;
 
   ReelModel get reel => context.read<ReelModel>();
-
-  double msPerPx = 10;
-  double _prevMsPerPx = 10;
-  double _scaleOffset;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = ScrollController(initialScrollOffset: 0)
-      ..addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    reel.playheadPosition = pxToDuration(controller.offset);
-  }
-
-  Duration pxToDuration(double offset) =>
-      Duration(milliseconds: (offset * msPerPx).round());
-
-  double durationToPx(Duration duration) => duration.inMilliseconds / msPerPx;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // if (controller.hasClients &&
-    //     selectedId != reel.selectedFrameId &&
-    //     !reel.playing) {
-    //   controller.removeListener(_onScroll);
-    //   _scrollTo(reel.selectedFrameId);
-    //   controller.addListener(_onScroll);
-    // }
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
 
   void toggleMenu() {
     setState(() => _contextMenuOpen = !_contextMenuOpen);
@@ -72,9 +32,6 @@ class _ReelDrawerState extends State<ReelDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    // Update when selected frame is painted on.
-    context.watch<FrameModel>();
-
     return AnimatedBottomDrawer(
       height: 120,
       open: widget.open,
@@ -83,28 +40,11 @@ class _ReelDrawerState extends State<ReelDrawer> {
         portalAnchor: Alignment.centerLeft,
         childAnchor: Alignment.centerRight,
         portal: ReelContextMenu(),
-        child: GestureDetector(
-          onScaleStart: (ScaleStartDetails details) {
-            _prevMsPerPx = msPerPx;
-            controller.removeListener(_onScroll);
-          },
-          onScaleUpdate: (ScaleUpdateDetails details) {
-            _scaleOffset ??= 1 - details.scale;
-            setState(() {
-              msPerPx = _prevMsPerPx / (details.scale + _scaleOffset);
-              controller.jumpTo(durationToPx(reel.playheadPosition));
-            });
-          },
-          onScaleEnd: (ScaleEndDetails details) {
-            _scaleOffset = null;
-            controller.addListener(_onScroll);
-          },
-          child: Stack(
-            children: [
-              Timeline(),
-              Playhead(),
-            ],
-          ),
+        child: Stack(
+          children: [
+            Timeline(),
+            Playhead(),
+          ],
         ),
       ),
     );
