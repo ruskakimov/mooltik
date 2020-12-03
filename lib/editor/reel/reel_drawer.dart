@@ -4,8 +4,7 @@ import 'package:flutter_portal/flutter_portal.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
-import 'package:mooltik/editor/reel/widgets/add_frame_button.dart';
-import 'package:mooltik/editor/reel/widgets/frame_sliver.dart';
+import 'package:mooltik/editor/reel/timeline.dart';
 import 'package:mooltik/editor/reel/widgets/playhead.dart';
 import 'package:mooltik/editor/reel/widgets/reel_context_menu.dart';
 import 'package:provider/provider.dart';
@@ -102,54 +101,13 @@ class _ReelDrawerState extends State<ReelDrawer> {
           },
           child: Stack(
             children: [
-              _buildList(),
+              Timeline(),
               Playhead(),
             ],
           ),
         ),
       ),
     );
-  }
-
-  Widget _buildList() {
-    final reel = context.watch<ReelModel>();
-
-    return LayoutBuilder(builder: (context, constraints) {
-      final double halfWidth = constraints.maxWidth / 2;
-
-      return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        physics: BouncingScrollPhysics(),
-        controller: controller,
-        itemCount: reel.frames.length + 1,
-        padding: EdgeInsets.only(
-          left: halfWidth,
-          right: halfWidth - 62,
-        ),
-        itemBuilder: (context, index) {
-          if (index == reel.frames.length) {
-            return Center(
-              key: Key('add'),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 2.0),
-                child: AddFrameButton(),
-              ),
-            );
-          }
-
-          final frame = reel.frames[index];
-
-          return Center(
-            key: Key('${frame.id}'),
-            child: FrameSliver(
-              frame: frame,
-              width: durationToPx(frame.duration),
-              selected: index == reel.selectedFrameId,
-            ),
-          );
-        },
-      );
-    });
   }
 }
 
