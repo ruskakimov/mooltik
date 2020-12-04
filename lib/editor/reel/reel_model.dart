@@ -42,6 +42,7 @@ class ReelModel extends ChangeNotifier {
     _selectedFrameId++;
     _selectedFrameStart = _selectedFrameEnd;
     _selectedFrameEnd += selectedFrame.duration;
+    notifyListeners();
   }
 
   void selectPrevFrame() {
@@ -49,6 +50,7 @@ class ReelModel extends ChangeNotifier {
     _selectedFrameId--;
     _selectedFrameEnd = _selectedFrameStart;
     _selectedFrameStart -= selectedFrame.duration;
+    notifyListeners();
   }
 
   Duration get playheadPosition => _playheadPosition;
