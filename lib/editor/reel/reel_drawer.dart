@@ -134,14 +134,14 @@ class _ReelDrawerState extends State<ReelDrawer> {
               },
               child: PortalEntry(
                 visible: selected && _contextMenuOpen,
-                childAnchor: Alignment.topCenter,
+                childAnchor: Alignment(0.5, -1),
                 portalAnchor: Alignment.center,
                 portal: AddInBetweenButton(
                   onPressed: reel.addFrameBeforeSelected,
                 ),
                 child: PortalEntry(
                   visible: selected && _contextMenuOpen && index != lastIndex,
-                  childAnchor: Alignment.bottomCenter,
+                  childAnchor: Alignment(0.5, 1),
                   portalAnchor: Alignment.center,
                   portal: AddInBetweenButton(
                     onPressed: reel.addFrameAfterSelected,
