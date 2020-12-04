@@ -146,8 +146,19 @@ class _ReelDrawerState extends State<ReelDrawer> {
                   portal: AddInBetweenButton(
                     onPressed: reel.addFrameAfterSelected,
                   ),
-                  child: FrameThumbnail(
-                    frame: frame,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 4,
+                        color: selected
+                            ? Theme.of(context).colorScheme.primary
+                            : Colors.transparent,
+                      ),
+                    ),
+                    position: DecorationPosition.foreground,
+                    child: FrameThumbnail(
+                      frame: frame,
+                    ),
                   ),
                 ),
               ),
