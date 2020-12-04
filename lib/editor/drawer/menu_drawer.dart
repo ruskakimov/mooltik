@@ -47,18 +47,18 @@ class _MenuDrawerState extends State<MenuDrawer> {
 
     return Column(
       children: [
-        MenuListTile(
-          icon: Icons.lightbulb_outline,
-          title: 'Onion',
-          trailing: Switch(
-            activeColor: Theme.of(context).colorScheme.primary,
-            value: reel.onion,
-            onChanged: (value) => reel.onion = value,
-          ),
-          onTap: () {
-            reel.onion = !reel.onion;
-          },
-        ),
+        // MenuListTile(
+        //   icon: Icons.lightbulb_outline,
+        //   title: 'Onion',
+        //   trailing: Switch(
+        //     activeColor: Theme.of(context).colorScheme.primary,
+        //     value: reel.onion,
+        //     onChanged: (value) => reel.onion = value,
+        //   ),
+        //   onTap: () {
+        //     reel.onion = !reel.onion;
+        //   },
+        // ),
         Spacer(),
         MenuListTile(
           icon: Icons.image,

@@ -91,8 +91,9 @@ class ReelModel extends ChangeNotifier {
 
   bool get onion => _onion;
   bool _onion = true;
-  set onion(bool value) {
-    _onion = value;
+
+  void toggleOnion() {
+    _onion = !_onion;
     notifyListeners();
   }
 

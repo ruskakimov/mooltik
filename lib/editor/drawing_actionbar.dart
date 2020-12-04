@@ -7,6 +7,7 @@ import 'package:mooltik/editor/drawer/color_picker_button.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/drawer/color_picker_drawer.dart';
 import 'package:mooltik/editor/reel/reel_drawer.dart';
+import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 
@@ -50,6 +51,13 @@ class _DrawingActionBarState extends State<DrawingActionBar> {
               setState(() {
                 leftOpen = leftOpen == LeftDrawer.reel ? null : LeftDrawer.reel;
               });
+            },
+          ),
+          AppIconButton(
+            icon: FontAwesomeIcons.lightbulb,
+            selected: context.watch<ReelModel>().onion,
+            onTap: () {
+              context.read<ReelModel>().toggleOnion();
             },
           ),
           Spacer(),
