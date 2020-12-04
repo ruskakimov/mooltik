@@ -37,14 +37,14 @@ class ReelModel extends ChangeNotifier {
 
   FrameModel get selectedFrame => frames[_selectedFrameId];
 
-  void _selectNextFrame() {
+  void selectNextFrame() {
     if (_selectedFrameId == frames.length - 1) return;
     _selectedFrameId++;
     _selectedFrameStart = _selectedFrameEnd;
     _selectedFrameEnd += selectedFrame.duration;
   }
 
-  void _selectPrevFrame() {
+  void selectPrevFrame() {
     if (_selectedFrameId == 0) return;
     _selectedFrameId--;
     _selectedFrameEnd = _selectedFrameStart;
@@ -61,9 +61,9 @@ class ReelModel extends ChangeNotifier {
       ),
     );
     if (_playheadPosition < _selectedFrameStart) {
-      _selectPrevFrame();
+      selectPrevFrame();
     } else if (_selectedFrameEnd < _playheadPosition) {
-      _selectNextFrame();
+      selectNextFrame();
     }
     notifyListeners();
   }
