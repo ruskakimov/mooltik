@@ -44,10 +44,6 @@ class _ToolBarState extends State<ToolBar> {
           Expanded(
             child: _buildLeftActions(),
           ),
-          AppIconButton(
-            icon: FontAwesomeIcons.play,
-            onTap: reel.play,
-          ),
           Expanded(
             child: _buildRightActions(),
           ),

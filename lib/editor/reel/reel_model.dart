@@ -9,12 +9,6 @@ class ReelModel extends ChangeNotifier {
   })  : assert(frameSize != null),
         frames = initialFrames ?? [FrameModel(size: frameSize)] {
     _selectedFrameId = 0;
-    _selectedFrameStart = Duration.zero;
-    _selectedFrameEnd = frames.first.duration;
-    _totalDuration = frames.fold(
-      Duration.zero,
-      (total, frame) => total + frame.duration,
-    );
   }
 
   final Size frameSize;
@@ -29,76 +23,13 @@ class ReelModel extends ChangeNotifier {
 
   int get selectedFrameId => _selectedFrameId;
   int _selectedFrameId;
-  Duration _selectedFrameStart;
-  Duration _selectedFrameEnd;
-
-  Duration get totalDuration => _totalDuration;
-  Duration _totalDuration;
 
   FrameModel get selectedFrame => frames[_selectedFrameId];
 
-  void selectNextFrame() {
-    if (_selectedFrameId == frames.length - 1) return;
-    _selectedFrameId++;
-    _selectedFrameStart = _selectedFrameEnd;
-    _selectedFrameEnd += selectedFrame.duration;
-    notifyListeners();
-  }
-
-  void selectPrevFrame() {
-    if (_selectedFrameId == 0) return;
-    _selectedFrameId--;
-    _selectedFrameEnd = _selectedFrameStart;
-    _selectedFrameStart -= selectedFrame.duration;
-    notifyListeners();
-  }
-
-  Duration get playheadPosition => _playheadPosition;
-  Duration _playheadPosition = Duration.zero;
-  set playheadPosition(Duration position) {
-    _playheadPosition = Duration(
-      milliseconds: position.inMilliseconds.clamp(
-        0,
-        _totalDuration.inMilliseconds,
-      ),
-    );
-    if (_playheadPosition < _selectedFrameStart) {
-      selectPrevFrame();
-    } else if (_selectedFrameEnd < _playheadPosition) {
-      selectNextFrame();
-    }
-    notifyListeners();
-  }
-
-  /*
-  Playback:
-  */
-
-  bool get playing => _playing;
-  bool _playing = false;
-  int _selectedFrameIdBeforePlaying;
-
-  void play() {
-    _selectedFrameIdBeforePlaying = _selectedFrameId;
-    _playing = true;
-    _animate();
-    notifyListeners();
-  }
-
-  void _animate() async {
-    if (!_playing) return;
-    await Future.delayed(selectedFrame.duration);
-    if (!_playing) return;
-
-    _selectedFrameId = (_selectedFrameId + 1) % frames.length;
-    notifyListeners();
-
-    _animate();
-  }
-
-  void stop() {
-    _playing = false;
-    _selectedFrameId = _selectedFrameIdBeforePlaying;
+  void selectFrame(int id) {
+    assert(id >= 0 && id < frames.length);
+    if (id == _selectedFrameId || id < 0 || id >= frames.length) return;
+    _selectedFrameId = id;
     notifyListeners();
   }
 
@@ -107,12 +38,11 @@ class ReelModel extends ChangeNotifier {
   */
 
   void addFrame() {
-    final newFrameDuration = frames.last.duration;
     frames.add(FrameModel(
       size: frameSize,
-      duration: newFrameDuration,
+      duration: frames.last.duration,
     ));
-    _totalDuration += newFrameDuration;
+    _selectedFrameId = frames.length - 1;
     notifyListeners();
   }
 
@@ -167,12 +97,12 @@ class ReelModel extends ChangeNotifier {
   }
 
   FrameModel get frameBefore {
-    if (playing || !onion || _selectedFrameId == 0) return null;
+    if (!onion || _selectedFrameId == 0) return null;
     return frames[_selectedFrameId - 1];
   }
 
   FrameModel get frameAfter {
-    if (playing || !onion || _selectedFrameId == frames.length - 1) return null;
+    if (!onion || _selectedFrameId == frames.length - 1) return null;
     return frames[_selectedFrameId + 1];
   }
 }

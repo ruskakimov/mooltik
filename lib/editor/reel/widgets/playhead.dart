@@ -9,9 +9,10 @@ class Playhead extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Duration playheadPosition = context.select<ReelModel, Duration>(
-      (ReelModel reel) => reel.playheadPosition,
-    );
+    final Duration playheadPosition = null;
+    // context.select<ReelModel, Duration>(
+    //   (ReelModel reel) => reel.playheadPosition,
+    // );
 
     return Center(
       child: Column(

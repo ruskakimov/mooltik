@@ -43,19 +43,13 @@ class _ReelDrawerState extends State<ReelDrawer> {
   }
 
   void _onScroll() {
-    if (selectedId > reel.selectedFrameId) {
-      reel.selectNextFrame();
-    } else if (selectedId < reel.selectedFrameId) {
-      reel.selectPrevFrame();
-    }
+    reel.selectFrame(selectedId);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (controller.hasClients &&
-        selectedId != reel.selectedFrameId &&
-        !reel.playing) {
+    if (controller.hasClients && selectedId != reel.selectedFrameId) {
       controller.removeListener(_onScroll);
       _scrollTo(reel.selectedFrameId);
       controller.addListener(_onScroll);
