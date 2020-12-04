@@ -10,7 +10,7 @@ import 'package:mooltik/editor/reel/widgets/reel_context_menu.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 
-const double drawerWidth = 160.0;
+const double drawerWidth = 112.0;
 const double thumbnailHeight = 64.0;
 const double gap = 1.0;
 

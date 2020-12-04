@@ -14,15 +14,17 @@ class FrameThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return FittedBox(
-          alignment: Alignment.center,
-          fit: BoxFit.cover,
-          child: CustomPaint(
-            size: Size(
-              constraints.maxHeight / frame.height * frame.width,
-              constraints.maxHeight,
+        return SizedBox.expand(
+          child: FittedBox(
+            alignment: Alignment.center,
+            fit: BoxFit.cover,
+            child: CustomPaint(
+              size: Size(
+                constraints.maxHeight / frame.height * frame.width,
+                constraints.maxHeight,
+              ),
+              painter: FramePainter(frame: frame),
             ),
-            painter: FramePainter(frame: frame),
           ),
         );
       },
