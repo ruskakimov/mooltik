@@ -31,45 +31,56 @@ class EditingPage extends StatelessWidget {
           ),
         ],
         builder: (context, child) {
-          final reel = context.watch<ReelModel>();
-
           return Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
             body: SafeArea(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppIconButton(
-                    icon: FontAwesomeIcons.arrowLeft,
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
+              child: Column(
+                children: <Widget>[
                   Expanded(
-                    child: Column(
-                      children: <Widget>[
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildExitButton(context),
                         Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => DrawingPage(reel: reel),
-                                ),
-                              );
-                            },
-                            child: FrameThumbnail(frame: reel.selectedFrame),
-                          ),
-                        ),
-                        Expanded(
-                          child: Timeline(),
+                          child: Preview(),
                         ),
                       ],
                     ),
+                  ),
+                  Expanded(
+                    child: Timeline(),
                   ),
                 ],
               ),
             ),
           );
         });
+  }
+
+  AppIconButton _buildExitButton(BuildContext context) {
+    return AppIconButton(
+      icon: FontAwesomeIcons.arrowLeft,
+      onTap: () {
+        Navigator.pop(context);
+      },
+    );
+  }
+}
+
+class Preview extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final reel = context.watch<ReelModel>();
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => DrawingPage(reel: reel),
+          ),
+        );
+      },
+      child: FrameThumbnail(frame: reel.selectedFrame),
+    );
   }
 }
