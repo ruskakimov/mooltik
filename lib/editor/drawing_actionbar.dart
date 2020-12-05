@@ -20,14 +20,14 @@ enum RightDrawer {
   color,
 }
 
-class DrawingActionBar extends StatefulWidget {
-  const DrawingActionBar({Key key}) : super(key: key);
+class DrawingActionbar extends StatefulWidget {
+  const DrawingActionbar({Key key}) : super(key: key);
 
   @override
-  _DrawingActionBarState createState() => _DrawingActionBarState();
+  _DrawingActionbarState createState() => _DrawingActionbarState();
 }
 
-class _DrawingActionBarState extends State<DrawingActionBar> {
+class _DrawingActionbarState extends State<DrawingActionbar> {
   LeftDrawer leftOpen;
   RightDrawer rightOpen;
 

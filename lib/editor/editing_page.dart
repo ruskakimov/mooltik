@@ -1,0 +1,75 @@
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/common/app_icon_button.dart';
+import 'package:mooltik/editor/drawing_page.dart';
+import 'package:mooltik/editor/frame/frame_thumbnail.dart';
+import 'package:mooltik/editor/reel/timeline.dart';
+import 'package:mooltik/editor/toolbox/toolbox_model.dart';
+import 'package:provider/provider.dart';
+
+import 'reel/reel_model.dart';
+
+class EditingPage extends StatelessWidget {
+  static const routeName = '/editor';
+
+  const EditingPage({
+    Key key,
+    @required this.reel,
+  }) : super(key: key);
+
+  final ReelModel reel;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(
+            value: reel,
+          ),
+          ChangeNotifierProvider(
+            create: (context) => ToolboxModel(),
+          ),
+        ],
+        builder: (context, child) {
+          final reel = context.watch<ReelModel>();
+
+          return Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            body: SafeArea(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppIconButton(
+                    icon: FontAwesomeIcons.arrowLeft,
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: <Widget>[
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => DrawingPage(reel: reel),
+                                ),
+                              );
+                            },
+                            child: FrameThumbnail(frame: reel.selectedFrame),
+                          ),
+                        ),
+                        Expanded(
+                          child: Timeline(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+}

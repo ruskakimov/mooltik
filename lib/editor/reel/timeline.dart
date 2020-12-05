@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
 
@@ -22,9 +21,6 @@ class _TimelineState extends State<Timeline> {
 
   @override
   Widget build(BuildContext context) {
-    // Update when selected frame is painted on.
-    context.watch<FrameModel>();
-
     final reel = context.watch<ReelModel>();
 
     return GestureDetector(

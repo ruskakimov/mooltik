@@ -45,7 +45,7 @@ class DrawingPage extends StatelessWidget {
                     ),
                     Align(
                       alignment: Alignment.topLeft,
-                      child: DrawingActionBar(),
+                      child: DrawingActionbar(),
                     ),
                   ],
                 ),
