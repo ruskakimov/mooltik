@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/surface.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
 
@@ -23,20 +24,24 @@ class _TimelineState extends State<Timeline> {
   Widget build(BuildContext context) {
     final reel = context.watch<ReelModel>();
 
-    return GestureDetector(
-      onScaleStart: (ScaleStartDetails details) {
-        _prevMsPerPx = msPerPx;
-      },
-      onScaleUpdate: (ScaleUpdateDetails details) {
-        _scaleOffset ??= 1 - details.scale;
-        setState(() {
-          msPerPx = _prevMsPerPx / (details.scale + _scaleOffset);
-        });
-      },
-      onScaleEnd: (ScaleEndDetails details) {
-        _scaleOffset = null;
-      },
-      child: CustomPaint(),
+    return Surface(
+      child: GestureDetector(
+        onScaleStart: (ScaleStartDetails details) {
+          _prevMsPerPx = msPerPx;
+        },
+        onScaleUpdate: (ScaleUpdateDetails details) {
+          _scaleOffset ??= 1 - details.scale;
+          setState(() {
+            msPerPx = _prevMsPerPx / (details.scale + _scaleOffset);
+          });
+        },
+        onScaleEnd: (ScaleEndDetails details) {
+          _scaleOffset = null;
+        },
+        child: SizedBox.expand(
+          child: CustomPaint(),
+        ),
+      ),
     );
   }
 }
