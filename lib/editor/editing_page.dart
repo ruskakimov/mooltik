@@ -41,9 +41,9 @@ class EditingPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildExitButton(context),
-                        Expanded(
-                          child: Preview(),
-                        ),
+                        Spacer(),
+                        Preview(),
+                        Spacer(),
                       ],
                     ),
                   ),
