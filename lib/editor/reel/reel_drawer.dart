@@ -5,7 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/common/app_icon_button.dart';
 import 'package:mooltik/editor/frame/frame_thumbnail.dart';
-import 'package:mooltik/editor/reel/widgets/reel_context_menu.dart';
+import 'package:mooltik/editor/reel/components/add_in_between_button.dart';
+import 'package:mooltik/editor/reel/components/reel_context_menu.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 
@@ -157,29 +158,5 @@ class _ReelDrawerState extends State<ReelDrawer> {
         },
       );
     });
-  }
-}
-
-class AddInBetweenButton extends StatelessWidget {
-  const AddInBetweenButton({
-    Key key,
-    @required this.onPressed,
-  }) : super(key: key);
-
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      mini: true,
-      elevation: 5,
-      backgroundColor: Theme.of(context).colorScheme.secondary,
-      child: Icon(
-        FontAwesomeIcons.plus,
-        size: 13,
-        color: Theme.of(context).colorScheme.onSecondary,
-      ),
-      onPressed: onPressed,
-    );
   }
 }

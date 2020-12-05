@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/surface.dart';
-import 'package:mooltik/editor/reel/timeline.dart';
-import 'package:mooltik/editor/reel/timeline_actionbar.dart';
-import 'package:mooltik/editor/reel/widgets/playhead.dart';
+import 'package:mooltik/editor/timeline/timeline.dart';
+import 'package:mooltik/editor/timeline/timeline_actionbar.dart';
+import 'package:mooltik/editor/timeline/playhead.dart';
 
 class TimelinePanel extends StatelessWidget {
   const TimelinePanel({
