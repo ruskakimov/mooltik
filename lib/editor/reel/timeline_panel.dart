@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/surface.dart';
 import 'package:mooltik/editor/reel/timeline.dart';
+import 'package:mooltik/editor/reel/timeline_actionbar.dart';
 import 'package:mooltik/editor/reel/widgets/playhead.dart';
 
 class TimelinePanel extends StatelessWidget {
@@ -13,6 +14,7 @@ class TimelinePanel extends StatelessWidget {
     return Surface(
       child: Column(
         children: [
+          TimelineActionbar(),
           Expanded(
             child: Stack(
               fit: StackFit.expand,
