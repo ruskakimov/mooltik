@@ -72,9 +72,6 @@ class _ReelDrawerState extends State<ReelDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    // Update when selected frame is painted on.
-    context.watch<FrameModel>();
-
     return AnimatedLeftDrawer(
       width: drawerWidth,
       open: widget.open,
