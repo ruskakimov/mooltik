@@ -21,7 +21,7 @@ class AppIconButton extends StatelessWidget {
         onTap: onTap,
         child: SizedBox(
           height: 44,
-          width: 44,
+          width: 52,
           child: Icon(
             icon,
             color: _getColor(context),

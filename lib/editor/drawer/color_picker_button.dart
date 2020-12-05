@@ -15,7 +15,7 @@ class ColorPickerButton extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: SizedBox(
-        width: 44,
+        width: 52,
         height: 44,
         child: Center(
           child: ClipOval(

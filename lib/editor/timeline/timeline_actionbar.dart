@@ -15,7 +15,13 @@ class TimelineActionbar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AppIconButton(
+            icon: FontAwesomeIcons.stepBackward,
+          ),
+          AppIconButton(
             icon: FontAwesomeIcons.play,
+          ),
+          AppIconButton(
+            icon: FontAwesomeIcons.stepForward,
           ),
         ],
       ),
