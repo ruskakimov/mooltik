@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/surface.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +37,10 @@ class _TimelineState extends State<Timeline> {
         _scaleOffset = null;
       },
       child: SizedBox.expand(
-        child: CustomPaint(),
+        child: ColoredBox(
+          color: Colors.black.withOpacity(0.2),
+          child: CustomPaint(),
+        ),
       ),
     );
   }

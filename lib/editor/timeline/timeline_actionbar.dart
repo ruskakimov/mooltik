@@ -16,12 +16,15 @@ class TimelineActionbar extends StatelessWidget {
         children: [
           AppIconButton(
             icon: FontAwesomeIcons.stepBackward,
+            onTap: () {},
           ),
           AppIconButton(
             icon: FontAwesomeIcons.play,
+            onTap: () {},
           ),
           AppIconButton(
             icon: FontAwesomeIcons.stepForward,
+            onTap: () {},
           ),
         ],
       ),
