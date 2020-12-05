@@ -24,23 +24,21 @@ class _TimelineState extends State<Timeline> {
   Widget build(BuildContext context) {
     final reel = context.watch<ReelModel>();
 
-    return Surface(
-      child: GestureDetector(
-        onScaleStart: (ScaleStartDetails details) {
-          _prevMsPerPx = msPerPx;
-        },
-        onScaleUpdate: (ScaleUpdateDetails details) {
-          _scaleOffset ??= 1 - details.scale;
-          setState(() {
-            msPerPx = _prevMsPerPx / (details.scale + _scaleOffset);
-          });
-        },
-        onScaleEnd: (ScaleEndDetails details) {
-          _scaleOffset = null;
-        },
-        child: SizedBox.expand(
-          child: CustomPaint(),
-        ),
+    return GestureDetector(
+      onScaleStart: (ScaleStartDetails details) {
+        _prevMsPerPx = msPerPx;
+      },
+      onScaleUpdate: (ScaleUpdateDetails details) {
+        _scaleOffset ??= 1 - details.scale;
+        setState(() {
+          msPerPx = _prevMsPerPx / (details.scale + _scaleOffset);
+        });
+      },
+      onScaleEnd: (ScaleEndDetails details) {
+        _scaleOffset = null;
+      },
+      child: SizedBox.expand(
+        child: CustomPaint(),
       ),
     );
   }
