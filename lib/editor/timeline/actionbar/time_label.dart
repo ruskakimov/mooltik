@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/timeline/timeline_model.dart';
+import 'package:provider/provider.dart';
 
 class TimeLabel extends StatelessWidget {
   const TimeLabel({Key key}) : super(key: key);
@@ -14,10 +16,7 @@ class TimeLabel extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Row(
         children: [
-          Text(
-            durationToLabel(Duration.zero),
-            style: style,
-          ),
+          _PlayheadTimeLabel(style: style),
           Opacity(
             opacity: 0.5,
             child: Text(
@@ -27,6 +26,25 @@ class TimeLabel extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _PlayheadTimeLabel extends StatelessWidget {
+  const _PlayheadTimeLabel({
+    Key key,
+    @required this.style,
+  }) : super(key: key);
+
+  final TextStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      durationToLabel(context.select<TimelineModel, Duration>(
+        (timeline) => timeline.playheadPosition,
+      )),
+      style: style,
     );
   }
 }
