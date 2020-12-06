@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:provider/provider.dart';
 
 class TimelineScrollable extends StatefulWidget {
@@ -20,6 +21,8 @@ class _TimelineScrollableState extends State<TimelineScrollable> {
 
   @override
   Widget build(BuildContext context) {
+    final timeline = context.watch<TimelineModel>();
+
     return GestureDetector(
       onScaleStart: (ScaleStartDetails details) {
         _prevMsPerPx = msPerPx;

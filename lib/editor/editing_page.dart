@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/app_icon_button.dart';
 import 'package:mooltik/editor/drawing_page.dart';
+import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/frame/frame_thumbnail.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:mooltik/editor/timeline/timeline_panel.dart';
@@ -74,7 +75,11 @@ class Preview extends StatelessWidget {
           ),
         );
       },
-      child: FrameThumbnail(frame: project.frames.first),
+      child: FrameThumbnail(
+        frame: context.select<TimelineModel, FrameModel>(
+          (timeline) => timeline.selectedFrame,
+        ),
+      ),
     );
   }
 }
