@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/app_icon_button.dart';
 import 'package:mooltik/editor/drawing_page.dart';
 import 'package:mooltik/editor/frame/frame_thumbnail.dart';
+import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:mooltik/editor/timeline/timeline_panel.dart';
 import 'package:mooltik/home/project.dart';
 import 'package:provider/provider.dart';
@@ -12,26 +13,31 @@ class EditingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildExitButton(context),
-                  Spacer(),
-                  Preview(),
-                  Spacer(),
-                ],
+    return ChangeNotifierProvider(
+      create: (context) => TimelineModel(
+        frames: context.read<Project>().frames,
+      ),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        body: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildExitButton(context),
+                    Spacer(),
+                    Preview(),
+                    Spacer(),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: TimelinePanel(),
-            ),
-          ],
+              Expanded(
+                child: TimelinePanel(),
+              ),
+            ],
+          ),
         ),
       ),
     );
