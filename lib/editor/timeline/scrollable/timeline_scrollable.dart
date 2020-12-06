@@ -13,6 +13,7 @@ class _TimelineScrollableState extends State<TimelineScrollable> {
   double msPerPx = 10;
   double _prevMsPerPx = 10;
   double _scaleOffset;
+  Offset _prevFocalPoint;
 
   Duration pxToDuration(double offset) =>
       Duration(milliseconds: (offset * msPerPx).round());
@@ -26,12 +27,17 @@ class _TimelineScrollableState extends State<TimelineScrollable> {
     return GestureDetector(
       onScaleStart: (ScaleStartDetails details) {
         _prevMsPerPx = msPerPx;
+        _prevFocalPoint = details.localFocalPoint;
       },
       onScaleUpdate: (ScaleUpdateDetails details) {
         _scaleOffset ??= 1 - details.scale;
         setState(() {
           msPerPx = _prevMsPerPx / (details.scale + _scaleOffset);
         });
+
+        final diff = (details.localFocalPoint - _prevFocalPoint);
+        timeline.scrub(pxToDuration(-diff.dx));
+        _prevFocalPoint = details.localFocalPoint;
       },
       onScaleEnd: (ScaleEndDetails details) {
         _scaleOffset = null;

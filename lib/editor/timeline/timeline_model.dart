@@ -23,4 +23,18 @@ class TimelineModel extends ChangeNotifier {
 
   FrameModel get selectedFrame => frames[_selectedFrameId];
   int _selectedFrameId;
+
+  void scrub(Duration diff) {
+    _playheadPosition += diff;
+    _clampPlayhead();
+    notifyListeners();
+  }
+
+  void _clampPlayhead() {
+    if (_playheadPosition < Duration.zero) {
+      _playheadPosition = Duration.zero;
+    } else if (_playheadPosition > _totalDuration) {
+      _playheadPosition = _totalDuration;
+    }
+  }
 }
