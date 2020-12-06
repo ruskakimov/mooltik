@@ -17,13 +17,7 @@ class TimeLabel extends StatelessWidget {
       child: Row(
         children: [
           _PlayheadTimeLabel(style: style),
-          Opacity(
-            opacity: 0.5,
-            child: Text(
-              ' / ${durationToLabel(Duration.zero)}',
-              style: style,
-            ),
-          ),
+          _TotalTimeLabel(style: style),
         ],
       ),
     );
@@ -45,6 +39,30 @@ class _PlayheadTimeLabel extends StatelessWidget {
         (timeline) => timeline.playheadPosition,
       )),
       style: style,
+    );
+  }
+}
+
+class _TotalTimeLabel extends StatelessWidget {
+  const _TotalTimeLabel({
+    Key key,
+    @required this.style,
+  }) : super(key: key);
+
+  final TextStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    final totalLabel = durationToLabel(context.select<TimelineModel, Duration>(
+      (timeline) => timeline.totalDuration,
+    ));
+
+    return Opacity(
+      opacity: 0.5,
+      child: Text(
+        ' / $totalLabel',
+        style: style,
+      ),
     );
   }
 }
