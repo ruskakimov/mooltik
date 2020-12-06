@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/app_icon_button.dart';
+import 'package:mooltik/editor/timeline/actionbar/time_label.dart';
 
 class TimelineActionbar extends StatelessWidget {
   const TimelineActionbar({
@@ -14,6 +15,9 @@ class TimelineActionbar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Expanded(
+            child: TimeLabel(),
+          ),
           AppIconButton(
             icon: FontAwesomeIcons.stepBackward,
             onTap: () {},
@@ -26,16 +30,9 @@ class TimelineActionbar extends StatelessWidget {
             icon: FontAwesomeIcons.stepForward,
             onTap: () {},
           ),
+          Spacer(),
         ],
       ),
     );
   }
-}
-
-String durationToLabel(Duration duration) {
-  String twoDigits(int n) => n.toString().padLeft(2, "0");
-  String min = twoDigits(duration.inMinutes);
-  String sec = twoDigits(duration.inSeconds.remainder(60));
-  String secFr = twoDigits(duration.inMilliseconds.remainder(1000) ~/ 10);
-  return '$min:$sec.$secFr';
 }
