@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/surface.dart';
-import 'package:mooltik/editor/timeline/timeline.dart';
-import 'package:mooltik/editor/timeline/timeline_actionbar.dart';
-import 'package:mooltik/editor/timeline/playhead.dart';
+import 'package:mooltik/editor/timeline/scrollable/timeline_scrollable.dart';
+import 'package:mooltik/editor/timeline/actionbar/timeline_actionbar.dart';
+import 'package:mooltik/editor/timeline/scrollable/playhead.dart';
 
 class TimelinePanel extends StatelessWidget {
   const TimelinePanel({
@@ -19,7 +19,7 @@ class TimelinePanel extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Timeline(),
+                TimelineScrollable(),
                 Playhead(),
               ],
             ),

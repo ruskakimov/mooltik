@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Timeline extends StatefulWidget {
-  const Timeline({Key key}) : super(key: key);
+class TimelineScrollable extends StatefulWidget {
+  const TimelineScrollable({Key key}) : super(key: key);
 
   @override
-  _TimelineState createState() => _TimelineState();
+  _TimelineScrollableState createState() => _TimelineScrollableState();
 }
 
-class _TimelineState extends State<Timeline> {
+class _TimelineScrollableState extends State<TimelineScrollable> {
   double msPerPx = 10;
   double _prevMsPerPx = 10;
   double _scaleOffset;
