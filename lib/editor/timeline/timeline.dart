@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
 
 class Timeline extends StatefulWidget {
@@ -21,8 +20,6 @@ class _TimelineState extends State<Timeline> {
 
   @override
   Widget build(BuildContext context) {
-    final reel = context.watch<ReelModel>();
-
     return GestureDetector(
       onScaleStart: (ScaleStartDetails details) {
         _prevMsPerPx = msPerPx;

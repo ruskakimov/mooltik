@@ -28,7 +28,7 @@ class AddProjectButton extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => ChangeNotifierProvider<Project>.value(
               value: project,
-              child: EditingPage(reel: project.reel),
+              child: EditingPage(),
             ),
           ),
         );

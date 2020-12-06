@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
-import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:mooltik/home/png.dart';
 import 'package:mooltik/home/project_save_data.dart';
 import 'package:path/path.dart' as p;
@@ -22,25 +21,25 @@ class Project extends ChangeNotifier {
 
   final File _dataFile;
 
-  ReelModel get reel => _reel;
-  ReelModel _reel;
+  List<FrameModel> get frames => _frames;
+  List<FrameModel> _frames;
+
+  Size get frameSize => _frameSize;
+  Size _frameSize;
 
   Future<void> open() async {
     if (await _dataFile.exists()) {
       // Existing project.
       final contents = await _dataFile.readAsString();
       final data = ProjectSaveData.fromJson(jsonDecode(contents));
-      final frameSize = Size(data.width, data.height);
-
-      _reel = ReelModel(
-        frameSize: frameSize,
-        initialFrames: await Future.wait(
-          data.frames.map((frameData) => _getFrame(frameData, frameSize)),
-        ),
+      _frameSize = Size(data.width, data.height);
+      _frames = await Future.wait(
+        data.frames.map((frameData) => _getFrame(frameData, frameSize)),
       );
     } else {
       // New project.
-      _reel = ReelModel();
+      _frameSize = const Size(1280, 720);
+      _frames = [FrameModel(size: frameSize)];
     }
   }
 
@@ -56,13 +55,11 @@ class Project extends ChangeNotifier {
   }
 
   Future<void> save() async {
-    final List<FrameModel> frames = _reel.frames;
-
     // Write project data.
     final data = ProjectSaveData(
-      width: _reel.frameSize.width,
-      height: _reel.frameSize.height,
-      frames: frames
+      width: _frameSize.width,
+      height: _frameSize.height,
+      frames: _frames
           .map((f) => FrameSaveData(id: f.id, duration: f.duration))
           .toList(),
     );
@@ -90,7 +87,7 @@ class Project extends ChangeNotifier {
   }
 
   void close() {
-    _reel = null;
+    _frames = null;
   }
 
   File getFrameFile(int id) => File(p.join(directory.path, 'frame$id.png'));

@@ -4,16 +4,14 @@ import '../frame/frame_model.dart';
 
 class ReelModel extends ChangeNotifier {
   ReelModel({
-    this.frameSize = const Size(1280, 720),
-    List<FrameModel> initialFrames,
+    @required this.frameSize,
+    @required this.frames,
   })  : assert(frameSize != null),
-        frames = initialFrames ?? [FrameModel(size: frameSize)] {
-    _selectedFrameId = 0;
-  }
+        assert(frames != null && frames.isNotEmpty),
+        _selectedFrameId = 0;
 
   final Size frameSize;
-
-  List<FrameModel> frames;
+  final List<FrameModel> frames;
 
   FrameModel _copiedFrame;
 
