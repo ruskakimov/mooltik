@@ -5,10 +5,27 @@ class TimeLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = TextStyle(
+      color: Theme.of(context).colorScheme.onSurface,
+      fontSize: 13,
+    );
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Text(
-        durationToLabel(Duration.zero),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: Row(
+        children: [
+          Text(
+            durationToLabel(Duration.zero),
+            style: style,
+          ),
+          Opacity(
+            opacity: 0.5,
+            child: Text(
+              ' / ${durationToLabel(Duration.zero)}',
+              style: style,
+            ),
+          ),
+        ],
       ),
     );
   }
