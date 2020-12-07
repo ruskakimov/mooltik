@@ -24,7 +24,13 @@ class TimelineModel extends ChangeNotifier {
   Duration _totalDuration;
 
   FrameModel get selectedFrame => frames[_selectedFrameId];
+
+  int get selectedFrameId => _selectedFrameId;
   int _selectedFrameId;
+
+  double get selectedFrameProgress =>
+      (_playheadPosition - _selectedFrameStart).inMilliseconds /
+      selectedFrame.duration.inMilliseconds;
 
   Duration _selectedFrameStart;
   Duration _selectedFrameEnd;

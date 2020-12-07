@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:provider/provider.dart';
 
@@ -14,11 +15,6 @@ class _TimelineScrollableState extends State<TimelineScrollable> {
   double _prevMsPerPx = 10;
   double _scaleOffset;
   Offset _prevFocalPoint;
-
-  Duration pxToDuration(double offset) =>
-      Duration(milliseconds: (offset * msPerPx).round());
-
-  double durationToPx(Duration duration) => duration.inMilliseconds / msPerPx;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +32,7 @@ class _TimelineScrollableState extends State<TimelineScrollable> {
         });
 
         final diff = (details.localFocalPoint - _prevFocalPoint);
-        timeline.scrub(pxToDuration(-diff.dx));
+        timeline.scrub(pxToDuration(-diff.dx, msPerPx));
         _prevFocalPoint = details.localFocalPoint;
       },
       onScaleEnd: (ScaleEndDetails details) {
@@ -45,9 +41,64 @@ class _TimelineScrollableState extends State<TimelineScrollable> {
       child: SizedBox.expand(
         child: ColoredBox(
           color: Colors.black.withOpacity(0.2),
-          child: CustomPaint(),
+          child: CustomPaint(
+            painter: TimelinePainter(
+              frames: timeline.frames,
+              selectedFrameId: timeline.selectedFrameId,
+              selectedFrameProgress: timeline.selectedFrameProgress,
+              msPerPx: msPerPx,
+            ),
+          ),
         ),
       ),
     );
   }
+}
+
+Duration pxToDuration(double offset, double msPerPx) =>
+    Duration(milliseconds: (offset * msPerPx).round());
+
+double durationToPx(Duration duration, double msPerPx) =>
+    duration.inMilliseconds / msPerPx;
+
+class TimelinePainter extends CustomPainter {
+  TimelinePainter({
+    @required this.frames,
+    @required this.selectedFrameId,
+    @required this.selectedFrameProgress,
+    @required this.msPerPx,
+  });
+
+  final List<FrameModel> frames;
+  final int selectedFrameId;
+  final double selectedFrameProgress;
+  final double msPerPx;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double midX = size.width / 2;
+
+    final double frameWidth =
+        durationToPx(frames[selectedFrameId].duration, msPerPx);
+    final double frameStartX = midX - frameWidth * selectedFrameProgress;
+
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(
+          frameStartX,
+          (size.height - 60) / 2,
+          frameWidth,
+          60,
+        ),
+        Radius.circular(4),
+      ),
+      Paint()..color = Colors.white,
+    );
+  }
+
+  @override
+  bool shouldRepaint(TimelinePainter oldDelegate) => true;
+
+  @override
+  bool shouldRebuildSemantics(TimelinePainter oldDelegate) => false;
 }
