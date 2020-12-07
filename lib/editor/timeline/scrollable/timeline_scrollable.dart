@@ -74,12 +74,16 @@ class TimelinePainter extends CustomPainter {
   final double selectedFrameProgress;
   final double msPerPx;
 
+  double getFrameWidth(int frameIndex) => durationToPx(
+        frames[frameIndex].duration,
+        msPerPx,
+      );
+
   @override
   void paint(Canvas canvas, Size size) {
     final double midX = size.width / 2;
 
-    final double frameWidth =
-        durationToPx(frames[selectedFrameIndex].duration, msPerPx);
+    final double frameWidth = getFrameWidth(selectedFrameIndex);
     final double frameStartX = midX - frameWidth * selectedFrameProgress;
 
     canvas.drawRRect(
