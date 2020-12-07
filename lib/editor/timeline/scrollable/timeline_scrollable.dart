@@ -44,7 +44,7 @@ class _TimelineScrollableState extends State<TimelineScrollable> {
           child: CustomPaint(
             painter: TimelinePainter(
               frames: timeline.frames,
-              selectedFrameId: timeline.selectedFrameId,
+              selectedFrameIndex: timeline.selectedFrameIndex,
               selectedFrameProgress: timeline.selectedFrameProgress,
               msPerPx: msPerPx,
             ),
@@ -64,13 +64,13 @@ double durationToPx(Duration duration, double msPerPx) =>
 class TimelinePainter extends CustomPainter {
   TimelinePainter({
     @required this.frames,
-    @required this.selectedFrameId,
+    @required this.selectedFrameIndex,
     @required this.selectedFrameProgress,
     @required this.msPerPx,
   });
 
   final List<FrameModel> frames;
-  final int selectedFrameId;
+  final int selectedFrameIndex;
   final double selectedFrameProgress;
   final double msPerPx;
 
@@ -79,7 +79,7 @@ class TimelinePainter extends CustomPainter {
     final double midX = size.width / 2;
 
     final double frameWidth =
-        durationToPx(frames[selectedFrameId].duration, msPerPx);
+        durationToPx(frames[selectedFrameIndex].duration, msPerPx);
     final double frameStartX = midX - frameWidth * selectedFrameProgress;
 
     canvas.drawRRect(

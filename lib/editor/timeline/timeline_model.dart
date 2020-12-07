@@ -6,7 +6,7 @@ class TimelineModel extends ChangeNotifier {
     @required this.frames,
   })  : assert(frames != null && frames.isNotEmpty),
         _playheadPosition = Duration.zero,
-        _selectedFrameId = 0,
+        _selectedFrameIndex = 0,
         _selectedFrameStart = Duration.zero,
         _selectedFrameEnd = frames.first.duration {
     _totalDuration = frames.fold(
@@ -23,10 +23,10 @@ class TimelineModel extends ChangeNotifier {
   Duration get totalDuration => _totalDuration;
   Duration _totalDuration;
 
-  FrameModel get selectedFrame => frames[_selectedFrameId];
+  FrameModel get selectedFrame => frames[_selectedFrameIndex];
 
-  int get selectedFrameId => _selectedFrameId;
-  int _selectedFrameId;
+  int get selectedFrameIndex => _selectedFrameIndex;
+  int _selectedFrameIndex;
 
   double get selectedFrameProgress =>
       (_playheadPosition - _selectedFrameStart).inMilliseconds /
@@ -44,15 +44,15 @@ class TimelineModel extends ChangeNotifier {
   }
 
   void _selectPrevFrame() {
-    if (_selectedFrameId == 0) return;
-    _selectedFrameId--;
+    if (_selectedFrameIndex == 0) return;
+    _selectedFrameIndex--;
     _selectedFrameEnd = _selectedFrameStart;
     _selectedFrameStart -= selectedFrame.duration;
   }
 
   void _selectNextFrame() {
-    if (_selectedFrameId == frames.length - 1) return;
-    _selectedFrameId++;
+    if (_selectedFrameIndex == frames.length - 1) return;
+    _selectedFrameIndex++;
     _selectedFrameStart = _selectedFrameEnd;
     _selectedFrameEnd += selectedFrame.duration;
   }
