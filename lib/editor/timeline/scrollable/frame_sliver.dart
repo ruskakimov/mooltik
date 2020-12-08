@@ -13,16 +13,16 @@ class FrameSliver {
   final double endX;
   final ui.Image thumbnail;
 
-  void paint(Canvas canvas, double startY, double endY) {
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
+  RRect _getRrect(double startY, double endY) => RRect.fromRectAndRadius(
         Rect.fromLTRB(startX, startY, endX, endY).deflate(1),
         Radius.circular(4),
-      ),
-      Paint()..color = Colors.white,
-    );
+      );
+
+  void paint(Canvas canvas, double startY, double endY) {
+    final RRect rrect = _getRrect(startY, endY);
+    canvas.drawRRect(rrect, Paint()..color = Colors.white);
     canvas.save();
-    canvas.clipRect(Rect.fromLTRB(startX, startY, endX, endY));
+    canvas.clipRRect(rrect);
     canvas.translate(startX, startY);
     canvas.scale((endY - startY) / thumbnail.height);
     canvas.drawImage(thumbnail, Offset.zero, Paint());
