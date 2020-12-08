@@ -104,11 +104,10 @@ class TimelinePainter extends CustomPainter {
     for (int i = selectedFrameIndex - 1;
         i >= 0 && sliverRects.first.left > 0;
         i--) {
-      final double frameWidth = getFrameWidth(i);
       sliverRects.insert(
         0,
         getSliverRect(
-          sliverRects.first.left - frameWidth,
+          sliverRects.first.left - getFrameWidth(i),
           sliverRects.first.left,
         ),
       );
@@ -118,10 +117,9 @@ class TimelinePainter extends CustomPainter {
     for (int i = selectedFrameIndex + 1;
         i < frames.length && sliverRects.last.right < size.width;
         i++) {
-      final double frameWidth = getFrameWidth(i);
       sliverRects.add(getSliverRect(
         sliverRects.last.right,
-        sliverRects.last.right + frameWidth,
+        sliverRects.last.right + getFrameWidth(i),
       ));
     }
 
