@@ -86,14 +86,16 @@ class TimelinePainter extends CustomPainter {
     final double frameWidth = getFrameWidth(selectedFrameIndex);
     final double frameStartX = midX - frameWidth * selectedFrameProgress;
 
+    final Rect selectedFrameRect = Rect.fromLTWH(
+      frameStartX,
+      (size.height - 60) / 2,
+      frameWidth,
+      60,
+    );
+
     canvas.drawRRect(
       RRect.fromRectAndRadius(
-        Rect.fromLTWH(
-          frameStartX,
-          (size.height - 60) / 2,
-          frameWidth,
-          60,
-        ),
+        selectedFrameRect,
         Radius.circular(4),
       ),
       Paint()..color = Colors.white,
