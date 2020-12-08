@@ -114,6 +114,21 @@ class TimelinePainter extends CustomPainter {
       );
     }
 
+    // Fill with slivers on right side.
+    for (int i = selectedFrameIndex + 1;
+        i < frames.length && sliverRects.last.right < size.width;
+        i++) {
+      final double frameWidth = getFrameWidth(i);
+      sliverRects.add(
+        Rect.fromLTRB(
+          sliverRects.last.right,
+          sliverTop,
+          sliverRects.last.right + frameWidth,
+          sliverBottom,
+        ),
+      );
+    }
+
     for (final rect in sliverRects) {
       drawFrameSliver(canvas, rect);
     }
