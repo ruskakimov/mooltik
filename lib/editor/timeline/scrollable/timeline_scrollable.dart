@@ -86,7 +86,7 @@ class TimelinePainter extends CustomPainter {
     final double frameWidth = getFrameWidth(selectedFrameIndex);
     final double frameStartX = midX - frameWidth * selectedFrameProgress;
 
-    final double sliverHeight = 60;
+    final double sliverHeight = 50;
     final double sliverTop = (size.height - sliverHeight) / 2;
     final double sliverBottom = (size.height + sliverHeight) / 2;
 
@@ -136,7 +136,7 @@ class TimelinePainter extends CustomPainter {
 
   void drawFrameSliver(Canvas canvas, Rect rect) {
     canvas.drawRRect(
-      RRect.fromRectAndRadius(rect, Radius.circular(4)),
+      RRect.fromRectAndRadius(rect.deflate(1), Radius.circular(4)),
       Paint()..color = Colors.white,
     );
   }
