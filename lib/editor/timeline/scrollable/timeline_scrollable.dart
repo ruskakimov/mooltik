@@ -120,7 +120,7 @@ class TimelinePainter extends CustomPainter {
       ));
     }
 
-    final double sliverHeight = 50;
+    final double sliverHeight = 80;
     final double sliverTop = (size.height - sliverHeight) / 2;
     final double sliverBottom = (size.height + sliverHeight) / 2;
 
