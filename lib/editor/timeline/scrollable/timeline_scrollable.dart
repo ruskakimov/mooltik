@@ -83,18 +83,19 @@ class TimelinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final double midX = size.width / 2;
 
-    final double frameWidth = getFrameWidth(selectedFrameIndex);
-    final double frameStartX = midX - frameWidth * selectedFrameProgress;
-
     final double sliverHeight = 50;
     final double sliverTop = (size.height - sliverHeight) / 2;
     final double sliverBottom = (size.height + sliverHeight) / 2;
 
-    final Rect selectedFrameRect = Rect.fromLTRB(
+    Rect getSliverRect(double startX, double endX) =>
+        Rect.fromLTRB(startX, sliverTop, endX, sliverBottom);
+
+    final double frameWidth = getFrameWidth(selectedFrameIndex);
+    final double frameStartX = midX - frameWidth * selectedFrameProgress;
+
+    final Rect selectedFrameRect = getSliverRect(
       frameStartX,
-      sliverTop,
       frameStartX + frameWidth,
-      sliverBottom,
     );
     final sliverRects = [selectedFrameRect];
 
@@ -105,11 +106,9 @@ class TimelinePainter extends CustomPainter {
       final double frameWidth = getFrameWidth(i);
       sliverRects.insert(
         0,
-        Rect.fromLTRB(
+        getSliverRect(
           sliverRects.first.left - frameWidth,
-          sliverTop,
           sliverRects.first.left,
-          sliverBottom,
         ),
       );
     }
@@ -119,14 +118,10 @@ class TimelinePainter extends CustomPainter {
         i < frames.length && sliverRects.last.right < size.width;
         i++) {
       final double frameWidth = getFrameWidth(i);
-      sliverRects.add(
-        Rect.fromLTRB(
-          sliverRects.last.right,
-          sliverTop,
-          sliverRects.last.right + frameWidth,
-          sliverBottom,
-        ),
-      );
+      sliverRects.add(getSliverRect(
+        sliverRects.last.right,
+        sliverRects.last.right + frameWidth,
+      ));
     }
 
     for (final rect in sliverRects) {
