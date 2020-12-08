@@ -93,11 +93,12 @@ class TimelinePainter extends CustomPainter {
       60,
     );
 
+    drawFrameSliver(canvas, selectedFrameRect);
+  }
+
+  void drawFrameSliver(Canvas canvas, Rect rect) {
     canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        selectedFrameRect,
-        Radius.circular(4),
-      ),
+      RRect.fromRectAndRadius(rect, Radius.circular(4)),
       Paint()..color = Colors.white,
     );
   }
