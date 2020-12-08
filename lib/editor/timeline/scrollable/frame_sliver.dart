@@ -22,6 +22,7 @@ class FrameSliver {
       Paint()..color = Colors.white,
     );
     canvas.save();
+    canvas.clipRect(Rect.fromLTRB(startX, startY, endX, endY));
     canvas.translate(startX, startY);
     canvas.scale((endY - startY) / thumbnail.height);
     canvas.drawImage(thumbnail, Offset.zero, Paint());
