@@ -88,6 +88,7 @@ class TimelinePainter extends CustomPainter {
 
     final double sliverHeight = 60;
     final double sliverTop = (size.height - sliverHeight) / 2;
+    final double sliverBottom = (size.height + sliverHeight) / 2;
 
     final Rect selectedFrameRect = Rect.fromLTWH(
       frameStartX,
@@ -104,11 +105,11 @@ class TimelinePainter extends CustomPainter {
       final double frameWidth = getFrameWidth(i);
       sliverRects.insert(
         0,
-        Rect.fromLTWH(
+        Rect.fromLTRB(
           sliverRects.first.left - frameWidth,
           sliverTop,
-          frameWidth,
-          sliverHeight,
+          sliverRects.first.left,
+          sliverBottom,
         ),
       );
     }
