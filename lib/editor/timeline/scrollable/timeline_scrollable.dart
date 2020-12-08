@@ -90,12 +90,13 @@ class TimelinePainter extends CustomPainter {
     Rect getSliverRect(double startX, double endX) =>
         Rect.fromLTRB(startX, sliverTop, endX, sliverBottom);
 
-    final double frameWidth = getFrameWidth(selectedFrameIndex);
-    final double frameStartX = midX - frameWidth * selectedFrameProgress;
+    final double selectedFrameWidth = getFrameWidth(selectedFrameIndex);
+    final double selectedFrameStartX =
+        midX - selectedFrameWidth * selectedFrameProgress;
 
     final Rect selectedFrameRect = getSliverRect(
-      frameStartX,
-      frameStartX + frameWidth,
+      selectedFrameStartX,
+      selectedFrameStartX + selectedFrameWidth,
     );
     final sliverRects = [selectedFrameRect];
 
