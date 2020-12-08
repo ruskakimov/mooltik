@@ -86,14 +86,36 @@ class TimelinePainter extends CustomPainter {
     final double frameWidth = getFrameWidth(selectedFrameIndex);
     final double frameStartX = midX - frameWidth * selectedFrameProgress;
 
+    final double sliverHeight = 60;
+    final double sliverTop = (size.height - sliverHeight) / 2;
+
     final Rect selectedFrameRect = Rect.fromLTWH(
       frameStartX,
-      (size.height - 60) / 2,
+      sliverTop,
       frameWidth,
-      60,
+      sliverHeight,
     );
+    final sliverRects = [selectedFrameRect];
 
-    drawFrameSliver(canvas, selectedFrameRect);
+    // Fill with slivers on left side.
+    for (int i = selectedFrameIndex - 1;
+        i >= 0 && sliverRects.first.left > 0;
+        i--) {
+      final double frameWidth = getFrameWidth(i);
+      sliverRects.insert(
+        0,
+        Rect.fromLTWH(
+          sliverRects.first.left - frameWidth,
+          sliverTop,
+          frameWidth,
+          sliverHeight,
+        ),
+      );
+    }
+
+    for (final rect in sliverRects) {
+      drawFrameSliver(canvas, rect);
+    }
   }
 
   void drawFrameSliver(Canvas canvas, Rect rect) {
