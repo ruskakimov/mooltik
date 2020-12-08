@@ -21,5 +21,10 @@ class FrameSliver {
       ),
       Paint()..color = Colors.white,
     );
+    canvas.save();
+    canvas.translate(startX, startY);
+    canvas.scale((endY - startY) / thumbnail.height);
+    canvas.drawImage(thumbnail, Offset.zero, Paint());
+    canvas.restore();
   }
 }
