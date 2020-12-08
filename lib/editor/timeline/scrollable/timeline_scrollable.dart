@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
+import 'package:mooltik/editor/timeline/scrollable/frame_sliver.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:provider/provider.dart';
 
@@ -83,56 +84,49 @@ class TimelinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final double midX = size.width / 2;
 
-    final double sliverHeight = 50;
-    final double sliverTop = (size.height - sliverHeight) / 2;
-    final double sliverBottom = (size.height + sliverHeight) / 2;
-
-    Rect getSliverRect(double startX, double endX) =>
-        Rect.fromLTRB(startX, sliverTop, endX, sliverBottom);
-
     final double selectedFrameWidth = getFrameWidth(selectedFrameIndex);
     final double selectedFrameStartX =
         midX - selectedFrameWidth * selectedFrameProgress;
 
-    final Rect selectedFrameRect = getSliverRect(
-      selectedFrameStartX,
-      selectedFrameStartX + selectedFrameWidth,
+    final selectedFrameSliver = FrameSliver(
+      startX: selectedFrameStartX,
+      endX: selectedFrameStartX + selectedFrameWidth,
+      thumbnail: frames[selectedFrameIndex].snapshot,
     );
-    final sliverRects = [selectedFrameRect];
+    final List<FrameSliver> slivers = [selectedFrameSliver];
 
     // Fill with slivers on left side.
     for (int i = selectedFrameIndex - 1;
-        i >= 0 && sliverRects.first.left > 0;
+        i >= 0 && slivers.first.startX > 0;
         i--) {
-      sliverRects.insert(
+      slivers.insert(
         0,
-        getSliverRect(
-          sliverRects.first.left - getFrameWidth(i),
-          sliverRects.first.left,
+        FrameSliver(
+          startX: slivers.first.startX - getFrameWidth(i),
+          endX: slivers.first.startX,
+          thumbnail: frames[i].snapshot,
         ),
       );
     }
 
     // Fill with slivers on right side.
     for (int i = selectedFrameIndex + 1;
-        i < frames.length && sliverRects.last.right < size.width;
+        i < frames.length && slivers.last.endX < size.width;
         i++) {
-      sliverRects.add(getSliverRect(
-        sliverRects.last.right,
-        sliverRects.last.right + getFrameWidth(i),
+      slivers.add(FrameSliver(
+        startX: slivers.last.endX,
+        endX: slivers.last.endX + getFrameWidth(i),
+        thumbnail: frames[i].snapshot,
       ));
     }
 
-    for (final rect in sliverRects) {
-      drawFrameSliver(canvas, rect);
-    }
-  }
+    final double sliverHeight = 50;
+    final double sliverTop = (size.height - sliverHeight) / 2;
+    final double sliverBottom = (size.height + sliverHeight) / 2;
 
-  void drawFrameSliver(Canvas canvas, Rect rect) {
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(rect.deflate(1), Radius.circular(4)),
-      Paint()..color = Colors.white,
-    );
+    for (final sliver in slivers) {
+      sliver.paint(canvas, sliverTop, sliverBottom);
+    }
   }
 
   @override
