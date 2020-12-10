@@ -4,24 +4,25 @@ import 'package:mooltik/editor/frame/frame_model.dart';
 class TimelineModel extends ChangeNotifier {
   TimelineModel({
     @required this.frames,
+    TickerProvider vsync,
   })  : assert(frames != null && frames.isNotEmpty),
-        _playheadPosition = Duration.zero,
         _selectedFrameIndex = 0,
         _selectedFrameStart = Duration.zero,
-        _selectedFrameEnd = frames.first.duration {
-    _totalDuration = frames.fold(
-      Duration.zero,
-      (duration, frame) => duration + frame.duration,
-    );
-  }
+        _selectedFrameEnd = frames.first.duration,
+        _controller = AnimationController(
+          vsync: vsync,
+          duration: frames.fold(
+            Duration.zero,
+            (duration, frame) => duration + frame.duration,
+          ),
+        );
 
   final List<FrameModel> frames;
+  final AnimationController _controller;
 
-  Duration get playheadPosition => _playheadPosition;
-  Duration _playheadPosition;
+  Duration get playheadPosition => totalDuration * _controller.value;
 
-  Duration get totalDuration => _totalDuration;
-  Duration _totalDuration;
+  Duration get totalDuration => _controller.duration;
 
   FrameModel get selectedFrame => frames[_selectedFrameIndex];
 
@@ -29,16 +30,16 @@ class TimelineModel extends ChangeNotifier {
   int _selectedFrameIndex;
 
   double get selectedFrameProgress =>
-      (_playheadPosition - _selectedFrameStart).inMilliseconds /
+      (playheadPosition - _selectedFrameStart).inMilliseconds /
       selectedFrame.duration.inMilliseconds;
 
   Duration _selectedFrameStart;
   Duration _selectedFrameEnd;
 
   void _updateSelectedFrame() {
-    if (_playheadPosition < _selectedFrameStart) {
+    if (playheadPosition < _selectedFrameStart) {
       _selectPrevFrame();
-    } else if (_playheadPosition > _selectedFrameEnd) {
+    } else if (playheadPosition > _selectedFrameEnd) {
       _selectNextFrame();
     }
   }
@@ -57,18 +58,10 @@ class TimelineModel extends ChangeNotifier {
     _selectedFrameEnd += selectedFrame.duration;
   }
 
-  void scrub(Duration diff) {
-    _playheadPosition += diff;
-    _clampPlayhead();
+  /// Scrubs the timeline by a [fraction] of total duration.
+  void scrub(double fraction) {
+    _controller.value += fraction;
     _updateSelectedFrame();
     notifyListeners();
-  }
-
-  void _clampPlayhead() {
-    if (_playheadPosition < Duration.zero) {
-      _playheadPosition = Duration.zero;
-    } else if (_playheadPosition > _totalDuration) {
-      _playheadPosition = _totalDuration;
-    }
   }
 }

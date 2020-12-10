@@ -20,6 +20,7 @@ class _TimelineScrollableState extends State<TimelineScrollable> {
   @override
   Widget build(BuildContext context) {
     final timeline = context.watch<TimelineModel>();
+    final timelineWidth = durationToPx(timeline.totalDuration, msPerPx);
 
     return GestureDetector(
       onScaleStart: (ScaleStartDetails details) {
@@ -33,7 +34,7 @@ class _TimelineScrollableState extends State<TimelineScrollable> {
         });
 
         final diff = (details.localFocalPoint - _prevFocalPoint);
-        timeline.scrub(pxToDuration(-diff.dx, msPerPx));
+        timeline.scrub(-diff.dx / timelineWidth);
         _prevFocalPoint = details.localFocalPoint;
       },
       onScaleEnd: (ScaleEndDetails details) {
