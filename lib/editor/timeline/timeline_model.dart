@@ -9,25 +9,25 @@ class TimelineModel extends ChangeNotifier {
         _selectedFrameIndex = 0,
         _selectedFrameStart = Duration.zero,
         _selectedFrameEnd = frames.first.duration,
-        _controller = AnimationController(
+        _playheadController = AnimationController(
           vsync: vsync,
           duration: frames.fold(
             Duration.zero,
             (duration, frame) => duration + frame.duration,
           ),
         ) {
-    _controller.addListener(() {
+    _playheadController.addListener(() {
       _updateSelectedFrame();
       notifyListeners();
     });
   }
 
   final List<FrameModel> frames;
-  final AnimationController _controller;
+  final AnimationController _playheadController;
 
-  Duration get playheadPosition => totalDuration * _controller.value;
+  Duration get playheadPosition => totalDuration * _playheadController.value;
 
-  Duration get totalDuration => _controller.duration;
+  Duration get totalDuration => _playheadController.duration;
 
   FrameModel get selectedFrame => frames[_selectedFrameIndex];
 
@@ -65,6 +65,6 @@ class TimelineModel extends ChangeNotifier {
 
   /// Scrubs the timeline by a [fraction] of total duration.
   void scrub(double fraction) {
-    _controller.value += fraction;
+    _playheadController.value += fraction;
   }
 }
