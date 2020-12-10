@@ -15,7 +15,12 @@ class TimelineModel extends ChangeNotifier {
             Duration.zero,
             (duration, frame) => duration + frame.duration,
           ),
-        );
+        ) {
+    _controller.addListener(() {
+      _updateSelectedFrame();
+      notifyListeners();
+    });
+  }
 
   final List<FrameModel> frames;
   final AnimationController _controller;
@@ -61,7 +66,5 @@ class TimelineModel extends ChangeNotifier {
   /// Scrubs the timeline by a [fraction] of total duration.
   void scrub(double fraction) {
     _controller.value += fraction;
-    _updateSelectedFrame();
-    notifyListeners();
   }
 }
