@@ -10,6 +10,14 @@ import 'reel/reel_model.dart';
 class DrawingPage extends StatelessWidget {
   static const routeName = '/draw';
 
+  const DrawingPage({
+    Key key,
+    this.initialFrameIndex = 0,
+  })  : assert(initialFrameIndex != null),
+        super(key: key);
+
+  final int initialFrameIndex;
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -18,6 +26,7 @@ class DrawingPage extends StatelessWidget {
           create: (context) => ReelModel(
             frameSize: context.read<Project>().frameSize,
             frames: context.read<Project>().frames,
+            initialFrameIndex: initialFrameIndex,
           ),
         ),
         ChangeNotifierProvider(

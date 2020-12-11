@@ -6,9 +6,12 @@ class ReelModel extends ChangeNotifier {
   ReelModel({
     @required this.frameSize,
     @required this.frames,
+    int initialFrameIndex = 0,
   })  : assert(frameSize != null),
         assert(frames != null && frames.isNotEmpty),
-        _selectedFrameId = 0;
+        assert(initialFrameIndex != null),
+        _selectedFrameId = initialFrameIndex,
+        _onion = false;
 
   final Size frameSize;
   final List<FrameModel> frames;
@@ -88,7 +91,7 @@ class ReelModel extends ChangeNotifier {
   */
 
   bool get onion => _onion;
-  bool _onion = true;
+  bool _onion;
 
   void toggleOnion() {
     _onion = !_onion;
