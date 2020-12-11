@@ -67,4 +67,8 @@ class TimelineModel extends ChangeNotifier {
   void scrub(double fraction) {
     _playheadController.value += fraction;
   }
+
+  void play() {
+    _playheadController.forward();
+  }
 }
