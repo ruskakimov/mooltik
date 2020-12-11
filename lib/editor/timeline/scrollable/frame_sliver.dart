@@ -21,11 +21,13 @@ class FrameSliver {
   void paint(Canvas canvas, double startY, double endY) {
     final RRect rrect = _getRrect(startY, endY);
     canvas.drawRRect(rrect, Paint()..color = Colors.white);
-    canvas.save();
-    canvas.clipRRect(rrect);
-    canvas.translate(startX, startY);
-    canvas.scale((endY - startY) / thumbnail.height);
-    canvas.drawImage(thumbnail, Offset.zero, Paint());
-    canvas.restore();
+    if (thumbnail != null) {
+      canvas.save();
+      canvas.clipRRect(rrect);
+      canvas.translate(startX, startY);
+      canvas.scale((endY - startY) / thumbnail.height);
+      canvas.drawImage(thumbnail, Offset.zero, Paint());
+      canvas.restore();
+    }
   }
 }
