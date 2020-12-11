@@ -27,8 +27,10 @@ class TimelineActionbar extends StatelessWidget {
             onTap: () {},
           ),
           AppIconButton(
-            icon: FontAwesomeIcons.play,
-            onTap: timeline.play,
+            icon: timeline.playing
+                ? FontAwesomeIcons.pause
+                : FontAwesomeIcons.play,
+            onTap: timeline.playing ? timeline.pause : timeline.play,
           ),
           AppIconButton(
             icon: FontAwesomeIcons.stepForward,

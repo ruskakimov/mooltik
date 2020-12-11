@@ -27,6 +27,8 @@ class TimelineModel extends ChangeNotifier {
 
   Duration get playheadPosition => totalDuration * _playheadController.value;
 
+  bool get playing => _playheadController.isAnimating;
+
   Duration get totalDuration => _playheadController.duration;
 
   FrameModel get selectedFrame => frames[_selectedFrameIndex];
@@ -70,5 +72,11 @@ class TimelineModel extends ChangeNotifier {
 
   void play() {
     _playheadController.forward();
+    notifyListeners();
+  }
+
+  void pause() {
+    _playheadController.stop();
+    notifyListeners();
   }
 }
