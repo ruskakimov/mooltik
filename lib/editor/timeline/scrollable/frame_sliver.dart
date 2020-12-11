@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -25,8 +26,13 @@ class FrameSliver {
       canvas.save();
       canvas.clipRRect(rrect);
       canvas.translate(startX, startY);
-      canvas.scale((endY - startY) / thumbnail.height);
-      canvas.drawImage(thumbnail, Offset.zero, Paint());
+      final double scaleFactor = (endY - startY) / thumbnail.height;
+      canvas.scale(scaleFactor);
+      final double xOverflow = max(
+        0,
+        thumbnail.width - rrect.width / scaleFactor,
+      );
+      canvas.drawImage(thumbnail, Offset(-xOverflow / 2, 0), Paint());
       canvas.restore();
     }
   }
