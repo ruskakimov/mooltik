@@ -5,12 +5,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/common/app_icon_button.dart';
 import 'package:mooltik/editor/frame/frame_thumbnail.dart';
-import 'package:mooltik/editor/reel/context_menu/add_in_between_button.dart';
 import 'package:mooltik/editor/reel/context_menu/reel_context_menu.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/reel/reel_model.dart';
 
-const double drawerWidth = 112.0;
+const double drawerWidth = 100.0;
 const double thumbnailHeight = 64.0;
 const double gap = 1.0;
 
@@ -114,43 +113,27 @@ class _ReelDrawerState extends State<ReelDrawer> {
           final frame = reel.frames[index];
           final selected = index == reel.selectedFrameId;
 
-          return SizedBox(
-            height: thumbnailHeight,
-            child: GestureDetector(
-              onTap: () {
-                if (selected) {
-                  setState(() => _contextMenuOpen = !_contextMenuOpen);
-                }
-                _scrollTo(index);
-              },
-              child: PortalEntry(
-                visible: selected && _contextMenuOpen,
-                childAnchor: Alignment(0.5, -1),
-                portalAnchor: Alignment.center,
-                portal: AddInBetweenButton(
-                  onPressed: reel.addFrameBeforeSelected,
+          return GestureDetector(
+            onTap: () {
+              if (selected) {
+                setState(() => _contextMenuOpen = !_contextMenuOpen);
+              }
+              _scrollTo(index);
+            },
+            child: SizedBox(
+              height: thumbnailHeight,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 4,
+                    color: selected
+                        ? Theme.of(context).colorScheme.primary
+                        : Colors.transparent,
+                  ),
                 ),
-                child: PortalEntry(
-                  visible: selected && _contextMenuOpen && index != lastIndex,
-                  childAnchor: Alignment(0.5, 1),
-                  portalAnchor: Alignment.center,
-                  portal: AddInBetweenButton(
-                    onPressed: reel.addFrameAfterSelected,
-                  ),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 4,
-                        color: selected
-                            ? Theme.of(context).colorScheme.primary
-                            : Colors.transparent,
-                      ),
-                    ),
-                    position: DecorationPosition.foreground,
-                    child: FrameThumbnail(
-                      frame: frame,
-                    ),
-                  ),
+                position: DecorationPosition.foreground,
+                child: FrameThumbnail(
+                  frame: frame,
                 ),
               ),
             ),
