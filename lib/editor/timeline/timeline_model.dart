@@ -46,7 +46,7 @@ class TimelineModel extends ChangeNotifier {
   void _updateSelectedFrame() {
     if (playheadPosition < _selectedFrameStart) {
       _selectPrevFrame();
-    } else if (playheadPosition > _selectedFrameEnd) {
+    } else if (playheadPosition >= _selectedFrameEnd) {
       _selectNextFrame();
     }
   }
@@ -77,6 +77,14 @@ class TimelineModel extends ChangeNotifier {
 
   void pause() {
     _playheadController.stop();
+    notifyListeners();
+  }
+
+  void stepForward() {
+    final double fraction =
+        _selectedFrameEnd.inMilliseconds / totalDuration.inMilliseconds;
+    _playheadController.value = fraction;
+    _updateSelectedFrame();
     notifyListeners();
   }
 }
