@@ -89,7 +89,6 @@ class _ReelDrawerState extends State<ReelDrawer> {
 
     return LayoutBuilder(builder: (context, constraints) {
       final padding = (constraints.maxHeight - thumbnailHeight) / 2;
-      final lastIndex = reel.frames.length - 1;
 
       return ListView.separated(
         controller: controller,
