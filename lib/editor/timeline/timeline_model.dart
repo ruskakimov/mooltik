@@ -80,6 +80,16 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void stepBackward() {
+    final Duration time = _selectedFrameIndex == 0
+        ? _selectedFrameStart
+        : _selectedFrameStart - frames[_selectedFrameIndex - 1].duration;
+    final double fraction = time.inMilliseconds / totalDuration.inMilliseconds;
+    _playheadController.value = fraction;
+    _updateSelectedFrame();
+    notifyListeners();
+  }
+
   void stepForward() {
     final double fraction =
         _selectedFrameEnd.inMilliseconds / totalDuration.inMilliseconds;

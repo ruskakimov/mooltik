@@ -24,7 +24,7 @@ class TimelineActionbar extends StatelessWidget {
           ),
           AppIconButton(
             icon: FontAwesomeIcons.stepBackward,
-            onTap: () {},
+            onTap: timeline.stepBackward,
           ),
           AppIconButton(
             icon: timeline.playing
