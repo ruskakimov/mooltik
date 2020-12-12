@@ -40,6 +40,8 @@ class TimelineModel extends ChangeNotifier {
       (playheadPosition - _selectedFrameStart).inMilliseconds /
       selectedFrame.duration.inMilliseconds;
 
+  bool get lastFrameSelected => _selectedFrameIndex == frames.length - 1;
+
   Duration _selectedFrameStart;
   Duration _selectedFrameEnd;
 
@@ -59,7 +61,7 @@ class TimelineModel extends ChangeNotifier {
   }
 
   void _selectNextFrame() {
-    if (_selectedFrameIndex == frames.length - 1) return;
+    if (lastFrameSelected) return;
     _selectedFrameIndex++;
     _selectedFrameStart = _selectedFrameEnd;
     _selectedFrameEnd += selectedFrame.duration;
@@ -94,7 +96,7 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get stepBackwardAvailable => _selectedFrameIndex > 0;
+  bool get stepBackwardAvailable => !playing && _selectedFrameIndex > 0;
 
   void stepBackward() {
     if (!stepBackwardAvailable) return;
@@ -106,7 +108,7 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get stepForwardAvailable => _selectedFrameIndex < frames.length - 1;
+  bool get stepForwardAvailable => !playing && !lastFrameSelected;
 
   void stepForward() {
     if (!stepForwardAvailable) return;

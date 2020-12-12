@@ -9,12 +9,14 @@ class StepForwardButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final timeline = context.watch<TimelineModel>();
     return AppIconButton(
-      icon: timeline.stepForwardAvailable
-          ? FontAwesomeIcons.stepForward
-          : FontAwesomeIcons.plus,
-      onTap: timeline.stepForwardAvailable
-          ? timeline.stepForward
-          : timeline.addFrame,
+      icon: timeline.lastFrameSelected
+          ? FontAwesomeIcons.plus
+          : FontAwesomeIcons.stepForward,
+      onTap: timeline.playing
+          ? null
+          : timeline.lastFrameSelected
+              ? timeline.addFrame
+              : timeline.stepForward,
     );
   }
 }
