@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/easel/easel_model.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
+import 'package:mooltik/editor/onion_model.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:mooltik/home/project.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +39,7 @@ class _EaselState extends State<Easel> {
       builder: (context, child) {
         final easel = context.watch<EaselModel>();
         final frame = context.watch<FrameModel>();
+        final onion = context.watch<OnionModel>();
 
         return EaselGestureDetector(
           onStrokeStart: easel.onStrokeStart,
@@ -69,36 +71,36 @@ class _EaselState extends State<Easel> {
                           height: frame.height,
                           color: Colors.white,
                         ),
-                        // if (reel.frameBefore != null)
-                        //   Opacity(
-                        //     opacity: 0.2,
-                        //     child: CustomPaint(
-                        //       size: Size(frame.width, frame.height),
-                        //       foregroundPainter: FramePainter(
-                        //         frame: reel.frameBefore,
-                        //         background: Colors.transparent,
-                        //         filter: ColorFilter.mode(
-                        //           Colors.red,
-                        //           BlendMode.srcATop,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // if (reel.frameAfter != null)
-                        //   Opacity(
-                        //     opacity: 0.2,
-                        //     child: CustomPaint(
-                        //       size: Size(frame.width, frame.height),
-                        //       foregroundPainter: FramePainter(
-                        //         frame: reel.frameAfter,
-                        //         background: Colors.transparent,
-                        //         filter: ColorFilter.mode(
-                        //           Colors.green,
-                        //           BlendMode.srcATop,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
+                        if (onion.frameBefore != null)
+                          Opacity(
+                            opacity: 0.2,
+                            child: CustomPaint(
+                              size: Size(frame.width, frame.height),
+                              foregroundPainter: FramePainter(
+                                frame: onion.frameBefore,
+                                background: Colors.transparent,
+                                filter: ColorFilter.mode(
+                                  Colors.red,
+                                  BlendMode.srcATop,
+                                ),
+                              ),
+                            ),
+                          ),
+                        if (onion.frameAfter != null)
+                          Opacity(
+                            opacity: 0.2,
+                            child: CustomPaint(
+                              size: Size(frame.width, frame.height),
+                              foregroundPainter: FramePainter(
+                                frame: onion.frameAfter,
+                                background: Colors.transparent,
+                                filter: ColorFilter.mode(
+                                  Colors.green,
+                                  BlendMode.srcATop,
+                                ),
+                              ),
+                            ),
+                          ),
                         CustomPaint(
                           size: Size(frame.width, frame.height),
                           foregroundPainter: FramePainter(

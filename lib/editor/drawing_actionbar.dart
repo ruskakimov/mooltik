@@ -6,6 +6,7 @@ import 'package:mooltik/common/surface.dart';
 import 'package:mooltik/editor/drawer/color_picker_button.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/drawer/color_picker_drawer.dart';
+import 'package:mooltik/editor/onion_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 
@@ -37,13 +38,13 @@ class _DrawingActionbarState extends State<DrawingActionbar> {
               Navigator.pop(context);
             },
           ),
-          // AppIconButton(
-          //   icon: FontAwesomeIcons.lightbulb,
-          //   selected: context.watch<ReelModel>().onion,
-          //   onTap: () {
-          //     context.read<ReelModel>().toggleOnion();
-          //   },
-          // ),
+          AppIconButton(
+            icon: FontAwesomeIcons.lightbulb,
+            selected: context.watch<OnionModel>().enabled,
+            onTap: () {
+              context.read<OnionModel>().toggle();
+            },
+          ),
           Spacer(),
           for (var i = 0; i < toolbox.tools.length; i++)
             AppIconButton(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/drawing_actionbar.dart';
+import 'package:mooltik/editor/onion_model.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,14 @@ class DrawingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProxyProvider<TimelineModel, OnionModel>(
+          update: (context, timeline, model) =>
+              model..updateSelectedIndex(timeline.selectedFrameIndex),
+          create: (context) => OnionModel(
+            frames: context.read<TimelineModel>().frames,
+            selectedIndex: context.read<TimelineModel>().selectedFrameIndex,
+          ),
+        ),
         ChangeNotifierProvider(
           create: (context) => ToolboxModel(),
         ),
