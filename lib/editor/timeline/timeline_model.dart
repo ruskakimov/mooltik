@@ -65,6 +65,12 @@ class TimelineModel extends ChangeNotifier {
     _selectedFrameEnd += selectedFrame.duration;
   }
 
+  void _resetSelectedFrame() {
+    _selectedFrameIndex = 0;
+    _selectedFrameStart = Duration.zero;
+    _selectedFrameEnd = frames.first.duration;
+  }
+
   /// Scrubs the timeline by a [fraction] of total duration.
   void scrub(double fraction) {
     _playheadController.value += fraction;
@@ -84,6 +90,7 @@ class TimelineModel extends ChangeNotifier {
     _playheadController
       ..reset()
       ..forward();
+    _resetSelectedFrame();
     notifyListeners();
   }
 
