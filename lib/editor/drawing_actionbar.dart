@@ -9,6 +9,7 @@ import 'package:mooltik/editor/drawer/color_picker_drawer.dart';
 import 'package:mooltik/editor/onion_model.dart';
 import 'package:mooltik/editor/timeline/actionbar/step_backward_button.dart';
 import 'package:mooltik/editor/timeline/actionbar/step_forward_button.dart';
+import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 
@@ -49,6 +50,14 @@ class _DrawingActionbarState extends State<DrawingActionbar> {
           ),
           Spacer(),
           StepBackwardButton(),
+          SizedBox(
+            width: 32,
+            child: Center(
+              child: Text(
+                '${context.watch<TimelineModel>().selectedFrameIndex + 1}',
+              ),
+            ),
+          ),
           StepForwardButton(),
           Spacer(),
           for (var i = 0; i < toolbox.tools.length; i++)
