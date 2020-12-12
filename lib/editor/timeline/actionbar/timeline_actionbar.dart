@@ -23,7 +23,8 @@ class TimelineActionbar extends StatelessWidget {
           Spacer(),
           AppIconButton(
             icon: FontAwesomeIcons.stepBackward,
-            onTap: timeline.stepBackward,
+            onTap:
+                timeline.stepBackwardAvailable ? timeline.stepBackward : null,
           ),
           AppIconButton(
             icon: timeline.playing
@@ -33,7 +34,7 @@ class TimelineActionbar extends StatelessWidget {
           ),
           AppIconButton(
             icon: FontAwesomeIcons.stepForward,
-            onTap: timeline.stepForward,
+            onTap: timeline.stepForwardAvailable ? timeline.stepForward : null,
           ),
         ],
       ),

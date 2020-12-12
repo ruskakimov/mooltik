@@ -80,17 +80,22 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get stepBackwardAvailable => _selectedFrameIndex > 0;
+
   void stepBackward() {
-    final Duration time = _selectedFrameIndex == 0
-        ? _selectedFrameStart
-        : _selectedFrameStart - frames[_selectedFrameIndex - 1].duration;
+    if (!stepBackwardAvailable) return;
+    final Duration time =
+        _selectedFrameStart - frames[_selectedFrameIndex - 1].duration;
     final double fraction = time.inMilliseconds / totalDuration.inMilliseconds;
     _playheadController.value = fraction;
     _updateSelectedFrame();
     notifyListeners();
   }
 
+  bool get stepForwardAvailable => _selectedFrameIndex < frames.length - 1;
+
   void stepForward() {
+    if (!stepForwardAvailable) return;
     final double fraction =
         _selectedFrameEnd.inMilliseconds / totalDuration.inMilliseconds;
     _playheadController.value = fraction;
