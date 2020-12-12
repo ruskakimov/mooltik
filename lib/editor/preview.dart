@@ -9,19 +9,19 @@ import 'package:provider/provider.dart';
 class Preview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final project = context.watch<Project>();
-
     return GestureDetector(
       onTap: () async {
+        final project = context.read<Project>();
         final timeline = context.read<TimelineModel>();
 
         await Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ChangeNotifierProvider.value(
-              value: project,
-              child: DrawingPage(
-                initialFrameIndex: timeline.selectedFrameIndex,
-              ),
+            builder: (context) => MultiProvider(
+              providers: [
+                ChangeNotifierProvider.value(value: project),
+                ChangeNotifierProvider.value(value: timeline),
+              ],
+              child: DrawingPage(),
             ),
           ),
         );

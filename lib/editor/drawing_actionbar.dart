@@ -6,14 +6,8 @@ import 'package:mooltik/common/surface.dart';
 import 'package:mooltik/editor/drawer/color_picker_button.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/drawer/color_picker_drawer.dart';
-import 'package:mooltik/editor/reel/reel_drawer.dart';
-import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
-
-enum LeftDrawer {
-  reel,
-}
 
 enum RightDrawer {
   strokeSize,
@@ -28,7 +22,6 @@ class DrawingActionbar extends StatefulWidget {
 }
 
 class _DrawingActionbarState extends State<DrawingActionbar> {
-  LeftDrawer leftOpen;
   RightDrawer rightOpen;
 
   @override
@@ -44,22 +37,13 @@ class _DrawingActionbarState extends State<DrawingActionbar> {
               Navigator.pop(context);
             },
           ),
-          AppIconButton(
-            icon: FontAwesomeIcons.film,
-            selected: leftOpen == LeftDrawer.reel,
-            onTap: () {
-              setState(() {
-                leftOpen = leftOpen == LeftDrawer.reel ? null : LeftDrawer.reel;
-              });
-            },
-          ),
-          AppIconButton(
-            icon: FontAwesomeIcons.lightbulb,
-            selected: context.watch<ReelModel>().onion,
-            onTap: () {
-              context.read<ReelModel>().toggleOnion();
-            },
-          ),
+          // AppIconButton(
+          //   icon: FontAwesomeIcons.lightbulb,
+          //   selected: context.watch<ReelModel>().onion,
+          //   onTap: () {
+          //     context.read<ReelModel>().toggleOnion();
+          //   },
+          // ),
           Spacer(),
           for (var i = 0; i < toolbox.tools.length; i++)
             AppIconButton(
@@ -103,9 +87,6 @@ class _DrawingActionbarState extends State<DrawingActionbar> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        ReelDrawer(
-          open: leftOpen == LeftDrawer.reel,
-        ),
         StrokeSizeDrawer(
           open: rightOpen == RightDrawer.strokeSize,
         ),

@@ -7,7 +7,6 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/gif.dart';
-import 'package:mooltik/editor/reel/reel_model.dart';
 import 'package:mooltik/home/png.dart';
 import 'package:mooltik/home/project.dart';
 import 'package:path_provider/path_provider.dart';
@@ -43,7 +42,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
   }
 
   Widget _buildMenu() {
-    final reel = context.watch<ReelModel>();
+    // final reel = context.watch<ReelModel>();
 
     return Column(
       children: [
@@ -67,7 +66,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
             setState(() {
               _saving = true;
             });
-            await _saveGif(reel.frames);
+            // await _saveGif(reel.frames);
             setState(() {
               _saving = false;
             });
@@ -80,7 +79,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
             setState(() {
               _saving = true;
             });
-            await _saveVideo(reel.frames);
+            // await _saveVideo(reel.frames);
             setState(() {
               _saving = false;
             });
