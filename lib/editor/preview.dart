@@ -10,11 +10,11 @@ class Preview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
+      onTap: () {
         final project = context.read<Project>();
         final timeline = context.read<TimelineModel>();
 
-        await Navigator.of(context).push(
+        Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => MultiProvider(
               providers: [
@@ -25,8 +25,6 @@ class Preview extends StatelessWidget {
             ),
           ),
         );
-
-        timeline.onDrawingClosed();
       },
       child: FrameThumbnail(
         frame: context.select<TimelineModel, FrameModel>(
