@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/timeline/actionbar/step_backward_button.dart';
+import 'package:mooltik/editor/timeline/actionbar/step_forward_button.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/app_icon_button.dart';
@@ -21,21 +23,14 @@ class TimelineActionbar extends StatelessWidget {
         children: [
           TimeLabel(),
           Spacer(),
-          AppIconButton(
-            icon: FontAwesomeIcons.stepBackward,
-            onTap:
-                timeline.stepBackwardAvailable ? timeline.stepBackward : null,
-          ),
+          StepBackwardButton(),
           AppIconButton(
             icon: timeline.playing
                 ? FontAwesomeIcons.pause
                 : FontAwesomeIcons.play,
             onTap: timeline.playing ? timeline.pause : timeline.play,
           ),
-          AppIconButton(
-            icon: FontAwesomeIcons.stepForward,
-            onTap: timeline.stepForwardAvailable ? timeline.stepForward : null,
-          ),
+          StepForwardButton(),
         ],
       ),
     );
