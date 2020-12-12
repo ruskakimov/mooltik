@@ -19,9 +19,8 @@ class TimelineActionbar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
-            child: TimeLabel(),
-          ),
+          TimeLabel(),
+          Spacer(),
           AppIconButton(
             icon: FontAwesomeIcons.stepBackward,
             onTap: timeline.stepBackward,
@@ -36,7 +35,6 @@ class TimelineActionbar extends StatelessWidget {
             icon: FontAwesomeIcons.stepForward,
             onTap: timeline.stepForward,
           ),
-          Spacer(),
         ],
       ),
     );
