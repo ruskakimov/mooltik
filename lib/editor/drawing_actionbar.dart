@@ -7,6 +7,7 @@ import 'package:mooltik/editor/drawer/color_picker_button.dart';
 import 'package:mooltik/editor/drawer/animated_drawer.dart';
 import 'package:mooltik/editor/drawer/color_picker_drawer.dart';
 import 'package:mooltik/editor/onion_model.dart';
+import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 
@@ -43,6 +44,19 @@ class _DrawingActionbarState extends State<DrawingActionbar> {
             selected: context.watch<OnionModel>().enabled,
             onTap: () {
               context.read<OnionModel>().toggle();
+            },
+          ),
+          Spacer(),
+          AppIconButton(
+            icon: FontAwesomeIcons.stepBackward,
+            onTap: () {
+              context.read<TimelineModel>().stepBackward();
+            },
+          ),
+          AppIconButton(
+            icon: FontAwesomeIcons.stepForward,
+            onTap: () {
+              context.read<TimelineModel>().stepForward();
             },
           ),
           Spacer(),
