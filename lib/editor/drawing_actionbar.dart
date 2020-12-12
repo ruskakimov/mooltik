@@ -49,17 +49,6 @@ class _DrawingActionbarState extends State<DrawingActionbar> {
             },
           ),
           Spacer(),
-          StepBackwardButton(),
-          SizedBox(
-            width: 32,
-            child: Center(
-              child: Text(
-                '${context.watch<TimelineModel>().selectedFrameIndex + 1}',
-              ),
-            ),
-          ),
-          StepForwardButton(),
-          Spacer(),
           for (var i = 0; i < toolbox.tools.length; i++)
             AppIconButton(
               icon: toolbox.tools[i].icon,
@@ -75,14 +64,17 @@ class _DrawingActionbarState extends State<DrawingActionbar> {
                 toolbox.selectTool(i);
               },
             ),
-          ColorPickerButton(
-            onTap: () {
-              setState(() {
-                rightOpen =
-                    rightOpen == RightDrawer.color ? null : RightDrawer.color;
-              });
-            },
+          Spacer(),
+          StepBackwardButton(),
+          SizedBox(
+            width: 32,
+            child: Center(
+              child: Text(
+                '${context.watch<TimelineModel>().selectedFrameIndex + 1}',
+              ),
+            ),
           ),
+          StepForwardButton(),
         ],
       ),
     );
