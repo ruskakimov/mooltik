@@ -102,4 +102,11 @@ class TimelineModel extends ChangeNotifier {
     _updateSelectedFrame();
     notifyListeners();
   }
+
+  void addFrame() {
+    frames.add(FrameModel(size: frames.first.size));
+    _playheadController.duration += frames.last.duration;
+    stepForward();
+    notifyListeners();
+  }
 }
