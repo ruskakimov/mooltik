@@ -12,17 +12,21 @@ class Preview extends StatelessWidget {
     final project = context.watch<Project>();
 
     return GestureDetector(
-      onTap: () {
-        final frameIndex = context.read<TimelineModel>().selectedFrameIndex;
+      onTap: () async {
+        final timeline = context.read<TimelineModel>();
 
-        Navigator.of(context).push(
+        await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => ChangeNotifierProvider.value(
               value: project,
-              child: DrawingPage(initialFrameIndex: frameIndex),
+              child: DrawingPage(
+                initialFrameIndex: timeline.selectedFrameIndex,
+              ),
             ),
           ),
         );
+
+        timeline.onDrawingClosed();
       },
       child: FrameThumbnail(
         frame: context.select<TimelineModel, FrameModel>(

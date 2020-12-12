@@ -22,6 +22,17 @@ class TimelineModel extends ChangeNotifier {
     });
   }
 
+  void onDrawingClosed() {
+    final position = playheadPosition;
+    _playheadController.duration = frames.fold(
+      Duration.zero,
+      (duration, frame) => duration + frame.duration,
+    );
+    _playheadController.value =
+        position.inMilliseconds / _playheadController.duration.inMilliseconds;
+    notifyListeners();
+  }
+
   final List<FrameModel> frames;
   final AnimationController _playheadController;
 
