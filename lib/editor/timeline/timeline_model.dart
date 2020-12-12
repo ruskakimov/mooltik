@@ -80,6 +80,13 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void replay() {
+    _playheadController
+      ..reset()
+      ..forward();
+    notifyListeners();
+  }
+
   bool get stepBackwardAvailable => _selectedFrameIndex > 0;
 
   void stepBackward() {
