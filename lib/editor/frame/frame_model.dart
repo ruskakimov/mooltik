@@ -41,6 +41,7 @@ class FrameModel extends ChangeNotifier {
   List<ui.Image> _snapshots;
   int _selectedSnapshotId;
 
+  Size get size => _size;
   final Size _size;
 
   double get width => _size.width;

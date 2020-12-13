@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mooltik/home/project.dart';
 import 'package:provider/provider.dart';
-import 'package:mooltik/editor/editor_page.dart';
+import 'package:mooltik/editor/editing_page.dart';
 import 'package:mooltik/home/projects_manager_model.dart';
 
 class ProjectGallery extends StatelessWidget {
@@ -32,7 +32,7 @@ class ProjectGallery extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => ChangeNotifierProvider<Project>.value(
                     value: project,
-                    child: EditorPage(reel: project.reel),
+                    child: EditingPage(),
                   ),
                 ),
               );

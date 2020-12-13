@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/frame/frame_painter.dart';
+import 'package:provider/provider.dart';
 
 class FrameThumbnail extends StatelessWidget {
   const FrameThumbnail({
@@ -12,16 +13,15 @@ class FrameThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
+    return ChangeNotifierProvider.value(
+      value: frame,
+      builder: (BuildContext context, Widget child) {
+        context.watch<FrameModel>();
         return FittedBox(
           alignment: Alignment.center,
           fit: BoxFit.cover,
           child: CustomPaint(
-            size: Size(
-              constraints.maxHeight / frame.height * frame.width,
-              constraints.maxHeight,
-            ),
+            size: frame.size,
             painter: FramePainter(frame: frame),
           ),
         );

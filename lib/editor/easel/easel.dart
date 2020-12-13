@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/easel/easel_model.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
-import 'package:mooltik/editor/reel/reel_model.dart';
+import 'package:mooltik/editor/onion_model.dart';
+import 'package:mooltik/editor/timeline/timeline_model.dart';
+import 'package:mooltik/home/project.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editor/toolbox/toolbox_model.dart';
 
@@ -18,13 +20,15 @@ class Easel extends StatefulWidget {
 class _EaselState extends State<Easel> {
   @override
   Widget build(BuildContext context) {
-    final reel = context.watch<ReelModel>();
+    final project = context.watch<Project>();
+    final timeline = context.watch<TimelineModel>();
     final toolbox = context.watch<ToolboxModel>();
 
-    return ChangeNotifierProxyProvider2<ReelModel, ToolboxModel, EaselModel>(
+    return ChangeNotifierProxyProvider2<TimelineModel, ToolboxModel,
+        EaselModel>(
       create: (_) => EaselModel(
-        frame: reel.selectedFrame,
-        frameSize: reel.frameSize,
+        frame: timeline.selectedFrame,
+        frameSize: project.frameSize,
         selectedTool: toolbox.selectedTool,
         screenSize: MediaQuery.of(context).size,
       ),
@@ -35,7 +39,7 @@ class _EaselState extends State<Easel> {
       builder: (context, child) {
         final easel = context.watch<EaselModel>();
         final frame = context.watch<FrameModel>();
-        final reel = context.watch<ReelModel>();
+        final onion = context.watch<OnionModel>();
 
         return EaselGestureDetector(
           onStrokeStart: easel.onStrokeStart,
@@ -67,13 +71,13 @@ class _EaselState extends State<Easel> {
                           height: frame.height,
                           color: Colors.white,
                         ),
-                        if (reel.frameBefore != null)
+                        if (onion.frameBefore != null)
                           Opacity(
                             opacity: 0.2,
                             child: CustomPaint(
                               size: Size(frame.width, frame.height),
                               foregroundPainter: FramePainter(
-                                frame: reel.frameBefore,
+                                frame: onion.frameBefore,
                                 background: Colors.transparent,
                                 filter: ColorFilter.mode(
                                   Colors.red,
@@ -82,13 +86,13 @@ class _EaselState extends State<Easel> {
                               ),
                             ),
                           ),
-                        if (reel.frameAfter != null)
+                        if (onion.frameAfter != null)
                           Opacity(
                             opacity: 0.2,
                             child: CustomPaint(
                               size: Size(frame.width, frame.height),
                               foregroundPainter: FramePainter(
-                                frame: reel.frameAfter,
+                                frame: onion.frameAfter,
                                 background: Colors.transparent,
                                 filter: ColorFilter.mode(
                                   Colors.green,
