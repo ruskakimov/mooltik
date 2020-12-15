@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/timeline/actionbar/record_button.dart';
 import 'package:mooltik/editor/timeline/actionbar/step_backward_button.dart';
 import 'package:mooltik/editor/timeline/actionbar/step_forward_button.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,8 @@ class TimelineActionbar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TimeLabel(),
+          Spacer(),
+          RecordButton(),
           Spacer(),
           StepBackwardButton(),
           AppIconButton(
