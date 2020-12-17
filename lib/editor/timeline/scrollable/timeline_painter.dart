@@ -26,20 +26,21 @@ class TimelinePainter extends CustomPainter {
         msPerPx,
       );
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    final double midX = size.width / 2;
-
+  FrameSliver getSelectedFrameSliver(double midX) {
     final double selectedFrameWidth = getFrameWidth(selectedFrameIndex);
     final double selectedFrameStartX =
         midX - selectedFrameWidth * selectedFrameProgress;
-
-    final selectedFrameSliver = FrameSliver(
+    return FrameSliver(
       startX: selectedFrameStartX,
       endX: selectedFrameStartX + selectedFrameWidth,
       thumbnail: frames[selectedFrameIndex].snapshot,
     );
-    final List<FrameSliver> slivers = [selectedFrameSliver];
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double midX = size.width / 2;
+    final List<FrameSliver> slivers = [getSelectedFrameSliver(midX)];
 
     // Fill with slivers on left side.
     for (int i = selectedFrameIndex - 1;
