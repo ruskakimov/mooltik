@@ -6,7 +6,7 @@ class RecordButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppIconButton(
-      icon: FontAwesomeIcons.solidCircle,
+      icon: FontAwesomeIcons.microphone,
       onTap: () {},
     );
   }
