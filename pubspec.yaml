@@ -30,7 +30,6 @@ dependencies:
   permission_handler: ^5.0.1+1
   flutter_colorpicker: ^0.3.4
   font_awesome_flutter: ^8.8.1
-  after_init: ^0.1.2
   flutter_ffmpeg: ^0.3.0
   flutter_sound_lite: ^6.4.8+2
 
