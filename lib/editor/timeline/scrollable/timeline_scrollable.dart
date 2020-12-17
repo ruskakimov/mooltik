@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/sound_bite.dart';
 import 'package:mooltik/editor/timeline/scrollable/convert.dart';
 import 'package:mooltik/editor/timeline/scrollable/timeline_painter.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
@@ -49,6 +50,11 @@ class _TimelineScrollableState extends State<TimelineScrollable> {
               selectedFrameIndex: timeline.selectedFrameIndex,
               selectedFrameProgress: timeline.selectedFrameProgress,
               msPerPx: msPerPx,
+              soundBite: SoundBite(
+                file: null,
+                offset: Duration(seconds: 2),
+                duration: Duration(seconds: 1),
+              ),
             ),
           ),
         ),

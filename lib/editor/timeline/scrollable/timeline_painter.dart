@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
+import 'package:mooltik/editor/sound_bite.dart';
 import 'package:mooltik/editor/timeline/scrollable/convert.dart';
 import 'package:mooltik/editor/timeline/scrollable/sliver/frame_sliver.dart';
 
@@ -9,12 +10,16 @@ class TimelinePainter extends CustomPainter {
     @required this.selectedFrameIndex,
     @required this.selectedFrameProgress,
     @required this.msPerPx,
+    this.soundBite,
   });
 
   final List<FrameModel> frames;
   final int selectedFrameIndex;
   final double selectedFrameProgress;
   final double msPerPx;
+
+  // TODO: Add multiple sound bites support.
+  final SoundBite soundBite;
 
   double getFrameWidth(int frameIndex) => durationToPx(
         frames[frameIndex].duration,

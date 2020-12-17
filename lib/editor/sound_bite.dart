@@ -5,7 +5,10 @@ import 'package:flutter/foundation.dart';
 class SoundBite {
   SoundBite({
     @required this.file,
-  });
+    @required Duration offset,
+    Duration duration,
+  })  : _offset = offset,
+        _duration = duration;
 
   String get uri => file.path;
   final File file;
