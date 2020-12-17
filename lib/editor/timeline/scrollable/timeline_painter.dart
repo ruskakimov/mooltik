@@ -37,8 +37,7 @@ class TimelinePainter extends CustomPainter {
     );
   }
 
-  @override
-  void paint(Canvas canvas, Size size) {
+  List<FrameSliver> getVisibleFrameSlivers(Size size) {
     final double midX = size.width / 2;
     final List<FrameSliver> slivers = [getSelectedFrameSliver(midX)];
 
@@ -66,12 +65,18 @@ class TimelinePainter extends CustomPainter {
         thumbnail: frames[i].snapshot,
       ));
     }
+    return slivers;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final List<FrameSliver> frameSlivers = getVisibleFrameSlivers(size);
 
     final double sliverHeight = 80;
     final double sliverTop = (size.height - sliverHeight) / 2;
     final double sliverBottom = (size.height + sliverHeight) / 2;
 
-    for (final sliver in slivers) {
+    for (final sliver in frameSlivers) {
       sliver.paint(canvas, sliverTop, sliverBottom);
     }
   }
