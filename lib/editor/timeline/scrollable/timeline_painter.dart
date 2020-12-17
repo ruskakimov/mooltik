@@ -85,7 +85,16 @@ class TimelinePainter extends CustomPainter {
     final double soundSliverTop = frameSliverBottom + 8;
     final double soundSliverBottom = soundSliverTop + sliverHeight;
 
-    SoundSliver(startX: size.width / 2, endX: 100).paint(
+    // TODO: Convert to startX
+    soundBite.offset;
+
+    // TODO: Convert to width
+    final double soundSliverWidth = durationToPx(soundBite.duration, msPerPx);
+
+    SoundSliver(
+      startX: size.width / 2,
+      endX: size.width / 2 + soundSliverWidth,
+    ).paint(
       canvas,
       soundSliverTop,
       soundSliverBottom,
