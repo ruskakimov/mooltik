@@ -34,6 +34,7 @@ dependencies:
   vibration: ^1.5.0
   flutter_ffmpeg: ^0.3.0
   flutter_portal: ^0.3.0
+  flutter_sound: ^6.4.7+1
 
 dev_dependencies:
   flutter_test:
