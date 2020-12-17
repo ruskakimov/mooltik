@@ -3,6 +3,7 @@ import 'package:mooltik/editor/frame/frame_model.dart';
 import 'package:mooltik/editor/sound_bite.dart';
 import 'package:mooltik/editor/timeline/scrollable/convert.dart';
 import 'package:mooltik/editor/timeline/scrollable/sliver/frame_sliver.dart';
+import 'package:mooltik/editor/timeline/scrollable/sliver/sound_sliver.dart';
 
 class TimelinePainter extends CustomPainter {
   TimelinePainter({
@@ -72,13 +73,23 @@ class TimelinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final List<FrameSliver> frameSlivers = getVisibleFrameSlivers(size);
 
-    final double sliverHeight = 80;
-    final double sliverTop = (size.height - sliverHeight) / 2;
-    final double sliverBottom = (size.height + sliverHeight) / 2;
+    final double sliverHeight = (size.height - 24) / 2;
+
+    final double frameSliverTop = 8;
+    final double frameSliverBottom = frameSliverTop + sliverHeight;
 
     for (final sliver in frameSlivers) {
-      sliver.paint(canvas, sliverTop, sliverBottom);
+      sliver.paint(canvas, frameSliverTop, frameSliverBottom);
     }
+
+    final double soundSliverTop = frameSliverBottom + 8;
+    final double soundSliverBottom = soundSliverTop + sliverHeight;
+
+    SoundSliver(startX: size.width / 2, endX: 100).paint(
+      canvas,
+      soundSliverTop,
+      soundSliverBottom,
+    );
   }
 
   @override
