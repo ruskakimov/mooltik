@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
-import 'package:mooltik/editor/timeline/scrollable/frame_sliver.dart';
+import 'package:mooltik/editor/timeline/scrollable/sliver/frame_sliver.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:provider/provider.dart';
 
