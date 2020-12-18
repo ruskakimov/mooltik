@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/timeline/player_model.dart';
+import 'package:provider/provider.dart';
 import 'package:mooltik/common/surface.dart';
 import 'package:mooltik/editor/timeline/scrollable/timeline_scrollable.dart';
 import 'package:mooltik/editor/timeline/actionbar/timeline_actionbar.dart';
@@ -11,20 +13,23 @@ class TimelinePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Surface(
-      child: Column(
-        children: [
-          TimelineActionbar(),
-          Expanded(
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                TimelineScrollable(),
-                Playhead(),
-              ],
+    return ChangeNotifierProvider<PlayerModel>(
+      create: (context) => PlayerModel(),
+      child: Surface(
+        child: Column(
+          children: [
+            TimelineActionbar(),
+            Expanded(
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  TimelineScrollable(),
+                  Playhead(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
