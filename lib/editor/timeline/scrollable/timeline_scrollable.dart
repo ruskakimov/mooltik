@@ -53,7 +53,7 @@ class _TimelineScrollableState extends State<TimelineScrollable> {
               playheadPosition: timeline.playheadPosition,
               soundBite: SoundBite(
                 file: null,
-                offset: Duration(seconds: 2),
+                startTime: Duration(seconds: 2),
                 duration: Duration(seconds: 1),
               ),
             ),

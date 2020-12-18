@@ -90,7 +90,7 @@ class TimelinePainter extends CustomPainter {
     final double soundSliverBottom = soundSliverTop + sliverHeight;
 
     final double soundSliverStart =
-        midX + durationToPx(soundBite.offset - playheadPosition, msPerPx);
+        midX + durationToPx(soundBite.startTime - playheadPosition, msPerPx);
 
     final double soundSliverWidth = durationToPx(soundBite.duration, msPerPx);
 

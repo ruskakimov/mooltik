@@ -5,9 +5,9 @@ import 'package:flutter/foundation.dart';
 class SoundBite {
   SoundBite({
     @required this.file,
-    @required Duration offset,
+    @required Duration startTime,
     Duration duration,
-  })  : _offset = offset,
+  })  : _startTime = startTime,
         _duration = duration;
 
   String get uri => file.path;
@@ -15,8 +15,8 @@ class SoundBite {
 
   // final Uint8List waveform;
 
-  Duration get offset => _offset;
-  Duration _offset;
+  Duration get startTime => _startTime;
+  Duration _startTime;
 
   Duration get duration => _duration;
   Duration _duration;
