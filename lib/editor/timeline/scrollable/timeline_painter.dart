@@ -9,7 +9,7 @@ class TimelinePainter extends CustomPainter {
   TimelinePainter({
     @required this.frames,
     @required this.selectedFrameIndex,
-    @required this.selectedFrameProgress,
+    @required this.selectedFrameStartTime,
     @required this.msPerPx,
     @required this.playheadPosition,
     this.soundBite,
@@ -17,7 +17,7 @@ class TimelinePainter extends CustomPainter {
 
   final List<FrameModel> frames;
   final int selectedFrameIndex;
-  final double selectedFrameProgress;
+  final Duration selectedFrameStartTime;
   final double msPerPx;
   final Duration playheadPosition;
 
@@ -32,7 +32,7 @@ class TimelinePainter extends CustomPainter {
   FrameSliver getSelectedFrameSliver(double midX) {
     final double selectedFrameWidth = getFrameWidth(selectedFrameIndex);
     final double selectedFrameStartX =
-        midX - selectedFrameWidth * selectedFrameProgress;
+        midX + durationToPx(selectedFrameStartTime - playheadPosition, msPerPx);
     return FrameSliver(
       startX: selectedFrameStartX,
       endX: selectedFrameStartX + selectedFrameWidth,

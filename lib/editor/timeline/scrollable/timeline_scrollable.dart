@@ -48,7 +48,7 @@ class _TimelineScrollableState extends State<TimelineScrollable> {
             painter: TimelinePainter(
               frames: timeline.frames,
               selectedFrameIndex: timeline.selectedFrameIndex,
-              selectedFrameProgress: timeline.selectedFrameProgress,
+              selectedFrameStartTime: timeline.selectedFrameStartTime,
               msPerPx: msPerPx,
               playheadPosition: timeline.playheadPosition,
               soundBite: SoundBite(
