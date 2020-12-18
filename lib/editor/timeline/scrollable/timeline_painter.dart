@@ -24,15 +24,19 @@ class TimelinePainter extends CustomPainter {
   // TODO: Add multiple sound bites support.
   final SoundBite soundBite;
 
+  double _midX;
+
+  double xFromTime(Duration time) =>
+      _midX + durationToPx(time - playheadPosition, msPerPx);
+
   double getFrameWidth(int frameIndex) => durationToPx(
         frames[frameIndex].duration,
         msPerPx,
       );
 
-  FrameSliver getSelectedFrameSliver(double midX) {
+  FrameSliver getSelectedFrameSliver() {
     final double selectedFrameWidth = getFrameWidth(selectedFrameIndex);
-    final double selectedFrameStartX =
-        midX + durationToPx(selectedFrameStartTime - playheadPosition, msPerPx);
+    final double selectedFrameStartX = xFromTime(selectedFrameStartTime);
     return FrameSliver(
       startX: selectedFrameStartX,
       endX: selectedFrameStartX + selectedFrameWidth,
@@ -41,8 +45,7 @@ class TimelinePainter extends CustomPainter {
   }
 
   List<FrameSliver> getVisibleFrameSlivers(Size size) {
-    final double midX = size.width / 2;
-    final List<FrameSliver> slivers = [getSelectedFrameSliver(midX)];
+    final List<FrameSliver> slivers = [getSelectedFrameSliver()];
 
     // Fill with slivers on left side.
     for (int i = selectedFrameIndex - 1;
@@ -73,7 +76,7 @@ class TimelinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final double midX = size.width / 2;
+    _midX = size.width / 2;
 
     final List<FrameSliver> frameSlivers = getVisibleFrameSlivers(size);
 
@@ -89,9 +92,7 @@ class TimelinePainter extends CustomPainter {
     final double soundSliverTop = frameSliverBottom + 8;
     final double soundSliverBottom = soundSliverTop + sliverHeight;
 
-    final double soundSliverStart =
-        midX + durationToPx(soundBite.startTime - playheadPosition, msPerPx);
-
+    final double soundSliverStart = xFromTime(soundBite.startTime);
     final double soundSliverWidth = durationToPx(soundBite.duration, msPerPx);
 
     SoundSliver(
