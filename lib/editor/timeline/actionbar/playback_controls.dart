@@ -12,6 +12,7 @@ class PlaybackControls extends StatelessWidget {
     final timeline = context.watch<TimelineModel>();
 
     return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         StepBackwardButton(),
         AppIconButton(

@@ -15,11 +15,13 @@ class TimelineActionbar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TimeLabel(),
-          Spacer(),
+          Expanded(
+            child: TimeLabel(),
+          ),
           RecordButton(),
-          Spacer(),
-          PlaybackControls(),
+          Expanded(
+            child: PlaybackControls(),
+          ),
         ],
       ),
     );
