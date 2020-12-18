@@ -10,9 +10,9 @@ class RecordButton extends StatelessWidget {
     final player = context.watch<PlayerModel>();
 
     return AppIconButton(
-      selected: player.recording,
+      selected: player.isRecording,
       icon: FontAwesomeIcons.microphone,
-      onTap: player.recording ? player.stopRecording : player.startRecording,
+      onTap: player.isRecording ? player.stopRecording : player.startRecording,
     );
   }
 }

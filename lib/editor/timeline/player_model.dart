@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class PlayerModel extends ChangeNotifier {
-  bool get recording => _recording;
-  bool _recording = false;
+  bool get isRecording => _isRecording;
+  bool _isRecording = false;
 
   void startRecording() {
-    _recording = true;
+    _isRecording = true;
     notifyListeners();
   }
 
   void stopRecording() {
-    _recording = false;
+    _isRecording = false;
     notifyListeners();
   }
 }

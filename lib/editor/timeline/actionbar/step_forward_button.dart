@@ -12,7 +12,7 @@ class StepForwardButton extends StatelessWidget {
       icon: timeline.lastFrameSelected
           ? FontAwesomeIcons.plus
           : FontAwesomeIcons.stepForward,
-      onTap: timeline.playing
+      onTap: timeline.isPlaying
           ? null
           : timeline.lastFrameSelected
               ? timeline.addFrame

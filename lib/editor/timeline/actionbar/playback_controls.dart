@@ -16,12 +16,12 @@ class PlaybackControls extends StatelessWidget {
       children: [
         StepBackwardButton(),
         AppIconButton(
-          icon: timeline.playing
+          icon: timeline.isPlaying
               ? FontAwesomeIcons.pause
               : timeline.playheadPosition == timeline.totalDuration
                   ? FontAwesomeIcons.undoAlt
                   : FontAwesomeIcons.play,
-          onTap: timeline.playing
+          onTap: timeline.isPlaying
               ? timeline.pause
               : timeline.playheadPosition == timeline.totalDuration
                   ? timeline.replay

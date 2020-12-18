@@ -12,9 +12,9 @@ void main() {
         FrameModel(size: Size(1280, 720)),
       ]);
       model.play();
-      expect(model.playing, isTrue);
+      expect(model.isPlaying, isTrue);
       model.stop();
-      expect(model.playing, isFalse);
+      expect(model.isPlaying, isFalse);
     });
 
     test('should show frames in sequence with correct duration (2 frames)', () {
