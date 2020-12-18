@@ -50,6 +50,7 @@ class _TimelineScrollableState extends State<TimelineScrollable> {
               selectedFrameIndex: timeline.selectedFrameIndex,
               selectedFrameProgress: timeline.selectedFrameProgress,
               msPerPx: msPerPx,
+              playheadPosition: timeline.playheadPosition,
               soundBite: SoundBite(
                 file: null,
                 offset: Duration(seconds: 2),

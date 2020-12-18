@@ -11,6 +11,7 @@ class TimelinePainter extends CustomPainter {
     @required this.selectedFrameIndex,
     @required this.selectedFrameProgress,
     @required this.msPerPx,
+    @required this.playheadPosition,
     this.soundBite,
   });
 
@@ -18,6 +19,7 @@ class TimelinePainter extends CustomPainter {
   final int selectedFrameIndex;
   final double selectedFrameProgress;
   final double msPerPx;
+  final Duration playheadPosition;
 
   // TODO: Add multiple sound bites support.
   final SoundBite soundBite;
@@ -71,6 +73,8 @@ class TimelinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final double midX = size.width / 2;
+
     final List<FrameSliver> frameSlivers = getVisibleFrameSlivers(size);
 
     final double sliverHeight = (size.height - 24) / 2;
@@ -85,15 +89,14 @@ class TimelinePainter extends CustomPainter {
     final double soundSliverTop = frameSliverBottom + 8;
     final double soundSliverBottom = soundSliverTop + sliverHeight;
 
-    // TODO: Convert to startX
-    soundBite.offset;
+    final double soundSliverStart =
+        midX + durationToPx(soundBite.offset - playheadPosition, msPerPx);
 
-    // TODO: Convert to width
     final double soundSliverWidth = durationToPx(soundBite.duration, msPerPx);
 
     SoundSliver(
-      startX: size.width / 2,
-      endX: size.width / 2 + soundSliverWidth,
+      startX: soundSliverStart,
+      endX: soundSliverStart + soundSliverWidth,
     ).paint(
       canvas,
       soundSliverTop,
