@@ -35,6 +35,7 @@ class FrameSaveData {
         'duration': duration.toString(),
       };
 
+  // TODO: Save file path instead. This will allow changing project folder structure.
   final int id;
   final Duration duration;
 }
