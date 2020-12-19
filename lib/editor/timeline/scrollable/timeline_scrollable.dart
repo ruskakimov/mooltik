@@ -53,7 +53,9 @@ class _TimelineScrollableState extends State<TimelineScrollable> {
               msPerPx: msPerPx,
               playheadPosition: timeline.playheadPosition,
               soundBite: context.select<PlayerModel, SoundClip>(
-                (PlayerModel player) => player.soundBite,
+                (PlayerModel player) => player.soundClips.isNotEmpty
+                    ? player.soundClips.first
+                    : null,
               ),
             ),
           ),

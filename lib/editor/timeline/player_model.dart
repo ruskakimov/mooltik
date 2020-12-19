@@ -9,18 +9,19 @@ import 'package:permission_handler/permission_handler.dart';
 
 class PlayerModel extends ChangeNotifier {
   PlayerModel({
-    Directory directory,
+    @required this.soundClips,
+    @required this.getNewSoundClipFile,
     TimelineModel timeline,
-  })  : _directory = directory,
-        _timeline = timeline,
+  })  : _timeline = timeline,
         _player = FlutterSoundPlayer() {
     _player.openAudioSession().then((_) {
       _timeline.addListener(_timelineListener);
     });
   }
 
-  // TODO: Move file ownership to Project, since it is responsible for project folder IO.
-  final Directory _directory;
+  // TODO: These two can be combined into a single class.
+  final List<SoundClip> soundClips;
+  final Future<File> Function() getNewSoundClipFile;
 
   final TimelineModel _timeline;
 
@@ -31,9 +32,6 @@ class PlayerModel extends ChangeNotifier {
 
   bool get isPlaying => _player?.isPlaying ?? false;
   bool _isPlayerBusy = false;
-
-  SoundClip get soundBite => _soundBite;
-  SoundClip _soundBite;
 
   Future<void> _initRecorder() async {
     final permit = await Permission.microphone.request();
@@ -56,23 +54,24 @@ class PlayerModel extends ChangeNotifier {
   }
 
   void _playerListener() async {
-    if (_soundBite == null) return;
+    if (soundClips.isEmpty) return;
 
+    final soundClip = soundClips.first;
     final shouldPlay = _timeline.isPlaying &&
-        _timeline.playheadPosition >= _soundBite.startTime &&
-        _timeline.playheadPosition <= _soundBite.endTime;
+        _timeline.playheadPosition >= soundClip.startTime &&
+        _timeline.playheadPosition <= soundClip.endTime;
 
     if (shouldPlay && !isPlaying && !_isPlayerBusy) {
       _isPlayerBusy = true;
 
       // TODO: This is expensive (~80ms), prime the sound beforehand
       await _player.startPlayer(
-        fromURI: _soundBite.file.path,
+        fromURI: soundClip.uri,
         codec: Codec.aacADTS,
       );
 
       await _player.seekToPlayer(
-        _timeline.playheadPosition - _soundBite.startTime,
+        _timeline.playheadPosition - soundClip.startTime,
       );
 
       _isPlayerBusy = false;
@@ -84,8 +83,9 @@ class PlayerModel extends ChangeNotifier {
   }
 
   void _updateSoundBiteDuration() {
-    _soundBite = _soundBite.copyWith(
-      duration: _timeline.playheadPosition - _soundBite.startTime,
+    if (soundClips.isEmpty) return;
+    soundClips.first = soundClips.first.copyWith(
+      duration: _timeline.playheadPosition - soundClips.first.startTime,
     );
     notifyListeners();
   }
@@ -95,13 +95,16 @@ class PlayerModel extends ChangeNotifier {
       await _initRecorder();
       if (_recorder == null) return;
     }
-    _soundBite = SoundClip(
-      file: File('${_directory.path}/recording.aac'),
-      startTime: _timeline.playheadPosition,
-      duration: Duration.zero,
+    soundClips.clear();
+    soundClips.add(
+      SoundClip(
+        file: await getNewSoundClipFile(),
+        startTime: _timeline.playheadPosition,
+        duration: Duration.zero,
+      ),
     );
     await _recorder.startRecorder(
-      toFile: _soundBite.file.path,
+      toFile: soundClips.first.uri,
       codec: Codec.aacADTS,
       audioSource: AudioSource.voice_communication,
     );

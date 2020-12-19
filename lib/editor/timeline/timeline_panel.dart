@@ -17,7 +17,8 @@ class TimelinePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<PlayerModel>(
       create: (context) => PlayerModel(
-        directory: context.read<Project>().directory,
+        soundClips: context.read<Project>().soundClips,
+        getNewSoundClipFile: context.read<Project>().getNewSoundClipFile,
         timeline: context.read<TimelineModel>(),
       ),
       child: Surface(

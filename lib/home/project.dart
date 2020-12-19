@@ -23,10 +23,10 @@ class Project extends ChangeNotifier {
   final File _dataFile;
 
   List<FrameModel> get frames => _frames;
-  List<FrameModel> _frames;
+  List<FrameModel> _frames = [];
 
   List<SoundClip> get soundClips => _soundClips;
-  List<SoundClip> _soundClips;
+  List<SoundClip> _soundClips = [];
 
   Size get frameSize => _frameSize;
   Size _frameSize;
@@ -40,6 +40,8 @@ class Project extends ChangeNotifier {
       _frames = await Future.wait(
         data.frames.map((frameData) => _getFrame(frameData, frameSize)),
       );
+      // TODO: Restore sound clips.
+      _soundClips = [];
     } else {
       // New project.
       _frameSize = const Size(1280, 720);
@@ -101,4 +103,8 @@ class Project extends ChangeNotifier {
         'sounds',
         '$id.aac',
       ));
+
+  Future<File> getNewSoundClipFile() async =>
+      await getSoundClipFile(DateTime.now().millisecondsSinceEpoch)
+          .create(recursive: true);
 }
