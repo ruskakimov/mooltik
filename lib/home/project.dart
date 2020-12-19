@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
+import 'package:mooltik/editor/sound_clip.dart';
 import 'package:mooltik/home/png.dart';
 import 'package:mooltik/home/project_save_data.dart';
 import 'package:path/path.dart' as p;
@@ -23,6 +24,9 @@ class Project extends ChangeNotifier {
 
   List<FrameModel> get frames => _frames;
   List<FrameModel> _frames;
+
+  List<SoundClip> get soundClips => _soundClips;
+  List<SoundClip> _soundClips;
 
   Size get frameSize => _frameSize;
   Size _frameSize;
@@ -91,4 +95,10 @@ class Project extends ChangeNotifier {
   }
 
   File getFrameFile(int id) => File(p.join(directory.path, 'frame$id.png'));
+
+  File getSoundClipFile(int id) => File(p.join(
+        directory.path,
+        'sounds',
+        '$id.aac',
+      ));
 }
