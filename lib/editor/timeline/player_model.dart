@@ -12,7 +12,12 @@ class PlayerModel extends ChangeNotifier {
     Directory directory,
     TimelineModel timeline,
   })  : _directory = directory,
-        _timeline = timeline;
+        _timeline = timeline,
+        _player = FlutterSoundPlayer() {
+    _player.openAudioSession().then((_) {
+      _timeline.addListener(_timelineListener);
+    });
+  }
 
   // TODO: Move file ownership to Project, since it is responsible for project folder IO.
   final Directory _directory;
@@ -20,8 +25,12 @@ class PlayerModel extends ChangeNotifier {
   final TimelineModel _timeline;
 
   FlutterSoundRecorder _recorder;
+  FlutterSoundPlayer _player;
 
   bool get isRecording => _recorder?.isRecording ?? false;
+
+  bool get isPlaying => _player?.isPlaying ?? false;
+  bool _isPlayerBusy = false;
 
   SoundBite get soundBite => _soundBite;
   SoundBite _soundBite;
@@ -34,10 +43,61 @@ class PlayerModel extends ChangeNotifier {
   }
 
   void _timelineListener() {
-    _updateSoundBiteDuration();
+    if (isRecording) {
+      _recorderListener();
+    } else {
+      _playerListener();
+    }
+  }
 
-    if (!_timeline.isPlaying) {
-      stopRecording();
+  void _recorderListener() {
+    _updateSoundBiteDuration();
+    if (!_timeline.isPlaying) stopRecording();
+  }
+
+  void _playerListener() async {
+    if (_soundBite == null) return;
+
+    final shouldPlay = _timeline.isPlaying &&
+        _timeline.playheadPosition >= _soundBite.startTime &&
+        _timeline.playheadPosition <= _soundBite.endTime;
+
+    if (shouldPlay && !isPlaying && !_isPlayerBusy) {
+      _isPlayerBusy = true;
+      var s = Stopwatch()..start();
+      await _player.startPlayer(
+        fromURI: _soundBite.file.path,
+        codec: Codec.aacADTS,
+      );
+      s.stop();
+      print('play ${s.elapsedMilliseconds}');
+
+      s
+        ..reset()
+        ..start();
+      await _player.pausePlayer();
+      s.stop();
+      print('pause ${s.elapsedMilliseconds}');
+
+      s
+        ..reset()
+        ..start();
+      await _player.seekToPlayer(Duration(milliseconds: 100));
+      s.stop();
+      print('seek ${s.elapsedMilliseconds}');
+
+      s
+        ..reset()
+        ..start();
+      await _player.resumePlayer();
+      s.stop();
+      print('resume ${s.elapsedMilliseconds}');
+
+      _isPlayerBusy = false;
+    } else if (!shouldPlay && isPlaying && !_isPlayerBusy) {
+      _isPlayerBusy = true;
+      await _player.stopPlayer();
+      _isPlayerBusy = false;
     }
   }
 
@@ -58,7 +118,6 @@ class PlayerModel extends ChangeNotifier {
       startTime: _timeline.playheadPosition,
       duration: Duration.zero,
     );
-    _timeline.addListener(_timelineListener);
     await _recorder.startRecorder(
       toFile: _soundBite.file.path,
       codec: Codec.aacADTS,
@@ -71,13 +130,13 @@ class PlayerModel extends ChangeNotifier {
   Future<void> stopRecording() async {
     await _recorder.stopRecorder();
     _timeline.pause();
-    _timeline.removeListener(_timelineListener);
     notifyListeners();
   }
 
   @override
   Future<void> dispose() async {
     super.dispose();
-    await _recorder.closeAudioSession();
+    await _recorder?.closeAudioSession();
+    await _player?.closeAudioSession();
   }
 }

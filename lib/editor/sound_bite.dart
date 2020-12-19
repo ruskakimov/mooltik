@@ -18,6 +18,8 @@ class SoundBite {
   Duration get startTime => _startTime;
   Duration _startTime;
 
+  Duration get endTime => _startTime + _duration;
+
   Duration get duration => _duration;
   Duration _duration;
 
