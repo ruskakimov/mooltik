@@ -65,7 +65,7 @@ class PlayerModel extends ChangeNotifier {
     if (shouldPlay && !isPlaying && !_isPlayerBusy) {
       _isPlayerBusy = true;
 
-      // TODO: This is expensive, prime the sound beforehand
+      // TODO: This is expensive (~80ms), prime the sound beforehand
       await _player.startPlayer(
         fromURI: _soundBite.file.path,
         codec: Codec.aacADTS,
