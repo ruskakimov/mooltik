@@ -88,20 +88,22 @@ class TimelinePainter extends CustomPainter {
       sliver.paint(canvas, frameSliverTop, frameSliverBottom);
     }
 
-    final double soundSliverTop = frameSliverBottom + 8;
-    final double soundSliverBottom = soundSliverTop + sliverHeight;
+    if (soundBite != null) {
+      final double soundSliverTop = frameSliverBottom + 8;
+      final double soundSliverBottom = soundSliverTop + sliverHeight;
 
-    final double soundSliverStartX = xFromTime(soundBite.startTime);
-    final double soundSliverWidth = widthFromDuration(soundBite.duration);
+      final double soundSliverStartX = xFromTime(soundBite.startTime);
+      final double soundSliverWidth = widthFromDuration(soundBite.duration);
 
-    SoundSliver(
-      startX: soundSliverStartX,
-      endX: soundSliverStartX + soundSliverWidth,
-    ).paint(
-      canvas,
-      soundSliverTop,
-      soundSliverBottom,
-    );
+      SoundSliver(
+        startX: soundSliverStartX,
+        endX: soundSliverStartX + soundSliverWidth,
+      ).paint(
+        canvas,
+        soundSliverTop,
+        soundSliverBottom,
+      );
+    }
   }
 
   @override
