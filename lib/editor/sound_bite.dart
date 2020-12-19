@@ -20,4 +20,10 @@ class SoundBite {
 
   Duration get duration => _duration;
   Duration _duration;
+
+  SoundBite copyWith({Duration duration}) => SoundBite(
+        file: file,
+        startTime: startTime,
+        duration: duration ?? this.duration,
+      );
 }
