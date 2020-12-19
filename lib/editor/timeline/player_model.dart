@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound_lite/flutter_sound.dart';
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
-import 'package:mooltik/editor/sound_bite.dart';
+import 'package:mooltik/editor/sound_clip.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -32,8 +32,8 @@ class PlayerModel extends ChangeNotifier {
   bool get isPlaying => _player?.isPlaying ?? false;
   bool _isPlayerBusy = false;
 
-  SoundBite get soundBite => _soundBite;
-  SoundBite _soundBite;
+  SoundClip get soundBite => _soundBite;
+  SoundClip _soundBite;
 
   Future<void> _initRecorder() async {
     final permit = await Permission.microphone.request();
@@ -95,7 +95,7 @@ class PlayerModel extends ChangeNotifier {
       await _initRecorder();
       if (_recorder == null) return;
     }
-    _soundBite = SoundBite(
+    _soundBite = SoundClip(
       file: File('${_directory.path}/recording.aac'),
       startTime: _timeline.playheadPosition,
       duration: Duration.zero,

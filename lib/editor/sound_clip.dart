@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
-class SoundBite {
-  SoundBite({
+class SoundClip {
+  SoundClip({
     @required this.file,
     @required Duration startTime,
     Duration duration,
@@ -23,7 +23,7 @@ class SoundBite {
   Duration get duration => _duration;
   Duration _duration;
 
-  SoundBite copyWith({Duration duration}) => SoundBite(
+  SoundClip copyWith({Duration duration}) => SoundClip(
         file: file,
         startTime: startTime,
         duration: duration ?? this.duration,

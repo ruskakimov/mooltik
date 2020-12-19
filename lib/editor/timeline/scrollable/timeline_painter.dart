@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
-import 'package:mooltik/editor/sound_bite.dart';
+import 'package:mooltik/editor/sound_clip.dart';
 import 'package:mooltik/editor/timeline/scrollable/convert.dart';
 import 'package:mooltik/editor/timeline/scrollable/sliver/frame_sliver.dart';
 import 'package:mooltik/editor/timeline/scrollable/sliver/sound_sliver.dart';
@@ -22,7 +22,7 @@ class TimelinePainter extends CustomPainter {
   final Duration playheadPosition;
 
   // TODO: Add multiple sound bites support.
-  final SoundBite soundBite;
+  final SoundClip soundBite;
 
   double _midX;
 
