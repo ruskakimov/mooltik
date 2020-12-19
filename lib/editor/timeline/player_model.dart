@@ -48,11 +48,13 @@ class PlayerModel extends ChangeNotifier {
       codec: Codec.aacADTS,
       audioSource: AudioSource.voice_communication,
     );
+    _timeline.play();
     notifyListeners();
   }
 
   Future<void> stopRecording() async {
     await _recorder.stopRecorder();
+    _timeline.pause();
     notifyListeners();
   }
 
