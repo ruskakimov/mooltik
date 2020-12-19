@@ -26,7 +26,7 @@ class PlayerModel extends ChangeNotifier {
   SoundBite get soundBite => _soundBite;
   SoundBite _soundBite;
 
-  Future<void> initRecorder() async {
+  Future<void> _initRecorder() async {
     final permit = await Permission.microphone.request();
     if (permit != PermissionStatus.granted) return;
     _recorder = FlutterSoundRecorder();
@@ -42,7 +42,7 @@ class PlayerModel extends ChangeNotifier {
 
   Future<void> startRecording() async {
     if (_recorder == null) {
-      await initRecorder();
+      await _initRecorder();
       if (_recorder == null) return;
     }
     _soundBite = SoundBite(
