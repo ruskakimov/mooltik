@@ -64,34 +64,16 @@ class PlayerModel extends ChangeNotifier {
 
     if (shouldPlay && !isPlaying && !_isPlayerBusy) {
       _isPlayerBusy = true;
-      var s = Stopwatch()..start();
+
+      // TODO: This is expensive, prime the sound beforehand
       await _player.startPlayer(
         fromURI: _soundBite.file.path,
         codec: Codec.aacADTS,
       );
-      s.stop();
-      print('play ${s.elapsedMilliseconds}');
 
-      s
-        ..reset()
-        ..start();
-      await _player.pausePlayer();
-      s.stop();
-      print('pause ${s.elapsedMilliseconds}');
-
-      s
-        ..reset()
-        ..start();
-      await _player.seekToPlayer(Duration(milliseconds: 100));
-      s.stop();
-      print('seek ${s.elapsedMilliseconds}');
-
-      s
-        ..reset()
-        ..start();
-      await _player.resumePlayer();
-      s.stop();
-      print('resume ${s.elapsedMilliseconds}');
+      await _player.seekToPlayer(
+        _timeline.playheadPosition - _soundBite.startTime,
+      );
 
       _isPlayerBusy = false;
     } else if (!shouldPlay && isPlaying && !_isPlayerBusy) {
