@@ -33,6 +33,14 @@ class PlayerModel extends ChangeNotifier {
     await _recorder.openAudioSession();
   }
 
+  void _timelineListener() {
+    _updateSoundBiteDuration();
+
+    if (!_timeline.isPlaying) {
+      stopRecording();
+    }
+  }
+
   void _updateSoundBiteDuration() {
     _soundBite = _soundBite.copyWith(
       duration: _timeline.playheadPosition - _soundBite.startTime,
@@ -50,7 +58,7 @@ class PlayerModel extends ChangeNotifier {
       startTime: _timeline.playheadPosition,
       duration: Duration.zero,
     );
-    _timeline.addListener(_updateSoundBiteDuration);
+    _timeline.addListener(_timelineListener);
     await _recorder.startRecorder(
       toFile: _soundBite.file.path,
       codec: Codec.aacADTS,
@@ -63,7 +71,7 @@ class PlayerModel extends ChangeNotifier {
   Future<void> stopRecording() async {
     await _recorder.stopRecorder();
     _timeline.pause();
-    _timeline.removeListener(_updateSoundBiteDuration);
+    _timeline.removeListener(_timelineListener);
     notifyListeners();
   }
 
