@@ -50,6 +50,7 @@ class PlayerModel extends ChangeNotifier {
 
   void _recorderListener() {
     _updateSoundBiteDuration();
+    // TODO: Extend last frame instead of stopping recording.
     if (!_timeline.isPlaying) stopRecording();
   }
 
