@@ -40,8 +40,7 @@ class Project extends ChangeNotifier {
       _frames = await Future.wait(
         data.frames.map((frameData) => _getFrame(frameData, frameSize)),
       );
-      // TODO: Restore sound clips.
-      _soundClips = [];
+      _soundClips = data.sounds;
     } else {
       // New project.
       _frameSize = const Size(1280, 720);
