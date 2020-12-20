@@ -53,31 +53,42 @@ class PlayerModel extends ChangeNotifier {
     if (!_timeline.isPlaying) stopRecording();
   }
 
-  void _playerListener() async {
+  Future<void> primePlayer() async {
     if (soundClips.isEmpty) return;
+
+    _isPlayerBusy = true;
+
+    await _player.startPlayer(
+      fromURI: soundClips.first.path,
+      codec: Codec.aacADTS,
+    );
+    await _player.pausePlayer();
+
+    _isPlayerBusy = false;
+  }
+
+  void _playerListener() async {
+    if (soundClips.isEmpty || _isPlayerBusy) return;
 
     final soundClip = soundClips.first;
     final shouldPlay = _timeline.isPlaying &&
         _timeline.playheadPosition >= soundClip.startTime &&
         _timeline.playheadPosition <= soundClip.endTime;
 
-    if (shouldPlay && !isPlaying && !_isPlayerBusy) {
+    if (shouldPlay && _player.isPaused) {
       _isPlayerBusy = true;
-
-      // TODO: This is expensive (~80ms), prime the sound beforehand
-      await _player.startPlayer(
-        fromURI: soundClip.path,
-        codec: Codec.aacADTS,
-      );
 
       await _player.seekToPlayer(
         _timeline.playheadPosition - soundClip.startTime,
       );
+      await _player.resumePlayer();
 
       _isPlayerBusy = false;
-    } else if (!shouldPlay && isPlaying && !_isPlayerBusy) {
+    } else if (!shouldPlay && _player.isPlaying) {
       _isPlayerBusy = true;
+
       await _player.stopPlayer();
+
       _isPlayerBusy = false;
     }
   }
