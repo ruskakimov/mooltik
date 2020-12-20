@@ -67,6 +67,7 @@ class Project extends ChangeNotifier {
       frames: _frames
           .map((f) => FrameSaveData(id: f.id, duration: f.duration))
           .toList(),
+      sounds: _soundClips,
     );
     await _dataFile.writeAsString(jsonEncode(data));
 
