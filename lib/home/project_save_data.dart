@@ -1,8 +1,12 @@
+import 'package:mooltik/common/parse_duration.dart';
+import 'package:mooltik/editor/sound_clip.dart';
+
 class ProjectSaveData {
   ProjectSaveData({
     this.width,
     this.height,
     this.frames,
+    this.sounds,
   });
 
   ProjectSaveData.fromJson(Map<String, dynamic> json)
@@ -10,17 +14,24 @@ class ProjectSaveData {
         height = json['height'],
         frames = (json['frames'] as List<dynamic>)
             .map((d) => FrameSaveData.fromJson(d))
-            .toList();
+            .toList(),
+        sounds = json['sounds'] != null
+            ? (json['sounds'] as List<dynamic>)
+                .map((d) => SoundClip.fromJson(d))
+                .toList()
+            : [];
 
   Map<String, dynamic> toJson() => {
         'width': width,
         'height': height,
         'frames': frames.map((d) => d.toJson()).toList(),
+        'sounds': sounds.map((d) => d.toJson()).toList(),
       };
 
   final double width;
   final double height;
   final List<FrameSaveData> frames;
+  final List<SoundClip> sounds;
 }
 
 class FrameSaveData {
@@ -28,28 +39,14 @@ class FrameSaveData {
 
   FrameSaveData.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        duration = _parseDuration(json['duration']);
+        duration = parseDuration(json['duration']);
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'duration': duration.toString(),
       };
 
+  // TODO: Save file path instead. This will allow changing project folder structure.
   final int id;
   final Duration duration;
-}
-
-Duration _parseDuration(String source) {
-  int hours = 0;
-  int minutes = 0;
-  int micros;
-  List<String> parts = source.split(':');
-  if (parts.length > 2) {
-    hours = int.parse(parts[parts.length - 3]);
-  }
-  if (parts.length > 1) {
-    minutes = int.parse(parts[parts.length - 2]);
-  }
-  micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
-  return Duration(hours: hours, minutes: minutes, microseconds: micros);
 }

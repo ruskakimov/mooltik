@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
+import 'package:mooltik/editor/sound_clip.dart';
 import 'package:mooltik/home/png.dart';
 import 'package:mooltik/home/project_save_data.dart';
 import 'package:path/path.dart' as p;
@@ -22,7 +23,10 @@ class Project extends ChangeNotifier {
   final File _dataFile;
 
   List<FrameModel> get frames => _frames;
-  List<FrameModel> _frames;
+  List<FrameModel> _frames = [];
+
+  List<SoundClip> get soundClips => _soundClips;
+  List<SoundClip> _soundClips = [];
 
   Size get frameSize => _frameSize;
   Size _frameSize;
@@ -36,6 +40,7 @@ class Project extends ChangeNotifier {
       _frames = await Future.wait(
         data.frames.map((frameData) => _getFrame(frameData, frameSize)),
       );
+      _soundClips = data.sounds;
     } else {
       // New project.
       _frameSize = const Size(1280, 720);
@@ -54,6 +59,7 @@ class Project extends ChangeNotifier {
     );
   }
 
+  // TODO: Remove deleted files
   Future<void> save() async {
     // Write project data.
     final data = ProjectSaveData(
@@ -62,6 +68,7 @@ class Project extends ChangeNotifier {
       frames: _frames
           .map((f) => FrameSaveData(id: f.id, duration: f.duration))
           .toList(),
+      sounds: _soundClips,
     );
     await _dataFile.writeAsString(jsonEncode(data));
 
@@ -91,4 +98,14 @@ class Project extends ChangeNotifier {
   }
 
   File getFrameFile(int id) => File(p.join(directory.path, 'frame$id.png'));
+
+  File getSoundClipFile(int id) => File(p.join(
+        directory.path,
+        'sounds',
+        '$id.aac',
+      ));
+
+  Future<File> getNewSoundClipFile() async =>
+      await getSoundClipFile(DateTime.now().millisecondsSinceEpoch)
+          .create(recursive: true);
 }

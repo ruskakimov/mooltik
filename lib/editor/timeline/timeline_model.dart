@@ -27,7 +27,7 @@ class TimelineModel extends ChangeNotifier {
 
   Duration get playheadPosition => totalDuration * _playheadController.value;
 
-  bool get playing => _playheadController.isAnimating;
+  bool get isPlaying => _playheadController.isAnimating;
 
   Duration get totalDuration => _playheadController.duration;
 
@@ -36,12 +36,9 @@ class TimelineModel extends ChangeNotifier {
   int get selectedFrameIndex => _selectedFrameIndex;
   int _selectedFrameIndex;
 
-  double get selectedFrameProgress =>
-      (playheadPosition - _selectedFrameStart).inMilliseconds /
-      selectedFrame.duration.inMilliseconds;
-
   bool get lastFrameSelected => _selectedFrameIndex == frames.length - 1;
 
+  Duration get selectedFrameStartTime => _selectedFrameStart;
   Duration _selectedFrameStart;
   Duration _selectedFrameEnd;
 
@@ -96,7 +93,7 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get stepBackwardAvailable => !playing && _selectedFrameIndex > 0;
+  bool get stepBackwardAvailable => !isPlaying && _selectedFrameIndex > 0;
 
   void stepBackward() {
     if (!stepBackwardAvailable) return;
@@ -108,7 +105,7 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get stepForwardAvailable => !playing && !lastFrameSelected;
+  bool get stepForwardAvailable => !isPlaying && !lastFrameSelected;
 
   void stepForward() {
     if (!stepForwardAvailable) return;

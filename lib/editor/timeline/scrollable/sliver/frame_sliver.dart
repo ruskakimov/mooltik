@@ -2,25 +2,20 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/timeline/scrollable/sliver/sliver.dart';
 
-class FrameSliver {
+class FrameSliver extends Sliver {
   FrameSliver({
-    @required this.startX,
-    @required this.endX,
+    @required double startX,
+    @required double endX,
     @required this.thumbnail,
-  });
+  }) : super(startX, endX);
 
-  final double startX;
-  final double endX;
   final ui.Image thumbnail;
 
-  RRect _getRrect(double startY, double endY) => RRect.fromRectAndRadius(
-        Rect.fromLTRB(startX, startY, endX, endY).deflate(1),
-        Radius.circular(4),
-      );
-
+  @override
   void paint(Canvas canvas, double startY, double endY) {
-    final RRect rrect = _getRrect(startY, endY);
+    final RRect rrect = getRrect(startY, endY);
     canvas.drawRRect(rrect, Paint()..color = Colors.white);
     if (thumbnail != null) {
       canvas.save();
