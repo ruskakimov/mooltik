@@ -15,9 +15,11 @@ class ProjectSaveData {
         frames = (json['frames'] as List<dynamic>)
             .map((d) => FrameSaveData.fromJson(d))
             .toList(),
-        sounds = (json['sounds'] as List<dynamic>)
-            .map((d) => SoundClip.fromJson(d))
-            .toList();
+        sounds = json['sounds'] != null
+            ? (json['sounds'] as List<dynamic>)
+                .map((d) => SoundClip.fromJson(d))
+                .toList()
+            : [];
 
   Map<String, dynamic> toJson() => {
         'width': width,
