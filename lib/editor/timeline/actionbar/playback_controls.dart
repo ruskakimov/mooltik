@@ -24,6 +24,7 @@ class PlaybackControls extends StatelessWidget {
     final timeline = context.watch<TimelineModel>();
     final player = context.watch<PlayerModel>();
 
+    // Disabled play button when recording sound
     if (player.isRecording)
       return AppIconButton(
         icon: FontAwesomeIcons.play,
