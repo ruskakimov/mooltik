@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mooltik/editor/sound_clip.dart';
 import 'package:mooltik/home/project_save_data.dart';
 
 void main() {
@@ -9,7 +11,19 @@ void main() {
       final data = ProjectSaveData(
         width: 200,
         height: 100,
-        frames: [FrameSaveData(id: 0, duration: Duration(seconds: 3))],
+        frames: [
+          FrameSaveData(
+            id: 0,
+            duration: Duration(seconds: 3),
+          ),
+        ],
+        sounds: [
+          SoundClip(
+            file: File(''),
+            startTime: Duration(seconds: 1),
+            duration: Duration(seconds: 2),
+          ),
+        ],
       );
       expect(
         jsonEncode(data),
