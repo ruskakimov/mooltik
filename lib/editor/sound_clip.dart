@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:mooltik/common/parse_duration.dart';
 
 class SoundClip {
   SoundClip({
@@ -10,7 +11,7 @@ class SoundClip {
   })  : _startTime = startTime,
         _duration = duration;
 
-  String get uri => file.path;
+  String get path => file.path;
   final File file;
 
   // final Uint8List waveform;
@@ -28,4 +29,15 @@ class SoundClip {
         startTime: startTime,
         duration: duration ?? this.duration,
       );
+
+  SoundClip.fromJson(Map<String, dynamic> json)
+      : file = File(json['path']),
+        _startTime = parseDuration(json['start_time']),
+        _duration = parseDuration(json['duration']);
+
+  Map<String, dynamic> toJson() => {
+        'path': file.path,
+        'start_time': _startTime.toString(),
+        'duration': _duration.toString(),
+      };
 }

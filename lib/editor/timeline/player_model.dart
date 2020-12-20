@@ -66,7 +66,7 @@ class PlayerModel extends ChangeNotifier {
 
       // TODO: This is expensive (~80ms), prime the sound beforehand
       await _player.startPlayer(
-        fromURI: soundClip.uri,
+        fromURI: soundClip.path,
         codec: Codec.aacADTS,
       );
 
@@ -104,7 +104,7 @@ class PlayerModel extends ChangeNotifier {
       ),
     );
     await _recorder.startRecorder(
-      toFile: soundClips.first.uri,
+      toFile: soundClips.first.path,
       codec: Codec.aacADTS,
       audioSource: AudioSource.voice_communication,
     );
