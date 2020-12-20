@@ -59,6 +59,7 @@ class Project extends ChangeNotifier {
     );
   }
 
+  // TODO: Remove deleted files
   Future<void> save() async {
     // Write project data.
     final data = ProjectSaveData(
