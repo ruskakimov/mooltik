@@ -14,6 +14,8 @@ class Preview extends StatelessWidget {
         final project = context.read<Project>();
         final timeline = context.read<TimelineModel>();
 
+        if (timeline.isPlaying) return;
+
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => MultiProvider(
