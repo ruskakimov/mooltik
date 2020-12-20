@@ -24,6 +24,11 @@ class PlaybackControls extends StatelessWidget {
     final timeline = context.watch<TimelineModel>();
     final player = context.watch<PlayerModel>();
 
+    if (player.isRecording)
+      return AppIconButton(
+        icon: FontAwesomeIcons.play,
+      );
+
     // Pause
     if (timeline.isPlaying)
       return AppIconButton(
