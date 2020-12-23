@@ -23,21 +23,32 @@ class TimelineActionbar extends StatelessWidget {
             visible: true,
             childAnchor: Alignment.center,
             portalAnchor: Alignment.center,
-            portal: Material(
-              borderRadius: BorderRadius.circular(8),
-              elevation: 10,
-              color: Theme.of(context).colorScheme.primary,
-              child: Container(
-                width: 200,
-                height: 56,
-              ),
-            ),
+            portal: FrameMenu(),
             child: RecordButton(),
           ),
           Expanded(
             child: PlaybackControls(),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class FrameMenu extends StatelessWidget {
+  const FrameMenu({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      borderRadius: BorderRadius.circular(8),
+      elevation: 10,
+      color: Theme.of(context).colorScheme.primary,
+      child: Container(
+        width: 200,
+        height: 56,
       ),
     );
   }
