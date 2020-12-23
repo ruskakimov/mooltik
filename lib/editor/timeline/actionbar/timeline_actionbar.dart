@@ -47,28 +47,54 @@ class FrameMenu extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       elevation: 10,
       color: Theme.of(context).colorScheme.primary,
-      child: Container(
-        width: 200,
-        height: 56,
-        child: LabeledIconButton(),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(width: 16),
+          LabeledIconButton(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+          SizedBox(width: 16),
+          LabeledIconButton(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+          SizedBox(width: 16),
+        ],
       ),
     );
   }
 }
 
 class LabeledIconButton extends StatelessWidget {
-  const LabeledIconButton({Key key}) : super(key: key);
+  const LabeledIconButton({Key key, this.color}) : super(key: key);
+
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Icon(FontAwesomeIcons.trashAlt),
-        SizedBox(height: 4),
-        Text('Delete'),
-      ],
+    return SizedBox(
+      width: 56,
+      height: 56,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            FontAwesomeIcons.trashAlt,
+            size: 18,
+            color: color,
+          ),
+          SizedBox(height: 6),
+          Text(
+            'Delete',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: color,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
