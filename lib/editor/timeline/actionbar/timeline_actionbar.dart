@@ -52,10 +52,14 @@ class FrameMenu extends StatelessWidget {
         children: [
           SizedBox(width: 16),
           LabeledIconButton(
+            icon: FontAwesomeIcons.copy,
+            label: 'Duplicate',
             color: Theme.of(context).colorScheme.onPrimary,
           ),
           SizedBox(width: 16),
           LabeledIconButton(
+            icon: FontAwesomeIcons.trashAlt,
+            label: 'Delete',
             color: Theme.of(context).colorScheme.onPrimary,
           ),
           SizedBox(width: 16),
@@ -66,8 +70,15 @@ class FrameMenu extends StatelessWidget {
 }
 
 class LabeledIconButton extends StatelessWidget {
-  const LabeledIconButton({Key key, this.color}) : super(key: key);
+  const LabeledIconButton({
+    Key key,
+    @required this.icon,
+    @required this.label,
+    @required this.color,
+  }) : super(key: key);
 
+  final IconData icon;
+  final String label;
   final Color color;
 
   @override
@@ -80,16 +91,16 @@ class LabeledIconButton extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(
-            FontAwesomeIcons.trashAlt,
+            icon,
             size: 18,
             color: color,
           ),
-          SizedBox(height: 6),
+          SizedBox(height: 8),
           Text(
-            'Delete',
+            label,
             style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
               color: color,
             ),
           ),
