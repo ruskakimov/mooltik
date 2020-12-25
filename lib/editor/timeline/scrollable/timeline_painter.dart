@@ -13,6 +13,7 @@ class TimelinePainter extends CustomPainter {
   final TimelineViewModel timelineView;
 
   // TODO: Add multiple sound bites support.
+  // TODO: Move to timeline view model
   final SoundClip soundBite;
 
   @override
