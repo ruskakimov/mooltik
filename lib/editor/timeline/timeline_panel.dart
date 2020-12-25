@@ -26,7 +26,9 @@ class TimelinePanel extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider<TimelineViewModel>(
-          create: (context) => TimelineViewModel(),
+          create: (context) => TimelineViewModel(
+            timeline: context.read<TimelineModel>(),
+          ),
         ),
       ],
       child: Surface(
