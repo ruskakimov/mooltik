@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/timeline/player_model.dart';
+import 'package:mooltik/editor/timeline/scrollable/timeline_view_model.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:mooltik/home/project.dart';
 import 'package:provider/provider.dart';
@@ -15,12 +16,19 @@ class TimelinePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<PlayerModel>(
-      create: (context) => PlayerModel(
-        soundClips: context.read<Project>().soundClips,
-        getNewSoundClipFile: context.read<Project>().getNewSoundClipFile,
-        timeline: context.read<TimelineModel>(),
-      ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<PlayerModel>(
+          create: (context) => PlayerModel(
+            soundClips: context.read<Project>().soundClips,
+            getNewSoundClipFile: context.read<Project>().getNewSoundClipFile,
+            timeline: context.read<TimelineModel>(),
+          ),
+        ),
+        ChangeNotifierProvider<TimelineViewModel>(
+          create: (context) => TimelineViewModel(),
+        ),
+      ],
       child: Surface(
         child: Column(
           children: [
