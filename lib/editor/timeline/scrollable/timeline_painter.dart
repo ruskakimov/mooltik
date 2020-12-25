@@ -29,6 +29,22 @@ class TimelinePainter extends CustomPainter {
         timelineView.frameSliverTop,
         timelineView.frameSliverBottom,
       );
+
+      // Draw selection border.
+      if (timelineView.selectedFrameIndex == sliver.frameIndex) {
+        canvas.drawRRect(
+          sliver
+              .getRrect(
+                timelineView.frameSliverTop,
+                timelineView.frameSliverBottom,
+              )
+              .deflate(2),
+          Paint()
+            ..color = Colors.amber
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 4,
+        );
+      }
     }
 
     if (soundBite != null) {

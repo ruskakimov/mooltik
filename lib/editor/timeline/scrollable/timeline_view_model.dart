@@ -72,6 +72,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   bool get showFrameMenu => _selectedFrameIndex != null;
 
+  int get selectedFrameIndex => _selectedFrameIndex;
   int _selectedFrameIndex;
 
   double get _midX => size.width / 2;
