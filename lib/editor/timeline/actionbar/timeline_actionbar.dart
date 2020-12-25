@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/timeline/scrollable/timeline_view_model.dart';
+
+import 'package:provider/provider.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:mooltik/editor/timeline/actionbar/frame_menu.dart';
 import 'package:mooltik/editor/timeline/actionbar/playback_controls.dart';
@@ -21,7 +24,7 @@ class TimelineActionbar extends StatelessWidget {
             child: TimeLabel(),
           ),
           PortalEntry(
-            visible: true,
+            visible: context.watch<TimelineViewModel>().showFrameMenu,
             childAnchor: Alignment.center,
             portalAnchor: Alignment.center,
             portal: FrameMenu(),
