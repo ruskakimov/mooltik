@@ -40,8 +40,15 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   void onTapUp(TapUpDetails details) {
-    _selectedFrameIndex = _getFrameIndexUnderPosition(details.localPosition);
-    print(_selectedFrameIndex);
+    final tappedFrameIndex = _getFrameIndexUnderPosition(details.localPosition);
+
+    // Remove selection if tapped again.
+    if (_selectedFrameIndex == tappedFrameIndex) {
+      _selectedFrameIndex = null;
+    } else {
+      _selectedFrameIndex = tappedFrameIndex;
+    }
+
     notifyListeners();
   }
 
