@@ -40,17 +40,23 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   void onTapUp(TapUpDetails details) {
-    final y = details.localPosition.dy;
-
-    _selectedFrameIndex = null;
-
-    // Tap on frame layer area.
-    if (y > frameSliverTop && y < frameSliverBottom) {
-      // TODO: iterate visibleFrameSlivers
-      _selectedFrameIndex = 0;
-    }
-
+    _selectedFrameIndex = _getFrameIndexUnderPosition(details.localPosition);
+    print(_selectedFrameIndex);
     notifyListeners();
+  }
+
+  int _getFrameIndexUnderPosition(Offset position) {
+    // Tapped outside of frame y range.
+    if (position.dy < frameSliverTop || position.dy > frameSliverBottom)
+      return null;
+
+    // TODO: Reuse slivers used for painting
+    for (final sliver in getVisibleFrameSlivers()) {
+      if (position.dx > sliver.startX && position.dx < sliver.endX) {
+        return sliver.frameIndex;
+      }
+    }
+    return null;
   }
 
   /// Size of the timeline view.
