@@ -29,6 +29,7 @@ class TimelineViewModel extends ChangeNotifier {
 
     final diff = (details.localFocalPoint - _prevFocalPoint);
     _timeline.scrub(-diff.dx / timelineWidth);
+    _selectedFrameIndex = null;
 
     _prevFocalPoint = details.localFocalPoint;
 
