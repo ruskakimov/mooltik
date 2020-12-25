@@ -4,7 +4,7 @@ import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:mooltik/home/project.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/surface.dart';
-import 'package:mooltik/editor/timeline/scrollable/timeline_scrollable.dart';
+import 'package:mooltik/editor/timeline/scrollable/timeline_view.dart';
 import 'package:mooltik/editor/timeline/actionbar/timeline_actionbar.dart';
 import 'package:mooltik/editor/timeline/scrollable/playhead.dart';
 
@@ -29,7 +29,7 @@ class TimelinePanel extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  TimelineScrollable(),
+                  TimelineView(),
                   Playhead(),
                 ],
               ),

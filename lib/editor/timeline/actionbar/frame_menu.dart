@@ -51,7 +51,6 @@ class LabeledIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkResponse(
       highlightColor: Colors.white,
-      splashColor: Colors.white,
       radius: 56,
       onTap: () {},
       child: SizedBox(

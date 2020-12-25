@@ -6,14 +6,14 @@ import 'package:mooltik/editor/timeline/scrollable/timeline_painter.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:provider/provider.dart';
 
-class TimelineScrollable extends StatefulWidget {
-  const TimelineScrollable({Key key}) : super(key: key);
+class TimelineView extends StatefulWidget {
+  const TimelineView({Key key}) : super(key: key);
 
   @override
-  _TimelineScrollableState createState() => _TimelineScrollableState();
+  _TimelineViewState createState() => _TimelineViewState();
 }
 
-class _TimelineScrollableState extends State<TimelineScrollable> {
+class _TimelineViewState extends State<TimelineView> {
   double msPerPx = 10;
   double _prevMsPerPx = 10;
   double _scaleOffset;
@@ -41,6 +41,12 @@ class _TimelineScrollableState extends State<TimelineScrollable> {
       },
       onScaleEnd: (ScaleEndDetails details) {
         _scaleOffset = null;
+      },
+      onTapUp: (TapUpDetails details) {
+        print(details.localPosition);
+        // details.localPosition.dy < frameSliverTop
+        // details.localPosition.dy > frameSliverBottom
+        // iterate visibleFrameSlivers
       },
       child: SizedBox.expand(
         child: ColoredBox(
