@@ -83,6 +83,7 @@ class TimelineViewModel extends ChangeNotifier {
       startX: selectedFrameStartX,
       endX: selectedFrameStartX + selectedFrameWidth,
       thumbnail: _timeline.selectedFrame.snapshot,
+      frameIndex: _timeline.selectedFrameIndex,
     );
   }
 
@@ -100,6 +101,7 @@ class TimelineViewModel extends ChangeNotifier {
               widthFromDuration(_timeline.frames[i].duration),
           endX: slivers.first.startX,
           thumbnail: _timeline.frames[i].snapshot,
+          frameIndex: i,
         ),
       );
     }
@@ -113,6 +115,7 @@ class TimelineViewModel extends ChangeNotifier {
         endX:
             slivers.last.endX + widthFromDuration(_timeline.frames[i].duration),
         thumbnail: _timeline.frames[i].snapshot,
+        frameIndex: i,
       ));
     }
     return slivers;
