@@ -49,6 +49,8 @@ class TimelineViewModel extends ChangeNotifier {
       _selectedFrameIndex = tappedFrameIndex;
     }
 
+    _timeline.seekTo(timeFromX(details.localPosition.dx));
+
     notifyListeners();
   }
 
@@ -84,6 +86,9 @@ class TimelineViewModel extends ChangeNotifier {
 
   double xFromTime(Duration time) =>
       _midX + durationToPx(time - _timeline.playheadPosition, _msPerPx);
+
+  Duration timeFromX(double x) =>
+      _timeline.playheadPosition + pxToDuration(x - _midX, msPerPx);
 
   double widthFromDuration(Duration duration) =>
       durationToPx(duration, _msPerPx);

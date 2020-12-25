@@ -70,7 +70,19 @@ class TimelineModel extends ChangeNotifier {
     _selectedFrameEnd = frames.first.duration;
   }
 
-  /// Scrubs the timeline by a [fraction] of total duration.
+  double _fraction(Duration playheadPosition) =>
+      playheadPosition.inMicroseconds / totalDuration.inMicroseconds;
+
+  /// Scrolls to a new playhead position.
+  void seekTo(Duration playheadPosition) {
+    _playheadController.animateTo(
+      _fraction(playheadPosition),
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  /// Scrolls the timeline by a [fraction] of total duration.
   void scrub(double fraction) {
     _playheadController.value += fraction;
   }
