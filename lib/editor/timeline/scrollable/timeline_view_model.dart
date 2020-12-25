@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/timeline/scrollable/convert.dart';
+import 'package:mooltik/editor/timeline/scrollable/sliver/frame_sliver.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 
 class TimelineViewModel extends ChangeNotifier {
@@ -43,5 +44,61 @@ class TimelineViewModel extends ChangeNotifier {
     // details.localPosition.dy < frameSliverTop
     // details.localPosition.dy > frameSliverBottom
     // iterate visibleFrameSlivers
+  }
+
+  /// Size of the timeline view.
+  /// Update before painting or gesture detection.
+  Size size = Size.zero;
+
+  double get _midX => size.width / 2;
+
+  double xFromTime(Duration time) =>
+      _midX + durationToPx(time - _timeline.playheadPosition, _msPerPx);
+
+  double widthFromDuration(Duration duration) =>
+      durationToPx(duration, _msPerPx);
+
+  FrameSliver getSelectedFrameSliver() {
+    final double selectedFrameStartX =
+        xFromTime(_timeline.selectedFrameStartTime);
+    final double selectedFrameWidth =
+        widthFromDuration(_timeline.selectedFrame.duration);
+    return FrameSliver(
+      startX: selectedFrameStartX,
+      endX: selectedFrameStartX + selectedFrameWidth,
+      thumbnail: _timeline.selectedFrame.snapshot,
+    );
+  }
+
+  List<FrameSliver> getVisibleFrameSlivers() {
+    final List<FrameSliver> slivers = [getSelectedFrameSliver()];
+
+    // Fill with slivers on left side.
+    for (int i = _timeline.selectedFrameIndex - 1;
+        i >= 0 && slivers.first.startX > 0;
+        i--) {
+      slivers.insert(
+        0,
+        FrameSliver(
+          startX: slivers.first.startX -
+              widthFromDuration(_timeline.frames[i].duration),
+          endX: slivers.first.startX,
+          thumbnail: _timeline.frames[i].snapshot,
+        ),
+      );
+    }
+
+    // Fill with slivers on right side.
+    for (int i = _timeline.selectedFrameIndex + 1;
+        i < _timeline.frames.length && slivers.last.endX < size.width;
+        i++) {
+      slivers.add(FrameSliver(
+        startX: slivers.last.endX,
+        endX:
+            slivers.last.endX + widthFromDuration(_timeline.frames[i].duration),
+        thumbnail: _timeline.frames[i].snapshot,
+      ));
+    }
+    return slivers;
   }
 }
