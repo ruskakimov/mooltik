@@ -88,6 +88,9 @@ class TimelineModel extends ChangeNotifier {
   }
 
   void play() {
+    if (_playheadController.isCompleted) {
+      _playheadController.reset();
+    }
     _playheadController.forward();
     notifyListeners();
   }

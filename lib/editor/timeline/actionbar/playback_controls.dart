@@ -39,16 +39,6 @@ class PlaybackControls extends StatelessWidget {
         },
       );
 
-    // Replay
-    if (timeline.playheadPosition == timeline.totalDuration)
-      return AppIconButton(
-        icon: FontAwesomeIcons.undoAlt,
-        onTap: () async {
-          await player.primePlayer();
-          timeline.replay();
-        },
-      );
-
     // Play
     return AppIconButton(
       icon: FontAwesomeIcons.play,
