@@ -52,6 +52,11 @@ class TimelineViewModel extends ChangeNotifier {
 
   double get _midX => size.width / 2;
 
+  double get sliverHeight => (size.height - 24) / 2;
+
+  double get frameSliverTop => 8;
+  double get frameSliverBottom => frameSliverTop + sliverHeight;
+
   double xFromTime(Duration time) =>
       _midX + durationToPx(time - _timeline.playheadPosition, _msPerPx);
 

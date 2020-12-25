@@ -23,18 +23,18 @@ class TimelinePainter extends CustomPainter {
     final List<FrameSliver> frameSlivers =
         timelineView.getVisibleFrameSlivers();
 
-    final double sliverHeight = (size.height - 24) / 2;
-
-    final double frameSliverTop = 8;
-    final double frameSliverBottom = frameSliverTop + sliverHeight;
-
     for (final sliver in frameSlivers) {
-      sliver.paint(canvas, frameSliverTop, frameSliverBottom);
+      sliver.paint(
+        canvas,
+        timelineView.frameSliverTop,
+        timelineView.frameSliverBottom,
+      );
     }
 
     if (soundBite != null) {
-      final double soundSliverTop = frameSliverBottom + 8;
-      final double soundSliverBottom = soundSliverTop + sliverHeight;
+      final double soundSliverTop = timelineView.frameSliverBottom + 8;
+      final double soundSliverBottom =
+          soundSliverTop + timelineView.sliverHeight;
 
       final double soundSliverStartX =
           timelineView.xFromTime(soundBite.startTime);
