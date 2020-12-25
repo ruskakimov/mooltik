@@ -50,7 +50,10 @@ class TimelineViewModel extends ChangeNotifier {
       _selectedFrameIndex = tappedFrameIndex;
     }
 
-    _timeline.seekTo(timeFromX(details.localPosition.dx));
+    // Scroll to selected frame.
+    if (_selectedFrameIndex != null) {
+      _timeline.seekTo(timeFromX(details.localPosition.dx));
+    }
 
     notifyListeners();
   }
