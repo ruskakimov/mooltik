@@ -88,8 +88,9 @@ class TimelineModel extends ChangeNotifier {
   }
 
   void play() {
-    if (_playheadController.isCompleted) {
+    if (_playheadController.value == _playheadController.upperBound) {
       _playheadController.reset();
+      _resetSelectedFrame();
     }
     _playheadController.forward();
     notifyListeners();
@@ -97,14 +98,6 @@ class TimelineModel extends ChangeNotifier {
 
   void pause() {
     _playheadController.stop();
-    notifyListeners();
-  }
-
-  void replay() {
-    _playheadController
-      ..reset()
-      ..forward();
-    _resetSelectedFrame();
     notifyListeners();
   }
 
