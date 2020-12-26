@@ -8,12 +8,14 @@ class Playhead extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SizedBox(
-        width: 2,
-        height: double.infinity,
-        child: Material(
-          color: Theme.of(context).colorScheme.primary,
-          elevation: 4,
+      child: IgnorePointer(
+        child: SizedBox(
+          width: 2,
+          height: double.infinity,
+          child: Material(
+            color: Theme.of(context).colorScheme.primary,
+            elevation: 4,
+          ),
         ),
       ),
     );
