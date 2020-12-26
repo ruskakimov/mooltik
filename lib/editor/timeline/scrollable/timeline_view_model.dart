@@ -148,6 +148,11 @@ class TimelineViewModel extends ChangeNotifier {
     Frame menu methods:
   */
 
+  void closeFrameMenu() {
+    _selectedFrameIndex = null;
+    notifyListeners();
+  }
+
   void deleteSelected() {
     if (_selectedFrameIndex == null) return;
     _timeline.deleteFrameAt(_selectedFrameIndex);

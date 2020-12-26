@@ -16,6 +16,8 @@ class TimelineActionbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final timelineView = context.watch<TimelineViewModel>();
+
     return SizedBox(
       height: 48,
       child: Row(
@@ -25,11 +27,20 @@ class TimelineActionbar extends StatelessWidget {
             child: TimeLabel(),
           ),
           PortalEntry(
-            visible: context.watch<TimelineViewModel>().showFrameMenu,
-            childAnchor: Alignment.center,
-            portalAnchor: Alignment.center,
-            portal: FrameMenu(),
-            child: PlayButton(),
+            visible: timelineView.showFrameMenu,
+            portal: Listener(
+              behavior: HitTestBehavior.translucent,
+              onPointerDown: (_) {
+                timelineView.closeFrameMenu();
+              },
+            ),
+            child: PortalEntry(
+              visible: timelineView.showFrameMenu,
+              childAnchor: Alignment.center,
+              portalAnchor: Alignment.center,
+              portal: FrameMenu(),
+              child: PlayButton(),
+            ),
           ),
           Expanded(
             child: Row(
