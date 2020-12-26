@@ -41,14 +41,7 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   void onTapUp(TapUpDetails details) {
-    final tappedFrameIndex = _getFrameIndexUnderPosition(details.localPosition);
-
-    // Remove selection if tapped again.
-    if (_selectedFrameIndex == tappedFrameIndex) {
-      _selectedFrameIndex = null;
-    } else {
-      _selectedFrameIndex = tappedFrameIndex;
-    }
+    _selectedFrameIndex = _getFrameIndexUnderPosition(details.localPosition);
 
     // Scroll to selected frame.
     if (_selectedFrameIndex != null) {

@@ -30,7 +30,7 @@ class TimelineActionbar extends StatelessWidget {
             visible: timelineView.showFrameMenu,
             portal: Listener(
               behavior: HitTestBehavior.translucent,
-              onPointerDown: (_) {
+              onPointerUp: (_) {
                 timelineView.closeFrameMenu();
               },
             ),
