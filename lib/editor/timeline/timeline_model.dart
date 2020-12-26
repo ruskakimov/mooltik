@@ -138,4 +138,14 @@ class TimelineModel extends ChangeNotifier {
     stepForward();
     notifyListeners();
   }
+
+  void deleteFrameAt(int frameIndex) {
+    // Outside index range.
+    if (frameIndex < 0 || frameIndex >= frames.length) return;
+
+    _playheadController.duration -= frames[frameIndex].duration;
+    frames.removeAt(frameIndex);
+    _updateSelectedFrame();
+    notifyListeners();
+  }
 }

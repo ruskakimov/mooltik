@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/timeline/scrollable/timeline_view_model.dart';
+import 'package:mooltik/editor/timeline/timeline_model.dart';
+import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FrameMenu extends StatelessWidget {
@@ -8,6 +11,8 @@ class FrameMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final timelineView = context.watch<TimelineViewModel>();
+
     return Material(
       clipBehavior: Clip.antiAlias,
       borderRadius: BorderRadius.circular(8),
@@ -27,6 +32,7 @@ class FrameMenu extends StatelessWidget {
             icon: FontAwesomeIcons.trashAlt,
             label: 'Delete',
             color: Theme.of(context).colorScheme.onPrimary,
+            onTap: timelineView.deleteSelected,
           ),
           SizedBox(width: 16),
         ],
@@ -41,18 +47,20 @@ class LabeledIconButton extends StatelessWidget {
     @required this.icon,
     @required this.label,
     @required this.color,
+    this.onTap,
   }) : super(key: key);
 
   final IconData icon;
   final String label;
   final Color color;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkResponse(
       highlightColor: Colors.white,
       radius: 56,
-      onTap: () {},
+      onTap: onTap,
       child: SizedBox(
         width: 56,
         height: 56,

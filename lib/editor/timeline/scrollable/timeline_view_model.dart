@@ -143,4 +143,15 @@ class TimelineViewModel extends ChangeNotifier {
     }
     return slivers;
   }
+
+  /*
+    Frame menu methods:
+  */
+
+  void deleteSelected() {
+    if (_selectedFrameIndex == null) return;
+    _timeline.deleteFrameAt(_selectedFrameIndex);
+    _selectedFrameIndex = null;
+    notifyListeners();
+  }
 }
