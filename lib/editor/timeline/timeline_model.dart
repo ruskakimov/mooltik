@@ -148,4 +148,19 @@ class TimelineModel extends ChangeNotifier {
     _updateSelectedFrame();
     notifyListeners();
   }
+
+  void duplicateFrameAt(int frameIndex) {
+    // Outside index range.
+    if (frameIndex < 0 || frameIndex >= frames.length) return;
+
+    final newFrame = FrameModel(
+      size: frames.first.size,
+      initialSnapshot: frames[frameIndex].snapshot,
+      duration: frames[frameIndex].duration,
+    );
+    frames.insert(frameIndex + 1, newFrame);
+    _playheadController.duration += newFrame.duration;
+    _updateSelectedFrame();
+    notifyListeners();
+  }
 }

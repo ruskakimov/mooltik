@@ -26,6 +26,7 @@ class FrameMenu extends StatelessWidget {
             icon: FontAwesomeIcons.copy,
             label: 'Duplicate',
             color: Theme.of(context).colorScheme.onPrimary,
+            onTap: timelineView.duplicateSelected,
           ),
           SizedBox(width: 16),
           LabeledIconButton(

@@ -154,4 +154,11 @@ class TimelineViewModel extends ChangeNotifier {
     _selectedFrameIndex = null;
     notifyListeners();
   }
+
+  void duplicateSelected() {
+    if (_selectedFrameIndex == null) return;
+    _timeline.duplicateFrameAt(_selectedFrameIndex);
+    _selectedFrameIndex = null;
+    notifyListeners();
+  }
 }
