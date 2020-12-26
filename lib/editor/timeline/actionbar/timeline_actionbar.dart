@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/timeline/actionbar/add_frame_button.dart';
 import 'package:mooltik/editor/timeline/actionbar/play_button.dart';
 import 'package:mooltik/editor/timeline/scrollable/timeline_view_model.dart';
 
@@ -35,6 +36,7 @@ class TimelineActionbar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 RecordButton(),
+                AddFrameButton(),
               ],
             ),
           ),
