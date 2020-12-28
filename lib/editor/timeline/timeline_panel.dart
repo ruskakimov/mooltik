@@ -32,7 +32,7 @@ class TimelinePanel extends StatelessWidget {
           ),
         ),
       ],
-      child: Surface(
+      builder: (context, child) => Surface(
         child: Column(
           children: [
             TimelineActionbar(),
@@ -42,7 +42,8 @@ class TimelinePanel extends StatelessWidget {
                 children: [
                   TimelineView(),
                   Playhead(),
-                  PositionedResizeHandle(),
+                  if (context.watch<TimelineViewModel>().showFrameMenu)
+                    PositionedResizeHandle(),
                 ],
               ),
             ),
