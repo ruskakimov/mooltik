@@ -41,10 +41,41 @@ class TimelinePanel extends StatelessWidget {
                 children: [
                   TimelineView(),
                   Playhead(),
+                  Positioned(
+                    top: 15,
+                    left: 457,
+                    child: const ResizeHandle(),
+                  ),
                 ],
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ResizeHandle extends StatelessWidget {
+  const ResizeHandle({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      borderRadius: BorderRadius.circular(8),
+      color: Theme.of(context).colorScheme.primary,
+      elevation: 10,
+      child: SizedBox(
+        height: 48,
+        width: 24,
+        child: RotatedBox(
+          quarterTurns: 1,
+          child: Icon(
+            Icons.drag_handle_rounded,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
         ),
       ),
     );
