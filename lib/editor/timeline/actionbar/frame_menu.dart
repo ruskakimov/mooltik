@@ -22,6 +22,13 @@ class FrameMenu extends StatelessWidget {
         children: [
           SizedBox(width: 16),
           LabeledIconButton(
+            icon: FontAwesomeIcons.arrowsAltH,
+            label: 'Resize',
+            color: Theme.of(context).colorScheme.onPrimary,
+            onTap: () {},
+          ),
+          SizedBox(width: 16),
+          LabeledIconButton(
             icon: FontAwesomeIcons.copy,
             label: 'Duplicate',
             color: Theme.of(context).colorScheme.onPrimary,
