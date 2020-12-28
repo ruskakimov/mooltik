@@ -8,7 +8,6 @@ class TimelineModel extends ChangeNotifier {
   })  : assert(frames != null && frames.isNotEmpty),
         _selectedFrameIndex = 0,
         _selectedFrameStart = Duration.zero,
-        _selectedFrameEnd = frames.first.duration,
         _playheadController = AnimationController(
           vsync: vsync,
           duration: frames.fold(
@@ -41,13 +40,13 @@ class TimelineModel extends ChangeNotifier {
   Duration get selectedFrameStartTime => _selectedFrameStart;
   Duration _selectedFrameStart;
 
-  Duration get selectedFrameEndTime => _selectedFrameEnd;
-  Duration _selectedFrameEnd;
+  Duration get selectedFrameEndTime =>
+      _selectedFrameStart + selectedFrame.duration;
 
   void _updateSelectedFrame() {
     if (playheadPosition < _selectedFrameStart) {
       _selectPrevFrame();
-    } else if (playheadPosition >= _selectedFrameEnd) {
+    } else if (playheadPosition >= selectedFrameEndTime) {
       _selectNextFrame();
     }
   }
@@ -55,21 +54,18 @@ class TimelineModel extends ChangeNotifier {
   void _selectPrevFrame() {
     if (_selectedFrameIndex == 0) return;
     _selectedFrameIndex--;
-    _selectedFrameEnd = _selectedFrameStart;
     _selectedFrameStart -= selectedFrame.duration;
   }
 
   void _selectNextFrame() {
     if (lastFrameSelected) return;
     _selectedFrameIndex++;
-    _selectedFrameStart = _selectedFrameEnd;
-    _selectedFrameEnd += selectedFrame.duration;
+    _selectedFrameStart = selectedFrameEndTime;
   }
 
   void _resetSelectedFrame() {
     _selectedFrameIndex = 0;
     _selectedFrameStart = Duration.zero;
-    _selectedFrameEnd = frames.first.duration;
   }
 
   double _fraction(Duration playheadPosition) =>
@@ -120,7 +116,7 @@ class TimelineModel extends ChangeNotifier {
   void stepForward() {
     if (!stepForwardAvailable) return;
     final double fraction =
-        _selectedFrameEnd.inMilliseconds / totalDuration.inMilliseconds;
+        selectedFrameEndTime.inMilliseconds / totalDuration.inMilliseconds;
     _playheadController.value = fraction;
     _updateSelectedFrame();
     notifyListeners();
