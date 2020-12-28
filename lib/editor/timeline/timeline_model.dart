@@ -40,6 +40,8 @@ class TimelineModel extends ChangeNotifier {
 
   Duration get selectedFrameStartTime => _selectedFrameStart;
   Duration _selectedFrameStart;
+
+  Duration get selectedFrameEndTime => _selectedFrameEnd;
   Duration _selectedFrameEnd;
 
   void _updateSelectedFrame() {

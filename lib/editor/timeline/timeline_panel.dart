@@ -41,11 +41,7 @@ class TimelinePanel extends StatelessWidget {
                 children: [
                   TimelineView(),
                   Playhead(),
-                  Positioned(
-                    top: 15,
-                    left: 457,
-                    child: const ResizeHandle(),
-                  ),
+                  PositionedResizeHandle(),
                 ],
               ),
             ),
@@ -56,10 +52,38 @@ class TimelinePanel extends StatelessWidget {
   }
 }
 
+class PositionedResizeHandle extends StatelessWidget {
+  final double width = 24;
+  final double height = 48;
+
+  @override
+  Widget build(BuildContext context) {
+    final timelineView = context.watch<TimelineViewModel>();
+    final timeline = context.watch<TimelineModel>();
+
+    final frameSliverMid = timelineView.frameSliverTop +
+        (timelineView.frameSliverBottom - timelineView.frameSliverTop) / 2;
+
+    return Positioned(
+      left: timelineView.xFromTime(timeline.selectedFrameEndTime) - width / 2,
+      top: frameSliverMid - height / 2,
+      child: ResizeHandle(
+        width: width,
+        height: height,
+      ),
+    );
+  }
+}
+
 class ResizeHandle extends StatelessWidget {
   const ResizeHandle({
     Key key,
+    this.width,
+    this.height,
   }) : super(key: key);
+
+  final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +92,8 @@ class ResizeHandle extends StatelessWidget {
       color: Theme.of(context).colorScheme.primary,
       elevation: 10,
       child: SizedBox(
-        height: 48,
-        width: 24,
+        width: width,
+        height: height,
         child: RotatedBox(
           quarterTurns: 1,
           child: Icon(
