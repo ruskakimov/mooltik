@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/timeline/scrollable/timeline_view_model.dart';
-import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
