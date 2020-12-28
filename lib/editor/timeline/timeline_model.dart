@@ -70,26 +70,34 @@ class TimelineModel extends ChangeNotifier {
     _selectedFrameEnd = frames.first.duration;
   }
 
-  /// Scrubs the timeline by a [fraction] of total duration.
+  double _fraction(Duration playheadPosition) =>
+      playheadPosition.inMicroseconds / totalDuration.inMicroseconds;
+
+  /// Scrolls to a new playhead position.
+  void seekTo(Duration playheadPosition) {
+    _playheadController.animateTo(
+      _fraction(playheadPosition),
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  /// Scrolls the timeline by a [fraction] of total duration.
   void scrub(double fraction) {
     _playheadController.value += fraction;
   }
 
   void play() {
+    if (_playheadController.value == _playheadController.upperBound) {
+      _playheadController.reset();
+      _resetSelectedFrame();
+    }
     _playheadController.forward();
     notifyListeners();
   }
 
   void pause() {
     _playheadController.stop();
-    notifyListeners();
-  }
-
-  void replay() {
-    _playheadController
-      ..reset()
-      ..forward();
-    _resetSelectedFrame();
     notifyListeners();
   }
 
@@ -116,10 +124,36 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addFrame() {
-    frames.add(FrameModel(size: frames.first.size));
-    _playheadController.duration += frames.last.duration;
+  void addFrameAfterSelected() {
+    final newFrame = FrameModel(size: frames.first.size);
+    frames.insert(_selectedFrameIndex + 1, newFrame);
+    _playheadController.duration += newFrame.duration;
     stepForward();
+    notifyListeners();
+  }
+
+  void deleteFrameAt(int frameIndex) {
+    // Outside index range.
+    if (frameIndex < 0 || frameIndex >= frames.length) return;
+
+    _playheadController.duration -= frames[frameIndex].duration;
+    frames.removeAt(frameIndex);
+    _updateSelectedFrame();
+    notifyListeners();
+  }
+
+  void duplicateFrameAt(int frameIndex) {
+    // Outside index range.
+    if (frameIndex < 0 || frameIndex >= frames.length) return;
+
+    final newFrame = FrameModel(
+      size: frames.first.size,
+      initialSnapshot: frames[frameIndex].snapshot,
+      duration: frames[frameIndex].duration,
+    );
+    frames.insert(frameIndex + 1, newFrame);
+    _playheadController.duration += newFrame.duration;
+    _updateSelectedFrame();
     notifyListeners();
   }
 }

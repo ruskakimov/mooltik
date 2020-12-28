@@ -9,9 +9,11 @@ class FrameSliver extends Sliver {
     @required double startX,
     @required double endX,
     @required this.thumbnail,
+    @required this.frameIndex,
   }) : super(startX, endX);
 
   final ui.Image thumbnail;
+  final int frameIndex;
 
   @override
   void paint(Canvas canvas, double startY, double endY) {
