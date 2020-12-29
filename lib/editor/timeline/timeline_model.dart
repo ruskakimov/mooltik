@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 
+const Duration minFrameDuration = Duration(milliseconds: 42);
+
 class TimelineModel extends ChangeNotifier {
   TimelineModel({
     @required this.frames,
@@ -156,6 +158,8 @@ class TimelineModel extends ChangeNotifier {
   }
 
   void changeSelectedFrameDuration(Duration newDuration) {
+    if (newDuration <= minFrameDuration) return;
+
     final prevPlayheadPosition = playheadPosition;
 
     _playheadController.duration += newDuration - selectedFrame.duration;
