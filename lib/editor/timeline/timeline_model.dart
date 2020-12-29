@@ -165,10 +165,11 @@ class TimelineModel extends ChangeNotifier {
     _playheadController.duration += newDuration - selectedFrame.duration;
     selectedFrame.duration = newDuration;
 
-    // Adjust playhead position.
+    // Keep playhead inside selected frame.
     _playheadController.value = _fraction(
       prevPlayheadPosition < selectedFrameEndTime
           ? prevPlayheadPosition
+          // Selected frame will change when playhead equals `selectedFrameEndTime`.
           : selectedFrameEndTime - Duration(milliseconds: 1),
     );
 
