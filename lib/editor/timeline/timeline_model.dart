@@ -163,9 +163,15 @@ class TimelineModel extends ChangeNotifier {
     final prevPlayheadPosition = playheadPosition;
 
     _playheadController.duration += newDuration - selectedFrame.duration;
-    _playheadController.value = _fraction(prevPlayheadPosition);
-
     selectedFrame.duration = newDuration;
+
+    // Adjust playhead position.
+    _playheadController.value = _fraction(
+      prevPlayheadPosition < selectedFrameEndTime
+          ? prevPlayheadPosition
+          : selectedFrameEndTime - Duration(milliseconds: 1),
+    );
+
     notifyListeners();
   }
 }
