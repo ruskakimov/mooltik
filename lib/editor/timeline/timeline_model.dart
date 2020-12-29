@@ -59,8 +59,8 @@ class TimelineModel extends ChangeNotifier {
 
   void _selectNextFrame() {
     if (lastFrameSelected) return;
-    _selectedFrameIndex++;
     _selectedFrameStart = selectedFrameEndTime;
+    _selectedFrameIndex++;
   }
 
   void _resetSelectedFrame() {
@@ -80,7 +80,7 @@ class TimelineModel extends ChangeNotifier {
     );
   }
 
-  /// Scrolls the timeline by a [fraction] of total duration.
+  /// Instantly scrolls the timeline by a [fraction] of total duration.
   void scrub(double fraction) {
     _playheadController.value += fraction;
   }
@@ -152,6 +152,16 @@ class TimelineModel extends ChangeNotifier {
     frames.insert(frameIndex + 1, newFrame);
     _playheadController.duration += newFrame.duration;
     _updateSelectedFrame();
+    notifyListeners();
+  }
+
+  void changeSelectedFrameDuration(Duration newDuration) {
+    final prevPlayheadPosition = playheadPosition;
+
+    _playheadController.duration += newDuration - selectedFrame.duration;
+    _playheadController.value = _fraction(prevPlayheadPosition);
+
+    selectedFrame.duration = newDuration;
     notifyListeners();
   }
 }

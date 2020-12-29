@@ -15,12 +15,23 @@ class PositionedResizeHandle extends StatelessWidget {
     final frameSliverMid = timelineView.frameSliverTop +
         (timelineView.frameSliverBottom - timelineView.frameSliverTop) / 2;
 
+    final offset = Offset(
+      timelineView.xFromTime(timeline.selectedFrameEndTime) - width / 2,
+      frameSliverMid - height / 2,
+    );
+
     return Positioned(
-      left: timelineView.xFromTime(timeline.selectedFrameEndTime) - width / 2,
-      top: frameSliverMid - height / 2,
-      child: ResizeHandle(
-        width: width,
-        height: height,
+      left: offset.dx,
+      top: offset.dy,
+      child: GestureDetector(
+        onHorizontalDragUpdate: (details) {
+          final timelinePosition = details.localPosition + offset;
+          timelineView.onDurationHandleDragUpdate(timelinePosition.dx);
+        },
+        child: ResizeHandle(
+          width: width,
+          height: height,
+        ),
       ),
     );
   }
