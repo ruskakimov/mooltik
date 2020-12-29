@@ -3,9 +3,16 @@ import 'package:provider/provider.dart';
 import 'package:mooltik/editor/timeline/scrollable/timeline_view_model.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 
-class PositionedResizeHandle extends StatelessWidget {
+class PositionedResizeHandle extends StatefulWidget {
+  @override
+  _PositionedResizeHandleState createState() => _PositionedResizeHandleState();
+}
+
+class _PositionedResizeHandleState extends State<PositionedResizeHandle> {
   final double width = 24;
   final double height = 48;
+
+  Offset _dragStartOffset;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +31,11 @@ class PositionedResizeHandle extends StatelessWidget {
       left: offset.dx,
       top: offset.dy,
       child: GestureDetector(
+        onHorizontalDragStart: (details) {
+          _dragStartOffset = offset;
+        },
         onHorizontalDragUpdate: (details) {
-          final timelinePosition = details.localPosition + offset;
+          final timelinePosition = details.localPosition + _dragStartOffset;
           timelineView.onDurationHandleDragUpdate(timelinePosition.dx);
         },
         child: ResizeHandle(
