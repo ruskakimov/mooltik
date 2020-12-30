@@ -117,9 +117,7 @@ class TimelineModel extends ChangeNotifier {
 
   void stepForward() {
     if (!stepForwardAvailable) return;
-    final double fraction =
-        selectedFrameEndTime.inMilliseconds / totalDuration.inMilliseconds;
-    _playheadController.value = fraction;
+    _playheadController.value = _fraction(selectedFrameEndTime);
     _updateSelectedFrame();
     notifyListeners();
   }
