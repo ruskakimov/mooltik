@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mooltik/common/app_icon_button.dart';
+import 'package:mooltik/editor/editing_actionbar.dart';
 import 'package:mooltik/editor/preview.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:mooltik/editor/timeline/timeline_panel.dart';
@@ -32,7 +31,7 @@ class _EditingPageState extends State<EditingPage>
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildExitButton(context),
+                    EditingActionbar(),
                     Spacer(),
                     Preview(),
                     Spacer(),
@@ -46,20 +45,6 @@ class _EditingPageState extends State<EditingPage>
           ),
         ),
       ),
-    );
-  }
-
-  AppIconButton _buildExitButton(BuildContext context) {
-    return AppIconButton(
-      icon: FontAwesomeIcons.arrowLeft,
-      onTap: () async {
-        final project = context.read<Project>();
-        await project.save();
-        Navigator.pop(context);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          project.close();
-        });
-      },
     );
   }
 }
