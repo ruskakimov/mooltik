@@ -47,6 +47,8 @@ class EditingActionbar extends StatelessWidget {
                     ),
                     RaisedButton(
                       color: Theme.of(context).colorScheme.primary,
+                      highlightColor: Colors.white12,
+                      splashColor: Colors.white,
                       shape: CircleBorder(),
                       onPressed: () {},
                       child: SizedBox(
