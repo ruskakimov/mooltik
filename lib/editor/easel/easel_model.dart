@@ -79,11 +79,11 @@ class EaselModel extends ChangeNotifier {
   }
 
   void _fitToScreen() {
-    final verticalPadding = 16.0;
-    _scale = (_screenSize.height - verticalPadding * 2) / frameSize.height;
+    final topPadding = 44.0; // equals drawing actionbar height
+    _scale = (_screenSize.height - topPadding) / frameSize.height;
     _offset = Offset(
       (_screenSize.width - frameSize.width * _scale) / 2,
-      (_screenSize.height - frameSize.height * _scale) / 2,
+      (topPadding + _screenSize.height - frameSize.height * _scale) / 2,
     );
     _rotation = 0;
   }
