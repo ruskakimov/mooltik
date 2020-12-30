@@ -13,27 +13,45 @@ class EditingActionbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _buildExitButton(context),
+        AppIconButton(
+          icon: FontAwesomeIcons.arrowLeft,
+          onTap: () async {
+            final project = context.read<Project>();
+            await project.save();
+            Navigator.pop(context);
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              project.close();
+            });
+          },
+        ),
         Spacer(),
         AppIconButton(
           icon: FontAwesomeIcons.fileDownload,
-          onTap: () {},
+          onTap: () => showDialog<void>(
+            context: context,
+            builder: (BuildContext context) => SimpleDialog(
+              title: const Text(
+                'Export video',
+                textAlign: TextAlign.center,
+              ),
+              titlePadding: EdgeInsets.all(16),
+              contentPadding: EdgeInsets.all(16),
+              children: <Widget>[
+                LinearProgressIndicator(
+                  value: 0,
+                ),
+                SizedBox(height: 16),
+                RaisedButton(
+                  color: Theme.of(context).colorScheme.primary,
+                  textColor: Theme.of(context).colorScheme.onPrimary,
+                  child: Text('Start'),
+                  onPressed: () {},
+                ),
+              ],
+            ),
+          ),
         ),
       ],
-    );
-  }
-
-  AppIconButton _buildExitButton(BuildContext context) {
-    return AppIconButton(
-      icon: FontAwesomeIcons.arrowLeft,
-      onTap: () async {
-        final project = context.read<Project>();
-        await project.save();
-        Navigator.pop(context);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          project.close();
-        });
-      },
     );
   }
 }
