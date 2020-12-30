@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editor/export_dialog.dart';
 import 'package:mooltik/home/project.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -29,47 +30,7 @@ class EditingActionbar extends StatelessWidget {
           icon: FontAwesomeIcons.fileDownload,
           onTap: () => showDialog<void>(
             context: context,
-            builder: (BuildContext context) => Dialog(
-              shape: CircleBorder(),
-              child: SizedBox(
-                width: 280,
-                height: 280,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    SizedBox(
-                      width: 260,
-                      height: 260,
-                      child: CircularProgressIndicator(
-                        value: 0,
-                        strokeWidth: 20,
-                      ),
-                    ),
-                    RaisedButton(
-                      color: Theme.of(context).colorScheme.primary,
-                      highlightColor: Colors.white12,
-                      splashColor: Colors.white,
-                      shape: CircleBorder(),
-                      onPressed: () {},
-                      child: SizedBox(
-                        width: 230,
-                        height: 230,
-                        child: Center(
-                          child: Text(
-                            'Export video',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            builder: (BuildContext context) => ExportDialog(),
           ),
         ),
       ],
