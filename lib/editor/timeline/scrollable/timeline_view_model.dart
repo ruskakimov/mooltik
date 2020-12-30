@@ -159,4 +159,9 @@ class TimelineViewModel extends ChangeNotifier {
     _selectedFrameIndex = null;
     notifyListeners();
   }
+
+  void onDurationHandleDragUpdate(double x) {
+    final newDuration = timeFromX(x) - _timeline.selectedFrameStartTime;
+    _timeline.changeSelectedFrameDuration(newDuration);
+  }
 }

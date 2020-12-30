@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/timeline/player_model.dart';
+import 'package:mooltik/editor/timeline/scrollable/resize_handle.dart';
 import 'package:mooltik/editor/timeline/scrollable/timeline_view_model.dart';
 import 'package:mooltik/editor/timeline/timeline_model.dart';
 import 'package:mooltik/home/project.dart';
@@ -31,7 +32,7 @@ class TimelinePanel extends StatelessWidget {
           ),
         ),
       ],
-      child: Surface(
+      builder: (context, child) => Surface(
         child: Column(
           children: [
             TimelineActionbar(),
@@ -41,6 +42,8 @@ class TimelinePanel extends StatelessWidget {
                 children: [
                   TimelineView(),
                   Playhead(),
+                  if (context.watch<TimelineViewModel>().showFrameMenu)
+                    PositionedResizeHandle(),
                 ],
               ),
             ),
