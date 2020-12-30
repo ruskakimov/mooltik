@@ -29,25 +29,44 @@ class EditingActionbar extends StatelessWidget {
           icon: FontAwesomeIcons.fileDownload,
           onTap: () => showDialog<void>(
             context: context,
-            builder: (BuildContext context) => SimpleDialog(
-              title: const Text(
-                'Export video',
-                textAlign: TextAlign.center,
+            builder: (BuildContext context) => Dialog(
+              shape: CircleBorder(),
+              child: SizedBox(
+                width: 280,
+                height: 280,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      width: 260,
+                      height: 260,
+                      child: CircularProgressIndicator(
+                        value: 0,
+                        strokeWidth: 20,
+                      ),
+                    ),
+                    RaisedButton(
+                      color: Theme.of(context).colorScheme.primary,
+                      shape: CircleBorder(),
+                      onPressed: () {},
+                      child: SizedBox(
+                        width: 230,
+                        height: 230,
+                        child: Center(
+                          child: Text(
+                            'Export video',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              titlePadding: EdgeInsets.all(16),
-              contentPadding: EdgeInsets.all(16),
-              children: <Widget>[
-                LinearProgressIndicator(
-                  value: 0,
-                ),
-                SizedBox(height: 16),
-                RaisedButton(
-                  color: Theme.of(context).colorScheme.primary,
-                  textColor: Theme.of(context).colorScheme.onPrimary,
-                  child: Text('Start'),
-                  onPressed: () {},
-                ),
-              ],
             ),
           ),
         ),
