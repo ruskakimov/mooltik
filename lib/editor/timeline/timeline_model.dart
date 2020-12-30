@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editor/frame/frame_model.dart';
 
+const Duration minFrameDuration = Duration(milliseconds: 42);
+
 class TimelineModel extends ChangeNotifier {
   TimelineModel({
     @required this.frames,
@@ -8,7 +10,6 @@ class TimelineModel extends ChangeNotifier {
   })  : assert(frames != null && frames.isNotEmpty),
         _selectedFrameIndex = 0,
         _selectedFrameStart = Duration.zero,
-        _selectedFrameEnd = frames.first.duration,
         _playheadController = AnimationController(
           vsync: vsync,
           duration: frames.fold(
@@ -40,12 +41,14 @@ class TimelineModel extends ChangeNotifier {
 
   Duration get selectedFrameStartTime => _selectedFrameStart;
   Duration _selectedFrameStart;
-  Duration _selectedFrameEnd;
+
+  Duration get selectedFrameEndTime =>
+      _selectedFrameStart + selectedFrame.duration;
 
   void _updateSelectedFrame() {
     if (playheadPosition < _selectedFrameStart) {
       _selectPrevFrame();
-    } else if (playheadPosition >= _selectedFrameEnd) {
+    } else if (playheadPosition >= selectedFrameEndTime) {
       _selectNextFrame();
     }
   }
@@ -53,21 +56,18 @@ class TimelineModel extends ChangeNotifier {
   void _selectPrevFrame() {
     if (_selectedFrameIndex == 0) return;
     _selectedFrameIndex--;
-    _selectedFrameEnd = _selectedFrameStart;
     _selectedFrameStart -= selectedFrame.duration;
   }
 
   void _selectNextFrame() {
     if (lastFrameSelected) return;
+    _selectedFrameStart = selectedFrameEndTime;
     _selectedFrameIndex++;
-    _selectedFrameStart = _selectedFrameEnd;
-    _selectedFrameEnd += selectedFrame.duration;
   }
 
   void _resetSelectedFrame() {
     _selectedFrameIndex = 0;
     _selectedFrameStart = Duration.zero;
-    _selectedFrameEnd = frames.first.duration;
   }
 
   double _fraction(Duration playheadPosition) =>
@@ -82,7 +82,7 @@ class TimelineModel extends ChangeNotifier {
     );
   }
 
-  /// Scrolls the timeline by a [fraction] of total duration.
+  /// Instantly scrolls the timeline by a [fraction] of total duration.
   void scrub(double fraction) {
     _playheadController.value += fraction;
   }
@@ -118,7 +118,7 @@ class TimelineModel extends ChangeNotifier {
   void stepForward() {
     if (!stepForwardAvailable) return;
     final double fraction =
-        _selectedFrameEnd.inMilliseconds / totalDuration.inMilliseconds;
+        selectedFrameEndTime.inMilliseconds / totalDuration.inMilliseconds;
     _playheadController.value = fraction;
     _updateSelectedFrame();
     notifyListeners();
@@ -154,6 +154,25 @@ class TimelineModel extends ChangeNotifier {
     frames.insert(frameIndex + 1, newFrame);
     _playheadController.duration += newFrame.duration;
     _updateSelectedFrame();
+    notifyListeners();
+  }
+
+  void changeSelectedFrameDuration(Duration newDuration) {
+    if (newDuration <= minFrameDuration) return;
+
+    final prevPlayheadPosition = playheadPosition;
+
+    _playheadController.duration += newDuration - selectedFrame.duration;
+    selectedFrame.duration = newDuration;
+
+    // Keep playhead inside selected frame.
+    _playheadController.value = _fraction(
+      prevPlayheadPosition < selectedFrameEndTime
+          ? prevPlayheadPosition
+          // Selected frame will change when playhead equals `selectedFrameEndTime`.
+          : selectedFrameEndTime - Duration(milliseconds: 1),
+    );
+
     notifyListeners();
   }
 }
