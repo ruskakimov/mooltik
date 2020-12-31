@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:mooltik/editing/editing_page.dart';
 import 'package:mooltik/gallery/data/projects_manager_model.dart';
 
-class ProjectGallery extends StatelessWidget {
-  const ProjectGallery({
+class ProjectList extends StatelessWidget {
+  const ProjectList({
     Key key,
   }) : super(key: key);
 

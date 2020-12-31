@@ -3,20 +3,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mooltik/gallery/ui/add_project_button.dart';
 import 'package:mooltik/gallery/ui/home_bar.dart';
-import 'package:mooltik/gallery/ui/projects_gallery.dart';
+import 'package:mooltik/gallery/ui/project_list.dart';
 import 'package:mooltik/gallery/data/projects_manager_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+class GalleryPage extends StatefulWidget {
+  const GalleryPage({Key key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _GalleryPageState createState() => _GalleryPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _GalleryPageState extends State<GalleryPage> {
   final ProjectsManagerModel manager = ProjectsManagerModel();
 
   @override
@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             HomeBar(),
-            Expanded(child: ProjectGallery()),
+            Expanded(child: ProjectList()),
           ],
         ),
         floatingActionButton: AddProjectButton(),

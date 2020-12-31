@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_portal/flutter_portal.dart';
-import 'package:mooltik/gallery/home_page.dart';
+import 'package:mooltik/gallery/gallery_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,7 +51,7 @@ class App extends StatelessWidget {
           ),
         ),
         routes: {
-          Navigator.defaultRouteName: (context) => HomePage(),
+          Navigator.defaultRouteName: (context) => GalleryPage(),
         },
       ),
     );
