@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/drawing_page.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
-import 'package:mooltik/editing/ui/frame_thumbnail.dart';
+import 'package:mooltik/editing/ui/preview/frame_thumbnail.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:provider/provider.dart';
 

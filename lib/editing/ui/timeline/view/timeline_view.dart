@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/editing/data/player_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
-import 'package:mooltik/editing/ui/timeline/scrollable/timeline_painter.dart';
+import 'package:mooltik/editing/ui/timeline/view/timeline_painter.dart';
 import 'package:provider/provider.dart';
 
 class TimelineView extends StatelessWidget {

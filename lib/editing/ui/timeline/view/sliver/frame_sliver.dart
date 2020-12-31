@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:mooltik/editing/ui/timeline/scrollable/sliver/sliver.dart';
+import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 
 class FrameSliver extends Sliver {
   FrameSliver({

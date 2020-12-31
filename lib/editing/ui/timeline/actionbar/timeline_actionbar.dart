@@ -4,7 +4,7 @@ import 'package:mooltik/editing/ui/timeline/actionbar/add_frame_button.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/play_button.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/record_button.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/time_label.dart';
-import 'package:mooltik/editing/ui/timeline/frame_menu.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/frame_menu.dart';
 
 import 'package:provider/provider.dart';
 import 'package:flutter_portal/flutter_portal.dart';

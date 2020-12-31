@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/editing/ui/timeline/scrollable/sliver/sliver.dart';
+import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 
 class SoundSliver extends Sliver {
   SoundSliver({

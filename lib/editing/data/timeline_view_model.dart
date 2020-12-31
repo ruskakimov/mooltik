@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/convert.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
-import 'package:mooltik/editing/ui/timeline/scrollable/sliver/frame_sliver.dart';
+import 'package:mooltik/editing/ui/timeline/view/sliver/frame_sliver.dart';
 
 class TimelineViewModel extends ChangeNotifier {
   TimelineViewModel({

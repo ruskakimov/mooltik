@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/player_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
-import 'package:mooltik/editing/ui/timeline/scrollable/resize_handle.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/resize_handle.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/surface.dart';
-import 'package:mooltik/editing/ui/timeline/scrollable/timeline_view.dart';
+import 'package:mooltik/editing/ui/timeline/view/timeline_view.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/timeline_actionbar.dart';
-import 'package:mooltik/editing/ui/timeline/scrollable/playhead.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/playhead.dart';
 
 class TimelinePanel extends StatelessWidget {
   const TimelinePanel({
