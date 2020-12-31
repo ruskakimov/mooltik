@@ -8,7 +8,7 @@ import 'package:mooltik/common/ui/animated_drawer.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/common/data/io/gif.dart';
 import 'package:mooltik/common/data/io/png.dart';
-import 'package:mooltik/common/data/project.dart';
+import 'package:mooltik/common/data/project/project.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';

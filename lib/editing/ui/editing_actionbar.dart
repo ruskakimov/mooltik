@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editing/ui/export_dialog.dart';
-import 'package:mooltik/common/data/project.dart';
+import 'package:mooltik/common/data/project/project.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';

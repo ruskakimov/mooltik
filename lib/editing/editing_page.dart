@@ -3,7 +3,7 @@ import 'package:mooltik/editing/ui/editing_actionbar.dart';
 import 'package:mooltik/editing/ui/preview.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/timeline/timeline_panel.dart';
-import 'package:mooltik/common/data/project.dart';
+import 'package:mooltik/common/data/project/project.dart';
 import 'package:provider/provider.dart';
 
 class EditingPage extends StatefulWidget {

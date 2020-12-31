@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project.dart';
+import 'package:mooltik/common/data/project/project.dart';
 import 'package:path/path.dart' as p;
 
 class ProjectsManagerModel extends ChangeNotifier {

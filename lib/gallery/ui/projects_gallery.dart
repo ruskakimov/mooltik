@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project.dart';
+import 'package:mooltik/common/data/project/project.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editing/editing_page.dart';
 import 'package:mooltik/gallery/data/projects_manager_model.dart';

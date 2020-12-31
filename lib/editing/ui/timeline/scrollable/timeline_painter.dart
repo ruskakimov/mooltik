@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/sound_clip.dart';
+import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/editing/ui/timeline/scrollable/sliver/frame_sliver.dart';
 import 'package:mooltik/editing/ui/timeline/scrollable/sliver/sound_sliver.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';

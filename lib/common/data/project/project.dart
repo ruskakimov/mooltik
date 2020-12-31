@@ -3,9 +3,9 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
-import 'package:mooltik/common/data/sound_clip.dart';
+import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/io/png.dart';
-import 'package:mooltik/common/data/project_save_data.dart';
+import 'package:mooltik/common/data/project/project_save_data.dart';
 import 'package:path/path.dart' as p;
 
 class Project extends ChangeNotifier {

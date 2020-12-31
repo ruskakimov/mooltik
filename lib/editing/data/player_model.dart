@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound_lite/flutter_sound.dart';
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
-import 'package:mooltik/common/data/sound_clip.dart';
+import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 

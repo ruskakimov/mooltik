@@ -5,7 +5,7 @@ import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
-import 'package:mooltik/common/data/project.dart';
+import 'package:mooltik/common/data/project/project.dart';
 import 'package:provider/provider.dart';
 
 import 'easel_gesture_detector.dart';

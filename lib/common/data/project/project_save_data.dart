@@ -1,5 +1,5 @@
 import 'package:mooltik/common/data/parse_duration.dart';
-import 'package:mooltik/common/data/sound_clip.dart';
+import 'package:mooltik/common/data/project/sound_clip.dart';
 
 class ProjectSaveData {
   ProjectSaveData({
