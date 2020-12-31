@@ -3,7 +3,7 @@ import 'package:mooltik/editing/editing_page.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mooltik/gallery/data/projects_manager_model.dart';
+import 'package:mooltik/gallery/data/gallery_model.dart';
 
 class AddProjectButton extends StatelessWidget {
   const AddProjectButton({
@@ -12,7 +12,7 @@ class AddProjectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final manager = context.watch<ProjectsManagerModel>();
+    final manager = context.watch<GalleryModel>();
 
     return FloatingActionButton(
       backgroundColor: Theme.of(context).colorScheme.primary,

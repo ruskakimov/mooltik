@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:path/path.dart' as p;
 
-class ProjectsManagerModel extends ChangeNotifier {
+class GalleryModel extends ChangeNotifier {
   Directory _directory;
   List<Project> _projects;
 

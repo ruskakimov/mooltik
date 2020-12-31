@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editing/editing_page.dart';
-import 'package:mooltik/gallery/data/projects_manager_model.dart';
+import 'package:mooltik/gallery/data/gallery_model.dart';
 
 class ProjectList extends StatelessWidget {
   const ProjectList({
@@ -13,16 +13,16 @@ class ProjectList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final manager = context.watch<ProjectsManagerModel>();
+    final gallery = context.watch<GalleryModel>();
 
-    if (manager.numberOfProjects == null) return Container();
+    if (gallery.numberOfProjects == null) return SizedBox.shrink();
 
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       scrollDirection: Axis.horizontal,
-      itemCount: manager.numberOfProjects,
+      itemCount: gallery.numberOfProjects,
       itemBuilder: (context, index) {
-        final Project project = manager.getProject(index);
+        final Project project = gallery.getProject(index);
 
         return Center(
           child: GestureDetector(
