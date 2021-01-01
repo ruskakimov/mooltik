@@ -36,21 +36,14 @@ class ExportDialog extends StatelessWidget {
                 // await ImageGallerySaver.saveFile(video.path);
               },
             ),
-            // Text(
-            //   '72%',
-            //   style: TextStyle(
-            //     fontSize: 32,
-            //     fontWeight: FontWeight.bold,
-            //     color: Colors.white,
-            //   ),
-            // ),
+            // _buildLoadingProgressLabel(),
           ],
         ),
       ),
     );
   }
 
-  SizedBox _buildLoadingIndicator() {
+  Widget _buildLoadingIndicator() {
     return SizedBox(
       width: sideWidth - loadingStrokeWidth,
       height: sideWidth - loadingStrokeWidth,
@@ -58,6 +51,17 @@ class ExportDialog extends StatelessWidget {
         value: 0,
         backgroundColor: Colors.black12,
         strokeWidth: loadingStrokeWidth,
+      ),
+    );
+  }
+
+  Widget _buildLoadingProgressLabel() {
+    return Text(
+      '72%',
+      style: TextStyle(
+        fontSize: 32,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
       ),
     );
   }
