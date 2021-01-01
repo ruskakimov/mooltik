@@ -29,7 +29,12 @@ class ExportDialog extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            _buildLoadingIndicator(exporter.progress),
+            Positioned.fill(
+              child: _LoadingIndicator(
+                value: exporter.progress,
+                strokeWidth: loadingStrokeWidth,
+              ),
+            ),
             if (exporter.hasntBegan)
               _ExportButton(
                 diameter: sideWidth - loadingStrokeWidth * 2,
@@ -41,35 +46,50 @@ class ExportDialog extends StatelessWidget {
                   // await ImageGallerySaver.saveFile(video.path);
                 },
               ),
-            // _buildLoadingProgressLabel(),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildLoadingIndicator(double value) {
-    return SizedBox(
-      width: sideWidth - loadingStrokeWidth,
-      height: sideWidth - loadingStrokeWidth,
-      child: CircularProgressIndicator(
-        value: value,
-        backgroundColor: Colors.black12,
-        strokeWidth: loadingStrokeWidth,
+class _LoadingIndicator extends StatelessWidget {
+  const _LoadingIndicator({
+    Key key,
+    @required this.value,
+    @required this.strokeWidth,
+  }) : super(key: key);
+
+  final double value;
+  final double strokeWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      // Prevent stroke from overflowing widget, as stroke is centered around the widget's edge.
+      padding: EdgeInsets.all(strokeWidth / 2),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          CircularProgressIndicator(
+            value: value,
+            backgroundColor: Colors.black12,
+            strokeWidth: strokeWidth,
+          ),
+          Text(
+            _formatProgress(value),
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildLoadingProgressLabel() {
-    return Text(
-      '72%',
-      style: TextStyle(
-        fontSize: 32,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      ),
-    );
-  }
+  String _formatProgress(double value) => '${value.toInt()}%';
 }
 
 class _ExportButton extends StatelessWidget {
