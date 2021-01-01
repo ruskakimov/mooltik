@@ -7,5 +7,13 @@ class ExporterModel extends ChangeNotifier {
   double get progress => _progress;
   double _progress = 0;
 
-  bool get hasntBegan => _progress == 0;
+  bool get isNotStarted => _progress == 0;
+
+  void start() {
+    // get temp directory
+    // timeline.frames -> images
+    // write PNGs (cannot use project pngs, cos they have transparent bg)
+    // mp4Write(slides, file, temp)
+    // await ImageGallerySaver.saveFile(video.path);
+  }
 }

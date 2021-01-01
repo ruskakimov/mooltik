@@ -35,16 +35,10 @@ class ExportDialog extends StatelessWidget {
                 strokeWidth: loadingStrokeWidth,
               ),
             ),
-            if (exporter.hasntBegan)
+            if (exporter.isNotStarted)
               _ExportButton(
                 diameter: sideWidth - loadingStrokeWidth * 2,
-                onTap: () {
-                  // get temp directory
-                  // timeline.frames -> images
-                  // write PNGs (cannot use project pngs, cos they have transparent bg)
-                  // mp4Write(slides, file, temp)
-                  // await ImageGallerySaver.saveFile(video.path);
-                },
+                onTap: exporter.start,
               ),
           ],
         ),
