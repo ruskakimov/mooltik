@@ -1,6 +1,6 @@
 import 'package:mooltik/common/data/io/mp4/slide.dart';
 
-String generateSlideConcatDemuxer(List<Slide> slides) {
+String slideshowConcatDemuxer(List<Slide> slides) {
   String concatDemuxer = '';
   for (final slide in slides) {
     concatDemuxer += '''
