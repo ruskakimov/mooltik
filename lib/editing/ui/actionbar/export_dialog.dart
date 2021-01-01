@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:mooltik/editing/data/exporter_model.dart';
 
 class ExportDialog extends StatelessWidget {
   const ExportDialog({
@@ -17,6 +19,8 @@ class ExportDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final exporter = context.watch<ExporterModel>();
+
     return Dialog(
       shape: CircleBorder(),
       child: SizedBox(
@@ -25,17 +29,18 @@ class ExportDialog extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            _buildLoadingIndicator(),
-            _ExportButton(
-              diameter: sideWidth - loadingStrokeWidth * 2,
-              onTap: () {
-                // get temp directory
-                // timeline.frames -> images
-                // write PNGs (cannot use project pngs, cos they have transparent bg)
-                // mp4Write(slides, file, temp)
-                // await ImageGallerySaver.saveFile(video.path);
-              },
-            ),
+            _buildLoadingIndicator(exporter.progress),
+            if (exporter.hasntBegan)
+              _ExportButton(
+                diameter: sideWidth - loadingStrokeWidth * 2,
+                onTap: () {
+                  // get temp directory
+                  // timeline.frames -> images
+                  // write PNGs (cannot use project pngs, cos they have transparent bg)
+                  // mp4Write(slides, file, temp)
+                  // await ImageGallerySaver.saveFile(video.path);
+                },
+              ),
             // _buildLoadingProgressLabel(),
           ],
         ),
@@ -43,12 +48,12 @@ class ExportDialog extends StatelessWidget {
     );
   }
 
-  Widget _buildLoadingIndicator() {
+  Widget _buildLoadingIndicator(double value) {
     return SizedBox(
       width: sideWidth - loadingStrokeWidth,
       height: sideWidth - loadingStrokeWidth,
       child: CircularProgressIndicator(
-        value: 0,
+        value: value,
         backgroundColor: Colors.black12,
         strokeWidth: loadingStrokeWidth,
       ),

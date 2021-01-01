@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editing/data/exporter_model.dart';
 import 'package:mooltik/editing/ui/actionbar/export_dialog.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +31,10 @@ class EditingActionbar extends StatelessWidget {
           icon: FontAwesomeIcons.fileDownload,
           onTap: () => showDialog<void>(
             context: context,
-            builder: (BuildContext context) => ExportDialog(),
+            builder: (BuildContext context) => ChangeNotifierProvider(
+              create: (context) => ExporterModel(),
+              child: ExportDialog(),
+            ),
           ),
         ),
       ],
