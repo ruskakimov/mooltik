@@ -10,10 +10,9 @@ Future<void> mp4Write(File mp4File, List<Slide> slides) {
 String _getConcatDemuxer(List<Slide> slides) {
   String concatDemuxer = '';
   for (final slide in slides) {
-    final durationInSeconds = slide.duration.inMilliseconds / 1000;
     concatDemuxer += '''
       file '${slide.pngImage.path}'
-      duration ${durationInSeconds.toStringAsFixed(6)}
+      duration ${_formatDuration(slide.duration)}
     ''';
   }
 
@@ -25,3 +24,5 @@ String _getConcatDemuxer(List<Slide> slides) {
 
   return concatDemuxer;
 }
+
+String _formatDuration(Duration duration) => '${duration.inMilliseconds}ms';
