@@ -29,7 +29,13 @@ class ExportDialog extends StatelessWidget {
               highlightColor: Colors.white12,
               splashColor: Colors.white,
               shape: CircleBorder(),
-              onPressed: () {},
+              onPressed: () {
+                // get temp directory
+                // timeline.frames -> images
+                // write PNGs (cannot use project pngs, cos they have transparent bg)
+                // mp4Write(slides, file, temp)
+                // await ImageGallerySaver.saveFile(video.path);
+              },
               child: SizedBox(
                 width: 240,
                 height: 240,
