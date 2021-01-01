@@ -3,25 +3,35 @@ import 'package:flutter/material.dart';
 class ExportDialog extends StatelessWidget {
   const ExportDialog({
     Key key,
-  }) : super(key: key);
+    this.sideWidth = 280,
+    this.loadingStrokeWidth = 20,
+  })  : assert(
+          sideWidth >= 280,
+          'Minimum flutter dialog width is 280px.',
+        ),
+        assert(loadingStrokeWidth < sideWidth / 2),
+        super(key: key);
+
+  final double sideWidth;
+  final double loadingStrokeWidth;
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
       shape: CircleBorder(),
       child: SizedBox(
-        width: 280,
-        height: 280,
+        width: sideWidth,
+        height: sideWidth,
         child: Stack(
           alignment: Alignment.center,
           children: [
             SizedBox(
-              width: 260,
-              height: 260,
+              width: sideWidth - loadingStrokeWidth,
+              height: sideWidth - loadingStrokeWidth,
               child: CircularProgressIndicator(
                 value: 0,
                 backgroundColor: Colors.black12,
-                strokeWidth: 20,
+                strokeWidth: loadingStrokeWidth,
               ),
             ),
             RaisedButton(
@@ -37,8 +47,8 @@ class ExportDialog extends StatelessWidget {
                 // await ImageGallerySaver.saveFile(video.path);
               },
               child: SizedBox(
-                width: 240,
-                height: 240,
+                width: sideWidth - loadingStrokeWidth * 2,
+                height: sideWidth - loadingStrokeWidth * 2,
                 child: Center(
                   child: Text(
                     'Export video',
