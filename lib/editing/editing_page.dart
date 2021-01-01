@@ -35,6 +35,7 @@ class _EditingPageState extends State<EditingPage>
                     Spacer(),
                     Preview(),
                     Spacer(),
+                    SizedBox(width: 52), // to center preview
                   ],
                 ),
               ),
