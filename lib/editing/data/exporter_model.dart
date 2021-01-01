@@ -7,7 +7,7 @@ class ExporterModel extends ChangeNotifier {
   double get progress => _progress;
   double _progress = 0;
 
-  bool get isNotStarted => _progress == 0.5;
+  bool get isNotStarted => _progress == 0;
 
   void start() {
     // get temp directory
