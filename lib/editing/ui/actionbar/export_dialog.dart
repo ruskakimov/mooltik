@@ -65,10 +65,12 @@ class _LoadingIndicator extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          CircularProgressIndicator(
-            value: value,
-            backgroundColor: Colors.black12,
-            strokeWidth: strokeWidth,
+          Positioned.fill(
+            child: CircularProgressIndicator(
+              value: value,
+              backgroundColor: Colors.black12,
+              strokeWidth: strokeWidth,
+            ),
           ),
           Text(
             _formatProgress(value),
