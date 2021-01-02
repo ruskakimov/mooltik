@@ -10,6 +10,12 @@ import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/drawing/data/frame/image_from_frame.dart';
 
+enum ExporterState {
+  initial,
+  exporting,
+  done,
+}
+
 class ExporterModel extends ChangeNotifier {
   ExporterModel({
     @required this.frames,
@@ -27,15 +33,18 @@ class ExporterModel extends ChangeNotifier {
   final Directory tempDir;
 
   /// Value between 0 and 1 that indicates video export progress.
-  /// 0 - export hasn't began
-  /// 1 - video exported successfully.
   double get progress => _progress;
   double _progress = 0;
 
-  bool get isNotStarted => _progress == 0;
+  bool get isInitial => _state == ExporterState.initial;
+  bool get isExporting => state == ExporterState.exporting;
+  bool get isDone => state == ExporterState.done;
+
+  ExporterState get state => _state;
+  ExporterState _state = ExporterState.initial;
 
   Future<void> start() async {
-    _progress = double.minPositive;
+    _state = ExporterState.exporting;
     notifyListeners();
 
     final videoFile = _tempFile('mooltik_video.mp4');
@@ -55,6 +64,9 @@ class ExporterModel extends ChangeNotifier {
     );
 
     await ImageGallerySaver.saveFile(videoFile.path);
+
+    _state = ExporterState.done;
+    notifyListeners();
   }
 
   Future<Slide> _slideFromFrame(FrameModel frame) async {

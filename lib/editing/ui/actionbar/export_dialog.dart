@@ -35,7 +35,7 @@ class ExportDialog extends StatelessWidget {
                 strokeWidth: loadingStrokeWidth,
               ),
             ),
-            if (exporter.isNotStarted)
+            if (exporter.isInitial)
               _ExportButton(
                 diameter: sideWidth - loadingStrokeWidth * 2,
                 onTap: exporter.start,
