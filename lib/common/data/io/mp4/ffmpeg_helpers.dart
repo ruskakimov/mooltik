@@ -19,3 +19,10 @@ String ffmpegSlideshowConcatDemuxer(List<Slide> slides) {
 }
 
 String ffmpegDurationLabel(Duration duration) => '${duration.inMilliseconds}ms';
+
+String ffmpegCommand({
+  String concatDemuxerPath,
+  String outputPath,
+  Duration videoDuration,
+}) =>
+    '-y -f concat -safe 0 -i $concatDemuxerPath -vf fps=24 -pix_fmt yuv420p -t ${ffmpegDurationLabel(videoDuration)} $outputPath';

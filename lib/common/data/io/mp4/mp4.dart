@@ -35,7 +35,9 @@ Future<void> mp4Write(
     (duration, slide) => duration + slide.duration,
   );
 
-  await FlutterFFmpeg().execute(
-    '-y -f concat -safe 0 -i ${concatFile.path} -vf fps=24 -pix_fmt yuv420p -t ${ffmpegDurationLabel(videoDuration)} ${mp4File.path}',
-  );
+  await FlutterFFmpeg().execute(ffmpegCommand(
+    concatDemuxerPath: concatFile.path,
+    outputPath: mp4File.path,
+    videoDuration: videoDuration,
+  ));
 }
