@@ -65,6 +65,7 @@ class ExporterModel extends ChangeNotifier {
 
     await ImageGallerySaver.saveFile(videoFile.path);
 
+    _progress = 1; // in case ffmpeg statistics callback didn't finish on 100%
     _state = ExporterState.done;
     notifyListeners();
   }

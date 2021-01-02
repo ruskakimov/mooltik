@@ -21,6 +21,7 @@ Future<void> mp4Write(
   await concatFile.writeAsString(ffmpegSlideshowConcatDemuxer(slides));
 
   final config = FlutterFFmpegConfig();
+  config.resetStatistics();
 
   final Duration videoDuration = slides.fold(
     Duration.zero,
@@ -40,5 +41,4 @@ Future<void> mp4Write(
     outputPath: mp4File.path,
     videoDuration: videoDuration,
   ));
-  await config.resetStatistics();
 }
