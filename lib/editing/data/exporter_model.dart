@@ -46,6 +46,7 @@ class ExporterModel extends ChangeNotifier {
     await mp4Write(
       videoFile,
       slides,
+      soundClips,
       tempDir,
       (double progress) {
         _progress = progress;
