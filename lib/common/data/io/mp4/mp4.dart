@@ -3,7 +3,7 @@ import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:flutter_ffmpeg/statistics.dart';
 import 'package:path/path.dart' as p;
 import 'package:mooltik/common/data/io/mp4/slide.dart';
-import 'package:mooltik/common/data/io/mp4/slideshow_concat_demuxer.dart';
+import 'package:mooltik/common/data/io/mp4/ffmpeg_helpers.dart';
 
 typedef void ProgressCallback(double progress);
 
@@ -16,7 +16,7 @@ Future<void> mp4Write(
   assert(slides != null && slides.isNotEmpty);
 
   final concatFile = File(p.join(tempDir.path, 'concat.txt'));
-  await concatFile.writeAsString(slideshowConcatDemuxer(slides));
+  await concatFile.writeAsString(ffmpegSlideshowConcatDemuxer(slides));
 
   final config = FlutterFFmpegConfig();
   await config.resetStatistics();
@@ -30,7 +30,12 @@ Future<void> mp4Write(
     }
   });
 
+  final Duration videoDuration = slides.fold(
+    Duration.zero,
+    (duration, slide) => duration + slide.duration,
+  );
+
   await FlutterFFmpeg().execute(
-    '-y -f concat -safe 0 -i ${concatFile.path} -vf fps=24 -pix_fmt yuv420p ${mp4File.path}',
+    '-y -f concat -safe 0 -i ${concatFile.path} -vf fps=24 -pix_fmt yuv420p -t ${ffmpegDurationLabel(videoDuration)} ${mp4File.path}',
   );
 }

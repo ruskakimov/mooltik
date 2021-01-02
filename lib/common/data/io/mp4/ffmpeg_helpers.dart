@@ -1,11 +1,11 @@
 import 'package:mooltik/common/data/io/mp4/slide.dart';
 
-String slideshowConcatDemuxer(List<Slide> slides) {
+String ffmpegSlideshowConcatDemuxer(List<Slide> slides) {
   String concatDemuxer = '';
   for (final slide in slides) {
     concatDemuxer += '''
       file '${slide.pngImage.path}'
-      duration ${_formatDuration(slide.duration)}
+      duration ${ffmpegDurationLabel(slide.duration)}
     ''';
   }
 
@@ -18,4 +18,4 @@ String slideshowConcatDemuxer(List<Slide> slides) {
   return concatDemuxer;
 }
 
-String _formatDuration(Duration duration) => '${duration.inMilliseconds}ms';
+String ffmpegDurationLabel(Duration duration) => '${duration.inMilliseconds}ms';
