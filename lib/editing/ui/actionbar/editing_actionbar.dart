@@ -40,13 +40,14 @@ class EditingActionbar extends StatelessWidget {
   Future<void> _openDialog(BuildContext context) async {
     if (await Permission.storage.request().isGranted) {
       final tempDir = await getTemporaryDirectory();
+      final project = context.read<Project>();
 
       return showDialog<void>(
         context: context,
         builder: (BuildContext context) => ChangeNotifierProvider(
           create: (context) => ExporterModel(
-            frames: context.read<Project>().frames,
-            soundClips: context.read<Project>().soundClips,
+            frames: project.frames,
+            soundClips: project.soundClips,
             tempDir: tempDir,
           ),
           child: ExportDialog(),
