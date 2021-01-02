@@ -23,12 +23,15 @@ String ffmpegDurationLabel(Duration duration) => '${duration.inMilliseconds}ms';
 String ffmpegCommand({
   String concatDemuxerPath,
   String soundClipPath,
+  Duration soundClipOffset,
   String outputPath,
   Duration videoDuration,
 }) {
   final globalOptions = '-y';
   final videoInput = '-f concat -safe 0 -i $concatDemuxerPath';
-  final audioInput = soundClipPath != null ? '-i $soundClipPath' : '';
+  final audioInput = soundClipPath != null
+      ? '-itsoffset ${ffmpegDurationLabel(soundClipOffset)} -i $soundClipPath'
+      : '';
   final output =
       '-vf fps=24 -pix_fmt yuv420p -t ${ffmpegDurationLabel(videoDuration)} $outputPath';
   return '$globalOptions $videoInput $audioInput $output';
