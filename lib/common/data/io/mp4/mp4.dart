@@ -22,22 +22,16 @@ Future<void> mp4Write(
 
   final config = FlutterFFmpegConfig();
 
-  int totalTime;
-
-  config.enableStatisticsCallback((Statistics stats) {
-    print(
-        "Statistics: executionId: ${stats.executionId}, time: ${stats.time}, size: ${stats.size}, bitrate: ${stats.bitrate}, speed: ${stats.speed}, videoFrameNumber: ${stats.videoFrameNumber}, videoQuality: ${stats.videoQuality}, videoFps: ${stats.videoFps}");
-    if (totalTime == null) {
-      totalTime = stats.time;
-    } else {
-      progressCallback?.call(stats.time / totalTime);
-    }
-  });
-
   final Duration videoDuration = slides.fold(
     Duration.zero,
     (duration, slide) => duration + slide.duration,
   );
+
+  config.enableStatisticsCallback((Statistics stats) {
+    // print(
+    // "Statistics: executionId: ${stats.executionId}, time: ${stats.time}, size: ${stats.size}, bitrate: ${stats.bitrate}, speed: ${stats.speed}, videoFrameNumber: ${stats.videoFrameNumber}, videoQuality: ${stats.videoQuality}, videoFps: ${stats.videoFps}");
+    progressCallback?.call(stats.time / videoDuration.inMilliseconds);
+  });
 
   await FlutterFFmpeg().execute(ffmpegCommand(
     concatDemuxerPath: concatFile.path,
