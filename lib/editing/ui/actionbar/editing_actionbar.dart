@@ -32,7 +32,10 @@ class EditingActionbar extends StatelessWidget {
           onTap: () => showDialog<void>(
             context: context,
             builder: (BuildContext context) => ChangeNotifierProvider(
-              create: (context) => ExporterModel(),
+              create: (context) => ExporterModel(
+                frames: context.read<Project>().frames,
+                soundClips: context.read<Project>().soundClips,
+              ),
               child: ExportDialog(),
             ),
           ),
