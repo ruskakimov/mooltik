@@ -73,7 +73,7 @@ class _LoadingIndicator extends StatelessWidget {
             ),
           ),
           Text(
-            _formatProgress(value),
+            value < 1 ? _formatProgress(value) : 'Done',
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
