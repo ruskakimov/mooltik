@@ -42,7 +42,7 @@ class ExportDialog extends StatelessWidget {
               ),
             if (exporter.isDone)
               TextButton(
-                onPressed: () {},
+                onPressed: exporter.openOutputFile,
                 child: _LargeText('Open'),
               ),
           ],

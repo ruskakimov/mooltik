@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mooltik/common/data/io/mp4/mp4.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as p;
 import 'package:mooltik/common/data/io/mp4/slide.dart';
 import 'package:mooltik/common/data/io/png.dart';
@@ -43,6 +44,8 @@ class ExporterModel extends ChangeNotifier {
   ExporterState get state => _state;
   ExporterState _state = ExporterState.initial;
 
+  String _outputFilePath;
+
   Future<void> start() async {
     _state = ExporterState.exporting;
     notifyListeners();
@@ -63,11 +66,21 @@ class ExporterModel extends ChangeNotifier {
       },
     );
 
-    await ImageGallerySaver.saveFile(videoFile.path);
+    final result = await ImageGallerySaver.saveFile(videoFile.path);
+    try {
+      _outputFilePath = result['filePath'];
+    } catch (e) {
+      print(e);
+    }
 
     _progress = 1; // in case ffmpeg statistics callback didn't finish on 100%
     _state = ExporterState.done;
     notifyListeners();
+  }
+
+  Future<void> openOutputFile() async {
+    if (_outputFilePath == null) return;
+    OpenFile.open(p.fromUri(_outputFilePath));
   }
 
   Future<Slide> _slideFromFrame(FrameModel frame) async {

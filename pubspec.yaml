@@ -32,6 +32,7 @@ dependencies:
   flutter_ffmpeg: ^0.3.0
   flutter_sound_lite: ^6.4.8+2
   flutter_portal: ^0.3.0
+  open_file: ^3.0.3
 
 dev_dependencies:
   flutter_test:
