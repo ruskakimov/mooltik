@@ -86,7 +86,7 @@ class _LoadingIndicator extends StatelessWidget {
   }
 
   String _formatProgress(double value) =>
-      '${(value * 100).toStringAsFixed(1)}%';
+      '${(value * 100).toStringAsFixed(0)}%';
 }
 
 class _ExportButton extends StatelessWidget {

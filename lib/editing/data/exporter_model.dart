@@ -55,7 +55,7 @@ class ExporterModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  double get oneSlideWorkFraction => 0.1 / frames.length;
+  double get oneSlideWorkFraction => 0.05 / frames.length;
 
   Future<Slide> _slideFromFrame(FrameModel frame) async {
     final image = await imageFromFrame(frame);
