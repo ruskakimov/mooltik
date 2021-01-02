@@ -19,6 +19,7 @@ Future<void> mp4Write(
   await concatFile.writeAsString(slideshowConcatDemuxer(slides));
 
   final config = FlutterFFmpegConfig();
+  await config.resetStatistics();
   int totalTime;
 
   config.enableStatisticsCallback((Statistics stats) {
