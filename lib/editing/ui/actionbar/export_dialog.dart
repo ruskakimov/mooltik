@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_portal/flutter_portal.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editing/data/exporter_model.dart';
 
@@ -21,31 +22,35 @@ class ExportDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final exporter = context.watch<ExporterModel>();
 
-    return Dialog(
-      shape: CircleBorder(),
-      child: SizedBox(
-        width: sideWidth,
-        height: sideWidth,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Positioned.fill(
-              child: _LoadingIndicator(
-                value: exporter.progress,
-                strokeWidth: loadingStrokeWidth,
+    return PortalEntry(
+      visible: exporter.isExporting,
+      portal: AbsorbPointer(),
+      child: Dialog(
+        shape: CircleBorder(),
+        child: SizedBox(
+          width: sideWidth,
+          height: sideWidth,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Positioned.fill(
+                child: _LoadingIndicator(
+                  value: exporter.progress,
+                  strokeWidth: loadingStrokeWidth,
+                ),
               ),
-            ),
-            if (exporter.isInitial)
-              _ExportButton(
-                diameter: sideWidth - loadingStrokeWidth * 2,
-                onTap: exporter.start,
-              ),
-            if (exporter.isDone)
-              TextButton(
-                onPressed: exporter.openOutputFile,
-                child: _LargeText('Open'),
-              ),
-          ],
+              if (exporter.isInitial)
+                _ExportButton(
+                  diameter: sideWidth - loadingStrokeWidth * 2,
+                  onTap: exporter.start,
+                ),
+              if (exporter.isDone)
+                TextButton(
+                  onPressed: exporter.openOutputFile,
+                  child: _LargeText('Open'),
+                ),
+            ],
+          ),
         ),
       ),
     );
