@@ -35,25 +35,36 @@ class ExporterModel extends ChangeNotifier {
   bool get isNotStarted => _progress == 0;
 
   Future<void> start() async {
-    _progress = 0.1;
+    _progress = double.minPositive;
     notifyListeners();
 
+    final s = Stopwatch()..start();
     final videoFile = _tempFile('mooltik_video.mp4');
     final slides = await Future.wait(
       frames.map((frame) => _slideFromFrame(frame)),
     );
+    print('>>> ${s.elapsedMilliseconds}');
+
     await mp4Write(videoFile, slides, tempDir);
+    print('>>> ${s.elapsedMilliseconds}');
 
     await ImageGallerySaver.saveFile(videoFile.path);
+    print('>>> ${s.elapsedMilliseconds}');
 
     _progress = 1;
     notifyListeners();
   }
 
+  double get oneSlideWorkFraction => 0.1 / frames.length;
+
   Future<Slide> _slideFromFrame(FrameModel frame) async {
     final image = await imageFromFrame(frame);
     final pngFile = _tempFile('${frame.id}.png');
     await pngWrite(pngFile, image);
+
+    _progress += oneSlideWorkFraction;
+    notifyListeners();
+
     return Slide(pngFile, frame.duration);
   }
 
