@@ -40,6 +40,11 @@ class ExportDialog extends StatelessWidget {
                 diameter: sideWidth - loadingStrokeWidth * 2,
                 onTap: exporter.start,
               ),
+            if (exporter.isDone)
+              TextButton(
+                onPressed: () {},
+                child: _LargeText('Open'),
+              ),
           ],
         ),
       ),
@@ -72,14 +77,7 @@ class _LoadingIndicator extends StatelessWidget {
               strokeWidth: strokeWidth,
             ),
           ),
-          Text(
-            value < 1 ? _formatProgress(value) : 'Done',
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
+          _LargeText(value < 1 ? _formatProgress(value) : ''),
         ],
       ),
     );
@@ -87,6 +85,24 @@ class _LoadingIndicator extends StatelessWidget {
 
   String _formatProgress(double value) =>
       '${(value * 100).toStringAsFixed(0)}%';
+}
+
+class _LargeText extends StatelessWidget {
+  const _LargeText(this.text, {Key key}) : super(key: key);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: 32,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+    );
+  }
 }
 
 class _ExportButton extends StatelessWidget {
