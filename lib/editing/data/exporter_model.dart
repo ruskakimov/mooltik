@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
@@ -6,11 +8,17 @@ class ExporterModel extends ChangeNotifier {
   ExporterModel({
     @required this.frames,
     @required this.soundClips,
+    @required this.tempDir,
   });
 
+  /// For output video.
   final List<FrameModel> frames;
 
+  /// For output audio.
   final List<SoundClip> soundClips;
+
+  /// Temporary directory to store intermediate results.
+  final Directory tempDir;
 
   /// Value between 0 and 1 that indicates video export progress.
   /// 0 - export hasn't began
