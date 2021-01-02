@@ -1,8 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:mooltik/common/data/io/mp4/mp4.dart';
+import 'package:path/path.dart' as p;
+import 'package:mooltik/common/data/io/mp4/slide.dart';
+import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/image_from_frame.dart';
 
 class ExporterModel extends ChangeNotifier {
   ExporterModel({
@@ -28,11 +34,28 @@ class ExporterModel extends ChangeNotifier {
 
   bool get isNotStarted => _progress == 0;
 
-  void start() {
-    // get temp directory
-    // timeline.frames -> images
-    // write PNGs (cannot use project pngs, cos they have transparent bg)
-    // mp4Write(slides, file, temp)
-    // await ImageGallerySaver.saveFile(video.path);
+  Future<void> start() async {
+    _progress = 0.1;
+    notifyListeners();
+
+    final videoFile = _tempFile('mooltik_video.mp4');
+    final slides = await Future.wait(
+      frames.map((frame) => _slideFromFrame(frame)),
+    );
+    await mp4Write(videoFile, slides, tempDir);
+
+    await ImageGallerySaver.saveFile(videoFile.path);
+
+    _progress = 1;
+    notifyListeners();
   }
+
+  Future<Slide> _slideFromFrame(FrameModel frame) async {
+    final image = await imageFromFrame(frame);
+    final pngFile = _tempFile('${frame.id}.png');
+    await pngWrite(pngFile, image);
+    return Slide(pngFile, frame.duration);
+  }
+
+  File _tempFile(String fileName) => File(p.join(tempDir.path, fileName));
 }
