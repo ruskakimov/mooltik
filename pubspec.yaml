@@ -23,7 +23,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  image: ^2.1.18
   provider: ^4.3.2+2
   path_provider: ^1.6.18
   image_gallery_saver: ^1.5.0
