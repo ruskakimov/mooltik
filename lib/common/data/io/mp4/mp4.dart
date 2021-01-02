@@ -21,9 +21,12 @@ Future<void> mp4Write(
   await concatFile.writeAsString(ffmpegSlideshowConcatDemuxer(slides));
 
   final config = FlutterFFmpegConfig();
+
   int totalTime;
 
   config.enableStatisticsCallback((Statistics stats) {
+    print(
+        "Statistics: executionId: ${stats.executionId}, time: ${stats.time}, size: ${stats.size}, bitrate: ${stats.bitrate}, speed: ${stats.speed}, videoFrameNumber: ${stats.videoFrameNumber}, videoQuality: ${stats.videoQuality}, videoFps: ${stats.videoFps}");
     if (totalTime == null) {
       totalTime = stats.time;
     } else {
@@ -43,4 +46,5 @@ Future<void> mp4Write(
     outputPath: mp4File.path,
     videoDuration: videoDuration,
   ));
+  await config.resetStatistics();
 }
