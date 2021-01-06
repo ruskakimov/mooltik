@@ -8,6 +8,7 @@ import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
 import 'package:path/path.dart' as p;
 
+/// Holds project data, reads and writes to project folder.
 class Project extends ChangeNotifier {
   Project(this.directory)
       : id = int.parse(p.basename(directory.path).split('_').last),
