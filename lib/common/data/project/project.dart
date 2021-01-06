@@ -98,8 +98,30 @@ class Project extends ChangeNotifier {
       await pngWrite(thumbnail, frames.first.snapshot);
     }
 
+    await _deleteUnusedFiles();
+
     // Refresh gallery thumbnails.
     notifyListeners();
+  }
+
+  /// Deletes frames and sound clips that were removed from the project.
+  Future<void> _deleteUnusedFiles() async {
+    await _deleteUnusedFrameImages();
+  }
+
+  Future<void> _deleteUnusedFrameImages() async {
+    final Set<String> usedFrameImages =
+        frames.map((frame) => _getFrameFilePath(frame.id));
+
+    bool _isUnusedFrameImage(String path) =>
+        p.extension(path) == '.png' && !usedFrameImages.contains(path);
+
+    await for (final entity in directory.list()) {
+      if (_isUnusedFrameImage(entity.path)) {
+        // TODO: await all at once
+        await entity.delete();
+      }
+    }
   }
 
   Future<FrameModel> _getFrame(FrameSaveData frameData, Size size) async {
@@ -113,7 +135,9 @@ class Project extends ChangeNotifier {
     );
   }
 
-  File _getFrameFile(int id) => File(p.join(directory.path, 'frame$id.png'));
+  File _getFrameFile(int id) => File(_getFrameFilePath(id));
+
+  String _getFrameFilePath(int id) => p.join(directory.path, 'frame$id.png');
 
   File _getSoundClipFile(int id) => File(p.join(
         directory.path,
