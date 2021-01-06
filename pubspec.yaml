@@ -23,7 +23,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  image: ^2.1.18
   provider: ^4.3.2+2
   path_provider: ^1.6.18
   image_gallery_saver: ^1.5.0
@@ -33,6 +32,7 @@ dependencies:
   flutter_ffmpeg: ^0.3.0
   flutter_sound_lite: ^6.4.8+2
   flutter_portal: ^0.3.0
+  open_file: ^3.0.3
 
 dev_dependencies:
   flutter_test:

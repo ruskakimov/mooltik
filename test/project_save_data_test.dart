@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mooltik/editor/sound_clip.dart';
-import 'package:mooltik/home/project_save_data.dart';
+import 'package:mooltik/common/data/project/sound_clip.dart';
+import 'package:mooltik/common/data/project/project_save_data.dart';
 
 void main() {
   group('ProjectSaveData should', () {
