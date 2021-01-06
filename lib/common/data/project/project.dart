@@ -106,6 +106,7 @@ class Project extends ChangeNotifier {
   /// Deletes frames and sound clips that were removed from the project.
   Future<void> _deleteUnusedFiles() async {
     await _deleteUnusedFrameImages();
+    await _deleteUnusedSoundFiles();
   }
 
   Future<void> _deleteUnusedFrameImages() async {
@@ -117,6 +118,21 @@ class Project extends ChangeNotifier {
 
     await for (final entity in directory.list()) {
       if (_isUnusedFrameImage(entity.path)) {
+        // TODO: await all at once
+        await entity.delete();
+      }
+    }
+  }
+
+  Future<void> _deleteUnusedSoundFiles() async {
+    final soundDir = Directory(_getSoundDirectoryPath());
+    final Set<String> usedSoundFiles = soundClips.map((clip) => clip.file.path);
+
+    bool _isUnusedSoundFile(String path) =>
+        p.extension(path) == '.aac' && !usedSoundFiles.contains(path);
+
+    await for (final entity in soundDir.list()) {
+      if (_isUnusedSoundFile(entity.path)) {
         // TODO: await all at once
         await entity.delete();
       }
@@ -138,11 +154,12 @@ class Project extends ChangeNotifier {
 
   String _getFrameFilePath(int id) => p.join(directory.path, 'frame$id.png');
 
-  File _getSoundClipFile(int id) => File(p.join(
-        directory.path,
-        'sounds',
-        '$id.aac',
-      ));
+  File _getSoundClipFile(int id) => File(_getSoundClipFilePath(id));
+
+  String _getSoundDirectoryPath() => p.join(directory.path, 'sounds');
+
+  String _getSoundClipFilePath(int id) =>
+      p.join(_getSoundDirectoryPath(), '$id.aac');
 
   Future<File> getNewSoundClipFile() async =>
       await _getSoundClipFile(DateTime.now().millisecondsSinceEpoch)
