@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/io/png.dart';
@@ -118,12 +119,7 @@ class Project extends ChangeNotifier {
         p.basename(path) != 'thumbnail.png' &&
         !usedFrameImages.contains(path);
 
-    final List<FileSystemEntity> filesToDelete = await directory
-        .list()
-        .where((entity) => _isUnusedFrameImage(entity.path))
-        .toList();
-
-    await Future.wait(filesToDelete.map((file) => file.delete()));
+    await deleteFilesWhere(directory, _isUnusedFrameImage);
   }
 
   Future<void> _deleteUnusedSoundFiles() async {
@@ -134,12 +130,7 @@ class Project extends ChangeNotifier {
     bool _isUnusedSoundFile(String path) =>
         p.extension(path) == '.aac' && !usedSoundFiles.contains(path);
 
-    final List<FileSystemEntity> filesToDelete = await soundDir
-        .list()
-        .where((entity) => _isUnusedSoundFile(entity.path))
-        .toList();
-
-    await Future.wait(filesToDelete.map((file) => file.delete()));
+    await deleteFilesWhere(soundDir, _isUnusedSoundFile);
   }
 
   Future<FrameModel> _getFrame(FrameSaveData frameData, Size size) async {
