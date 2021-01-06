@@ -68,17 +68,6 @@ class Project extends ChangeNotifier {
     _soundClips = null;
   }
 
-  Future<FrameModel> _getFrame(FrameSaveData frameData, Size size) async {
-    final file = getFrameFile(frameData.id);
-    final image = file.existsSync() ? await pngRead(file) : null;
-    return FrameModel(
-      id: frameData.id,
-      duration: frameData.duration,
-      size: size,
-      initialSnapshot: image,
-    );
-  }
-
   // TODO: Remove deleted files
   Future<void> save() async {
     // Write project data.
@@ -98,7 +87,7 @@ class Project extends ChangeNotifier {
         return frame.snapshot != null;
       }).map(
         (frame) => pngWrite(
-          getFrameFile(frame.id),
+          _getFrameFile(frame.id),
           frame.snapshot,
         ),
       ),
@@ -113,15 +102,26 @@ class Project extends ChangeNotifier {
     notifyListeners();
   }
 
-  File getFrameFile(int id) => File(p.join(directory.path, 'frame$id.png'));
+  Future<FrameModel> _getFrame(FrameSaveData frameData, Size size) async {
+    final file = _getFrameFile(frameData.id);
+    final image = file.existsSync() ? await pngRead(file) : null;
+    return FrameModel(
+      id: frameData.id,
+      duration: frameData.duration,
+      size: size,
+      initialSnapshot: image,
+    );
+  }
 
-  File getSoundClipFile(int id) => File(p.join(
+  File _getFrameFile(int id) => File(p.join(directory.path, 'frame$id.png'));
+
+  File _getSoundClipFile(int id) => File(p.join(
         directory.path,
         'sounds',
         '$id.aac',
       ));
 
   Future<File> getNewSoundClipFile() async =>
-      await getSoundClipFile(DateTime.now().millisecondsSinceEpoch)
+      await _getSoundClipFile(DateTime.now().millisecondsSinceEpoch)
           .create(recursive: true);
 }
