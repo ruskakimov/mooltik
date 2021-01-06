@@ -44,6 +44,7 @@ class Project extends ChangeNotifier {
   Size get frameSize => _frameSize;
   Size _frameSize;
 
+  /// Loads project files into memory.
   Future<void> open() async {
     if (await _dataFile.exists()) {
       // Existing project.
@@ -59,6 +60,12 @@ class Project extends ChangeNotifier {
       _frameSize = const Size(1280, 720);
       _frames = [FrameModel(size: frameSize)];
     }
+  }
+
+  /// Frees the memory of project files.
+  void close() {
+    _frames = null;
+    _soundClips = null;
   }
 
   Future<FrameModel> _getFrame(FrameSaveData frameData, Size size) async {
@@ -104,10 +111,6 @@ class Project extends ChangeNotifier {
 
     // Refresh gallery thumbnails.
     notifyListeners();
-  }
-
-  void close() {
-    _frames = null;
   }
 
   File getFrameFile(int id) => File(p.join(directory.path, 'frame$id.png'));
