@@ -118,14 +118,10 @@ class Project extends ChangeNotifier {
         p.basename(path) != 'thumbnail.png' &&
         !usedFrameImages.contains(path);
 
-    final List<FileSystemEntity> filesToDelete = [];
-
-    await for (final entity in directory.list()) {
-      if (_isUnusedFrameImage(entity.path)) {
-        print('Deleting unused frame ${entity.path}');
-        filesToDelete.add(entity);
-      }
-    }
+    final List<FileSystemEntity> filesToDelete = await directory
+        .list()
+        .where((entity) => _isUnusedFrameImage(entity.path))
+        .toList();
 
     await Future.wait(filesToDelete.map((file) => file.delete()));
   }
@@ -138,14 +134,10 @@ class Project extends ChangeNotifier {
     bool _isUnusedSoundFile(String path) =>
         p.extension(path) == '.aac' && !usedSoundFiles.contains(path);
 
-    final List<FileSystemEntity> filesToDelete = [];
-
-    await for (final entity in soundDir.list()) {
-      if (_isUnusedSoundFile(entity.path)) {
-        print('Deleting unused sound ${entity.path}');
-        filesToDelete.add(entity);
-      }
-    }
+    final List<FileSystemEntity> filesToDelete = await soundDir
+        .list()
+        .where((entity) => _isUnusedSoundFile(entity.path))
+        .toList();
 
     await Future.wait(filesToDelete.map((file) => file.delete()));
   }
