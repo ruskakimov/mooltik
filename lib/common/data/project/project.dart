@@ -68,7 +68,6 @@ class Project extends ChangeNotifier {
     _soundClips = null;
   }
 
-  // TODO: Remove deleted files
   Future<void> save() async {
     // Write project data.
     final data = ProjectSaveData(
