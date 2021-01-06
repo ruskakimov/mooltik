@@ -114,7 +114,9 @@ class Project extends ChangeNotifier {
         frames.map((frame) => _getFrameFilePath(frame.id)).toSet();
 
     bool _isUnusedFrameImage(String path) =>
-        p.extension(path) == '.png' && !usedFrameImages.contains(path);
+        p.extension(path) == '.png' &&
+        p.basename(path) != 'thumbnail.png' &&
+        !usedFrameImages.contains(path);
 
     await for (final entity in directory.list()) {
       if (_isUnusedFrameImage(entity.path)) {
