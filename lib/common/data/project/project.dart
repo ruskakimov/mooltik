@@ -9,6 +9,18 @@ import 'package:mooltik/common/data/project/project_save_data.dart';
 import 'package:path/path.dart' as p;
 
 /// Holds project data, reads and writes to project folder.
+///
+/// Project file structure looks like the following:
+///
+/// ```
+/// /project_[creation_timestamp]
+///    project_data.json
+///    frame[creation_timestamp].png
+///    /sounds
+///        [creation_timestamp].aac
+/// ```
+///
+/// Where `[creation_timestamp]` is replaced with an epoch of creation time of that piece of data.
 class Project extends ChangeNotifier {
   Project(this.directory)
       : id = int.parse(p.basename(directory.path).split('_').last),
