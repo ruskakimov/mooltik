@@ -31,13 +31,13 @@ class EditingActionbar extends StatelessWidget {
         Spacer(),
         AppIconButton(
           icon: FontAwesomeIcons.fileDownload,
-          onTap: () => _openDialog(context),
+          onTap: () => _openExportDialog(context),
         ),
       ],
     );
   }
 
-  Future<void> _openDialog(BuildContext context) async {
+  Future<void> _openExportDialog(BuildContext context) async {
     if (await Permission.storage.request().isGranted) {
       final tempDir = await getTemporaryDirectory();
       final project = context.read<Project>();
