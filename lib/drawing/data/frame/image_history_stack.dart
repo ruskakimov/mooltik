@@ -22,9 +22,15 @@ class ImageHistoryStack {
   /// Push a new [snapshot] in place of [currentSnapshot].
   void push(Image snapshot) {}
 
-  /// Select previous snapshot if available.
+  /// Whether there is an older snapshot available.
+  bool get isUndoAvailable => true;
+
+  /// Select older snapshot if available.
   void undo() {}
 
-  /// Select next snapshot if available.
+  /// Whether there is a newer snapshot available.
+  bool get isRedoAvailable => true;
+
+  /// Select newer snapshot if available.
   void redo() {}
 }
