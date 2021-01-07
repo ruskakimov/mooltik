@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 
+import 'package:mooltik/drawing/data/frame/image_from_frame.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:flutter/material.dart';
 
@@ -74,14 +75,7 @@ class FrameModel extends ChangeNotifier {
   }
 
   Future<void> _generateLastSnapshot() async {
-    final recorder = ui.PictureRecorder();
-    final canvas = ui.Canvas(recorder);
-    FramePainter(
-      frame: this,
-      background: Colors.transparent,
-    ).paint(canvas, ui.Size(width, height));
-    final pic = recorder.endRecording();
-    final snapshot = await pic.toImage(width.toInt(), height.toInt());
+    final snapshot = await imageFromFrame(this, background: Colors.transparent);
 
     // Remove redoable snapshots on new stroke.
     if (_selectedSnapshotId >= 0) {
