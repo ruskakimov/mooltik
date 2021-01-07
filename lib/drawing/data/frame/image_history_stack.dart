@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-/// A limited stack of historical snapshots for one image.
+/// A limited stack of historical snapshots for one frame.
 class ImageHistoryStack {
   ImageHistoryStack({
     @required this.maxCount,
