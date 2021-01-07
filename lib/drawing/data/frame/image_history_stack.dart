@@ -12,7 +12,7 @@ class ImageHistoryStack {
   final int maxCount;
 
   /// List with image progression.
-  List<Image> _snapshots;
+  final List<Image> _snapshots = [];
 
   int _currentSnapshotIndex;
 
