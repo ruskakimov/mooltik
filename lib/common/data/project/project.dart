@@ -124,6 +124,8 @@ class Project extends ChangeNotifier {
 
   Future<void> _deleteUnusedSoundFiles() async {
     final soundDir = Directory(_getSoundDirectoryPath());
+    if (!soundDir.existsSync()) return;
+
     final Set<String> usedSoundFiles =
         soundClips.map((clip) => clip.file.path).toSet();
 
