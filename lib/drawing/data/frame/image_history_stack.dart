@@ -21,7 +21,20 @@ class ImageHistoryStack {
       _snapshots.isNotEmpty ? _snapshots[_currentSnapshotIndex] : null;
 
   /// Push a new [snapshot] in place of [currentSnapshot].
-  void push(Image snapshot) {}
+  void push(Image snapshot) {
+    // Remove snapshots on top of the current snapshot, which can exist if undo was called.
+    _snapshots.removeRange(_currentSnapshotIndex + 1, _snapshots.length);
+
+    _snapshots.add(snapshot);
+
+    // Remove oldest snapshots if the stack overflows.
+    if (_snapshots.length > maxCount) {
+      _snapshots.removeRange(0, _snapshots.length - maxCount);
+    }
+
+    // Select pushed snapshot.
+    _currentSnapshotIndex = _snapshots.length - 1;
+  }
 
   /// Whether there is an older snapshot available.
   bool get isUndoAvailable => _currentSnapshotIndex > 0;
