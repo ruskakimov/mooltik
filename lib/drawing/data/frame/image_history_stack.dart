@@ -11,6 +11,20 @@ class ImageHistoryStack {
   /// Maximum number of images in the stack.
   final int maxCount;
 
-  /// Push a new [snapshot] on top of the stack.
+  /// List with image progression.
+  List<Image> _snapshots;
+
+  int _currentSnapshotIndex;
+
+  /// Snapshot visible to the user.
+  Image get currentSnapshot => _snapshots[_currentSnapshotIndex];
+
+  /// Push a new [snapshot] in place of [currentSnapshot].
   void push(Image snapshot) {}
+
+  /// Select previous snapshot if available.
+  void undo() {}
+
+  /// Select next snapshot if available.
+  void redo() {}
 }
