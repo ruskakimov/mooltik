@@ -17,7 +17,8 @@ class ImageHistoryStack {
   int _currentSnapshotIndex;
 
   /// Snapshot visible to the user.
-  Image get currentSnapshot => _snapshots[_currentSnapshotIndex];
+  Image get currentSnapshot =>
+      _snapshots.isNotEmpty ? _snapshots[_currentSnapshotIndex] : null;
 
   /// Push a new [snapshot] in place of [currentSnapshot].
   void push(Image snapshot) {}
