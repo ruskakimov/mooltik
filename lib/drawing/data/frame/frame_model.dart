@@ -1,7 +1,6 @@
 import 'dart:ui' as ui;
 
 import 'package:mooltik/drawing/data/frame/image_from_frame.dart';
-import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:flutter/material.dart';
 
 import 'stroke.dart';
