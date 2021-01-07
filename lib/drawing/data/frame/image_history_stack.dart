@@ -2,16 +2,16 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-/// A stack of image progression with maximum length.
+/// A limited stack of historical snapshots.
 class ImageHistoryStack {
   ImageHistoryStack({
     @required this.maxCount,
   });
 
-  /// Maximum number of images in the stack.
+  /// Maximum number of historical snapshots in the stack.
   final int maxCount;
 
-  /// List with image progression.
+  /// List with historical snapshots.
   final List<Image> _snapshots = [];
 
   int _currentSnapshotIndex;
