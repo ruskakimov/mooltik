@@ -27,11 +27,19 @@ class ImageHistoryStack {
   bool get isUndoAvailable => _currentSnapshotIndex > 0;
 
   /// Select older snapshot if available.
-  void undo() {}
+  void undo() {
+    if (isUndoAvailable) {
+      _currentSnapshotIndex--;
+    }
+  }
 
   /// Whether there is a newer snapshot available.
   bool get isRedoAvailable => _currentSnapshotIndex < _snapshots.length - 1;
 
   /// Select newer snapshot if available.
-  void redo() {}
+  void redo() {
+    if (isRedoAvailable) {
+      _currentSnapshotIndex++;
+    }
+  }
 }
