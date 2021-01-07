@@ -145,6 +145,7 @@ class EaselModel extends ChangeNotifier {
   void onStrokeEnd() {
     _currentStroke.finish();
 
+    // TODO: Rasterize and update snapshot here.
     if (_currentStroke.boundingRect.overlaps(_frameArea)) {
       _frame.add(_currentStroke);
     }
