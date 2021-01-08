@@ -23,6 +23,16 @@ void main() async {
       expect(stack.currentSnapshot, isNull);
     });
 
+    test('should undo', () {
+      final stack = ImageHistoryStack(maxCount: 5);
+      stack.push(imageA);
+      stack.push(imageB);
+      expect(stack.currentSnapshot, imageB);
+
+      stack.undo();
+      expect(stack.currentSnapshot, imageA);
+    });
+
     test('should not have undo available with only one snapshot', () {
       final stack = ImageHistoryStack(maxCount: 1);
       stack.push(imageA);
