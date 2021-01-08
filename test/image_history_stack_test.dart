@@ -23,6 +23,16 @@ void main() async {
       expect(stack.currentSnapshot, isNull);
     });
 
+    test('should not keep more images than maximum count', () {
+      final stack = ImageHistoryStack(maxCount: 2);
+      stack.push(imageA);
+      stack.push(imageB);
+      stack.push(imageC);
+      stack.undo();
+      expect(stack.currentSnapshot, imageB);
+      expect(stack.isUndoAvailable, isFalse);
+    });
+
     test('should undo', () {
       final stack = ImageHistoryStack(maxCount: 5);
       stack.push(imageA);
