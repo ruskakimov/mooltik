@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:mooltik/drawing/data/frame/image_from_frame.dart';
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
 
 import 'stroke.dart';
 
@@ -21,9 +22,11 @@ class FrameModel extends ChangeNotifier {
   })  : id = id ?? DateTime.now().millisecondsSinceEpoch,
         _size = size,
         _duration = duration,
-        unrasterizedStrokes = [],
-        _snapshots = [initialSnapshot],
-        _selectedSnapshotId = 0;
+        unrasterizedStrokes = [] {
+    if (initialSnapshot != null) {
+      _historyStack.push(initialSnapshot);
+    }
+  }
 
   final int id;
 
@@ -37,9 +40,8 @@ class FrameModel extends ChangeNotifier {
 
   final List<Stroke> unrasterizedStrokes;
 
-  /// Must contain at least one snapshot. [null] represents an empty screen.
-  List<ui.Image> _snapshots;
-  int _selectedSnapshotId;
+  ImageHistoryStack _historyStack =
+      ImageHistoryStack(maxCount: maxSnapshotCount);
 
   Size get size => _size;
   final Size _size;
@@ -48,24 +50,20 @@ class FrameModel extends ChangeNotifier {
 
   double get height => _size.height;
 
-  ui.Image get snapshot => _snapshots[_selectedSnapshotId];
+  ui.Image get snapshot => _historyStack.currentSnapshot;
 
-  bool get undoAvailable => _selectedSnapshotId > 0;
+  bool get undoAvailable => _historyStack.isUndoAvailable;
 
-  bool get redoAvailable => _selectedSnapshotId + 1 < _snapshots.length;
+  bool get redoAvailable => _historyStack.isRedoAvailable;
 
   void undo() {
-    if (undoAvailable) {
-      _selectedSnapshotId--;
-      notifyListeners();
-    }
+    _historyStack.undo();
+    notifyListeners();
   }
 
   void redo() {
-    if (redoAvailable) {
-      _selectedSnapshotId++;
-      notifyListeners();
-    }
+    _historyStack.redo();
+    notifyListeners();
   }
 
   void add(Stroke stroke) {
@@ -75,18 +73,7 @@ class FrameModel extends ChangeNotifier {
 
   Future<void> _generateLastSnapshot() async {
     final snapshot = await imageFromFrame(this, background: Colors.transparent);
-
-    // Remove redoable snapshots on new stroke.
-    if (_selectedSnapshotId >= 0) {
-      _snapshots.removeRange(_selectedSnapshotId + 1, _snapshots.length);
-    }
-
-    _snapshots.add(snapshot);
-    if (_snapshots.length > maxSnapshotCount) {
-      _snapshots.removeRange(0, _snapshots.length - maxSnapshotCount);
-    }
-    _selectedSnapshotId = _snapshots.length - 1;
-
+    _historyStack.push(snapshot);
     unrasterizedStrokes.clear();
     notifyListeners();
   }
