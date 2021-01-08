@@ -23,15 +23,42 @@ void main() async {
       expect(stack.currentSnapshot, isNull);
     });
 
-    test('should not undo with one snapshot left', () {
+    test('should not have undo available with only one snapshot', () {
       final stack = ImageHistoryStack(maxCount: 1);
       stack.push(imageA);
       expect(stack.currentSnapshot, imageA);
       expect(stack.isUndoAvailable, isFalse);
 
-      // Shouldn't do anything.
+      // Should have no effect.
       stack.undo();
       expect(stack.currentSnapshot, imageA);
+    });
+
+    test('should not have redo available after a push', () {
+      final stack = ImageHistoryStack(maxCount: 10);
+      stack.push(imageA);
+      expect(stack.currentSnapshot, imageA);
+      expect(stack.isRedoAvailable, isFalse);
+
+      // Should have no effect.
+      stack.redo();
+      expect(stack.currentSnapshot, imageA);
+
+      stack.push(imageB);
+      expect(stack.currentSnapshot, imageB);
+      expect(stack.isRedoAvailable, isFalse);
+
+      // Should have no effect.
+      stack.redo();
+      expect(stack.currentSnapshot, imageB);
+
+      stack.push(imageC);
+      expect(stack.currentSnapshot, imageC);
+      expect(stack.isRedoAvailable, isFalse);
+
+      // Should have no effect.
+      stack.redo();
+      expect(stack.currentSnapshot, imageC);
     });
   });
 }
