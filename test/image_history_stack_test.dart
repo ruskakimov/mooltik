@@ -26,7 +26,12 @@ void main() async {
     test('should not undo with one snapshot left', () {
       final stack = ImageHistoryStack(maxCount: 1);
       stack.push(imageA);
+      expect(stack.currentSnapshot, imageA);
       expect(stack.isUndoAvailable, isFalse);
+
+      // Shouldn't do anything.
+      stack.undo();
+      expect(stack.currentSnapshot, imageA);
     });
   });
 }
