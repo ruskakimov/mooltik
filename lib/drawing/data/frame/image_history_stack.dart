@@ -14,7 +14,7 @@ class ImageHistoryStack {
   /// List with historical snapshots.
   final List<Image> _snapshots = [];
 
-  int _currentSnapshotIndex;
+  int _currentSnapshotIndex = 0;
 
   /// Snapshot visible to the user.
   Image get currentSnapshot =>
@@ -22,8 +22,10 @@ class ImageHistoryStack {
 
   /// Push a new [snapshot] in place of [currentSnapshot].
   void push(Image snapshot) {
-    // Remove snapshots on top of the current snapshot, which can exist if undo was called.
-    _snapshots.removeRange(_currentSnapshotIndex + 1, _snapshots.length);
+    // Remove redo snapshots.
+    if (isRedoAvailable) {
+      _snapshots.removeRange(_currentSnapshotIndex + 1, _snapshots.length);
+    }
 
     _snapshots.add(snapshot);
 

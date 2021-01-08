@@ -22,5 +22,11 @@ void main() async {
       final stack = ImageHistoryStack(maxCount: 3);
       expect(stack.currentSnapshot, isNull);
     });
+
+    test('should not undo with one snapshot left', () {
+      final stack = ImageHistoryStack(maxCount: 1);
+      stack.push(imageA);
+      expect(stack.isUndoAvailable, isFalse);
+    });
   });
 }
