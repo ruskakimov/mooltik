@@ -9,7 +9,7 @@ import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 
 /// Maximum number of consecutive undos.
-const int maxUndos = 15;
+const int maxUndos = 50;
 
 const twoPi = pi * 2;
 
