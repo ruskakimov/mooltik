@@ -38,7 +38,19 @@ void main() async {
       expect(stack.isUndoAvailable, isFalse);
     });
 
-    test('should undo', () {
+    test('can undo first pushed snapshot', () {
+      final stack = ImageHistoryStack(maxCount: 5);
+      expect(stack.currentSnapshot, isNull);
+
+      stack.push(imageA);
+      expect(stack.currentSnapshot, imageA);
+      expect(stack.isUndoAvailable, isTrue);
+
+      stack.undo();
+      expect(stack.currentSnapshot, isNull);
+    });
+
+    test('can undo multiple times', () {
       final stack = ImageHistoryStack(maxCount: 5);
       stack.push(imageA);
       stack.push(imageB);
@@ -46,9 +58,12 @@ void main() async {
 
       stack.undo();
       expect(stack.currentSnapshot, imageA);
+
+      stack.undo();
+      expect(stack.currentSnapshot, isNull);
     });
 
-    test('should redo', () {
+    test('can redo', () {
       final stack = ImageHistoryStack(maxCount: 5);
       stack.push(imageA);
       stack.push(imageB);
@@ -68,20 +83,6 @@ void main() async {
       // Should have no effect.
       stack.undo();
       expect(stack.currentSnapshot, imageA);
-    });
-
-    test(
-        'can undo first pushed snapshot if initial is empty (first stroke on empty canvas)',
-        () {
-      final stack = ImageHistoryStack(maxCount: 5);
-      expect(stack.currentSnapshot, isNull);
-
-      stack.push(imageA);
-      expect(stack.currentSnapshot, imageA);
-      expect(stack.isUndoAvailable, isTrue);
-
-      stack.undo();
-      expect(stack.currentSnapshot, isNull);
     });
 
     test('should not have redo available after a push', () {
