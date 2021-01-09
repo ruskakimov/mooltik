@@ -6,13 +6,6 @@ import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
 
 import 'stroke.dart';
 
-/// Maximum number of stored snapshots.
-///
-/// Each stroke generates a new snapshot.
-/// Snapshot is a bitmap image.
-/// This value minus 1 equals maximum number of undo's.
-const int maxSnapshotCount = 16;
-
 class FrameModel extends ChangeNotifier {
   FrameModel({
     int id,
@@ -24,7 +17,7 @@ class FrameModel extends ChangeNotifier {
         _duration = duration,
         unrasterizedStrokes = [],
         _historyStack = ImageHistoryStack(
-          maxCount: maxSnapshotCount,
+          maxCount: 16,
           initialSnapshot: initialSnapshot,
         );
 
