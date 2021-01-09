@@ -23,6 +23,11 @@ void main() async {
       expect(stack.currentSnapshot, isNull);
     });
 
+    test('has a snapshot initially if specified', () {
+      final stack = ImageHistoryStack(maxCount: 3, initialSnapshot: imageA);
+      expect(stack.currentSnapshot, imageA);
+    });
+
     test('should not keep more images than maximum count', () {
       final stack = ImageHistoryStack(maxCount: 2);
       stack.push(imageA);
