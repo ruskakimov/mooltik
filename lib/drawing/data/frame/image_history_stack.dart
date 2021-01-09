@@ -23,7 +23,7 @@ class ImageHistoryStack {
   int _currentSnapshotIndex = 0;
 
   /// Snapshot visible to the user.
-  /// `null` represents an empty canvas.
+  /// `null` represents an empty snapshot.
   Image get currentSnapshot => _snapshots[_currentSnapshotIndex];
 
   /// Push a new [snapshot] in place of [currentSnapshot].
