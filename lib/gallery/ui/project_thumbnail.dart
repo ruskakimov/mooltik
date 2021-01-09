@@ -24,6 +24,7 @@ class ProjectThumbnail extends StatelessWidget {
               // Temporary fix for this issue https://github.com/flutter/flutter/issues/17419
               thumbnail.readAsBytesSync(),
               fit: BoxFit.cover,
+              gaplessPlayback: true,
             )
           : null,
     );
