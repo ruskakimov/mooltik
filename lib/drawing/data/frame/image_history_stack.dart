@@ -6,13 +6,14 @@ import 'package:flutter/foundation.dart';
 class ImageHistoryStack {
   ImageHistoryStack({
     @required this.maxCount,
-  });
+    Image initialSnapshot,
+  }) : _snapshots = [initialSnapshot];
 
   /// Maximum number of historical snapshots in the stack.
   final int maxCount;
 
   /// List with historical snapshots.
-  final List<Image> _snapshots = [];
+  final List<Image> _snapshots;
 
   int _currentSnapshotIndex = 0;
 

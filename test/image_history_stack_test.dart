@@ -18,7 +18,7 @@ void main() async {
   final imageC = await pngRead(testImageFile('rabbit_yellow.png'));
 
   group('ImageHistoryStack', () {
-    test('has no snapshot initially', () {
+    test('has no snapshot initially if not specified', () {
       final stack = ImageHistoryStack(maxCount: 3);
       expect(stack.currentSnapshot, isNull);
     });
