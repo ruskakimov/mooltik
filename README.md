@@ -1,4 +1,4 @@
-# Mooltik - animatic maker
+# Mooltik - storyboard animation
 
 Work in progress...
 
