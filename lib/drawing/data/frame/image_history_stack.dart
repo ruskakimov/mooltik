@@ -19,8 +19,7 @@ class ImageHistoryStack {
 
   /// Snapshot visible to the user.
   /// `null` represents an empty canvas.
-  Image get currentSnapshot =>
-      _snapshots.isNotEmpty ? _snapshots[_currentSnapshotIndex] : null;
+  Image get currentSnapshot => _snapshots[_currentSnapshotIndex];
 
   /// Push a new [snapshot] in place of [currentSnapshot].
   void push(Image snapshot) {
