@@ -21,10 +21,9 @@ class EditingActionbar extends StatelessWidget {
           icon: FontAwesomeIcons.arrowLeft,
           onTap: () async {
             final project = context.read<Project>();
-            await project.save();
             Navigator.pop(context);
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              project.close();
+              project.saveAndClose();
             });
           },
         ),
