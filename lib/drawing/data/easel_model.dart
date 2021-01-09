@@ -8,6 +8,9 @@ import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 
+/// Maximum number of consecutive undos.
+const int maxUndos = 15;
+
 const twoPi = pi * 2;
 
 class EaselModel extends ChangeNotifier {
@@ -18,7 +21,7 @@ class EaselModel extends ChangeNotifier {
     @required Size screenSize,
   })  : _frame = frame,
         _historyStack = ImageHistoryStack(
-          maxCount: 16,
+          maxCount: maxUndos + 1,
           initialSnapshot: frame.snapshot,
         ),
         _selectedTool = selectedTool,
@@ -83,7 +86,7 @@ class EaselModel extends ChangeNotifier {
   void updateFrame(FrameModel frame) {
     _frame = frame;
     _historyStack = ImageHistoryStack(
-      maxCount: 16,
+      maxCount: maxUndos + 1,
       initialSnapshot: frame.snapshot,
     );
     notifyListeners();
