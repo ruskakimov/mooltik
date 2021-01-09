@@ -1,11 +1,6 @@
 import 'dart:ui' as ui;
 
-import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:flutter/material.dart';
-import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
-import 'package:mooltik/drawing/ui/frame_painter.dart';
-
-import 'stroke.dart';
 
 class FrameModel extends ChangeNotifier {
   FrameModel({
@@ -16,11 +11,7 @@ class FrameModel extends ChangeNotifier {
   })  : id = id ?? DateTime.now().millisecondsSinceEpoch,
         _size = size,
         _duration = duration,
-        unrasterizedStrokes = [],
-        _historyStack = ImageHistoryStack(
-          maxCount: 16,
-          initialSnapshot: initialSnapshot,
-        );
+        _snapshot = initialSnapshot;
 
   final int id;
 
@@ -32,10 +23,6 @@ class FrameModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  final List<Stroke> unrasterizedStrokes;
-
-  final ImageHistoryStack _historyStack;
-
   Size get size => _size;
   final Size _size;
 
@@ -43,39 +30,10 @@ class FrameModel extends ChangeNotifier {
 
   double get height => _size.height;
 
-  ui.Image get snapshot => _historyStack.currentSnapshot;
-
-  bool get undoAvailable => _historyStack.isUndoAvailable;
-
-  bool get redoAvailable => _historyStack.isRedoAvailable;
-
-  void undo() {
-    _historyStack.undo();
-    notifyListeners();
-  }
-
-  void redo() {
-    _historyStack.redo();
-    notifyListeners();
-  }
-
-  void add(Stroke stroke) {
-    unrasterizedStrokes.add(stroke);
-    _generateLastSnapshot();
-  }
-
-  Future<void> _generateLastSnapshot() async {
-    final snapshot = await generateImage(
-      FramePainter(
-        frame: this,
-        strokes: unrasterizedStrokes,
-        background: Colors.transparent,
-      ),
-      width.toInt(),
-      height.toInt(),
-    );
-    _historyStack.push(snapshot);
-    unrasterizedStrokes.clear();
+  ui.Image get snapshot => _snapshot;
+  ui.Image _snapshot;
+  set snapshot(ui.Image snapshot) {
+    _snapshot = snapshot;
     notifyListeners();
   }
 }

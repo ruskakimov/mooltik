@@ -1,9 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
+import 'package:mooltik/drawing/ui/frame_painter.dart';
 
 const twoPi = pi * 2;
 
@@ -14,6 +17,10 @@ class EaselModel extends ChangeNotifier {
     @required Tool selectedTool,
     @required Size screenSize,
   })  : _frame = frame,
+        _historyStack = ImageHistoryStack(
+          maxCount: 16,
+          initialSnapshot: frame.snapshot,
+        ),
         _selectedTool = selectedTool,
         _screenSize = screenSize {
     _fitToScreen();
@@ -38,10 +45,10 @@ class EaselModel extends ChangeNotifier {
 
   Offset _fixedFramePoint;
 
-  Stroke _currentStroke;
+  /// Current strokes that are not yet rasterized and added to the frame.
+  final List<Stroke> unrasterizedStrokes = [];
 
-  /// Current unfinished stroke.
-  Stroke get currentStroke => _currentStroke;
+  ImageHistoryStack _historyStack;
 
   /// Canvas offset from top of the easel area.
   double get canvasTopOffset => _offset.dy;
@@ -75,6 +82,26 @@ class EaselModel extends ChangeNotifier {
   /// Used by provider to update dependency.
   void updateFrame(FrameModel frame) {
     _frame = frame;
+    _historyStack = ImageHistoryStack(
+      maxCount: 16,
+      initialSnapshot: frame.snapshot,
+    );
+    notifyListeners();
+  }
+
+  bool get undoAvailable => _historyStack.isUndoAvailable;
+
+  bool get redoAvailable => _historyStack.isRedoAvailable;
+
+  void undo() {
+    _historyStack.undo();
+    _frame.snapshot = _historyStack.currentSnapshot;
+    notifyListeners();
+  }
+
+  void redo() {
+    _historyStack.redo();
+    _frame.snapshot = _historyStack.currentSnapshot;
     notifyListeners();
   }
 
@@ -132,30 +159,53 @@ class EaselModel extends ChangeNotifier {
 
   void onStrokeStart(DragStartDetails details) {
     final framePoint = _toFramePoint(details.localPosition);
-    _currentStroke = _selectedTool.makeStroke(framePoint, _selectedColor);
+    unrasterizedStrokes.add(
+      _selectedTool.makeStroke(framePoint, _selectedColor),
+    );
     notifyListeners();
   }
 
   void onStrokeUpdate(DragUpdateDetails details) {
+    if (unrasterizedStrokes.isEmpty) return;
+
     final framePoint = _toFramePoint(details.localPosition);
-    _currentStroke.extend(framePoint);
+    unrasterizedStrokes.last.extend(framePoint);
     notifyListeners();
   }
 
   void onStrokeEnd() {
-    _currentStroke.finish();
+    if (unrasterizedStrokes.isEmpty) return;
 
-    // TODO: Rasterize and update snapshot here.
-    if (_currentStroke.boundingRect.overlaps(_frameArea)) {
-      _frame.add(_currentStroke);
+    unrasterizedStrokes.last.finish();
+
+    // TODO: Queue snapshots.
+    if (unrasterizedStrokes.last.boundingRect.overlaps(_frameArea)) {
+      _generateLastSnapshot();
     }
 
-    _currentStroke = null;
     notifyListeners();
   }
 
   void onStrokeCancel() {
-    _currentStroke = null;
+    if (unrasterizedStrokes.isEmpty) return;
+
+    unrasterizedStrokes.removeLast();
+    notifyListeners();
+  }
+
+  Future<void> _generateLastSnapshot() async {
+    final snapshot = await generateImage(
+      FramePainter(
+        frame: _frame,
+        strokes: unrasterizedStrokes,
+        background: Colors.transparent,
+      ),
+      _frame.width.toInt(),
+      _frame.height.toInt(),
+    );
+    _frame.snapshot = snapshot;
+    _historyStack.push(snapshot);
+    unrasterizedStrokes.clear();
     notifyListeners();
   }
 }
