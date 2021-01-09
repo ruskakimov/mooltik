@@ -4,6 +4,11 @@ import 'package:flutter/foundation.dart';
 
 /// A limited stack of historical snapshots for one frame.
 class ImageHistoryStack {
+  /// Creates a stack with [maxCount] maximum number of images.
+  ///
+  /// If [initialSnapshot] is `null`, it represents an empty canvas.
+  ///
+  /// Maximum number of consecutive undos would be `[maxCount] - 1`.
   ImageHistoryStack({
     @required this.maxCount,
     Image initialSnapshot,
