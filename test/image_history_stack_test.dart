@@ -61,7 +61,7 @@ void main() async {
       expect(stack.currentSnapshot, imageB);
     });
 
-    test('should not have undo available with only one snapshot', () {
+    test('should not undo initial snapshot', () {
       final stack = ImageHistoryStack(maxCount: 5, initialSnapshot: imageA);
       expect(stack.isUndoAvailable, isFalse);
 
