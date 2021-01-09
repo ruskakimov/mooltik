@@ -22,11 +22,11 @@ class FrameModel extends ChangeNotifier {
   })  : id = id ?? DateTime.now().millisecondsSinceEpoch,
         _size = size,
         _duration = duration,
-        unrasterizedStrokes = [] {
-    if (initialSnapshot != null) {
-      _historyStack.push(initialSnapshot);
-    }
-  }
+        unrasterizedStrokes = [],
+        _historyStack = ImageHistoryStack(
+          maxCount: maxSnapshotCount,
+          initialSnapshot: initialSnapshot,
+        );
 
   final int id;
 
@@ -40,8 +40,7 @@ class FrameModel extends ChangeNotifier {
 
   final List<Stroke> unrasterizedStrokes;
 
-  ImageHistoryStack _historyStack =
-      ImageHistoryStack(maxCount: maxSnapshotCount);
+  final ImageHistoryStack _historyStack;
 
   Size get size => _size;
   final Size _size;
