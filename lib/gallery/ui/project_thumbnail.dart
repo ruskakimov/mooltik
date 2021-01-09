@@ -16,8 +16,8 @@ class ProjectThumbnail extends StatelessWidget {
     context.watch<Project>();
 
     return Container(
-      width: 200,
-      height: 200,
+      width: 320,
+      height: 180,
       color: Colors.white,
       child: thumbnail.existsSync()
           ? Image.memory(
