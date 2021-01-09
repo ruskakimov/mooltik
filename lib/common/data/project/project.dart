@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
@@ -47,6 +48,8 @@ class Project extends ChangeNotifier {
 
   bool _shouldClose;
 
+  Timer _autoSaveTimer;
+
   /// Loads project files into memory.
   Future<void> open() async {
     // Check if already open.
@@ -70,12 +73,22 @@ class Project extends ChangeNotifier {
       _frameSize = const Size(1280, 720);
       _frames = [FrameModel(size: frameSize)];
     }
+
+    _startAutoSaveTimer();
   }
 
-  /// Frees the memory of project files.
+  void _startAutoSaveTimer() {
+    _autoSaveTimer = Timer.periodic(
+      Duration(minutes: 1),
+      (_) => save(),
+    );
+  }
+
+  /// Frees the memory of project files and stops auto-save.
   void _close() {
     _frames.clear();
     _soundClips.clear();
+    _autoSaveTimer?.cancel();
   }
 
   Future<void> saveAndClose() async {
