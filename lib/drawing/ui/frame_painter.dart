@@ -42,9 +42,6 @@ class FramePainter extends CustomPainter {
       );
     }
 
-    // TODO: Remove this one.
-    frame.unrasterizedStrokes.forEach((stroke) => stroke.paintOn(canvas));
-
     strokes?.forEach((stroke) => stroke.paintOn(canvas));
 
     if (showCursor && strokes.isNotEmpty) {

@@ -68,6 +68,7 @@ class FrameModel extends ChangeNotifier {
     final snapshot = await generateImage(
       FramePainter(
         frame: this,
+        strokes: unrasterizedStrokes,
         background: Colors.transparent,
       ),
       width.toInt(),

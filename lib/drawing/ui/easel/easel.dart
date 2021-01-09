@@ -110,6 +110,7 @@ class _EaselState extends State<Easel> {
                             strokes: [
                               if (easel.currentStroke != null)
                                 easel.currentStroke,
+                              ...frame.unrasterizedStrokes,
                             ],
                             showCursor: true,
                             background: Colors.transparent,
