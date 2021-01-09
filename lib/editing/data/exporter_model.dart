@@ -2,14 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/io/mp4/mp4.dart';
+import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as p;
 import 'package:mooltik/common/data/io/mp4/slide.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
-import 'package:mooltik/drawing/data/frame/image_from_frame.dart';
 
 enum ExporterState {
   initial,
@@ -84,7 +85,11 @@ class ExporterModel extends ChangeNotifier {
   }
 
   Future<Slide> _slideFromFrame(FrameModel frame) async {
-    final image = await imageFromFrame(frame);
+    final image = await generateImage(
+      FramePainter(frame: frame),
+      frame.width.toInt(),
+      frame.height.toInt(),
+    );
     final pngFile = _tempFile('${frame.id}.png');
     await pngWrite(pngFile, image);
     return Slide(pngFile, frame.duration);

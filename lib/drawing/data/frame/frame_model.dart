@@ -1,8 +1,9 @@
 import 'dart:ui' as ui;
 
-import 'package:mooltik/drawing/data/frame/image_from_frame.dart';
+import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
+import 'package:mooltik/drawing/ui/frame_painter.dart';
 
 import 'stroke.dart';
 
@@ -64,7 +65,14 @@ class FrameModel extends ChangeNotifier {
   }
 
   Future<void> _generateLastSnapshot() async {
-    final snapshot = await imageFromFrame(this, background: Colors.transparent);
+    final snapshot = await generateImage(
+      FramePainter(
+        frame: this,
+        background: Colors.transparent,
+      ),
+      width.toInt(),
+      height.toInt(),
+    );
     _historyStack.push(snapshot);
     unrasterizedStrokes.clear();
     notifyListeners();
