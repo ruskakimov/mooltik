@@ -45,14 +45,14 @@ class Project extends ChangeNotifier {
   Size get frameSize => _frameSize;
   Size _frameSize;
 
-  bool _shouldFreeMemory;
+  bool _shouldClose;
 
   /// Loads project files into memory.
   Future<void> open() async {
     // Check if already open.
     if (_frames.isNotEmpty) {
       // Prevent freeing memory after closing and quickly opening the project again.
-      _shouldFreeMemory = false;
+      _shouldClose = false;
       return;
     }
 
@@ -73,18 +73,18 @@ class Project extends ChangeNotifier {
   }
 
   /// Frees the memory of project files.
-  void _freeMemory() {
+  void _close() {
     _frames.clear();
     _soundClips.clear();
   }
 
   Future<void> saveAndClose() async {
-    _shouldFreeMemory = true;
+    _shouldClose = true;
     await save();
 
     // User might have opened the project again while it was writing to disk.
-    if (_shouldFreeMemory) {
-      _freeMemory();
+    if (_shouldClose) {
+      _close();
     }
   }
 
