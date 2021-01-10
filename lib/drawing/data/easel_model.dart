@@ -18,16 +18,12 @@ class EaselModel extends ChangeNotifier {
     @required FrameModel frame,
     @required this.frameSize,
     @required Tool selectedTool,
-    @required Size screenSize,
   })  : _frame = frame,
         _historyStack = ImageHistoryStack(
           maxCount: maxUndos + 1,
           initialSnapshot: frame.snapshot,
         ),
-        _selectedTool = selectedTool,
-        _screenSize = screenSize {
-    _fitToScreen();
-  }
+        _selectedTool = selectedTool;
 
   FrameModel _frame;
 
@@ -36,7 +32,7 @@ class EaselModel extends ChangeNotifier {
 
   final Size frameSize;
 
-  Size _screenSize;
+  Size _easelSize;
 
   Offset _offset = Offset.zero;
 
@@ -92,6 +88,19 @@ class EaselModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Updates easel size on first build and when easel size changes.
+  void updateSize(Size size) {
+    if (size == _easelSize) return;
+
+    if (_easelSize == null) {
+      // Fit to screen on first build.
+      _easelSize = size;
+      _fitToScreen();
+    } else {
+      _easelSize = size;
+    }
+  }
+
   bool get undoAvailable => _historyStack.isUndoAvailable;
 
   bool get redoAvailable => _historyStack.isRedoAvailable;
@@ -109,12 +118,9 @@ class EaselModel extends ChangeNotifier {
   }
 
   void _fitToScreen() {
-    final topPadding = 44.0; // equals drawing actionbar height
-    _scale = (_screenSize.height - topPadding) / frameSize.height;
-    _offset = Offset(
-      (_screenSize.width - frameSize.width * _scale) / 2,
-      topPadding,
-    );
+    if (_easelSize == null) return;
+    _scale = _easelSize.height / frameSize.height;
+    _offset = Offset((_easelSize.width - frameSize.width * _scale) / 2, 0);
     _rotation = 0;
   }
 
