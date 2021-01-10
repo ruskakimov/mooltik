@@ -48,8 +48,8 @@ class _EaselState extends State<Easel> {
           onStrokeCancel: easel.onStrokeCancel,
           onScaleStart: easel.onScaleStart,
           onScaleUpdate: easel.onScaleUpdate,
-          onTwoFingerTap: frame.undo,
-          onThreeFingerTap: frame.redo,
+          onTwoFingerTap: easel.undo,
+          onThreeFingerTap: easel.redo,
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -105,10 +105,7 @@ class _EaselState extends State<Easel> {
                           size: Size(frame.width, frame.height),
                           foregroundPainter: FramePainter(
                             frame: frame,
-                            strokes: [
-                              if (easel.currentStroke != null)
-                                easel.currentStroke,
-                            ],
+                            strokes: easel.unrasterizedStrokes,
                             showCursor: true,
                             background: Colors.transparent,
                           ),

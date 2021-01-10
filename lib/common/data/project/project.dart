@@ -1,13 +1,28 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
 import 'package:path/path.dart' as p;
 
+/// Holds project data, reads and writes to project folder.
+///
+/// Project file structure looks like the following:
+///
+/// ```
+/// /project_[creation_timestamp]
+///    project_data.json
+///    frame[creation_timestamp].png
+///    /sounds
+///        [creation_timestamp].aac
+/// ```
+///
+/// Where `[creation_timestamp]` is replaced with an epoch of creation time of that piece of data.
 class Project extends ChangeNotifier {
   Project(this.directory)
       : id = int.parse(p.basename(directory.path).split('_').last),
@@ -31,7 +46,19 @@ class Project extends ChangeNotifier {
   Size get frameSize => _frameSize;
   Size _frameSize;
 
+  bool _shouldClose;
+
+  Timer _autoSaveTimer;
+
+  /// Loads project files into memory.
   Future<void> open() async {
+    // Check if already open.
+    if (_frames.isNotEmpty) {
+      // Prevent freeing memory after closing and quickly opening the project again.
+      _shouldClose = false;
+      return;
+    }
+
     if (await _dataFile.exists()) {
       // Existing project.
       final contents = await _dataFile.readAsString();
@@ -46,20 +73,34 @@ class Project extends ChangeNotifier {
       _frameSize = const Size(1280, 720);
       _frames = [FrameModel(size: frameSize)];
     }
+
+    _startAutoSaveTimer();
   }
 
-  Future<FrameModel> _getFrame(FrameSaveData frameData, Size size) async {
-    final file = getFrameFile(frameData.id);
-    final image = file.existsSync() ? await pngRead(file) : null;
-    return FrameModel(
-      id: frameData.id,
-      duration: frameData.duration,
-      size: size,
-      initialSnapshot: image,
+  void _startAutoSaveTimer() {
+    _autoSaveTimer = Timer.periodic(
+      Duration(minutes: 1),
+      (_) => save(),
     );
   }
 
-  // TODO: Remove deleted files
+  /// Frees the memory of project files and stops auto-save.
+  void _close() {
+    _frames.clear();
+    _soundClips.clear();
+    _autoSaveTimer?.cancel();
+  }
+
+  Future<void> saveAndClose() async {
+    _shouldClose = true;
+    await save();
+
+    // User might have opened the project again while it was writing to disk.
+    if (_shouldClose) {
+      _close();
+    }
+  }
+
   Future<void> save() async {
     // Write project data.
     final data = ProjectSaveData(
@@ -78,7 +119,7 @@ class Project extends ChangeNotifier {
         return frame.snapshot != null;
       }).map(
         (frame) => pngWrite(
-          getFrameFile(frame.id),
+          _getFrameFile(frame.id),
           frame.snapshot,
         ),
       ),
@@ -89,23 +130,66 @@ class Project extends ChangeNotifier {
       await pngWrite(thumbnail, frames.first.snapshot);
     }
 
+    await _deleteUnusedFiles();
+
     // Refresh gallery thumbnails.
     notifyListeners();
   }
 
-  void close() {
-    _frames = null;
+  /// Deletes frames and sound clips that were removed from the project.
+  Future<void> _deleteUnusedFiles() async {
+    await _deleteUnusedFrameImages();
+    await _deleteUnusedSoundFiles();
   }
 
-  File getFrameFile(int id) => File(p.join(directory.path, 'frame$id.png'));
+  Future<void> _deleteUnusedFrameImages() async {
+    final Set<String> usedFrameImages =
+        frames.map((frame) => _getFrameFilePath(frame.id)).toSet();
 
-  File getSoundClipFile(int id) => File(p.join(
-        directory.path,
-        'sounds',
-        '$id.aac',
-      ));
+    bool _isUnusedFrameImage(String path) =>
+        p.extension(path) == '.png' &&
+        p.basename(path) != 'thumbnail.png' &&
+        !usedFrameImages.contains(path);
+
+    await deleteFilesWhere(directory, _isUnusedFrameImage);
+  }
+
+  Future<void> _deleteUnusedSoundFiles() async {
+    final soundDir = Directory(_getSoundDirectoryPath());
+    if (!soundDir.existsSync()) return;
+
+    final Set<String> usedSoundFiles =
+        soundClips.map((clip) => clip.file.path).toSet();
+
+    bool _isUnusedSoundFile(String path) =>
+        p.extension(path) == '.aac' && !usedSoundFiles.contains(path);
+
+    await deleteFilesWhere(soundDir, _isUnusedSoundFile);
+  }
+
+  Future<FrameModel> _getFrame(FrameSaveData frameData, Size size) async {
+    final file = _getFrameFile(frameData.id);
+    final image = file.existsSync() ? await pngRead(file) : null;
+    return FrameModel(
+      id: frameData.id,
+      duration: frameData.duration,
+      size: size,
+      initialSnapshot: image,
+    );
+  }
+
+  File _getFrameFile(int id) => File(_getFrameFilePath(id));
+
+  String _getFrameFilePath(int id) => p.join(directory.path, 'frame$id.png');
+
+  File _getSoundClipFile(int id) => File(_getSoundClipFilePath(id));
+
+  String _getSoundDirectoryPath() => p.join(directory.path, 'sounds');
+
+  String _getSoundClipFilePath(int id) =>
+      p.join(_getSoundDirectoryPath(), '$id.aac');
 
   Future<File> getNewSoundClipFile() async =>
-      await getSoundClipFile(DateTime.now().millisecondsSinceEpoch)
+      await _getSoundClipFile(DateTime.now().millisecondsSinceEpoch)
           .create(recursive: true);
 }
