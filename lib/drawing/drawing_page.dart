@@ -38,15 +38,18 @@ class DrawingPage extends StatelessWidget {
               ),
             ],
             child: SafeArea(
-              child: Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  Positioned.fill(
-                    child: Easel(),
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: DrawingActionbar(),
+              child: Column(
+                children: [
+                  DrawingActionbar(),
+                  Expanded(
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: <Widget>[
+                        Positioned.fill(
+                          child: Easel(),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
