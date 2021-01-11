@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/data/toolbox/tools/pencil.dart';
 import 'package:mooltik/drawing/ui/color_picker_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
@@ -34,13 +35,15 @@ class SizePicker extends StatelessWidget {
             toolbox.selectedToolStrokeWidth + strokeWidthDelta);
       },
       onTap: () {
-        showDialog<void>(
-          context: context,
-          builder: (BuildContext context) => ChangeNotifierProvider.value(
-            value: toolbox,
-            child: ColorPickerDialog(),
-          ),
-        );
+        if (toolbox.selectedTool is Pencil) {
+          showDialog<void>(
+            context: context,
+            builder: (BuildContext context) => ChangeNotifierProvider.value(
+              value: toolbox,
+              child: ColorPickerDialog(),
+            ),
+          );
+        }
       },
       child: _Circle(
         radius: pickerRadius,
