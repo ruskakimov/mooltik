@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:mooltik/common/ui/animated_drawer.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
 
-class ColorPickerDrawer extends StatelessWidget {
-  const ColorPickerDrawer({
+class ColorPickerDialog extends StatelessWidget {
+  const ColorPickerDialog({
     Key key,
     this.open,
   }) : super(key: key);
@@ -16,16 +15,12 @@ class ColorPickerDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
 
-    return AnimatedRightDrawer(
-      width: 400,
-      open: open,
+    return Dialog(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ColorPicker(
-          // pickerColor: toolbox.selectedColor,
-          // onColorChanged: (color) {
-          //   toolbox.selectColor(color);
-          // },
+          pickerColor: toolbox.selectedToolColor,
+          onColorChanged: toolbox.changeToolColor,
           showLabel: false,
         ),
       ),

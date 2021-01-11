@@ -27,9 +27,10 @@ class ToolboxModel extends ChangeNotifier {
     }
   }
 
-  void changeToolOpacity(double value) {
-    assert(value >= 0.0 && value <= 1.0);
-    selectedTool.paint.color = selectedTool.paint.color.withOpacity(value);
+  Color get selectedToolColor => selectedTool?.paint?.color;
+
+  void changeToolColor(Color color) {
+    selectedTool.paint.color = color;
     notifyListeners();
   }
 }

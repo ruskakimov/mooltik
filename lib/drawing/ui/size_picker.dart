@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/ui/color_picker_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 
@@ -32,6 +33,15 @@ class SizePicker extends StatelessWidget {
         toolbox.changeToolStrokeWidth(
             toolbox.selectedToolStrokeWidth + strokeWidthDelta);
       },
+      onTap: () {
+        showDialog<void>(
+          context: context,
+          builder: (BuildContext context) => ChangeNotifierProvider.value(
+            value: toolbox,
+            child: ColorPickerDialog(),
+          ),
+        );
+      },
       child: _Circle(
         radius: pickerRadius,
         color: Color(0xC4C4C4).withOpacity(0.5),
@@ -42,7 +52,7 @@ class SizePicker extends StatelessWidget {
               toolbox.selectedTool.minStrokeWidth,
               toolbox.selectedTool.maxStrokeWidth,
             ),
-            color: Colors.black,
+            color: toolbox.selectedToolColor,
             border: Border.all(color: Colors.white),
           ),
         ),
