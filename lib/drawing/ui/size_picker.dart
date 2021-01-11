@@ -5,14 +5,17 @@ import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 class SizePicker extends StatelessWidget {
   const SizePicker({
     Key key,
+    this.pickerRadius = 60,
   }) : super(key: key);
+
+  final double pickerRadius;
 
   @override
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
 
     return _Circle(
-      radius: 60,
+      radius: pickerRadius,
       color: Color(0xC4C4C4).withOpacity(0.5),
       child: Center(
         child: _Circle(
