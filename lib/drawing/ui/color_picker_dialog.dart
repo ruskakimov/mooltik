@@ -16,12 +16,15 @@ class ColorPickerDialog extends StatelessWidget {
     final toolbox = context.watch<ToolboxModel>();
 
     return Dialog(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ColorPicker(
-          pickerColor: toolbox.selectedToolColor,
-          onColorChanged: toolbox.changeToolColor,
-          showLabel: false,
+      child: SizedBox(
+        width: 400,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ColorPicker(
+            pickerColor: toolbox.selectedToolColor,
+            onColorChanged: toolbox.changeToolColor,
+            showLabel: false,
+          ),
         ),
       ),
     );
