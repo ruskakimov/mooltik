@@ -6,9 +6,11 @@ class SizePicker extends StatelessWidget {
   const SizePicker({
     Key key,
     this.pickerRadius = 60,
+    this.smallestInnerCircleRadius = 5,
   }) : super(key: key);
 
   final double pickerRadius;
+  final double smallestInnerCircleRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +21,23 @@ class SizePicker extends StatelessWidget {
       color: Color(0xC4C4C4).withOpacity(0.5),
       child: Center(
         child: _Circle(
-          radius: 30,
+          radius: _calcInnerCircleRadius(
+            toolbox.selectedToolStrokeWidth,
+            toolbox.selectedTool.minStrokeWidth,
+            toolbox.selectedTool.maxStrokeWidth,
+          ),
           color: Colors.black,
           border: Border.all(color: Colors.white),
         ),
       ),
     );
+  }
+
+  double _calcInnerCircleRadius(
+      double value, double minValue, double maxValue) {
+    final fraction = (value - minValue) / (maxValue - minValue);
+    return smallestInnerCircleRadius +
+        (pickerRadius - smallestInnerCircleRadius) * fraction;
   }
 }
 
