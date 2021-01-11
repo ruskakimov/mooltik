@@ -16,25 +16,34 @@ class SizePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
 
-    return _Circle(
-      radius: pickerRadius,
-      color: Color(0xC4C4C4).withOpacity(0.5),
-      child: Center(
-        child: _Circle(
-          radius: _calcInnerCircleRadius(
-            toolbox.selectedToolStrokeWidth,
-            toolbox.selectedTool.minStrokeWidth,
-            toolbox.selectedTool.maxStrokeWidth,
+    return GestureDetector(
+      onVerticalDragUpdate: (DragUpdateDetails details) {
+        toolbox.changeToolStrokeWidth(
+            toolbox.selectedToolStrokeWidth - details.delta.dy);
+      },
+      child: _Circle(
+        radius: pickerRadius,
+        color: Color(0xC4C4C4).withOpacity(0.5),
+        child: Center(
+          child: _Circle(
+            radius: _calcInnerCircleRadius(
+              toolbox.selectedToolStrokeWidth,
+              toolbox.selectedTool.minStrokeWidth,
+              toolbox.selectedTool.maxStrokeWidth,
+            ),
+            color: Colors.black,
+            border: Border.all(color: Colors.white),
           ),
-          color: Colors.black,
-          border: Border.all(color: Colors.white),
         ),
       ),
     );
   }
 
   double _calcInnerCircleRadius(
-      double value, double minValue, double maxValue) {
+    double value,
+    double minValue,
+    double maxValue,
+  ) {
     final fraction = (value - minValue) / (maxValue - minValue);
     return smallestInnerCircleRadius +
         (pickerRadius - smallestInnerCircleRadius) * fraction;
