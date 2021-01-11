@@ -20,4 +20,10 @@ class Eraser extends Tool {
   Stroke makeStroke(Offset startPoint) {
     return Stroke(startPoint, paint);
   }
+
+  @override
+  double get maxStrokeWidth => 300;
+
+  @override
+  double get minStrokeWidth => 10;
 }
