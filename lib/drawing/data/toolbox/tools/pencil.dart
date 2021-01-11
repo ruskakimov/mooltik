@@ -26,7 +26,7 @@ class Pencil extends Tool {
   }
 
   @override
-  double get maxStrokeWidth => 100;
+  double get maxStrokeWidth => 200;
 
   @override
   double get minStrokeWidth => 5;
