@@ -17,9 +17,12 @@ class ToolboxModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeToolWidth(int value) {
-    selectedTool.paint.strokeWidth = value.toDouble();
-    notifyListeners();
+  void changeToolStrokeWidth(double strokeWidth) {
+    if (strokeWidth <= selectedTool.maxStrokeWidth &&
+        strokeWidth >= selectedTool.minStrokeWidth) {
+      selectedTool.paint.strokeWidth = strokeWidth;
+      notifyListeners();
+    }
   }
 
   void changeToolOpacity(double value) {
