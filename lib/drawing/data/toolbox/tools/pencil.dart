@@ -21,7 +21,7 @@ class Pencil extends Tool {
         );
 
   @override
-  Stroke makeStroke(Offset startPoint, Color color) {
-    return Stroke(startPoint, paint..color = color);
+  Stroke makeStroke(Offset startPoint) {
+    return Stroke(startPoint, paint);
   }
 }

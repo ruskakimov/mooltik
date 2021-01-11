@@ -33,8 +33,7 @@ class _EaselState extends State<Easel> {
       ),
       update: (_, reel, toolbox, easel) => easel
         ..updateFrame(reel.selectedFrame)
-        ..updateSelectedTool(toolbox.selectedTool)
-        ..updateSelectedColor(toolbox.selectedColor),
+        ..updateSelectedTool(toolbox.selectedTool),
       builder: (context, child) {
         final easel = context.watch<EaselModel>();
         final frame = context.watch<FrameModel>();

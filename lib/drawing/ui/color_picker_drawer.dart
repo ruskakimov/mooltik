@@ -22,10 +22,10 @@ class ColorPickerDrawer extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ColorPicker(
-          pickerColor: toolbox.selectedColor,
-          onColorChanged: (color) {
-            toolbox.selectColor(color);
-          },
+          // pickerColor: toolbox.selectedColor,
+          // onColorChanged: (color) {
+          //   toolbox.selectColor(color);
+          // },
           showLabel: false,
         ),
       ),

@@ -17,7 +17,7 @@ class Eraser extends Tool {
         );
 
   @override
-  Stroke makeStroke(Offset startPoint, Color color) {
+  Stroke makeStroke(Offset startPoint) {
     return Stroke(startPoint, paint);
   }
 }
