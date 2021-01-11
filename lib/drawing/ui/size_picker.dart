@@ -7,10 +7,12 @@ class SizePicker extends StatelessWidget {
     Key key,
     this.pickerRadius = 60,
     this.smallestInnerCircleRadius = 5,
+    this.dragSensitivity = 0.4,
   }) : super(key: key);
 
   final double pickerRadius;
   final double smallestInnerCircleRadius;
+  final double dragSensitivity;
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +20,17 @@ class SizePicker extends StatelessWidget {
 
     return GestureDetector(
       onVerticalDragUpdate: (DragUpdateDetails details) {
+        final toolWidthRange = toolbox.selectedTool.maxStrokeWidth -
+            toolbox.selectedTool.minStrokeWidth;
+        final innerCircleRadiusRange = pickerRadius - smallestInnerCircleRadius;
+
+        final strokeWidthDelta = -details.delta.dy /
+            innerCircleRadiusRange *
+            toolWidthRange *
+            dragSensitivity;
+
         toolbox.changeToolStrokeWidth(
-            toolbox.selectedToolStrokeWidth - details.delta.dy);
+            toolbox.selectedToolStrokeWidth + strokeWidthDelta);
       },
       child: _Circle(
         radius: pickerRadius,
