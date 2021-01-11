@@ -52,7 +52,10 @@ class DrawingPage extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
+                            padding: const EdgeInsets.only(
+                              left: 8.0,
+                              bottom: 44, // actionbar height
+                            ),
                             child: SizePicker(),
                           ),
                         ),
