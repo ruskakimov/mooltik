@@ -16,6 +16,7 @@ class ColorPickerDialog extends StatelessWidget {
     final toolbox = context.watch<ToolboxModel>();
 
     return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: SizedBox(
         width: 400,
         child: Padding(
