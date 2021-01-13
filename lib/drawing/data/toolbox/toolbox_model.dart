@@ -3,16 +3,29 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'tools/tools.dart';
 
+const String _pencilStrokeWidthKey = 'pencil_stroke_width';
+const String _eraserStrokeWidthKey = 'eraser_stroke_width';
+
 class ToolboxModel extends ChangeNotifier {
-  ToolboxModel(this.sharedPreferences);
+  ToolboxModel(this.sharedPreferences)
+      : _tools = [
+          Pencil(
+            strokeWidth: sharedPreferences.containsKey(_pencilStrokeWidthKey)
+                ? sharedPreferences.getDouble(_pencilStrokeWidthKey)
+                : 10,
+          ),
+          Eraser(
+            strokeWidth: sharedPreferences.containsKey(_eraserStrokeWidthKey)
+                ? sharedPreferences.getDouble(_eraserStrokeWidthKey)
+                : 100,
+          ),
+        ],
+        _selectedToolId = 0;
 
   final SharedPreferences sharedPreferences;
 
-  final List<Tool> _tools = [
-    Pencil(strokeWidth: 10),
-    Eraser(strokeWidth: 100),
-  ];
-  int _selectedToolId = 0;
+  final List<Tool> _tools;
+  int _selectedToolId;
 
   List<Tool> get tools => _tools;
   Tool get selectedTool => _tools[_selectedToolId];
