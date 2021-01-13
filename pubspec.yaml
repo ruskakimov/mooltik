@@ -33,6 +33,7 @@ dependencies:
   flutter_sound_lite: ^6.4.8+2
   flutter_portal: ^0.3.0
   open_file: ^3.0.3
+  shared_preferences: ^0.5.12+4
 
 dev_dependencies:
   flutter_test:

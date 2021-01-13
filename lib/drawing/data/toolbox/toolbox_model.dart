@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'tools/tools.dart';
 
 class ToolboxModel extends ChangeNotifier {
+  ToolboxModel();
+
   final List<Tool> _tools = [
     Pencil(strokeWidth: 10),
     Eraser(strokeWidth: 100),
