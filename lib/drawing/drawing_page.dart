@@ -7,6 +7,7 @@ import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/ui/easel/easel.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawingPage extends StatelessWidget {
   static const routeName = '/draw';
@@ -24,7 +25,7 @@ class DrawingPage extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(
-          create: (context) => ToolboxModel(),
+          create: (context) => ToolboxModel(context.read<SharedPreferences>()),
         ),
       ],
       builder: (context, child) {

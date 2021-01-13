@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'tools/tools.dart';
 
 class ToolboxModel extends ChangeNotifier {
-  ToolboxModel();
+  ToolboxModel(this.sharedPreferences);
+
+  final SharedPreferences sharedPreferences;
 
   final List<Tool> _tools = [
     Pencil(strokeWidth: 10),
