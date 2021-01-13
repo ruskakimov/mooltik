@@ -45,20 +45,32 @@ class SizePicker extends StatelessWidget {
           );
         }
       },
-      child: _Circle(
-        radius: pickerRadius,
-        color: Color(0xC4C4C4).withOpacity(0.5),
-        child: Center(
-          child: _Circle(
-            radius: _calcInnerCircleRadius(
-              toolbox.selectedToolStrokeWidth,
-              toolbox.selectedTool.minStrokeWidth,
-              toolbox.selectedTool.maxStrokeWidth,
-            ),
-            color: toolbox.selectedToolColor,
-            border: Border.all(color: Colors.white),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          _Circle(
+            radius: pickerRadius,
+            color: Color(0xC4C4C4).withOpacity(0.5),
           ),
-        ),
+          ClipOval(
+            child: _Circle(
+              radius: _calcInnerCircleRadius(
+                toolbox.selectedToolStrokeWidth,
+                toolbox.selectedTool.minStrokeWidth,
+                toolbox.selectedTool.maxStrokeWidth,
+              ),
+              color: toolbox.selectedToolColor,
+              border: Border.all(color: Colors.white),
+              child: FittedBox(
+                fit: BoxFit.none,
+                child: CustomPaint(
+                  size: Size.square(pickerRadius),
+                  painter: _TileBackgroundPainter(),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -93,7 +105,7 @@ class _Circle extends StatelessWidget {
     return Container(
       width: radius,
       height: radius,
-      decoration: BoxDecoration(
+      foregroundDecoration: BoxDecoration(
         color: color,
         shape: BoxShape.circle,
         border: border,
@@ -101,4 +113,24 @@ class _Circle extends StatelessWidget {
       child: child,
     );
   }
+}
+
+class _TileBackgroundPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Size tileSize = Size(size.width / 13, size.height / 13);
+    final Paint greyPaint = Paint()..color = const Color(0xFFCCCCCC);
+    final Paint whitePaint = Paint()..color = Colors.white;
+    List.generate((size.height / tileSize.height).round(), (int y) {
+      List.generate((size.width / tileSize.width).round(), (int x) {
+        canvas.drawRect(
+          Offset(tileSize.width * x, tileSize.height * y) & tileSize,
+          (x + y) % 2 != 0 ? whitePaint : greyPaint,
+        );
+      });
+    });
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
