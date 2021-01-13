@@ -52,15 +52,15 @@ class SizePicker extends StatelessWidget {
             radius: pickerRadius,
             color: Color(0xC4C4C4).withOpacity(0.5),
           ),
-          ClipOval(
-            child: _Circle(
-              radius: _calcInnerCircleRadius(
-                toolbox.selectedToolStrokeWidth,
-                toolbox.selectedTool.minStrokeWidth,
-                toolbox.selectedTool.maxStrokeWidth,
-              ),
-              color: toolbox.selectedToolColor,
-              border: Border.all(color: Colors.white),
+          _Circle(
+            radius: _calcInnerCircleRadius(
+              toolbox.selectedToolStrokeWidth,
+              toolbox.selectedTool.minStrokeWidth,
+              toolbox.selectedTool.maxStrokeWidth,
+            ),
+            color: toolbox.selectedToolColor,
+            border: Border.all(color: Colors.white),
+            child: ClipOval(
               child: FittedBox(
                 fit: BoxFit.none,
                 child: CustomPaint(
