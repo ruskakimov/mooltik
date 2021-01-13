@@ -17,8 +17,8 @@ class ColorPickerDialog extends StatelessWidget {
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: SizedBox(
-        width: 400,
+      child: ConstrainedBox(
+        constraints: BoxConstraints.loose(Size.square(400)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ColorPicker(
