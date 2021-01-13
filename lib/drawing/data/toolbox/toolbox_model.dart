@@ -41,6 +41,11 @@ class ToolboxModel extends ChangeNotifier {
     if (strokeWidth <= selectedTool.maxStrokeWidth &&
         strokeWidth >= selectedTool.minStrokeWidth) {
       selectedTool.paint.strokeWidth = strokeWidth;
+
+      sharedPreferences.setDouble(
+        selectedTool is Pencil ? _pencilStrokeWidthKey : _eraserStrokeWidthKey,
+        strokeWidth,
+      );
       notifyListeners();
     }
   }
