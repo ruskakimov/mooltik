@@ -6,9 +6,16 @@ PODS:
   - flutter_ffmpeg/https (0.3.0):
     - Flutter
     - mobile-ffmpeg-https (= 4.4)
+  - "flutter_sound_lite (6.4.8+2)":
+    - Flutter
+    - "tau_sound_core (= 6.4.8+2)"
+  - "flutter_sound_web (6.4.8+2)":
+    - Flutter
   - image_gallery_saver (1.5.0):
     - Flutter
   - mobile-ffmpeg-https (4.4)
+  - open_file (0.0.1):
+    - Flutter
   - path_provider (0.0.1):
     - Flutter
   - path_provider_linux (0.0.1):
@@ -19,31 +26,39 @@ PODS:
     - Flutter
   - "permission_handler (5.0.1+1)":
     - Flutter
-  - vibration (1.5.0):
-    - Flutter
+  - "tau_sound_core (6.4.8+2)"
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_ffmpeg (from `.symlinks/plugins/flutter_ffmpeg/ios`)
+  - flutter_sound_lite (from `.symlinks/plugins/flutter_sound_lite/ios`)
+  - flutter_sound_web (from `.symlinks/plugins/flutter_sound_web/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
+  - open_file (from `.symlinks/plugins/open_file/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - path_provider_linux (from `.symlinks/plugins/path_provider_linux/ios`)
   - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
   - path_provider_windows (from `.symlinks/plugins/path_provider_windows/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
-  - vibration (from `.symlinks/plugins/vibration/ios`)
 
 SPEC REPOS:
   trunk:
     - mobile-ffmpeg-https
+    - tau_sound_core
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
   flutter_ffmpeg:
     :path: ".symlinks/plugins/flutter_ffmpeg/ios"
+  flutter_sound_lite:
+    :path: ".symlinks/plugins/flutter_sound_lite/ios"
+  flutter_sound_web:
+    :path: ".symlinks/plugins/flutter_sound_web/ios"
   image_gallery_saver:
     :path: ".symlinks/plugins/image_gallery_saver/ios"
+  open_file:
+    :path: ".symlinks/plugins/open_file/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   path_provider_linux:
@@ -54,20 +69,21 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_windows/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
-  vibration:
-    :path: ".symlinks/plugins/vibration/ios"
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_ffmpeg: 657ce8a1502c3d25bf34efc58b380b248836f772
+  flutter_sound_lite: 4f09f3967356d13f18d9682c0c058b35708feb60
+  flutter_sound_web: bced59eac2aa69cb61875da8786f92f539f554e8
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   mobile-ffmpeg-https: 311fc4a8f671cf36d1d6b8f421e8246b790978d9
+  open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   path_provider_linux: 4d630dc393e1f20364f3e3b4a2ff41d9674a84e4
   path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
   path_provider_windows: a2b81600c677ac1959367280991971cb9a1edb3b
   permission_handler: eac8e15b4a1a3fba55b761d19f3f4e6b005d15b6
-  vibration: 64de683387ea8cc822f7b4f1653747bc8ff91662
+  tau_sound_core: 74ffbf8790d019cdd56200ca36038ec117b920c2
 
 PODFILE CHECKSUM: 03ca1bf1c64dc8b19c6e4677c8bd060771e18859
 
