@@ -8,8 +8,10 @@ const String _eraserStrokeWidthKey = 'eraser_stroke_width';
 const String _pencilColorKey = 'pencil_color';
 
 class ToolboxModel extends ChangeNotifier {
-  ToolboxModel(this.sharedPreferences)
-      : _tools = [
+  ToolboxModel(SharedPreferences sharedPreferences)
+      : assert(sharedPreferences != null),
+        _sharedPreferences = sharedPreferences,
+        _tools = [
           Pencil(
             strokeWidth: sharedPreferences.containsKey(_pencilStrokeWidthKey)
                 ? sharedPreferences.getDouble(_pencilStrokeWidthKey)
@@ -26,7 +28,7 @@ class ToolboxModel extends ChangeNotifier {
         ],
         _selectedToolId = 0;
 
-  final SharedPreferences sharedPreferences;
+  final SharedPreferences _sharedPreferences;
 
   final List<Tool> _tools;
   int _selectedToolId;
@@ -46,7 +48,7 @@ class ToolboxModel extends ChangeNotifier {
         strokeWidth >= selectedTool.minStrokeWidth) {
       selectedTool.paint.strokeWidth = strokeWidth;
 
-      sharedPreferences.setDouble(
+      _sharedPreferences.setDouble(
         selectedTool is Pencil ? _pencilStrokeWidthKey : _eraserStrokeWidthKey,
         strokeWidth,
       );
@@ -62,7 +64,7 @@ class ToolboxModel extends ChangeNotifier {
     selectedTool.paint.color = color;
 
     if (selectedTool is Pencil) {
-      sharedPreferences.setInt(_pencilColorKey, color.value);
+      _sharedPreferences.setInt(_pencilColorKey, color.value);
     }
     notifyListeners();
   }
