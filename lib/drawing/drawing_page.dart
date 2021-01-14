@@ -40,27 +40,26 @@ class DrawingPage extends StatelessWidget {
               ),
             ],
             child: SafeArea(
-              child: Column(
+              child: Stack(
                 children: [
-                  DrawingActionbar(),
-                  Expanded(
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: <Widget>[
-                        Positioned.fill(
-                          child: Easel(),
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 8.0,
-                              bottom: 44, // actionbar height
-                            ),
-                            child: SizePicker(),
-                          ),
-                        ),
-                      ],
+                  Positioned.fill(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 44.0),
+                      child: Easel(),
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: 44,
+                    child: DrawingActionbar(),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: SizePicker(),
                     ),
                   ),
                 ],
