@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "177520826749",
+    "project_id": "mooltik-760af",
+    "storage_bucket": "mooltik-760af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177520826749:android:ee4b46b2fb323e2636d414",
+        "android_client_info": {
+          "package_name": "com.kakimov.mooltik"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177520826749-n8h076a21dsusirg091dq1snnjcs8ra9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9tZfQYKwJrfywl7QtdNs91rN6vuazfmg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177520826749-n8h076a21dsusirg091dq1snnjcs8ra9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
