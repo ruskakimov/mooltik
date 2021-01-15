@@ -35,6 +35,9 @@ dependencies:
   open_file: ^3.0.3
   shared_preferences: ^0.5.12+4
 
+  firebase_core: ^0.7.0
+  firebase_crashlytics: ^0.4.0+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
