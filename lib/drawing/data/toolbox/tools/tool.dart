@@ -7,5 +7,8 @@ abstract class Tool {
   final IconData icon;
   final Paint paint;
 
-  Stroke makeStroke(Offset startPoint, Color color);
+  double get maxStrokeWidth;
+  double get minStrokeWidth;
+
+  Stroke makeStroke(Offset startPoint);
 }
