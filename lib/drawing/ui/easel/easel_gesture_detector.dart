@@ -45,16 +45,8 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
     _prevPointersOnScreen = _pointersOnScreen;
     _pointersOnScreen = _pointersOnScreen + count;
 
-    // First pointer down.
-    if (_firstPointerDown) {
-      _veryQuickStroke = true;
-      Future.delayed(veryQuickStrokeMaxDuration, () {
-        _veryQuickStroke = false;
-      });
-    }
-
     // Second pointer down.
-    else if (_secondPointerDown) {
+    if (_secondPointerDown) {
       if (_veryQuickStroke) {
         widget.onStrokeCancel?.call();
       } else if (_startedStroke) {
@@ -108,6 +100,10 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
       localPosition: details.localFocalPoint,
     ));
     _startedStroke = true;
+    _veryQuickStroke = true;
+    Future.delayed(veryQuickStrokeMaxDuration, () {
+      _veryQuickStroke = false;
+    });
   }
 
   void _onSinglePointerMove(ScaleUpdateDetails details) {
