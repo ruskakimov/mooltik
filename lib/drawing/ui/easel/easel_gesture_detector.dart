@@ -58,10 +58,8 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
     else if (_secondPointerDown) {
       if (_veryQuickStroke) {
         widget.onStrokeCancel?.call();
-        print('cancel stroke');
       } else if (_startedStroke) {
         widget.onStrokeEnd?.call();
-        print('end stroke 1');
       }
       _veryQuickStroke = false;
       _startedStroke = false;
@@ -71,7 +69,6 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
     else if (_pointersOnScreen == 0) {
       if (_startedStroke) {
         widget.onStrokeEnd?.call();
-        print('end stroke 2');
       }
       // Reset state.
       _startedStroke = false;
@@ -111,7 +108,6 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
       globalPosition: details.focalPoint,
       localPosition: details.localFocalPoint,
     ));
-    print('start stroke');
   }
 
   void _onSinglePointerMove(ScaleUpdateDetails details) {
