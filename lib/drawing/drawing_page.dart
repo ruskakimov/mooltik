@@ -8,6 +8,7 @@ import 'package:mooltik/drawing/ui/size_picker.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/ui/easel/easel.dart';
+import 'package:mooltik/editing/ui/preview/frame_thumbnail.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,6 +33,7 @@ class DrawingPage extends StatelessWidget {
       ],
       builder: (context, child) {
         final timeline = context.watch<TimelineModel>();
+        final onion = context.watch<OnionModel>();
 
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.background,
@@ -74,6 +76,30 @@ class DrawingPage extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 8.0),
                       child: SizePicker(),
                     ),
+                  ),
+                  Positioned(
+                    bottom: 24,
+                    left: 8,
+                    width: 60,
+                    height: 60,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Color(0xC4C4C4).withOpacity(0.5),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: FrameThumbnail(frame: onion.frameBefore),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 24,
+                    right: 8,
+                    width: 60,
+                    height: 60,
+                    child: FrameThumbnail(frame: onion.frameAfter),
                   ),
                 ],
               ),
