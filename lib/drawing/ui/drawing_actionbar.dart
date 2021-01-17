@@ -50,17 +50,6 @@ class DrawingActionbar extends StatelessWidget {
                 toolbox.selectTool(i);
               },
             ),
-          Spacer(),
-          StepBackwardButton(),
-          SizedBox(
-            width: 32,
-            child: Center(
-              child: Text(
-                '${context.watch<TimelineModel>().selectedFrameIndex + 1}',
-              ),
-            ),
-          ),
-          StepForwardButton(),
         ],
       ),
     );
