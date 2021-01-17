@@ -78,16 +78,18 @@ class DrawingPage extends StatelessWidget {
                       child: SizePicker(),
                     ),
                   ),
-                  Positioned(
-                    bottom: 24,
-                    left: 8,
-                    child: FrameButton(frame: onion.frameBefore),
-                  ),
-                  Positioned(
-                    bottom: 24,
-                    right: 8,
-                    child: FrameButton(frame: onion.frameAfter),
-                  ),
+                  if (timeline.frameBeforeSelected != null)
+                    Positioned(
+                      bottom: 24,
+                      left: 8,
+                      child: FrameButton(frame: timeline.frameBeforeSelected),
+                    ),
+                  if (timeline.frameAfterSelected != null)
+                    Positioned(
+                      bottom: 24,
+                      right: 8,
+                      child: FrameButton(frame: timeline.frameAfterSelected),
+                    ),
                 ],
               ),
             ),
