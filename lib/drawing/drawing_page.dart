@@ -4,6 +4,7 @@ import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/drawing/ui/drawing_actionbar.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
+import 'package:mooltik/drawing/ui/frame_button.dart';
 import 'package:mooltik/drawing/ui/size_picker.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
@@ -80,26 +81,12 @@ class DrawingPage extends StatelessWidget {
                   Positioned(
                     bottom: 24,
                     left: 8,
-                    width: 60,
-                    height: 60,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Color(0xC4C4C4).withOpacity(0.5),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: FrameThumbnail(frame: onion.frameBefore),
-                      ),
-                    ),
+                    child: FrameButton(frame: onion.frameBefore),
                   ),
                   Positioned(
                     bottom: 24,
                     right: 8,
-                    width: 60,
-                    height: 60,
-                    child: FrameThumbnail(frame: onion.frameAfter),
+                    child: FrameButton(frame: onion.frameAfter),
                   ),
                 ],
               ),
