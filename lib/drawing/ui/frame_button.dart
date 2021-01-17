@@ -16,6 +16,7 @@ class FrameButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      highlightColor: Colors.white70,
       borderRadius: BorderRadius.circular(8),
       child: Container(
         width: 60,
