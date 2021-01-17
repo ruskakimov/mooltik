@@ -15,8 +15,6 @@ class EaselGestureDetector extends StatefulWidget {
     this.onStrokeCancel,
     this.onScaleStart,
     this.onScaleUpdate,
-    this.onTwoFingerTap,
-    this.onThreeFingerTap,
   }) : super(key: key);
 
   final Widget child;
@@ -26,8 +24,6 @@ class EaselGestureDetector extends StatefulWidget {
   final VoidCallback onStrokeCancel;
   final GestureScaleStartCallback onScaleStart;
   final GestureScaleUpdateCallback onScaleUpdate;
-  final VoidCallback onTwoFingerTap;
-  final VoidCallback onThreeFingerTap;
 
   @override
   _EaselGestureDetectorState createState() => _EaselGestureDetectorState();
@@ -39,15 +35,11 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
   Offset _lastContactPoint;
   bool _startedStroke = false;
   bool _veryQuickStroke = false;
-  bool _twoTapPossible = false;
-  bool _threeTapPossible = false;
 
   bool get _firstPointerDown =>
       _prevPointersOnScreen == 0 && _pointersOnScreen == 1;
   bool get _secondPointerDown =>
       _prevPointersOnScreen == 1 && _pointersOnScreen == 2;
-  bool get _thirdPointerDown =>
-      _prevPointersOnScreen == 2 && _pointersOnScreen == 3;
 
   void changePointerOnScreenBy(int count) {
     _prevPointersOnScreen = _pointersOnScreen;
@@ -73,13 +65,6 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
       }
       _veryQuickStroke = false;
       _startedStroke = false;
-      _twoTapPossible = true;
-    }
-
-    // Third pointer down.
-    else if (_thirdPointerDown) {
-      _twoTapPossible = false;
-      _threeTapPossible = true;
     }
 
     // Last pointer up.
@@ -87,17 +72,9 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
       if (_startedStroke) {
         widget.onStrokeEnd?.call();
         print('end stroke 2');
-      } else if (_twoTapPossible) {
-        widget.onTwoFingerTap?.call();
-        print('two finger tap');
-      } else if (_threeTapPossible) {
-        widget.onThreeFingerTap?.call();
-        print('three finger tap');
       }
       // Reset state.
       _startedStroke = false;
-      _twoTapPossible = false;
-      _threeTapPossible = false;
     }
   }
 
@@ -118,14 +95,6 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
           }
         },
         onScaleUpdate: (ScaleUpdateDetails details) {
-          // Cancel two and three finger tap on stroke or scale.
-          if (details.scale != 1.0 ||
-              (details.focalPoint - _lastContactPoint).distanceSquared > 0) {
-            _twoTapPossible = false;
-            _threeTapPossible = false;
-            print('moved');
-          }
-
           if (_firstPointerDown) {
             _onSinglePointerMove(details);
           } else if (_secondPointerDown) {

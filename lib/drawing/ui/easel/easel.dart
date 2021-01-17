@@ -31,8 +31,6 @@ class _EaselState extends State<Easel> {
         onStrokeCancel: easel.onStrokeCancel,
         onScaleStart: easel.onScaleStart,
         onScaleUpdate: easel.onScaleUpdate,
-        onTwoFingerTap: easel.undo,
-        onThreeFingerTap: easel.redo,
         child: Stack(
           fit: StackFit.expand,
           children: [
