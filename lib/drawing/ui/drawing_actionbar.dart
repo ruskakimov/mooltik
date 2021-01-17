@@ -32,6 +32,7 @@ class DrawingActionbar extends StatelessWidget {
               context.read<OnionModel>().toggle();
             },
           ),
+          Spacer(),
           AppIconButton(
             icon: FontAwesomeIcons.undo,
             onTap: easel.undoAvailable ? easel.undo : null,
