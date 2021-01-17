@@ -89,10 +89,10 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
         print('end stroke 2');
       } else if (_twoTapPossible) {
         widget.onTwoFingerTap?.call();
-        print('undo');
+        print('two finger tap');
       } else if (_threeTapPossible) {
         widget.onThreeFingerTap?.call();
-        print('redo');
+        print('three finger tap');
       }
       // Reset state.
       _startedStroke = false;
