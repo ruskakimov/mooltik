@@ -48,7 +48,6 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
     // First pointer down.
     if (_firstPointerDown) {
       _veryQuickStroke = true;
-      _startedStroke = true;
       Future.delayed(veryQuickStrokeMaxDuration, () {
         _veryQuickStroke = false;
       });
@@ -108,6 +107,7 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
       globalPosition: details.focalPoint,
       localPosition: details.localFocalPoint,
     ));
+    _startedStroke = true;
   }
 
   void _onSinglePointerMove(ScaleUpdateDetails details) {
