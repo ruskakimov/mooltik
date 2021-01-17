@@ -33,15 +33,6 @@ class DrawingActionbar extends StatelessWidget {
             },
           ),
           Spacer(),
-          AppIconButton(
-            icon: FontAwesomeIcons.undo,
-            onTap: easel.undoAvailable ? easel.undo : null,
-          ),
-          AppIconButton(
-            icon: FontAwesomeIcons.redo,
-            onTap: easel.redoAvailable ? easel.redo : null,
-          ),
-          Spacer(),
           for (var i = 0; i < toolbox.tools.length; i++)
             AppIconButton(
               icon: toolbox.tools[i].icon,
@@ -50,6 +41,15 @@ class DrawingActionbar extends StatelessWidget {
                 toolbox.selectTool(i);
               },
             ),
+          Spacer(),
+          AppIconButton(
+            icon: FontAwesomeIcons.undo,
+            onTap: easel.undoAvailable ? easel.undo : null,
+          ),
+          AppIconButton(
+            icon: FontAwesomeIcons.redo,
+            onTap: easel.redoAvailable ? easel.redo : null,
+          ),
         ],
       ),
     );
