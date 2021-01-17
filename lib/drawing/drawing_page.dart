@@ -80,7 +80,7 @@ class DrawingPage extends StatelessWidget {
                   ),
                   if (timeline.stepBackwardAvailable)
                     Positioned(
-                      bottom: 24,
+                      bottom: 16,
                       left: 8,
                       child: FrameButton(
                         frame: timeline.frameBeforeSelected,
@@ -89,7 +89,7 @@ class DrawingPage extends StatelessWidget {
                     ),
                   if (timeline.stepForwardAvailable)
                     Positioned(
-                      bottom: 24,
+                      bottom: 16,
                       right: 8,
                       child: FrameButton(
                         frame: timeline.frameAfterSelected,
