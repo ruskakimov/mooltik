@@ -34,7 +34,6 @@ class DrawingPage extends StatelessWidget {
       ],
       builder: (context, child) {
         final timeline = context.watch<TimelineModel>();
-        final onion = context.watch<OnionModel>();
 
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.background,
