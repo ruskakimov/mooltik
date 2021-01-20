@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_portal/flutter_portal.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/surface.dart';
@@ -34,12 +35,22 @@ class DrawingActionbar extends StatelessWidget {
           ),
           Spacer(),
           for (var i = 0; i < toolbox.tools.length; i++)
-            AppIconButton(
-              icon: toolbox.tools[i].icon,
-              selected: toolbox.tools[i] == toolbox.selectedTool,
-              onTap: () {
-                toolbox.selectTool(i);
-              },
+            PortalEntry(
+              visible: toolbox.tools[i] == toolbox.selectedTool,
+              portal: Container(
+                width: 150,
+                height: 50,
+                color: Colors.red,
+              ),
+              portalAnchor: Alignment.topCenter,
+              child: AppIconButton(
+                icon: toolbox.tools[i].icon,
+                selected: toolbox.tools[i] == toolbox.selectedTool,
+                onTap: () {
+                  toolbox.selectTool(i);
+                },
+              ),
+              childAnchor: Alignment.bottomCenter.add(Alignment(0, -0.2)),
             ),
           Spacer(),
           AppIconButton(
