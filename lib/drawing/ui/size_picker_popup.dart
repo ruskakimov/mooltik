@@ -19,7 +19,7 @@ class SizePickerPopup extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _SizeOptionButton(innerCircleWidth: 10),
-            _SizeOptionButton(innerCircleWidth: 20),
+            _SizeOptionButton(innerCircleWidth: 20, selected: true),
             _SizeOptionButton(innerCircleWidth: 30),
           ],
         ),
@@ -32,15 +32,23 @@ class _SizeOptionButton extends StatelessWidget {
   const _SizeOptionButton({
     Key key,
     this.innerCircleWidth = 10,
+    this.selected = false,
   }) : super(key: key);
 
   final double innerCircleWidth;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 44,
       decoration: BoxDecoration(
+        border: selected
+            ? Border.all(
+                color: Theme.of(context).colorScheme.primary,
+                width: 2,
+              )
+            : null,
         color: Colors.black.withOpacity(0.25),
         shape: BoxShape.circle,
       ),
