@@ -18,9 +18,9 @@ class SizePickerPopup extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _SizeOptionButton(innerCircleWidth: 10),
-            _SizeOptionButton(innerCircleWidth: 20, selected: true),
-            _SizeOptionButton(innerCircleWidth: 30),
+            _SizeOptionButton(innerCircleWidth: 6),
+            _SizeOptionButton(innerCircleWidth: 12, selected: true),
+            _SizeOptionButton(innerCircleWidth: 28),
           ],
         ),
       ),
@@ -41,12 +41,12 @@ class _SizeOptionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 44,
+      width: 40,
       decoration: BoxDecoration(
         border: selected
             ? Border.all(
                 color: Theme.of(context).colorScheme.primary,
-                width: 2,
+                width: 3,
               )
             : null,
         color: Colors.black.withOpacity(0.25),
