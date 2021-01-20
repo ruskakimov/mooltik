@@ -13,16 +13,31 @@ class SizePickerPopup extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       elevation: 10,
       child: SizedBox(
-        width: 150,
-        height: 52,
+        width: 180,
+        height: 60,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            // Icon(Icons.fiber_manual_record),
-            // Icon(Icons.fiber_manual_record),
-            // Icon(Icons.fiber_manual_record),
+            _SizeOptionButton(),
+            _SizeOptionButton(),
+            _SizeOptionButton(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _SizeOptionButton extends StatelessWidget {
+  const _SizeOptionButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 44,
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.25),
+        shape: BoxShape.circle,
       ),
     );
   }
