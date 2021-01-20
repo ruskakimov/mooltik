@@ -34,43 +34,48 @@ class SizePicker extends StatelessWidget {
         toolbox.changeToolStrokeWidth(
             toolbox.selectedToolStrokeWidth + strokeWidthDelta);
       },
-      onTap: () {
-        if (toolbox.selectedTool is Pencil) {
-          showDialog<void>(
-            context: context,
-            builder: (BuildContext context) => ChangeNotifierProvider.value(
-              value: toolbox,
-              child: ColorPickerDialog(),
+      child: InkResponse(
+        radius: pickerRadius / 2,
+        highlightColor: Colors.white70,
+        splashColor: Colors.transparent,
+        onTap: () {
+          if (toolbox.selectedTool is Pencil) {
+            showDialog<void>(
+              context: context,
+              builder: (BuildContext context) => ChangeNotifierProvider.value(
+                value: toolbox,
+                child: ColorPickerDialog(),
+              ),
+            );
+          }
+        },
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            _Circle(
+              radius: pickerRadius,
+              color: Color(0xC4C4C4).withOpacity(0.5),
             ),
-          );
-        }
-      },
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          _Circle(
-            radius: pickerRadius,
-            color: Color(0xC4C4C4).withOpacity(0.5),
-          ),
-          _Circle(
-            radius: _calcInnerCircleRadius(
-              toolbox.selectedToolStrokeWidth,
-              toolbox.selectedTool.minStrokeWidth,
-              toolbox.selectedTool.maxStrokeWidth,
-            ),
-            color: toolbox.selectedToolColor,
-            border: Border.all(color: Colors.white),
-            child: ClipOval(
-              child: FittedBox(
-                fit: BoxFit.none,
-                child: CustomPaint(
-                  size: Size.square(pickerRadius),
-                  painter: _TileBackgroundPainter(),
+            _Circle(
+              radius: _calcInnerCircleRadius(
+                toolbox.selectedToolStrokeWidth,
+                toolbox.selectedTool.minStrokeWidth,
+                toolbox.selectedTool.maxStrokeWidth,
+              ),
+              color: toolbox.selectedToolColor,
+              border: Border.all(color: Colors.white),
+              child: ClipOval(
+                child: FittedBox(
+                  fit: BoxFit.none,
+                  child: CustomPaint(
+                    size: Size.square(pickerRadius),
+                    painter: _TileBackgroundPainter(),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

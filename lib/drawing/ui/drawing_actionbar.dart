@@ -33,15 +33,6 @@ class DrawingActionbar extends StatelessWidget {
             },
           ),
           Spacer(),
-          AppIconButton(
-            icon: FontAwesomeIcons.undo,
-            onTap: easel.undoAvailable ? easel.undo : null,
-          ),
-          AppIconButton(
-            icon: FontAwesomeIcons.redo,
-            onTap: easel.redoAvailable ? easel.redo : null,
-          ),
-          Spacer(),
           for (var i = 0; i < toolbox.tools.length; i++)
             AppIconButton(
               icon: toolbox.tools[i].icon,
@@ -51,16 +42,14 @@ class DrawingActionbar extends StatelessWidget {
               },
             ),
           Spacer(),
-          StepBackwardButton(),
-          SizedBox(
-            width: 32,
-            child: Center(
-              child: Text(
-                '${context.watch<TimelineModel>().selectedFrameIndex + 1}',
-              ),
-            ),
+          AppIconButton(
+            icon: FontAwesomeIcons.undo,
+            onTap: easel.undoAvailable ? easel.undo : null,
           ),
-          StepForwardButton(),
+          AppIconButton(
+            icon: FontAwesomeIcons.redo,
+            onTap: easel.redoAvailable ? easel.redo : null,
+          ),
         ],
       ),
     );
