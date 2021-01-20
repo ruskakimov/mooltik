@@ -5,9 +5,7 @@ import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/surface.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
-import 'package:mooltik/editing/ui/timeline/actionbar/step_backward_button.dart';
-import 'package:mooltik/editing/ui/timeline/actionbar/step_forward_button.dart';
-import 'package:mooltik/editing/data/timeline_model.dart';
+import 'package:mooltik/drawing/ui/size_picker_popup.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 
@@ -37,22 +35,7 @@ class DrawingActionbar extends StatelessWidget {
           for (var i = 0; i < toolbox.tools.length; i++)
             PortalEntry(
               visible: toolbox.tools[i] == toolbox.selectedTool,
-              portal: Container(
-                width: 150,
-                height: 52,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondary,
-                  borderRadius: BorderRadiusDirectional.circular(8),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Icon(Icons.fiber_manual_record),
-                    Icon(Icons.fiber_manual_record),
-                    Icon(Icons.fiber_manual_record),
-                  ],
-                ),
-              ),
+              portal: SizePickerPopup(),
               portalAnchor: Alignment.topCenter,
               child: AppIconButton(
                 icon: toolbox.tools[i].icon,
