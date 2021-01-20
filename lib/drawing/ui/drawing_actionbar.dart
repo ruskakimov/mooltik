@@ -39,8 +39,19 @@ class DrawingActionbar extends StatelessWidget {
               visible: toolbox.tools[i] == toolbox.selectedTool,
               portal: Container(
                 width: 150,
-                height: 50,
-                color: Colors.red,
+                height: 52,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondary,
+                  borderRadius: BorderRadiusDirectional.circular(8),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Icon(Icons.fiber_manual_record),
+                    Icon(Icons.fiber_manual_record),
+                    Icon(Icons.fiber_manual_record),
+                  ],
+                ),
               ),
               portalAnchor: Alignment.topCenter,
               child: AppIconButton(
@@ -50,7 +61,7 @@ class DrawingActionbar extends StatelessWidget {
                   toolbox.selectTool(i);
                 },
               ),
-              childAnchor: Alignment.bottomCenter.add(Alignment(0, -0.2)),
+              childAnchor: Alignment.bottomCenter.add(Alignment(0, 0.2)),
             ),
           Spacer(),
           AppIconButton(
