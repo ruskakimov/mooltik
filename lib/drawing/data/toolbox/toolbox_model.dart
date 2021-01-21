@@ -68,4 +68,11 @@ class ToolboxModel extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  /*
+  Size picker state:
+  */
+
+  bool get sizePickerOpen => _sizePickerOpen;
+  bool _sizePickerOpen = true;
 }

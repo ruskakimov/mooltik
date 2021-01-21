@@ -34,7 +34,8 @@ class DrawingActionbar extends StatelessWidget {
           Spacer(),
           for (var i = 0; i < toolbox.tools.length; i++)
             PortalEntry(
-              visible: toolbox.tools[i] == toolbox.selectedTool,
+              visible: toolbox.sizePickerOpen &&
+                  toolbox.tools[i] == toolbox.selectedTool,
               portal: SizePickerPopup(),
               portalAnchor: Alignment.topCenter,
               child: AppIconButton(
