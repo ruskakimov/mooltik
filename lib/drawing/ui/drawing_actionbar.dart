@@ -42,7 +42,11 @@ class DrawingActionbar extends StatelessWidget {
                 icon: toolbox.tools[i].icon,
                 selected: toolbox.tools[i] == toolbox.selectedTool,
                 onTap: () {
-                  toolbox.selectTool(i);
+                  if (toolbox.tools[i] == toolbox.selectedTool) {
+                    toolbox.openSizePicker();
+                  } else {
+                    toolbox.selectTool(i);
+                  }
                 },
               ),
               childAnchor: Alignment.bottomCenter.add(Alignment(0, 0.2)),
