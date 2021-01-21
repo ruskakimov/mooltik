@@ -19,9 +19,10 @@ class ToolButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
+    final showSizePickerOfThisTool = toolbox.sizePickerOpen && selected;
 
     return PortalEntry(
-      visible: toolbox.sizePickerOpen && selected,
+      visible: showSizePickerOfThisTool,
       portal: Listener(
         behavior: HitTestBehavior.opaque,
         onPointerUp: (_) {
@@ -29,7 +30,7 @@ class ToolButton extends StatelessWidget {
         },
       ),
       child: PortalEntry(
-        visible: toolbox.sizePickerOpen && selected,
+        visible: showSizePickerOfThisTool,
         portal: SizePickerPopup(),
         portalAnchor: Alignment.topCenter,
         child: AppIconButton(
