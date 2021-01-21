@@ -36,20 +36,30 @@ class DrawingActionbar extends StatelessWidget {
             PortalEntry(
               visible: toolbox.sizePickerOpen &&
                   toolbox.tools[i] == toolbox.selectedTool,
-              portal: SizePickerPopup(),
-              portalAnchor: Alignment.topCenter,
-              child: AppIconButton(
-                icon: toolbox.tools[i].icon,
-                selected: toolbox.tools[i] == toolbox.selectedTool,
-                onTap: () {
-                  if (toolbox.tools[i] == toolbox.selectedTool) {
-                    toolbox.openSizePicker();
-                  } else {
-                    toolbox.selectTool(i);
-                  }
+              portal: Listener(
+                behavior: HitTestBehavior.opaque,
+                onPointerUp: (_) {
+                  toolbox.closeSizePicker();
                 },
               ),
-              childAnchor: Alignment.bottomCenter.add(Alignment(0, 0.2)),
+              child: PortalEntry(
+                visible: toolbox.sizePickerOpen &&
+                    toolbox.tools[i] == toolbox.selectedTool,
+                portal: SizePickerPopup(),
+                portalAnchor: Alignment.topCenter,
+                child: AppIconButton(
+                  icon: toolbox.tools[i].icon,
+                  selected: toolbox.tools[i] == toolbox.selectedTool,
+                  onTap: () {
+                    if (toolbox.tools[i] == toolbox.selectedTool) {
+                      toolbox.openSizePicker();
+                    } else {
+                      toolbox.selectTool(i);
+                    }
+                  },
+                ),
+                childAnchor: Alignment.bottomCenter.add(Alignment(0, 0.2)),
+              ),
             ),
           Spacer(),
           AppIconButton(
