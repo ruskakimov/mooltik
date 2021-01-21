@@ -36,8 +36,9 @@ class ToolboxModel extends ChangeNotifier {
   List<Tool> get tools => _tools;
   Tool get selectedTool => _tools[_selectedToolId];
 
-  void selectTool(int toolId) {
-    _selectedToolId = toolId;
+  void selectTool(Tool tool) {
+    assert(_tools.contains(tool));
+    _selectedToolId = _tools.indexOf(tool);
     notifyListeners();
   }
 

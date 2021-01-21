@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_portal/flutter_portal.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/surface.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
-import 'package:mooltik/drawing/ui/size_picker_popup.dart';
+import 'package:mooltik/drawing/ui/tool_button.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 
@@ -32,34 +31,10 @@ class DrawingActionbar extends StatelessWidget {
             },
           ),
           Spacer(),
-          for (var i = 0; i < toolbox.tools.length; i++)
-            PortalEntry(
-              visible: toolbox.sizePickerOpen &&
-                  toolbox.tools[i] == toolbox.selectedTool,
-              portal: Listener(
-                behavior: HitTestBehavior.opaque,
-                onPointerUp: (_) {
-                  toolbox.closeSizePicker();
-                },
-              ),
-              child: PortalEntry(
-                visible: toolbox.sizePickerOpen &&
-                    toolbox.tools[i] == toolbox.selectedTool,
-                portal: SizePickerPopup(),
-                portalAnchor: Alignment.topCenter,
-                child: AppIconButton(
-                  icon: toolbox.tools[i].icon,
-                  selected: toolbox.tools[i] == toolbox.selectedTool,
-                  onTap: () {
-                    if (toolbox.tools[i] == toolbox.selectedTool) {
-                      toolbox.openSizePicker();
-                    } else {
-                      toolbox.selectTool(i);
-                    }
-                  },
-                ),
-                childAnchor: Alignment.bottomCenter.add(Alignment(0, 0.2)),
-              ),
+          for (final tool in toolbox.tools)
+            ToolButton(
+              tool: tool,
+              selected: tool == toolbox.selectedTool,
             ),
           Spacer(),
           AppIconButton(
