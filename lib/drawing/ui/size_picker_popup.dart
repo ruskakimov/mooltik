@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 
+const double _minInnerCircleWidth = 4;
+const double _maxInnerCircleWidth = 36;
+
 class SizePickerPopup extends StatelessWidget {
   const SizePickerPopup({
     Key key,
     @required this.selectedValue,
     @required this.valueOptions,
+    @required this.minValue,
+    @required this.maxValue,
     this.onSelected,
   }) : super(key: key);
 
   final double selectedValue;
   final List<double> valueOptions;
+  final double minValue;
+  final double maxValue;
   final void Function(double) onSelected;
 
   @override
@@ -27,7 +34,7 @@ class SizePickerPopup extends StatelessWidget {
           children: [
             for (final optionValue in valueOptions)
               _SizeOptionButton(
-                innerCircleWidth: optionValue,
+                innerCircleWidth: _calculateInnerCircleWidth(optionValue),
                 selected: optionValue == selectedValue,
                 onTap: () {
                   onSelected?.call(optionValue);
@@ -37,6 +44,15 @@ class SizePickerPopup extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// [minValue] -> [_minInnerCircleWidth]
+  /// [maxValue] -> [_maxInnerCircleWidth]
+  double _calculateInnerCircleWidth(double value) {
+    final radiusRange = _maxInnerCircleWidth - _minInnerCircleWidth;
+    final valueRange = maxValue - minValue;
+    final sliderValue = (value - minValue) / valueRange;
+    return _minInnerCircleWidth + sliderValue * radiusRange;
   }
 }
 
