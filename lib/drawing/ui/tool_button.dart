@@ -35,7 +35,10 @@ class ToolButton extends StatelessWidget {
           selectedValue: toolbox.selectedToolStrokeWidth,
           // TODO: Pass size options from tool
           valueOptions: [10, 20, 50],
-          onSelected: (double newValue) {},
+          onSelected: (double newValue) {
+            toolbox.changeToolStrokeWidth(newValue);
+            toolbox.closeSizePicker();
+          },
         ),
         portalAnchor: Alignment.topCenter,
         child: AppIconButton(

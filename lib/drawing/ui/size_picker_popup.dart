@@ -29,6 +29,9 @@ class SizePickerPopup extends StatelessWidget {
               _SizeOptionButton(
                 innerCircleWidth: optionValue,
                 selected: optionValue == selectedValue,
+                onTap: () {
+                  onSelected?.call(optionValue);
+                },
               ),
           ],
         ),
@@ -42,31 +45,37 @@ class _SizeOptionButton extends StatelessWidget {
     Key key,
     this.innerCircleWidth = 10,
     this.selected = false,
+    this.onTap,
   }) : super(key: key);
 
   final double innerCircleWidth;
   final bool selected;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 40,
-      decoration: BoxDecoration(
-        border: selected
-            ? Border.all(
-                color: Theme.of(context).colorScheme.primary,
-                width: 3,
-              )
-            : null,
-        color: Colors.black.withOpacity(0.25),
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Container(
-          width: innerCircleWidth,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
+    return InkResponse(
+      radius: 23,
+      onTap: onTap,
+      child: Container(
+        width: 40,
+        decoration: BoxDecoration(
+          border: selected
+              ? Border.all(
+                  color: Theme.of(context).colorScheme.primary,
+                  width: 3,
+                )
+              : null,
+          color: Colors.black.withOpacity(0.25),
+          shape: BoxShape.circle,
+        ),
+        child: Center(
+          child: Container(
+            width: innerCircleWidth,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
           ),
         ),
       ),
