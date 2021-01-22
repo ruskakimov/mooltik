@@ -75,7 +75,7 @@ class ToolboxModel extends ChangeNotifier {
   */
 
   bool get sizePickerOpen => _sizePickerOpen;
-  bool _sizePickerOpen = true;
+  bool _sizePickerOpen = false;
 
   void openSizePicker() {
     _sizePickerOpen = true;
