@@ -3,8 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'tool.dart';
 
-class Pencil extends Tool {
-  Pencil({
+class Marker extends Tool {
+  Marker({
     double strokeWidth,
     Color color = Colors.black,
   })  : assert(strokeWidth != null),

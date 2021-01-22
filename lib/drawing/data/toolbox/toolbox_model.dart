@@ -12,7 +12,7 @@ class ToolboxModel extends ChangeNotifier {
       : assert(sharedPreferences != null),
         _sharedPreferences = sharedPreferences,
         _tools = [
-          Pencil(
+          Marker(
             strokeWidth: sharedPreferences.containsKey(_pencilStrokeWidthKey)
                 ? sharedPreferences.getDouble(_pencilStrokeWidthKey)
                 : 10,
@@ -50,7 +50,7 @@ class ToolboxModel extends ChangeNotifier {
       selectedTool.paint.strokeWidth = strokeWidth;
 
       _sharedPreferences.setDouble(
-        selectedTool is Pencil ? _pencilStrokeWidthKey : _eraserStrokeWidthKey,
+        selectedTool is Marker ? _pencilStrokeWidthKey : _eraserStrokeWidthKey,
         strokeWidth,
       );
       notifyListeners();
@@ -64,7 +64,7 @@ class ToolboxModel extends ChangeNotifier {
 
     selectedTool.paint.color = color;
 
-    if (selectedTool is Pencil) {
+    if (selectedTool is Marker) {
       _sharedPreferences.setInt(_pencilColorKey, color.value);
     }
     notifyListeners();
