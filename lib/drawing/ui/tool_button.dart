@@ -24,8 +24,8 @@ class ToolButton extends StatelessWidget {
     return PortalEntry(
       visible: showSizePickerOfThisTool,
       portal: Listener(
-        behavior: HitTestBehavior.opaque,
-        onPointerUp: (_) {
+        behavior: HitTestBehavior.translucent,
+        onPointerDown: (_) {
           toolbox.closeSizePicker();
         },
       ),
@@ -42,16 +42,19 @@ class ToolButton extends StatelessWidget {
           },
         ),
         portalAnchor: Alignment.topCenter,
-        child: AppIconButton(
-          icon: tool.icon,
-          selected: selected,
-          onTap: () {
-            if (selected) {
-              toolbox.openSizePicker();
-            } else {
-              toolbox.selectTool(tool);
-            }
-          },
+        child: IgnorePointer(
+          ignoring: showSizePickerOfThisTool,
+          child: AppIconButton(
+            icon: tool.icon,
+            selected: selected,
+            onTap: () {
+              if (selected) {
+                toolbox.openSizePicker();
+              } else {
+                toolbox.selectTool(tool);
+              }
+            },
+          ),
         ),
         childAnchor: Alignment.bottomCenter.add(Alignment(0, 0.2)),
       ),
