@@ -33,60 +33,64 @@ class DrawingPage extends StatelessWidget {
       builder: (context, child) {
         final timeline = context.watch<TimelineModel>();
 
-        return Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.background,
-          body: MultiProvider(
-            providers: [
-              ChangeNotifierProvider<FrameModel>.value(
-                value: timeline.selectedFrame,
-              ),
-              ChangeNotifierProxyProvider2<TimelineModel, ToolboxModel,
-                  EaselModel>(
-                create: (context) => EaselModel(
-                  frame: timeline.selectedFrame,
-                  frameSize: context.read<Project>().frameSize,
-                  selectedTool: context.read<ToolboxModel>().selectedTool,
+        return WillPopScope(
+          // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
+          onWillPop: () async => true,
+          child: Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            body: MultiProvider(
+              providers: [
+                ChangeNotifierProvider<FrameModel>.value(
+                  value: timeline.selectedFrame,
                 ),
-                update: (_, reel, toolbox, easel) => easel
-                  ..updateFrame(reel.selectedFrame)
-                  ..updateSelectedTool(toolbox.selectedTool),
-              ),
-            ],
-            child: SafeArea(
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 44.0),
-                      child: Easel(),
-                    ),
+                ChangeNotifierProxyProvider2<TimelineModel, ToolboxModel,
+                    EaselModel>(
+                  create: (context) => EaselModel(
+                    frame: timeline.selectedFrame,
+                    frameSize: context.read<Project>().frameSize,
+                    selectedTool: context.read<ToolboxModel>().selectedTool,
                   ),
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: 44,
-                    child: DrawingActionbar(),
-                  ),
-                  if (timeline.stepBackwardAvailable)
-                    Positioned(
-                      bottom: 16,
-                      left: 8,
-                      child: FrameButton(
-                        frame: timeline.frameBeforeSelected,
-                        onTap: timeline.stepBackward,
+                  update: (_, reel, toolbox, easel) => easel
+                    ..updateFrame(reel.selectedFrame)
+                    ..updateSelectedTool(toolbox.selectedTool),
+                ),
+              ],
+              child: SafeArea(
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 44.0),
+                        child: Easel(),
                       ),
                     ),
-                  if (timeline.stepForwardAvailable)
                     Positioned(
-                      bottom: 16,
-                      right: 8,
-                      child: FrameButton(
-                        frame: timeline.frameAfterSelected,
-                        onTap: timeline.stepForward,
-                      ),
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: 44,
+                      child: DrawingActionbar(),
                     ),
-                ],
+                    if (timeline.stepBackwardAvailable)
+                      Positioned(
+                        bottom: 16,
+                        left: 8,
+                        child: FrameButton(
+                          frame: timeline.frameBeforeSelected,
+                          onTap: timeline.stepBackward,
+                        ),
+                      ),
+                    if (timeline.stepForwardAvailable)
+                      Positioned(
+                        bottom: 16,
+                        right: 8,
+                        child: FrameButton(
+                          frame: timeline.frameAfterSelected,
+                          onTap: timeline.stepForward,
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),

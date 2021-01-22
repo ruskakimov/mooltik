@@ -22,27 +22,31 @@ class _EditingPageState extends State<EditingPage>
         frames: context.read<Project>().frames,
         vsync: this,
       ),
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        body: SafeArea(
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    EditingActionbar(),
-                    Spacer(),
-                    Preview(),
-                    Spacer(),
-                    SizedBox(width: 52), // to center preview
-                  ],
+      child: WillPopScope(
+        // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
+        onWillPop: () async => true,
+        child: Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.background,
+          body: SafeArea(
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      EditingActionbar(),
+                      Spacer(),
+                      Preview(),
+                      Spacer(),
+                      SizedBox(width: 52), // to center preview
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: TimelinePanel(),
-              ),
-            ],
+                Expanded(
+                  child: TimelinePanel(),
+                ),
+              ],
+            ),
           ),
         ),
       ),
