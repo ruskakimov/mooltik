@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 const double _minInnerCircleWidth = 4;
 const double _maxInnerCircleWidth = 34;
 
-const double _triangleWidth = 40;
-const double _triangleHeight = 20;
+const double _triangleWidth = 24;
+const double _triangleHeight = 12;
 
 class SizePickerPopup extends StatelessWidget {
   const SizePickerPopup({
@@ -71,21 +71,6 @@ class SizePickerPopup extends StatelessWidget {
   }
 }
 
-class _Triangle extends StatelessWidget {
-  const _Triangle({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: _triangleWidth,
-      height: _triangleHeight,
-      color: Theme.of(context).colorScheme.secondary,
-    );
-  }
-}
-
 class _SizeOptionButton extends StatelessWidget {
   const _SizeOptionButton({
     Key key,
@@ -127,4 +112,37 @@ class _SizeOptionButton extends StatelessWidget {
       ),
     );
   }
+}
+
+class _Triangle extends StatelessWidget {
+  const _Triangle({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipPath(
+      child: Container(
+        width: _triangleWidth,
+        height: _triangleHeight,
+        color: Theme.of(context).colorScheme.secondary,
+      ),
+      clipper: _TriangleClipper(),
+    );
+  }
+}
+
+class _TriangleClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    return Path()
+      ..moveTo(size.width / 2, 0)
+      ..lineTo(size.width, size.height)
+      ..lineTo(0, size.height)
+      ..close();
+  }
+
+  @override
+  // TODO: Return false
+  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
 }
