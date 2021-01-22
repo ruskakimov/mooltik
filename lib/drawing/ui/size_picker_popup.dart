@@ -152,6 +152,5 @@ class _TriangleClipper extends CustomClipper<Path> {
   }
 
   @override
-  // TODO: Return false
-  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
