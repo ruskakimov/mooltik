@@ -26,8 +26,11 @@ class Pencil extends Tool {
   }
 
   @override
-  double get maxStrokeWidth => 200;
+  double get maxStrokeWidth => 50;
 
   @override
-  double get minStrokeWidth => 5;
+  double get minStrokeWidth => 4;
+
+  @override
+  List<double> get strokeWidthOptions => [4, 8, 16, 24];
 }

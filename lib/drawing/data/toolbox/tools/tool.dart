@@ -10,5 +10,7 @@ abstract class Tool {
   double get maxStrokeWidth;
   double get minStrokeWidth;
 
+  List<double> get strokeWidthOptions;
+
   Stroke makeStroke(Offset startPoint);
 }
