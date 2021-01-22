@@ -10,7 +10,7 @@ class Pencil extends Tool {
   })  : assert(strokeWidth != null),
         assert(color != null),
         super(
-          FontAwesomeIcons.paintBrush,
+          FontAwesomeIcons.marker,
           Paint()
             ..strokeWidth = strokeWidth
             ..color = color
