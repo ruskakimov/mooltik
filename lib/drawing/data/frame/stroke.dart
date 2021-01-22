@@ -16,13 +16,9 @@ class Stroke {
   Offset get lastPoint => _lastPoint;
   Offset _lastPoint;
 
-  bool get extended => _extended;
-  bool _extended = false;
-
   double get width => paint.strokeWidth;
 
   void extend(Offset point) {
-    _extended = true;
     if (_lastPoint == point) return;
     final mid = _midPoint(_lastPoint, point);
     _path.quadraticBezierTo(_lastPoint.dx, _lastPoint.dy, mid.dx, mid.dy);
@@ -31,7 +27,7 @@ class Stroke {
 
   void finish() {
     // Extend a single point stroke.
-    if (!_extended) {
+    if (_path.getBounds().isEmpty) {
       extend(_lastPoint.translate(0.01, 0.01));
     }
   }
