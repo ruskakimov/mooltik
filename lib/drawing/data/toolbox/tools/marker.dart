@@ -3,14 +3,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'tool.dart';
 
-class Pencil extends Tool {
-  Pencil({
+class Marker extends Tool {
+  Marker({
     double strokeWidth,
     Color color = Colors.black,
   })  : assert(strokeWidth != null),
         assert(color != null),
         super(
-          FontAwesomeIcons.paintBrush,
+          FontAwesomeIcons.marker,
           Paint()
             ..strokeWidth = strokeWidth
             ..color = color
@@ -26,8 +26,11 @@ class Pencil extends Tool {
   }
 
   @override
-  double get maxStrokeWidth => 200;
+  double get maxStrokeWidth => 40;
 
   @override
-  double get minStrokeWidth => 5;
+  double get minStrokeWidth => 4;
+
+  @override
+  List<double> get strokeWidthOptions => [4, 8, 16];
 }

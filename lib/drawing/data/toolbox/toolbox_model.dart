@@ -12,7 +12,7 @@ class ToolboxModel extends ChangeNotifier {
       : assert(sharedPreferences != null),
         _sharedPreferences = sharedPreferences,
         _tools = [
-          Pencil(
+          Marker(
             strokeWidth: sharedPreferences.containsKey(_pencilStrokeWidthKey)
                 ? sharedPreferences.getDouble(_pencilStrokeWidthKey)
                 : 10,
@@ -36,8 +36,9 @@ class ToolboxModel extends ChangeNotifier {
   List<Tool> get tools => _tools;
   Tool get selectedTool => _tools[_selectedToolId];
 
-  void selectTool(int toolId) {
-    _selectedToolId = toolId;
+  void selectTool(Tool tool) {
+    assert(_tools.contains(tool));
+    _selectedToolId = _tools.indexOf(tool);
     notifyListeners();
   }
 
@@ -49,7 +50,7 @@ class ToolboxModel extends ChangeNotifier {
       selectedTool.paint.strokeWidth = strokeWidth;
 
       _sharedPreferences.setDouble(
-        selectedTool is Pencil ? _pencilStrokeWidthKey : _eraserStrokeWidthKey,
+        selectedTool is Marker ? _pencilStrokeWidthKey : _eraserStrokeWidthKey,
         strokeWidth,
       );
       notifyListeners();
@@ -63,9 +64,26 @@ class ToolboxModel extends ChangeNotifier {
 
     selectedTool.paint.color = color;
 
-    if (selectedTool is Pencil) {
+    if (selectedTool is Marker) {
       _sharedPreferences.setInt(_pencilColorKey, color.value);
     }
+    notifyListeners();
+  }
+
+  /*
+  Size picker state:
+  */
+
+  bool get sizePickerOpen => _sizePickerOpen;
+  bool _sizePickerOpen = false;
+
+  void openSizePicker() {
+    _sizePickerOpen = true;
+    notifyListeners();
+  }
+
+  void closeSizePicker() {
+    _sizePickerOpen = false;
     notifyListeners();
   }
 }
