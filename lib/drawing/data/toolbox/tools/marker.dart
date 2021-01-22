@@ -26,11 +26,11 @@ class Marker extends Tool {
   }
 
   @override
-  double get maxStrokeWidth => 50;
+  double get maxStrokeWidth => 40;
 
   @override
   double get minStrokeWidth => 4;
 
   @override
-  List<double> get strokeWidthOptions => [4, 8, 16, 24];
+  List<double> get strokeWidthOptions => [4, 8, 16];
 }
