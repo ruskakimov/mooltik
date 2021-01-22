@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const double _minInnerCircleWidth = 4;
-const double _maxInnerCircleWidth = 36;
+const double _maxInnerCircleWidth = 34;
 
 class SizePickerPopup extends StatelessWidget {
   const SizePickerPopup({
