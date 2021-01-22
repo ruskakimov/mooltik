@@ -4,7 +4,8 @@ const double _minInnerCircleWidth = 4;
 const double _maxInnerCircleWidth = 34;
 
 const double _triangleWidth = 24;
-const double _triangleHeight = 12;
+const double _triangleHeight = 14;
+const double _triangleBorderRadius = 4;
 
 class SizePickerPopup extends StatelessWidget {
   const SizePickerPopup({
@@ -135,10 +136,18 @@ class _Triangle extends StatelessWidget {
 class _TriangleClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
+    final w = size.width;
+    final h = size.height;
+
+    final roundingLeftX = w / 2 - _triangleBorderRadius;
+    final roundingRightX = w / 2 + _triangleBorderRadius;
+    final roundingY = h - h * roundingLeftX / (w / 2);
+
     return Path()
-      ..moveTo(size.width / 2, 0)
-      ..lineTo(size.width, size.height)
-      ..lineTo(0, size.height)
+      ..moveTo(0, h)
+      ..lineTo(roundingLeftX, roundingY)
+      ..quadraticBezierTo(w / 2, 0, roundingRightX, roundingY)
+      ..lineTo(w, h)
       ..close();
   }
 
