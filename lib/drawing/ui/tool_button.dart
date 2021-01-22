@@ -31,6 +31,7 @@ class ToolButton extends StatelessWidget {
       ),
       child: PortalEntry(
         visible: showSizePickerOfThisTool,
+        // TODO: Pass size options from tool
         portal: SizePickerPopup(),
         portalAnchor: Alignment.topCenter,
         child: AppIconButton(
