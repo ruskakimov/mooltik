@@ -3,7 +3,14 @@ import 'package:flutter/material.dart';
 class SizePickerPopup extends StatelessWidget {
   const SizePickerPopup({
     Key key,
+    @required this.selectedValue,
+    @required this.valueOptions,
+    this.onSelected,
   }) : super(key: key);
+
+  final double selectedValue;
+  final List<double> valueOptions;
+  final void Function(double) onSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +25,11 @@ class SizePickerPopup extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _SizeOptionButton(innerCircleWidth: 6),
-            _SizeOptionButton(innerCircleWidth: 12, selected: true),
-            _SizeOptionButton(innerCircleWidth: 28),
+            for (final optionValue in valueOptions)
+              _SizeOptionButton(
+                innerCircleWidth: optionValue,
+                selected: optionValue == selectedValue,
+              ),
           ],
         ),
       ),
