@@ -20,7 +20,7 @@ class SizePickerPopup extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       elevation: 10,
       child: SizedBox(
-        width: 180,
+        width: 60.0 * valueOptions.length,
         height: 60,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
