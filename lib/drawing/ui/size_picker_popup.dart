@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 const double _minInnerCircleWidth = 4;
 const double _maxInnerCircleWidth = 34;
 
+const double _triangleWidth = 40;
+const double _triangleHeight = 20;
+
 class SizePickerPopup extends StatelessWidget {
   const SizePickerPopup({
     Key key,
@@ -21,28 +24,40 @@ class SizePickerPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Theme.of(context).colorScheme.secondary,
-      borderRadius: BorderRadiusDirectional.circular(8),
-      clipBehavior: Clip.antiAlias,
-      elevation: 10,
-      child: SizedBox(
-        width: 60.0 * valueOptions.length,
-        height: 60,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            for (final optionValue in valueOptions)
-              _SizeOptionButton(
-                innerCircleWidth: _calculateInnerCircleWidth(optionValue),
-                selected: optionValue == selectedValue,
-                onTap: () {
-                  onSelected?.call(optionValue);
-                },
-              ),
-          ],
+    final popupWidth = 60.0 * valueOptions.length;
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Material(
+          color: Theme.of(context).colorScheme.secondary,
+          borderRadius: BorderRadiusDirectional.circular(8),
+          clipBehavior: Clip.antiAlias,
+          elevation: 10,
+          child: SizedBox(
+            width: popupWidth,
+            height: 60,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                for (final optionValue in valueOptions)
+                  _SizeOptionButton(
+                    innerCircleWidth: _calculateInnerCircleWidth(optionValue),
+                    selected: optionValue == selectedValue,
+                    onTap: () {
+                      onSelected?.call(optionValue);
+                    },
+                  ),
+              ],
+            ),
+          ),
         ),
-      ),
+        Positioned(
+          top: -_triangleHeight,
+          left: (popupWidth - _triangleWidth) / 2,
+          child: _Triangle(),
+        ),
+      ],
     );
   }
 
@@ -53,6 +68,21 @@ class SizePickerPopup extends StatelessWidget {
     final valueRange = maxValue - minValue;
     final sliderValue = (value - minValue) / valueRange;
     return _minInnerCircleWidth + sliderValue * radiusRange;
+  }
+}
+
+class _Triangle extends StatelessWidget {
+  const _Triangle({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: _triangleWidth,
+      height: _triangleHeight,
+      color: Theme.of(context).colorScheme.secondary,
+    );
   }
 }
 
