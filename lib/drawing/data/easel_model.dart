@@ -113,8 +113,14 @@ class EaselModel extends ChangeNotifier {
 
   void _fitToScreen() {
     if (_easelSize == null) return;
-    _scale = _easelSize.height / frameSize.height;
-    _offset = Offset((_easelSize.width - frameSize.width * _scale) / 2, 0);
+    _scale = min(
+      _easelSize.height / frameSize.height,
+      _easelSize.width / frameSize.width,
+    );
+    _offset = Offset(
+      (_easelSize.width - frameSize.width * _scale) / 2,
+      (_easelSize.height - frameSize.height * _scale) / 2,
+    );
     _rotation = 0;
   }
 
