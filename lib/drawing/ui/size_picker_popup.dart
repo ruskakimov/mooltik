@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/ui/popup_with_arrow.dart';
 
 const double _minInnerCircleWidth = 4;
 const double _maxInnerCircleWidth = 34;
-
-const double _triangleWidth = 24;
-const double _triangleHeight = 14;
-const double _triangleBorderRadius = 4;
 
 class SizePickerPopup extends StatelessWidget {
   const SizePickerPopup({
@@ -25,40 +22,28 @@ class SizePickerPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final popupWidth = 60.0 * valueOptions.length;
+    return PopupWithArrow(
+      width: 60.0 * valueOptions.length,
+      child: _buildSizeOptions(),
+    );
+  }
 
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Material(
-          color: Theme.of(context).colorScheme.secondary,
-          borderRadius: BorderRadiusDirectional.circular(8),
-          clipBehavior: Clip.antiAlias,
-          elevation: 10,
-          child: SizedBox(
-            width: popupWidth,
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                for (final optionValue in valueOptions)
-                  _SizeOptionButton(
-                    innerCircleWidth: _calculateInnerCircleWidth(optionValue),
-                    selected: optionValue == selectedValue,
-                    onTap: () {
-                      onSelected?.call(optionValue);
-                    },
-                  ),
-              ],
+  Widget _buildSizeOptions() {
+    return SizedBox(
+      height: 60,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          for (final optionValue in valueOptions)
+            _SizeOptionButton(
+              innerCircleWidth: _calculateInnerCircleWidth(optionValue),
+              selected: optionValue == selectedValue,
+              onTap: () {
+                onSelected?.call(optionValue);
+              },
             ),
-          ),
-        ),
-        Positioned(
-          top: -_triangleHeight,
-          left: (popupWidth - _triangleWidth) / 2,
-          child: _Triangle(),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -113,44 +98,4 @@ class _SizeOptionButton extends StatelessWidget {
       ),
     );
   }
-}
-
-class _Triangle extends StatelessWidget {
-  const _Triangle({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipPath(
-      child: Container(
-        width: _triangleWidth,
-        height: _triangleHeight,
-        color: Theme.of(context).colorScheme.secondary,
-      ),
-      clipper: _TriangleClipper(),
-    );
-  }
-}
-
-class _TriangleClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final w = size.width;
-    final h = size.height;
-
-    final roundingLeftX = w / 2 - _triangleBorderRadius;
-    final roundingRightX = w / 2 + _triangleBorderRadius;
-    final roundingY = h - h * roundingLeftX / (w / 2);
-
-    return Path()
-      ..moveTo(0, h)
-      ..lineTo(roundingLeftX, roundingY)
-      ..quadraticBezierTo(w / 2, 0, roundingRightX, roundingY)
-      ..lineTo(w, h)
-      ..close();
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
