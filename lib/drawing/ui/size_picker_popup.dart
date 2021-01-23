@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 
 const double _padding = 12;
-const double _circleSize = 40;
+const double _circleSize = 44;
 
 const double _minInnerCircleWidth = 4;
 const double _maxInnerCircleWidth = 34;
@@ -92,7 +92,7 @@ class _SizeOptionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkResponse(
-      radius: 23,
+      radius: _circleSize / 2 + 3,
       onTap: onTap,
       child: Container(
         width: _circleSize,
