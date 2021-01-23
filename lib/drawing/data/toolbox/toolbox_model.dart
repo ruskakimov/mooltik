@@ -15,7 +15,7 @@ class ToolboxModel extends ChangeNotifier {
           Marker(
             strokeWidth: sharedPreferences.containsKey(_pencilStrokeWidthKey)
                 ? sharedPreferences.getDouble(_pencilStrokeWidthKey)
-                : 10,
+                : 8,
             color: sharedPreferences.containsKey(_pencilColorKey)
                 ? Color(sharedPreferences.getInt(_pencilColorKey))
                 : Colors.black,
