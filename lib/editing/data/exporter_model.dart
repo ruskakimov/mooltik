@@ -67,11 +67,18 @@ class ExporterModel extends ChangeNotifier {
       },
     );
 
-    final result = await ImageGallerySaver.saveFile(videoFile.path);
-    try {
-      _outputFilePath = result['filePath'];
-    } catch (e) {
-      print(e);
+    if (Platform.isAndroid) {
+      // Save to gallery on Android.
+      final result = await ImageGallerySaver.saveFile(videoFile.path);
+      try {
+        _outputFilePath = result['filePath'];
+      } catch (e) {
+        print(e);
+      }
+    } else if (Platform.isIOS) {
+      // iOS is more restrictive here. Usually apps show share dialog.
+      // Default native player will have a share button.
+      _outputFilePath = videoFile.path;
     }
 
     _progress = 1; // in case ffmpeg statistics callback didn't finish on 100%
