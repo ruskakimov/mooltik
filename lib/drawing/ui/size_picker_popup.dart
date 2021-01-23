@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 
+const double _padding = 12;
+const double _circleSize = 40;
+
 const double _minInnerCircleWidth = 4;
 const double _maxInnerCircleWidth = 34;
 
@@ -23,16 +26,33 @@ class SizePickerPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupWithArrow(
-      width: 60.0 * valueOptions.length,
-      child: _buildSizeOptions(),
+      width: _circleSize * valueOptions.length +
+          _padding * (valueOptions.length + 1),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildSizeOptions(),
+          Divider(height: 2),
+          Padding(
+            padding: const EdgeInsets.all(_padding),
+            child: Container(
+              height: _circleSize,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(_circleSize / 2),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildSizeOptions() {
-    return SizedBox(
-      height: 60,
+    return Padding(
+      padding: const EdgeInsets.all(_padding),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           for (final optionValue in valueOptions)
             _SizeOptionButton(
@@ -75,7 +95,8 @@ class _SizeOptionButton extends StatelessWidget {
       radius: 23,
       onTap: onTap,
       child: Container(
-        width: 40,
+        width: _circleSize,
+        height: _circleSize,
         decoration: BoxDecoration(
           border: selected
               ? Border.all(
