@@ -25,7 +25,6 @@ class _AppSliderState extends State<AppSlider> {
 
   @override
   Widget build(BuildContext context) {
-    print('build ${widget.value}');
     return LayoutBuilder(builder: (context, constraints) {
       return GestureDetector(
         onHorizontalDragStart: (DragStartDetails details) {
