@@ -5,10 +5,12 @@ class AppSlider extends StatefulWidget {
     Key key,
     this.height = 44,
     this.value = 0.5,
+    this.innerPadding = 3,
     this.onChanged,
   }) : super(key: key);
 
   final double height;
+  final double innerPadding;
 
   /// Slider value between 0 and 1.
   final double value;
@@ -34,9 +36,9 @@ class _AppSliderState extends State<AppSlider> {
         },
         onHorizontalDragUpdate: (DragUpdateDetails details) {
           _draggedBy += details.primaryDelta;
+          final maxWidth = constraints.maxWidth - widget.innerPadding * 2;
           final newValue =
-              (_valueAtDragStart + _draggedBy / constraints.maxWidth)
-                  .clamp(0.0, 1.0);
+              (_valueAtDragStart + _draggedBy / maxWidth).clamp(0.0, 1.0);
           widget.onChanged?.call(newValue);
         },
         child: Padding(
@@ -48,7 +50,7 @@ class _AppSliderState extends State<AppSlider> {
               borderRadius: BorderRadius.circular(widget.height / 2),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(3.0),
+              padding: EdgeInsets.all(widget.innerPadding),
               child: _buildProgressBar(),
             ),
           ),
