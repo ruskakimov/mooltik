@@ -6,6 +6,7 @@ import 'tools/tools.dart';
 const String _pencilStrokeWidthKey = 'pencil_stroke_width';
 const String _eraserStrokeWidthKey = 'eraser_stroke_width';
 const String _pencilColorKey = 'pencil_color';
+const String _eraserColorKey = 'eraser_color';
 
 class ToolboxModel extends ChangeNotifier {
   ToolboxModel(SharedPreferences sharedPreferences)
@@ -24,6 +25,9 @@ class ToolboxModel extends ChangeNotifier {
             strokeWidth: sharedPreferences.containsKey(_eraserStrokeWidthKey)
                 ? sharedPreferences.getDouble(_eraserStrokeWidthKey)
                 : 100,
+            opacity: sharedPreferences.containsKey(_eraserColorKey)
+                ? Color(sharedPreferences.getInt(_eraserColorKey)).opacity
+                : 1,
           ),
         ],
         _selectedToolId = 0;
@@ -62,12 +66,10 @@ class ToolboxModel extends ChangeNotifier {
   void changeToolOpacity(double opacity) {
     selectedTool.paint.color = selectedTool.paint.color.withOpacity(opacity);
 
-    if (selectedTool is Marker) {
-      _sharedPreferences.setInt(
-        _pencilColorKey,
-        selectedTool.paint.color.value,
-      );
-    }
+    _sharedPreferences.setInt(
+      selectedTool is Marker ? _pencilColorKey : _eraserColorKey,
+      selectedTool.paint.color.value,
+    );
     notifyListeners();
   }
 

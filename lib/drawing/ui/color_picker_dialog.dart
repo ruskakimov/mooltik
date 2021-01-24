@@ -22,8 +22,8 @@ class ColorPickerDialog extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ColorPicker(
-            pickerColor: toolbox.selectedToolColor,
-            onColorChanged: toolbox.changeToolColor,
+            // pickerColor: toolbox.selectedToolColor,
+            // onColorChanged: toolbox.changeToolColor,
             showLabel: false,
           ),
         ),
