@@ -33,16 +33,7 @@ class SizePickerPopup extends StatelessWidget {
         children: [
           _buildSizeOptions(),
           Divider(height: 2),
-          Padding(
-            padding: const EdgeInsets.all(_padding),
-            child: Container(
-              height: _circleSize,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(_circleSize / 2),
-              ),
-            ),
-          ),
+          _Slider(),
         ],
       ),
     );
@@ -74,6 +65,45 @@ class SizePickerPopup extends StatelessWidget {
     final valueRange = maxValue - minValue;
     final sliderValue = (value - minValue) / valueRange;
     return _minInnerCircleWidth + sliderValue * radiusRange;
+  }
+}
+
+class _Slider extends StatelessWidget {
+  const _Slider({
+    Key key,
+    this.height = _circleSize,
+  }) : super(key: key);
+
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(_padding),
+      child: Container(
+        height: height,
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.25),
+          borderRadius: BorderRadius.circular(height / 2),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: Container(
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(height / 2),
+            ),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                width: 100,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
