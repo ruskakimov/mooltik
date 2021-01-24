@@ -72,9 +72,13 @@ class _Slider extends StatelessWidget {
   const _Slider({
     Key key,
     this.height = _circleSize,
+    this.value = 0.5,
   }) : super(key: key);
 
   final double height;
+
+  /// Slider value between 0 and 1.
+  final double value;
 
   @override
   Widget build(BuildContext context) {
@@ -88,18 +92,24 @@ class _Slider extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(3.0),
-          child: Container(
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(height / 2),
-            ),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                width: 100,
-                color: Colors.white,
-              ),
-            ),
+          child: _buildProgressBar(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProgressBar() {
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(height / 2),
+      ),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: LayoutBuilder(
+          builder: (context, constraints) => Container(
+            width: constraints.maxWidth * value,
+            color: Colors.white,
           ),
         ),
       ),
