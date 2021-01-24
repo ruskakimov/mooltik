@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/ui/app_slider.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
@@ -37,7 +38,7 @@ class SizePickerPopup extends StatelessWidget {
         children: [
           _buildSizeOptions(),
           Divider(height: 2),
-          _Slider(
+          AppSlider(
             value: toolbox.selectedToolOpacity,
             onChanged: (double value) {
               toolbox.changeToolOpacity(value);
@@ -114,68 +115,6 @@ class _SizeOptionButton extends StatelessWidget {
               color: Colors.white,
               shape: BoxShape.circle,
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _Slider extends StatelessWidget {
-  const _Slider({
-    Key key,
-    this.height = _circleSize,
-    this.value = 0.5,
-    this.onChanged,
-  }) : super(key: key);
-
-  final double height;
-
-  /// Slider value between 0 and 1.
-  final double value;
-
-  final ValueChanged<double> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return GestureDetector(
-        onHorizontalDragUpdate: (DragUpdateDetails details) {
-          onChanged?.call(
-            (value + details.primaryDelta / constraints.maxWidth)
-                .clamp(0.0, 1.0),
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(_padding),
-          child: Container(
-            height: height,
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.25),
-              borderRadius: BorderRadius.circular(height / 2),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: _buildProgressBar(),
-            ),
-          ),
-        ),
-      );
-    });
-  }
-
-  Widget _buildProgressBar() {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(height / 2),
-      ),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: LayoutBuilder(
-          builder: (context, constraints) => Container(
-            width: constraints.maxWidth * value,
-            color: Colors.white,
           ),
         ),
       ),
