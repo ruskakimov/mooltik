@@ -68,6 +68,50 @@ class SizePickerPopup extends StatelessWidget {
   }
 }
 
+class _SizeOptionButton extends StatelessWidget {
+  const _SizeOptionButton({
+    Key key,
+    this.innerCircleWidth = 10,
+    this.selected = false,
+    this.onTap,
+  }) : super(key: key);
+
+  final double innerCircleWidth;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkResponse(
+      radius: _circleSize / 2 + 3,
+      onTap: onTap,
+      child: Container(
+        width: _circleSize,
+        height: _circleSize,
+        decoration: BoxDecoration(
+          border: selected
+              ? Border.all(
+                  color: Theme.of(context).colorScheme.primary,
+                  width: 3,
+                )
+              : null,
+          color: Colors.black.withOpacity(0.25),
+          shape: BoxShape.circle,
+        ),
+        child: Center(
+          child: Container(
+            width: innerCircleWidth,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _Slider extends StatelessWidget {
   const _Slider({
     Key key,
@@ -110,50 +154,6 @@ class _Slider extends StatelessWidget {
           builder: (context, constraints) => Container(
             width: constraints.maxWidth * value,
             color: Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SizeOptionButton extends StatelessWidget {
-  const _SizeOptionButton({
-    Key key,
-    this.innerCircleWidth = 10,
-    this.selected = false,
-    this.onTap,
-  }) : super(key: key);
-
-  final double innerCircleWidth;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkResponse(
-      radius: _circleSize / 2 + 3,
-      onTap: onTap,
-      child: Container(
-        width: _circleSize,
-        height: _circleSize,
-        decoration: BoxDecoration(
-          border: selected
-              ? Border.all(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 3,
-                )
-              : null,
-          color: Colors.black.withOpacity(0.25),
-          shape: BoxShape.circle,
-        ),
-        child: Center(
-          child: Container(
-            width: innerCircleWidth,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-            ),
           ),
         ),
       ),
