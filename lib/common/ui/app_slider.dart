@@ -27,6 +27,7 @@ class _AppSliderState extends State<AppSlider> {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onHorizontalDragStart: (DragStartDetails details) {
           _valueAtDragStart = widget.value;
           _draggedBy = 0;
