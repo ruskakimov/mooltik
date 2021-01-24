@@ -57,15 +57,16 @@ class ToolboxModel extends ChangeNotifier {
     }
   }
 
-  Color get selectedToolColor => selectedTool?.paint?.color;
+  double get selectedToolOpacity => selectedTool?.paint?.color?.opacity;
 
-  void changeToolColor(Color color) {
-    if (selectedTool is Eraser) return;
-
-    selectedTool.paint.color = color;
+  void changeToolOpacity(double opacity) {
+    selectedTool.paint.color = selectedTool.paint.color.withOpacity(opacity);
 
     if (selectedTool is Marker) {
-      _sharedPreferences.setInt(_pencilColorKey, color.value);
+      _sharedPreferences.setInt(
+        _pencilColorKey,
+        selectedTool.paint.color.value,
+      );
     }
     notifyListeners();
   }

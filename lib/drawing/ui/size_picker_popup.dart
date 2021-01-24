@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
+import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 
 const double _padding = 12;
 const double _circleSize = 44;
@@ -25,6 +27,8 @@ class SizePickerPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final toolbox = context.watch<ToolboxModel>();
+
     return PopupWithArrow(
       width: _circleSize * valueOptions.length +
           _padding * (valueOptions.length + 1),
@@ -33,7 +37,12 @@ class SizePickerPopup extends StatelessWidget {
         children: [
           _buildSizeOptions(),
           Divider(height: 2),
-          _Slider(),
+          _Slider(
+            value: toolbox.selectedToolOpacity,
+            onChanged: (double value) {
+              toolbox.changeToolOpacity(value);
+            },
+          ),
         ],
       ),
     );
@@ -117,6 +126,7 @@ class _Slider extends StatelessWidget {
     Key key,
     this.height = _circleSize,
     this.value = 0.5,
+    this.onChanged,
   }) : super(key: key);
 
   final double height;
@@ -124,22 +134,34 @@ class _Slider extends StatelessWidget {
   /// Slider value between 0 and 1.
   final double value;
 
+  final ValueChanged<double> onChanged;
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(_padding),
-      child: Container(
-        height: height,
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.25),
-          borderRadius: BorderRadius.circular(height / 2),
-        ),
+    return LayoutBuilder(builder: (context, constraints) {
+      return GestureDetector(
+        onHorizontalDragUpdate: (DragUpdateDetails details) {
+          onChanged?.call(
+            (value + details.primaryDelta / constraints.maxWidth)
+                .clamp(0.0, 1.0),
+          );
+        },
         child: Padding(
-          padding: const EdgeInsets.all(3.0),
-          child: _buildProgressBar(),
+          padding: const EdgeInsets.all(_padding),
+          child: Container(
+            height: height,
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.25),
+              borderRadius: BorderRadius.circular(height / 2),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: _buildProgressBar(),
+            ),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget _buildProgressBar() {
