@@ -18,7 +18,11 @@ class ToolboxModel extends ChangeNotifier {
                 ? sharedPreferences.getDouble(_pencilStrokeWidthKey)
                 : 8,
             color: sharedPreferences.containsKey(_pencilColorKey)
-                ? Color(sharedPreferences.getInt(_pencilColorKey))
+                ? Colors.black.withOpacity(
+                    // This is to default back to black, if another color was selected before and saved to shared prefs.
+                    // TODO: Remove once color picker is added.
+                    Color(sharedPreferences.getInt(_pencilColorKey)).opacity,
+                  )
                 : Colors.black,
           ),
           Eraser(
