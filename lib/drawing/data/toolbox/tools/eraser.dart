@@ -4,12 +4,14 @@ import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'tool.dart';
 
 class Eraser extends Tool {
-  Eraser({double strokeWidth})
+  Eraser({double strokeWidth, double opacity = 1})
       : assert(strokeWidth != null),
+        assert(opacity != null),
         super(
           FontAwesomeIcons.eraser,
           Paint()
             ..strokeWidth = strokeWidth
+            ..color = Colors.black.withOpacity(opacity)
             ..style = PaintingStyle.stroke
             ..strokeCap = StrokeCap.round
             ..strokeJoin = StrokeJoin.round
@@ -28,5 +30,5 @@ class Eraser extends Tool {
   double get minStrokeWidth => 10;
 
   @override
-  List<double> get strokeWidthOptions => [20, 100, 300];
+  List<double> get strokeWidthOptions => [20, 100, 200, 300];
 }
