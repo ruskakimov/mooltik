@@ -53,21 +53,23 @@ class ToolboxModel extends ChangeNotifier {
   double get selectedToolStrokeWidth => selectedTool?.paint?.strokeWidth;
 
   void changeToolStrokeWidth(double strokeWidth) {
-    if (strokeWidth <= selectedTool.maxStrokeWidth &&
-        strokeWidth >= selectedTool.minStrokeWidth) {
-      selectedTool.paint.strokeWidth = strokeWidth;
+    assert(strokeWidth <= selectedTool.maxStrokeWidth &&
+        strokeWidth >= selectedTool.minStrokeWidth);
 
-      _sharedPreferences.setDouble(
-        selectedTool is Marker ? _pencilStrokeWidthKey : _eraserStrokeWidthKey,
-        strokeWidth,
-      );
-      notifyListeners();
-    }
+    selectedTool.paint.strokeWidth = strokeWidth;
+
+    _sharedPreferences.setDouble(
+      selectedTool is Marker ? _pencilStrokeWidthKey : _eraserStrokeWidthKey,
+      strokeWidth,
+    );
+    notifyListeners();
   }
 
   double get selectedToolOpacity => selectedTool?.paint?.color?.opacity;
 
   void changeToolOpacity(double opacity) {
+    assert(opacity >= 0 && opacity <= 1);
+
     selectedTool.paint.color = selectedTool.paint.color.withOpacity(opacity);
 
     _sharedPreferences.setInt(
