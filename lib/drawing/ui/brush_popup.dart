@@ -10,8 +10,8 @@ const double _circleSize = 44;
 const double _minInnerCircleWidth = 4;
 const double _maxInnerCircleWidth = 34;
 
-class SizePickerPopup extends StatelessWidget {
-  const SizePickerPopup({
+class BrushPopup extends StatelessWidget {
+  const BrushPopup({
     Key key,
     @required this.selectedValue,
     @required this.valueOptions,

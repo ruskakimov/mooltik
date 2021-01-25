@@ -4,7 +4,7 @@ import 'package:flutter_portal/flutter_portal.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
-import 'package:mooltik/drawing/ui/size_picker_popup.dart';
+import 'package:mooltik/drawing/ui/brush_popup.dart';
 
 class ToolButton extends StatelessWidget {
   const ToolButton({
@@ -31,7 +31,7 @@ class ToolButton extends StatelessWidget {
       ),
       child: PortalEntry(
         visible: showSizePickerOfThisTool,
-        portal: SizePickerPopup(
+        portal: BrushPopup(
           selectedValue: toolbox.selectedToolStrokeWidth,
           valueOptions: tool.strokeWidthOptions,
           minValue: tool.minStrokeWidth,
