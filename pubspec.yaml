@@ -43,6 +43,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   quiver: ^2.1.0
+  flutter_launcher_icons: ^0.8.1
+
+flutter_icons:
+  android: false # TODO: add later
+  ios: true
+  image_path: "assets/icon/mooltik_ios_1024.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
