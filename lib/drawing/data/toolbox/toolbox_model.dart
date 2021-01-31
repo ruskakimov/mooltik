@@ -6,6 +6,7 @@ import 'tools/tools.dart';
 const String _pencilStrokeWidthKey = 'pencil_stroke_width';
 const String _eraserStrokeWidthKey = 'eraser_stroke_width';
 const String _pencilColorKey = 'pencil_color';
+const String _eraserColorKey = 'eraser_color';
 
 class ToolboxModel extends ChangeNotifier {
   ToolboxModel(SharedPreferences sharedPreferences)
@@ -17,13 +18,20 @@ class ToolboxModel extends ChangeNotifier {
                 ? sharedPreferences.getDouble(_pencilStrokeWidthKey)
                 : 8,
             color: sharedPreferences.containsKey(_pencilColorKey)
-                ? Color(sharedPreferences.getInt(_pencilColorKey))
+                ? Colors.black.withOpacity(
+                    // This is to default back to black, if another color was selected before and saved to shared prefs.
+                    // TODO: Remove once color picker is added.
+                    Color(sharedPreferences.getInt(_pencilColorKey)).opacity,
+                  )
                 : Colors.black,
           ),
           Eraser(
             strokeWidth: sharedPreferences.containsKey(_eraserStrokeWidthKey)
                 ? sharedPreferences.getDouble(_eraserStrokeWidthKey)
                 : 100,
+            opacity: sharedPreferences.containsKey(_eraserColorKey)
+                ? Color(sharedPreferences.getInt(_eraserColorKey)).opacity
+                : 1,
           ),
         ],
         _selectedToolId = 0;
@@ -45,28 +53,29 @@ class ToolboxModel extends ChangeNotifier {
   double get selectedToolStrokeWidth => selectedTool?.paint?.strokeWidth;
 
   void changeToolStrokeWidth(double strokeWidth) {
-    if (strokeWidth <= selectedTool.maxStrokeWidth &&
-        strokeWidth >= selectedTool.minStrokeWidth) {
-      selectedTool.paint.strokeWidth = strokeWidth;
+    assert(strokeWidth <= selectedTool.maxStrokeWidth &&
+        strokeWidth >= selectedTool.minStrokeWidth);
 
-      _sharedPreferences.setDouble(
-        selectedTool is Marker ? _pencilStrokeWidthKey : _eraserStrokeWidthKey,
-        strokeWidth,
-      );
-      notifyListeners();
-    }
+    selectedTool.paint.strokeWidth = strokeWidth;
+
+    _sharedPreferences.setDouble(
+      selectedTool is Marker ? _pencilStrokeWidthKey : _eraserStrokeWidthKey,
+      strokeWidth,
+    );
+    notifyListeners();
   }
 
-  Color get selectedToolColor => selectedTool?.paint?.color;
+  double get selectedToolOpacity => selectedTool?.paint?.color?.opacity;
 
-  void changeToolColor(Color color) {
-    if (selectedTool is Eraser) return;
+  void changeToolOpacity(double opacity) {
+    assert(opacity >= 0 && opacity <= 1);
 
-    selectedTool.paint.color = color;
+    selectedTool.paint.color = selectedTool.paint.color.withOpacity(opacity);
 
-    if (selectedTool is Marker) {
-      _sharedPreferences.setInt(_pencilColorKey, color.value);
-    }
+    _sharedPreferences.setInt(
+      selectedTool is Marker ? _pencilColorKey : _eraserColorKey,
+      selectedTool.paint.color.value,
+    );
     notifyListeners();
   }
 

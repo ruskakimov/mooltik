@@ -32,5 +32,5 @@ class Marker extends Tool {
   double get minStrokeWidth => 4;
 
   @override
-  List<double> get strokeWidthOptions => [4, 8, 16];
+  List<double> get strokeWidthOptions => [4, 8, 16, 32];
 }
