@@ -14,7 +14,7 @@ class ToolboxModel extends ChangeNotifier {
       : assert(sharedPreferences != null),
         _sharedPreferences = sharedPreferences,
         _tools = [
-          ShadowBrush(
+          Brush(
               // strokeWidth: sharedPreferences.containsKey(_pencilStrokeWidthKey)
               //     ? sharedPreferences.getDouble(_pencilStrokeWidthKey)
               //     : 8,

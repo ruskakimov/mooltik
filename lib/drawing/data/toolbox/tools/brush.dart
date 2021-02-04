@@ -3,8 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'tool.dart';
 
-class ShadowBrush extends Tool {
-  ShadowBrush({
+class Brush extends Tool {
+  Brush({
     double strokeWidth = 100,
     Color color = Colors.black26,
   })  : assert(strokeWidth != null),
