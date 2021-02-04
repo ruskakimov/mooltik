@@ -30,5 +30,5 @@ class Eraser extends Tool {
   double get minStrokeWidth => 10;
 
   @override
-  List<double> get strokeWidthOptions => [20, 100, 200, 300];
+  List<double> get strokeWidthOptions => [20, 100, 300];
 }
