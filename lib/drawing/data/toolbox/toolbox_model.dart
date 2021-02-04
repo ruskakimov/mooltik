@@ -26,7 +26,7 @@ class ToolboxModel extends ChangeNotifier {
               //       )
               //     : Colors.black,
               ),
-          Marker(
+          Pen(
             strokeWidth: sharedPreferences.containsKey(_pencilStrokeWidthKey)
                 ? sharedPreferences.getDouble(_pencilStrokeWidthKey)
                 : 8,
@@ -72,7 +72,7 @@ class ToolboxModel extends ChangeNotifier {
     selectedTool.paint.strokeWidth = strokeWidth;
 
     _sharedPreferences.setDouble(
-      selectedTool is Marker ? _pencilStrokeWidthKey : _eraserStrokeWidthKey,
+      selectedTool is Pen ? _pencilStrokeWidthKey : _eraserStrokeWidthKey,
       strokeWidth,
     );
     notifyListeners();
@@ -86,7 +86,7 @@ class ToolboxModel extends ChangeNotifier {
     selectedTool.paint.color = selectedTool.paint.color.withOpacity(opacity);
 
     _sharedPreferences.setInt(
-      selectedTool is Marker ? _pencilColorKey : _eraserColorKey,
+      selectedTool is Pen ? _pencilColorKey : _eraserColorKey,
       selectedTool.paint.color.value,
     );
     notifyListeners();
