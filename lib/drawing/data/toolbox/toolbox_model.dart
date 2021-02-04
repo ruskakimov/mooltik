@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/data/toolbox/tools/brush.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'tools/tools.dart';
@@ -13,6 +14,18 @@ class ToolboxModel extends ChangeNotifier {
       : assert(sharedPreferences != null),
         _sharedPreferences = sharedPreferences,
         _tools = [
+          ShadowBrush(
+              // strokeWidth: sharedPreferences.containsKey(_pencilStrokeWidthKey)
+              //     ? sharedPreferences.getDouble(_pencilStrokeWidthKey)
+              //     : 8,
+              // color: sharedPreferences.containsKey(_pencilColorKey)
+              //     ? Colors.black.withOpacity(
+              //         // This is to default back to black, if another color was selected before and saved to shared prefs.
+              //         // TODO: Remove once color picker is added.
+              //         Color(sharedPreferences.getInt(_pencilColorKey)).opacity,
+              //       )
+              //     : Colors.black,
+              ),
           Marker(
             strokeWidth: sharedPreferences.containsKey(_pencilStrokeWidthKey)
                 ? sharedPreferences.getDouble(_pencilStrokeWidthKey)
