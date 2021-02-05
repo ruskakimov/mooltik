@@ -56,13 +56,13 @@ class _AppSliderState extends State<AppSlider> {
                 children: [
                   _buildProgressBar(),
                   Align(
-                    alignment: Alignment(-0.84, 0.0),
+                    alignment: Alignment(-0.82, 0.0),
                     child: Icon(
                       widget.value == 0
                           ? Icons.invert_colors_off_rounded
                           : Icons.invert_colors_on_rounded,
                       color: Colors.grey,
-                      size: 24,
+                      size: 28,
                     ),
                   ),
                 ],
