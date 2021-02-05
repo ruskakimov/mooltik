@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AppSlider extends StatefulWidget {
   const AppSlider({
@@ -51,7 +52,21 @@ class _AppSliderState extends State<AppSlider> {
             ),
             child: Padding(
               padding: EdgeInsets.all(widget.innerPadding),
-              child: _buildProgressBar(),
+              child: Stack(
+                children: [
+                  _buildProgressBar(),
+                  Align(
+                    alignment: Alignment(-0.84, 0.0),
+                    child: Icon(
+                      widget.value == 0
+                          ? Icons.invert_colors_off_rounded
+                          : Icons.invert_colors_on_rounded,
+                      color: Colors.grey,
+                      size: 24,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
