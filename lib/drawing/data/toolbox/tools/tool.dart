@@ -6,9 +6,15 @@ abstract class Tool {
   Tool(this.icon, this.paint, SharedPreferences sharedPreferences)
       : assert(sharedPreferences != null) {
     // Restore selected stroke width.
-    paint.strokeWidth = sharedPreferences.containsKey(strokeWidthKey)
-        ? sharedPreferences.getDouble(strokeWidthKey)
-        : strokeWidthOptions[1];
+    if (sharedPreferences.containsKey(strokeWidthKey)) {
+      paint.strokeWidth = sharedPreferences.getDouble(strokeWidthKey);
+    }
+
+    // Default to middle stroke width option if none selected.
+    if (!strokeWidthOptions.contains(paint.strokeWidth)) {
+      final midIndex = strokeWidthOptions.length ~/ 2;
+      paint.strokeWidth = strokeWidthOptions[midIndex];
+    }
 
     // Restore selected color.
     if (sharedPreferences.containsKey(colorKey)) {
