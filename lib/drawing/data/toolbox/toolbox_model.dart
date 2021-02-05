@@ -3,38 +3,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'tools/tools.dart';
 
-const String _pencilStrokeWidthKey = 'pencil_stroke_width';
-const String _eraserStrokeWidthKey = 'eraser_stroke_width';
-const String _pencilColorKey = 'pencil_color';
-const String _eraserColorKey = 'eraser_color';
-
 class ToolboxModel extends ChangeNotifier {
   ToolboxModel(SharedPreferences sharedPreferences)
       : assert(sharedPreferences != null),
         _sharedPreferences = sharedPreferences,
         _tools = [
-          Marker(
-            strokeWidth: sharedPreferences.containsKey(_pencilStrokeWidthKey)
-                ? sharedPreferences.getDouble(_pencilStrokeWidthKey)
-                : 8,
-            color: sharedPreferences.containsKey(_pencilColorKey)
-                ? Colors.black.withOpacity(
-                    // This is to default back to black, if another color was selected before and saved to shared prefs.
-                    // TODO: Remove once color picker is added.
-                    Color(sharedPreferences.getInt(_pencilColorKey)).opacity,
-                  )
-                : Colors.black,
-          ),
-          Eraser(
-            strokeWidth: sharedPreferences.containsKey(_eraserStrokeWidthKey)
-                ? sharedPreferences.getDouble(_eraserStrokeWidthKey)
-                : 100,
-            opacity: sharedPreferences.containsKey(_eraserColorKey)
-                ? Color(sharedPreferences.getInt(_eraserColorKey)).opacity
-                : 1,
-          ),
+          Brush(sharedPreferences),
+          Pen(sharedPreferences),
+          Eraser(sharedPreferences),
         ],
-        _selectedToolId = 0;
+        _selectedToolId = 1;
 
   final SharedPreferences _sharedPreferences;
 
@@ -59,7 +37,7 @@ class ToolboxModel extends ChangeNotifier {
     selectedTool.paint.strokeWidth = strokeWidth;
 
     _sharedPreferences.setDouble(
-      selectedTool is Marker ? _pencilStrokeWidthKey : _eraserStrokeWidthKey,
+      selectedTool.strokeWidthKey,
       strokeWidth,
     );
     notifyListeners();
@@ -73,7 +51,7 @@ class ToolboxModel extends ChangeNotifier {
     selectedTool.paint.color = selectedTool.paint.color.withOpacity(opacity);
 
     _sharedPreferences.setInt(
-      selectedTool is Marker ? _pencilColorKey : _eraserColorKey,
+      selectedTool.colorKey,
       selectedTool.paint.color.value,
     );
     notifyListeners();
