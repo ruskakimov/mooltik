@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'tool.dart';
 
 class Eraser extends Tool {
-  Eraser({double strokeWidth, double opacity = 1})
-      : assert(strokeWidth != null),
-        assert(opacity != null),
-        super(
+  Eraser(SharedPreferences sharedPreferences)
+      : super(
           FontAwesomeIcons.eraser,
           Paint()
-            ..strokeWidth = strokeWidth
-            ..color = Colors.black.withOpacity(opacity)
+            ..color = Colors.black
             ..style = PaintingStyle.stroke
             ..strokeCap = StrokeCap.round
             ..strokeJoin = StrokeJoin.round
             ..blendMode = BlendMode.dstOut,
+          sharedPreferences,
         );
 
   @override
@@ -31,4 +30,7 @@ class Eraser extends Tool {
 
   @override
   List<double> get strokeWidthOptions => [20, 100, 300];
+
+  @override
+  String get name => 'eraser';
 }
