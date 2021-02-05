@@ -31,8 +31,10 @@ abstract class Tool {
   /// Tool name used to prefix shared preferences keys.
   String get name;
 
-  /// Shared preferences keys.
+  /// Shared preferences key for stroke width.
   String get strokeWidthKey => name + '_stroke_width';
+
+  /// Shared preferences key for color.
   String get colorKey => name + '_color';
 
   Stroke makeStroke(Offset startPoint);
