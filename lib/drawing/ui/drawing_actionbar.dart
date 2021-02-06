@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
-import 'package:mooltik/common/ui/popup_entry.dart';
-import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/common/ui/surface.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
+import 'package:mooltik/drawing/ui/menu_button.dart';
 import 'package:mooltik/drawing/ui/tool_button.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
@@ -25,13 +24,6 @@ class DrawingActionbar extends StatelessWidget {
             },
           ),
           MenuButton(),
-          // AppIconButton(
-          //   icon: FontAwesomeIcons.lightbulb,
-          //   selected: context.watch<OnionModel>().enabled,
-          //   onTap: () {
-          //     context.read<OnionModel>().toggle();
-          //   },
-          // ),
           Spacer(),
           for (final tool in toolbox.tools)
             ToolButton(
@@ -48,28 +40,6 @@ class DrawingActionbar extends StatelessWidget {
             onTap: easel.redoAvailable ? easel.redo : null,
           ),
         ],
-      ),
-    );
-  }
-}
-
-class MenuButton extends StatelessWidget {
-  const MenuButton({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupEntry(
-      visible: true,
-      popupAnchor: Alignment(-0.6, -1.0),
-      popup: PopupWithArrow(
-        width: 300,
-        child: SizedBox(height: 200),
-      ),
-      child: AppIconButton(
-        icon: FontAwesomeIcons.ellipsisV,
-        onTap: () {},
       ),
     );
   }
