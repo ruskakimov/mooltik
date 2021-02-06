@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/popup_entry.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
+import 'package:mooltik/drawing/ui/drawing_menu.dart';
 
 const double _arrowLeftOffset = 60;
 
@@ -32,7 +33,7 @@ class _MenuButtonState extends State<MenuButton> {
       popup: PopupWithArrow(
         width: widget.menuWidth,
         arrowOffset: _arrowLeftOffset,
-        child: SizedBox(height: 200),
+        child: DrawingMenu(),
       ),
       child: AppIconButton(
         icon: FontAwesomeIcons.ellipsisV,
