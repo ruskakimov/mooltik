@@ -62,6 +62,7 @@ class MenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupEntry(
       visible: true,
+      popupAnchor: Alignment(-0.6, -1.0),
       popup: PopupWithArrow(
         width: 300,
         child: SizedBox(height: 200),

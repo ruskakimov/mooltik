@@ -7,12 +7,14 @@ class PopupEntry extends StatelessWidget {
     @required this.visible,
     @required this.popup,
     @required this.child,
+    this.popupAnchor = Alignment.topCenter,
     this.onTapOutside,
   }) : super(key: key);
 
   final bool visible;
   final Widget popup;
   final Widget child;
+  final Alignment popupAnchor;
   final VoidCallback onTapOutside;
 
   @override
@@ -28,7 +30,7 @@ class PopupEntry extends StatelessWidget {
       child: PortalEntry(
         visible: visible,
         portal: popup,
-        portalAnchor: Alignment.topCenter,
+        portalAnchor: popupAnchor,
         child: IgnorePointer(
           ignoring: visible,
           child: child,
