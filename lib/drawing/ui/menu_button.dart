@@ -4,10 +4,15 @@ import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/popup_entry.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 
+const double _arrowLeftOffset = 60;
+
 class MenuButton extends StatefulWidget {
   const MenuButton({
     Key key,
+    this.menuWidth = 300,
   }) : super(key: key);
+
+  final double menuWidth;
 
   @override
   _MenuButtonState createState() => _MenuButtonState();
@@ -20,9 +25,13 @@ class _MenuButtonState extends State<MenuButton> {
   Widget build(BuildContext context) {
     return PopupEntry(
       visible: _menuOpen,
-      popupAnchor: Alignment(-0.6, -1.0),
+      popupAnchor: Alignment(
+        -1.0 + _arrowLeftOffset * 2 / widget.menuWidth,
+        -1.0,
+      ),
       popup: PopupWithArrow(
-        width: 300,
+        width: widget.menuWidth,
+        arrowOffset: _arrowLeftOffset,
         child: SizedBox(height: 200),
       ),
       child: AppIconButton(
