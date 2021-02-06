@@ -24,12 +24,16 @@ class DrawingActionbar extends StatelessWidget {
             },
           ),
           AppIconButton(
-            icon: FontAwesomeIcons.lightbulb,
-            selected: context.watch<OnionModel>().enabled,
-            onTap: () {
-              context.read<OnionModel>().toggle();
-            },
+            icon: FontAwesomeIcons.ellipsisV,
+            onTap: () {},
           ),
+          // AppIconButton(
+          //   icon: FontAwesomeIcons.lightbulb,
+          //   selected: context.watch<OnionModel>().enabled,
+          //   onTap: () {
+          //     context.read<OnionModel>().toggle();
+          //   },
+          // ),
           Spacer(),
           for (final tool in toolbox.tools)
             ToolButton(
