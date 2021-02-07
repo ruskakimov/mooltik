@@ -20,24 +20,6 @@ class DrawingMenu extends StatelessWidget {
       physics: ScrollPhysics(),
       children: [
         _MenuTile(
-          icon: FontAwesomeIcons.lightbulb,
-          title: 'Onion skinning',
-          trailing: Switch(
-            value: onion.enabled,
-            onChanged: (_) => onion.toggle(),
-          ),
-          onTap: () => onion.toggle(),
-        ),
-        _MenuTile(
-          icon: FontAwesomeIcons.expand,
-          title: 'Fit canvas to screen',
-          onTap: () {
-            context.read<EaselModel>().fitToScreen();
-            onDone?.call();
-          },
-        ),
-        Divider(),
-        _MenuTile(
           icon: FontAwesomeIcons.plus,
           title: 'Add empty frame',
           onTap: () {
@@ -52,6 +34,24 @@ class DrawingMenu extends StatelessWidget {
             final timeline = context.read<TimelineModel>();
             timeline.duplicateFrameAt(timeline.selectedFrameIndex);
             timeline.stepForward();
+            onDone?.call();
+          },
+        ),
+        Divider(),
+        _MenuTile(
+          icon: FontAwesomeIcons.lightbulb,
+          title: 'Onion skinning',
+          trailing: Switch(
+            value: onion.enabled,
+            onChanged: (_) => onion.toggle(),
+          ),
+          onTap: () => onion.toggle(),
+        ),
+        _MenuTile(
+          icon: FontAwesomeIcons.expand,
+          title: 'Fit canvas to screen',
+          onTap: () {
+            context.read<EaselModel>().fitToScreen();
             onDone?.call();
           },
         ),
