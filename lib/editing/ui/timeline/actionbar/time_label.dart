@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +12,7 @@ class TimeLabel extends StatelessWidget {
     final style = TextStyle(
       color: Theme.of(context).colorScheme.onSurface,
       fontSize: 14,
+      fontFeatures: [FontFeature.tabularFigures()],
     );
 
     return Padding(
