@@ -19,35 +19,35 @@ class DrawingMenu extends StatelessWidget {
       shrinkWrap: true,
       physics: ScrollPhysics(),
       children: [
-        ListTile(
-          leading: Icon(FontAwesomeIcons.lightbulb, size: 20),
-          title: Text('Onion skinning'),
+        _MenuTile(
+          icon: FontAwesomeIcons.lightbulb,
+          title: 'Onion skinning',
           trailing: Switch(
             value: onion.enabled,
             onChanged: (_) => onion.toggle(),
           ),
           onTap: () => onion.toggle(),
         ),
-        ListTile(
-          leading: Icon(FontAwesomeIcons.expand, size: 20),
-          title: Text('Fit canvas to screen'),
+        _MenuTile(
+          icon: FontAwesomeIcons.expand,
+          title: 'Fit canvas to screen',
           onTap: () {
             context.read<EaselModel>().fitToScreen();
             onDone?.call();
           },
         ),
         Divider(),
-        ListTile(
-          leading: Icon(FontAwesomeIcons.plus, size: 20),
-          title: Text('Add empty frame'),
+        _MenuTile(
+          icon: FontAwesomeIcons.plus,
+          title: 'Add empty frame',
           onTap: () {
             context.read<TimelineModel>().addFrameAfterSelected();
             onDone?.call();
           },
         ),
-        ListTile(
-          leading: Icon(FontAwesomeIcons.copy, size: 20),
-          title: Text('Duplicate this frame'),
+        _MenuTile(
+          icon: FontAwesomeIcons.copy,
+          title: 'Duplicate this frame',
           onTap: () {
             final timeline = context.read<TimelineModel>();
             timeline.duplicateFrameAt(timeline.selectedFrameIndex);
@@ -56,6 +56,43 @@ class DrawingMenu extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+}
+
+class _MenuTile extends StatelessWidget {
+  const _MenuTile({
+    Key key,
+    @required this.icon,
+    @required this.title,
+    this.trailing,
+    this.onTap,
+  }) : super(key: key);
+
+  final IconData icon;
+  final String title;
+  final Widget trailing;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Transform.translate(
+        offset: Offset(0, 1),
+        child: Icon(icon, size: 20),
+      ),
+      title: Transform.translate(
+        offset: Offset(-20, 0),
+        child: Text(
+          title,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+      trailing: trailing,
+      onTap: onTap,
     );
   }
 }
