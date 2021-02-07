@@ -32,7 +32,10 @@ class DrawingMenu extends StatelessWidget {
         ),
         ListTile(
           title: Text('Duplicate this frame'),
-          onTap: () {},
+          onTap: () {
+            final timeline = context.read<TimelineModel>();
+            timeline.duplicateFrameAt(timeline.selectedFrameIndex);
+          },
         ),
       ],
     );
