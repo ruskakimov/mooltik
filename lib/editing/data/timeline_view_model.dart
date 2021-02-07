@@ -146,8 +146,11 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get canDeleteHighlighted => _timeline.frames.length > 1;
+
   void deleteSelected() {
     if (_highlightedFrameIndex == null) return;
+    if (!canDeleteHighlighted) return;
     _timeline.deleteFrameAt(_highlightedFrameIndex);
     _highlightedFrameIndex = null;
     notifyListeners();
