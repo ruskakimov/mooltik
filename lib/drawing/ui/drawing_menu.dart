@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 
 class DrawingMenu extends StatelessWidget {
-  const DrawingMenu({Key key}) : super(key: key);
+  const DrawingMenu({Key key, this.onDone}) : super(key: key);
+
+  final VoidCallback onDone;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class DrawingMenu extends StatelessWidget {
           title: Text('Add empty frame'),
           onTap: () {
             context.read<TimelineModel>().addFrameAfterSelected();
+            onDone?.call();
           },
         ),
         ListTile(
@@ -35,6 +38,7 @@ class DrawingMenu extends StatelessWidget {
           onTap: () {
             final timeline = context.read<TimelineModel>();
             timeline.duplicateFrameAt(timeline.selectedFrameIndex);
+            onDone?.call();
           },
         ),
       ],

@@ -33,7 +33,11 @@ class _MenuButtonState extends State<MenuButton> {
       popup: PopupWithArrow(
         width: widget.menuWidth,
         arrowOffset: _arrowLeftOffset,
-        child: DrawingMenu(),
+        child: DrawingMenu(
+          onDone: () {
+            setState(() => _menuOpen = false);
+          },
+        ),
       ),
       child: AppIconButton(
         icon: FontAwesomeIcons.ellipsisV,
