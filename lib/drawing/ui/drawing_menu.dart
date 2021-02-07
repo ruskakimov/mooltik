@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
@@ -24,6 +25,13 @@ class DrawingMenu extends StatelessWidget {
             onChanged: (_) => onion.toggle(),
           ),
           onTap: () => onion.toggle(),
+        ),
+        ListTile(
+          title: Text('Fit canvas to screen'),
+          onTap: () {
+            context.read<EaselModel>().fitToScreen();
+            onDone?.call();
+          },
         ),
         Divider(),
         ListTile(

@@ -89,7 +89,7 @@ class EaselModel extends ChangeNotifier {
     if (_easelSize == null) {
       // Fit to screen on first build.
       _easelSize = size;
-      _fitToScreen();
+      fitToScreen();
     } else {
       _easelSize = size;
     }
@@ -111,7 +111,7 @@ class EaselModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _fitToScreen() {
+  void fitToScreen() {
     if (_easelSize == null) return;
     _scale = min(
       _easelSize.height / frameSize.height,
@@ -122,6 +122,7 @@ class EaselModel extends ChangeNotifier {
       (_easelSize.height - frameSize.height * _scale) / 2,
     );
     _rotation = 0;
+    notifyListeners();
   }
 
   Offset _toFramePoint(Offset point) {
