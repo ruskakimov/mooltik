@@ -82,7 +82,7 @@ class _MenuTile extends StatelessWidget {
         child: Icon(icon, size: 20),
       ),
       title: Transform.translate(
-        offset: Offset(-20, 0),
+        offset: Offset(-18, 0),
         child: Text(
           title,
           style: TextStyle(

@@ -10,7 +10,7 @@ const double _arrowLeftOffset = 60;
 class MenuButton extends StatefulWidget {
   const MenuButton({
     Key key,
-    this.menuWidth = 300,
+    this.menuWidth = 320,
   }) : super(key: key);
 
   final double menuWidth;
