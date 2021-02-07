@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 
@@ -25,7 +26,9 @@ class DrawingMenu extends StatelessWidget {
         Divider(),
         ListTile(
           title: Text('Add empty frame'),
-          onTap: () {},
+          onTap: () {
+            context.read<TimelineModel>().addFrameAfterSelected();
+          },
         ),
         ListTile(
           title: Text('Duplicate this frame'),
