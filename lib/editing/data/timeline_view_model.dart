@@ -29,7 +29,7 @@ class TimelineViewModel extends ChangeNotifier {
 
     final diff = (details.localFocalPoint - _prevFocalPoint);
     _timeline.scrub(-diff.dx / timelineWidth);
-    _selectedFrameIndex = null;
+    _highlightedFrameIndex = null;
 
     _prevFocalPoint = details.localFocalPoint;
 
@@ -41,10 +41,10 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   void onTapUp(TapUpDetails details) {
-    _selectedFrameIndex = _getFrameIndexUnderPosition(details.localPosition);
+    _highlightedFrameIndex = _getFrameIndexUnderPosition(details.localPosition);
 
     // Scroll to selected frame.
-    if (_selectedFrameIndex != null) {
+    if (_highlightedFrameIndex != null) {
       _timeline.seekTo(timeFromX(details.localPosition.dx));
     }
 
@@ -69,10 +69,10 @@ class TimelineViewModel extends ChangeNotifier {
   /// Update before painting or gesture detection.
   Size size = Size.zero;
 
-  bool get showFrameMenu => _selectedFrameIndex != null;
+  bool get showFrameMenu => _highlightedFrameIndex != null;
 
-  int get selectedFrameIndex => _selectedFrameIndex;
-  int _selectedFrameIndex;
+  int get highlightedFrameIndex => _highlightedFrameIndex;
+  int _highlightedFrameIndex;
 
   double get _midX => size.width / 2;
 
@@ -142,21 +142,21 @@ class TimelineViewModel extends ChangeNotifier {
   */
 
   void closeFrameMenu() {
-    _selectedFrameIndex = null;
+    _highlightedFrameIndex = null;
     notifyListeners();
   }
 
   void deleteSelected() {
-    if (_selectedFrameIndex == null) return;
-    _timeline.deleteFrameAt(_selectedFrameIndex);
-    _selectedFrameIndex = null;
+    if (_highlightedFrameIndex == null) return;
+    _timeline.deleteFrameAt(_highlightedFrameIndex);
+    _highlightedFrameIndex = null;
     notifyListeners();
   }
 
   void duplicateSelected() {
-    if (_selectedFrameIndex == null) return;
-    _timeline.duplicateFrameAt(_selectedFrameIndex);
-    _selectedFrameIndex = null;
+    if (_highlightedFrameIndex == null) return;
+    _timeline.duplicateFrameAt(_highlightedFrameIndex);
+    _highlightedFrameIndex = null;
     notifyListeners();
   }
 

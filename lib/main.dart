@@ -49,6 +49,8 @@ class App extends StatelessWidget {
             accentColor: Colors.amber,
             // Splash
             highlightColor: Colors.white.withOpacity(0.2),
+            // Switch
+            toggleableActiveColor: Colors.amber,
             colorScheme: ColorScheme(
               brightness: Brightness.dark,
               // Primary

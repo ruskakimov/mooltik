@@ -9,8 +9,8 @@ import 'package:provider/provider.dart';
 class Preview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
+    return Listener(
+      onPointerDown: (_) {
         final project = context.read<Project>();
         final timeline = context.read<TimelineModel>();
 

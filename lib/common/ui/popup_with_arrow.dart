@@ -8,10 +8,12 @@ class PopupWithArrow extends StatelessWidget {
   const PopupWithArrow({
     Key key,
     @required this.width,
+    this.arrowOffset,
     this.child,
   }) : super(key: key);
 
   final double width;
+  final double arrowOffset;
   final Widget child;
 
   @override
@@ -31,7 +33,9 @@ class PopupWithArrow extends StatelessWidget {
         ),
         Positioned(
           top: -_triangleHeight,
-          left: (width - _triangleWidth) / 2,
+          left: arrowOffset == null
+              ? (width - _triangleWidth) / 2
+              : arrowOffset - _triangleWidth / 2,
           child: _Triangle(),
         ),
       ],
