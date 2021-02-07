@@ -38,6 +38,7 @@ class DrawingMenu extends StatelessWidget {
           onTap: () {
             final timeline = context.read<TimelineModel>();
             timeline.duplicateFrameAt(timeline.selectedFrameIndex);
+            timeline.stepForward();
             onDone?.call();
           },
         ),
