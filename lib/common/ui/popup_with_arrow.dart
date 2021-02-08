@@ -53,37 +53,42 @@ class PopupWithArrow extends StatelessWidget {
             child: child,
           ),
         ),
-        Positioned(
-          top: arrowSide == ArrowSide.top ? _arrowSideOffset : null,
-          left: arrowSide == ArrowSide.left
-              ? _arrowSideOffset
-              : arrowSide == ArrowSide.right
-                  ? null
-                  : _horizontalSideLeftOffset,
-          right: arrowSide == ArrowSide.right ? _arrowSideOffset : null,
-          bottom: arrowSide == ArrowSide.bottom ? _arrowSideOffset : null,
-          child: RotatedBox(
-            quarterTurns: _arrowQuarterTurns,
-            child: _Arrow(),
+        Positioned.fill(
+          child: Align(
+            alignment: Alignment(
+              _arrowAlignmentX,
+              _arrowAlignmentY,
+            ),
+            child: Transform.translate(
+              offset: Offset(0, 0),
+              child: RotatedBox(
+                quarterTurns: _arrowQuarterTurns,
+                child: _Arrow(),
+              ),
+            ),
           ),
         ),
       ],
     );
   }
 
-  double get _arrowSideOffset => -_arrowHeight + 0.5;
-
-  double get _horizontalSideLeftOffset {
-    switch (arrowPosition) {
-      case ArrowPosition.start:
-        return _arrowWidth;
-      case ArrowPosition.end:
-        return width - _arrowWidth * 2;
-      case ArrowPosition.middle:
-      default:
-        return (width - _arrowWidth) / 2;
-    }
+  double get _arrowAlignmentX {
+    if (arrowSide == ArrowSide.left) return -1;
+    if (arrowSide == ArrowSide.right) return 1;
+    if (arrowPosition == ArrowPosition.start) return -1;
+    if (arrowPosition == ArrowPosition.middle) return 0;
+    return 1;
   }
+
+  double get _arrowAlignmentY {
+    if (arrowSide == ArrowSide.top) return -1;
+    if (arrowSide == ArrowSide.bottom) return 1;
+    if (arrowPosition == ArrowPosition.start) return -1;
+    if (arrowPosition == ArrowPosition.middle) return 0;
+    return 1;
+  }
+
+  double get _arrowSideOffset => -_arrowHeight + 0.5;
 
   int get _arrowQuarterTurns {
     switch (arrowSide) {
@@ -112,7 +117,7 @@ class _Arrow extends StatelessWidget {
       child: Container(
         width: _arrowWidth,
         height: _arrowHeight,
-        color: Theme.of(context).colorScheme.secondary,
+        color: Theme.of(context).colorScheme.primary,
       ),
       clipper: _ArrowClipper(),
     );
