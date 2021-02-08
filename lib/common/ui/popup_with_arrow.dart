@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-const double _triangleWidth = 24;
-const double _triangleHeight = 14;
-const double _triangleBorderRadius = 4;
+const double _arrowWidth = 24;
+const double _arrowHeight = 14;
+const double _arrowBorderRadius = 4;
 
 enum ArrowSide {
   top,
@@ -41,20 +41,20 @@ class PopupWithArrow extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: -_triangleHeight,
+          top: -_arrowHeight,
           left: arrowOffset == null
-              ? (width - _triangleWidth) / 2
-              : arrowOffset - _triangleWidth / 2,
+              ? (width - _arrowWidth) / 2
+              : arrowOffset - _arrowWidth / 2,
           child: RotatedBox(
-            quarterTurns: _triangleQuarterTurns(),
-            child: _Triangle(),
+            quarterTurns: _arrowQuarterTurns(),
+            child: _Arrow(),
           ),
         ),
       ],
     );
   }
 
-  int _triangleQuarterTurns() {
+  int _arrowQuarterTurns() {
     switch (arrowSide) {
       case ArrowSide.top:
         return 0;
@@ -70,8 +70,8 @@ class PopupWithArrow extends StatelessWidget {
   }
 }
 
-class _Triangle extends StatelessWidget {
-  const _Triangle({
+class _Arrow extends StatelessWidget {
+  const _Arrow({
     Key key,
   }) : super(key: key);
 
@@ -79,23 +79,23 @@ class _Triangle extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipPath(
       child: Container(
-        width: _triangleWidth,
-        height: _triangleHeight,
+        width: _arrowWidth,
+        height: _arrowHeight,
         color: Theme.of(context).colorScheme.secondary,
       ),
-      clipper: _TriangleClipper(),
+      clipper: _ArrowClipper(),
     );
   }
 }
 
-class _TriangleClipper extends CustomClipper<Path> {
+class _ArrowClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final w = size.width;
     final h = size.height;
 
-    final roundingLeftX = w / 2 - _triangleBorderRadius;
-    final roundingRightX = w / 2 + _triangleBorderRadius;
+    final roundingLeftX = w / 2 - _arrowBorderRadius;
+    final roundingRightX = w / 2 + _arrowBorderRadius;
     final roundingY = h - h * roundingLeftX / (w / 2);
 
     return Path()
