@@ -27,13 +27,11 @@ enum ArrowPosition {
 class PopupWithArrow extends StatelessWidget {
   const PopupWithArrow({
     Key key,
-    @required this.width,
-    this.child,
+    @required this.child,
     this.arrowSide = ArrowSide.top,
     this.arrowPosition = ArrowPosition.middle,
   }) : super(key: key);
 
-  final double width;
   final Widget child;
   final ArrowSide arrowSide;
   final ArrowPosition arrowPosition;
@@ -48,10 +46,7 @@ class PopupWithArrow extends StatelessWidget {
           borderRadius: BorderRadiusDirectional.circular(8),
           clipBehavior: Clip.antiAlias,
           elevation: 10,
-          child: SizedBox(
-            width: width,
-            child: child,
-          ),
+          child: child,
         ),
         Positioned.fill(
           child: Align(

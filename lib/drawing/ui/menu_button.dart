@@ -8,10 +8,7 @@ import 'package:mooltik/drawing/ui/drawing_menu.dart';
 class MenuButton extends StatefulWidget {
   const MenuButton({
     Key key,
-    this.menuWidth = 320,
   }) : super(key: key);
-
-  final double menuWidth;
 
   @override
   _MenuButtonState createState() => _MenuButtonState();
@@ -29,7 +26,6 @@ class _MenuButtonState extends State<MenuButton> {
       //   -1.0,
       // ),
       popup: PopupWithArrow(
-        width: widget.menuWidth,
         child: DrawingMenu(
           onDone: () {
             setState(() => _menuOpen = false);
