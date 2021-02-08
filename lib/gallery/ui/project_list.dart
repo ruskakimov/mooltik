@@ -24,21 +24,21 @@ class ProjectList extends StatelessWidget {
         final Project project = gallery.getProject(index);
 
         return Center(
-          child: GestureDetector(
-            onTap: () async {
-              await project.open();
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ChangeNotifierProvider<Project>.value(
-                    value: project,
-                    child: EditingPage(),
+          child: ChangeNotifierProvider<Project>.value(
+            value: project,
+            child: ProjectThumbnail(
+              thumbnail: project.thumbnail,
+              onTap: () async {
+                await project.open();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ChangeNotifierProvider<Project>.value(
+                      value: project,
+                      child: EditingPage(),
+                    ),
                   ),
-                ),
-              );
-            },
-            child: ChangeNotifierProvider<Project>.value(
-              value: project,
-              child: ProjectThumbnail(thumbnail: project.thumbnail),
+                );
+              },
             ),
           ),
         );
