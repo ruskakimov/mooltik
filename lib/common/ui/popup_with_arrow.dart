@@ -60,7 +60,7 @@ class PopupWithArrow extends StatelessWidget {
               _arrowAlignmentY,
             ),
             child: Transform.translate(
-              offset: Offset(0, 0),
+              offset: _arrowOffset,
               child: RotatedBox(
                 quarterTurns: _arrowQuarterTurns,
                 child: _Arrow(),
@@ -88,7 +88,17 @@ class PopupWithArrow extends StatelessWidget {
     return 0;
   }
 
-  double get _arrowSideOffset => -_arrowHeight + 0.5;
+  Offset get _arrowOffset {
+    // Adjust for sub-pixel gap artifact.
+    final h = _arrowHeight - 0.5;
+    final w = _arrowWidth;
+
+    if (arrowSide == ArrowSide.top || arrowSide == ArrowSide.bottom) {
+      return Offset(w * -_arrowAlignmentX, h * _arrowAlignmentY);
+    } else {
+      return Offset(h * _arrowAlignmentX, w * -_arrowAlignmentY);
+    }
+  }
 
   int get _arrowQuarterTurns {
     switch (arrowSide) {
@@ -117,7 +127,7 @@ class _Arrow extends StatelessWidget {
       child: Container(
         width: _arrowWidth,
         height: _arrowHeight,
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).colorScheme.secondary,
       ),
       clipper: _ArrowClipper(),
     );
