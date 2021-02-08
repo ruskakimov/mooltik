@@ -23,6 +23,8 @@ class _MenuButtonState extends State<MenuButton> {
       visible: _menuOpen,
       popupAnchor: Alignment.topLeft,
       popup: PopupWithArrow(
+        arrowSide: ArrowSide.top,
+        arrowPosition: ArrowPosition.start,
         child: DrawingMenu(
           onDone: () {
             setState(() => _menuOpen = false);
