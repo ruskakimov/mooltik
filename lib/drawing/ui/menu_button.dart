@@ -5,8 +5,6 @@ import 'package:mooltik/common/ui/popup_entry.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/drawing/ui/drawing_menu.dart';
 
-const double _arrowLeftOffset = 60;
-
 class MenuButton extends StatefulWidget {
   const MenuButton({
     Key key,
@@ -26,13 +24,12 @@ class _MenuButtonState extends State<MenuButton> {
   Widget build(BuildContext context) {
     return PopupEntry(
       visible: _menuOpen,
-      popupAnchor: Alignment(
-        -1.0 + _arrowLeftOffset * 2 / widget.menuWidth,
-        -1.0,
-      ),
+      // popupAnchor: Alignment(
+      //   -1.0 + _arrowLeftOffset * 2 / widget.menuWidth,
+      //   -1.0,
+      // ),
       popup: PopupWithArrow(
         width: widget.menuWidth,
-        arrowOffset: _arrowLeftOffset,
         child: DrawingMenu(
           onDone: () {
             setState(() => _menuOpen = false);

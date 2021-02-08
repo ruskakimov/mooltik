@@ -28,14 +28,12 @@ class PopupWithArrow extends StatelessWidget {
   const PopupWithArrow({
     Key key,
     @required this.width,
-    this.arrowOffset,
     this.child,
     this.arrowSide = ArrowSide.top,
     this.arrowPosition = ArrowPosition.middle,
   }) : super(key: key);
 
   final double width;
-  final double arrowOffset;
   final Widget child;
   final ArrowSide arrowSide;
   final ArrowPosition arrowPosition;
@@ -58,9 +56,7 @@ class PopupWithArrow extends StatelessWidget {
         Positioned(
           top: arrowSide == ArrowSide.top ? -_arrowHeight : null,
           bottom: arrowSide == ArrowSide.bottom ? -_arrowHeight : null,
-          left: arrowOffset == null
-              ? (width - _arrowWidth) / 2
-              : arrowOffset - _arrowWidth / 2,
+          left: (width - _arrowWidth) / 2,
           child: RotatedBox(
             quarterTurns: _arrowQuarterTurns,
             child: _Arrow(),
