@@ -21,10 +21,7 @@ class _MenuButtonState extends State<MenuButton> {
   Widget build(BuildContext context) {
     return PopupEntry(
       visible: _menuOpen,
-      // popupAnchor: Alignment(
-      //   -1.0 + _arrowLeftOffset * 2 / widget.menuWidth,
-      //   -1.0,
-      // ),
+      popupAnchor: Alignment.topLeft,
       popup: PopupWithArrow(
         child: DrawingMenu(
           onDone: () {

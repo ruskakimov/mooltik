@@ -31,20 +31,22 @@ class BrushPopup extends StatelessWidget {
     final toolbox = context.watch<ToolboxModel>();
 
     return PopupWithArrow(
-      width: _circleSize * valueOptions.length +
-          _padding * (valueOptions.length + 1),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildSizeOptions(),
-          Divider(height: 2),
-          AppSlider(
-            value: toolbox.selectedToolOpacity,
-            onChanged: (double value) {
-              toolbox.changeToolOpacity(value);
-            },
-          ),
-        ],
+      child: SizedBox(
+        width: _circleSize * valueOptions.length +
+            _padding * (valueOptions.length + 1),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildSizeOptions(),
+            Divider(height: 2),
+            AppSlider(
+              value: toolbox.selectedToolOpacity,
+              onChanged: (double value) {
+                toolbox.changeToolOpacity(value);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
