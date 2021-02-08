@@ -56,7 +56,8 @@ class PopupWithArrow extends StatelessWidget {
         Positioned(
           top: arrowSide == ArrowSide.top ? -_arrowHeight : null,
           bottom: arrowSide == ArrowSide.bottom ? -_arrowHeight : null,
-          left: (width - _arrowWidth) / 2,
+          left: arrowPosition == ArrowPosition.start ? _arrowWidth : null,
+          right: arrowPosition == ArrowPosition.end ? _arrowWidth : null,
           child: RotatedBox(
             quarterTurns: _arrowQuarterTurns,
             child: _Arrow(),

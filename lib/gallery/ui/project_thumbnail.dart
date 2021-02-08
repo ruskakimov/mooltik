@@ -46,10 +46,10 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
 
   Widget _buildProjectMenu() {
     return PopupWithArrow(
-      width: 100,
+      width: 200,
       child: SizedBox(height: 60),
-      arrowSide: ArrowSide.top,
-      arrowPosition: ArrowPosition.start,
+      arrowSide: ArrowSide.bottom,
+      arrowPosition: ArrowPosition.end,
     );
   }
 
