@@ -76,16 +76,16 @@ class PopupWithArrow extends StatelessWidget {
     if (arrowSide == ArrowSide.left) return -1;
     if (arrowSide == ArrowSide.right) return 1;
     if (arrowPosition == ArrowPosition.start) return -1;
-    if (arrowPosition == ArrowPosition.middle) return 0;
-    return 1;
+    if (arrowPosition == ArrowPosition.end) return 1;
+    return 0;
   }
 
   double get _arrowAlignmentY {
     if (arrowSide == ArrowSide.top) return -1;
     if (arrowSide == ArrowSide.bottom) return 1;
     if (arrowPosition == ArrowPosition.start) return -1;
-    if (arrowPosition == ArrowPosition.middle) return 0;
-    return 1;
+    if (arrowPosition == ArrowPosition.end) return 1;
+    return 0;
   }
 
   double get _arrowSideOffset => -_arrowHeight + 0.5;
