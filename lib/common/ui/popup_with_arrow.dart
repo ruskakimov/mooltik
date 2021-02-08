@@ -4,6 +4,7 @@ const double _arrowWidth = 24;
 const double _arrowHeight = 14;
 const double _arrowBorderRadius = 4;
 
+/// The side of the popup on which arrow is put.
 enum ArrowSide {
   top,
   left,
