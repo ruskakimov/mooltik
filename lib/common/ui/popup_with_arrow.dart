@@ -12,6 +12,15 @@ enum ArrowSide {
   bottom,
 }
 
+/// Arrow position on popup side.
+/// `ArrowPosition.start` stands for left on horizontal side and top on vertical side.
+/// `ArrowPosition.end` stands for right on horizontal side and bottom on vertical side.
+enum ArrowPosition {
+  start,
+  middle,
+  end,
+}
+
 class PopupWithArrow extends StatelessWidget {
   const PopupWithArrow({
     Key key,
@@ -19,12 +28,14 @@ class PopupWithArrow extends StatelessWidget {
     this.arrowOffset,
     this.child,
     this.arrowSide = ArrowSide.top,
+    this.arrowPosition = ArrowPosition.middle,
   }) : super(key: key);
 
   final double width;
   final double arrowOffset;
   final Widget child;
   final ArrowSide arrowSide;
+  final ArrowPosition arrowPosition;
 
   @override
   Widget build(BuildContext context) {
