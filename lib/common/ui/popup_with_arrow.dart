@@ -53,12 +53,13 @@ class PopupWithArrow extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: -_arrowHeight,
+          top: arrowSide == ArrowSide.top ? -_arrowHeight : null,
+          bottom: arrowSide == ArrowSide.bottom ? -_arrowHeight : null,
           left: arrowOffset == null
               ? (width - _arrowWidth) / 2
               : arrowOffset - _arrowWidth / 2,
           child: RotatedBox(
-            quarterTurns: _arrowQuarterTurns(),
+            quarterTurns: _arrowQuarterTurns,
             child: _Arrow(),
           ),
         ),
@@ -66,7 +67,7 @@ class PopupWithArrow extends StatelessWidget {
     );
   }
 
-  int _arrowQuarterTurns() {
+  int get _arrowQuarterTurns {
     switch (arrowSide) {
       case ArrowSide.top:
         return 0;

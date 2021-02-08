@@ -48,6 +48,8 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
     return PopupWithArrow(
       width: 100,
       child: SizedBox(height: 60),
+      arrowSide: ArrowSide.bottom,
+      arrowPosition: ArrowPosition.middle,
     );
   }
 
