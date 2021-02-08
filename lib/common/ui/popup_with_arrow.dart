@@ -13,11 +13,14 @@ enum ArrowSide {
 }
 
 /// Arrow position on popup side.
-/// `ArrowPosition.start` stands for left on horizontal side and top on vertical side.
-/// `ArrowPosition.end` stands for right on horizontal side and bottom on vertical side.
 enum ArrowPosition {
+  /// Left on horizontal side and top on vertical side.
   start,
+
+  /// Middle of selected popup side.
   middle,
+
+  /// Right on horizontal side and bottom on vertical side.
   end,
 }
 
