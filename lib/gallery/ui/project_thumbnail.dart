@@ -33,6 +33,8 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
       },
       child: PopupEntry(
         visible: _menuOpen,
+        childAnchor: Alignment.topCenter,
+        popupAnchor: Alignment.center,
         popup: _buildProjectMenu(),
         child: _buildThumbnail(),
         onTapOutside: () {

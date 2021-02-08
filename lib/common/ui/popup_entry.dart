@@ -8,6 +8,7 @@ class PopupEntry extends StatelessWidget {
     @required this.popup,
     @required this.child,
     this.popupAnchor = Alignment.topCenter,
+    this.childAnchor = const Alignment(0, 1.2),
     this.onTapOutside,
   }) : super(key: key);
 
@@ -15,6 +16,7 @@ class PopupEntry extends StatelessWidget {
   final Widget popup;
   final Widget child;
   final Alignment popupAnchor;
+  final Alignment childAnchor;
   final VoidCallback onTapOutside;
 
   @override
@@ -35,7 +37,7 @@ class PopupEntry extends StatelessWidget {
           ignoring: visible,
           child: child,
         ),
-        childAnchor: Alignment.bottomCenter.add(Alignment(0, 0.2)),
+        childAnchor: childAnchor,
       ),
     );
   }
