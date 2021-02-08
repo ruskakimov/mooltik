@@ -178,10 +178,11 @@ class PopupWithArrowEntry extends StatelessWidget {
       visible: visible,
       childAnchor: arrowAnchor,
       // TODO: Pass arrow alignment
-      popupAnchor: Alignment.topLeft,
+      popupAnchor: Alignment.topCenter,
       popup: Transform.translate(
         // TODO: Reverse arrow offset
-        offset: Offset(-_arrowWidth * 1.5, _arrowHeight),
+        offset: Offset.zero,
+        // offset: Offset(-_arrowWidth * 1.5, _arrowHeight),
         child: PopupWithArrow(
           arrowSide: arrowSide,
           arrowPosition: arrowPosition,

@@ -31,11 +31,9 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
       onLongPress: () {
         setState(() => _menuOpen = true);
       },
-      child: PopupEntry(
+      child: PopupWithArrowEntry(
         visible: _menuOpen,
-        childAnchor: Alignment.topCenter,
-        popupAnchor: Alignment.center,
-        popup: _buildProjectMenu(),
+        popupBody: _buildProjectMenu(),
         child: _buildThumbnail(),
         onTapOutside: () {
           setState(() => _menuOpen = false);
@@ -45,11 +43,7 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
   }
 
   Widget _buildProjectMenu() {
-    return PopupWithArrow(
-      child: SizedBox(width: 200, height: 200),
-      arrowSide: ArrowSide.bottom,
-      arrowPosition: ArrowPosition.middle,
-    );
+    return SizedBox(width: 200, height: 200);
   }
 
   Widget _buildThumbnail() {
