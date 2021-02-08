@@ -49,7 +49,7 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
       width: 200,
       child: SizedBox(height: 60),
       arrowSide: ArrowSide.bottom,
-      arrowPosition: ArrowPosition.end,
+      // arrowPosition: ArrowPosition.end,
     );
   }
 
