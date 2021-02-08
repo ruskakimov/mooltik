@@ -160,7 +160,7 @@ class PopupWithArrowEntry extends StatelessWidget {
     @required this.child,
     this.arrowSide = ArrowSide.top,
     this.arrowPosition = ArrowPosition.middle,
-    this.arrowAnchor = const Alignment(0, 0.55),
+    this.arrowAnchor = const Alignment(0, 0.6),
     this.onTapOutside,
   }) : super(key: key);
 
