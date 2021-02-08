@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/ui/popup_entry.dart';
 
 const double _arrowWidth = 24;
 const double _arrowHeight = 14;
@@ -149,4 +150,44 @@ class _ArrowClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+class PopupWithArrowEntry extends StatelessWidget {
+  const PopupWithArrowEntry({
+    Key key,
+    @required this.visible,
+    @required this.popupBody,
+    @required this.child,
+    this.arrowSide = ArrowSide.top,
+    this.arrowPosition = ArrowPosition.middle,
+    this.arrowAnchor = const Alignment(0, 0.55),
+    this.onTapOutside,
+  }) : super(key: key);
+
+  final bool visible;
+  final Widget popupBody;
+  final Widget child;
+  final ArrowSide arrowSide;
+  final ArrowPosition arrowPosition;
+  final Alignment arrowAnchor;
+  final VoidCallback onTapOutside;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupEntry(
+      visible: visible,
+      childAnchor: arrowAnchor,
+      popupAnchor: Alignment.topLeft,
+      popup: Transform.translate(
+        offset: Offset(-_arrowWidth * 1.5, _arrowHeight),
+        child: PopupWithArrow(
+          arrowSide: arrowSide,
+          arrowPosition: arrowPosition,
+          child: popupBody,
+        ),
+      ),
+      child: child,
+      onTapOutside: onTapOutside,
+    );
+  }
 }

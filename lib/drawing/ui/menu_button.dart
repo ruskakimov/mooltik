@@ -19,17 +19,14 @@ class _MenuButtonState extends State<MenuButton> {
 
   @override
   Widget build(BuildContext context) {
-    return PopupEntry(
+    return PopupWithArrowEntry(
       visible: _menuOpen,
-      popupAnchor: Alignment.topLeft,
-      popup: PopupWithArrow(
-        arrowSide: ArrowSide.top,
-        arrowPosition: ArrowPosition.start,
-        child: DrawingMenu(
-          onDone: () {
-            setState(() => _menuOpen = false);
-          },
-        ),
+      arrowSide: ArrowSide.top,
+      arrowPosition: ArrowPosition.start,
+      popupBody: DrawingMenu(
+        onDone: () {
+          setState(() => _menuOpen = false);
+        },
       ),
       child: AppIconButton(
         icon: FontAwesomeIcons.ellipsisV,
