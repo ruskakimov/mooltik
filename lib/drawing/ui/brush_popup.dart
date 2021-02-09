@@ -32,7 +32,7 @@ class BrushPopup extends StatelessWidget {
 
     return PopupWithArrow(
       arrowSide: ArrowSide.top,
-      arrowPosition: ArrowPosition.middle,
+      arrowPosition: ArrowSidePosition.middle,
       child: SizedBox(
         width: _circleSize * valueOptions.length +
             _padding * (valueOptions.length + 1),

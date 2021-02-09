@@ -191,7 +191,7 @@ class PopupWithArrowEntry extends StatelessWidget {
       childAnchor: arrowAnchor,
       popupAnchor: arrowAlignment,
       popup: Transform.translate(
-        offset: arrowOffset.scale(-1, -1).translate(-_arrowWidth / 2, 0),
+        offset: arrowOffset.scale(-1, -1),
         child: PopupWithArrow(
           arrowSide: arrowSide,
           arrowPosition: arrowPosition,

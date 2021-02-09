@@ -34,7 +34,8 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
       child: PopupWithArrowEntry(
         visible: _menuOpen,
         arrowSide: ArrowSide.bottom,
-        arrowAnchor: Alignment.topCenter,
+        arrowPosition: ArrowSidePosition.start,
+        arrowAnchor: Alignment.topRight,
         popupBody: _buildProjectMenu(),
         child: _buildThumbnail(),
         onTapOutside: () {
