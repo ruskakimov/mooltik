@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
+import 'package:mooltik/gallery/data/gallery_model.dart';
 import 'package:provider/provider.dart';
 
 class ProjectThumbnail extends StatefulWidget {
@@ -54,7 +55,9 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
         icon: FontAwesomeIcons.trashAlt,
         label: 'Move to Bin',
         color: Theme.of(context).colorScheme.onPrimary,
-        onTap: () {},
+        onTap: () {
+          context.read<GalleryModel>().deleteProject(0);
+        },
       ),
     );
   }
