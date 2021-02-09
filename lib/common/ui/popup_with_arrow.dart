@@ -146,6 +146,9 @@ Alignment _arrowAlignment(
   return Alignment(_arrowAlignmentX(), _arrowAlignmentY());
 }
 
+bool _horizontalArrowSide(ArrowSide arrowSide) =>
+    arrowSide == ArrowSide.top || arrowSide == ArrowSide.bottom;
+
 Offset _arrowOffset(
   ArrowSide arrowSide,
   Alignment arrowAlignment,
@@ -154,7 +157,7 @@ Offset _arrowOffset(
   final h = _arrowHeight - 0.5;
   final w = _arrowWidth;
 
-  if (arrowSide == ArrowSide.top || arrowSide == ArrowSide.bottom) {
+  if (_horizontalArrowSide(arrowSide)) {
     return Offset(w * -arrowAlignment.x, h * arrowAlignment.y);
   } else {
     return Offset(h * arrowAlignment.x, w * -arrowAlignment.y);
@@ -184,14 +187,20 @@ class PopupWithArrowEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final arrowAlignment = _arrowAlignment(arrowSide, arrowSidePosition);
-    final arrowOffset = _arrowOffset(arrowSide, arrowAlignment);
+    var arrowOffset = _arrowOffset(arrowSide, arrowAlignment).scale(-1, -1);
+
+    if (_horizontalArrowSide(arrowSide)) {
+      arrowOffset += Offset(_arrowWidth / 2 * arrowAlignment.x, 0);
+    } else {
+      arrowOffset += Offset(0, _arrowWidth / 2 * arrowAlignment.y);
+    }
 
     return PopupEntry(
       visible: visible,
       childAnchor: arrowAnchor,
       popupAnchor: arrowAlignment,
       popup: Transform.translate(
-        offset: arrowOffset.scale(-1, -1),
+        offset: arrowOffset,
         child: PopupWithArrow(
           arrowSide: arrowSide,
           arrowPosition: arrowSidePosition,
