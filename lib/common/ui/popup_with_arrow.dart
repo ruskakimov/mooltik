@@ -14,7 +14,7 @@ enum ArrowSide {
 }
 
 /// Arrow position on popup side.
-enum ArrowPosition {
+enum ArrowSidePosition {
   /// Left on horizontal side and top on vertical side.
   start,
 
@@ -30,12 +30,12 @@ class PopupWithArrow extends StatelessWidget {
     Key key,
     @required this.child,
     this.arrowSide = ArrowSide.top,
-    this.arrowPosition = ArrowPosition.middle,
+    this.arrowPosition = ArrowSidePosition.middle,
   }) : super(key: key);
 
   final Widget child;
   final ArrowSide arrowSide;
-  final ArrowPosition arrowPosition;
+  final ArrowSidePosition arrowPosition;
 
   @override
   Widget build(BuildContext context) {
@@ -123,27 +123,33 @@ class _ArrowClipper extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
-Alignment _arrowAlignment(ArrowSide arrowSide, ArrowPosition arrowPosition) {
+Alignment _arrowAlignment(
+  ArrowSide arrowSide,
+  ArrowSidePosition arrowPosition,
+) {
   double _arrowAlignmentX() {
     if (arrowSide == ArrowSide.left) return -1;
     if (arrowSide == ArrowSide.right) return 1;
-    if (arrowPosition == ArrowPosition.start) return -1;
-    if (arrowPosition == ArrowPosition.end) return 1;
+    if (arrowPosition == ArrowSidePosition.start) return -1;
+    if (arrowPosition == ArrowSidePosition.end) return 1;
     return 0;
   }
 
   double _arrowAlignmentY() {
     if (arrowSide == ArrowSide.top) return -1;
     if (arrowSide == ArrowSide.bottom) return 1;
-    if (arrowPosition == ArrowPosition.start) return -1;
-    if (arrowPosition == ArrowPosition.end) return 1;
+    if (arrowPosition == ArrowSidePosition.start) return -1;
+    if (arrowPosition == ArrowSidePosition.end) return 1;
     return 0;
   }
 
   return Alignment(_arrowAlignmentX(), _arrowAlignmentY());
 }
 
-Offset _arrowOffset(ArrowSide arrowSide, Alignment arrowAlignment) {
+Offset _arrowOffset(
+  ArrowSide arrowSide,
+  Alignment arrowAlignment,
+) {
   // Adjust for sub-pixel gap artifact.
   final h = _arrowHeight - 0.5;
   final w = _arrowWidth;
@@ -162,7 +168,7 @@ class PopupWithArrowEntry extends StatelessWidget {
     @required this.popupBody,
     @required this.child,
     this.arrowSide = ArrowSide.top,
-    this.arrowPosition = ArrowPosition.middle,
+    this.arrowPosition = ArrowSidePosition.middle,
     this.arrowAnchor = const Alignment(0, 0.6),
     this.onTapOutside,
   }) : super(key: key);
@@ -171,7 +177,7 @@ class PopupWithArrowEntry extends StatelessWidget {
   final Widget popupBody;
   final Widget child;
   final ArrowSide arrowSide;
-  final ArrowPosition arrowPosition;
+  final ArrowSidePosition arrowPosition;
   final Alignment arrowAnchor;
   final VoidCallback onTapOutside;
 
