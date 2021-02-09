@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/surface.dart';
-import 'package:mooltik/gallery/ui/trash_button.dart';
+import 'package:mooltik/gallery/ui/bin_button.dart';
 
 class HomeBar extends StatelessWidget {
   const HomeBar({
@@ -14,7 +14,7 @@ class HomeBar extends StatelessWidget {
         children: [
           _Logo(),
           Spacer(),
-          TrashButton(),
+          BinButton(),
           SizedBox(width: 16),
         ],
       ),

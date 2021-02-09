@@ -3,16 +3,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 
-class TrashButton extends StatefulWidget {
-  const TrashButton({
+class BinButton extends StatefulWidget {
+  const BinButton({
     Key key,
   }) : super(key: key);
 
   @override
-  _TrashButtonState createState() => _TrashButtonState();
+  _BinButtonState createState() => _BinButtonState();
 }
 
-class _TrashButtonState extends State<TrashButton> {
+class _BinButtonState extends State<BinButton> {
   bool _trashOpen = false;
 
   @override
