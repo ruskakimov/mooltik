@@ -31,11 +31,13 @@ class PopupWithArrow extends StatelessWidget {
     @required this.child,
     this.arrowSide = ArrowSide.top,
     this.arrowPosition = ArrowSidePosition.middle,
+    this.color,
   }) : super(key: key);
 
   final Widget child;
   final ArrowSide arrowSide;
   final ArrowSidePosition arrowPosition;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,7 @@ class PopupWithArrow extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Material(
-          color: Theme.of(context).colorScheme.secondary,
+          color: color ?? Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadiusDirectional.circular(8),
           clipBehavior: Clip.antiAlias,
           elevation: 10,
@@ -58,7 +60,7 @@ class PopupWithArrow extends StatelessWidget {
               offset: _arrowOffset(arrowSide, arrowAlignment),
               child: RotatedBox(
                 quarterTurns: _arrowQuarterTurns,
-                child: _Arrow(),
+                child: _Arrow(color: color),
               ),
             ),
           ),
@@ -86,7 +88,10 @@ class PopupWithArrow extends StatelessWidget {
 class _Arrow extends StatelessWidget {
   const _Arrow({
     Key key,
+    this.color,
   }) : super(key: key);
+
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +99,7 @@ class _Arrow extends StatelessWidget {
       child: Container(
         width: _arrowWidth,
         height: _arrowHeight,
-        color: Theme.of(context).colorScheme.secondary,
+        color: color ?? Theme.of(context).colorScheme.secondary,
       ),
       clipper: _ArrowClipper(),
     );
@@ -173,6 +178,7 @@ class PopupWithArrowEntry extends StatelessWidget {
     this.arrowSide = ArrowSide.top,
     this.arrowSidePosition = ArrowSidePosition.middle,
     this.arrowAnchor = const Alignment(0, 0.6),
+    this.popupColor,
     this.onTapOutside,
   }) : super(key: key);
 
@@ -182,6 +188,7 @@ class PopupWithArrowEntry extends StatelessWidget {
   final ArrowSide arrowSide;
   final ArrowSidePosition arrowSidePosition;
   final Alignment arrowAnchor;
+  final Color popupColor;
   final VoidCallback onTapOutside;
 
   @override
@@ -205,6 +212,7 @@ class PopupWithArrowEntry extends StatelessWidget {
           arrowSide: arrowSide,
           arrowPosition: arrowSidePosition,
           child: popupBody,
+          color: popupColor,
         ),
       ),
       child: child,
