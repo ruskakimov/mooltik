@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mooltik/common/ui/app_icon_button.dart';
-import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/common/ui/surface.dart';
+import 'package:mooltik/gallery/ui/trash_button.dart';
 
 class HomeBar extends StatelessWidget {
   const HomeBar({
@@ -16,28 +14,9 @@ class HomeBar extends StatelessWidget {
         children: [
           _Logo(),
           Spacer(),
-          _TrashButton(),
+          TrashButton(),
           SizedBox(width: 16),
         ],
-      ),
-    );
-  }
-}
-
-class _TrashButton extends StatelessWidget {
-  const _TrashButton({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupWithArrowEntry(
-      visible: false,
-      arrowSide: ArrowSide.top,
-      arrowSidePosition: ArrowSidePosition.end,
-      popupBody: SizedBox(width: 200, height: 300),
-      child: AppIconButton(
-        icon: FontAwesomeIcons.trashAlt,
       ),
     );
   }
