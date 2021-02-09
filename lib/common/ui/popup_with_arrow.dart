@@ -39,6 +39,8 @@ class PopupWithArrow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final arrowAlignment = _arrowAlignment(arrowSide, arrowPosition);
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -51,12 +53,9 @@ class PopupWithArrow extends StatelessWidget {
         ),
         Positioned.fill(
           child: Align(
-            alignment: Alignment(
-              _arrowAlignmentX,
-              _arrowAlignmentY,
-            ),
+            alignment: arrowAlignment,
             child: Transform.translate(
-              offset: _arrowOffset,
+              offset: _arrowOffset(arrowSide, arrowAlignment),
               child: RotatedBox(
                 quarterTurns: _arrowQuarterTurns,
                 child: _Arrow(),
@@ -66,34 +65,6 @@ class PopupWithArrow extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  double get _arrowAlignmentX {
-    if (arrowSide == ArrowSide.left) return -1;
-    if (arrowSide == ArrowSide.right) return 1;
-    if (arrowPosition == ArrowPosition.start) return -1;
-    if (arrowPosition == ArrowPosition.end) return 1;
-    return 0;
-  }
-
-  double get _arrowAlignmentY {
-    if (arrowSide == ArrowSide.top) return -1;
-    if (arrowSide == ArrowSide.bottom) return 1;
-    if (arrowPosition == ArrowPosition.start) return -1;
-    if (arrowPosition == ArrowPosition.end) return 1;
-    return 0;
-  }
-
-  Offset get _arrowOffset {
-    // Adjust for sub-pixel gap artifact.
-    final h = _arrowHeight - 0.5;
-    final w = _arrowWidth;
-
-    if (arrowSide == ArrowSide.top || arrowSide == ArrowSide.bottom) {
-      return Offset(w * -_arrowAlignmentX, h * _arrowAlignmentY);
-    } else {
-      return Offset(h * _arrowAlignmentX, w * -_arrowAlignmentY);
-    }
   }
 
   int get _arrowQuarterTurns {
@@ -152,6 +123,38 @@ class _ArrowClipper extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
+Alignment _arrowAlignment(ArrowSide arrowSide, ArrowPosition arrowPosition) {
+  double _arrowAlignmentX() {
+    if (arrowSide == ArrowSide.left) return -1;
+    if (arrowSide == ArrowSide.right) return 1;
+    if (arrowPosition == ArrowPosition.start) return -1;
+    if (arrowPosition == ArrowPosition.end) return 1;
+    return 0;
+  }
+
+  double _arrowAlignmentY() {
+    if (arrowSide == ArrowSide.top) return -1;
+    if (arrowSide == ArrowSide.bottom) return 1;
+    if (arrowPosition == ArrowPosition.start) return -1;
+    if (arrowPosition == ArrowPosition.end) return 1;
+    return 0;
+  }
+
+  return Alignment(_arrowAlignmentX(), _arrowAlignmentY());
+}
+
+Offset _arrowOffset(ArrowSide arrowSide, Alignment arrowAlignment) {
+  // Adjust for sub-pixel gap artifact.
+  final h = _arrowHeight - 0.5;
+  final w = _arrowWidth;
+
+  if (arrowSide == ArrowSide.top || arrowSide == ArrowSide.bottom) {
+    return Offset(w * -arrowAlignment.x, h * arrowAlignment.y);
+  } else {
+    return Offset(h * arrowAlignment.x, w * -arrowAlignment.y);
+  }
+}
+
 class PopupWithArrowEntry extends StatelessWidget {
   const PopupWithArrowEntry({
     Key key,
@@ -174,15 +177,15 @@ class PopupWithArrowEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final arrowAlignment = _arrowAlignment(arrowSide, arrowPosition);
+    final arrowOffset = _arrowOffset(arrowSide, arrowAlignment);
+
     return PopupEntry(
       visible: visible,
       childAnchor: arrowAnchor,
-      // TODO: Pass arrow alignment
-      popupAnchor: Alignment.topCenter,
+      popupAnchor: arrowAlignment,
       popup: Transform.translate(
-        // TODO: Reverse arrow offset
-        offset: Offset.zero,
-        // offset: Offset(-_arrowWidth * 1.5, _arrowHeight),
+        offset: arrowOffset.scale(-1, -1).translate(-_arrowWidth / 2, 0),
         child: PopupWithArrow(
           arrowSide: arrowSide,
           arrowPosition: arrowPosition,

@@ -33,6 +33,8 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
       },
       child: PopupWithArrowEntry(
         visible: _menuOpen,
+        arrowSide: ArrowSide.bottom,
+        arrowAnchor: Alignment.topCenter,
         popupBody: _buildProjectMenu(),
         child: _buildThumbnail(),
         onTapOutside: () {
@@ -43,7 +45,7 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
   }
 
   Widget _buildProjectMenu() {
-    return SizedBox(width: 200, height: 200);
+    return SizedBox(width: 200, height: 60);
   }
 
   Widget _buildThumbnail() {
