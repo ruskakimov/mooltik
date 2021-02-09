@@ -36,7 +36,7 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
         visible: _menuOpen,
         arrowSide: ArrowSide.bottom,
         arrowSidePosition: ArrowSidePosition.middle,
-        arrowAnchor: Alignment(0, -0.5),
+        arrowAnchor: Alignment(0, -0.8),
         popupColor: Theme.of(context).colorScheme.primary,
         popupBody: _buildProjectMenu(),
         child: _buildThumbnail(),
