@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/app_slider.dart';
 import 'package:provider/provider.dart';
-import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 
 const double _padding = 12;
@@ -10,8 +9,8 @@ const double _circleSize = 44;
 const double _minInnerCircleWidth = 4;
 const double _maxInnerCircleWidth = 34;
 
-class BrushPopup extends StatelessWidget {
-  const BrushPopup({
+class BrushPicker extends StatelessWidget {
+  const BrushPicker({
     Key key,
     @required this.selectedValue,
     @required this.valueOptions,
@@ -30,25 +29,21 @@ class BrushPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
 
-    return PopupWithArrow(
-      arrowSide: ArrowSide.top,
-      arrowPosition: ArrowSidePosition.middle,
-      child: SizedBox(
-        width: _circleSize * valueOptions.length +
-            _padding * (valueOptions.length + 1),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildSizeOptions(),
-            Divider(height: 2),
-            AppSlider(
-              value: toolbox.selectedToolOpacity,
-              onChanged: (double value) {
-                toolbox.changeToolOpacity(value);
-              },
-            ),
-          ],
-        ),
+    return SizedBox(
+      width: _circleSize * valueOptions.length +
+          _padding * (valueOptions.length + 1),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildSizeOptions(),
+          Divider(height: 2),
+          AppSlider(
+            value: toolbox.selectedToolOpacity,
+            onChanged: (double value) {
+              toolbox.changeToolOpacity(value);
+            },
+          ),
+        ],
       ),
     );
   }
