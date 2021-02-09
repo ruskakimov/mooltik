@@ -63,7 +63,11 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
     return Container(
       width: 320,
       height: 180,
-      color: Colors.white,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: widget.thumbnail.existsSync()
           ? Image.memory(
               // Temporary fix for this issue https://github.com/flutter/flutter/issues/17419
