@@ -22,7 +22,7 @@ class _MenuButtonState extends State<MenuButton> {
     return PopupWithArrowEntry(
       visible: _menuOpen,
       arrowSide: ArrowSide.top,
-      arrowPosition: ArrowSidePosition.start,
+      arrowSidePosition: ArrowSidePosition.start,
       popupBody: DrawingMenu(
         onDone: () {
           setState(() => _menuOpen = false);

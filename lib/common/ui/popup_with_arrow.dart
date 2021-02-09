@@ -168,7 +168,7 @@ class PopupWithArrowEntry extends StatelessWidget {
     @required this.popupBody,
     @required this.child,
     this.arrowSide = ArrowSide.top,
-    this.arrowPosition = ArrowSidePosition.middle,
+    this.arrowSidePosition = ArrowSidePosition.middle,
     this.arrowAnchor = const Alignment(0, 0.6),
     this.onTapOutside,
   }) : super(key: key);
@@ -177,13 +177,13 @@ class PopupWithArrowEntry extends StatelessWidget {
   final Widget popupBody;
   final Widget child;
   final ArrowSide arrowSide;
-  final ArrowSidePosition arrowPosition;
+  final ArrowSidePosition arrowSidePosition;
   final Alignment arrowAnchor;
   final VoidCallback onTapOutside;
 
   @override
   Widget build(BuildContext context) {
-    final arrowAlignment = _arrowAlignment(arrowSide, arrowPosition);
+    final arrowAlignment = _arrowAlignment(arrowSide, arrowSidePosition);
     final arrowOffset = _arrowOffset(arrowSide, arrowAlignment);
 
     return PopupEntry(
@@ -194,7 +194,7 @@ class PopupWithArrowEntry extends StatelessWidget {
         offset: arrowOffset.scale(-1, -1),
         child: PopupWithArrow(
           arrowSide: arrowSide,
-          arrowPosition: arrowPosition,
+          arrowPosition: arrowSidePosition,
           child: popupBody,
         ),
       ),
