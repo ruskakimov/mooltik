@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
-import 'package:mooltik/common/ui/popup_entry.dart';
+import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:provider/provider.dart';
 
@@ -47,7 +48,15 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
   }
 
   Widget _buildProjectMenu() {
-    return SizedBox(width: 200, height: 60);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: LabeledIconButton(
+        icon: FontAwesomeIcons.trashAlt,
+        label: 'Move to Bin',
+        color: Theme.of(context).colorScheme.onPrimary,
+        onTap: () {},
+      ),
+    );
   }
 
   Widget _buildThumbnail() {
