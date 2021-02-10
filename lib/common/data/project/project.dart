@@ -28,6 +28,7 @@ class Project extends ChangeNotifier {
   Project(this.directory)
       : creationEpoch =
             parseCreationEpochFromDirectoryName(p.basename(directory.path)),
+        binned = parseBinnedFromDirectoryName(p.basename(directory.path)),
         thumbnail = File(p.join(directory.path, 'thumbnail.png')),
         _dataFile = File(p.join(directory.path, 'project_data.json'));
 
@@ -48,6 +49,10 @@ class Project extends ChangeNotifier {
     return int.parse(match);
   }
 
+  static bool parseBinnedFromDirectoryName(String dirName) {
+    return RegExp(r'.*_binned').hasMatch(dirName);
+  }
+
   static bool validProjectDirectory(Directory directory) {
     final String dirName = p.basename(directory.path);
     return RegExp(r'^project_[0-9]+$').hasMatch(dirName);
@@ -56,6 +61,9 @@ class Project extends ChangeNotifier {
   final Directory directory;
 
   final int creationEpoch;
+
+  /// Whether this project currently resides in the bin.
+  final bool binned;
 
   final File thumbnail;
 
