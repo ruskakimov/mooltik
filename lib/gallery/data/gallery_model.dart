@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
-import 'package:path/path.dart' as p;
 
 class GalleryModel extends ChangeNotifier {
   Directory _directory;
@@ -32,12 +31,7 @@ class GalleryModel extends ChangeNotifier {
   Future<Project> addProject() async {
     if (_projects == null) throw Exception('Read projects first.');
 
-    final int id = DateTime.now().millisecondsSinceEpoch;
-    final String folderName = 'project_$id';
-    final Directory dir =
-        await Directory(p.join(_directory.path, folderName)).create();
-    final Project project = Project(dir);
-
+    final project = Project.createIn(_directory);
     _projects.insert(0, project);
 
     notifyListeners();

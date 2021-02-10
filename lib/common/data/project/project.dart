@@ -24,10 +24,20 @@ import 'package:path/path.dart' as p;
 ///
 /// Where `[creation_timestamp]` is replaced with an epoch of creation time of that piece of data.
 class Project extends ChangeNotifier {
+  /// Loads project from the existing project directory.
   Project(this.directory)
       : id = int.parse(p.basename(directory.path).split('_').last),
         thumbnail = File(p.join(directory.path, 'thumbnail.png')),
         _dataFile = File(p.join(directory.path, 'project_data.json'));
+
+  /// Creates a new project from scratch in a given directory.
+  factory Project.createIn(Directory parentDirectory) {
+    final int id = DateTime.now().millisecondsSinceEpoch;
+    final String folderName = 'project_$id';
+    final Directory dir = Directory(p.join(parentDirectory.path, folderName))
+      ..createSync();
+    return Project(dir);
+  }
 
   static bool validProjectDirectory(Directory directory) {
     final String folderName = p.basename(directory.path);
