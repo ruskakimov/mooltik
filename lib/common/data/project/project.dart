@@ -29,6 +29,11 @@ class Project extends ChangeNotifier {
         thumbnail = File(p.join(directory.path, 'thumbnail.png')),
         _dataFile = File(p.join(directory.path, 'project_data.json'));
 
+  static bool validProjectDirectory(Directory directory) {
+    final String folderName = p.basename(directory.path);
+    return RegExp(r'^project_[0-9]+$').hasMatch(folderName);
+  }
+
   final Directory directory;
 
   final int id;

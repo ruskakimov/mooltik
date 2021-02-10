@@ -18,18 +18,13 @@ class GalleryModel extends ChangeNotifier {
   Future<List<Project>> _readProjects() async {
     final List<Project> projects = [];
     await for (final FileSystemEntity dir in _directory.list()) {
-      if (dir is Directory && _validProjectDirectory(dir)) {
+      if (dir is Directory && Project.validProjectDirectory(dir)) {
         projects.add(Project(dir));
       }
     }
     // Recent projects first.
     projects.sort((p1, p2) => p2.id - p1.id);
     return projects;
-  }
-
-  bool _validProjectDirectory(Directory directory) {
-    final String folderName = p.basename(directory.path);
-    return RegExp(r'^project_[0-9]+$').hasMatch(folderName);
   }
 
   Project getProject(int index) => _projects[index];
