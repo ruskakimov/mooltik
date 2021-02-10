@@ -26,7 +26,8 @@ import 'package:path/path.dart' as p;
 class Project extends ChangeNotifier {
   /// Loads project from an existing project directory.
   Project(this.directory)
-      : creationEpoch = int.parse(p.basename(directory.path).split('_').last),
+      : creationEpoch =
+            parseCreationEpochFromDirectoryName(p.basename(directory.path)),
         thumbnail = File(p.join(directory.path, 'thumbnail.png')),
         _dataFile = File(p.join(directory.path, 'project_data.json'));
 
@@ -42,9 +43,14 @@ class Project extends ChangeNotifier {
     return binned ? '${basename}_binned' : basename;
   }
 
+  static int parseCreationEpochFromDirectoryName(String dirName) {
+    final match = RegExp(r'[0-9]+').stringMatch(dirName);
+    return int.parse(match);
+  }
+
   static bool validProjectDirectory(Directory directory) {
-    final String folderName = p.basename(directory.path);
-    return RegExp(r'^project_[0-9]+$').hasMatch(folderName);
+    final String dirName = p.basename(directory.path);
+    return RegExp(r'^project_[0-9]+$').hasMatch(dirName);
   }
 
   final Directory directory;
