@@ -24,7 +24,7 @@ import 'package:path/path.dart' as p;
 ///
 /// Where `[creation_epoch]` is replaced with an epoch of creation time of that piece of data.
 class Project extends ChangeNotifier {
-  /// Loads project from the existing project directory.
+  /// Loads project from an existing project directory.
   Project(this.directory)
       : creationEpoch = int.parse(p.basename(directory.path).split('_').last),
         thumbnail = File(p.join(directory.path, 'thumbnail.png')),
