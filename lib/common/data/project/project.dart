@@ -32,11 +32,15 @@ class Project extends ChangeNotifier {
 
   /// Creates a new project from scratch in a given directory.
   factory Project.createIn(Directory parentDirectory) {
-    final int id = DateTime.now().millisecondsSinceEpoch;
-    final String folderName = 'project_$id';
-    final Directory dir = Directory(p.join(parentDirectory.path, folderName))
-      ..createSync();
+    final dirName =
+        directoryName(DateTime.now().millisecondsSinceEpoch.toString());
+    final dir = Directory(p.join(parentDirectory.path, dirName))..createSync();
     return Project(dir);
+  }
+
+  static String directoryName(String creationEpoch, [bool binned = false]) {
+    final basename = 'project_$creationEpoch';
+    return binned ? '${basename}_binned' : basename;
   }
 
   static bool validProjectDirectory(Directory directory) {
