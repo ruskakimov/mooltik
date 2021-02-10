@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
+import 'package:mooltik/gallery/ui/bin_contents.dart';
 
 class BinButton extends StatefulWidget {
   const BinButton({
@@ -21,7 +22,7 @@ class _BinButtonState extends State<BinButton> {
       visible: _trashOpen,
       arrowSide: ArrowSide.top,
       arrowSidePosition: ArrowSidePosition.end,
-      popupBody: SizedBox(width: 200, height: 300),
+      popupBody: BinContents(),
       child: AppIconButton(
         icon: FontAwesomeIcons.trashAlt,
         onTap: () {
