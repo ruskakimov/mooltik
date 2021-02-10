@@ -24,7 +24,7 @@ class ProjectList extends StatelessWidget {
         final Project project = gallery.getProject(index);
 
         return Center(
-          key: Key('${project.id}'),
+          key: Key('${project.creationEpoch}'),
           child: ChangeNotifierProvider<Project>.value(
             value: project,
             child: ProjectThumbnail(

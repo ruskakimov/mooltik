@@ -15,18 +15,18 @@ import 'package:path/path.dart' as p;
 /// Project file structure looks like the following:
 ///
 /// ```
-/// /project_[creation_timestamp]
+/// /project_[creation_epoch]
 ///    project_data.json
-///    frame[creation_timestamp].png
+///    frame[creation_epoch].png
 ///    /sounds
-///        [creation_timestamp].aac
+///        [creation_epoch].aac
 /// ```
 ///
-/// Where `[creation_timestamp]` is replaced with an epoch of creation time of that piece of data.
+/// Where `[creation_epoch]` is replaced with an epoch of creation time of that piece of data.
 class Project extends ChangeNotifier {
   /// Loads project from the existing project directory.
   Project(this.directory)
-      : id = int.parse(p.basename(directory.path).split('_').last),
+      : creationEpoch = int.parse(p.basename(directory.path).split('_').last),
         thumbnail = File(p.join(directory.path, 'thumbnail.png')),
         _dataFile = File(p.join(directory.path, 'project_data.json'));
 
@@ -46,7 +46,7 @@ class Project extends ChangeNotifier {
 
   final Directory directory;
 
-  final int id;
+  final int creationEpoch;
 
   final File thumbnail;
 

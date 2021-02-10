@@ -22,7 +22,7 @@ class GalleryModel extends ChangeNotifier {
       }
     }
     // Recent projects first.
-    projects.sort((p1, p2) => p2.id - p1.id);
+    projects.sort((p1, p2) => p2.creationEpoch - p1.creationEpoch);
     return projects;
   }
 
