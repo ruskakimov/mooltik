@@ -56,7 +56,9 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
         label: 'Move to Bin',
         color: Theme.of(context).colorScheme.onPrimary,
         onTap: () {
-          context.read<GalleryModel>().deleteProject(0);
+          context
+              .read<GalleryModel>()
+              .moveProjectToBin(context.read<Project>());
         },
       ),
     );

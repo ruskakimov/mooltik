@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
+import 'package:path/path.dart' as p;
 
 class GalleryModel extends ChangeNotifier {
   Directory _directory;
@@ -38,9 +39,25 @@ class GalleryModel extends ChangeNotifier {
     return project;
   }
 
-  Future<void> deleteProject(int index) async {
-    final Project project = _projects.removeAt(index);
-    await project.directory.delete(recursive: true);
+  Future<void> moveProjectToBin(Project project) async {
+    if (!_projects.contains(project))
+      throw Exception('Project instance not found.');
+
+    final i = _projects.indexOf(project);
+    final newDirName = Project.directoryName(project.creationEpoch, true);
+    final newPath = p.join(_directory.path, newDirName);
+
+    _projects[i] = Project(project.directory.renameSync(newPath));
+    notifyListeners();
+  }
+
+  Future<void> deleteProject(Project project) async {
+    if (!_projects.contains(project))
+      throw Exception('Project instance not found.');
+
+    final i = _projects.indexOf(project);
+    final deletedProject = _projects.removeAt(i);
+    await deletedProject.directory.delete(recursive: true);
     notifyListeners();
   }
 }
