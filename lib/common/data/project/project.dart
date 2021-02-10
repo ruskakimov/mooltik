@@ -57,8 +57,10 @@ class Project extends ChangeNotifier {
   }
 
   static bool validProjectDirectory(Directory directory) {
-    final String dirName = p.basename(directory.path);
-    return RegExp(r'^project_[0-9]+$').hasMatch(dirName);
+    final dirName = p.basename(directory.path);
+    final creationEpoch = parseCreationEpochFromDirectoryName(dirName);
+    final binned = parseBinnedFromDirectoryName(dirName);
+    return dirName == directoryName(creationEpoch, binned);
   }
 
   final Directory directory;
