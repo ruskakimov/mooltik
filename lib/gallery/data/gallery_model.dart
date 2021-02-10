@@ -54,6 +54,8 @@ class GalleryModel extends ChangeNotifier {
   Future<void> deleteProject(Project project) async {
     if (!_projects.contains(project))
       throw Exception('Project instance not found.');
+    if (!project.binned)
+      throw Exception('Cannot delete project outside of bin.');
 
     final i = _projects.indexOf(project);
     final deletedProject = _projects.removeAt(i);
