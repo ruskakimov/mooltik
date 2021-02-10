@@ -10,6 +10,8 @@ import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
 import 'package:path/path.dart' as p;
 
+const String _binnedPostfix = '_binned';
+
 /// Holds project data, reads and writes to project folder.
 ///
 /// Project file structure looks like the following:
@@ -40,8 +42,9 @@ class Project extends ChangeNotifier {
   }
 
   static String directoryName(int creationEpoch, [bool binned = false]) {
-    final basename = 'project_$creationEpoch';
-    return binned ? '${basename}_binned' : basename;
+    var dirName = 'project_$creationEpoch';
+    if (binned) dirName += _binnedPostfix;
+    return dirName;
   }
 
   static int parseCreationEpochFromDirectoryName(String dirName) {
@@ -50,7 +53,7 @@ class Project extends ChangeNotifier {
   }
 
   static bool parseBinnedFromDirectoryName(String dirName) {
-    return RegExp(r'.*_binned').hasMatch(dirName);
+    return RegExp('.*$_binnedPostfix').hasMatch(dirName);
   }
 
   static bool validProjectDirectory(Directory directory) {
