@@ -5,9 +5,13 @@ import 'package:path/path.dart' as p;
 
 class GalleryModel extends ChangeNotifier {
   Directory _directory;
-  List<Project> _projects;
+  List<Project> _projects = [];
 
-  int get numberOfProjects => _projects?.length;
+  List<Project> get projects =>
+      _projects.where((project) => !project.binned).toList();
+
+  List<Project> get binnedProjects =>
+      _projects.where((project) => project.binned).toList();
 
   Future<void> init(Directory directory) async {
     _directory = directory;
@@ -26,8 +30,6 @@ class GalleryModel extends ChangeNotifier {
     projects.sort((p1, p2) => p2.creationEpoch - p1.creationEpoch);
     return projects;
   }
-
-  Project getProject(int index) => _projects[index];
 
   Future<Project> addProject() async {
     if (_projects == null) throw Exception('Read projects first.');

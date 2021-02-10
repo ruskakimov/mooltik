@@ -13,15 +13,14 @@ class ProjectList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gallery = context.watch<GalleryModel>();
-
-    if (gallery.numberOfProjects == null) return SizedBox.shrink();
+    final projects = gallery.projects;
 
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       scrollDirection: Axis.horizontal,
-      itemCount: gallery.numberOfProjects,
+      itemCount: gallery.projects.length,
       itemBuilder: (context, index) {
-        final Project project = gallery.getProject(index);
+        final project = projects[index];
 
         return Center(
           key: Key('${project.creationEpoch}'),
