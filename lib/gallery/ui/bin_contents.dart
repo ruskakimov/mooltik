@@ -38,7 +38,9 @@ class BinContents extends StatelessWidget {
                 _BinSlideAction(
                   icon: FontAwesomeIcons.undoAlt,
                   label: 'Restore',
-                  onTap: () {},
+                  onTap: () {
+                    gallery.restoreProject(project);
+                  },
                 ),
               ],
               child: Padding(

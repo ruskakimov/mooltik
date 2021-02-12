@@ -47,9 +47,9 @@ class GalleryModel extends ChangeNotifier {
 
     final i = _projects.indexOf(project);
     final newDirName = Project.directoryName(project.creationEpoch, true);
-    final newPath = p.join(_directory.path, newDirName);
+    final newProjectPath = p.join(_directory.path, newDirName);
 
-    _projects[i] = Project(project.directory.renameSync(newPath));
+    _projects[i] = Project(project.directory.renameSync(newProjectPath));
     notifyListeners();
   }
 
@@ -62,6 +62,20 @@ class GalleryModel extends ChangeNotifier {
     final i = _projects.indexOf(project);
     final deletedProject = _projects.removeAt(i);
     await deletedProject.directory.delete(recursive: true);
+    notifyListeners();
+  }
+
+  Future<void> restoreProject(Project project) async {
+    if (!_projects.contains(project))
+      throw Exception('Project instance not found.');
+    if (!project.binned)
+      throw Exception('Cannot restore project outside of bin.');
+
+    final i = _projects.indexOf(project);
+    final newDirName = Project.directoryName(project.creationEpoch, false);
+    final newProjectPath = p.join(_directory.path, newDirName);
+
+    _projects[i] = Project(project.directory.renameSync(newProjectPath));
     notifyListeners();
   }
 }
