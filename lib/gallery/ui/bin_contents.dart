@@ -13,54 +13,63 @@ class BinContents extends StatelessWidget {
     final gallery = context.watch<GalleryModel>();
     final binnedProjects = gallery.binnedProjects;
 
-    return SizedBox(
-      width: 200,
-      height: 300,
-      child: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 6.0),
-        children: [
-          for (final project in binnedProjects)
-            Slidable(
-              key: Key('${project.creationEpoch}'),
-              actionPane: SlidableDrawerActionPane(),
-              actionExtentRatio: 0.5,
-              actions: [
-                _BinSlideAction(
-                  color: Colors.red,
-                  icon: FontAwesomeIcons.fireAlt,
-                  label: 'Destroy',
-                  onTap: () {
-                    gallery.deleteProject(project);
-                  },
-                ),
-              ],
-              secondaryActions: [
-                _BinSlideAction(
-                  icon: FontAwesomeIcons.undoAlt,
-                  label: 'Restore',
-                  onTap: () {
-                    gallery.restoreProject(project);
-                  },
-                ),
-              ],
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 6.0,
-                ),
-                child: Container(
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    color:
-                        Colors.white, // in case thumbnail is missing background
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Image.file(project.thumbnail),
-                ),
+    if (binnedProjects.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(FontAwesomeIcons.toiletPaperSlash),
+            SizedBox(height: 12),
+            Text('Nothing here...'),
+          ],
+        ),
+      );
+    }
+
+    return ListView(
+      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      children: [
+        for (final project in binnedProjects)
+          Slidable(
+            key: Key('${project.creationEpoch}'),
+            actionPane: SlidableDrawerActionPane(),
+            actionExtentRatio: 0.5,
+            actions: [
+              _BinSlideAction(
+                color: Colors.red,
+                icon: FontAwesomeIcons.fireAlt,
+                label: 'Destroy',
+                onTap: () {
+                  gallery.deleteProject(project);
+                },
               ),
-            )
-        ],
-      ),
+            ],
+            secondaryActions: [
+              _BinSlideAction(
+                icon: FontAwesomeIcons.undoAlt,
+                label: 'Restore',
+                onTap: () {
+                  gallery.restoreProject(project);
+                },
+              ),
+            ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+                vertical: 6.0,
+              ),
+              child: Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  color:
+                      Colors.white, // in case thumbnail is missing background
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Image.file(project.thumbnail),
+              ),
+            ),
+          )
+      ],
     );
   }
 }

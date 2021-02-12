@@ -22,7 +22,11 @@ class _BinButtonState extends State<BinButton> {
       visible: _trashOpen,
       arrowSide: ArrowSide.top,
       arrowSidePosition: ArrowSidePosition.end,
-      popupBody: BinContents(),
+      popupBody: SizedBox(
+        width: 200,
+        height: 300,
+        child: BinContents(),
+      ),
       child: AppIconButton(
         icon: FontAwesomeIcons.trashAlt,
         onTap: () {
