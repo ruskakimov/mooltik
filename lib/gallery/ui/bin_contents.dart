@@ -21,6 +21,7 @@ class BinContents extends StatelessWidget {
         children: [
           for (final project in binnedProjects)
             Slidable(
+              key: Key('${project.creationEpoch}'),
               actionPane: SlidableDrawerActionPane(),
               actionExtentRatio: 0.5,
               actions: [
@@ -28,7 +29,9 @@ class BinContents extends StatelessWidget {
                   color: Colors.red,
                   icon: FontAwesomeIcons.fireAlt,
                   label: 'Destroy',
-                  onTap: () {},
+                  onTap: () {
+                    gallery.deleteProject(project);
+                  },
                 ),
               ],
               secondaryActions: [
