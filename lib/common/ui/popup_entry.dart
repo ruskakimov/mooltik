@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 
+const _popupAnimationDuration = Duration(milliseconds: 150);
+
 class PopupEntry extends StatelessWidget {
   const PopupEntry({
     Key key,
@@ -31,7 +33,16 @@ class PopupEntry extends StatelessWidget {
       ),
       child: PortalEntry(
         visible: visible,
-        portal: popup,
+        closeDuration: _popupAnimationDuration,
+        portal: TweenAnimationBuilder<double>(
+          duration: _popupAnimationDuration,
+          tween: Tween(begin: 0, end: visible ? 1 : 0),
+          builder: (context, progress, child) => Opacity(
+            opacity: progress,
+            child: child,
+          ),
+          child: popup,
+        ),
         portalAnchor: popupAnchor,
         child: IgnorePointer(
           ignoring: visible,
