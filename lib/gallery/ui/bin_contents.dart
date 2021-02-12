@@ -14,8 +14,24 @@ class BinContents extends StatelessWidget {
       width: 200,
       height: 300,
       child: ListView(
+        padding: const EdgeInsets.symmetric(vertical: 6.0),
         children: [
-          for (final project in binnedProjects) Image.file(project.thumbnail)
+          for (final project in binnedProjects)
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+                vertical: 6.0,
+              ),
+              child: Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  color:
+                      Colors.white, // in case thumbnail is missing background
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Image.file(project.thumbnail),
+              ),
+            )
         ],
       ),
     );
