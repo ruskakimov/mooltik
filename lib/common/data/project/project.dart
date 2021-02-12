@@ -165,14 +165,12 @@ class Project extends ChangeNotifier {
     );
 
     // Write thumbnail.
-    if (frames.first.snapshot != null) {
-      final image = await generateImage(
-        FramePainter(frame: frames.first),
-        _frameSize.width.toInt(),
-        _frameSize.height.toInt(),
-      );
-      await pngWrite(thumbnail, image);
-    }
+    final image = await generateImage(
+      FramePainter(frame: frames.first),
+      _frameSize.width.toInt(),
+      _frameSize.height.toInt(),
+    );
+    await pngWrite(thumbnail, image);
 
     await _deleteUnusedFiles();
 
