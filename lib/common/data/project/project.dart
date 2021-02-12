@@ -4,10 +4,12 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/delete_files_where.dart';
+import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
+import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:path/path.dart' as p;
 
 const String _binnedPostfix = '_binned';
@@ -164,7 +166,12 @@ class Project extends ChangeNotifier {
 
     // Write thumbnail.
     if (frames.first.snapshot != null) {
-      await pngWrite(thumbnail, frames.first.snapshot);
+      final image = await generateImage(
+        FramePainter(frame: frames.first),
+        _frameSize.width.toInt(),
+        _frameSize.height.toInt(),
+      );
+      await pngWrite(thumbnail, image);
     }
 
     await _deleteUnusedFiles();
