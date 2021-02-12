@@ -46,7 +46,7 @@ class BinContents extends StatelessWidget {
             ],
             secondaryActions: [
               _BinSlideAction(
-                icon: FontAwesomeIcons.undoAlt,
+                icon: FontAwesomeIcons.reply,
                 label: 'Restore',
                 onTap: () {
                   gallery.restoreProject(project);
