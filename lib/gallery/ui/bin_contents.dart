@@ -24,34 +24,19 @@ class BinContents extends StatelessWidget {
               actionPane: SlidableDrawerActionPane(),
               actionExtentRatio: 0.5,
               actions: [
-                SlideAction(
-                  child: Material(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(8),
-                    clipBehavior: Clip.antiAlias,
-                    child: LabeledIconButton(
-                      icon: FontAwesomeIcons.fireAlt,
-                      label: 'Destroy',
-                      color: Colors.white,
-                      onTap: () {},
-                    ),
-                  ),
+                _BinSlideAction(
+                  color: Colors.red,
+                  icon: FontAwesomeIcons.fireAlt,
+                  label: 'Destroy',
+                  onTap: () {},
                 ),
               ],
               secondaryActions: [
-                SlideAction(
-                  child: Material(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(8),
-                    clipBehavior: Clip.antiAlias,
-                    child: LabeledIconButton(
-                      icon: FontAwesomeIcons.undoAlt,
-                      label: 'Restore',
-                      color: Colors.white,
-                      onTap: () {},
-                    ),
-                  ),
-                )
+                _BinSlideAction(
+                  icon: FontAwesomeIcons.undoAlt,
+                  label: 'Restore',
+                  onTap: () {},
+                ),
               ],
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -70,6 +55,38 @@ class BinContents extends StatelessWidget {
               ),
             )
         ],
+      ),
+    );
+  }
+}
+
+class _BinSlideAction extends StatelessWidget {
+  const _BinSlideAction({
+    Key key,
+    @required this.icon,
+    @required this.label,
+    this.color,
+    this.onTap,
+  }) : super(key: key);
+
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SlideAction(
+      child: Material(
+        color: color,
+        borderRadius: BorderRadius.circular(8),
+        clipBehavior: Clip.antiAlias,
+        child: LabeledIconButton(
+          icon: icon,
+          label: label,
+          color: Colors.white,
+          onTap: onTap,
+        ),
       ),
     );
   }
