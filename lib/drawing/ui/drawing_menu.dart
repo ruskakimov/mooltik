@@ -22,7 +22,6 @@ class DrawingMenu extends StatelessWidget {
     return SizedBox(
       width: width,
       child: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 8),
         shrinkWrap: true,
         physics: ScrollPhysics(),
         children: [
