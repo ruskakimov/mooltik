@@ -37,6 +37,21 @@ class BinContents extends StatelessWidget {
                       onTap: () {},
                     ),
                   ),
+                ),
+              ],
+              secondaryActions: [
+                SlideAction(
+                  child: Material(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(8),
+                    clipBehavior: Clip.antiAlias,
+                    child: LabeledIconButton(
+                      icon: FontAwesomeIcons.undoAlt,
+                      label: 'Restore',
+                      color: Colors.white,
+                      onTap: () {},
+                    ),
+                  ),
                 )
               ],
               child: Padding(
