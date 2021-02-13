@@ -27,7 +27,7 @@ class PopupEntry extends StatelessWidget {
       visible: visible,
       portal: Listener(
         behavior: HitTestBehavior.translucent,
-        onPointerDown: (_) {
+        onPointerUp: (_) {
           onTapOutside?.call();
         },
       ),
