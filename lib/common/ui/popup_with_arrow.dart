@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/ui/measure_hack.dart';
 import 'package:mooltik/common/ui/popup_entry.dart';
 
 const double _arrowWidth = 24;
@@ -169,7 +170,7 @@ Offset _arrowOffset(
   }
 }
 
-class PopupWithArrowEntry extends StatelessWidget {
+class PopupWithArrowEntry extends StatefulWidget {
   const PopupWithArrowEntry({
     Key key,
     @required this.visible,
@@ -192,31 +193,49 @@ class PopupWithArrowEntry extends StatelessWidget {
   final VoidCallback onTapOutside;
 
   @override
-  Widget build(BuildContext context) {
-    final arrowAlignment = _arrowAlignment(arrowSide, arrowSidePosition);
-    var arrowOffset = _arrowOffset(arrowSide, arrowAlignment).scale(-1, -1);
+  _PopupWithArrowEntryState createState() => _PopupWithArrowEntryState();
+}
 
-    if (_horizontalArrowSide(arrowSide)) {
+class _PopupWithArrowEntryState extends State<PopupWithArrowEntry> {
+  Size _popupSize;
+
+  @override
+  Widget build(BuildContext context) {
+    var arrowAlignment =
+        _arrowAlignment(widget.arrowSide, widget.arrowSidePosition);
+    var arrowOffset =
+        _arrowOffset(widget.arrowSide, arrowAlignment).scale(-1, -1);
+
+    if (_horizontalArrowSide(widget.arrowSide)) {
       arrowOffset += Offset(_arrowWidth / 2 * arrowAlignment.x, 0);
     } else {
       arrowOffset += Offset(0, _arrowWidth / 2 * arrowAlignment.y);
     }
 
+    // This is a hack to move tappable area with popup.
+    // Previously a transform was used, but transform doesn't move tappable area.
+    if (_popupSize != null) {
+      arrowAlignment = arrowAlignment.add(Alignment(
+        -arrowOffset.dx / _popupSize.width * 2,
+        -arrowOffset.dy / _popupSize.height * 2,
+      ));
+    }
+
     return PopupEntry(
-      visible: visible,
-      childAnchor: arrowAnchor,
+      visible: widget.visible,
+      childAnchor: widget.arrowAnchor,
       popupAnchor: arrowAlignment,
-      popup: Transform.translate(
-        offset: arrowOffset,
+      popup: MeasurableWidget(
+        onChange: (Size size) => setState(() => _popupSize = size),
         child: PopupWithArrow(
-          arrowSide: arrowSide,
-          arrowPosition: arrowSidePosition,
-          child: popupBody,
-          color: popupColor,
+          arrowSide: widget.arrowSide,
+          arrowPosition: widget.arrowSidePosition,
+          child: widget.popupBody,
+          color: widget.popupColor,
         ),
       ),
-      child: child,
-      onTapOutside: onTapOutside,
+      child: widget.child,
+      onTapOutside: widget.onTapOutside,
     );
   }
 }
