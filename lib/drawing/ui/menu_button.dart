@@ -36,6 +36,9 @@ class _MenuButtonState extends State<MenuButton> {
       onTapOutside: () {
         setState(() => _menuOpen = false);
       },
+      onDragOutside: () {
+        setState(() => _menuOpen = false);
+      },
     );
   }
 }

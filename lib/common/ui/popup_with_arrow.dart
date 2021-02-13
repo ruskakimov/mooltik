@@ -181,6 +181,7 @@ class PopupWithArrowEntry extends StatefulWidget {
     this.arrowAnchor = const Alignment(0, 0.6),
     this.popupColor,
     this.onTapOutside,
+    this.onDragOutside,
   }) : super(key: key);
 
   final bool visible;
@@ -191,6 +192,7 @@ class PopupWithArrowEntry extends StatefulWidget {
   final Alignment arrowAnchor;
   final Color popupColor;
   final VoidCallback onTapOutside;
+  final VoidCallback onDragOutside;
 
   @override
   _PopupWithArrowEntryState createState() => _PopupWithArrowEntryState();
@@ -236,6 +238,7 @@ class _PopupWithArrowEntryState extends State<PopupWithArrowEntry> {
       ),
       child: widget.child,
       onTapOutside: widget.onTapOutside,
+      onDragOutside: widget.onDragOutside,
     );
   }
 }

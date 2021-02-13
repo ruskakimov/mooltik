@@ -37,6 +37,9 @@ class ToolButton extends StatelessWidget {
       onTapOutside: () {
         toolbox.closeSizePicker();
       },
+      onDragOutside: () {
+        toolbox.closeSizePicker();
+      },
       child: AppIconButton(
         icon: tool.icon,
         selected: selected,

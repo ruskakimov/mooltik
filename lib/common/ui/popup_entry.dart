@@ -12,6 +12,7 @@ class PopupEntry extends StatelessWidget {
     this.popupAnchor = Alignment.topCenter,
     this.childAnchor = const Alignment(0, 1.2),
     this.onTapOutside,
+    this.onDragOutside,
   }) : super(key: key);
 
   final bool visible;
@@ -20,6 +21,7 @@ class PopupEntry extends StatelessWidget {
   final Alignment popupAnchor;
   final Alignment childAnchor;
   final VoidCallback onTapOutside;
+  final VoidCallback onDragOutside;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,9 @@ class PopupEntry extends StatelessWidget {
         behavior: HitTestBehavior.translucent,
         onPointerUp: (_) {
           onTapOutside?.call();
+        },
+        onPointerMove: (_) {
+          onDragOutside?.call();
         },
       ),
       child: PortalEntry(
