@@ -24,7 +24,7 @@ class _BinButtonState extends State<BinButton> {
       arrowSidePosition: ArrowSidePosition.end,
       popupBody: SizedBox(
         width: 200,
-        height: 300,
+        height: (MediaQuery.of(context).size.height - 70).clamp(0.0, 500.0),
         child: BinContents(),
       ),
       child: AppIconButton(
