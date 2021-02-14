@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/gallery/data/gallery_model.dart';
 import 'package:provider/provider.dart';
@@ -28,46 +29,61 @@ class BinContents extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       children: [
         for (final project in binnedProjects)
-          Slidable(
+          _BinItem(
             key: Key('${project.creationEpoch}'),
-            actionPane: SlidableDrawerActionPane(),
-            actionExtentRatio: 0.5,
-            actions: [
-              _BinSlideAction(
-                color: Colors.red,
-                icon: FontAwesomeIcons.fireAlt,
-                label: 'Destroy',
-                onTap: () {
-                  gallery.deleteProject(project);
-                },
-              ),
-            ],
-            secondaryActions: [
-              _BinSlideAction(
-                icon: FontAwesomeIcons.reply,
-                label: 'Restore',
-                onTap: () {
-                  gallery.restoreProject(project);
-                },
-              ),
-            ],
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12.0,
-                vertical: 6.0,
-              ),
-              child: Container(
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  color:
-                      Colors.white, // in case thumbnail is missing background
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Image.file(project.thumbnail),
-              ),
-            ),
+            project: project,
           )
       ],
+    );
+  }
+}
+
+class _BinItem extends StatelessWidget {
+  const _BinItem({
+    Key key,
+    @required this.project,
+  }) : super(key: key);
+
+  final Project project;
+
+  @override
+  Widget build(BuildContext context) {
+    return Slidable(
+      actionPane: SlidableDrawerActionPane(),
+      actionExtentRatio: 0.5,
+      actions: [
+        _BinSlideAction(
+          color: Colors.red,
+          icon: FontAwesomeIcons.fireAlt,
+          label: 'Destroy',
+          onTap: () {
+            context.read<GalleryModel>().deleteProject(project);
+          },
+        ),
+      ],
+      secondaryActions: [
+        _BinSlideAction(
+          icon: FontAwesomeIcons.reply,
+          label: 'Restore',
+          onTap: () {
+            context.read<GalleryModel>().restoreProject(project);
+          },
+        ),
+      ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12.0,
+          vertical: 6.0,
+        ),
+        child: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            color: Colors.white, // in case thumbnail is missing background
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Image.file(project.thumbnail),
+        ),
+      ),
     );
   }
 }
