@@ -14,15 +14,13 @@ class BinContents extends StatelessWidget {
     final binnedProjects = gallery.binnedProjects;
 
     if (binnedProjects.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(FontAwesomeIcons.toiletPaperSlash),
-            SizedBox(height: 12),
-            Text('Nothing here...'),
-          ],
-        ),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(FontAwesomeIcons.toiletPaperSlash),
+          SizedBox(height: 12),
+          Text('Nothing here...'),
+        ],
       );
     }
 
