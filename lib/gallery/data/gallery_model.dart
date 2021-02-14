@@ -59,9 +59,8 @@ class GalleryModel extends ChangeNotifier {
     if (!project.binned)
       throw Exception('Cannot delete project outside of bin.');
 
-    final i = _projects.indexOf(project);
-    final deletedProject = _projects.removeAt(i);
-    await deletedProject.directory.delete(recursive: true);
+    _projects.remove(project);
+    await project.directory.delete(recursive: true);
     notifyListeners();
   }
 
