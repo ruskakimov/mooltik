@@ -33,7 +33,11 @@ class _Logo extends StatelessWidget {
       width: 56,
       height: 56,
       color: Theme.of(context).colorScheme.primary,
-      child: Image.asset('assets/logo_foreground.png', fit: BoxFit.cover),
+      child: Image.asset(
+        'assets/logo_foreground.png',
+        fit: BoxFit.cover,
+        filterQuality: FilterQuality.medium,
+      ),
     );
   }
 }
