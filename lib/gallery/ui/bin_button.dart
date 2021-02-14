@@ -14,12 +14,12 @@ class BinButton extends StatefulWidget {
 }
 
 class _BinButtonState extends State<BinButton> {
-  bool _trashOpen = false;
+  bool _binOpen = false;
 
   @override
   Widget build(BuildContext context) {
     return PopupWithArrowEntry(
-      visible: _trashOpen,
+      visible: _binOpen,
       arrowSide: ArrowSide.top,
       arrowSidePosition: ArrowSidePosition.end,
       popupBody: SizedBox(
@@ -30,11 +30,11 @@ class _BinButtonState extends State<BinButton> {
       child: AppIconButton(
         icon: FontAwesomeIcons.trashAlt,
         onTap: () {
-          setState(() => _trashOpen = true);
+          setState(() => _binOpen = true);
         },
       ),
       onTapOutside: () {
-        setState(() => _trashOpen = false);
+        setState(() => _binOpen = false);
       },
     );
   }
