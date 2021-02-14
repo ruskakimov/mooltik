@@ -4,34 +4,73 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/delete_files_where.dart';
+import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
+import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:path/path.dart' as p;
+
+const String _binnedPostfix = '_binned';
 
 /// Holds project data, reads and writes to project folder.
 ///
 /// Project file structure looks like the following:
 ///
 /// ```
-/// /project_[creation_timestamp]
+/// /project_[creation_epoch]
 ///    project_data.json
-///    frame[creation_timestamp].png
+///    frame[creation_epoch].png
 ///    /sounds
-///        [creation_timestamp].aac
+///        [creation_epoch].aac
 /// ```
 ///
-/// Where `[creation_timestamp]` is replaced with an epoch of creation time of that piece of data.
+/// Where `[creation_epoch]` is replaced with an epoch of creation time of that piece of data.
 class Project extends ChangeNotifier {
+  /// Loads project from an existing project directory.
   Project(this.directory)
-      : id = int.parse(p.basename(directory.path).split('_').last),
+      : creationEpoch =
+            parseCreationEpochFromDirectoryName(p.basename(directory.path)),
+        binned = parseBinnedFromDirectoryName(p.basename(directory.path)),
         thumbnail = File(p.join(directory.path, 'thumbnail.png')),
         _dataFile = File(p.join(directory.path, 'project_data.json'));
 
+  /// Creates a new project from scratch in a given directory.
+  factory Project.createIn(Directory parentDirectory) {
+    final dirName = directoryName(DateTime.now().millisecondsSinceEpoch);
+    final dir = Directory(p.join(parentDirectory.path, dirName))..createSync();
+    return Project(dir);
+  }
+
+  static String directoryName(int creationEpoch, [bool binned = false]) {
+    var dirName = 'project_$creationEpoch';
+    if (binned) dirName += _binnedPostfix;
+    return dirName;
+  }
+
+  static int parseCreationEpochFromDirectoryName(String dirName) {
+    final match = RegExp(r'[0-9]+').stringMatch(dirName);
+    return int.parse(match);
+  }
+
+  static bool parseBinnedFromDirectoryName(String dirName) {
+    return RegExp('.*$_binnedPostfix').hasMatch(dirName);
+  }
+
+  static bool validProjectDirectory(Directory directory) {
+    final dirName = p.basename(directory.path);
+    final creationEpoch = parseCreationEpochFromDirectoryName(dirName);
+    final binned = parseBinnedFromDirectoryName(dirName);
+    return dirName == directoryName(creationEpoch, binned);
+  }
+
   final Directory directory;
 
-  final int id;
+  final int creationEpoch;
+
+  /// Whether this project currently resides in the bin.
+  final bool binned;
 
   final File thumbnail;
 
@@ -126,9 +165,12 @@ class Project extends ChangeNotifier {
     );
 
     // Write thumbnail.
-    if (frames.first.snapshot != null) {
-      await pngWrite(thumbnail, frames.first.snapshot);
-    }
+    final image = await generateImage(
+      FramePainter(frame: frames.first),
+      _frameSize.width.toInt(),
+      _frameSize.height.toInt(),
+    );
+    await pngWrite(thumbnail, image);
 
     await _deleteUnusedFiles();
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/ui/popup_entry.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/add_frame_button.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/play_button.dart';
@@ -26,21 +27,15 @@ class TimelineActionbar extends StatelessWidget {
           Expanded(
             child: TimeLabel(),
           ),
-          PortalEntry(
+          PopupEntry(
             visible: timelineView.showFrameMenu,
-            portal: Listener(
-              behavior: HitTestBehavior.translucent,
-              onPointerUp: (_) {
-                timelineView.closeFrameMenu();
-              },
-            ),
-            child: PortalEntry(
-              visible: timelineView.showFrameMenu,
-              childAnchor: Alignment.center,
-              portalAnchor: Alignment.center,
-              portal: FrameMenu(),
-              child: PlayButton(),
-            ),
+            childAnchor: Alignment.center,
+            popupAnchor: Alignment.center,
+            popup: FrameMenu(),
+            child: PlayButton(),
+            onTapOutside: () {
+              timelineView.closeFrameMenu();
+            },
           ),
           Expanded(
             child: Row(

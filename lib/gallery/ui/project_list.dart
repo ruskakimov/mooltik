@@ -13,32 +13,32 @@ class ProjectList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gallery = context.watch<GalleryModel>();
-
-    if (gallery.numberOfProjects == null) return SizedBox.shrink();
+    final projects = gallery.projects;
 
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       scrollDirection: Axis.horizontal,
-      itemCount: gallery.numberOfProjects,
+      itemCount: gallery.projects.length,
       itemBuilder: (context, index) {
-        final Project project = gallery.getProject(index);
+        final project = projects[index];
 
         return Center(
-          child: GestureDetector(
-            onTap: () async {
-              await project.open();
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ChangeNotifierProvider<Project>.value(
-                    value: project,
-                    child: EditingPage(),
+          key: Key('${project.creationEpoch}'),
+          child: ChangeNotifierProvider<Project>.value(
+            value: project,
+            child: ProjectThumbnail(
+              thumbnail: project.thumbnail,
+              onTap: () async {
+                await project.open();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ChangeNotifierProvider<Project>.value(
+                      value: project,
+                      child: EditingPage(),
+                    ),
                   ),
-                ),
-              );
-            },
-            child: ChangeNotifierProvider<Project>.value(
-              value: project,
-              child: ProjectThumbnail(thumbnail: project.thumbnail),
+                );
+              },
             ),
           ),
         );

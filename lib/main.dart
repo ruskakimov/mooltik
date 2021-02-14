@@ -48,6 +48,7 @@ class App extends StatelessWidget {
             // Overscroll
             accentColor: Colors.amber,
             // Splash
+            splashColor: Colors.white30,
             highlightColor: Colors.white.withOpacity(0.2),
             // Switch
             toggleableActiveColor: Colors.amber,

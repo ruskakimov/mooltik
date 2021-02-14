@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/ui/popup_entry.dart';
+import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
-import 'package:mooltik/drawing/ui/brush_popup.dart';
+import 'package:mooltik/drawing/ui/brush_picker.dart';
 
 class ToolButton extends StatelessWidget {
   const ToolButton({
@@ -20,9 +20,11 @@ class ToolButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
 
-    return PopupEntry(
+    return PopupWithArrowEntry(
       visible: toolbox.sizePickerOpen && selected,
-      popup: BrushPopup(
+      arrowSide: ArrowSide.top,
+      arrowSidePosition: ArrowSidePosition.middle,
+      popupBody: BrushPicker(
         selectedValue: toolbox.selectedToolStrokeWidth,
         valueOptions: tool.strokeWidthOptions,
         minValue: tool.minStrokeWidth,
@@ -33,6 +35,9 @@ class ToolButton extends StatelessWidget {
         },
       ),
       onTapOutside: () {
+        toolbox.closeSizePicker();
+      },
+      onDragOutside: () {
         toolbox.closeSizePicker();
       },
       child: AppIconButton(

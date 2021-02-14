@@ -5,9 +5,13 @@ import 'package:path/path.dart' as p;
 
 class GalleryModel extends ChangeNotifier {
   Directory _directory;
-  List<Project> _projects;
+  List<Project> _projects = [];
 
-  int get numberOfProjects => _projects?.length;
+  List<Project> get projects =>
+      _projects.where((project) => !project.binned).toList();
+
+  List<Project> get binnedProjects =>
+      _projects.where((project) => project.binned).toList();
 
   Future<void> init(Directory directory) async {
     _directory = directory;
@@ -18,40 +22,59 @@ class GalleryModel extends ChangeNotifier {
   Future<List<Project>> _readProjects() async {
     final List<Project> projects = [];
     await for (final FileSystemEntity dir in _directory.list()) {
-      if (dir is Directory && _validProjectDirectory(dir)) {
+      if (dir is Directory && Project.validProjectDirectory(dir)) {
         projects.add(Project(dir));
       }
     }
     // Recent projects first.
-    projects.sort((p1, p2) => p2.id - p1.id);
+    projects.sort((p1, p2) => p2.creationEpoch - p1.creationEpoch);
     return projects;
   }
-
-  bool _validProjectDirectory(Directory directory) {
-    final String folderName = p.basename(directory.path);
-    return RegExp(r'^project_[0-9]+$').hasMatch(folderName);
-  }
-
-  Project getProject(int index) => _projects[index];
 
   Future<Project> addProject() async {
     if (_projects == null) throw Exception('Read projects first.');
 
-    final int id = DateTime.now().millisecondsSinceEpoch;
-    final String folderName = 'project_$id';
-    final Directory dir =
-        await Directory(p.join(_directory.path, folderName)).create();
-    final Project project = Project(dir);
-
+    final project = Project.createIn(_directory);
     _projects.insert(0, project);
 
     notifyListeners();
     return project;
   }
 
-  Future<void> deleteProject(int index) async {
-    final Project project = _projects.removeAt(index);
+  Future<void> moveProjectToBin(Project project) async {
+    if (!_projects.contains(project))
+      throw Exception('Project instance not found.');
+
+    final i = _projects.indexOf(project);
+    final newDirName = Project.directoryName(project.creationEpoch, true);
+    final newProjectPath = p.join(_directory.path, newDirName);
+
+    _projects[i] = Project(project.directory.renameSync(newProjectPath));
+    notifyListeners();
+  }
+
+  Future<void> deleteProject(Project project) async {
+    if (!_projects.contains(project))
+      throw Exception('Project instance not found.');
+    if (!project.binned)
+      throw Exception('Cannot delete project outside of bin.');
+
+    _projects.remove(project);
     await project.directory.delete(recursive: true);
+    notifyListeners();
+  }
+
+  Future<void> restoreProject(Project project) async {
+    if (!_projects.contains(project))
+      throw Exception('Project instance not found.');
+    if (!project.binned)
+      throw Exception('Cannot restore project outside of bin.');
+
+    final i = _projects.indexOf(project);
+    final newDirName = Project.directoryName(project.creationEpoch, false);
+    final newProjectPath = p.join(_directory.path, newDirName);
+
+    _projects[i] = Project(project.directory.renameSync(newProjectPath));
     notifyListeners();
   }
 }
