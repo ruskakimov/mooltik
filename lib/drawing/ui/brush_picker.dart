@@ -9,6 +9,9 @@ const double _circleSize = 44;
 const double _minInnerCircleWidth = 4;
 const double _maxInnerCircleWidth = 34;
 
+const int _columns = 3;
+const double _pickerWidth = _circleSize * _columns + _padding * (_columns + 1);
+
 class BrushPicker extends StatelessWidget {
   const BrushPicker({
     Key key,
@@ -30,13 +33,12 @@ class BrushPicker extends StatelessWidget {
     final toolbox = context.watch<ToolboxModel>();
 
     return SizedBox(
-      width: _circleSize * valueOptions.length +
-          _padding * (valueOptions.length + 1),
+      width: _pickerWidth,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildSizeOptions(),
-          Divider(height: 2),
+          if (valueOptions.isNotEmpty) _buildSizeOptions(),
+          if (valueOptions.isNotEmpty) Divider(height: 2),
           AppSlider(
             value: toolbox.selectedToolOpacity,
             onChanged: (double value) {

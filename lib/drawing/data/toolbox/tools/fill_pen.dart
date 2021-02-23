@@ -27,7 +27,7 @@ class FillPen extends Tool {
   double get minStrokeWidth => 1;
 
   @override
-  List<double> get strokeWidthOptions => [1];
+  List<double> get strokeWidthOptions => [];
 
   @override
   String get name => 'fill_pen';
