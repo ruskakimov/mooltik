@@ -12,11 +12,11 @@ class AirBrush extends Tool {
             ..color = Colors.black26
             ..style = PaintingStyle.stroke
             ..strokeCap = StrokeCap.round
-            ..strokeJoin = StrokeJoin.bevel
-            // TODO: Change blur to 50% of stroke size
-            ..maskFilter = MaskFilter.blur(BlurStyle.normal, 25),
+            ..strokeJoin = StrokeJoin.bevel,
           sharedPreferences,
-        );
+        ) {
+    _updateBlur();
+  }
 
   @override
   Stroke makeStroke(Offset startPoint) {
@@ -33,5 +33,15 @@ class AirBrush extends Tool {
   List<double> get strokeWidthOptions => [50, 100, 200];
 
   @override
+  set strokeWidth(double value) {
+    super.strokeWidth = value;
+    _updateBlur();
+  }
+
+  @override
   String get name => 'air_brush';
+
+  void _updateBlur() {
+    paint.maskFilter = MaskFilter.blur(BlurStyle.normal, strokeWidth / 2);
+  }
 }

@@ -3,7 +3,7 @@ import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Tool {
-  Tool(this.icon, this.paint, SharedPreferences sharedPreferences)
+  Tool(this.icon, this.paint, this.sharedPreferences)
       : assert(sharedPreferences != null) {
     // Restore selected stroke width.
     if (sharedPreferences.containsKey(strokeWidthKey)) {
@@ -29,6 +29,7 @@ abstract class Tool {
 
   final IconData icon;
   final Paint paint;
+  final SharedPreferences sharedPreferences;
 
   double get maxStrokeWidth;
   double get minStrokeWidth;
@@ -40,6 +41,14 @@ abstract class Tool {
 
   /// Shared preferences key for stroke width.
   String get strokeWidthKey => name + '_stroke_width';
+
+  double get strokeWidth => paint.strokeWidth;
+
+  set strokeWidth(double value) {
+    assert(strokeWidth <= maxStrokeWidth && strokeWidth >= minStrokeWidth);
+    paint.strokeWidth = value;
+    sharedPreferences.setDouble(strokeWidthKey, strokeWidth);
+  }
 
   /// Shared preferences key for color.
   String get colorKey => name + '_color';

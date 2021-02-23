@@ -29,18 +29,10 @@ class ToolboxModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  double get selectedToolStrokeWidth => selectedTool?.paint?.strokeWidth;
+  double get selectedToolStrokeWidth => selectedTool?.strokeWidth;
 
   void changeToolStrokeWidth(double strokeWidth) {
-    assert(strokeWidth <= selectedTool.maxStrokeWidth &&
-        strokeWidth >= selectedTool.minStrokeWidth);
-
-    selectedTool.paint.strokeWidth = strokeWidth;
-
-    _sharedPreferences.setDouble(
-      selectedTool.strokeWidthKey,
-      strokeWidth,
-    );
+    selectedTool.strokeWidth = strokeWidth;
     notifyListeners();
   }
 
