@@ -4,16 +4,17 @@ import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'tool.dart';
 
-class Brush extends Tool {
-  Brush(SharedPreferences sharedPreferences)
+class AirBrush extends Tool {
+  AirBrush(SharedPreferences sharedPreferences)
       : super(
-          FontAwesomeIcons.paintBrush,
+          FontAwesomeIcons.sprayCan,
           Paint()
             ..color = Colors.black26
             ..style = PaintingStyle.stroke
             ..strokeCap = StrokeCap.round
             ..strokeJoin = StrokeJoin.bevel
-            ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
+            // TODO: Change blur to 50% of stroke size
+            ..maskFilter = MaskFilter.blur(BlurStyle.normal, 25),
           sharedPreferences,
         );
 
