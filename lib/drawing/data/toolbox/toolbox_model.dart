@@ -36,17 +36,10 @@ class ToolboxModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  double get selectedToolOpacity => selectedTool?.paint?.color?.opacity;
+  double get selectedToolOpacity => selectedTool?.opacity;
 
   void changeToolOpacity(double opacity) {
-    assert(opacity >= 0 && opacity <= 1);
-
-    selectedTool.paint.color = selectedTool.paint.color.withOpacity(opacity);
-
-    _sharedPreferences.setInt(
-      selectedTool.colorKey,
-      selectedTool.paint.color.value,
-    );
+    selectedTool.opacity = opacity;
     notifyListeners();
   }
 

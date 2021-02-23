@@ -50,6 +50,14 @@ abstract class Tool {
     sharedPreferences.setDouble(strokeWidthKey, strokeWidth);
   }
 
+  double get opacity => paint.color.opacity;
+
+  set opacity(double value) {
+    assert(opacity >= 0 && opacity <= 1);
+    paint.color = paint.color.withOpacity(value);
+    sharedPreferences.setInt(colorKey, paint.color.value);
+  }
+
   /// Shared preferences key for color.
   String get colorKey => name + '_color';
 
