@@ -33,5 +33,5 @@ class AirBrush extends Tool {
   List<double> get strokeWidthOptions => [50, 100, 200];
 
   @override
-  String get name => 'brush';
+  String get name => 'air_brush';
 }
