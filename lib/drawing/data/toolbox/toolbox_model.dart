@@ -8,6 +8,7 @@ class ToolboxModel extends ChangeNotifier {
       : assert(sharedPreferences != null),
         _sharedPreferences = sharedPreferences,
         _tools = [
+          FillPen(sharedPreferences),
           Brush(sharedPreferences),
           Pen(sharedPreferences),
           Eraser(sharedPreferences),
