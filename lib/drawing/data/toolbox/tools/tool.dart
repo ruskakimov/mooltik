@@ -11,7 +11,8 @@ abstract class Tool {
     }
 
     // Default to middle stroke width option if none selected.
-    if (!strokeWidthOptions.contains(paint.strokeWidth)) {
+    if (strokeWidthOptions.isNotEmpty &&
+        !strokeWidthOptions.contains(paint.strokeWidth)) {
       final midIndex = strokeWidthOptions.length ~/ 2;
       paint.strokeWidth = strokeWidthOptions[midIndex];
     }

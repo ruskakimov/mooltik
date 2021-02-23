@@ -21,10 +21,10 @@ class FillPen extends Tool {
   }
 
   @override
-  double get maxStrokeWidth => 2;
+  double get maxStrokeWidth => 0;
 
   @override
-  double get minStrokeWidth => 1;
+  double get minStrokeWidth => 0;
 
   @override
   List<double> get strokeWidthOptions => [];
