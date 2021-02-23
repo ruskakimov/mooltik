@@ -13,7 +13,7 @@ class ToolboxModel extends ChangeNotifier {
           Pen(sharedPreferences),
           Eraser(sharedPreferences),
         ],
-        _selectedToolId = 1;
+        _selectedToolId = 2;
 
   final SharedPreferences _sharedPreferences;
 
