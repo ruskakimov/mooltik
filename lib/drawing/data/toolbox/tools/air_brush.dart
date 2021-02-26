@@ -4,18 +4,19 @@ import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'tool.dart';
 
-class Brush extends Tool {
-  Brush(SharedPreferences sharedPreferences)
+class AirBrush extends Tool {
+  AirBrush(SharedPreferences sharedPreferences)
       : super(
-          FontAwesomeIcons.paintBrush,
+          FontAwesomeIcons.sprayCan,
           Paint()
             ..color = Colors.black26
             ..style = PaintingStyle.stroke
             ..strokeCap = StrokeCap.round
-            ..strokeJoin = StrokeJoin.bevel
-            ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
+            ..strokeJoin = StrokeJoin.bevel,
           sharedPreferences,
-        );
+        ) {
+    _updateBlur();
+  }
 
   @override
   Stroke makeStroke(Offset startPoint) {
@@ -32,5 +33,15 @@ class Brush extends Tool {
   List<double> get strokeWidthOptions => [50, 100, 200];
 
   @override
-  String get name => 'brush';
+  set strokeWidth(double value) {
+    super.strokeWidth = value;
+    _updateBlur();
+  }
+
+  @override
+  String get name => 'air_brush';
+
+  void _updateBlur() {
+    paint.maskFilter = MaskFilter.blur(BlurStyle.normal, strokeWidth / 2);
+  }
 }

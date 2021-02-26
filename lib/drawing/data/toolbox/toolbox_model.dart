@@ -8,11 +8,12 @@ class ToolboxModel extends ChangeNotifier {
       : assert(sharedPreferences != null),
         _sharedPreferences = sharedPreferences,
         _tools = [
-          Brush(sharedPreferences),
+          FillPen(sharedPreferences),
+          AirBrush(sharedPreferences),
           Pen(sharedPreferences),
           Eraser(sharedPreferences),
         ],
-        _selectedToolId = 1;
+        _selectedToolId = 2;
 
   final SharedPreferences _sharedPreferences;
 
@@ -28,32 +29,17 @@ class ToolboxModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  double get selectedToolStrokeWidth => selectedTool?.paint?.strokeWidth;
+  double get selectedToolStrokeWidth => selectedTool?.strokeWidth;
 
   void changeToolStrokeWidth(double strokeWidth) {
-    assert(strokeWidth <= selectedTool.maxStrokeWidth &&
-        strokeWidth >= selectedTool.minStrokeWidth);
-
-    selectedTool.paint.strokeWidth = strokeWidth;
-
-    _sharedPreferences.setDouble(
-      selectedTool.strokeWidthKey,
-      strokeWidth,
-    );
+    selectedTool.strokeWidth = strokeWidth;
     notifyListeners();
   }
 
-  double get selectedToolOpacity => selectedTool?.paint?.color?.opacity;
+  double get selectedToolOpacity => selectedTool?.opacity;
 
   void changeToolOpacity(double opacity) {
-    assert(opacity >= 0 && opacity <= 1);
-
-    selectedTool.paint.color = selectedTool.paint.color.withOpacity(opacity);
-
-    _sharedPreferences.setInt(
-      selectedTool.colorKey,
-      selectedTool.paint.color.value,
-    );
+    selectedTool.opacity = opacity;
     notifyListeners();
   }
 
