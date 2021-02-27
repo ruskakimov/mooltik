@@ -6,7 +6,6 @@ import 'tools/tools.dart';
 class ToolboxModel extends ChangeNotifier {
   ToolboxModel(SharedPreferences sharedPreferences)
       : assert(sharedPreferences != null),
-        _sharedPreferences = sharedPreferences,
         tools = [
           FillPen(sharedPreferences),
           AirBrush(sharedPreferences),
@@ -14,8 +13,6 @@ class ToolboxModel extends ChangeNotifier {
           Eraser(sharedPreferences),
         ],
         _selectedToolId = 2;
-
-  final SharedPreferences _sharedPreferences;
 
   final List<Tool> tools;
   int _selectedToolId;
