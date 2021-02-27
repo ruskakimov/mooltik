@@ -6,7 +6,7 @@ import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/brush_picker.dart';
 
-class ToolButton extends StatelessWidget {
+class ToolButton extends StatefulWidget {
   const ToolButton({
     Key key,
     @required this.tool,
@@ -17,40 +17,51 @@ class ToolButton extends StatelessWidget {
   final bool selected;
 
   @override
+  _ToolButtonState createState() => _ToolButtonState();
+}
+
+class _ToolButtonState extends State<ToolButton> {
+  bool _pickerOpen = false;
+
+  @override
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
 
     return PopupWithArrowEntry(
-      visible: toolbox.sizePickerOpen && selected,
+      visible: _pickerOpen && widget.selected,
       arrowSide: ArrowSide.top,
       arrowSidePosition: ArrowSidePosition.middle,
       popupBody: BrushPicker(
         selectedValue: toolbox.selectedToolStrokeWidth,
-        valueOptions: tool.strokeWidthOptions,
-        minValue: tool.minStrokeWidth,
-        maxValue: tool.maxStrokeWidth,
+        valueOptions: widget.tool.strokeWidthOptions,
+        minValue: widget.tool.minStrokeWidth,
+        maxValue: widget.tool.maxStrokeWidth,
         onSelected: (double newValue) {
           toolbox.changeToolStrokeWidth(newValue);
-          toolbox.closeSizePicker();
+          _closePicker();
         },
       ),
-      onTapOutside: () {
-        toolbox.closeSizePicker();
-      },
-      onDragOutside: () {
-        toolbox.closeSizePicker();
-      },
+      onTapOutside: _closePicker,
+      onDragOutside: _closePicker,
       child: AppIconButton(
-        icon: tool.icon,
-        selected: selected,
+        icon: widget.tool.icon,
+        selected: widget.selected,
         onTap: () {
-          if (selected) {
-            toolbox.openSizePicker();
+          if (widget.selected) {
+            _openPicker();
           } else {
-            toolbox.selectTool(tool);
+            toolbox.selectTool(widget.tool);
           }
         },
       ),
     );
+  }
+
+  void _openPicker() {
+    setState(() => _pickerOpen = true);
+  }
+
+  void _closePicker() {
+    setState(() => _pickerOpen = false);
   }
 }

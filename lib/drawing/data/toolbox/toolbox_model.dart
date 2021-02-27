@@ -6,8 +6,7 @@ import 'tools/tools.dart';
 class ToolboxModel extends ChangeNotifier {
   ToolboxModel(SharedPreferences sharedPreferences)
       : assert(sharedPreferences != null),
-        _sharedPreferences = sharedPreferences,
-        _tools = [
+        tools = [
           FillPen(sharedPreferences),
           AirBrush(sharedPreferences),
           Pen(sharedPreferences),
@@ -15,17 +14,14 @@ class ToolboxModel extends ChangeNotifier {
         ],
         _selectedToolId = 2;
 
-  final SharedPreferences _sharedPreferences;
-
-  final List<Tool> _tools;
+  final List<Tool> tools;
   int _selectedToolId;
 
-  List<Tool> get tools => _tools;
-  Tool get selectedTool => _tools[_selectedToolId];
+  Tool get selectedTool => tools[_selectedToolId];
 
   void selectTool(Tool tool) {
-    assert(_tools.contains(tool));
-    _selectedToolId = _tools.indexOf(tool);
+    assert(tools.contains(tool));
+    _selectedToolId = tools.indexOf(tool);
     notifyListeners();
   }
 
@@ -40,23 +36,6 @@ class ToolboxModel extends ChangeNotifier {
 
   void changeToolOpacity(double opacity) {
     selectedTool.opacity = opacity;
-    notifyListeners();
-  }
-
-  /*
-  Size picker state:
-  */
-
-  bool get sizePickerOpen => _sizePickerOpen;
-  bool _sizePickerOpen = false;
-
-  void openSizePicker() {
-    _sizePickerOpen = true;
-    notifyListeners();
-  }
-
-  void closeSizePicker() {
-    _sizePickerOpen = false;
     notifyListeners();
   }
 }
