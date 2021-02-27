@@ -41,21 +41,4 @@ class ToolboxModel extends ChangeNotifier {
     selectedTool.opacity = opacity;
     notifyListeners();
   }
-
-  /*
-  Size picker state:
-  */
-
-  bool get sizePickerOpen => _sizePickerOpen;
-  bool _sizePickerOpen = false;
-
-  void openSizePicker() {
-    _sizePickerOpen = true;
-    notifyListeners();
-  }
-
-  void closeSizePicker() {
-    _sizePickerOpen = false;
-    notifyListeners();
-  }
 }
