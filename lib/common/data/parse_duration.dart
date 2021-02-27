@@ -1,14 +1,10 @@
 Duration parseDuration(String source) {
-  int hours = 0;
-  int minutes = 0;
-  int micros;
-  List<String> parts = source.split(':');
-  if (parts.length > 2) {
-    hours = int.parse(parts[parts.length - 3]);
-  }
-  if (parts.length > 1) {
-    minutes = int.parse(parts[parts.length - 2]);
-  }
-  micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
-  return Duration(hours: hours, minutes: minutes, microseconds: micros);
+  final re = RegExp(r'^(\d+):(\d{2}):(\d{2}).(\d{6})$');
+  final match = re.firstMatch(source);
+  return Duration(
+    hours: int.parse(match.group(1)),
+    minutes: int.parse(match.group(2)),
+    seconds: int.parse(match.group(3)),
+    microseconds: int.parse(match.group(4)),
+  );
 }
