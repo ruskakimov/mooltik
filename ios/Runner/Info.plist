@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -24,7 +26,7 @@
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Record voice-over.</string>
-	<key>NSCameraUsageDescription</key> <!-- Needed if mic is used. Issue is here https://github.com/Baseflow/flutter-permission-handler/issues/273. -->
+	<key>NSCameraUsageDescription</key>
 	<string>Capture photos.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Save generated video.</string>
