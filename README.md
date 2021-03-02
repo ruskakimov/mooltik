@@ -1,4 +1,4 @@
-# Mooltik - storyboard animation
+# Mooltik - animated movie maker
 
 [![Codemagic build status](https://api.codemagic.io/apps/60363e65c9d4d7cf9b10cfc0/60363e65c9d4d7cf9b10cfbf/status_badge.svg)](https://codemagic.io/apps/60363e65c9d4d7cf9b10cfc0/60363e65c9d4d7cf9b10cfbf/latest_build)
 
