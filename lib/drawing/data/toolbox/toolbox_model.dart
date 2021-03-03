@@ -30,6 +30,11 @@ class ToolboxModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void changeToolColor(Color color) {
+    selectedTool.color = color;
+    notifyListeners();
+  }
+
   void changeToolOpacity(double opacity) {
     selectedTool.opacity = opacity;
     notifyListeners();

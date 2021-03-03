@@ -18,11 +18,7 @@ abstract class Tool {
 
     // Restore selected color.
     if (sharedPreferences.containsKey(colorKey)) {
-      paint.color = Colors.black.withOpacity(
-        // This is to default back to black, if another color was selected before and saved to shared prefs.
-        // TODO: Remove once color picker is added.
-        Color(sharedPreferences.getInt(colorKey)).opacity,
-      );
+      paint.color = Color(sharedPreferences.getInt(colorKey));
     }
   }
 
@@ -54,10 +50,11 @@ abstract class Tool {
   /// Shared preferences key for color.
   String get colorKey => name + '_color';
 
-  /// Shared preferences key for opacity.
-  String get opacityKey => name + '_opacity';
-
   double get strokeWidth => paint.strokeWidth;
+
+  Color get color => paint.color.withOpacity(1);
+
+  double get opacity => paint.color.opacity;
 
   set strokeWidth(double value) {
     assert(strokeWidth <= maxStrokeWidth && strokeWidth >= minStrokeWidth);
@@ -65,7 +62,10 @@ abstract class Tool {
     sharedPreferences.setDouble(strokeWidthKey, strokeWidth);
   }
 
-  double get opacity => paint.color.opacity;
+  set color(Color color) {
+    paint.color = color.withOpacity(opacity);
+    sharedPreferences.setInt(colorKey, paint.color.value);
+  }
 
   set opacity(double value) {
     assert(opacity >= 0 && opacity <= 1);
