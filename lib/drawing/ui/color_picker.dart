@@ -15,18 +15,19 @@ class ColorPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return GridView.count(
+      crossAxisCount: 3,
+      shrinkWrap: true,
+      mainAxisSpacing: 12,
+      crossAxisSpacing: 12,
       padding: const EdgeInsets.all(12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          for (final color in colorOptions)
-            PickerOptionButton(
-              innerCircleColor: color,
-              selected: color == selectedColor,
-            ),
-        ],
-      ),
+      children: [
+        for (final color in colorOptions)
+          PickerOptionButton(
+            innerCircleColor: color,
+            selected: color == selectedColor,
+          ),
+      ],
     );
   }
 }

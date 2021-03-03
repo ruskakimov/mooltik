@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class PickerOptionButton extends StatelessWidget {
   const PickerOptionButton({
     Key key,
-    this.innerCircleWidth = maxInnerCircleWidth,
+    this.innerCircleWidth = circleSize,
     this.innerCircleColor = Colors.white,
     this.selected = false,
     this.onTap,
