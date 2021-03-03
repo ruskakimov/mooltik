@@ -52,9 +52,12 @@ class _ToolButtonState extends State<ToolButton> {
             ColorPicker(
               selectedColor: Colors.black,
               colorOptions: [
-                Colors.black,
-                Colors.redAccent,
-                Colors.teal,
+                // Colors.black,
+                // Colors.redAccent,
+                Colors.yellow,
+                // Colors.teal,
+                Colors.blue,
+                Colors.purpleAccent,
               ],
             ),
             AppSlider(
