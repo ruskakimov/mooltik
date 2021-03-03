@@ -71,6 +71,7 @@ class _ToolButtonState extends State<ToolButton> {
       child: AppIconButton(
         icon: widget.tool.icon,
         selected: widget.selected,
+        selectedColor: Colors.black,
         onTap: () {
           if (widget.selected) {
             _openPicker();
