@@ -40,7 +40,7 @@ class _ToolButtonState extends State<ToolButton> {
           children: [
             if (widget.tool.strokeWidthOptions.isNotEmpty)
               SizePicker(
-                selectedValue: toolbox.selectedToolStrokeWidth,
+                selectedValue: toolbox.selectedTool.strokeWidth,
                 valueOptions: widget.tool.strokeWidthOptions,
                 minValue: widget.tool.minStrokeWidth,
                 maxValue: widget.tool.maxStrokeWidth,
@@ -57,7 +57,7 @@ class _ToolButtonState extends State<ToolButton> {
               },
             ),
             AppSlider(
-              value: toolbox.selectedToolOpacity,
+              value: toolbox.selectedTool.opacity,
               onChanged: (double value) {
                 toolbox.changeToolOpacity(value);
               },
