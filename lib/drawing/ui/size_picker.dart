@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/ui/app_slider.dart';
-import 'package:provider/provider.dart';
-import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 
 const double _padding = 12;
 const double _circleSize = 44;
@@ -9,11 +6,8 @@ const double _circleSize = 44;
 const double _minInnerCircleWidth = 4;
 const double _maxInnerCircleWidth = 34;
 
-const int _columns = 3;
-const double _pickerWidth = _circleSize * _columns + _padding * (_columns + 1);
-
-class BrushPicker extends StatelessWidget {
-  const BrushPicker({
+class SizePicker extends StatelessWidget {
+  const SizePicker({
     Key key,
     @required this.selectedValue,
     @required this.valueOptions,
@@ -30,27 +24,6 @@ class BrushPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final toolbox = context.watch<ToolboxModel>();
-
-    return SizedBox(
-      width: _pickerWidth,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (valueOptions.isNotEmpty) _buildSizeOptions(),
-          if (valueOptions.isNotEmpty) Divider(height: 2),
-          AppSlider(
-            value: toolbox.selectedToolOpacity,
-            onChanged: (double value) {
-              toolbox.changeToolOpacity(value);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSizeOptions() {
     return Padding(
       padding: const EdgeInsets.all(_padding),
       child: Row(

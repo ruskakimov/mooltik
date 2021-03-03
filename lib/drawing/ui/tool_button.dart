@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/ui/app_slider.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
-import 'package:mooltik/drawing/ui/brush_picker.dart';
+import 'package:mooltik/drawing/ui/size_picker.dart';
 
 class ToolButton extends StatefulWidget {
   const ToolButton({
@@ -31,15 +32,30 @@ class _ToolButtonState extends State<ToolButton> {
       visible: _pickerOpen && widget.selected,
       arrowSide: ArrowSide.top,
       arrowSidePosition: ArrowSidePosition.middle,
-      popupBody: BrushPicker(
-        selectedValue: toolbox.selectedToolStrokeWidth,
-        valueOptions: widget.tool.strokeWidthOptions,
-        minValue: widget.tool.minStrokeWidth,
-        maxValue: widget.tool.maxStrokeWidth,
-        onSelected: (double newValue) {
-          toolbox.changeToolStrokeWidth(newValue);
-          _closePicker();
-        },
+      popupBody: SizedBox(
+        width: 180,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (widget.tool.strokeWidthOptions.isNotEmpty)
+              SizePicker(
+                selectedValue: toolbox.selectedToolStrokeWidth,
+                valueOptions: widget.tool.strokeWidthOptions,
+                minValue: widget.tool.minStrokeWidth,
+                maxValue: widget.tool.maxStrokeWidth,
+                onSelected: (double newValue) {
+                  toolbox.changeToolStrokeWidth(newValue);
+                  _closePicker();
+                },
+              ),
+            AppSlider(
+              value: toolbox.selectedToolOpacity,
+              onChanged: (double value) {
+                toolbox.changeToolOpacity(value);
+              },
+            ),
+          ],
+        ),
       ),
       onTapOutside: _closePicker,
       onDragOutside: _closePicker,
