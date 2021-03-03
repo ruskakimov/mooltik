@@ -26,6 +26,9 @@ class ColorPicker extends StatelessWidget {
           PickerOptionButton(
             innerCircleColor: color,
             selected: color == selectedColor,
+            onTap: () {
+              onSelected?.call(color);
+            },
           ),
       ],
     );
