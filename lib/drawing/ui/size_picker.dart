@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-
-const double _padding = 12;
-const double _circleSize = 44;
-
-const double _minInnerCircleWidth = 4;
-const double _maxInnerCircleWidth = 34;
+import 'package:mooltik/drawing/ui/picker_option_button.dart';
 
 class SizePicker extends StatelessWidget {
   const SizePicker({
@@ -25,12 +20,12 @@ class SizePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(_padding),
+      padding: const EdgeInsets.all(12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           for (final optionValue in valueOptions)
-            _SizeOptionButton(
+            PickerOptionButton(
               innerCircleWidth: _calculateInnerCircleWidth(optionValue),
               selected: optionValue == selectedValue,
               onTap: () {
@@ -45,53 +40,11 @@ class SizePicker extends StatelessWidget {
   /// [minValue] -> [_minInnerCircleWidth]
   /// [maxValue] -> [_maxInnerCircleWidth]
   double _calculateInnerCircleWidth(double value) {
-    final radiusRange = _maxInnerCircleWidth - _minInnerCircleWidth;
+    final min = PickerOptionButton.minInnerCircleWidth;
+    final max = PickerOptionButton.maxInnerCircleWidth;
+
     final valueRange = maxValue - minValue;
     final sliderValue = (value - minValue) / valueRange;
-    return _minInnerCircleWidth + sliderValue * radiusRange;
-  }
-}
-
-class _SizeOptionButton extends StatelessWidget {
-  const _SizeOptionButton({
-    Key key,
-    this.innerCircleWidth = 10,
-    this.selected = false,
-    this.onTap,
-  }) : super(key: key);
-
-  final double innerCircleWidth;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkResponse(
-      radius: _circleSize / 2 + 3,
-      onTap: onTap,
-      child: Container(
-        width: _circleSize,
-        height: _circleSize,
-        decoration: BoxDecoration(
-          border: selected
-              ? Border.all(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 3,
-                )
-              : null,
-          color: Colors.black.withOpacity(0.25),
-          shape: BoxShape.circle,
-        ),
-        child: Center(
-          child: Container(
-            width: innerCircleWidth,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-            ),
-          ),
-        ),
-      ),
-    );
+    return min + sliderValue * (max - min);
   }
 }
