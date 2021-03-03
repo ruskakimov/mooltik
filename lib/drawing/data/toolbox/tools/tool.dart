@@ -51,6 +51,12 @@ abstract class Tool {
   /// Shared preferences key for stroke width.
   String get strokeWidthKey => name + '_stroke_width';
 
+  /// Shared preferences key for color.
+  String get colorKey => name + '_color';
+
+  /// Shared preferences key for opacity.
+  String get opacityKey => name + '_opacity';
+
   double get strokeWidth => paint.strokeWidth;
 
   set strokeWidth(double value) {
@@ -66,9 +72,6 @@ abstract class Tool {
     paint.color = paint.color.withOpacity(value);
     sharedPreferences.setInt(colorKey, paint.color.value);
   }
-
-  /// Shared preferences key for color.
-  String get colorKey => name + '_color';
 
   Stroke makeStroke(Offset startPoint);
 }
