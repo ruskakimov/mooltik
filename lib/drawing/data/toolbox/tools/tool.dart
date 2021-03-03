@@ -3,8 +3,7 @@ import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Tool {
-  Tool(this.icon, this.paint, this.sharedPreferences)
-      : assert(sharedPreferences != null) {
+  Tool(this.paint, this.sharedPreferences) : assert(sharedPreferences != null) {
     // Restore selected stroke width.
     if (sharedPreferences.containsKey(strokeWidthKey)) {
       paint.strokeWidth = sharedPreferences.getDouble(strokeWidthKey);
@@ -27,7 +26,9 @@ abstract class Tool {
     }
   }
 
-  final IconData icon;
+  /// Icon diplayed on the tool's button.
+  IconData get icon;
+
   final Paint paint;
   final SharedPreferences sharedPreferences;
 

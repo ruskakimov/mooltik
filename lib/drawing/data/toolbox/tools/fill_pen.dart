@@ -7,13 +7,18 @@ import 'tool.dart';
 class FillPen extends Tool {
   FillPen(SharedPreferences sharedPreferences)
       : super(
-          FontAwesomeIcons.penFancy,
           Paint()
             ..color = Colors.black26
             ..style = PaintingStyle.fill
             ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
           sharedPreferences,
         );
+
+  @override
+  String get name => 'fill_pen';
+
+  @override
+  IconData get icon => FontAwesomeIcons.penFancy;
 
   @override
   Stroke makeStroke(Offset startPoint) {
@@ -28,7 +33,4 @@ class FillPen extends Tool {
 
   @override
   List<double> get strokeWidthOptions => [];
-
-  @override
-  String get name => 'fill_pen';
 }
