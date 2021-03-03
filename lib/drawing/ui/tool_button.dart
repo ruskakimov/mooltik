@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/app_slider.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
+import 'package:mooltik/drawing/ui/color_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
@@ -48,6 +49,14 @@ class _ToolButtonState extends State<ToolButton> {
                   _closePicker();
                 },
               ),
+            ColorPicker(
+              selectedColor: Colors.black,
+              colorOptions: [
+                Colors.black,
+                Colors.redAccent,
+                Colors.teal,
+              ],
+            ),
             AppSlider(
               value: toolbox.selectedToolOpacity,
               onChanged: (double value) {
