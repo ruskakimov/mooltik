@@ -35,4 +35,7 @@ class Eraser extends Tool {
 
   @override
   List<double> get strokeWidthOptions => [20, 100, 300];
+
+  @override
+  List<Color> get colorOptions => [];
 }

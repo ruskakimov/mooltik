@@ -49,14 +49,15 @@ class _ToolButtonState extends State<ToolButton> {
                   _closePicker();
                 },
               ),
-            ColorPicker(
-              selectedColor: toolbox.selectedTool.color,
-              colorOptions: widget.tool.colorOptions,
-              onSelected: (Color color) {
-                toolbox.changeToolColor(color);
-                _closePicker();
-              },
-            ),
+            if (widget.tool.colorOptions.isNotEmpty)
+              ColorPicker(
+                selectedColor: toolbox.selectedTool.color,
+                colorOptions: widget.tool.colorOptions,
+                onSelected: (Color color) {
+                  toolbox.changeToolColor(color);
+                  _closePicker();
+                },
+              ),
             AppSlider(
               value: toolbox.selectedTool.opacity,
               onChanged: (double value) {
