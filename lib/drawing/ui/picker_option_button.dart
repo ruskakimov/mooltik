@@ -22,7 +22,7 @@ class PickerOptionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkResponse(
-      radius: circleSize / 2 + 3,
+      radius: circleSize / 2,
       onTap: onTap,
       child: Container(
         width: circleSize,
@@ -30,7 +30,7 @@ class PickerOptionButton extends StatelessWidget {
         decoration: BoxDecoration(
           border: selected
               ? Border.all(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Colors.white,
                   width: 3,
                 )
               : null,
