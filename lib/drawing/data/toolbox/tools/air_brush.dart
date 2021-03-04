@@ -7,7 +7,6 @@ import 'tool.dart';
 class AirBrush extends Tool {
   AirBrush(SharedPreferences sharedPreferences)
       : super(
-          FontAwesomeIcons.sprayCan,
           Paint()
             ..color = Colors.black26
             ..style = PaintingStyle.stroke
@@ -17,6 +16,12 @@ class AirBrush extends Tool {
         ) {
     _updateBlur();
   }
+
+  @override
+  String get name => 'air_brush';
+
+  @override
+  IconData get icon => FontAwesomeIcons.sprayCan;
 
   @override
   Stroke makeStroke(Offset startPoint) {
@@ -37,9 +42,6 @@ class AirBrush extends Tool {
     super.strokeWidth = value;
     _updateBlur();
   }
-
-  @override
-  String get name => 'air_brush';
 
   void _updateBlur() {
     paint.maskFilter = MaskFilter.blur(BlurStyle.normal, strokeWidth / 2);

@@ -25,14 +25,15 @@ class ToolboxModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  double get selectedToolStrokeWidth => selectedTool?.strokeWidth;
-
   void changeToolStrokeWidth(double strokeWidth) {
     selectedTool.strokeWidth = strokeWidth;
     notifyListeners();
   }
 
-  double get selectedToolOpacity => selectedTool?.opacity;
+  void changeToolColor(Color color) {
+    selectedTool.color = color;
+    notifyListeners();
+  }
 
   void changeToolOpacity(double opacity) {
     selectedTool.opacity = opacity;

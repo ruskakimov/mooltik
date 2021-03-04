@@ -7,7 +7,6 @@ import 'tool.dart';
 class Pen extends Tool {
   Pen(SharedPreferences sharedPreferences)
       : super(
-          FontAwesomeIcons.marker,
           Paint()
             ..color = Colors.black
             ..style = PaintingStyle.stroke
@@ -16,6 +15,12 @@ class Pen extends Tool {
             ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
           sharedPreferences,
         );
+
+  @override
+  String get name => 'pen';
+
+  @override
+  IconData get icon => FontAwesomeIcons.marker;
 
   @override
   Stroke makeStroke(Offset startPoint) {
@@ -30,7 +35,4 @@ class Pen extends Tool {
 
   @override
   List<double> get strokeWidthOptions => [5, 10, 20];
-
-  @override
-  String get name => 'pen';
 }

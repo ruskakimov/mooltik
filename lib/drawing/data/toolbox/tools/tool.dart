@@ -3,8 +3,7 @@ import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Tool {
-  Tool(this.icon, this.paint, this.sharedPreferences)
-      : assert(sharedPreferences != null) {
+  Tool(this.paint, this.sharedPreferences) : assert(sharedPreferences != null) {
     // Restore selected stroke width.
     if (sharedPreferences.containsKey(strokeWidthKey)) {
       paint.strokeWidth = sharedPreferences.getDouble(strokeWidthKey);
@@ -19,15 +18,13 @@ abstract class Tool {
 
     // Restore selected color.
     if (sharedPreferences.containsKey(colorKey)) {
-      paint.color = Colors.black.withOpacity(
-        // This is to default back to black, if another color was selected before and saved to shared prefs.
-        // TODO: Remove once color picker is added.
-        Color(sharedPreferences.getInt(colorKey)).opacity,
-      );
+      paint.color = Color(sharedPreferences.getInt(colorKey));
     }
   }
 
-  final IconData icon;
+  /// Icon diplayed on the tool's button.
+  IconData get icon;
+
   final Paint paint;
   final SharedPreferences sharedPreferences;
 
@@ -35,6 +32,14 @@ abstract class Tool {
   double get minStrokeWidth;
 
   List<double> get strokeWidthOptions;
+  List<Color> get colorOptions => [
+        Colors.black,
+        Colors.redAccent,
+        Colors.yellow,
+        Colors.teal,
+        Colors.blue,
+        Colors.deepPurple,
+      ];
 
   /// Tool name used to prefix shared preferences keys.
   String get name;
@@ -42,7 +47,14 @@ abstract class Tool {
   /// Shared preferences key for stroke width.
   String get strokeWidthKey => name + '_stroke_width';
 
+  /// Shared preferences key for color.
+  String get colorKey => name + '_color';
+
   double get strokeWidth => paint.strokeWidth;
+
+  Color get color => paint.color.withOpacity(1);
+
+  double get opacity => paint.color.opacity;
 
   set strokeWidth(double value) {
     assert(strokeWidth <= maxStrokeWidth && strokeWidth >= minStrokeWidth);
@@ -50,16 +62,16 @@ abstract class Tool {
     sharedPreferences.setDouble(strokeWidthKey, strokeWidth);
   }
 
-  double get opacity => paint.color.opacity;
+  set color(Color color) {
+    paint.color = color.withOpacity(opacity);
+    sharedPreferences.setInt(colorKey, paint.color.value);
+  }
 
   set opacity(double value) {
     assert(opacity >= 0 && opacity <= 1);
     paint.color = paint.color.withOpacity(value);
     sharedPreferences.setInt(colorKey, paint.color.value);
   }
-
-  /// Shared preferences key for color.
-  String get colorKey => name + '_color';
 
   Stroke makeStroke(Offset startPoint);
 }

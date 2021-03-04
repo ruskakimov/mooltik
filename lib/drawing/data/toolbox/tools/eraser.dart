@@ -7,7 +7,6 @@ import 'tool.dart';
 class Eraser extends Tool {
   Eraser(SharedPreferences sharedPreferences)
       : super(
-          FontAwesomeIcons.eraser,
           Paint()
             ..color = Colors.black
             ..style = PaintingStyle.stroke
@@ -16,6 +15,12 @@ class Eraser extends Tool {
             ..blendMode = BlendMode.dstOut,
           sharedPreferences,
         );
+
+  @override
+  String get name => 'eraser';
+
+  @override
+  IconData get icon => FontAwesomeIcons.eraser;
 
   @override
   Stroke makeStroke(Offset startPoint) {
@@ -32,5 +37,5 @@ class Eraser extends Tool {
   List<double> get strokeWidthOptions => [20, 100, 300];
 
   @override
-  String get name => 'eraser';
+  List<Color> get colorOptions => [];
 }
