@@ -1,4 +1,7 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/popup_entry.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/add_frame_button.dart';
@@ -39,6 +42,24 @@ class TimelineActionbar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                AppIconButton(
+                  icon: FontAwesomeIcons.music,
+                  onTap: () async {
+                    final result = await FilePicker.platform.pickFiles(
+                      type: FileType.custom,
+                      allowedExtensions: [
+                        'mp3',
+                        'aac',
+                        'flac',
+                        'm4a',
+                        'wav',
+                      ],
+                    );
+
+                    // Cancelled by user.
+                    if (result == null) return;
+                  },
+                ),
                 AddFrameButton(),
               ],
             ),
