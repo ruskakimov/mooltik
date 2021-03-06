@@ -41,7 +41,7 @@ dependencies:
 
   # Audio playback:
 
-  # Export videos:
+  # Export video:
   flutter_ffmpeg: ^0.3.0
   image_gallery_saver: ^1.5.0
   open_file: ^3.0.3
