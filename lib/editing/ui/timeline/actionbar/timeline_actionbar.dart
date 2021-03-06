@@ -3,12 +3,10 @@ import 'package:mooltik/common/ui/popup_entry.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/add_frame_button.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/play_button.dart';
-import 'package:mooltik/editing/ui/timeline/actionbar/record_button.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/time_label.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/frame_menu.dart';
 
 import 'package:provider/provider.dart';
-import 'package:flutter_portal/flutter_portal.dart';
 
 class TimelineActionbar extends StatelessWidget {
   const TimelineActionbar({
@@ -41,7 +39,6 @@ class TimelineActionbar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                RecordButton(),
                 AddFrameButton(),
               ],
             ),

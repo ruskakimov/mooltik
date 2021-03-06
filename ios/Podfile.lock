@@ -59,11 +59,6 @@ PODS:
   - flutter_ffmpeg/https (0.3.0):
     - Flutter
     - mobile-ffmpeg-https (= 4.4)
-  - "flutter_sound_lite (6.4.8+2)":
-    - Flutter
-    - "tau_sound_core (= 6.4.8+2)"
-  - "flutter_sound_web (6.4.8+2)":
-    - Flutter
   - GoogleAppMeasurement (7.3.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
     - GoogleUtilities/MethodSwizzler (~> 7.0)
@@ -122,7 +117,6 @@ PODS:
     - Flutter
   - shared_preferences_windows (0.0.1):
     - Flutter
-  - "tau_sound_core (6.4.8+2)"
 
 DEPENDENCIES:
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
@@ -132,8 +126,6 @@ DEPENDENCIES:
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - Flutter (from `Flutter`)
   - flutter_ffmpeg (from `.symlinks/plugins/flutter_ffmpeg/ios`)
-  - flutter_sound_lite (from `.symlinks/plugins/flutter_sound_lite/ios`)
-  - flutter_sound_web (from `.symlinks/plugins/flutter_sound_web/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
   - open_file (from `.symlinks/plugins/open_file/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -161,7 +153,6 @@ SPEC REPOS:
     - mobile-ffmpeg-https
     - nanopb
     - PromisesObjC
-    - tau_sound_core
 
 EXTERNAL SOURCES:
   firebase_analytics:
@@ -178,10 +169,6 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_ffmpeg:
     :path: ".symlinks/plugins/flutter_ffmpeg/ios"
-  flutter_sound_lite:
-    :path: ".symlinks/plugins/flutter_sound_lite/ios"
-  flutter_sound_web:
-    :path: ".symlinks/plugins/flutter_sound_web/ios"
   image_gallery_saver:
     :path: ".symlinks/plugins/image_gallery_saver/ios"
   open_file:
@@ -221,8 +208,6 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 30646fc9a61c6f4ee3cd7a8b7231721842b40c95
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_ffmpeg: 657ce8a1502c3d25bf34efc58b380b248836f772
-  flutter_sound_lite: 4f09f3967356d13f18d9682c0c058b35708feb60
-  flutter_sound_web: bced59eac2aa69cb61875da8786f92f539f554e8
   GoogleAppMeasurement: 8d3c0aeede16ab7764144b5a4ca8e1d4323841b7
   GoogleDataTransport: 116c84c4bdeb76be2a7a46de51244368f9794eab
   GoogleUtilities: d866834472f1324d080496bc67ab3ce5d0d46027
@@ -241,7 +226,6 @@ SPEC CHECKSUMS:
   shared_preferences_macos: f3f29b71ccbb56bf40c9dd6396c9acf15e214087
   shared_preferences_web: 141cce0c3ed1a1c5bf2a0e44f52d31eeb66e5ea9
   shared_preferences_windows: 36b76d6f54e76ead957e60b49e2f124b4cd3e6ae
-  tau_sound_core: 74ffbf8790d019cdd56200ca36038ec117b920c2
 
 PODFILE CHECKSUM: 5935256947aef04854e7e21415c558af15af1120
 
