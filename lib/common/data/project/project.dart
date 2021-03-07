@@ -234,4 +234,27 @@ class Project extends ChangeNotifier {
   Future<File> getNewSoundClipFile() async =>
       await _getSoundClipFile(DateTime.now().millisecondsSinceEpoch)
           .create(recursive: true);
+
+  Future<void> loadSoundClipFromFile(File source) async {
+    if (_soundClips.isNotEmpty) {
+      _soundClips.clear();
+    }
+
+    final sourceName = p.basename(source.path);
+
+    final soundFile = await source.copy(
+      p.join(_getSoundDirectoryPath(), sourceName),
+    );
+
+    final soundClip = SoundClip(
+      file: soundFile,
+      startTime: Duration.zero,
+      // TODO: Read duration from file.
+      duration: Duration(seconds: 1),
+    );
+
+    _soundClips.add(soundClip);
+
+    notifyListeners();
+  }
 }

@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/popup_entry.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
@@ -58,6 +61,9 @@ class TimelineActionbar extends StatelessWidget {
 
                     // Cancelled by user.
                     if (result == null) return;
+
+                    final file = File(result.files.single.path);
+                    await context.read<Project>().loadSoundClipFromFile(file);
                   },
                 ),
                 AddFrameButton(),
