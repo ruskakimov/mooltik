@@ -49,12 +49,8 @@ PODS:
     - Firebase/Analytics (= 7.3.0)
     - firebase_core
     - Flutter
-  - firebase_analytics_web (0.1.0):
-    - Flutter
   - firebase_core (0.7.0):
     - Firebase/CoreOnly (= 7.3.0)
-    - Flutter
-  - firebase_core_web (0.1.0):
     - Flutter
   - firebase_crashlytics (0.4.0-1):
     - Firebase/Crashlytics (= 7.3.0)
@@ -95,8 +91,6 @@ PODS:
   - flutter_ffmpeg/https (0.3.0):
     - Flutter
     - mobile-ffmpeg-https (= 4.4)
-  - flutter_plugin_android_lifecycle (0.0.1):
-    - Flutter
   - GoogleAppMeasurement (7.3.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
     - GoogleUtilities/MethodSwizzler (~> 7.0)
@@ -128,8 +122,6 @@ PODS:
     - Flutter
   - just_audio (0.0.1):
     - Flutter
-  - just_audio_web (0.0.1):
-    - Flutter
   - mobile-ffmpeg-https (4.4)
   - nanopb (2.30906.0):
     - nanopb/decode (= 2.30906.0)
@@ -140,12 +132,6 @@ PODS:
     - Flutter
   - path_provider (0.0.1):
     - Flutter
-  - path_provider_linux (0.0.1):
-    - Flutter
-  - path_provider_macos (0.0.1):
-    - Flutter
-  - path_provider_windows (0.0.1):
-    - Flutter
   - "permission_handler (5.0.1+1)":
     - Flutter
   - PromisesObjC (1.2.12)
@@ -154,41 +140,22 @@ PODS:
   - SDWebImage/Core (5.10.4)
   - shared_preferences (0.0.1):
     - Flutter
-  - shared_preferences_linux (0.0.1):
-    - Flutter
-  - shared_preferences_macos (0.0.1):
-    - Flutter
-  - shared_preferences_web (0.0.1):
-    - Flutter
-  - shared_preferences_windows (0.0.1):
-    - Flutter
   - SwiftyGif (5.4.0)
 
 DEPENDENCIES:
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
-  - firebase_analytics_web (from `.symlinks/plugins/firebase_analytics_web/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
-  - firebase_core_web (from `.symlinks/plugins/firebase_core_web/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - Flutter (from `Flutter`)
   - flutter_ffmpeg (from `.symlinks/plugins/flutter_ffmpeg/ios`)
-  - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
-  - just_audio_web (from `.symlinks/plugins/just_audio_web/ios`)
   - open_file (from `.symlinks/plugins/open_file/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - path_provider_linux (from `.symlinks/plugins/path_provider_linux/ios`)
-  - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
-  - path_provider_windows (from `.symlinks/plugins/path_provider_windows/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
-  - shared_preferences_linux (from `.symlinks/plugins/shared_preferences_linux/ios`)
-  - shared_preferences_macos (from `.symlinks/plugins/shared_preferences_macos/ios`)
-  - shared_preferences_web (from `.symlinks/plugins/shared_preferences_web/ios`)
-  - shared_preferences_windows (from `.symlinks/plugins/shared_preferences_windows/ios`)
 
 SPEC REPOS:
   trunk:
@@ -216,48 +183,26 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/file_picker/ios"
   firebase_analytics:
     :path: ".symlinks/plugins/firebase_analytics/ios"
-  firebase_analytics_web:
-    :path: ".symlinks/plugins/firebase_analytics_web/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
-  firebase_core_web:
-    :path: ".symlinks/plugins/firebase_core_web/ios"
   firebase_crashlytics:
     :path: ".symlinks/plugins/firebase_crashlytics/ios"
   Flutter:
     :path: Flutter
   flutter_ffmpeg:
     :path: ".symlinks/plugins/flutter_ffmpeg/ios"
-  flutter_plugin_android_lifecycle:
-    :path: ".symlinks/plugins/flutter_plugin_android_lifecycle/ios"
   image_gallery_saver:
     :path: ".symlinks/plugins/image_gallery_saver/ios"
   just_audio:
     :path: ".symlinks/plugins/just_audio/ios"
-  just_audio_web:
-    :path: ".symlinks/plugins/just_audio_web/ios"
   open_file:
     :path: ".symlinks/plugins/open_file/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
-  path_provider_linux:
-    :path: ".symlinks/plugins/path_provider_linux/ios"
-  path_provider_macos:
-    :path: ".symlinks/plugins/path_provider_macos/ios"
-  path_provider_windows:
-    :path: ".symlinks/plugins/path_provider_windows/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
-  shared_preferences_linux:
-    :path: ".symlinks/plugins/shared_preferences_linux/ios"
-  shared_preferences_macos:
-    :path: ".symlinks/plugins/shared_preferences_macos/ios"
-  shared_preferences_web:
-    :path: ".symlinks/plugins/shared_preferences_web/ios"
-  shared_preferences_windows:
-    :path: ".symlinks/plugins/shared_preferences_windows/ios"
 
 SPEC CHECKSUMS:
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
@@ -266,41 +211,30 @@ SPEC CHECKSUMS:
   file_picker: 3e6c3790de664ccf9b882732d9db5eaf6b8d4eb1
   Firebase: 26223c695fe322633274198cb19dca8cb7e54416
   firebase_analytics: 41043f6e14fc9bc27c3f05217ab7f2b0ad9b41eb
-  firebase_analytics_web: 7d539061ea4af07563a0e21044af89cab70efec0
   firebase_core: 91b27774a52f41f8b58484a75edf71197ac01c59
-  firebase_core_web: 2223a33d6da33b048d7fd598f2ead160af0b6020
   firebase_crashlytics: e6ecb908f6249ce3757d18a812819a41495bf1cb
   FirebaseAnalytics: 2580c2d62535ae7b644143d48941fcc239ea897a
   FirebaseCore: 4d3c72622ce0e2106aaa07bb4b2935ba2c370972
   FirebaseCoreDiagnostics: d50e11039e5984d92c8a512be2395f13df747350
   FirebaseCrashlytics: d31325312c92e2cb2f0386d589b9aa44e303d99b
   FirebaseInstallations: 30646fc9a61c6f4ee3cd7a8b7231721842b40c95
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_ffmpeg: 657ce8a1502c3d25bf34efc58b380b248836f772
-  flutter_plugin_android_lifecycle: dc0b544e129eebb77a6bfb1239d4d1c673a60a35
   GoogleAppMeasurement: 8d3c0aeede16ab7764144b5a4ca8e1d4323841b7
   GoogleDataTransport: 116c84c4bdeb76be2a7a46de51244368f9794eab
   GoogleUtilities: d866834472f1324d080496bc67ab3ce5d0d46027
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
-  just_audio_web: bd24b2bc6559f1362f5f4ebc81554da72c8e3616
   mobile-ffmpeg-https: 311fc4a8f671cf36d1d6b8f421e8246b790978d9
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  path_provider_linux: 4d630dc393e1f20364f3e3b4a2ff41d9674a84e4
-  path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
-  path_provider_windows: a2b81600c677ac1959367280991971cb9a1edb3b
   permission_handler: eac8e15b4a1a3fba55b761d19f3f4e6b005d15b6
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   SDWebImage: c666b97e1fa9c64b4909816a903322018f0a9c84
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
-  shared_preferences_linux: afefbfe8d921e207f01ede8b60373d9e3b566b78
-  shared_preferences_macos: f3f29b71ccbb56bf40c9dd6396c9acf15e214087
-  shared_preferences_web: 141cce0c3ed1a1c5bf2a0e44f52d31eeb66e5ea9
-  shared_preferences_windows: 36b76d6f54e76ead957e60b49e2f124b4cd3e6ae
   SwiftyGif: 5d4af95df24caf1c570dbbcb32a3b8a0763bc6d7
 
-PODFILE CHECKSUM: 5935256947aef04854e7e21415c558af15af1120
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
 COCOAPODS: 1.9.1

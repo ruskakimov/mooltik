@@ -63,7 +63,22 @@ class TimelineActionbar extends StatelessWidget {
                     if (result == null) return;
 
                     final file = File(result.files.single.path);
-                    await context.read<Project>().loadSoundClipFromFile(file);
+
+                    try {
+                      await context.read<Project>().loadSoundClipFromFile(file);
+                    } catch (e) {
+                      final snack = SnackBar(
+                        content: Text(
+                          'Failed to load audio.',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onError,
+                          ),
+                        ),
+                        backgroundColor: Theme.of(context).colorScheme.error,
+                      );
+
+                      ScaffoldMessenger.of(context).showSnackBar(snack);
+                    }
                   },
                 ),
                 AddFrameButton(),
