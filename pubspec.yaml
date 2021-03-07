@@ -40,6 +40,7 @@ dependencies:
   shared_preferences: ^0.5.12+4
 
   # Audio playback:
+  just_audio: ^0.7.0
 
   # Import assets:
   file_picker: <3.0.0
