@@ -10,6 +10,7 @@ import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
+import 'package:mooltik/editing/data/player_model.dart';
 import 'package:path/path.dart' as p;
 
 const String _binnedPostfix = '_binned';
@@ -240,17 +241,17 @@ class Project extends ChangeNotifier {
       _soundClips.clear();
     }
 
-    final sourceName = p.basename(source.path);
+    final sourceExtension = p.extension(source.path);
+    final name = '${DateTime.now().millisecondsSinceEpoch}$sourceExtension';
 
     final soundFile = await source.copy(
-      p.join(_getSoundDirectoryPath(), sourceName),
+      p.join(_getSoundDirectoryPath(), name),
     );
 
     final soundClip = SoundClip(
       file: soundFile,
       startTime: Duration.zero,
-      // TODO: Read duration from file.
-      duration: Duration(seconds: 1),
+      duration: await PlayerModel.getSoundFileDuration(soundFile),
     );
 
     _soundClips.add(soundClip);

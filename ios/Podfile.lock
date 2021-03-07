@@ -1,4 +1,6 @@
 PODS:
+  - audio_session (0.0.1):
+    - Flutter
   - DKImagePickerController/Core (4.3.2):
     - DKImagePickerController/ImageDataManager
     - DKImagePickerController/Resource
@@ -124,6 +126,10 @@ PODS:
     - GoogleUtilities/Logger
   - image_gallery_saver (1.5.0):
     - Flutter
+  - just_audio (0.0.1):
+    - Flutter
+  - just_audio_web (0.0.1):
+    - Flutter
   - mobile-ffmpeg-https (4.4)
   - nanopb (2.30906.0):
     - nanopb/decode (= 2.30906.0)
@@ -159,6 +165,7 @@ PODS:
   - SwiftyGif (5.4.0)
 
 DEPENDENCIES:
+  - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_analytics_web (from `.symlinks/plugins/firebase_analytics_web/ios`)
@@ -169,6 +176,8 @@ DEPENDENCIES:
   - flutter_ffmpeg (from `.symlinks/plugins/flutter_ffmpeg/ios`)
   - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
+  - just_audio (from `.symlinks/plugins/just_audio/ios`)
+  - just_audio_web (from `.symlinks/plugins/just_audio_web/ios`)
   - open_file (from `.symlinks/plugins/open_file/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - path_provider_linux (from `.symlinks/plugins/path_provider_linux/ios`)
@@ -201,6 +210,8 @@ SPEC REPOS:
     - SwiftyGif
 
 EXTERNAL SOURCES:
+  audio_session:
+    :path: ".symlinks/plugins/audio_session/ios"
   file_picker:
     :path: ".symlinks/plugins/file_picker/ios"
   firebase_analytics:
@@ -221,6 +232,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_plugin_android_lifecycle/ios"
   image_gallery_saver:
     :path: ".symlinks/plugins/image_gallery_saver/ios"
+  just_audio:
+    :path: ".symlinks/plugins/just_audio/ios"
+  just_audio_web:
+    :path: ".symlinks/plugins/just_audio_web/ios"
   open_file:
     :path: ".symlinks/plugins/open_file/ios"
   path_provider:
@@ -245,6 +260,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_windows/ios"
 
 SPEC CHECKSUMS:
+  audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   DKImagePickerController: b5eb7f7a388e4643264105d648d01f727110fc3d
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   file_picker: 3e6c3790de664ccf9b882732d9db5eaf6b8d4eb1
@@ -266,6 +282,8 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 116c84c4bdeb76be2a7a46de51244368f9794eab
   GoogleUtilities: d866834472f1324d080496bc67ab3ce5d0d46027
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
+  just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
+  just_audio_web: bd24b2bc6559f1362f5f4ebc81554da72c8e3616
   mobile-ffmpeg-https: 311fc4a8f671cf36d1d6b8f421e8246b790978d9
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
