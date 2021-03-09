@@ -251,7 +251,7 @@ class Project extends ChangeNotifier {
     final soundClip = SoundClip(
       file: soundFile,
       startTime: Duration.zero,
-      duration: await PlayerModel.getSoundFileDuration(soundFile),
+      duration: await getSoundFileDuration(soundFile),
     );
 
     _soundClips.add(soundClip);

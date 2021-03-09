@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
+import 'package:mooltik/editing/data/player_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +22,8 @@ class PlayButton extends StatelessWidget {
     // Play
     return AppIconButton(
       icon: FontAwesomeIcons.play,
-      onTap: () {
+      onTap: () async {
+        await context.read<PlayerModel>().prepare();
         timeline.play();
       },
     );
