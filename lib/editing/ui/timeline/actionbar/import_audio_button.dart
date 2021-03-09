@@ -14,17 +14,34 @@ class ImportAudioButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => ImporterModel(),
-      builder: (context, _) => AppIconButton(
-        icon: FontAwesomeIcons.music,
-        onTap: () async {
-          try {
-            final project = context.read<Project>();
-            await context.read<ImporterModel>().importAudioTo(project);
-          } catch (e) {
-            _showFailedImportError(context);
-          }
-        },
-      ),
+      builder: (context, _) {
+        final importer = context.watch<ImporterModel>();
+
+        if (importer.importing) {
+          return SizedBox(
+            width: 52,
+            child: Center(
+              child: SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          );
+        }
+
+        return AppIconButton(
+          icon: FontAwesomeIcons.music,
+          onTap: () async {
+            try {
+              final project = context.read<Project>();
+              await importer.importAudioTo(project);
+            } catch (e) {
+              _showFailedImportError(context);
+            }
+          },
+        );
+      },
     );
   }
 
