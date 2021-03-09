@@ -17,7 +17,17 @@ class PlayerModel extends ChangeNotifier {
     @required this.soundClips,
     TimelineModel timeline,
   })  : _player = AudioPlayer(),
-        _timeline = timeline;
+        _timeline = timeline {
+    _timeline.addListener(() {
+      if (_timeline.isPlaying == _player.playing) return;
+
+      if (_timeline.isPlaying) {
+        _player.play();
+      } else {
+        _player.stop();
+      }
+    });
+  }
 
   final AudioPlayer _player;
 
