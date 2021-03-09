@@ -12,26 +12,29 @@ class ImportAudioButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppIconButton(
-      icon: FontAwesomeIcons.music,
-      onTap: () async {
-        try {
-          final project = context.read<Project>();
-          await ImporterModel().importAudioTo(project);
-        } catch (e) {
-          final snack = SnackBar(
-            content: Text(
-              'Failed to load audio.',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onError,
+    return ChangeNotifierProvider(
+      create: (context) => ImporterModel(),
+      builder: (context, _) => AppIconButton(
+        icon: FontAwesomeIcons.music,
+        onTap: () async {
+          try {
+            final project = context.read<Project>();
+            await context.read<ImporterModel>().importAudioTo(project);
+          } catch (e) {
+            final snack = SnackBar(
+              content: Text(
+                'Failed to load audio.',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onError,
+                ),
               ),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          );
+              backgroundColor: Theme.of(context).colorScheme.error,
+            );
 
-          ScaffoldMessenger.of(context).showSnackBar(snack);
-        }
-      },
+            ScaffoldMessenger.of(context).showSnackBar(snack);
+          }
+        },
+      ),
     );
   }
 }
