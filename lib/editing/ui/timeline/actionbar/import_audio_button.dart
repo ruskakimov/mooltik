@@ -21,20 +21,24 @@ class ImportAudioButton extends StatelessWidget {
             final project = context.read<Project>();
             await context.read<ImporterModel>().importAudioTo(project);
           } catch (e) {
-            final snack = SnackBar(
-              content: Text(
-                'Failed to load audio.',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onError,
-                ),
-              ),
-              backgroundColor: Theme.of(context).colorScheme.error,
-            );
-
-            ScaffoldMessenger.of(context).showSnackBar(snack);
+            _showFailedImportError(context);
           }
         },
       ),
     );
+  }
+
+  void _showFailedImportError(BuildContext context) {
+    final snack = SnackBar(
+      content: Text(
+        'Failed to load audio.',
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onError,
+        ),
+      ),
+      backgroundColor: Theme.of(context).colorScheme.error,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snack);
   }
 }
