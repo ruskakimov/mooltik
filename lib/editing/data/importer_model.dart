@@ -14,11 +14,11 @@ class ImporterModel extends ChangeNotifier {
   Future<void> importAudioTo(Project project) async {
     if (_importing) return;
 
-    _importing = true;
-    notifyListeners();
-
     final soundFile = await _pickSoundFile();
     if (soundFile == null) return;
+
+    _importing = true;
+    notifyListeners();
 
     await project.loadSoundClipFromFile(soundFile);
 
