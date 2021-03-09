@@ -20,10 +20,14 @@ class ImporterModel extends ChangeNotifier {
     _importing = true;
     notifyListeners();
 
-    await project.loadSoundClipFromFile(soundFile);
-
-    _importing = false;
-    notifyListeners();
+    try {
+      await project.loadSoundClipFromFile(soundFile);
+    } catch (e) {
+      rethrow;
+    } finally {
+      _importing = false;
+      notifyListeners();
+    }
   }
 
   Future<File> _pickSoundFile() async {
