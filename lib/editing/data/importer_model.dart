@@ -18,6 +18,8 @@ class ImporterModel extends ChangeNotifier {
     notifyListeners();
 
     final soundFile = await _pickSoundFile();
+    if (soundFile == null) return;
+
     await project.loadSoundClipFromFile(soundFile);
 
     _importing = false;
