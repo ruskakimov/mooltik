@@ -28,9 +28,11 @@ class Preview extends StatelessWidget {
           ),
         );
       },
-      child: FrameThumbnail(
-        frame: context.select<TimelineModel, FrameModel>(
-          (timeline) => timeline.selectedFrame,
+      child: Center(
+        child: FrameThumbnail(
+          frame: context.select<TimelineModel, FrameModel>(
+            (timeline) => timeline.selectedFrame,
+          ),
         ),
       ),
     );
