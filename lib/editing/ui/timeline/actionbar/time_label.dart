@@ -11,7 +11,7 @@ class TimeLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = TextStyle(
       color: Theme.of(context).colorScheme.onSurface,
-      fontSize: 14,
+      fontSize: 12,
       fontFeatures: [FontFeature.tabularFigures()],
     );
 
