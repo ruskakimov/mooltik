@@ -1,11 +1,9 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/popup_entry.dart';
+import 'package:mooltik/editing/data/importer_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/add_frame_button.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/play_button.dart';
@@ -48,24 +46,9 @@ class TimelineActionbar extends StatelessWidget {
                 AppIconButton(
                   icon: FontAwesomeIcons.music,
                   onTap: () async {
-                    final result = await FilePicker.platform.pickFiles(
-                      type: FileType.custom,
-                      allowedExtensions: [
-                        'mp3',
-                        'aac',
-                        'flac',
-                        'm4a',
-                        'wav',
-                      ],
-                    );
-
-                    // Cancelled by user.
-                    if (result == null) return;
-
-                    final file = File(result.files.single.path);
-
                     try {
-                      await context.read<Project>().loadSoundClipFromFile(file);
+                      final project = context.read<Project>();
+                      await ImporterModel().importAudioTo(project);
                     } catch (e) {
                       final snack = SnackBar(
                         content: Text(
