@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
@@ -212,7 +212,14 @@ class Project extends ChangeNotifier {
 
   Future<FrameModel> _getFrame(FrameSaveData frameData, Size size) async {
     final file = _getFrameFile(frameData.id);
-    final image = file.existsSync() ? await pngRead(file) : null;
+    ui.Image image;
+
+    try {
+      image = await pngRead(file);
+    } catch (e) {
+      // Failed to read.
+    }
+
     return FrameModel(
       id: frameData.id,
       duration: frameData.duration,
