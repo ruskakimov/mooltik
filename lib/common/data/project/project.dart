@@ -249,11 +249,11 @@ class Project extends ChangeNotifier {
     }
 
     final sourceExtension = p.extension(source.path);
-    final name = '${DateTime.now().millisecondsSinceEpoch}$sourceExtension';
+    final fileName = '${DateTime.now().millisecondsSinceEpoch}$sourceExtension';
 
-    final soundFile = await source.copy(
-      p.join(_getSoundDirectoryPath(), name),
-    );
+    final soundFile = File(p.join(_getSoundDirectoryPath(), fileName));
+    await soundFile.create(recursive: true);
+    await source.copy(soundFile.path);
 
     final soundClip = SoundClip(
       file: soundFile,
