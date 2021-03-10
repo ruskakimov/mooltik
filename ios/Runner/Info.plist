@@ -24,18 +24,18 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Record voice-over.</string>
-	<key>NSCameraUsageDescription</key>  <!-- Needed if mic is used. Issue is here https://github.com/Baseflow/flutter-permission-handler/issues/273. -->
-	<string>Capture photos.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Save generated video.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string></string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>

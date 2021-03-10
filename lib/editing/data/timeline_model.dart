@@ -94,11 +94,14 @@ class TimelineModel extends ChangeNotifier {
     _playheadController.value += fraction;
   }
 
+  /// Reset playhead to the beginning.
+  void reset() {
+    _playheadController.reset();
+    _resetSelectedFrame();
+    notifyListeners();
+  }
+
   void play() {
-    if (_playheadController.value == _playheadController.upperBound) {
-      _playheadController.reset();
-      _resetSelectedFrame();
-    }
     _playheadController.forward();
     notifyListeners();
   }

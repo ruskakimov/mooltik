@@ -23,19 +23,34 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  # State management:
   provider: ^4.3.2+2
-  path_provider: ^1.6.18
-  image_gallery_saver: ^1.5.0
-  permission_handler: ^5.0.1+1
-  flutter_colorpicker: ^0.3.4
+
+  # UI:
   font_awesome_flutter: ^8.8.1
-  flutter_ffmpeg: ^0.3.0
-  flutter_sound_lite: ^6.4.8+2
   flutter_portal: ^0.3.0
   flutter_slidable: ^0.5.7
-  open_file: ^3.0.3
+
+  # App permissions:
+  permission_handler: ^5.0.1+1
+
+  # Save user data:
+  path_provider: ^1.6.18
   shared_preferences: ^0.5.12+4
 
+  # Audio playback:
+  just_audio: ^0.6.15+1
+
+  # Import assets:
+  file_picker: <3.0.0
+
+  # Export video:
+  flutter_ffmpeg: ^0.3.0
+  image_gallery_saver: ^1.5.0
+  open_file: ^3.0.3
+
+  # Analytics:
   firebase_core: ^0.7.0
   firebase_analytics: ^7.0.1
   firebase_crashlytics: ^0.4.0+1

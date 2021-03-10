@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
@@ -10,6 +10,7 @@ import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
+import 'package:mooltik/editing/data/player_model.dart';
 import 'package:path/path.dart' as p;
 
 const String _binnedPostfix = '_binned';
@@ -211,7 +212,14 @@ class Project extends ChangeNotifier {
 
   Future<FrameModel> _getFrame(FrameSaveData frameData, Size size) async {
     final file = _getFrameFile(frameData.id);
-    final image = file.existsSync() ? await pngRead(file) : null;
+    ui.Image image;
+
+    try {
+      image = await pngRead(file);
+    } catch (e) {
+      // Failed to read.
+    }
+
     return FrameModel(
       id: frameData.id,
       duration: frameData.duration,
@@ -234,4 +242,27 @@ class Project extends ChangeNotifier {
   Future<File> getNewSoundClipFile() async =>
       await _getSoundClipFile(DateTime.now().millisecondsSinceEpoch)
           .create(recursive: true);
+
+  Future<void> loadSoundClipFromFile(File source) async {
+    if (_soundClips.isNotEmpty) {
+      _soundClips.clear();
+    }
+
+    final sourceExtension = p.extension(source.path);
+    final fileName = '${DateTime.now().millisecondsSinceEpoch}$sourceExtension';
+
+    final soundFile = File(p.join(_getSoundDirectoryPath(), fileName));
+    await soundFile.create(recursive: true);
+    await source.copy(soundFile.path);
+
+    final soundClip = SoundClip(
+      file: soundFile,
+      startTime: Duration.zero,
+      duration: await getSoundFileDuration(soundFile),
+    );
+
+    _soundClips.add(soundClip);
+
+    notifyListeners();
+  }
 }

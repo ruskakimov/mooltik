@@ -35,10 +35,7 @@ class _EditingPageState extends State<EditingPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       EditingActionbar(),
-                      Spacer(),
-                      Preview(),
-                      Spacer(),
-                      SizedBox(width: 52), // to center preview
+                      Expanded(child: Preview()),
                     ],
                   ),
                 ),
