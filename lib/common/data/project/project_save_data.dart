@@ -9,7 +9,7 @@ class ProjectSaveData {
     this.sounds,
   });
 
-  ProjectSaveData.fromJson(Map<String, dynamic> json)
+  ProjectSaveData.fromJson(Map<String, dynamic> json, String soundDirPath)
       : width = json['width'],
         height = json['height'],
         frames = (json['frames'] as List<dynamic>)
@@ -17,7 +17,7 @@ class ProjectSaveData {
             .toList(),
         sounds = json['sounds'] != null
             ? (json['sounds'] as List<dynamic>)
-                .map((d) => SoundClip.fromJson(d))
+                .map((d) => SoundClip.fromJson(d, soundDirPath))
                 .toList()
             : [];
 

@@ -102,7 +102,10 @@ class Project extends ChangeNotifier {
     if (await _dataFile.exists()) {
       // Existing project.
       final contents = await _dataFile.readAsString();
-      final data = ProjectSaveData.fromJson(jsonDecode(contents));
+      final data = ProjectSaveData.fromJson(
+        jsonDecode(contents),
+        _getSoundDirectoryPath(),
+      );
       _frameSize = Size(data.width, data.height);
       _frames = await Future.wait(
         data.frames.map((frameData) => _getFrame(frameData, frameSize)),
