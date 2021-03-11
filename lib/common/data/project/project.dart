@@ -110,7 +110,8 @@ class Project extends ChangeNotifier {
       _frames = await Future.wait(
         data.frames.map((frameData) => _getFrame(frameData, frameSize)),
       );
-      _soundClips = data.sounds;
+      _soundClips =
+          data.sounds.where((sound) => sound.file.existsSync()).toList();
     } else {
       // New project.
       _frameSize = const Size(1280, 720);
