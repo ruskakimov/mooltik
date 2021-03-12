@@ -18,7 +18,7 @@ class ProjectList extends StatelessWidget {
     return GridView.count(
       padding: const EdgeInsets.all(32),
       scrollDirection: Axis.vertical,
-      crossAxisCount: 1,
+      crossAxisCount: MediaQuery.of(context).size.width ~/ 300,
       childAspectRatio: 16 / 9,
       mainAxisSpacing: 32,
       crossAxisSpacing: 32,
