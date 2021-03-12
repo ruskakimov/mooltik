@@ -15,16 +15,17 @@ class ProjectList extends StatelessWidget {
     final gallery = context.watch<GalleryModel>();
     final projects = gallery.projects;
 
-    return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
-      scrollDirection: Axis.horizontal,
-      itemCount: gallery.projects.length,
-      itemBuilder: (context, index) {
-        final project = projects[index];
-
-        return Center(
-          key: Key('${project.creationEpoch}'),
-          child: ChangeNotifierProvider<Project>.value(
+    return GridView.count(
+      padding: const EdgeInsets.all(32),
+      scrollDirection: Axis.vertical,
+      crossAxisCount: MediaQuery.of(context).size.width ~/ 300,
+      childAspectRatio: 16 / 9,
+      mainAxisSpacing: 32,
+      crossAxisSpacing: 32,
+      children: [
+        for (final project in projects)
+          ChangeNotifierProvider<Project>.value(
+            key: Key('${project.creationEpoch}'),
             value: project,
             child: ProjectThumbnail(
               thumbnail: project.thumbnail,
@@ -40,10 +41,8 @@ class ProjectList extends StatelessWidget {
                 );
               },
             ),
-          ),
-        );
-      },
-      separatorBuilder: (context, index) => const SizedBox(width: 24),
+          )
+      ],
     );
   }
 }

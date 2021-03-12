@@ -66,8 +66,6 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
 
   Widget _buildThumbnail() {
     return Container(
-      width: 320,
-      height: 180,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: Colors.white,

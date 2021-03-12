@@ -4,14 +4,15 @@ import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/surface.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/ui/menu_button.dart';
-import 'package:mooltik/drawing/ui/tool_button.dart';
 import 'package:provider/provider.dart';
-import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 
 class DrawingActionbar extends StatelessWidget {
+  const DrawingActionbar({Key key, this.middle}) : super(key: key);
+
+  final Widget middle;
+
   @override
   Widget build(BuildContext context) {
-    final toolbox = context.watch<ToolboxModel>();
     final easel = context.watch<EaselModel>();
 
     return Surface(
@@ -25,11 +26,7 @@ class DrawingActionbar extends StatelessWidget {
           ),
           MenuButton(),
           Spacer(),
-          for (final tool in toolbox.tools)
-            ToolButton(
-              tool: tool,
-              selected: tool == toolbox.selectedTool,
-            ),
+          if (middle != null) middle,
           Spacer(),
           AppIconButton(
             icon: FontAwesomeIcons.undo,

@@ -31,10 +31,19 @@ class _EditingPageState extends State<EditingPage>
             child: Column(
               children: <Widget>[
                 Expanded(
-                  child: Row(
+                  child: Flex(
+                    direction: MediaQuery.of(context).orientation ==
+                            Orientation.portrait
+                        ? Axis.vertical
+                        : Axis.horizontal,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      EditingActionbar(),
+                      EditingActionbar(
+                        direction: MediaQuery.of(context).orientation ==
+                                Orientation.portrait
+                            ? Axis.horizontal
+                            : Axis.vertical,
+                      ),
                       Expanded(child: Preview()),
                     ],
                   ),

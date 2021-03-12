@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/exporter_model.dart';
+import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/actionbar/export_dialog.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:path_provider/path_provider.dart';
@@ -11,26 +12,36 @@ import 'package:mooltik/common/ui/app_icon_button.dart';
 class EditingActionbar extends StatelessWidget {
   const EditingActionbar({
     Key key,
+    this.direction = Axis.horizontal,
   }) : super(key: key);
+
+  final Axis direction;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    final playing = context.select<TimelineModel, bool>(
+      (timeline) => timeline.isPlaying,
+    );
+
+    return Flex(
+      direction: direction,
       children: [
         AppIconButton(
           icon: FontAwesomeIcons.arrowLeft,
-          onTap: () async {
-            final project = context.read<Project>();
-            Navigator.pop(context);
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              project.saveAndClose();
-            });
-          },
+          onTap: playing
+              ? null
+              : () async {
+                  final project = context.read<Project>();
+                  Navigator.pop(context);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    project.saveAndClose();
+                  });
+                },
         ),
         Spacer(),
         AppIconButton(
           icon: FontAwesomeIcons.fileDownload,
-          onTap: () => _openExportDialog(context),
+          onTap: playing ? null : () => _openExportDialog(context),
         ),
       ],
     );
