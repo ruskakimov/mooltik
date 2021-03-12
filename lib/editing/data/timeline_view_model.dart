@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/convert.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
@@ -76,7 +78,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   double get _midX => size.width / 2;
 
-  double get sliverHeight => (size.height - 24) / 2;
+  double get sliverHeight => min((size.height - 24) / 2, 80);
 
   double get frameSliverTop => 8;
   double get frameSliverBottom => frameSliverTop + sliverHeight;
