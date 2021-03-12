@@ -38,11 +38,13 @@ class _GalleryPageState extends State<GalleryPage> {
       value: manager,
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        body: Stack(
           children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 56),
+              child: ProjectList(),
+            ),
             HomeBar(),
-            Expanded(child: ProjectList()),
           ],
         ),
         floatingActionButton: AddProjectButton(),
