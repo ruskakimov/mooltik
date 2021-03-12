@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
+import 'package:mooltik/common/ui/surface.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/drawing/ui/drawing_actionbar.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 import 'package:mooltik/drawing/ui/frame_button.dart';
+import 'package:mooltik/drawing/ui/toolbar.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/ui/easel/easel.dart';
@@ -32,6 +34,7 @@ class DrawingPage extends StatelessWidget {
       ],
       builder: (context, child) {
         final timeline = context.watch<TimelineModel>();
+        final toolbarOnBottom = MediaQuery.of(context).size.width < 600;
 
         return WillPopScope(
           // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
@@ -69,11 +72,23 @@ class DrawingPage extends StatelessWidget {
                       left: 0,
                       right: 0,
                       height: 44,
-                      child: DrawingActionbar(),
+                      child: DrawingActionbar(
+                        middle: toolbarOnBottom ? null : Toolbar(),
+                      ),
                     ),
+                    if (toolbarOnBottom)
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: 44,
+                        child: Surface(
+                          child: Toolbar(reversePopupSide: true),
+                        ),
+                      ),
                     if (timeline.stepBackwardAvailable)
                       Positioned(
-                        bottom: 16,
+                        top: 60,
                         left: 8,
                         child: FrameButton(
                           frame: timeline.frameBeforeSelected,
@@ -82,7 +97,7 @@ class DrawingPage extends StatelessWidget {
                       ),
                     if (timeline.stepForwardAvailable)
                       Positioned(
-                        bottom: 16,
+                        top: 60,
                         right: 8,
                         child: FrameButton(
                           frame: timeline.frameAfterSelected,
