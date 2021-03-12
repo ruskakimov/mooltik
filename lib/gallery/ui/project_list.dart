@@ -25,6 +25,7 @@ class ProjectList extends StatelessWidget {
       children: [
         for (final project in projects)
           ChangeNotifierProvider<Project>.value(
+            key: Key('${project.creationEpoch}'),
             value: project,
             child: ProjectThumbnail(
               thumbnail: project.thumbnail,
