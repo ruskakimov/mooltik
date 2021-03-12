@@ -86,10 +86,11 @@ class EaselModel extends ChangeNotifier {
   void updateSize(Size size) {
     if (size == _easelSize) return;
 
-    if (_easelSize == null) {
-      // Fit to screen on first build.
+    if (_easelSize != size) {
       _easelSize = size;
-      fitToScreen();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        fitToScreen();
+      });
     } else {
       _easelSize = size;
     }
