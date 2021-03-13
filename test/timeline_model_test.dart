@@ -17,5 +17,19 @@ void main() {
       );
       expect(timeline.currentFrame.id, 1);
     });
+
+    test('scrubbing updates current frame', () {
+      final timeline = TimelineModel(
+        frames: [
+          FrameModel(id: 1, size: sampleSize, duration: Duration(seconds: 2)),
+          FrameModel(id: 2, size: sampleSize, duration: Duration(seconds: 2)),
+        ],
+        vsync: TestVSync(),
+      );
+      timeline.scrub(0.5);
+      expect(timeline.currentFrame.id, 2);
+      timeline.scrub(-0.01);
+      expect(timeline.currentFrame.id, 1);
+    });
   });
 }
