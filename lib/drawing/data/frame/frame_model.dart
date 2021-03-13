@@ -18,10 +18,9 @@ class FrameModel extends ChangeNotifier {
   Duration get duration => _duration;
   Duration _duration;
   set duration(Duration value) {
-    if (value <= Duration.zero) return;
-    _duration = Duration(
-      milliseconds: 20 * (value.inMilliseconds / 20).round(),
-    );
+    final frames =
+        (value.inMilliseconds / 20).round().clamp(1, double.infinity);
+    _duration = Duration(milliseconds: 20 * frames);
     notifyListeners();
   }
 
