@@ -169,9 +169,12 @@ class TimelineModel extends ChangeNotifier {
 
     final prevPlayheadPosition = playheadPosition;
 
-    newDuration = Duration(milliseconds: newDuration.inMilliseconds);
-    _playheadController.duration += newDuration - selectedFrame.duration;
     selectedFrame.duration = newDuration;
+
+    _playheadController.duration = frames.fold(
+      Duration.zero,
+      (duration, frame) => duration + frame.duration,
+    );
 
     // Keep playhead inside selected frame.
     _playheadController.value = _fraction(
