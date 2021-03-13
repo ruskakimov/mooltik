@@ -186,4 +186,10 @@ class TimelineModel extends ChangeNotifier {
     if (frameIndex < 0 || frameIndex >= frames.length) return null;
     return calcTotalDuration(frames.sublist(0, frameIndex));
   }
+
+  Duration frameEndTimeAt(int frameIndex) {
+    // Outside index range.
+    if (frameIndex < 0 || frameIndex >= frames.length) return null;
+    return frameStartTimeAt(frameIndex) + frames[frameIndex].duration;
+  }
 }
