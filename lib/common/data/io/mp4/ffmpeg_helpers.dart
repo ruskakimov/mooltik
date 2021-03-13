@@ -33,6 +33,6 @@ String ffmpegCommand({
       ? '-itsoffset ${ffmpegDurationLabel(soundClipOffset)} -i $soundClipPath'
       : '';
   final output =
-      '-vf fps=24 -pix_fmt yuv420p -t ${ffmpegDurationLabel(videoDuration)} $outputPath';
+      '-vf fps=50 -pix_fmt yuv420p -t ${ffmpegDurationLabel(videoDuration)} $outputPath';
   return '$globalOptions $videoInput $audioInput $output';
 }

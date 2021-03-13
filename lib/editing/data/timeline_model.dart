@@ -12,16 +12,18 @@ class TimelineModel extends ChangeNotifier {
         _selectedFrameStart = Duration.zero,
         _playheadController = AnimationController(
           vsync: vsync,
-          duration: frames.fold(
-            Duration.zero,
-            (duration, frame) => duration + frame.duration,
-          ),
+          duration: calcTotalDuration(frames),
         ) {
     _playheadController.addListener(() {
       _updateSelectedFrame();
       notifyListeners();
     });
   }
+
+  static Duration calcTotalDuration(List<FrameModel> frames) => frames.fold(
+        Duration.zero,
+        (duration, frame) => duration + frame.duration,
+      );
 
   final List<FrameModel> frames;
   final AnimationController _playheadController;
@@ -169,9 +171,8 @@ class TimelineModel extends ChangeNotifier {
 
     final prevPlayheadPosition = playheadPosition;
 
-    newDuration = Duration(milliseconds: newDuration.inMilliseconds);
-    _playheadController.duration += newDuration - selectedFrame.duration;
     selectedFrame.duration = newDuration;
+    _playheadController.duration = calcTotalDuration(frames);
 
     // Keep playhead inside selected frame.
     _playheadController.value = _fraction(
