@@ -44,12 +44,6 @@ class TimelineViewModel extends ChangeNotifier {
 
   void onTapUp(TapUpDetails details) {
     _highlightedFrameIndex = _getFrameIndexUnderPosition(details.localPosition);
-
-    // Scroll to selected frame.
-    if (_highlightedFrameIndex != null) {
-      _timeline.seekTo(timeFromX(details.localPosition.dx));
-    }
-
     notifyListeners();
   }
 
