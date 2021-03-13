@@ -31,7 +31,7 @@ class TimelineViewModel extends ChangeNotifier {
 
     final diff = (details.localFocalPoint - _prevFocalPoint);
     _timeline.scrub(-diff.dx / timelineWidth);
-    _highlightedFrameIndex = null;
+    closeFrameMenu();
 
     _prevFocalPoint = details.localFocalPoint;
 
@@ -154,14 +154,14 @@ class TimelineViewModel extends ChangeNotifier {
     if (_highlightedFrameIndex == null) return;
     if (!canDeleteHighlighted) return;
     _timeline.deleteFrameAt(_highlightedFrameIndex);
-    _highlightedFrameIndex = null;
+    closeFrameMenu();
     notifyListeners();
   }
 
   void duplicateSelected() {
     if (_highlightedFrameIndex == null) return;
     _timeline.duplicateFrameAt(_highlightedFrameIndex);
-    _highlightedFrameIndex = null;
+    closeFrameMenu();
     notifyListeners();
   }
 
