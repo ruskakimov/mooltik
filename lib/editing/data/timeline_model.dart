@@ -176,7 +176,14 @@ class TimelineModel extends ChangeNotifier {
     // Keep playhead fixed.
     _playheadController.value = _fraction(prevPlayheadPosition);
     _updateCurrentFrame();
+    _currentFrameStart = frameStartTimeAt(_currentFrameIndex);
 
     notifyListeners();
+  }
+
+  Duration frameStartTimeAt(int frameIndex) {
+    // Outside index range.
+    if (frameIndex < 0 || frameIndex >= frames.length) return null;
+    return calcTotalDuration(frames.sublist(0, frameIndex));
   }
 }
