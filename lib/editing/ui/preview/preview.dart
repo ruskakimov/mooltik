@@ -31,7 +31,7 @@ class Preview extends StatelessWidget {
       child: Center(
         child: FrameThumbnail(
           frame: context.select<TimelineModel, FrameModel>(
-            (timeline) => timeline.selectedFrame,
+            (timeline) => timeline.currentFrame,
           ),
         ),
       ),

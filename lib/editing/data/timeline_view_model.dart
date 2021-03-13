@@ -92,24 +92,24 @@ class TimelineViewModel extends ChangeNotifier {
   double widthFromDuration(Duration duration) =>
       durationToPx(duration, _msPerPx);
 
-  FrameSliver getSelectedFrameSliver() {
-    final double selectedFrameStartX =
-        xFromTime(_timeline.selectedFrameStartTime);
-    final double selectedFrameWidth =
-        widthFromDuration(_timeline.selectedFrame.duration);
+  FrameSliver getCurrentFrameSliver() {
+    final double currentFrameStartX =
+        xFromTime(_timeline.currentFrameStartTime);
+    final double currentFrameWidth =
+        widthFromDuration(_timeline.currentFrame.duration);
     return FrameSliver(
-      startX: selectedFrameStartX,
-      endX: selectedFrameStartX + selectedFrameWidth,
-      thumbnail: _timeline.selectedFrame.snapshot,
-      frameIndex: _timeline.selectedFrameIndex,
+      startX: currentFrameStartX,
+      endX: currentFrameStartX + currentFrameWidth,
+      thumbnail: _timeline.currentFrame.snapshot,
+      frameIndex: _timeline.currentFrameIndex,
     );
   }
 
   List<FrameSliver> getVisibleFrameSlivers() {
-    final List<FrameSliver> slivers = [getSelectedFrameSliver()];
+    final List<FrameSliver> slivers = [getCurrentFrameSliver()];
 
     // Fill with slivers on left side.
-    for (int i = _timeline.selectedFrameIndex - 1;
+    for (int i = _timeline.currentFrameIndex - 1;
         i >= 0 && slivers.first.startX > 0;
         i--) {
       slivers.insert(
@@ -125,7 +125,7 @@ class TimelineViewModel extends ChangeNotifier {
     }
 
     // Fill with slivers on right side.
-    for (int i = _timeline.selectedFrameIndex + 1;
+    for (int i = _timeline.currentFrameIndex + 1;
         i < _timeline.frames.length && slivers.last.endX < size.width;
         i++) {
       slivers.add(FrameSliver(
@@ -166,7 +166,7 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   void onDurationHandleDragUpdate(double x) {
-    final newDuration = timeFromX(x) - _timeline.selectedFrameStartTime;
-    _timeline.changeSelectedFrameDuration(newDuration);
+    final newDuration = timeFromX(x) - _timeline.currentFrameStartTime;
+    _timeline.changeCurrentFrameDuration(newDuration);
   }
 }

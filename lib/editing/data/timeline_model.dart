@@ -8,14 +8,14 @@ class TimelineModel extends ChangeNotifier {
     @required this.frames,
     TickerProvider vsync,
   })  : assert(frames != null && frames.isNotEmpty),
-        _selectedFrameIndex = 0,
-        _selectedFrameStart = Duration.zero,
+        _currentFrameIndex = 0,
+        _currentFrameStart = Duration.zero,
         _playheadController = AnimationController(
           vsync: vsync,
           duration: calcTotalDuration(frames),
         ) {
     _playheadController.addListener(() {
-      _updateSelectedFrame();
+      _updateCurrentFrame();
       notifyListeners();
     });
   }
@@ -34,49 +34,49 @@ class TimelineModel extends ChangeNotifier {
 
   Duration get totalDuration => _playheadController.duration;
 
-  FrameModel get selectedFrame => frames[_selectedFrameIndex];
+  FrameModel get currentFrame => frames[_currentFrameIndex];
 
-  FrameModel get frameBeforeSelected =>
-      _selectedFrameIndex > 0 ? frames[_selectedFrameIndex - 1] : null;
+  FrameModel get previousFrame =>
+      _currentFrameIndex > 0 ? frames[_currentFrameIndex - 1] : null;
 
-  FrameModel get frameAfterSelected => _selectedFrameIndex < frames.length - 1
-      ? frames[_selectedFrameIndex + 1]
+  FrameModel get nextFrame => _currentFrameIndex < frames.length - 1
+      ? frames[_currentFrameIndex + 1]
       : null;
 
-  int get selectedFrameIndex => _selectedFrameIndex;
-  int _selectedFrameIndex;
+  int get currentFrameIndex => _currentFrameIndex;
+  int _currentFrameIndex;
 
-  bool get lastFrameSelected => _selectedFrameIndex == frames.length - 1;
+  bool get atLastFrame => _currentFrameIndex == frames.length - 1;
 
-  Duration get selectedFrameStartTime => _selectedFrameStart;
-  Duration _selectedFrameStart;
+  Duration get currentFrameStartTime => _currentFrameStart;
+  Duration _currentFrameStart;
 
-  Duration get selectedFrameEndTime =>
-      _selectedFrameStart + selectedFrame.duration;
+  Duration get currentFrameEndTime =>
+      _currentFrameStart + currentFrame.duration;
 
-  void _updateSelectedFrame() {
-    if (playheadPosition < _selectedFrameStart) {
-      _selectPrevFrame();
-    } else if (playheadPosition >= selectedFrameEndTime) {
-      _selectNextFrame();
+  void _updateCurrentFrame() {
+    if (playheadPosition < _currentFrameStart) {
+      _goToPrevFrame();
+    } else if (playheadPosition >= currentFrameEndTime) {
+      _goToNextFrame();
     }
   }
 
-  void _selectPrevFrame() {
-    if (_selectedFrameIndex == 0) return;
-    _selectedFrameIndex--;
-    _selectedFrameStart -= selectedFrame.duration;
+  void _goToPrevFrame() {
+    if (_currentFrameIndex == 0) return;
+    _currentFrameIndex--;
+    _currentFrameStart -= currentFrame.duration;
   }
 
-  void _selectNextFrame() {
-    if (lastFrameSelected) return;
-    _selectedFrameStart = selectedFrameEndTime;
-    _selectedFrameIndex++;
+  void _goToNextFrame() {
+    if (atLastFrame) return;
+    _currentFrameStart = currentFrameEndTime;
+    _currentFrameIndex++;
   }
 
-  void _resetSelectedFrame() {
-    _selectedFrameIndex = 0;
-    _selectedFrameStart = Duration.zero;
+  void _resetCurrentFrame() {
+    _currentFrameIndex = 0;
+    _currentFrameStart = Duration.zero;
   }
 
   double _fraction(Duration playheadPosition) =>
@@ -99,7 +99,7 @@ class TimelineModel extends ChangeNotifier {
   /// Reset playhead to the beginning.
   void reset() {
     _playheadController.reset();
-    _resetSelectedFrame();
+    _resetCurrentFrame();
     notifyListeners();
   }
 
@@ -113,29 +113,29 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get stepBackwardAvailable => !isPlaying && _selectedFrameIndex > 0;
+  bool get stepBackwardAvailable => !isPlaying && _currentFrameIndex > 0;
 
   void stepBackward() {
     if (!stepBackwardAvailable) return;
     final Duration time =
-        _selectedFrameStart - frames[_selectedFrameIndex - 1].duration;
+        _currentFrameStart - frames[_currentFrameIndex - 1].duration;
     _playheadController.value = _fraction(time);
-    _updateSelectedFrame();
+    _updateCurrentFrame();
     notifyListeners();
   }
 
-  bool get stepForwardAvailable => !isPlaying && !lastFrameSelected;
+  bool get stepForwardAvailable => !isPlaying && !atLastFrame;
 
   void stepForward() {
     if (!stepForwardAvailable) return;
-    _playheadController.value = _fraction(selectedFrameEndTime);
-    _updateSelectedFrame();
+    _playheadController.value = _fraction(currentFrameEndTime);
+    _updateCurrentFrame();
     notifyListeners();
   }
 
-  void addFrameAfterSelected() {
+  void addFrameAfterCurrent() {
     final newFrame = FrameModel(size: frames.first.size);
-    frames.insert(_selectedFrameIndex + 1, newFrame);
+    frames.insert(_currentFrameIndex + 1, newFrame);
     _playheadController.duration += newFrame.duration;
     stepForward();
     notifyListeners();
@@ -147,7 +147,7 @@ class TimelineModel extends ChangeNotifier {
 
     _playheadController.duration -= frames[frameIndex].duration;
     frames.removeAt(frameIndex);
-    _updateSelectedFrame();
+    _updateCurrentFrame();
     notifyListeners();
   }
 
@@ -162,24 +162,24 @@ class TimelineModel extends ChangeNotifier {
     );
     frames.insert(frameIndex + 1, newFrame);
     _playheadController.duration += newFrame.duration;
-    _updateSelectedFrame();
+    _updateCurrentFrame();
     notifyListeners();
   }
 
-  void changeSelectedFrameDuration(Duration newDuration) {
+  void changeCurrentFrameDuration(Duration newDuration) {
     if (newDuration <= minFrameDuration) return;
 
     final prevPlayheadPosition = playheadPosition;
 
-    selectedFrame.duration = newDuration;
+    currentFrame.duration = newDuration;
     _playheadController.duration = calcTotalDuration(frames);
 
-    // Keep playhead inside selected frame.
+    // Keep playhead inside current frame.
     _playheadController.value = _fraction(
-      prevPlayheadPosition < selectedFrameEndTime
+      prevPlayheadPosition < currentFrameEndTime
           ? prevPlayheadPosition
-          // Selected frame will change when playhead equals `selectedFrameEndTime`.
-          : selectedFrameEndTime - Duration(milliseconds: 1),
+          // Current frame will change when playhead equals `currentFrameEndTime`.
+          : currentFrameEndTime - Duration(milliseconds: 1),
     );
 
     notifyListeners();

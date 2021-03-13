@@ -29,7 +29,7 @@ class DrawingMenu extends StatelessWidget {
             icon: FontAwesomeIcons.plus,
             title: 'Add empty frame',
             onTap: () {
-              context.read<TimelineModel>().addFrameAfterSelected();
+              context.read<TimelineModel>().addFrameAfterCurrent();
               onDone?.call();
             },
           ),
@@ -38,7 +38,7 @@ class DrawingMenu extends StatelessWidget {
             title: 'Duplicate this frame',
             onTap: () {
               final timeline = context.read<TimelineModel>();
-              timeline.duplicateFrameAt(timeline.selectedFrameIndex);
+              timeline.duplicateFrameAt(timeline.currentFrameIndex);
               timeline.stepForward();
               onDone?.call();
             },

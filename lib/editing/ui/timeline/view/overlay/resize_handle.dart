@@ -23,7 +23,7 @@ class _PositionedResizeHandleState extends State<PositionedResizeHandle> {
         (timelineView.frameSliverBottom - timelineView.frameSliverTop) / 2;
 
     final offset = Offset(
-      timelineView.xFromTime(timeline.selectedFrameEndTime) - width / 2,
+      timelineView.xFromTime(timeline.currentFrameEndTime) - width / 2,
       frameSliverMid - height / 2,
     );
 
