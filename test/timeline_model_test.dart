@@ -31,5 +31,22 @@ void main() {
       timeline.scrub(-0.01);
       expect(timeline.currentFrame.id, 1);
     });
+
+    test('playhead position doesn\'t change when frame duration is changed',
+        () {
+      final timeline = TimelineModel(
+        frames: [
+          FrameModel(
+              id: 1, size: sampleSize, duration: Duration(milliseconds: 500)),
+          FrameModel(
+              id: 2, size: sampleSize, duration: Duration(milliseconds: 500)),
+        ],
+        vsync: TestVSync(),
+      );
+      timeline.scrub(0.25);
+      expect(timeline.playheadPosition, Duration(milliseconds: 250));
+      timeline.changeFrameDurationAt(0, Duration(milliseconds: 900));
+      expect(timeline.playheadPosition, Duration(milliseconds: 250));
+    });
   });
 }
