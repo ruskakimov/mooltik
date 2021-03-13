@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 
-const Duration minFrameDuration = Duration(milliseconds: 42);
-
 class TimelineModel extends ChangeNotifier {
   TimelineModel({
     @required this.frames,
@@ -166,21 +164,18 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeCurrentFrameDuration(Duration newDuration) {
-    if (newDuration <= minFrameDuration) return;
+  void changeFrameDurationAt(int frameIndex, Duration newDuration) {
+    // Outside index range.
+    if (frameIndex < 0 || frameIndex >= frames.length) return;
 
     final prevPlayheadPosition = playheadPosition;
 
-    currentFrame.duration = newDuration;
+    frames[frameIndex].duration = newDuration;
     _playheadController.duration = calcTotalDuration(frames);
 
-    // Keep playhead inside current frame.
-    _playheadController.value = _fraction(
-      prevPlayheadPosition < currentFrameEndTime
-          ? prevPlayheadPosition
-          // Current frame will change when playhead equals `currentFrameEndTime`.
-          : currentFrameEndTime - Duration(milliseconds: 1),
-    );
+    // Keep playhead fixed.
+    _playheadController.value = _fraction(prevPlayheadPosition);
+    _updateCurrentFrame();
 
     notifyListeners();
   }
