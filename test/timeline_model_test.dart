@@ -47,6 +47,25 @@ void main() {
       expect(timeline.playheadPosition, Duration(milliseconds: 250));
       timeline.changeFrameDurationAt(0, Duration(milliseconds: 900));
       expect(timeline.playheadPosition, Duration(milliseconds: 250));
+      expect(timeline.currentFrame.id, 1);
+    });
+
+    test('handles frame duration change past playhead (from right to left)',
+        () {
+      final timeline = TimelineModel(
+        frames: [
+          FrameModel(
+              id: 1, size: sampleSize, duration: Duration(milliseconds: 500)),
+          FrameModel(
+              id: 2, size: sampleSize, duration: Duration(milliseconds: 500)),
+        ],
+        vsync: TestVSync(),
+      );
+      timeline.scrub(0.25);
+      expect(timeline.playheadPosition, Duration(milliseconds: 250));
+      timeline.changeFrameDurationAt(0, Duration(milliseconds: 200));
+      expect(timeline.playheadPosition, Duration(milliseconds: 250));
+      expect(timeline.currentFrame.id, 2);
     });
   });
 }
