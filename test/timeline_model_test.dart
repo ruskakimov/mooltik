@@ -165,16 +165,19 @@ void main() {
         ],
         vsync: TestVSync(),
       );
+      timeline.jumpTo(Duration(milliseconds: 1500));
       expect(timeline.totalDuration, Duration(seconds: 6));
-      expect(timeline.currentFrame.id, 1);
-      expect(timeline.playheadPosition, Duration.zero);
+      expect(timeline.currentFrame.id, 2);
+      expect(timeline.playheadPosition, Duration(milliseconds: 1500));
+      expect(timeline.currentFrameStartTime, Duration(seconds: 1));
       timeline.insertFrameAt(
-        1,
+        2,
         FrameModel(id: 4, size: _size, duration: Duration(seconds: 4)),
       );
       expect(timeline.totalDuration, Duration(seconds: 10));
-      expect(timeline.currentFrame.id, 1);
-      expect(timeline.playheadPosition, Duration.zero);
+      expect(timeline.currentFrame.id, 2);
+      expect(timeline.playheadPosition, Duration(milliseconds: 1500));
+      expect(timeline.currentFrameStartTime, Duration(seconds: 1));
     });
 
     test('handles inserting frame before current', () {

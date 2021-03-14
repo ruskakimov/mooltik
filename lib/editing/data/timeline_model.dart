@@ -72,13 +72,9 @@ class TimelineModel extends ChangeNotifier {
   double _fraction(Duration playheadPosition) =>
       playheadPosition.inMicroseconds / totalDuration.inMicroseconds;
 
-  /// Scrolls to a new playhead position.
-  void seekTo(Duration playheadPosition) {
-    _playheadController.animateTo(
-      _fraction(playheadPosition),
-      duration: Duration(milliseconds: 200),
-      curve: Curves.easeInOut,
-    );
+  /// Jumps to a new playhead position.
+  void jumpTo(Duration playheadPosition) {
+    _playheadController.value = _fraction(playheadPosition);
   }
 
   /// Instantly scrolls the timeline by a [fraction] of total duration.
