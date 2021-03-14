@@ -113,11 +113,23 @@ void main() {
     test('handles deleting after current frame', () {
       final timeline = TimelineModel(
         frames: [
-          FrameModel(id: 1, size: _size, duration: Duration(milliseconds: 500)),
-          FrameModel(id: 2, size: _size, duration: Duration(milliseconds: 500)),
+          FrameModel(id: 1, size: _size, duration: Duration(seconds: 20)),
+          FrameModel(id: 2, size: _size, duration: Duration(seconds: 30)),
+          FrameModel(id: 3, size: _size, duration: Duration(seconds: 7)),
+          FrameModel(id: 4, size: _size, duration: Duration(seconds: 8)),
         ],
         vsync: TestVSync(),
       );
+      timeline.stepForward();
+      expect(timeline.totalDuration, Duration(seconds: 65));
+      expect(timeline.currentFrame.id, 2);
+      expect(timeline.playheadPosition, Duration(seconds: 20));
+      expect(timeline.currentFrameStartTime, Duration(seconds: 20));
+      timeline.deleteFrameAt(2);
+      expect(timeline.totalDuration, Duration(seconds: 58));
+      expect(timeline.currentFrame.id, 2);
+      expect(timeline.playheadPosition, Duration(seconds: 20));
+      expect(timeline.currentFrameStartTime, Duration(seconds: 20));
     });
   });
 }
