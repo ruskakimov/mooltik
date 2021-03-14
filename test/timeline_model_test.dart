@@ -195,7 +195,7 @@ void main() {
       expect(timeline.playheadPosition, Duration(milliseconds: 2500));
       expect(timeline.currentFrameStartTime, Duration(seconds: 1));
       timeline.insertFrameAt(
-        1,
+        0,
         FrameModel(id: 4, size: _size, duration: Duration(seconds: 3)),
       );
       expect(timeline.totalDuration, Duration(seconds: 8));

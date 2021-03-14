@@ -131,11 +131,25 @@ class TimelineModel extends ChangeNotifier {
     // Outside index range.
     if (frameIndex < 0 || frameIndex > frames.length) return;
 
+    final prevPlayheadPosition = playheadPosition;
     frames.insert(frameIndex, frame);
 
     // Increase total.
     _playheadController.duration += frame.duration;
 
+    if (frameIndex < _currentFrameIndex) {
+      _currentFrameIndex++;
+      _currentFrameStart += frame.duration;
+
+      // Keep playhead fixed.
+      _playheadController.value =
+          _fraction(prevPlayheadPosition + frame.duration);
+    } else {
+      // Keep playhead fixed.
+      _playheadController.value = _fraction(prevPlayheadPosition);
+    }
+
+    _syncCurrentFrameWithPlayhead();
     notifyListeners();
   }
 
