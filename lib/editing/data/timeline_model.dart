@@ -120,7 +120,7 @@ class TimelineModel extends ChangeNotifier {
   }
 
   void addFrameAfterCurrent() {
-    insertFrameAt(_currentFrameIndex, FrameModel(size: frames.first.size));
+    insertFrameAt(_currentFrameIndex + 1, FrameModel(size: frames.first.size));
     notifyListeners();
   }
 
