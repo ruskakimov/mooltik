@@ -31,6 +31,7 @@ class _ResizeEndHandleState extends State<ResizeEndHandle> {
       left: offset.dx,
       top: offset.dy,
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onHorizontalDragStart: (details) {
           _dragStartOffset = offset;
         },
