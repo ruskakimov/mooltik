@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/player_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
-import 'package:mooltik/editing/ui/timeline/view/overlay/resize_handle.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/resize_end_handle.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/surface.dart';
@@ -42,7 +42,7 @@ class TimelinePanel extends StatelessWidget {
                   TimelineView(),
                   Playhead(),
                   if (context.watch<TimelineViewModel>().showFrameMenu)
-                    PositionedResizeHandle(),
+                    ResizeEndHandle(),
                 ],
               ),
             ),
