@@ -140,13 +140,9 @@ class TimelineModel extends ChangeNotifier {
     if (frameIndex < _currentFrameIndex) {
       _currentFrameIndex++;
       _currentFrameStart += frame.duration;
-
-      // Keep playhead fixed.
-      _playheadController.value =
-          _fraction(prevPlayheadPosition + frame.duration);
+      jumpTo(prevPlayheadPosition + frame.duration);
     } else {
-      // Keep playhead fixed.
-      _playheadController.value = _fraction(prevPlayheadPosition);
+      jumpTo(prevPlayheadPosition);
     }
 
     _syncCurrentFrameWithPlayhead();
@@ -168,13 +164,9 @@ class TimelineModel extends ChangeNotifier {
     if (frameIndex < _currentFrameIndex) {
       _currentFrameIndex--;
       _currentFrameStart -= removedDuration;
-
-      // Keep playhead fixed.
-      _playheadController.value =
-          _fraction(prevPlayheadPosition - removedDuration);
+      jumpTo(prevPlayheadPosition - removedDuration);
     } else {
-      // Keep playhead fixed.
-      _playheadController.value = _fraction(prevPlayheadPosition);
+      jumpTo(prevPlayheadPosition);
     }
 
     _syncCurrentFrameWithPlayhead();
