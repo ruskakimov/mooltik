@@ -157,6 +157,9 @@ class TimelineModel extends ChangeNotifier {
       // Keep playhead fixed.
       _playheadController.value =
           _fraction(prevPlayheadPosition - removedDuration);
+    } else {
+      // Keep playhead fixed.
+      _playheadController.value = _fraction(prevPlayheadPosition);
     }
 
     _updateCurrentFrame();
