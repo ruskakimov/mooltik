@@ -13,7 +13,7 @@ class TimelineModel extends ChangeNotifier {
           duration: calcTotalDuration(frames),
         ) {
     _playheadController.addListener(() {
-      _updateCurrentFrame();
+      _syncCurrentFrameWithPlayhead();
       notifyListeners();
     });
   }
@@ -52,7 +52,7 @@ class TimelineModel extends ChangeNotifier {
   Duration get currentFrameEndTime =>
       _currentFrameStart + currentFrame.duration;
 
-  void _updateCurrentFrame() {
+  void _syncCurrentFrameWithPlayhead() {
     if (playheadPosition < _currentFrameStart) {
       _goToPrevFrame();
     } else if (playheadPosition >= currentFrameEndTime) {
@@ -118,7 +118,7 @@ class TimelineModel extends ChangeNotifier {
     final Duration time =
         _currentFrameStart - frames[_currentFrameIndex - 1].duration;
     _playheadController.value = _fraction(time);
-    _updateCurrentFrame();
+    _syncCurrentFrameWithPlayhead();
     notifyListeners();
   }
 
@@ -127,7 +127,7 @@ class TimelineModel extends ChangeNotifier {
   void stepForward() {
     if (!stepForwardAvailable) return;
     _playheadController.value = _fraction(currentFrameEndTime);
-    _updateCurrentFrame();
+    _syncCurrentFrameWithPlayhead();
     notifyListeners();
   }
 
@@ -163,7 +163,7 @@ class TimelineModel extends ChangeNotifier {
       _playheadController.value = _fraction(prevPlayheadPosition);
     }
 
-    _updateCurrentFrame();
+    _syncCurrentFrameWithPlayhead();
     notifyListeners();
   }
 
@@ -178,7 +178,7 @@ class TimelineModel extends ChangeNotifier {
     );
     frames.insert(frameIndex + 1, newFrame);
     _playheadController.duration += newFrame.duration;
-    _updateCurrentFrame();
+    _syncCurrentFrameWithPlayhead();
     notifyListeners();
   }
 
@@ -193,7 +193,7 @@ class TimelineModel extends ChangeNotifier {
 
     // Keep playhead fixed.
     _playheadController.value = _fraction(prevPlayheadPosition);
-    _updateCurrentFrame();
+    _syncCurrentFrameWithPlayhead();
     _currentFrameStart = frameStartTimeAt(_currentFrameIndex);
 
     notifyListeners();
