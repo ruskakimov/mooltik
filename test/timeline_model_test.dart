@@ -98,15 +98,15 @@ void main() {
         ],
         vsync: TestVSync(),
       );
-      expect(timeline.totalDuration, Duration(seconds: 65));
       timeline.stepForward();
+      expect(timeline.totalDuration, Duration(seconds: 65));
       expect(timeline.currentFrameIndex, 1);
       expect(timeline.playheadPosition, Duration(seconds: 20));
       expect(timeline.currentFrameStartTime, Duration(seconds: 20));
       timeline.deleteFrameAt(1);
       expect(timeline.totalDuration, Duration(seconds: 35));
-      expect(timeline.playheadPosition, Duration(seconds: 20));
       expect(timeline.currentFrame.id, 3);
+      expect(timeline.playheadPosition, Duration(seconds: 20));
       expect(timeline.currentFrameStartTime, Duration(seconds: 20));
     });
 
