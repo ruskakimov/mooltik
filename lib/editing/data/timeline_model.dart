@@ -162,6 +162,10 @@ class TimelineModel extends ChangeNotifier {
       _currentFrameIndex--;
       _currentFrameStart -= removedDuration;
       jumpTo(prevPlayheadPosition - removedDuration);
+    } else if (_currentFrameIndex >= frames.length) {
+      _currentFrameIndex--;
+      _currentFrameStart -= frames.last.duration;
+      jumpTo(totalDuration);
     } else {
       jumpTo(prevPlayheadPosition);
     }
