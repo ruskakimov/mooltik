@@ -156,6 +156,26 @@ void main() {
       expect(timeline.currentFrameStartTime, Duration(seconds: 30));
     });
 
+    test('handles deleting current last frame', () {
+      final timeline = TimelineModel(
+        frames: [
+          FrameModel(id: 1, size: _size, duration: Duration(seconds: 1)),
+          FrameModel(id: 2, size: _size, duration: Duration(seconds: 2)),
+        ],
+        vsync: TestVSync(),
+      );
+      timeline.stepForward();
+      expect(timeline.totalDuration, Duration(seconds: 3));
+      expect(timeline.currentFrame.id, 2);
+      expect(timeline.playheadPosition, Duration(seconds: 1));
+      expect(timeline.currentFrameStartTime, Duration(seconds: 1));
+      timeline.deleteFrameAt(1);
+      expect(timeline.totalDuration, Duration(seconds: 1));
+      expect(timeline.currentFrame.id, 1);
+      expect(timeline.playheadPosition, Duration(seconds: 1));
+      expect(timeline.currentFrameStartTime, Duration.zero);
+    });
+
     test('handles inserting frame after current', () {
       final timeline = TimelineModel(
         frames: [
