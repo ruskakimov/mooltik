@@ -43,7 +43,7 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   void onTapUp(TapUpDetails details) {
-    _highlightedFrameIndex = _getFrameIndexUnderPosition(details.localPosition);
+    _selectedFrameIndex = _getFrameIndexUnderPosition(details.localPosition);
     notifyListeners();
   }
 
@@ -65,10 +65,10 @@ class TimelineViewModel extends ChangeNotifier {
   /// Update before painting or gesture detection.
   Size size = Size.zero;
 
-  bool get showFrameMenu => _highlightedFrameIndex != null;
+  bool get showFrameMenu => _selectedFrameIndex != null;
 
-  int get highlightedFrameIndex => _highlightedFrameIndex;
-  int _highlightedFrameIndex;
+  int get selectedFrameIndex => _selectedFrameIndex;
+  int _selectedFrameIndex;
 
   double get _midX => size.width / 2;
 
@@ -138,31 +138,31 @@ class TimelineViewModel extends ChangeNotifier {
   */
 
   void closeFrameMenu() {
-    _highlightedFrameIndex = null;
+    _selectedFrameIndex = null;
     notifyListeners();
   }
 
-  bool get canDeleteHighlighted => _timeline.frames.length > 1;
+  bool get canDeleteSelected => _timeline.frames.length > 1;
 
   void deleteSelected() {
-    if (_highlightedFrameIndex == null) return;
-    if (!canDeleteHighlighted) return;
-    _timeline.deleteFrameAt(_highlightedFrameIndex);
+    if (_selectedFrameIndex == null) return;
+    if (!canDeleteSelected) return;
+    _timeline.deleteFrameAt(_selectedFrameIndex);
     closeFrameMenu();
     notifyListeners();
   }
 
   void duplicateSelected() {
-    if (_highlightedFrameIndex == null) return;
-    _timeline.duplicateFrameAt(_highlightedFrameIndex);
+    if (_selectedFrameIndex == null) return;
+    _timeline.duplicateFrameAt(_selectedFrameIndex);
     closeFrameMenu();
     notifyListeners();
   }
 
   void onDurationHandleDragUpdate(double x) {
     final newDuration =
-        timeFromX(x) - _timeline.frameStartTimeAt(_highlightedFrameIndex);
-    _timeline.changeFrameDurationAt(_highlightedFrameIndex, newDuration);
+        timeFromX(x) - _timeline.frameStartTimeAt(_selectedFrameIndex);
+    _timeline.changeFrameDurationAt(_selectedFrameIndex, newDuration);
     print(_timeline.currentFrameStartTime);
   }
 }

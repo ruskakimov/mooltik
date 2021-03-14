@@ -33,7 +33,7 @@ class FrameMenu extends StatelessWidget {
               icon: FontAwesomeIcons.trashAlt,
               label: 'Delete',
               color: Theme.of(context).colorScheme.onPrimary,
-              onTap: timelineView.canDeleteHighlighted
+              onTap: timelineView.canDeleteSelected
                   ? timelineView.deleteSelected
                   : null,
             ),
