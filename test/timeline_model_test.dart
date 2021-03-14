@@ -156,7 +156,7 @@ void main() {
       expect(timeline.currentFrameStartTime, Duration(seconds: 30));
     });
 
-    test('handles inserting frame after first', () {
+    test('handles inserting frame after current', () {
       final timeline = TimelineModel(
         frames: [
           FrameModel(id: 1, size: _size, duration: Duration(seconds: 1)),
@@ -175,6 +175,30 @@ void main() {
       expect(timeline.totalDuration, Duration(seconds: 10));
       expect(timeline.currentFrame.id, 1);
       expect(timeline.playheadPosition, Duration.zero);
+    });
+
+    test('handles inserting frame before current', () {
+      final timeline = TimelineModel(
+        frames: [
+          FrameModel(id: 1, size: _size, duration: Duration(seconds: 1)),
+          FrameModel(id: 2, size: _size, duration: Duration(seconds: 2)),
+          FrameModel(id: 3, size: _size, duration: Duration(seconds: 2)),
+        ],
+        vsync: TestVSync(),
+      );
+      timeline.scrub(0.5);
+      expect(timeline.totalDuration, Duration(seconds: 5));
+      expect(timeline.currentFrame.id, 2);
+      expect(timeline.playheadPosition, Duration(milliseconds: 2500));
+      expect(timeline.currentFrameStartTime, Duration(seconds: 1));
+      timeline.insertFrameAt(
+        1,
+        FrameModel(id: 4, size: _size, duration: Duration(seconds: 3)),
+      );
+      expect(timeline.totalDuration, Duration(seconds: 8));
+      expect(timeline.currentFrame.id, 2);
+      expect(timeline.playheadPosition, Duration(milliseconds: 5500));
+      expect(timeline.currentFrameStartTime, Duration(seconds: 4));
     });
   });
 }
