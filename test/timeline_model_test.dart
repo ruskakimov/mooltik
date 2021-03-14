@@ -144,10 +144,10 @@ void main() {
         ],
         vsync: TestVSync(),
       );
-      timeline.scrub(0.9);
+      timeline.scrub(0.8);
       expect(timeline.totalDuration, Duration(seconds: 340));
       expect(timeline.currentFrame.id, 2);
-      expect(timeline.playheadPosition, Duration(seconds: 306));
+      expect(timeline.playheadPosition, Duration(seconds: 272));
       expect(timeline.currentFrameStartTime, Duration(seconds: 5));
       timeline.deleteFrameAt(1);
       expect(timeline.totalDuration, Duration(seconds: 40));

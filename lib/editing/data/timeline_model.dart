@@ -53,23 +53,15 @@ class TimelineModel extends ChangeNotifier {
       _currentFrameStart + currentFrame.duration;
 
   void _syncCurrentFrameWithPlayhead() {
-    if (playheadPosition < _currentFrameStart) {
-      _goToPrevFrame();
-    } else if (playheadPosition >= currentFrameEndTime) {
-      _goToNextFrame();
+    while (playheadPosition < _currentFrameStart && _currentFrameIndex > 0) {
+      _currentFrameIndex--;
+      _currentFrameStart -= currentFrame.duration;
     }
-  }
 
-  void _goToPrevFrame() {
-    if (_currentFrameIndex == 0) return;
-    _currentFrameIndex--;
-    _currentFrameStart -= currentFrame.duration;
-  }
-
-  void _goToNextFrame() {
-    if (atLastFrame) return;
-    _currentFrameStart = currentFrameEndTime;
-    _currentFrameIndex++;
+    while (playheadPosition >= currentFrameEndTime && !atLastFrame) {
+      _currentFrameStart = currentFrameEndTime;
+      _currentFrameIndex++;
+    }
   }
 
   void _resetCurrentFrame() {
