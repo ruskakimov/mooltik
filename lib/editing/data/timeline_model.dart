@@ -120,10 +120,7 @@ class TimelineModel extends ChangeNotifier {
   }
 
   void addFrameAfterCurrent() {
-    final newFrame = FrameModel(size: frames.first.size);
-    frames.insert(_currentFrameIndex + 1, newFrame);
-    _playheadController.duration += newFrame.duration;
-    stepForward();
+    insertFrameAt(_currentFrameIndex, FrameModel(size: frames.first.size));
     notifyListeners();
   }
 
@@ -182,10 +179,7 @@ class TimelineModel extends ChangeNotifier {
       initialSnapshot: frames[frameIndex].snapshot,
       duration: frames[frameIndex].duration,
     );
-    frames.insert(frameIndex + 1, newFrame);
-    _playheadController.duration += newFrame.duration;
-    _syncCurrentFrameWithPlayhead();
-    notifyListeners();
+    insertFrameAt(frameIndex + 1, newFrame);
   }
 
   void changeFrameDurationAt(int frameIndex, Duration newDuration) {
