@@ -131,5 +131,29 @@ void main() {
       expect(timeline.playheadPosition, Duration(seconds: 20));
       expect(timeline.currentFrameStartTime, Duration(seconds: 20));
     });
+
+    test('handles deleting long frame', () {
+      final timeline = TimelineModel(
+        frames: [
+          FrameModel(id: 1, size: _size, duration: Duration(seconds: 5)),
+          FrameModel(id: 2, size: _size, duration: Duration(seconds: 300)),
+          FrameModel(id: 3, size: _size, duration: Duration(seconds: 7)),
+          FrameModel(id: 4, size: _size, duration: Duration(seconds: 8)),
+          FrameModel(id: 5, size: _size, duration: Duration(seconds: 10)),
+          FrameModel(id: 6, size: _size, duration: Duration(seconds: 10)),
+        ],
+        vsync: TestVSync(),
+      );
+      timeline.scrub(0.9);
+      expect(timeline.totalDuration, Duration(seconds: 340));
+      expect(timeline.currentFrame.id, 2);
+      expect(timeline.playheadPosition, Duration(seconds: 306));
+      expect(timeline.currentFrameStartTime, Duration(seconds: 5));
+      timeline.deleteFrameAt(1);
+      expect(timeline.totalDuration, Duration(seconds: 40));
+      expect(timeline.currentFrame.id, 6);
+      expect(timeline.playheadPosition, Duration(seconds: 40));
+      expect(timeline.currentFrameStartTime, Duration(seconds: 30));
+    });
   });
 }
