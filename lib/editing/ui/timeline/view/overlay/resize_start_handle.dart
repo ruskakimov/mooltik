@@ -10,9 +10,6 @@ class ResizeStartHandle extends StatefulWidget {
 }
 
 class _ResizeStartHandleState extends State<ResizeStartHandle> {
-  final double width = 24;
-  final double height = 48;
-
   Offset _dragStartOffset;
 
   @override
@@ -26,8 +23,8 @@ class _ResizeStartHandleState extends State<ResizeStartHandle> {
     final offset = Offset(
       timelineView.xFromTime(
               timeline.frameStartTimeAt(timelineView.selectedFrameIndex)) -
-          width / 2,
-      frameSliverMid - height / 2,
+          resizeHandleWidth / 2,
+      frameSliverMid - resizeHandleHeight / 2,
     );
 
     return Positioned(
@@ -41,10 +38,7 @@ class _ResizeStartHandleState extends State<ResizeStartHandle> {
           // final timelinePosition = details.localPosition + _dragStartOffset;
           // timelineView.onDurationHandleDragUpdate(timelinePosition.dx);
         },
-        child: ResizeHandle(
-          width: width,
-          height: height,
-        ),
+        child: ResizeHandle(),
       ),
     );
   }

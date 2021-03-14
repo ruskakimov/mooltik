@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 
+const double resizeHandleWidth = 24;
+const double resizeHandleHeight = 48;
+
 class ResizeHandle extends StatelessWidget {
-  const ResizeHandle({
-    Key key,
-    this.width,
-    this.height,
-  }) : super(key: key);
-
-  final double width;
-  final double height;
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -17,8 +11,8 @@ class ResizeHandle extends StatelessWidget {
       color: Theme.of(context).colorScheme.primary,
       elevation: 10,
       child: SizedBox(
-        width: width,
-        height: height,
+        width: resizeHandleWidth,
+        height: resizeHandleHeight,
         child: RotatedBox(
           quarterTurns: 1,
           child: Icon(
