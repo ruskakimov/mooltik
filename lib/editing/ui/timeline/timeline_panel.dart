@@ -32,26 +32,30 @@ class TimelinePanel extends StatelessWidget {
           ),
         ),
       ],
-      builder: (context, child) => Surface(
-        child: Column(
-          children: [
-            TimelineActionbar(),
-            Expanded(
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  TimelineView(),
-                  Playhead(),
-                  if (context.watch<TimelineViewModel>().showFrameMenu)
-                    ResizeStartHandle(),
-                  if (context.watch<TimelineViewModel>().showFrameMenu)
-                    ResizeEndHandle(),
-                ],
+      builder: (context, child) {
+        final timelineView = context.watch<TimelineViewModel>();
+
+        return Surface(
+          child: Column(
+            children: [
+              TimelineActionbar(),
+              Expanded(
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    TimelineView(),
+                    Playhead(),
+                    if (timelineView.showFrameMenu &&
+                        timelineView.selectedFrameIndex != 0)
+                      ResizeStartHandle(),
+                    if (timelineView.showFrameMenu) ResizeEndHandle(),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
