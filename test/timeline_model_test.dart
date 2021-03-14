@@ -76,13 +76,14 @@ void main() {
         vsync: TestVSync(),
       );
       expect(timeline.totalDuration, Duration(seconds: 24));
-      timeline.scrub(0.5);
-      expect(timeline.playheadPosition, Duration(seconds: 12));
+      timeline.stepForward();
+      timeline.stepForward();
+      expect(timeline.playheadPosition, Duration(seconds: 3));
       expect(timeline.currentFrame.id, 3);
       expect(timeline.currentFrameStartTime, Duration(seconds: 3));
       timeline.deleteFrameAt(1);
       expect(timeline.totalDuration, Duration(seconds: 22));
-      expect(timeline.playheadPosition, Duration(seconds: 10));
+      expect(timeline.playheadPosition, Duration(seconds: 1));
       expect(timeline.currentFrame.id, 3);
       expect(timeline.currentFrameStartTime, Duration(seconds: 1));
     });
