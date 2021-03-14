@@ -131,6 +131,18 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void insertFrameAt(int frameIndex, FrameModel frame) {
+    // Outside index range.
+    if (frameIndex < 0 || frameIndex > frames.length) return;
+
+    frames.insert(frameIndex, frame);
+
+    // Increase total.
+    _playheadController.duration += frame.duration;
+
+    notifyListeners();
+  }
+
   void deleteFrameAt(int frameIndex) {
     // Outside index range.
     if (frameIndex < 0 || frameIndex >= frames.length) return;

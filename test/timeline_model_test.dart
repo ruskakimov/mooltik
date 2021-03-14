@@ -155,5 +155,26 @@ void main() {
       expect(timeline.playheadPosition, Duration(seconds: 40));
       expect(timeline.currentFrameStartTime, Duration(seconds: 30));
     });
+
+    test('handles inserting frame after first', () {
+      final timeline = TimelineModel(
+        frames: [
+          FrameModel(id: 1, size: _size, duration: Duration(seconds: 1)),
+          FrameModel(id: 2, size: _size, duration: Duration(seconds: 2)),
+          FrameModel(id: 3, size: _size, duration: Duration(seconds: 3)),
+        ],
+        vsync: TestVSync(),
+      );
+      expect(timeline.totalDuration, Duration(seconds: 6));
+      expect(timeline.currentFrame.id, 1);
+      expect(timeline.playheadPosition, Duration.zero);
+      timeline.insertFrameAt(
+        1,
+        FrameModel(id: 4, size: _size, duration: Duration(seconds: 4)),
+      );
+      expect(timeline.totalDuration, Duration(seconds: 10));
+      expect(timeline.currentFrame.id, 1);
+      expect(timeline.playheadPosition, Duration.zero);
+    });
   });
 }
