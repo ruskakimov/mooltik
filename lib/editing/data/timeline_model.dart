@@ -142,6 +142,7 @@ class TimelineModel extends ChangeNotifier {
   void deleteFrameAt(int frameIndex) {
     // Outside index range.
     if (frameIndex < 0 || frameIndex >= frames.length) return;
+    if (frames.length < 2) return;
 
     final prevPlayheadPosition = playheadPosition;
     final removedDuration = frames[frameIndex].duration;
