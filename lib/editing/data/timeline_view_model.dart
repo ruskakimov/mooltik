@@ -170,6 +170,10 @@ class TimelineViewModel extends ChangeNotifier {
 
   /// Handle start time drag handle's new [updatedTimestamp].
   void onStartTimeHandleDragUpdate(Duration updatedTimestamp) {
+    if (_shouldSnapToPlayhead(updatedTimestamp)) {
+      updatedTimestamp = _timeline.playheadPosition;
+    }
+
     final newSelectedDuration =
         _timeline.frameEndTimeAt(_selectedFrameIndex) - updatedTimestamp;
     final diff = newSelectedDuration - _selectedFrameDuration;
@@ -188,9 +192,20 @@ class TimelineViewModel extends ChangeNotifier {
 
   /// Handle end time drag handle's new [updatedTimestamp].
   void onEndTimeHandleDragUpdate(Duration updatedTimestamp) {
+    if (_shouldSnapToPlayhead(updatedTimestamp)) {
+      updatedTimestamp = _timeline.playheadPosition;
+    }
+
     final newDuration =
         updatedTimestamp - _timeline.frameStartTimeAt(_selectedFrameIndex);
     _timeline.changeFrameDurationAt(_selectedFrameIndex, newDuration);
     notifyListeners();
+  }
+
+  /// Whether timestamp is close enough to playhead for it to snap to it.
+  bool _shouldSnapToPlayhead(Duration timestamp) {
+    final diff = (_timeline.playheadPosition - timestamp).abs();
+    final pxDiff = durationToPx(diff, _msPerPx);
+    return pxDiff <= 12;
   }
 }
