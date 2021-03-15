@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -62,9 +61,8 @@ class _TimelinePositionedState extends State<TimelinePositioned> {
             ? (details) {
                 final timelinePosition =
                     details.localPosition + _dragStartOffset;
-                final updatedTimestamp = FrameModel.roundDuration(
-                  timelineView.timeFromX(timelinePosition.dx),
-                );
+                final updatedTimestamp =
+                    timelineView.timeFromX(timelinePosition.dx);
                 widget.onDragUpdate(updatedTimestamp);
               }
             : null,

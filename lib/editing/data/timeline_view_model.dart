@@ -173,6 +173,7 @@ class TimelineViewModel extends ChangeNotifier {
     if (_shouldSnapToPlayhead(updatedTimestamp)) {
       updatedTimestamp = _timeline.playheadPosition;
     }
+    updatedTimestamp = FrameModel.roundDuration(updatedTimestamp);
 
     final newSelectedDuration =
         _timeline.frameEndTimeAt(_selectedFrameIndex) - updatedTimestamp;
@@ -195,6 +196,7 @@ class TimelineViewModel extends ChangeNotifier {
     if (_shouldSnapToPlayhead(updatedTimestamp)) {
       updatedTimestamp = _timeline.playheadPosition;
     }
+    updatedTimestamp = FrameModel.roundDuration(updatedTimestamp);
 
     final newDuration =
         updatedTimestamp - _timeline.frameStartTimeAt(_selectedFrameIndex);
