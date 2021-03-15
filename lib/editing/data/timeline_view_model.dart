@@ -159,6 +159,21 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Handle start time drag handle's new [x] coordinate.
+  void onStartTimeHandleDragUpdate(double x) {
+    final newSelectedDuration =
+        _timeline.frameEndTimeAt(_selectedFrameIndex) - timeFromX(x);
+
+    final diff =
+        newSelectedDuration - _timeline.frames[_selectedFrameIndex].duration;
+
+    _timeline.changeFrameDurationAt(
+      _selectedFrameIndex - 1,
+      _timeline.frames[_selectedFrameIndex - 1].duration - diff,
+    );
+    _timeline.changeFrameDurationAt(_selectedFrameIndex, newSelectedDuration);
+  }
+
   /// Handle end time drag handle's new [x] coordinate.
   void onEndTimeHandleDragUpdate(double x) {
     final newDuration =

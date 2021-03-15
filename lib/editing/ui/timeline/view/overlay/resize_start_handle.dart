@@ -36,8 +36,8 @@ class _ResizeStartHandleState extends State<ResizeStartHandle> {
           _dragStartOffset = offset;
         },
         onHorizontalDragUpdate: (details) {
-          // final timelinePosition = details.localPosition + _dragStartOffset;
-          // timelineView.onDurationHandleDragUpdate(timelinePosition.dx);
+          final timelinePosition = details.localPosition + _dragStartOffset;
+          timelineView.onStartTimeHandleDragUpdate(timelinePosition.dx);
         },
         child: ResizeHandle(),
       ),
