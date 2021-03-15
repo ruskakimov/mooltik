@@ -77,6 +77,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   double get frameSliverTop => 8;
   double get frameSliverBottom => frameSliverTop + sliverHeight;
+  double get frameSliverMid => (frameSliverTop + frameSliverBottom) / 2;
 
   double xFromTime(Duration time) =>
       _midX + durationToPx(time - _timeline.playheadPosition, _msPerPx);
@@ -160,10 +161,10 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Handle start time drag handle's new [x] coordinate.
-  void onStartTimeHandleDragUpdate(double x) {
+  /// Handle start time drag handle's new [updatedTimestamp].
+  void onStartTimeHandleDragUpdate(Duration updatedTimestamp) {
     final newSelectedDuration =
-        _timeline.frameEndTimeAt(_selectedFrameIndex) - timeFromX(x);
+        _timeline.frameEndTimeAt(_selectedFrameIndex) - updatedTimestamp;
 
     final diff =
         newSelectedDuration - _timeline.frames[_selectedFrameIndex].duration;
@@ -180,10 +181,10 @@ class TimelineViewModel extends ChangeNotifier {
     _timeline.changeFrameDurationAt(_selectedFrameIndex, newSelectedDuration);
   }
 
-  /// Handle end time drag handle's new [x] coordinate.
-  void onEndTimeHandleDragUpdate(double x) {
+  /// Handle end time drag handle's new [updatedTimestamp].
+  void onEndTimeHandleDragUpdate(Duration updatedTimestamp) {
     final newDuration =
-        timeFromX(x) - _timeline.frameStartTimeAt(_selectedFrameIndex);
+        updatedTimestamp - _timeline.frameStartTimeAt(_selectedFrameIndex);
     _timeline.changeFrameDurationAt(_selectedFrameIndex, newDuration);
   }
 }
