@@ -32,13 +32,20 @@ class TimelinePainter extends CustomPainter {
 
       // Draw border around selected.
       if (timelineView.selectedFrameIndex == sliver.frameIndex) {
+        final selectionRect = sliver
+            .getRrect(
+              timelineView.frameSliverTop,
+              timelineView.frameSliverBottom,
+            )
+            .deflate(2);
         canvas.drawRRect(
-          sliver
-              .getRrect(
-                timelineView.frameSliverTop,
-                timelineView.frameSliverBottom,
-              )
-              .deflate(2),
+          selectionRect,
+          Paint()
+            ..color = Colors.black54
+            ..style = PaintingStyle.fill,
+        );
+        canvas.drawRRect(
+          selectionRect,
           Paint()
             ..color = Colors.amber
             ..style = PaintingStyle.stroke
