@@ -30,26 +30,13 @@ class TimelinePainter extends CustomPainter {
         timelineView.frameSliverBottom,
       );
 
-      // Draw border around selected.
       if (timelineView.selectedFrameIndex == sliver.frameIndex) {
-        final selectionRect = sliver
-            .getRrect(
-              timelineView.frameSliverTop,
-              timelineView.frameSliverBottom,
-            )
-            .deflate(2);
-        canvas.drawRRect(
-          selectionRect,
-          Paint()
-            ..color = Colors.black54
-            ..style = PaintingStyle.fill,
-        );
-        canvas.drawRRect(
-          selectionRect,
-          Paint()
-            ..color = Colors.amber
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 4,
+        paintSelection(
+          canvas,
+          sliver.getRrect(
+            timelineView.frameSliverTop,
+            timelineView.frameSliverBottom,
+          ),
         );
       }
     }
@@ -80,4 +67,20 @@ class TimelinePainter extends CustomPainter {
 
   @override
   bool shouldRebuildSemantics(TimelinePainter oldDelegate) => false;
+}
+
+void paintSelection(Canvas canvas, RRect rect) {
+  canvas.drawRRect(
+    rect,
+    Paint()
+      ..color = Colors.black54
+      ..style = PaintingStyle.fill,
+  );
+  canvas.drawRRect(
+    rect.deflate(2),
+    Paint()
+      ..color = Colors.amber
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4,
+  );
 }
