@@ -179,6 +179,7 @@ class TimelineViewModel extends ChangeNotifier {
       newPrevDuration,
     );
     _timeline.changeFrameDurationAt(_selectedFrameIndex, newSelectedDuration);
+    notifyListeners();
   }
 
   /// Handle end time drag handle's new [updatedTimestamp].
@@ -186,5 +187,6 @@ class TimelineViewModel extends ChangeNotifier {
     final newDuration =
         updatedTimestamp - _timeline.frameStartTimeAt(_selectedFrameIndex);
     _timeline.changeFrameDurationAt(_selectedFrameIndex, newDuration);
+    notifyListeners();
   }
 }
