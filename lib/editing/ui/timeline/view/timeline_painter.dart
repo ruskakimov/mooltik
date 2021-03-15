@@ -80,11 +80,10 @@ void paintSelection(Canvas canvas, RRect rect, String label) {
       ..color = Colors.black54
       ..style = PaintingStyle.fill,
   );
-  paintText(
-    canvas,
-    text: label,
-    anchorCoordinate: rect.center,
-    style: const TextStyle(
+
+  final labelPainter = makeTextPainter(
+    label,
+    const TextStyle(
       color: Colors.white,
       fontSize: 12,
       fontWeight: FontWeight.bold,
@@ -92,6 +91,15 @@ void paintSelection(Canvas canvas, RRect rect, String label) {
       fontFeatures: [FontFeature.tabularFigures()],
     ),
   );
+
+  if (labelPainter.width + 24 < rect.width) {
+    paintWithTextPainter(
+      canvas,
+      painter: labelPainter,
+      anchorCoordinate: rect.center,
+    );
+  }
+
   canvas.drawRRect(
     rect.deflate(2),
     Paint()
