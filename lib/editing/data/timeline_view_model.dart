@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/editing/data/convert.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
+import 'package:mooltik/editing/ui/timeline/actionbar/time_label.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/frame_sliver.dart';
 
 class TimelineViewModel extends ChangeNotifier {
@@ -31,7 +33,7 @@ class TimelineViewModel extends ChangeNotifier {
 
     final diff = (details.localFocalPoint - _prevFocalPoint);
     _timeline.scrub(-diff.dx / timelineWidth);
-    _highlightedFrameIndex = null;
+    closeFrameMenu();
 
     _prevFocalPoint = details.localFocalPoint;
 
@@ -43,13 +45,7 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   void onTapUp(TapUpDetails details) {
-    _highlightedFrameIndex = _getFrameIndexUnderPosition(details.localPosition);
-
-    // Scroll to selected frame.
-    if (_highlightedFrameIndex != null) {
-      _timeline.seekTo(timeFromX(details.localPosition.dx));
-    }
-
+    _selectedFrameIndex = _getFrameIndexUnderPosition(details.localPosition);
     notifyListeners();
   }
 
@@ -71,10 +67,16 @@ class TimelineViewModel extends ChangeNotifier {
   /// Update before painting or gesture detection.
   Size size = Size.zero;
 
-  bool get showFrameMenu => _highlightedFrameIndex != null;
+  bool get showFrameMenu => _selectedFrameIndex != null;
 
-  int get highlightedFrameIndex => _highlightedFrameIndex;
-  int _highlightedFrameIndex;
+  int get selectedFrameIndex => _selectedFrameIndex;
+  int _selectedFrameIndex;
+
+  Duration get _selectedFrameDuration =>
+      _timeline.frames[_selectedFrameIndex].duration;
+
+  String get selectedFrameDurationLabel =>
+      durationToLabel(_selectedFrameDuration);
 
   double get _midX => size.width / 2;
 
@@ -82,6 +84,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   double get frameSliverTop => 8;
   double get frameSliverBottom => frameSliverTop + sliverHeight;
+  double get frameSliverMid => (frameSliverTop + frameSliverBottom) / 2;
 
   double xFromTime(Duration time) =>
       _midX + durationToPx(time - _timeline.playheadPosition, _msPerPx);
@@ -92,24 +95,24 @@ class TimelineViewModel extends ChangeNotifier {
   double widthFromDuration(Duration duration) =>
       durationToPx(duration, _msPerPx);
 
-  FrameSliver getSelectedFrameSliver() {
-    final double selectedFrameStartX =
-        xFromTime(_timeline.selectedFrameStartTime);
-    final double selectedFrameWidth =
-        widthFromDuration(_timeline.selectedFrame.duration);
+  FrameSliver getCurrentFrameSliver() {
+    final double currentFrameStartX =
+        xFromTime(_timeline.currentFrameStartTime);
+    final double currentFrameWidth =
+        widthFromDuration(_timeline.currentFrame.duration);
     return FrameSliver(
-      startX: selectedFrameStartX,
-      endX: selectedFrameStartX + selectedFrameWidth,
-      thumbnail: _timeline.selectedFrame.snapshot,
-      frameIndex: _timeline.selectedFrameIndex,
+      startX: currentFrameStartX,
+      endX: currentFrameStartX + currentFrameWidth,
+      thumbnail: _timeline.currentFrame.snapshot,
+      frameIndex: _timeline.currentFrameIndex,
     );
   }
 
   List<FrameSliver> getVisibleFrameSlivers() {
-    final List<FrameSliver> slivers = [getSelectedFrameSliver()];
+    final List<FrameSliver> slivers = [getCurrentFrameSliver()];
 
     // Fill with slivers on left side.
-    for (int i = _timeline.selectedFrameIndex - 1;
+    for (int i = _timeline.currentFrameIndex - 1;
         i >= 0 && slivers.first.startX > 0;
         i--) {
       slivers.insert(
@@ -125,7 +128,7 @@ class TimelineViewModel extends ChangeNotifier {
     }
 
     // Fill with slivers on right side.
-    for (int i = _timeline.selectedFrameIndex + 1;
+    for (int i = _timeline.currentFrameIndex + 1;
         i < _timeline.frames.length && slivers.last.endX < size.width;
         i++) {
       slivers.add(FrameSliver(
@@ -144,29 +147,67 @@ class TimelineViewModel extends ChangeNotifier {
   */
 
   void closeFrameMenu() {
-    _highlightedFrameIndex = null;
+    _selectedFrameIndex = null;
     notifyListeners();
   }
 
-  bool get canDeleteHighlighted => _timeline.frames.length > 1;
+  bool get canDeleteSelected => _timeline.frames.length > 1;
 
   void deleteSelected() {
-    if (_highlightedFrameIndex == null) return;
-    if (!canDeleteHighlighted) return;
-    _timeline.deleteFrameAt(_highlightedFrameIndex);
-    _highlightedFrameIndex = null;
+    if (_selectedFrameIndex == null) return;
+    if (!canDeleteSelected) return;
+    _timeline.deleteFrameAt(_selectedFrameIndex);
+    closeFrameMenu();
     notifyListeners();
   }
 
   void duplicateSelected() {
-    if (_highlightedFrameIndex == null) return;
-    _timeline.duplicateFrameAt(_highlightedFrameIndex);
-    _highlightedFrameIndex = null;
+    if (_selectedFrameIndex == null) return;
+    _timeline.duplicateFrameAt(_selectedFrameIndex);
+    closeFrameMenu();
     notifyListeners();
   }
 
-  void onDurationHandleDragUpdate(double x) {
-    final newDuration = timeFromX(x) - _timeline.selectedFrameStartTime;
-    _timeline.changeSelectedFrameDuration(newDuration);
+  /// Handle start time drag handle's new [updatedTimestamp].
+  void onStartTimeHandleDragUpdate(Duration updatedTimestamp) {
+    if (_shouldSnapToPlayhead(updatedTimestamp)) {
+      updatedTimestamp = _timeline.playheadPosition;
+    }
+    updatedTimestamp = FrameModel.roundDuration(updatedTimestamp);
+
+    final newSelectedDuration =
+        _timeline.frameEndTimeAt(_selectedFrameIndex) - updatedTimestamp;
+    final diff = newSelectedDuration - _selectedFrameDuration;
+    final newPrevDuration =
+        _timeline.frames[_selectedFrameIndex - 1].duration - diff;
+
+    if (newPrevDuration < FrameModel.singleFrameDuration) return;
+
+    _timeline.changeFrameDurationAt(
+      _selectedFrameIndex - 1,
+      newPrevDuration,
+    );
+    _timeline.changeFrameDurationAt(_selectedFrameIndex, newSelectedDuration);
+    notifyListeners();
+  }
+
+  /// Handle end time drag handle's new [updatedTimestamp].
+  void onEndTimeHandleDragUpdate(Duration updatedTimestamp) {
+    if (_shouldSnapToPlayhead(updatedTimestamp)) {
+      updatedTimestamp = _timeline.playheadPosition;
+    }
+    updatedTimestamp = FrameModel.roundDuration(updatedTimestamp);
+
+    final newDuration =
+        updatedTimestamp - _timeline.frameStartTimeAt(_selectedFrameIndex);
+    _timeline.changeFrameDurationAt(_selectedFrameIndex, newDuration);
+    notifyListeners();
+  }
+
+  /// Whether timestamp is close enough to playhead for it to snap to it.
+  bool _shouldSnapToPlayhead(Duration timestamp) {
+    final diff = (_timeline.playheadPosition - timestamp).abs();
+    final pxDiff = durationToPx(diff, _msPerPx);
+    return pxDiff <= 12;
   }
 }

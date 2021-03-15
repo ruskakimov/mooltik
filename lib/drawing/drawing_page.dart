@@ -22,10 +22,10 @@ class DrawingPage extends StatelessWidget {
       providers: [
         ChangeNotifierProxyProvider<TimelineModel, OnionModel>(
           update: (context, timeline, model) =>
-              model..updateSelectedIndex(timeline.selectedFrameIndex),
+              model..updateSelectedIndex(timeline.currentFrameIndex),
           create: (context) => OnionModel(
             frames: context.read<TimelineModel>().frames,
-            selectedIndex: context.read<TimelineModel>().selectedFrameIndex,
+            selectedIndex: context.read<TimelineModel>().currentFrameIndex,
           ),
         ),
         ChangeNotifierProvider(
@@ -44,17 +44,17 @@ class DrawingPage extends StatelessWidget {
             body: MultiProvider(
               providers: [
                 ChangeNotifierProvider<FrameModel>.value(
-                  value: timeline.selectedFrame,
+                  value: timeline.currentFrame,
                 ),
                 ChangeNotifierProxyProvider2<TimelineModel, ToolboxModel,
                     EaselModel>(
                   create: (context) => EaselModel(
-                    frame: timeline.selectedFrame,
+                    frame: timeline.currentFrame,
                     frameSize: context.read<Project>().frameSize,
                     selectedTool: context.read<ToolboxModel>().selectedTool,
                   ),
                   update: (_, reel, toolbox, easel) => easel
-                    ..updateFrame(reel.selectedFrame)
+                    ..updateFrame(reel.currentFrame)
                     ..updateSelectedTool(toolbox.selectedTool),
                 ),
               ],
@@ -91,7 +91,7 @@ class DrawingPage extends StatelessWidget {
                         top: 60,
                         left: 8,
                         child: FrameButton(
-                          frame: timeline.frameBeforeSelected,
+                          frame: timeline.previousFrame,
                           onTap: timeline.stepBackward,
                         ),
                       ),
@@ -100,7 +100,7 @@ class DrawingPage extends StatelessWidget {
                         top: 60,
                         right: 8,
                         child: FrameButton(
-                          frame: timeline.frameAfterSelected,
+                          frame: timeline.nextFrame,
                           onTap: timeline.stepForward,
                         ),
                       ),

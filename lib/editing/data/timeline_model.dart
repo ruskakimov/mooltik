@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 
-const Duration minFrameDuration = Duration(milliseconds: 42);
-
 class TimelineModel extends ChangeNotifier {
   TimelineModel({
     @required this.frames,
     TickerProvider vsync,
   })  : assert(frames != null && frames.isNotEmpty),
-        _selectedFrameIndex = 0,
-        _selectedFrameStart = Duration.zero,
+        _currentFrameIndex = 0,
+        _currentFrameStart = Duration.zero,
         _playheadController = AnimationController(
           vsync: vsync,
           duration: calcTotalDuration(frames),
         ) {
     _playheadController.addListener(() {
-      _updateSelectedFrame();
+      _syncCurrentFrameWithPlayhead();
       notifyListeners();
     });
   }
@@ -34,61 +32,49 @@ class TimelineModel extends ChangeNotifier {
 
   Duration get totalDuration => _playheadController.duration;
 
-  FrameModel get selectedFrame => frames[_selectedFrameIndex];
+  FrameModel get currentFrame => frames[_currentFrameIndex];
 
-  FrameModel get frameBeforeSelected =>
-      _selectedFrameIndex > 0 ? frames[_selectedFrameIndex - 1] : null;
+  FrameModel get previousFrame =>
+      _currentFrameIndex > 0 ? frames[_currentFrameIndex - 1] : null;
 
-  FrameModel get frameAfterSelected => _selectedFrameIndex < frames.length - 1
-      ? frames[_selectedFrameIndex + 1]
+  FrameModel get nextFrame => _currentFrameIndex < frames.length - 1
+      ? frames[_currentFrameIndex + 1]
       : null;
 
-  int get selectedFrameIndex => _selectedFrameIndex;
-  int _selectedFrameIndex;
+  int get currentFrameIndex => _currentFrameIndex;
+  int _currentFrameIndex;
 
-  bool get lastFrameSelected => _selectedFrameIndex == frames.length - 1;
+  bool get atLastFrame => _currentFrameIndex == frames.length - 1;
 
-  Duration get selectedFrameStartTime => _selectedFrameStart;
-  Duration _selectedFrameStart;
+  Duration get currentFrameStartTime => _currentFrameStart;
+  Duration _currentFrameStart;
 
-  Duration get selectedFrameEndTime =>
-      _selectedFrameStart + selectedFrame.duration;
+  Duration get currentFrameEndTime =>
+      _currentFrameStart + currentFrame.duration;
 
-  void _updateSelectedFrame() {
-    if (playheadPosition < _selectedFrameStart) {
-      _selectPrevFrame();
-    } else if (playheadPosition >= selectedFrameEndTime) {
-      _selectNextFrame();
+  void _syncCurrentFrameWithPlayhead() {
+    while (playheadPosition < _currentFrameStart && _currentFrameIndex > 0) {
+      _currentFrameIndex--;
+      _currentFrameStart -= currentFrame.duration;
+    }
+
+    while (playheadPosition >= currentFrameEndTime && !atLastFrame) {
+      _currentFrameStart = currentFrameEndTime;
+      _currentFrameIndex++;
     }
   }
 
-  void _selectPrevFrame() {
-    if (_selectedFrameIndex == 0) return;
-    _selectedFrameIndex--;
-    _selectedFrameStart -= selectedFrame.duration;
-  }
-
-  void _selectNextFrame() {
-    if (lastFrameSelected) return;
-    _selectedFrameStart = selectedFrameEndTime;
-    _selectedFrameIndex++;
-  }
-
-  void _resetSelectedFrame() {
-    _selectedFrameIndex = 0;
-    _selectedFrameStart = Duration.zero;
+  void _resetCurrentFrame() {
+    _currentFrameIndex = 0;
+    _currentFrameStart = Duration.zero;
   }
 
   double _fraction(Duration playheadPosition) =>
       playheadPosition.inMicroseconds / totalDuration.inMicroseconds;
 
-  /// Scrolls to a new playhead position.
-  void seekTo(Duration playheadPosition) {
-    _playheadController.animateTo(
-      _fraction(playheadPosition),
-      duration: Duration(milliseconds: 200),
-      curve: Curves.easeInOut,
-    );
+  /// Jumps to a new playhead position.
+  void jumpTo(Duration playheadPosition) {
+    _playheadController.value = _fraction(playheadPosition);
   }
 
   /// Instantly scrolls the timeline by a [fraction] of total duration.
@@ -99,7 +85,7 @@ class TimelineModel extends ChangeNotifier {
   /// Reset playhead to the beginning.
   void reset() {
     _playheadController.reset();
-    _resetSelectedFrame();
+    _resetCurrentFrame();
     notifyListeners();
   }
 
@@ -113,41 +99,78 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get stepBackwardAvailable => !isPlaying && _selectedFrameIndex > 0;
+  bool get stepBackwardAvailable => !isPlaying && _currentFrameIndex > 0;
 
   void stepBackward() {
     if (!stepBackwardAvailable) return;
     final Duration time =
-        _selectedFrameStart - frames[_selectedFrameIndex - 1].duration;
+        _currentFrameStart - frames[_currentFrameIndex - 1].duration;
     _playheadController.value = _fraction(time);
-    _updateSelectedFrame();
+    _syncCurrentFrameWithPlayhead();
     notifyListeners();
   }
 
-  bool get stepForwardAvailable => !isPlaying && !lastFrameSelected;
+  bool get stepForwardAvailable => !isPlaying && !atLastFrame;
 
   void stepForward() {
     if (!stepForwardAvailable) return;
-    _playheadController.value = _fraction(selectedFrameEndTime);
-    _updateSelectedFrame();
+    _playheadController.value = _fraction(currentFrameEndTime);
+    _syncCurrentFrameWithPlayhead();
     notifyListeners();
   }
 
-  void addFrameAfterSelected() {
-    final newFrame = FrameModel(size: frames.first.size);
-    frames.insert(_selectedFrameIndex + 1, newFrame);
-    _playheadController.duration += newFrame.duration;
-    stepForward();
+  void addFrameAfterCurrent() {
+    insertFrameAt(_currentFrameIndex + 1, FrameModel(size: frames.first.size));
+    notifyListeners();
+  }
+
+  void insertFrameAt(int frameIndex, FrameModel frame) {
+    // Outside index range.
+    if (frameIndex < 0 || frameIndex > frames.length) return;
+
+    final prevPlayheadPosition = playheadPosition;
+    frames.insert(frameIndex, frame);
+
+    // Increase total.
+    _playheadController.duration += frame.duration;
+
+    if (frameIndex < _currentFrameIndex) {
+      _currentFrameIndex++;
+      _currentFrameStart += frame.duration;
+      jumpTo(prevPlayheadPosition + frame.duration);
+    } else {
+      jumpTo(prevPlayheadPosition);
+    }
+
+    _syncCurrentFrameWithPlayhead();
     notifyListeners();
   }
 
   void deleteFrameAt(int frameIndex) {
     // Outside index range.
     if (frameIndex < 0 || frameIndex >= frames.length) return;
+    if (frames.length < 2) return;
 
-    _playheadController.duration -= frames[frameIndex].duration;
+    final prevPlayheadPosition = playheadPosition;
+    final removedDuration = frames[frameIndex].duration;
     frames.removeAt(frameIndex);
-    _updateSelectedFrame();
+
+    // Reduce total.
+    _playheadController.duration -= removedDuration;
+
+    if (frameIndex < _currentFrameIndex) {
+      _currentFrameIndex--;
+      _currentFrameStart -= removedDuration;
+      jumpTo(prevPlayheadPosition - removedDuration);
+    } else if (_currentFrameIndex >= frames.length) {
+      _currentFrameIndex--;
+      _currentFrameStart -= frames.last.duration;
+      jumpTo(totalDuration);
+    } else {
+      jumpTo(prevPlayheadPosition);
+    }
+
+    _syncCurrentFrameWithPlayhead();
     notifyListeners();
   }
 
@@ -160,28 +183,35 @@ class TimelineModel extends ChangeNotifier {
       initialSnapshot: frames[frameIndex].snapshot,
       duration: frames[frameIndex].duration,
     );
-    frames.insert(frameIndex + 1, newFrame);
-    _playheadController.duration += newFrame.duration;
-    _updateSelectedFrame();
-    notifyListeners();
+    insertFrameAt(frameIndex + 1, newFrame);
   }
 
-  void changeSelectedFrameDuration(Duration newDuration) {
-    if (newDuration <= minFrameDuration) return;
+  void changeFrameDurationAt(int frameIndex, Duration newDuration) {
+    // Outside index range.
+    if (frameIndex < 0 || frameIndex >= frames.length) return;
 
     final prevPlayheadPosition = playheadPosition;
 
-    selectedFrame.duration = newDuration;
+    frames[frameIndex].duration = newDuration;
     _playheadController.duration = calcTotalDuration(frames);
 
-    // Keep playhead inside selected frame.
-    _playheadController.value = _fraction(
-      prevPlayheadPosition < selectedFrameEndTime
-          ? prevPlayheadPosition
-          // Selected frame will change when playhead equals `selectedFrameEndTime`.
-          : selectedFrameEndTime - Duration(milliseconds: 1),
-    );
+    // Keep playhead fixed.
+    _playheadController.value = _fraction(prevPlayheadPosition);
+    _syncCurrentFrameWithPlayhead();
+    _currentFrameStart = frameStartTimeAt(_currentFrameIndex);
 
     notifyListeners();
+  }
+
+  Duration frameStartTimeAt(int frameIndex) {
+    // Outside index range.
+    if (frameIndex < 0 || frameIndex >= frames.length) return null;
+    return calcTotalDuration(frames.sublist(0, frameIndex));
+  }
+
+  Duration frameEndTimeAt(int frameIndex) {
+    // Outside index range.
+    if (frameIndex < 0 || frameIndex >= frames.length) return null;
+    return frameStartTimeAt(frameIndex) + frames[frameIndex].duration;
   }
 }

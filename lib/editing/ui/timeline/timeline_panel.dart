@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/player_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
-import 'package:mooltik/editing/ui/timeline/view/overlay/resize_handle.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/resize_end_handle.dart';
 import 'package:mooltik/common/data/project/project.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/resize_start_handle.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/surface.dart';
 import 'package:mooltik/editing/ui/timeline/view/timeline_view.dart';
@@ -31,24 +32,30 @@ class TimelinePanel extends StatelessWidget {
           ),
         ),
       ],
-      builder: (context, child) => Surface(
-        child: Column(
-          children: [
-            TimelineActionbar(),
-            Expanded(
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  TimelineView(),
-                  Playhead(),
-                  if (context.watch<TimelineViewModel>().showFrameMenu)
-                    PositionedResizeHandle(),
-                ],
+      builder: (context, child) {
+        final timelineView = context.watch<TimelineViewModel>();
+
+        return Surface(
+          child: Column(
+            children: [
+              TimelineActionbar(),
+              Expanded(
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    TimelineView(),
+                    Playhead(),
+                    if (timelineView.showFrameMenu &&
+                        timelineView.selectedFrameIndex != 0)
+                      ResizeStartHandle(),
+                    if (timelineView.showFrameMenu) ResizeEndHandle(),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

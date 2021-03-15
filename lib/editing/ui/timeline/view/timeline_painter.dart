@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
+import 'package:mooltik/common/ui/paint_text.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/frame_sliver.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sound_sliver.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
@@ -30,19 +33,14 @@ class TimelinePainter extends CustomPainter {
         timelineView.frameSliverBottom,
       );
 
-      // Draw border around highlighted.
-      if (timelineView.highlightedFrameIndex == sliver.frameIndex) {
-        canvas.drawRRect(
-          sliver
-              .getRrect(
-                timelineView.frameSliverTop,
-                timelineView.frameSliverBottom,
-              )
-              .deflate(2),
-          Paint()
-            ..color = Colors.amber
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 4,
+      if (timelineView.selectedFrameIndex == sliver.frameIndex) {
+        paintSelection(
+          canvas,
+          sliver.getRrect(
+            timelineView.frameSliverTop,
+            timelineView.frameSliverBottom,
+          ),
+          timelineView.selectedFrameDurationLabel,
         );
       }
     }
@@ -73,4 +71,40 @@ class TimelinePainter extends CustomPainter {
 
   @override
   bool shouldRebuildSemantics(TimelinePainter oldDelegate) => false;
+}
+
+void paintSelection(Canvas canvas, RRect rect, String label) {
+  canvas.drawRRect(
+    rect,
+    Paint()
+      ..color = Colors.black54
+      ..style = PaintingStyle.fill,
+  );
+
+  final labelPainter = makeTextPainter(
+    label,
+    const TextStyle(
+      color: Colors.white,
+      fontSize: 12,
+      fontWeight: FontWeight.bold,
+      shadows: [Shadow(blurRadius: 2, color: Colors.black)],
+      fontFeatures: [FontFeature.tabularFigures()],
+    ),
+  );
+
+  if (labelPainter.width + 24 < rect.width) {
+    paintWithTextPainter(
+      canvas,
+      painter: labelPainter,
+      anchorCoordinate: rect.center,
+    );
+  }
+
+  canvas.drawRRect(
+    rect.deflate(2),
+    Paint()
+      ..color = Colors.amber
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4,
+  );
 }

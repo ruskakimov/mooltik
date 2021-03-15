@@ -13,14 +13,24 @@ class FrameModel extends ChangeNotifier {
         _duration = duration,
         _snapshot = initialSnapshot;
 
+  /// Output is set to 50fps, therefore 1 frame = 20 ms.
+  static const Duration singleFrameDuration = Duration(milliseconds: 20);
+
+  /// Round duration so that it is a multiple of [singleFrameDuration].
+  static Duration roundDuration(Duration duration) {
+    final frames =
+        (duration.inMilliseconds / singleFrameDuration.inMilliseconds)
+            .round()
+            .clamp(1, double.infinity);
+    return singleFrameDuration * frames;
+  }
+
   final int id;
 
   Duration get duration => _duration;
   Duration _duration;
   set duration(Duration value) {
-    final frames =
-        (value.inMilliseconds / 20).round().clamp(1, double.infinity);
-    _duration = Duration(milliseconds: 20 * frames);
+    _duration = roundDuration(value);
     notifyListeners();
   }
 
