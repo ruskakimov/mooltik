@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/editing/data/convert.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
+import 'package:mooltik/editing/ui/timeline/actionbar/time_label.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/frame_sliver.dart';
 
 class TimelineViewModel extends ChangeNotifier {
@@ -70,6 +71,12 @@ class TimelineViewModel extends ChangeNotifier {
 
   int get selectedFrameIndex => _selectedFrameIndex;
   int _selectedFrameIndex;
+
+  Duration get _selectedFrameDuration =>
+      _timeline.frames[_selectedFrameIndex].duration;
+
+  String get selectedFrameDurationLabel =>
+      durationToLabel(_selectedFrameDuration);
 
   double get _midX => size.width / 2;
 
@@ -165,10 +172,7 @@ class TimelineViewModel extends ChangeNotifier {
   void onStartTimeHandleDragUpdate(Duration updatedTimestamp) {
     final newSelectedDuration =
         _timeline.frameEndTimeAt(_selectedFrameIndex) - updatedTimestamp;
-
-    final diff =
-        newSelectedDuration - _timeline.frames[_selectedFrameIndex].duration;
-
+    final diff = newSelectedDuration - _selectedFrameDuration;
     final newPrevDuration =
         _timeline.frames[_selectedFrameIndex - 1].duration - diff;
 

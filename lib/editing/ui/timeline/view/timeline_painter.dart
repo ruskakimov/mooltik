@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
+import 'package:mooltik/common/ui/paint_text.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/frame_sliver.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sound_sliver.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
@@ -37,6 +40,7 @@ class TimelinePainter extends CustomPainter {
             timelineView.frameSliverTop,
             timelineView.frameSliverBottom,
           ),
+          timelineView.selectedFrameDurationLabel,
         );
       }
     }
@@ -69,12 +73,24 @@ class TimelinePainter extends CustomPainter {
   bool shouldRebuildSemantics(TimelinePainter oldDelegate) => false;
 }
 
-void paintSelection(Canvas canvas, RRect rect) {
+void paintSelection(Canvas canvas, RRect rect, String label) {
   canvas.drawRRect(
     rect,
     Paint()
       ..color = Colors.black54
       ..style = PaintingStyle.fill,
+  );
+  paintText(
+    canvas,
+    text: label,
+    anchorCoordinate: rect.center,
+    style: const TextStyle(
+      color: Colors.white,
+      fontSize: 12,
+      fontWeight: FontWeight.bold,
+      shadows: [Shadow(blurRadius: 2, color: Colors.black)],
+      fontFeatures: [FontFeature.tabularFigures()],
+    ),
   );
   canvas.drawRRect(
     rect.deflate(2),
