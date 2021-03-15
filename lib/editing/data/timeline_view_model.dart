@@ -167,9 +167,14 @@ class TimelineViewModel extends ChangeNotifier {
     final diff =
         newSelectedDuration - _timeline.frames[_selectedFrameIndex].duration;
 
+    final newPrevDuration =
+        _timeline.frames[_selectedFrameIndex - 1].duration - diff;
+
+    if (newPrevDuration < Duration(milliseconds: 20)) return;
+
     _timeline.changeFrameDurationAt(
       _selectedFrameIndex - 1,
-      _timeline.frames[_selectedFrameIndex - 1].duration - diff,
+      newPrevDuration,
     );
     _timeline.changeFrameDurationAt(_selectedFrameIndex, newSelectedDuration);
   }
