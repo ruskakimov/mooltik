@@ -37,7 +37,7 @@ class _ResizeEndHandleState extends State<ResizeEndHandle> {
         },
         onHorizontalDragUpdate: (details) {
           final timelinePosition = details.localPosition + _dragStartOffset;
-          timelineView.onDurationHandleDragUpdate(timelinePosition.dx);
+          timelineView.onEndTimeHandleDragUpdate(timelinePosition.dx);
         },
         child: ResizeHandle(),
       ),
