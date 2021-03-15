@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/editing/data/convert.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/frame_sliver.dart';
@@ -170,7 +171,7 @@ class TimelineViewModel extends ChangeNotifier {
     final newPrevDuration =
         _timeline.frames[_selectedFrameIndex - 1].duration - diff;
 
-    if (newPrevDuration < Duration(milliseconds: 20)) return;
+    if (newPrevDuration < FrameModel.singleFrameDuration) return;
 
     _timeline.changeFrameDurationAt(
       _selectedFrameIndex - 1,
