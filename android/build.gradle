@@ -35,5 +35,5 @@ task clean(type: Delete) {
 }
 
 ext {
-    flutterFFmpegPackage = 'video'
+    flutterFFmpegPackage = 'full-gpl'
 }

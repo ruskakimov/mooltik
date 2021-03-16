@@ -85,12 +85,9 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 7.0)
     - PromisesObjC (~> 1.2)
   - Flutter (1.0.0)
-  - flutter_ffmpeg (0.3.0):
+  - flutter_ffmpeg/full-gpl (0.3.0):
     - Flutter
-    - flutter_ffmpeg/https (= 0.3.0)
-  - flutter_ffmpeg/https (0.3.0):
-    - Flutter
-    - mobile-ffmpeg-https (= 4.4)
+    - mobile-ffmpeg-full-gpl (= 4.4)
   - GoogleAppMeasurement (7.3.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
     - GoogleUtilities/MethodSwizzler (~> 7.0)
@@ -122,7 +119,7 @@ PODS:
     - Flutter
   - just_audio (0.0.1):
     - Flutter
-  - mobile-ffmpeg-https (4.4)
+  - mobile-ffmpeg-full-gpl (4.4)
   - nanopb (2.30906.0):
     - nanopb/decode (= 2.30906.0)
     - nanopb/encode (= 2.30906.0)
@@ -149,7 +146,7 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - Flutter (from `Flutter`)
-  - flutter_ffmpeg (from `.symlinks/plugins/flutter_ffmpeg/ios`)
+  - flutter_ffmpeg/full-gpl (from `.symlinks/plugins/flutter_ffmpeg/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - open_file (from `.symlinks/plugins/open_file/ios`)
@@ -170,7 +167,7 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUtilities
-    - mobile-ffmpeg-https
+    - mobile-ffmpeg-full-gpl
     - nanopb
     - PromisesObjC
     - SDWebImage
@@ -225,7 +222,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: d866834472f1324d080496bc67ab3ce5d0d46027
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
-  mobile-ffmpeg-https: 311fc4a8f671cf36d1d6b8f421e8246b790978d9
+  mobile-ffmpeg-full-gpl: 77de728206f08f30c70f530b18abb4e8f6413eb6
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
@@ -235,6 +232,6 @@ SPEC CHECKSUMS:
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   SwiftyGif: 5d4af95df24caf1c570dbbcb32a3b8a0763bc6d7
 
-PODFILE CHECKSUM: 366d008edaf03d8ab563ddda27c15fbfb237f78a
+PODFILE CHECKSUM: ea2b76eaf28060ba2c6cca38a4b0689570530d22
 
 COCOAPODS: 1.9.1
