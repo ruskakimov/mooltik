@@ -54,7 +54,7 @@ def flutter_install_plugin_pods(application_path = nil, relative_symlink_dir, pl
       File.symlink(plugin_path, symlink)
 
       if plugin_name == 'flutter_ffmpeg'
-        pod 'flutter_ffmpeg/full', :path => File.join(relative_symlink_dir, 'plugins', plugin_name, platform)
+        pod 'flutter_ffmpeg/full-gpl', :path => File.join(relative_symlink_dir, 'plugins', plugin_name, platform)
       else
         pod plugin_name, :path => File.join(relative_symlink_dir, 'plugins', plugin_name, platform)
       end
