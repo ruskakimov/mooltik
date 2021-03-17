@@ -29,7 +29,9 @@ class DrawingMenu extends StatelessWidget {
             icon: FontAwesomeIcons.plus,
             title: 'Add empty frame',
             onTap: () {
-              context.read<TimelineModel>().addFrameAfterCurrent();
+              final timeline = context.read<TimelineModel>();
+              timeline.addFrameAfterCurrent();
+              timeline.stepForward();
               onDone?.call();
             },
           ),
