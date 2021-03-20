@@ -85,16 +85,6 @@ class DrawingPage extends StatelessWidget {
                           child: Toolbar(reversePopupSide: true),
                         ),
                       ),
-                    Positioned(
-                      bottom: 16,
-                      left: 16,
-                      right: 16,
-                      height: 64,
-                      child: Material(
-                        borderRadius: BorderRadius.circular(8),
-                        elevation: 10,
-                      ),
-                    ),
                   ],
                 ),
               ),

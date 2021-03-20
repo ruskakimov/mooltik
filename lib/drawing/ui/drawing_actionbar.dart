@@ -25,9 +25,17 @@ class DrawingActionbar extends StatelessWidget {
             },
           ),
           MenuButton(),
+          AppIconButton(
+            icon: FontAwesomeIcons.film,
+            selected: false,
+            onTap: () {},
+          ),
           Spacer(),
           if (middle != null) middle,
           Spacer(),
+          AppIconButton(
+            icon: FontAwesomeIcons.layerGroup,
+          ),
           AppIconButton(
             icon: FontAwesomeIcons.undo,
             onTap: easel.undoAvailable ? easel.undo : null,
