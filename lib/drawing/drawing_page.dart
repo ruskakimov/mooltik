@@ -5,7 +5,6 @@ import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/drawing/ui/drawing_actionbar.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
-import 'package:mooltik/drawing/ui/frame_button.dart';
 import 'package:mooltik/drawing/ui/toolbar.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
@@ -84,24 +83,6 @@ class DrawingPage extends StatelessWidget {
                         height: 44,
                         child: Surface(
                           child: Toolbar(reversePopupSide: true),
-                        ),
-                      ),
-                    if (timeline.stepBackwardAvailable)
-                      Positioned(
-                        top: 60,
-                        left: 8,
-                        child: FrameButton(
-                          frame: timeline.previousFrame,
-                          onTap: timeline.stepBackward,
-                        ),
-                      ),
-                    if (timeline.stepForwardAvailable)
-                      Positioned(
-                        top: 60,
-                        right: 8,
-                        child: FrameButton(
-                          frame: timeline.nextFrame,
-                          onTap: timeline.stepForward,
                         ),
                       ),
                   ],
