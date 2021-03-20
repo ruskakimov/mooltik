@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/drawing_actionbar.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 import 'package:mooltik/drawing/ui/toolbar.dart';
@@ -28,6 +29,9 @@ class DrawingPage extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ToolboxModel(context.read<SharedPreferences>()),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => FrameReelModel(),
         ),
       ],
       builder: (context, child) {
@@ -65,6 +69,14 @@ class DrawingPage extends StatelessWidget {
                         child: Easel(),
                       ),
                     ),
+                    if (context.watch<FrameReelModel>().open)
+                      Positioned(
+                        top: 44,
+                        left: 0,
+                        right: 0,
+                        height: 80,
+                        child: Material(elevation: 5),
+                      ),
                     Positioned(
                       top: 0,
                       left: 0,

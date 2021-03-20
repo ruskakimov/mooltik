@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
+import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/menu_button.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,7 @@ class DrawingActionbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final easel = context.watch<EaselModel>();
+    final frameReel = context.watch<FrameReelModel>();
 
     return Material(
       elevation: 10,
@@ -27,8 +29,8 @@ class DrawingActionbar extends StatelessWidget {
           MenuButton(),
           AppIconButton(
             icon: FontAwesomeIcons.film,
-            selected: false,
-            onTap: () {},
+            selected: frameReel.open,
+            onTap: frameReel.toggleVisibility,
           ),
           Spacer(),
           if (middle != null) middle,
