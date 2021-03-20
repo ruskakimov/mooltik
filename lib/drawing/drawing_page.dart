@@ -69,14 +69,6 @@ class DrawingPage extends StatelessWidget {
                         child: Easel(),
                       ),
                     ),
-                    if (context.watch<FrameReelModel>().open)
-                      Positioned(
-                        top: 44,
-                        left: 0,
-                        right: 0,
-                        height: 80,
-                        child: Material(elevation: 5),
-                      ),
                     Positioned(
                       top: 0,
                       left: 0,
