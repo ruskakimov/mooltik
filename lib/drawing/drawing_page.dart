@@ -78,13 +78,14 @@ class DrawingPage extends StatelessWidget {
                         middle: toolbarOnBottom ? null : Toolbar(),
                       ),
                     ),
-                    Positioned(
-                      bottom: toolbarOnBottom ? 44 : 0,
-                      left: 0,
-                      right: 0,
-                      height: 44,
-                      child: Container(color: Colors.red),
-                    ),
+                    if (context.watch<FrameReelModel>().visible)
+                      Positioned(
+                        bottom: toolbarOnBottom ? 44 : 0,
+                        left: 0,
+                        right: 0,
+                        height: 44,
+                        child: Container(color: Colors.red),
+                      ),
                     if (toolbarOnBottom)
                       Positioned(
                         bottom: 0,
