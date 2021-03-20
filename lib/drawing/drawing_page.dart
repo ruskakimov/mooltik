@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
-import 'package:mooltik/common/ui/surface.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/drawing/ui/drawing_actionbar.dart';
@@ -81,7 +80,8 @@ class DrawingPage extends StatelessWidget {
                         left: 0,
                         right: 0,
                         height: 44,
-                        child: Surface(
+                        child: Material(
+                          elevation: 10,
                           child: Toolbar(reversePopupSide: true),
                         ),
                       ),

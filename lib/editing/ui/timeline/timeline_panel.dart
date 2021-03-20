@@ -6,7 +6,6 @@ import 'package:mooltik/editing/ui/timeline/view/overlay/resize_end_handle.dart'
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_start_handle.dart';
 import 'package:provider/provider.dart';
-import 'package:mooltik/common/ui/surface.dart';
 import 'package:mooltik/editing/ui/timeline/view/timeline_view.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/timeline_actionbar.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/playhead.dart';
@@ -35,7 +34,8 @@ class TimelinePanel extends StatelessWidget {
       builder: (context, child) {
         final timelineView = context.watch<TimelineViewModel>();
 
-        return Surface(
+        return Material(
+          elevation: 0,
           child: Column(
             children: [
               TimelineActionbar(),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
-import 'package:mooltik/common/ui/surface.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/ui/menu_button.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +14,8 @@ class DrawingActionbar extends StatelessWidget {
   Widget build(BuildContext context) {
     final easel = context.watch<EaselModel>();
 
-    return Surface(
+    return Material(
+      elevation: 10,
       child: Row(
         children: <Widget>[
           AppIconButton(
