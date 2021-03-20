@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class FrameReelModel extends ChangeNotifier {
-  bool get open => _open;
-  bool _open = false;
+  bool get visible => _visible;
+  bool _visible = false;
 
   void toggleVisibility() {
-    _open = !_open;
+    _visible = !_visible;
     notifyListeners();
   }
 }

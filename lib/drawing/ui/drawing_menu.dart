@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
+import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
@@ -18,6 +19,7 @@ class DrawingMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final onion = context.watch<OnionModel>();
+    final frameReel = context.watch<FrameReelModel>();
 
     return SizedBox(
       width: width,
@@ -54,6 +56,15 @@ class DrawingMenu extends StatelessWidget {
               onChanged: (_) => onion.toggle(),
             ),
             onTap: () => onion.toggle(),
+          ),
+          _MenuTile(
+            icon: FontAwesomeIcons.film,
+            title: 'Frame reel',
+            trailing: Switch(
+              value: frameReel.visible,
+              onChanged: (_) => frameReel.toggleVisibility(),
+            ),
+            onTap: () => frameReel.toggleVisibility(),
           ),
           _MenuTile(
             icon: FontAwesomeIcons.expand,
