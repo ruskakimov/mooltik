@@ -22,15 +22,27 @@ class FrameReel extends StatelessWidget {
 
       final timeline = context.watch<TimelineModel>();
 
-      return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(
-          horizontal: (constraints.maxWidth - itemWidth) / 2,
-        ),
-        itemCount: timeline.frames.length,
-        itemBuilder: (context, index) => _FrameReelItem(
-          frame: timeline.frames[index],
-        ),
+      return Stack(
+        children: [
+          ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(
+              horizontal: (constraints.maxWidth - itemWidth) / 2,
+            ),
+            itemCount: timeline.frames.length,
+            itemBuilder: (context, index) => _FrameReelItem(
+              frame: timeline.frames[index],
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: frameWidth,
+              height: 2,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ],
       );
     });
   }
