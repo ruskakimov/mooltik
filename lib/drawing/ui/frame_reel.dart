@@ -79,9 +79,20 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
         horizontal: (widget.width - widget.itemWidth) / 2,
       ),
       itemCount: timeline.frames.length,
-      itemBuilder: (context, index) => _FrameReelItem(
-        frame: timeline.frames[index],
+      itemBuilder: (context, index) => GestureDetector(
+        onTap: () => scrollTo(index),
+        child: _FrameReelItem(
+          frame: timeline.frames[index],
+        ),
       ),
+    );
+  }
+
+  void scrollTo(int frameIndex) {
+    _controller.animateTo(
+      frameOffset(frameIndex),
+      duration: Duration(milliseconds: 150),
+      curve: Curves.easeInOut,
     );
   }
 
