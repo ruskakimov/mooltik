@@ -64,7 +64,16 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
     _controller = ScrollController(
       initialScrollOffset: frameOffset(timeline.currentFrameIndex),
     );
+    _controller.addListener(() {
+      if (centeredFrameIndex < timeline.currentFrameIndex) {
+        timeline.stepBackward();
+      } else if (centeredFrameIndex > timeline.currentFrameIndex) {
+        timeline.stepForward();
+      }
+    });
   }
+
+  int get centeredFrameIndex => (_controller.offset / widget.itemWidth).round();
 
   double frameOffset(int frameIndex) => widget.itemWidth * frameIndex;
 
