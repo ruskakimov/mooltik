@@ -31,7 +31,16 @@ class FrameReel extends StatelessWidget {
           padding: _framePadding,
           child: AspectRatio(
             aspectRatio: 16 / 9,
-            child: FrameThumbnail(frame: timeline.frames[index]),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                boxShadow: [BoxShadow(blurRadius: 8, color: Colors.black12)],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: FrameThumbnail(frame: timeline.frames[index]),
+              ),
+            ),
           ),
         ),
       );
