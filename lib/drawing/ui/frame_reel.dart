@@ -40,7 +40,7 @@ class FrameReel extends StatelessWidget {
   }
 }
 
-class _FrameReelItemList extends StatelessWidget {
+class _FrameReelItemList extends StatefulWidget {
   const _FrameReelItemList({
     Key key,
     @required this.width,
@@ -51,19 +51,44 @@ class _FrameReelItemList extends StatelessWidget {
   final double itemWidth;
 
   @override
+  __FrameReelItemListState createState() => __FrameReelItemListState();
+}
+
+class __FrameReelItemListState extends State<_FrameReelItemList> {
+  ScrollController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    final timeline = context.read<TimelineModel>();
+    _controller = ScrollController(
+      initialScrollOffset: frameOffset(timeline.currentFrameIndex),
+    );
+  }
+
+  double frameOffset(int frameIndex) => widget.itemWidth * frameIndex;
+
+  @override
   Widget build(BuildContext context) {
     final timeline = context.watch<TimelineModel>();
 
     return ListView.builder(
+      controller: _controller,
       scrollDirection: Axis.horizontal,
       padding: EdgeInsets.symmetric(
-        horizontal: (width - itemWidth) / 2,
+        horizontal: (widget.width - widget.itemWidth) / 2,
       ),
       itemCount: timeline.frames.length,
       itemBuilder: (context, index) => _FrameReelItem(
         frame: timeline.frames[index],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
 
