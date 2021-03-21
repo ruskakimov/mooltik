@@ -20,19 +20,11 @@ class FrameReel extends StatelessWidget {
       final frameWidth = frameHeight / 9 * 16;
       final itemWidth = frameWidth + _framePadding.horizontal;
 
-      final timeline = context.watch<TimelineModel>();
-
       return Stack(
         children: [
-          ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(
-              horizontal: (constraints.maxWidth - itemWidth) / 2,
-            ),
-            itemCount: timeline.frames.length,
-            itemBuilder: (context, index) => _FrameReelItem(
-              frame: timeline.frames[index],
-            ),
+          _FrameReelItemList(
+            width: constraints.maxWidth,
+            itemWidth: itemWidth,
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -45,6 +37,33 @@ class FrameReel extends StatelessWidget {
         ],
       );
     });
+  }
+}
+
+class _FrameReelItemList extends StatelessWidget {
+  const _FrameReelItemList({
+    Key key,
+    @required this.width,
+    @required this.itemWidth,
+  }) : super(key: key);
+
+  final double width;
+  final double itemWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    final timeline = context.watch<TimelineModel>();
+
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      padding: EdgeInsets.symmetric(
+        horizontal: (width - itemWidth) / 2,
+      ),
+      itemCount: timeline.frames.length,
+      itemBuilder: (context, index) => _FrameReelItem(
+        frame: timeline.frames[index],
+      ),
+    );
   }
 }
 
