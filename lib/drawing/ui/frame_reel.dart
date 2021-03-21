@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/editing/ui/preview/frame_thumbnail.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
@@ -27,23 +28,39 @@ class FrameReel extends StatelessWidget {
           horizontal: (constraints.maxWidth - itemWidth) / 2,
         ),
         itemCount: timeline.frames.length,
-        itemBuilder: (context, index) => Padding(
-          padding: _framePadding,
-          child: AspectRatio(
-            aspectRatio: 16 / 9,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                boxShadow: [BoxShadow(blurRadius: 8, color: Colors.black12)],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: FrameThumbnail(frame: timeline.frames[index]),
-              ),
-            ),
-          ),
+        itemBuilder: (context, index) => _FrameReelItem(
+          frame: timeline.frames[index],
         ),
       );
     });
+  }
+}
+
+class _FrameReelItem extends StatelessWidget {
+  const _FrameReelItem({
+    Key key,
+    @required this.frame,
+  }) : super(key: key);
+
+  final FrameModel frame;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: _framePadding,
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            boxShadow: [BoxShadow(blurRadius: 8, color: Colors.black12)],
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: FrameThumbnail(frame: frame),
+          ),
+        ),
+      ),
+    );
   }
 }
