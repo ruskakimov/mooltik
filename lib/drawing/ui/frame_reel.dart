@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/editing/ui/preview/frame_thumbnail.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,7 @@ class FrameReel extends StatelessWidget {
       final itemWidth = frameWidth + _framePadding.horizontal;
 
       return Stack(
+        clipBehavior: Clip.none,
         children: [
           _FrameReelItemList(
             width: constraints.maxWidth,
@@ -94,20 +96,42 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
           return true;
         },
         child: ListView.builder(
+          clipBehavior: Clip.none,
           controller: _controller,
           scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(
-            horizontal: (widget.width - widget.itemWidth) / 2,
+          padding: EdgeInsets.only(
+            left: (widget.width - widget.itemWidth) / 2,
+            right: (widget.width - widget.itemWidth) / 2 - widget.itemWidth,
           ),
           primary: false,
-          itemCount: timeline.frames.length,
+          itemCount: timeline.frames.length + 1,
           itemExtent: widget.itemWidth,
-          itemBuilder: (context, index) => GestureDetector(
-            onTap: () => scrollTo(index),
-            child: _FrameReelItem(
-              frame: timeline.frames[index],
-            ),
-          ),
+          itemBuilder: (context, index) {
+            if (index == timeline.frames.length) {
+              return GestureDetector(
+                onTap: () {
+                  timeline.insertFrameAt(
+                    timeline.frames.length,
+                    FrameModel(size: timeline.frames.first.size),
+                  );
+                  scrollTo(timeline.frames.length - 1);
+                },
+                child: _FrameReelItem(
+                  child: ColoredBox(
+                    color: Colors.black26,
+                    child: Icon(FontAwesomeIcons.plus, size: 16),
+                  ),
+                ),
+              );
+            }
+
+            return GestureDetector(
+              onTap: () => scrollTo(index),
+              child: _FrameReelItem(
+                child: FrameThumbnail(frame: timeline.frames[index]),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -131,10 +155,10 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
 class _FrameReelItem extends StatelessWidget {
   const _FrameReelItem({
     Key key,
-    @required this.frame,
+    @required this.child,
   }) : super(key: key);
 
-  final FrameModel frame;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +173,7 @@ class _FrameReelItem extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: FrameThumbnail(frame: frame),
+            child: child,
           ),
         ),
       ),
