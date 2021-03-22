@@ -99,6 +99,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
           padding: EdgeInsets.symmetric(
             horizontal: (widget.width - widget.itemWidth) / 2,
           ),
+          primary: false,
           itemCount: timeline.frames.length,
           itemExtent: widget.itemWidth,
           itemBuilder: (context, index) => GestureDetector(
