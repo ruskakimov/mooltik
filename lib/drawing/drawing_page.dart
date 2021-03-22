@@ -37,7 +37,6 @@ class DrawingPage extends StatelessWidget {
       ],
       builder: (context, child) {
         final timeline = context.watch<TimelineModel>();
-        final toolbarOnBottom = MediaQuery.of(context).size.width < 600;
 
         return WillPopScope(
           // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
@@ -74,29 +73,15 @@ class DrawingPage extends StatelessWidget {
                       top: 0,
                       left: 0,
                       right: 0,
-                      height: 44,
-                      child: DrawingActionbar(
-                        middle: toolbarOnBottom ? null : Toolbar(),
-                      ),
+                      child: DrawingActionbar(),
                     ),
                     if (context.watch<FrameReelModel>().visible)
-                      Positioned(
-                        bottom: toolbarOnBottom ? 60 : 0,
-                        left: 0,
-                        right: 0,
-                        height: 44,
-                        child: FrameReel(),
-                      ),
-                    if (toolbarOnBottom)
                       Positioned(
                         bottom: 0,
                         left: 0,
                         right: 0,
                         height: 44,
-                        child: Material(
-                          elevation: 10,
-                          child: Toolbar(reversePopupSide: true),
-                        ),
+                        child: FrameReel(),
                       ),
                   ],
                 ),
