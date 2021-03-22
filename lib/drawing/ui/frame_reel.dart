@@ -81,17 +81,31 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
   Widget build(BuildContext context) {
     final timeline = context.watch<TimelineModel>();
 
-    return ListView.builder(
-      controller: _controller,
-      scrollDirection: Axis.horizontal,
-      padding: EdgeInsets.symmetric(
-        horizontal: (widget.width - widget.itemWidth) / 2,
-      ),
-      itemCount: timeline.frames.length,
-      itemBuilder: (context, index) => GestureDetector(
-        onTap: () => scrollTo(index),
-        child: _FrameReelItem(
-          frame: timeline.frames[index],
+    return GestureDetector(
+      // By catching onTapDown gesture, it's possible to keep animateTo from removing user's scroll listener.
+      onTapDown: (_) {},
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          if (notification is ScrollEndNotification) {
+            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+              scrollTo(centeredFrameIndex);
+            });
+          }
+          return true;
+        },
+        child: ListView.builder(
+          controller: _controller,
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.symmetric(
+            horizontal: (widget.width - widget.itemWidth) / 2,
+          ),
+          itemCount: timeline.frames.length,
+          itemBuilder: (context, index) => GestureDetector(
+            onTap: () => scrollTo(index),
+            child: _FrameReelItem(
+              frame: timeline.frames[index],
+            ),
+          ),
         ),
       ),
     );
