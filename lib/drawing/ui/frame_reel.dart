@@ -118,7 +118,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
                 },
                 child: _FrameReelItem(
                   child: ColoredBox(
-                    color: Colors.black26,
+                    color: Theme.of(context).colorScheme.secondary,
                     child: Icon(FontAwesomeIcons.plus, size: 16),
                   ),
                 ),
