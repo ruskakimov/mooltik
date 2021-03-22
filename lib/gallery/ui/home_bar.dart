@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/ui/surface.dart';
 import 'package:mooltik/gallery/ui/bin_button.dart';
 
 class HomeBar extends StatelessWidget {
@@ -9,7 +8,8 @@ class HomeBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Surface(
+    return Material(
+      elevation: 10,
       child: Row(
         children: [
           _Logo(),

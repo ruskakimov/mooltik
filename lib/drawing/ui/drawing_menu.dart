@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
-import 'package:mooltik/editing/data/timeline_model.dart';
+import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 
@@ -18,6 +18,7 @@ class DrawingMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final onion = context.watch<OnionModel>();
+    final frameReel = context.watch<FrameReelModel>();
 
     return SizedBox(
       width: width,
@@ -26,27 +27,6 @@ class DrawingMenu extends StatelessWidget {
         physics: ScrollPhysics(),
         children: [
           _MenuTile(
-            icon: FontAwesomeIcons.plus,
-            title: 'Add empty frame',
-            onTap: () {
-              final timeline = context.read<TimelineModel>();
-              timeline.addFrameAfterCurrent();
-              timeline.stepForward();
-              onDone?.call();
-            },
-          ),
-          _MenuTile(
-            icon: FontAwesomeIcons.copy,
-            title: 'Duplicate this frame',
-            onTap: () {
-              final timeline = context.read<TimelineModel>();
-              timeline.duplicateFrameAt(timeline.currentFrameIndex);
-              timeline.stepForward();
-              onDone?.call();
-            },
-          ),
-          Divider(),
-          _MenuTile(
             icon: FontAwesomeIcons.lightbulb,
             title: 'Onion skinning',
             trailing: Switch(
@@ -54,6 +34,15 @@ class DrawingMenu extends StatelessWidget {
               onChanged: (_) => onion.toggle(),
             ),
             onTap: () => onion.toggle(),
+          ),
+          _MenuTile(
+            icon: FontAwesomeIcons.film,
+            title: 'Frame reel',
+            trailing: Switch(
+              value: frameReel.visible,
+              onChanged: (_) => frameReel.toggleVisibility(),
+            ),
+            onTap: () => frameReel.toggleVisibility(),
           ),
           _MenuTile(
             icon: FontAwesomeIcons.expand,
