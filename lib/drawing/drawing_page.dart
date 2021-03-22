@@ -81,7 +81,7 @@ class DrawingPage extends StatelessWidget {
                     ),
                     if (context.watch<FrameReelModel>().visible)
                       Positioned(
-                        bottom: toolbarOnBottom ? 44 : 0,
+                        bottom: toolbarOnBottom ? 60 : 0,
                         left: 0,
                         right: 0,
                         height: 44,
