@@ -29,10 +29,14 @@ class DrawingPage extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(
-          create: (context) => ToolboxModel(context.read<SharedPreferences>()),
+          create: (context) => ToolboxModel(
+            context.read<SharedPreferences>(),
+          ),
         ),
         ChangeNotifierProvider(
-          create: (context) => FrameReelModel(),
+          create: (context) => FrameReelModel(
+            context.read<SharedPreferences>(),
+          ),
         ),
       ],
       builder: (context, child) {
