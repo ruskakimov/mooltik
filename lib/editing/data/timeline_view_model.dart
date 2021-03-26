@@ -29,7 +29,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   void onScaleUpdate(ScaleUpdateDetails details) {
     _scaleOffset ??= 1 - details.scale;
-    _msPerPx = _prevMsPerPx / (details.scale + _scaleOffset);
+    _msPerPx = (_prevMsPerPx / (details.scale + _scaleOffset)).clamp(1, 100);
 
     final diff = (details.localFocalPoint - _prevFocalPoint);
     _timeline.scrub(-diff.dx / timelineWidth);
