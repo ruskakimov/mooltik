@@ -6,17 +6,26 @@ import 'package:mooltik/editing/data/convert.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/time_label.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/frame_sliver.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const _msPerPxKey = 'timeline_view_ms_per_px';
 
 class TimelineViewModel extends ChangeNotifier {
   TimelineViewModel({
-    TimelineModel timeline,
-  }) : _timeline = timeline;
+    @required TimelineModel timeline,
+    @required SharedPreferences sharedPreferences,
+  })  : _timeline = timeline,
+        _preferences = sharedPreferences,
+        _msPerPx = sharedPreferences.getDouble(_msPerPxKey) ?? 10 {
+    _prevMsPerPx = _msPerPx;
+  }
 
+  SharedPreferences _preferences;
   final TimelineModel _timeline;
 
   double get msPerPx => _msPerPx;
-  double _msPerPx = 10;
-  double _prevMsPerPx = 10;
+  double _msPerPx;
+  double _prevMsPerPx;
   double _scaleOffset;
   Offset _prevFocalPoint;
 
@@ -29,7 +38,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   void onScaleUpdate(ScaleUpdateDetails details) {
     _scaleOffset ??= 1 - details.scale;
-    _msPerPx = (_prevMsPerPx / (details.scale + _scaleOffset)).clamp(1, 100);
+    _setScale(_prevMsPerPx / (details.scale + _scaleOffset));
 
     final diff = (details.localFocalPoint - _prevFocalPoint);
     _timeline.scrub(-diff.dx / timelineWidth);
@@ -38,6 +47,11 @@ class TimelineViewModel extends ChangeNotifier {
     _prevFocalPoint = details.localFocalPoint;
 
     notifyListeners();
+  }
+
+  void _setScale(double newMsPerPx) {
+    _msPerPx = newMsPerPx.clamp(1.0, 100.0);
+    _preferences.setDouble(_msPerPxKey, _msPerPx);
   }
 
   void onScaleEnd(ScaleEndDetails details) {

@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:mooltik/editing/ui/timeline/view/timeline_view.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/timeline_actionbar.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/playhead.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TimelinePanel extends StatelessWidget {
   const TimelinePanel({
@@ -28,6 +29,7 @@ class TimelinePanel extends StatelessWidget {
         ChangeNotifierProvider<TimelineViewModel>(
           create: (context) => TimelineViewModel(
             timeline: context.read<TimelineModel>(),
+            sharedPreferences: context.read<SharedPreferences>(),
           ),
         ),
       ],
