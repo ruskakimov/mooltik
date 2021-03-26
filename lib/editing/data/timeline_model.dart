@@ -26,7 +26,8 @@ class TimelineModel extends ChangeNotifier {
   final List<FrameModel> frames;
   final AnimationController _playheadController;
 
-  Duration get playheadPosition => totalDuration * _playheadController.value;
+  Duration get playheadPosition => Duration(
+      milliseconds: (totalDuration * _playheadController.value).inMilliseconds);
 
   bool get isPlaying => _playheadController.isAnimating;
 
