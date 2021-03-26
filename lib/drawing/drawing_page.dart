@@ -25,6 +25,7 @@ class DrawingPage extends StatelessWidget {
           create: (context) => OnionModel(
             frames: context.read<TimelineModel>().frames,
             selectedIndex: context.read<TimelineModel>().currentFrameIndex,
+            sharedPreferences: context.read<SharedPreferences>(),
           ),
         ),
         ChangeNotifierProvider(
