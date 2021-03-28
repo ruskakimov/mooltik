@@ -78,6 +78,20 @@ class TimelineModel extends ChangeNotifier {
     _playheadController.value = _fraction(playheadPosition);
   }
 
+  /// Jumps to the start of the specified frame.
+  void jumpToFrameStart(int frameIndex) {
+    // Outside index range.
+    if (frameIndex < 0 || frameIndex > frames.length) return;
+
+    while (_currentFrameIndex > frameIndex && stepBackwardAvailable) {
+      stepBackward();
+    }
+
+    while (_currentFrameIndex < frameIndex && stepForwardAvailable) {
+      stepForward();
+    }
+  }
+
   /// Instantly scrolls the timeline by a [fraction] of total duration.
   void scrub(double fraction) {
     _playheadController.value += fraction;

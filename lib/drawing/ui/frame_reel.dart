@@ -67,10 +67,8 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
       initialScrollOffset: frameOffset(timeline.currentFrameIndex),
     );
     _controller.addListener(() {
-      if (centeredFrameIndex < timeline.currentFrameIndex) {
-        timeline.stepBackward();
-      } else if (centeredFrameIndex > timeline.currentFrameIndex) {
-        timeline.stepForward();
+      if (centeredFrameIndex != timeline.currentFrameIndex) {
+        timeline.jumpToFrameStart(centeredFrameIndex);
       }
     });
   }
@@ -78,6 +76,9 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
   int get centeredFrameIndex => (_controller.offset / widget.itemWidth).round();
 
   double frameOffset(int frameIndex) => widget.itemWidth * frameIndex;
+
+  bool get snapped =>
+      (_controller.offset - frameOffset(centeredFrameIndex)).abs() < 0.1;
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +89,8 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
       onTapDown: (_) {},
       child: NotificationListener<ScrollNotification>(
         onNotification: (notification) {
-          if (notification is ScrollEndNotification) {
-            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-              scrollTo(centeredFrameIndex);
-            });
+          if (notification is ScrollEndNotification && !snapped) {
+            scrollTo(centeredFrameIndex);
           }
           return true;
         },
@@ -138,11 +137,13 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
   }
 
   void scrollTo(int frameIndex) {
-    _controller.animateTo(
-      frameOffset(frameIndex),
-      duration: Duration(milliseconds: 150),
-      curve: Curves.easeInOut,
-    );
+    Future.delayed(Duration.zero, () {
+      _controller.animateTo(
+        frameOffset(frameIndex),
+        duration: Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+      );
+    });
   }
 
   @override
