@@ -67,10 +67,8 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
       initialScrollOffset: frameOffset(timeline.currentFrameIndex),
     );
     _controller.addListener(() {
-      if (centeredFrameIndex < timeline.currentFrameIndex) {
-        timeline.stepBackward();
-      } else if (centeredFrameIndex > timeline.currentFrameIndex) {
-        timeline.stepForward();
+      if (centeredFrameIndex != timeline.currentFrameIndex) {
+        timeline.jumpToFrameStart(centeredFrameIndex);
       }
     });
   }
