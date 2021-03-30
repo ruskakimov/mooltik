@@ -35,13 +35,6 @@ class TimelineModel extends ChangeNotifier {
 
   FrameModel get currentFrame => frames[_currentFrameIndex];
 
-  FrameModel get previousFrame =>
-      _currentFrameIndex > 0 ? frames[_currentFrameIndex - 1] : null;
-
-  FrameModel get nextFrame => _currentFrameIndex < frames.length - 1
-      ? frames[_currentFrameIndex + 1]
-      : null;
-
   int get currentFrameIndex => _currentFrameIndex;
   int _currentFrameIndex;
 
