@@ -1,3 +1,3 @@
 abstract class TimeSpan {
-  Duration duration;
+  Duration get duration;
 }
