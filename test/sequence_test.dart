@@ -27,5 +27,18 @@ void main() {
         Duration(seconds: 13, milliseconds: 24),
       );
     });
+
+    test('handles iteration', () {
+      final list = [
+        TestSpan(Duration(milliseconds: 111)),
+        TestSpan(Duration(milliseconds: 333)),
+        TestSpan(Duration(milliseconds: 555)),
+      ];
+      final seq = Sequence(list);
+
+      for (int i = 0; i < seq.length; i++) {
+        expect(seq[i], list[i]);
+      }
+    });
   });
 }

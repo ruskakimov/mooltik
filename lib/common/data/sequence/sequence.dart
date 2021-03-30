@@ -9,9 +9,11 @@ class Sequence<T extends TimeSpan> {
           (duration, span) => duration + span.duration,
         );
 
-  // TODO: Override [] operator.
-  List<T> get spans => _spans;
   List<T> _spans;
+
+  T operator [](int index) => _spans[index];
+
+  int get length => _spans.length;
 
   Duration get totalDuration => _totalDuration;
   Duration _totalDuration;
