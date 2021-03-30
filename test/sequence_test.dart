@@ -40,5 +40,16 @@ void main() {
         expect(seq[i], list[i]);
       }
     });
+
+    test('ignores later mutations of provided list', () {
+      final list = [
+        TestSpan(Duration(milliseconds: 111)),
+        TestSpan(Duration(milliseconds: 333)),
+        TestSpan(Duration(milliseconds: 555)),
+      ];
+      final seq = Sequence(list);
+      list.removeLast();
+      expect(seq.length, 3);
+    });
   });
 }
