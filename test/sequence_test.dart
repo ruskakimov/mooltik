@@ -59,5 +59,19 @@ void main() {
       list.removeLast();
       expect(seq.length, 3);
     });
+
+    test('syncs playhead with current span', () {
+      final seq = Sequence([
+        TestSpan(Duration(seconds: 1)),
+        TestSpan(Duration(seconds: 2)),
+        TestSpan(Duration(milliseconds: 200)),
+      ]);
+      expect(seq.playhead, Duration.zero);
+      expect(seq.currentIndex, 0);
+      seq.playhead = Duration(seconds: 1, milliseconds: 400);
+      expect(seq.currentIndex, 1);
+      seq.playhead = Duration(seconds: 3, milliseconds: 100);
+      expect(seq.currentIndex, 2);
+    });
   });
 }
