@@ -104,5 +104,19 @@ void main() {
       expect(seq.currentIndex, 1);
       expect(seq.playhead, Duration(milliseconds: 150));
     });
+
+    test('handles removing current span', () {
+      final seq = Sequence([
+        TestSpan(Duration(milliseconds: 100)),
+        TestSpan(Duration(milliseconds: 200)),
+        TestSpan(Duration(milliseconds: 300)),
+      ]);
+      seq.playhead = Duration(milliseconds: 150);
+      expect(seq.currentIndex, 1);
+      seq.removeAt(1);
+      expect(seq.playhead, Duration(milliseconds: 100));
+      expect(seq.currentIndex, 1);
+      expect(seq.length, 2);
+    });
   });
 }

@@ -65,8 +65,8 @@ class Sequence<T extends TimeSpan> {
     }
 
     while (_playhead >= _currentSpanEnd && stepForwardAvailable) {
-      _currentIndex++;
       _currentSpanStart = _currentSpanEnd;
+      _currentIndex++;
     }
   }
 
@@ -109,6 +109,31 @@ class Sequence<T extends TimeSpan> {
       _currentIndex++;
       _currentSpanStart += span.duration;
       _playhead += span.duration;
+    }
+  }
+
+  void removeAt(int index) {
+    _validateIndex(index);
+    if (_spans.length <= 1) {
+      throw Exception('Cannot remove last span in sequence.');
+    }
+
+    final removedDuration = _spans[index].duration;
+    _spans.removeAt(index);
+
+    _totalDuration -= removedDuration;
+
+    if (index < _currentIndex) {
+      _currentIndex--;
+      _currentSpanStart -= removedDuration;
+      _playhead -= removedDuration;
+    } else if (index == _currentIndex) {
+      _playhead = _currentSpanStart;
+
+      if (_currentIndex == _spans.length) {
+        _currentIndex--;
+        _currentSpanStart -= _spans.last.duration;
+      }
     }
   }
 }
