@@ -1,8 +1,9 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/sequence/time_span.dart';
 
-class FrameModel extends ChangeNotifier {
+class FrameModel extends ChangeNotifier implements TimeSpan {
   FrameModel({
     int id,
     @required Size size,
