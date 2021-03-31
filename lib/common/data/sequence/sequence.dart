@@ -1,6 +1,6 @@
 import 'package:mooltik/common/data/sequence/time_span.dart';
 
-/// A playable sequence of `TimeSpan`s.
+/// A sequence of `TimeSpan`s with a playhead.
 ///
 /// Defines the relationship between a playhead and a list of `TimeSpan`s.
 ///
