@@ -91,5 +91,18 @@ void main() {
       seq.currentIndex = 1;
       expect(seq.playhead, Duration(milliseconds: 123));
     });
+
+    test('handles inserting at current index', () {
+      final seq = Sequence([
+        TestSpan(Duration(milliseconds: 123)),
+        TestSpan(Duration(milliseconds: 245)),
+      ]);
+      seq.playhead = Duration(milliseconds: 100);
+      expect(seq.currentIndex, 0);
+      seq.insert(0, TestSpan(Duration(milliseconds: 50)));
+      expect(seq.length, 3);
+      expect(seq.currentIndex, 1);
+      expect(seq.playhead, Duration(milliseconds: 150));
+    });
   });
 }

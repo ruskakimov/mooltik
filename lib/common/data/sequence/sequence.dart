@@ -98,4 +98,17 @@ class Sequence<T extends TimeSpan> {
     _validateIndex(index);
     return startTimeOf(index) + _spans[index].duration;
   }
+
+  void insert(int index, T span) {
+    _validateIndex(index);
+    _spans.insert(index, span);
+
+    _totalDuration += span.duration;
+
+    if (index <= _currentIndex) {
+      _currentIndex++;
+      _currentSpanStart += span.duration;
+      _playhead += span.duration;
+    }
+  }
 }
