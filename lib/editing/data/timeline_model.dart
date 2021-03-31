@@ -1,103 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 
 class TimelineModel extends ChangeNotifier {
   TimelineModel({
-    @required this.frames,
+    @required this.frameSeq,
     TickerProvider vsync,
-  })  : assert(frames != null && frames.isNotEmpty),
-        _currentFrameIndex = 0,
-        _currentFrameStart = Duration.zero,
+  })  : assert(frameSeq != null && frameSeq.length > 0),
         _playheadController = AnimationController(
           vsync: vsync,
-          duration: calcTotalDuration(frames),
+          duration: frameSeq.totalDuration,
         ) {
     _playheadController.addListener(() {
-      _syncCurrentFrameWithPlayhead();
+      frameSeq.playhead = Duration(
+        milliseconds:
+            (frameSeq.totalDuration * _playheadController.value).inMilliseconds,
+      );
       notifyListeners();
     });
   }
 
-  static Duration calcTotalDuration(List<FrameModel> frames) => frames.fold(
-        Duration.zero,
-        (duration, frame) => duration + frame.duration,
-      );
-
-  final List<FrameModel> frames;
+  final Sequence<FrameModel> frameSeq;
   final AnimationController _playheadController;
 
-  Duration get playheadPosition => Duration(
-      milliseconds: (totalDuration * _playheadController.value).inMilliseconds);
+  Duration get playheadPosition => frameSeq.playhead;
 
   bool get isPlaying => _playheadController.isAnimating;
 
-  Duration get totalDuration => _playheadController.duration;
+  Duration get totalDuration => frameSeq.totalDuration;
 
-  FrameModel get currentFrame => frames[_currentFrameIndex];
+  FrameModel get currentFrame => frameSeq.current;
 
-  int get currentFrameIndex => _currentFrameIndex;
-  int _currentFrameIndex;
+  int get currentFrameIndex => frameSeq.currentIndex;
 
-  bool get atLastFrame => _currentFrameIndex == frames.length - 1;
+  Duration get currentFrameStartTime => frameSeq.currentSpanStart;
 
-  Duration get currentFrameStartTime => _currentFrameStart;
-  Duration _currentFrameStart;
-
-  Duration get currentFrameEndTime =>
-      _currentFrameStart + currentFrame.duration;
-
-  void _syncCurrentFrameWithPlayhead() {
-    while (playheadPosition < _currentFrameStart && _currentFrameIndex > 0) {
-      _currentFrameIndex--;
-      _currentFrameStart -= currentFrame.duration;
-    }
-
-    while (playheadPosition >= currentFrameEndTime && !atLastFrame) {
-      _currentFrameStart = currentFrameEndTime;
-      _currentFrameIndex++;
-    }
-  }
-
-  void _resetCurrentFrame() {
-    _currentFrameIndex = 0;
-    _currentFrameStart = Duration.zero;
-  }
-
-  double _fraction(Duration playheadPosition) =>
-      playheadPosition.inMicroseconds / totalDuration.inMicroseconds;
+  Duration get currentFrameEndTime => frameSeq.currentSpanEnd;
 
   /// Jumps to a new playhead position.
   void jumpTo(Duration playheadPosition) {
-    _playheadController.value = _fraction(playheadPosition);
+    frameSeq.playhead = playheadPosition;
   }
 
   /// Jumps to the start of the specified frame.
   void jumpToFrameStart(int frameIndex) {
-    // Outside index range.
-    if (frameIndex < 0 || frameIndex > frames.length) return;
-
-    while (_currentFrameIndex > frameIndex && stepBackwardAvailable) {
-      stepBackward();
-    }
-
-    while (_currentFrameIndex < frameIndex && stepForwardAvailable) {
-      stepForward();
-    }
+    frameSeq.currentIndex = frameIndex;
   }
 
   /// Instantly scrolls the timeline by a [fraction] of total duration.
   void scrub(double fraction) {
-    _playheadController.value += fraction;
+    // TODO: Switch to passing duration
+    final diff = totalDuration * fraction;
+    frameSeq.playhead += diff;
   }
 
   /// Reset playhead to the beginning.
   void reset() {
-    _playheadController.reset();
-    _resetCurrentFrame();
+    frameSeq.playhead = Duration.zero;
     notifyListeners();
   }
 
   void play() {
+    _playheadController.duration = totalDuration;
+    _playheadController.value =
+        playheadPosition.inMicroseconds / totalDuration.inMicroseconds;
     _playheadController.forward();
     notifyListeners();
   }
@@ -107,119 +73,60 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get stepBackwardAvailable => !isPlaying && _currentFrameIndex > 0;
+  bool get stepBackwardAvailable =>
+      !isPlaying && frameSeq.stepBackwardAvailable;
 
   void stepBackward() {
-    if (!stepBackwardAvailable) return;
-    final Duration time =
-        _currentFrameStart - frames[_currentFrameIndex - 1].duration;
-    _playheadController.value = _fraction(time);
-    _syncCurrentFrameWithPlayhead();
+    frameSeq.stepBackward();
     notifyListeners();
   }
 
-  bool get stepForwardAvailable => !isPlaying && !atLastFrame;
+  bool get stepForwardAvailable => !isPlaying && frameSeq.stepForwardAvailable;
 
   void stepForward() {
-    if (!stepForwardAvailable) return;
-    _playheadController.value = _fraction(currentFrameEndTime);
-    _syncCurrentFrameWithPlayhead();
+    frameSeq.stepForward();
     notifyListeners();
   }
 
   void addFrameAfterCurrent() {
-    insertFrameAt(_currentFrameIndex + 1, FrameModel(size: frames.first.size));
+    insertFrameAt(
+      frameSeq.currentIndex + 1,
+      FrameModel(size: frameSeq[0].size),
+    );
     notifyListeners();
   }
 
   void insertFrameAt(int frameIndex, FrameModel frame) {
-    // Outside index range.
-    if (frameIndex < 0 || frameIndex > frames.length) return;
-
-    final prevPlayheadPosition = playheadPosition;
-    frames.insert(frameIndex, frame);
-
-    // Increase total.
-    _playheadController.duration += frame.duration;
-
-    if (frameIndex < _currentFrameIndex) {
-      _currentFrameIndex++;
-      _currentFrameStart += frame.duration;
-      jumpTo(prevPlayheadPosition + frame.duration);
-    } else {
-      jumpTo(prevPlayheadPosition);
-    }
-
-    _syncCurrentFrameWithPlayhead();
+    frameSeq.insert(frameIndex, frame);
     notifyListeners();
   }
 
   void deleteFrameAt(int frameIndex) {
-    // Outside index range.
-    if (frameIndex < 0 || frameIndex >= frames.length) return;
-    if (frames.length < 2) return;
-
-    final prevPlayheadPosition = playheadPosition;
-    final removedDuration = frames[frameIndex].duration;
-    frames.removeAt(frameIndex);
-
-    // Reduce total.
-    _playheadController.duration -= removedDuration;
-
-    if (frameIndex < _currentFrameIndex) {
-      _currentFrameIndex--;
-      _currentFrameStart -= removedDuration;
-      jumpTo(prevPlayheadPosition - removedDuration);
-    } else if (_currentFrameIndex >= frames.length) {
-      _currentFrameIndex--;
-      _currentFrameStart -= frames.last.duration;
-      jumpTo(totalDuration);
-    } else {
-      jumpTo(prevPlayheadPosition);
-    }
-
-    _syncCurrentFrameWithPlayhead();
+    frameSeq.removeAt(frameIndex);
     notifyListeners();
   }
 
   void duplicateFrameAt(int frameIndex) {
-    // Outside index range.
-    if (frameIndex < 0 || frameIndex >= frames.length) return;
-
     final newFrame = FrameModel(
-      size: frames.first.size,
-      initialSnapshot: frames[frameIndex].snapshot,
-      duration: frames[frameIndex].duration,
+      size: frameSeq[0].size,
+      initialSnapshot: frameSeq[frameIndex].snapshot,
+      duration: frameSeq[frameIndex].duration,
     );
     insertFrameAt(frameIndex + 1, newFrame);
   }
 
   void changeFrameDurationAt(int frameIndex, Duration newDuration) {
-    // Outside index range.
-    if (frameIndex < 0 || frameIndex >= frames.length) return;
-
-    final prevPlayheadPosition = playheadPosition;
-
-    frames[frameIndex].duration = newDuration;
-    _playheadController.duration = calcTotalDuration(frames);
-
-    // Keep playhead fixed.
-    _playheadController.value = _fraction(prevPlayheadPosition);
-    _syncCurrentFrameWithPlayhead();
-    _currentFrameStart = frameStartTimeAt(_currentFrameIndex);
-
+    final newFrame = FrameModel(
+      id: frameSeq[frameIndex].id,
+      size: frameSeq[frameIndex].size,
+      initialSnapshot: frameSeq[frameIndex].snapshot,
+      duration: newDuration,
+    );
+    frameSeq[frameIndex] = newFrame;
     notifyListeners();
   }
 
-  Duration frameStartTimeAt(int frameIndex) {
-    // Outside index range.
-    if (frameIndex < 0 || frameIndex >= frames.length) return null;
-    return calcTotalDuration(frames.sublist(0, frameIndex));
-  }
+  Duration frameStartTimeAt(int frameIndex) => frameSeq.startTimeOf(frameIndex);
 
-  Duration frameEndTimeAt(int frameIndex) {
-    // Outside index range.
-    if (frameIndex < 0 || frameIndex >= frames.length) return null;
-    return frameStartTimeAt(frameIndex) + frames[frameIndex].duration;
-  }
+  Duration frameEndTimeAt(int frameIndex) => frameSeq.endTimeOf(frameIndex);
 }

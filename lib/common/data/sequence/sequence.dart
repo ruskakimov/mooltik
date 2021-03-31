@@ -69,8 +69,10 @@ class Sequence<T extends TimeSpan> {
     }
   }
 
+  Duration get currentSpanStart => _currentSpanStart;
   Duration _currentSpanStart;
-  Duration get _currentSpanEnd => _currentSpanStart + current.duration;
+
+  Duration get currentSpanEnd => _currentSpanStart + current.duration;
 
   Duration get playhead => _playhead;
   Duration _playhead;
@@ -88,8 +90,8 @@ class Sequence<T extends TimeSpan> {
       _currentSpanStart -= current.duration;
     }
 
-    while (_playhead >= _currentSpanEnd && stepForwardAvailable) {
-      _currentSpanStart = _currentSpanEnd;
+    while (_playhead >= currentSpanEnd && stepForwardAvailable) {
+      _currentSpanStart = currentSpanEnd;
       _currentIndex++;
     }
   }
@@ -108,7 +110,7 @@ class Sequence<T extends TimeSpan> {
 
   void stepForward() {
     if (!stepForwardAvailable) return;
-    playhead = _currentSpanEnd;
+    playhead = currentSpanEnd;
   }
 
   Duration startTimeOf(int index) {

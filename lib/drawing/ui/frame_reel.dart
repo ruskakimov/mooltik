@@ -103,17 +103,17 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
             right: (widget.width - widget.itemWidth) / 2 - widget.itemWidth,
           ),
           primary: false,
-          itemCount: timeline.frames.length + 1,
+          itemCount: timeline.frameSeq.length + 1,
           itemExtent: widget.itemWidth,
           itemBuilder: (context, index) {
-            if (index == timeline.frames.length) {
+            if (index == timeline.frameSeq.length) {
               return GestureDetector(
                 onTap: () {
                   timeline.insertFrameAt(
-                    timeline.frames.length,
-                    FrameModel(size: timeline.frames.first.size),
+                    timeline.frameSeq.length,
+                    FrameModel(size: timeline.frameSeq[0].size),
                   );
-                  scrollTo(timeline.frames.length - 1);
+                  scrollTo(timeline.frameSeq.length - 1);
                 },
                 child: _FrameReelItem(
                   child: ColoredBox(
@@ -127,7 +127,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
             return GestureDetector(
               onTap: () => scrollTo(index),
               child: _FrameReelItem(
-                child: FrameThumbnail(frame: timeline.frames[index]),
+                child: FrameThumbnail(frame: timeline.frameSeq[index]),
               ),
             );
           },

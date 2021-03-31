@@ -1,5 +1,6 @@
 import 'package:flutter/painting.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 
@@ -9,10 +10,10 @@ void main() {
   group('TimelineModel', () {
     test('starts with first frame selected', () {
       final timeline = TimelineModel(
-        frames: [
+        frameSeq: Sequence<FrameModel>([
           FrameModel(id: 1, size: _size, duration: Duration(seconds: 2)),
           FrameModel(id: 2, size: _size, duration: Duration(seconds: 2)),
-        ],
+        ]),
         vsync: TestVSync(),
       );
       expect(timeline.currentFrame.id, 1);
@@ -20,10 +21,10 @@ void main() {
 
     test('scrubbing updates current frame', () {
       final timeline = TimelineModel(
-        frames: [
+        frameSeq: Sequence<FrameModel>([
           FrameModel(id: 1, size: _size, duration: Duration(seconds: 2)),
           FrameModel(id: 2, size: _size, duration: Duration(seconds: 2)),
-        ],
+        ]),
         vsync: TestVSync(),
       );
       timeline.scrub(0.5);
@@ -35,10 +36,10 @@ void main() {
     test('playhead position doesn\'t change when frame duration is changed',
         () {
       final timeline = TimelineModel(
-        frames: [
+        frameSeq: Sequence<FrameModel>([
           FrameModel(id: 1, size: _size, duration: Duration(milliseconds: 500)),
           FrameModel(id: 2, size: _size, duration: Duration(milliseconds: 500)),
-        ],
+        ]),
         vsync: TestVSync(),
       );
       timeline.scrub(0.25);
@@ -51,10 +52,10 @@ void main() {
     test('handles frame duration change past playhead (from right to left)',
         () {
       final timeline = TimelineModel(
-        frames: [
+        frameSeq: Sequence<FrameModel>([
           FrameModel(id: 1, size: _size, duration: Duration(milliseconds: 500)),
           FrameModel(id: 2, size: _size, duration: Duration(milliseconds: 500)),
-        ],
+        ]),
         vsync: TestVSync(),
       );
       timeline.scrub(0.25);
@@ -66,13 +67,13 @@ void main() {
 
     test('handles deleting before current frame', () {
       final timeline = TimelineModel(
-        frames: [
+        frameSeq: Sequence<FrameModel>([
           FrameModel(id: 1, size: _size, duration: Duration(seconds: 1)),
           FrameModel(id: 2, size: _size, duration: Duration(seconds: 2)),
           FrameModel(id: 3, size: _size, duration: Duration(seconds: 10)),
           FrameModel(id: 4, size: _size, duration: Duration(seconds: 4)),
           FrameModel(id: 5, size: _size, duration: Duration(seconds: 7)),
-        ],
+        ]),
         vsync: TestVSync(),
       );
       expect(timeline.totalDuration, Duration(seconds: 24));
@@ -90,12 +91,12 @@ void main() {
 
     test('handles deleting current frame', () {
       final timeline = TimelineModel(
-        frames: [
+        frameSeq: Sequence<FrameModel>([
           FrameModel(id: 1, size: _size, duration: Duration(seconds: 20)),
           FrameModel(id: 2, size: _size, duration: Duration(seconds: 30)),
           FrameModel(id: 3, size: _size, duration: Duration(seconds: 7)),
           FrameModel(id: 4, size: _size, duration: Duration(seconds: 8)),
-        ],
+        ]),
         vsync: TestVSync(),
       );
       timeline.stepForward();
@@ -112,12 +113,12 @@ void main() {
 
     test('handles deleting after current frame', () {
       final timeline = TimelineModel(
-        frames: [
+        frameSeq: Sequence<FrameModel>([
           FrameModel(id: 1, size: _size, duration: Duration(seconds: 20)),
           FrameModel(id: 2, size: _size, duration: Duration(seconds: 30)),
           FrameModel(id: 3, size: _size, duration: Duration(seconds: 7)),
           FrameModel(id: 4, size: _size, duration: Duration(seconds: 8)),
-        ],
+        ]),
         vsync: TestVSync(),
       );
       timeline.stepForward();
@@ -134,14 +135,14 @@ void main() {
 
     test('handles deleting long frame', () {
       final timeline = TimelineModel(
-        frames: [
+        frameSeq: Sequence<FrameModel>([
           FrameModel(id: 1, size: _size, duration: Duration(seconds: 5)),
           FrameModel(id: 2, size: _size, duration: Duration(seconds: 300)),
           FrameModel(id: 3, size: _size, duration: Duration(seconds: 7)),
           FrameModel(id: 4, size: _size, duration: Duration(seconds: 8)),
           FrameModel(id: 5, size: _size, duration: Duration(seconds: 10)),
           FrameModel(id: 6, size: _size, duration: Duration(seconds: 10)),
-        ],
+        ]),
         vsync: TestVSync(),
       );
       timeline.scrub(0.8);
@@ -151,17 +152,17 @@ void main() {
       expect(timeline.currentFrameStartTime, Duration(seconds: 5));
       timeline.deleteFrameAt(1);
       expect(timeline.totalDuration, Duration(seconds: 40));
-      expect(timeline.currentFrame.id, 6);
-      expect(timeline.playheadPosition, Duration(seconds: 40));
-      expect(timeline.currentFrameStartTime, Duration(seconds: 30));
+      expect(timeline.currentFrame.id, 3);
+      expect(timeline.playheadPosition, Duration(seconds: 5));
+      expect(timeline.currentFrameStartTime, Duration(seconds: 5));
     });
 
     test('handles deleting current last frame', () {
       final timeline = TimelineModel(
-        frames: [
+        frameSeq: Sequence<FrameModel>([
           FrameModel(id: 1, size: _size, duration: Duration(seconds: 1)),
           FrameModel(id: 2, size: _size, duration: Duration(seconds: 2)),
-        ],
+        ]),
         vsync: TestVSync(),
       );
       timeline.stepForward();
@@ -178,11 +179,11 @@ void main() {
 
     test('handles inserting frame after current', () {
       final timeline = TimelineModel(
-        frames: [
+        frameSeq: Sequence<FrameModel>([
           FrameModel(id: 1, size: _size, duration: Duration(seconds: 1)),
           FrameModel(id: 2, size: _size, duration: Duration(seconds: 2)),
           FrameModel(id: 3, size: _size, duration: Duration(seconds: 3)),
-        ],
+        ]),
         vsync: TestVSync(),
       );
       timeline.jumpTo(Duration(milliseconds: 1500));
@@ -202,11 +203,11 @@ void main() {
 
     test('handles inserting frame before current', () {
       final timeline = TimelineModel(
-        frames: [
+        frameSeq: Sequence<FrameModel>([
           FrameModel(id: 1, size: _size, duration: Duration(seconds: 1)),
           FrameModel(id: 2, size: _size, duration: Duration(seconds: 2)),
           FrameModel(id: 3, size: _size, duration: Duration(seconds: 2)),
-        ],
+        ]),
         vsync: TestVSync(),
       );
       timeline.scrub(0.5);

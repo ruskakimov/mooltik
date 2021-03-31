@@ -87,7 +87,7 @@ class TimelineViewModel extends ChangeNotifier {
   int _selectedFrameIndex;
 
   Duration get _selectedFrameDuration =>
-      _timeline.frames[_selectedFrameIndex].duration;
+      _timeline.frameSeq[_selectedFrameIndex].duration;
 
   String get selectedFrameDurationLabel =>
       durationToLabel(_selectedFrameDuration);
@@ -133,9 +133,9 @@ class TimelineViewModel extends ChangeNotifier {
         0,
         FrameSliver(
           startX: slivers.first.startX -
-              widthFromDuration(_timeline.frames[i].duration),
+              widthFromDuration(_timeline.frameSeq[i].duration),
           endX: slivers.first.startX,
-          thumbnail: _timeline.frames[i].snapshot,
+          thumbnail: _timeline.frameSeq[i].snapshot,
           frameIndex: i,
         ),
       );
@@ -143,13 +143,13 @@ class TimelineViewModel extends ChangeNotifier {
 
     // Fill with slivers on right side.
     for (int i = _timeline.currentFrameIndex + 1;
-        i < _timeline.frames.length && slivers.last.endX < size.width;
+        i < _timeline.frameSeq.length && slivers.last.endX < size.width;
         i++) {
       slivers.add(FrameSliver(
         startX: slivers.last.endX,
-        endX:
-            slivers.last.endX + widthFromDuration(_timeline.frames[i].duration),
-        thumbnail: _timeline.frames[i].snapshot,
+        endX: slivers.last.endX +
+            widthFromDuration(_timeline.frameSeq[i].duration),
+        thumbnail: _timeline.frameSeq[i].snapshot,
         frameIndex: i,
       ));
     }
@@ -165,7 +165,7 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get canDeleteSelected => _timeline.frames.length > 1;
+  bool get canDeleteSelected => _timeline.frameSeq.length > 1;
 
   void deleteSelected() {
     if (_selectedFrameIndex == null) return;
@@ -193,7 +193,7 @@ class TimelineViewModel extends ChangeNotifier {
         _timeline.frameEndTimeAt(_selectedFrameIndex) - updatedTimestamp;
     final diff = newSelectedDuration - _selectedFrameDuration;
     final newPrevDuration =
-        _timeline.frames[_selectedFrameIndex - 1].duration - diff;
+        _timeline.frameSeq[_selectedFrameIndex - 1].duration - diff;
 
     if (newPrevDuration < FrameModel.singleFrameDuration) return;
 
