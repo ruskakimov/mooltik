@@ -41,6 +41,12 @@ class Sequence<T extends TimeSpan> {
 
   int get length => _spans.length;
 
+  Iterable<T> get iterable sync* {
+    for (int i = 0; i < _spans.length; i++) {
+      yield _spans[i];
+    }
+  }
+
   T get current => _spans[_currentIndex];
 
   int get currentIndex => _currentIndex;

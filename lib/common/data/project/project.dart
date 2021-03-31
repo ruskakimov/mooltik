@@ -146,18 +146,12 @@ class Project extends ChangeNotifier {
     }
   }
 
-  Iterable<FrameModel> get framesIterable sync* {
-    for (int i = 0; i < _frames.length; i++) {
-      yield _frames[i];
-    }
-  }
-
   Future<void> save() async {
     // Write project data.
     final data = ProjectSaveData(
       width: _frameSize.width,
       height: _frameSize.height,
-      frames: framesIterable
+      frames: _frames.iterable
           .map((f) => FrameSaveData(id: f.id, duration: f.duration))
           .toList(),
       sounds: _soundClips,
@@ -166,7 +160,7 @@ class Project extends ChangeNotifier {
 
     // Write images.
     await Future.wait(
-      framesIterable.where((frame) {
+      _frames.iterable.where((frame) {
         return frame.snapshot != null;
       }).map(
         (frame) => pngWrite(
@@ -198,7 +192,7 @@ class Project extends ChangeNotifier {
 
   Future<void> _deleteUnusedFrameImages() async {
     final Set<String> usedFrameImages =
-        framesIterable.map((frame) => _getFrameFilePath(frame.id)).toSet();
+        _frames.iterable.map((frame) => _getFrameFilePath(frame.id)).toSet();
 
     bool _isUnusedFrameImage(String path) =>
         p.extension(path) == '.png' &&
