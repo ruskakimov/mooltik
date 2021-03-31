@@ -28,16 +28,20 @@ class Sequence<T extends TimeSpan> {
   int get currentIndex => _currentIndex;
   int _currentIndex;
   set currentIndex(int index) {
-    if (index < 0 || index >= _spans.length) {
-      throw Exception(
-        'Index value $index is outside of 0-${_spans.length - 1} range.',
-      );
-    }
+    _validateIndex(index);
     while (_currentIndex > index && stepBackwardAvailable) {
       stepBackward();
     }
     while (_currentIndex < index && stepForwardAvailable) {
       stepForward();
+    }
+  }
+
+  void _validateIndex(int index) {
+    if (index < 0 || index >= _spans.length) {
+      throw Exception(
+        'Index value $index is outside of 0-${_spans.length - 1} range.',
+      );
     }
   }
 
@@ -81,5 +85,17 @@ class Sequence<T extends TimeSpan> {
   void stepForward() {
     if (!stepForwardAvailable) return;
     playhead = _currentSpanEnd;
+  }
+
+  Duration startTimeOf(int index) {
+    _validateIndex(index);
+    return _spans
+        .sublist(0, index)
+        .fold(Duration.zero, (duration, span) => duration + span.duration);
+  }
+
+  Duration endTimeOf(int index) {
+    _validateIndex(index);
+    return startTimeOf(index) + _spans[index].duration;
   }
 }
