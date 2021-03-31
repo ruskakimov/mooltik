@@ -10,6 +10,14 @@ class TestSpan extends TimeSpan {
 
 void main() {
   group('Sequence', () {
+    test('playhead starts at zero', () {
+      final seq = Sequence([
+        TestSpan(Duration(seconds: 1)),
+        TestSpan(Duration(seconds: 2)),
+      ]);
+      expect(seq.playhead, Duration.zero);
+    });
+
     test('handles one span', () {
       final seq = Sequence([TestSpan(Duration(milliseconds: 200))]);
       expect(seq.totalDuration, Duration(milliseconds: 200));

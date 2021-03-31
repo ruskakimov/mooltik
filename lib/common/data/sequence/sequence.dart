@@ -1,9 +1,15 @@
 import 'package:mooltik/common/data/sequence/time_span.dart';
 
-/// Manages a sequence of `TimeSpan` and offers fast derived data.
+/// A playable sequence of `TimeSpan`s.
+///
+/// Defines the relationship between a playhead and a list of `TimeSpan`s.
+///
+/// When playhead is right on the edge between two spans,
+/// latest time span takes precedence.
 class Sequence<T extends TimeSpan> {
   Sequence(List<T> spans)
       : _spans = spans.sublist(0),
+        _playhead = Duration.zero,
         _totalDuration = spans.fold(
           Duration.zero,
           (duration, span) => duration + span.duration,
@@ -14,6 +20,9 @@ class Sequence<T extends TimeSpan> {
   T operator [](int index) => _spans[index];
 
   int get length => _spans.length;
+
+  Duration get playhead => _playhead;
+  Duration _playhead;
 
   Duration get totalDuration => _totalDuration;
   Duration _totalDuration;
