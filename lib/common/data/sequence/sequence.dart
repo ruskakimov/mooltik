@@ -21,6 +21,24 @@ class Sequence<T extends TimeSpan> {
 
   T operator [](int index) => _spans[index];
 
+  void operator []=(int index, T span) {
+    _validateIndex(index);
+    if (span == null) {
+      throw Exception('Cannot replace span with `null`.');
+    }
+    final diff = -_spans[index].duration + span.duration;
+    _spans[index] = span;
+    _totalDuration += diff;
+
+    if (index < _currentIndex) {
+      _currentSpanStart += diff;
+      _playhead += diff;
+    } else if (index == _currentIndex && diff.isNegative) {
+      if (_playhead >= _totalDuration) _playhead = _totalDuration;
+      _syncIndexWithPlayhead();
+    }
+  }
+
   int get length => _spans.length;
 
   T get current => _spans[_currentIndex];
