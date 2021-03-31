@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
+import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/io/png.dart';
@@ -77,8 +78,8 @@ class Project extends ChangeNotifier {
 
   final File _dataFile;
 
-  List<FrameModel> get frames => _frames;
-  List<FrameModel> _frames = [];
+  Sequence<FrameModel> get frames => _frames;
+  Sequence<FrameModel> _frames;
 
   List<SoundClip> get soundClips => _soundClips;
   List<SoundClip> _soundClips = [];
@@ -93,7 +94,7 @@ class Project extends ChangeNotifier {
   /// Loads project files into memory.
   Future<void> open() async {
     // Check if already open.
-    if (_frames.isNotEmpty) {
+    if (_frames != null) {
       // Prevent freeing memory after closing and quickly opening the project again.
       _shouldClose = false;
       return;
@@ -107,15 +108,15 @@ class Project extends ChangeNotifier {
         _getSoundDirectoryPath(),
       );
       _frameSize = Size(data.width, data.height);
-      _frames = await Future.wait(
+      _frames = Sequence<FrameModel>(await Future.wait(
         data.frames.map((frameData) => _getFrame(frameData, frameSize)),
-      );
+      ));
       _soundClips =
           data.sounds.where((sound) => sound.file.existsSync()).toList();
     } else {
       // New project.
       _frameSize = const Size(1280, 720);
-      _frames = [FrameModel(size: frameSize)];
+      _frames = Sequence<FrameModel>([FrameModel(size: frameSize)]);
     }
 
     _startAutoSaveTimer();
@@ -130,7 +131,7 @@ class Project extends ChangeNotifier {
 
   /// Frees the memory of project files and stops auto-save.
   void _close() {
-    _frames.clear();
+    _frames = null;
     _soundClips.clear();
     _autoSaveTimer?.cancel();
   }
@@ -145,12 +146,18 @@ class Project extends ChangeNotifier {
     }
   }
 
+  Iterable<FrameModel> get framesIterable sync* {
+    for (int i = 0; i < _frames.length; i++) {
+      yield _frames[i];
+    }
+  }
+
   Future<void> save() async {
     // Write project data.
     final data = ProjectSaveData(
       width: _frameSize.width,
       height: _frameSize.height,
-      frames: _frames
+      frames: framesIterable
           .map((f) => FrameSaveData(id: f.id, duration: f.duration))
           .toList(),
       sounds: _soundClips,
@@ -159,7 +166,7 @@ class Project extends ChangeNotifier {
 
     // Write images.
     await Future.wait(
-      frames.where((frame) {
+      framesIterable.where((frame) {
         return frame.snapshot != null;
       }).map(
         (frame) => pngWrite(
@@ -171,7 +178,7 @@ class Project extends ChangeNotifier {
 
     // Write thumbnail.
     final image = await generateImage(
-      FramePainter(frame: frames.first),
+      FramePainter(frame: frames[0]),
       _frameSize.width.toInt(),
       _frameSize.height.toInt(),
     );
@@ -191,7 +198,7 @@ class Project extends ChangeNotifier {
 
   Future<void> _deleteUnusedFrameImages() async {
     final Set<String> usedFrameImages =
-        frames.map((frame) => _getFrameFilePath(frame.id)).toSet();
+        framesIterable.map((frame) => _getFrameFilePath(frame.id)).toSet();
 
     bool _isUnusedFrameImage(String path) =>
         p.extension(path) == '.png' &&
