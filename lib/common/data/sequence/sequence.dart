@@ -27,6 +27,19 @@ class Sequence<T extends TimeSpan> {
 
   int get currentIndex => _currentIndex;
   int _currentIndex;
+  set currentIndex(int index) {
+    if (index < 0 || index >= _spans.length) {
+      throw Exception(
+        'Index value $index is outside of 0-${_spans.length - 1} range.',
+      );
+    }
+    while (_currentIndex > index && stepBackwardAvailable) {
+      stepBackward();
+    }
+    while (_currentIndex < index && stepForwardAvailable) {
+      stepForward();
+    }
+  }
 
   Duration _currentSpanStart;
   Duration get _currentSpanEnd => _currentSpanStart + current.duration;
@@ -37,23 +50,36 @@ class Sequence<T extends TimeSpan> {
     if (value < Duration.zero || value > totalDuration) {
       throw Exception('Invalid playhead value.');
     }
-
     _playhead = value;
-    _syncCurrentSpanWithPlayhead();
+    _syncIndexWithPlayhead();
+  }
+
+  void _syncIndexWithPlayhead() {
+    while (_playhead < _currentSpanStart && stepBackwardAvailable) {
+      _currentIndex--;
+      _currentSpanStart -= current.duration;
+    }
+
+    while (_playhead >= _currentSpanEnd && stepForwardAvailable) {
+      _currentIndex++;
+      _currentSpanStart = _currentSpanEnd;
+    }
   }
 
   Duration get totalDuration => _totalDuration;
   Duration _totalDuration;
 
-  void _syncCurrentSpanWithPlayhead() {
-    while (_playhead < _currentSpanStart && _currentIndex > 0) {
-      _currentIndex--;
-      _currentSpanStart -= current.duration;
-    }
+  bool get stepBackwardAvailable => _currentIndex > 0;
 
-    while (_playhead >= _currentSpanEnd && _currentIndex < _spans.length - 1) {
-      _currentSpanStart = _currentSpanEnd;
-      _currentIndex++;
-    }
+  void stepBackward() {
+    if (!stepBackwardAvailable) return;
+    playhead = _currentSpanStart - _spans[_currentIndex - 1].duration;
+  }
+
+  bool get stepForwardAvailable => _currentIndex < _spans.length - 1;
+
+  void stepForward() {
+    if (!stepForwardAvailable) return;
+    playhead = _currentSpanEnd;
   }
 }

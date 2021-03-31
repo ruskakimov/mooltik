@@ -82,5 +82,14 @@ void main() {
       seq.playhead = Duration(milliseconds: 123);
       expect(seq.currentIndex, 1);
     });
+
+    test('setting index jumps to that span\'s start time', () {
+      final seq = Sequence([
+        TestSpan(Duration(milliseconds: 123)),
+        TestSpan(Duration(milliseconds: 245)),
+      ]);
+      seq.currentIndex = 1;
+      expect(seq.playhead, Duration(milliseconds: 123));
+    });
   });
 }
