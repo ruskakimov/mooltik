@@ -73,5 +73,14 @@ void main() {
       seq.playhead = Duration(seconds: 3, milliseconds: 100);
       expect(seq.currentIndex, 2);
     });
+
+    test('latest time span takes precedence when playhead is between', () {
+      final seq = Sequence([
+        TestSpan(Duration(milliseconds: 123)),
+        TestSpan(Duration(milliseconds: 245)),
+      ]);
+      seq.playhead = Duration(milliseconds: 123);
+      expect(seq.currentIndex, 1);
+    });
   });
 }
