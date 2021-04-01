@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/editing/data/convert.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/time_label.dart';
@@ -189,7 +189,7 @@ class TimelineViewModel extends ChangeNotifier {
     if (_shouldSnapToPlayhead(updatedTimestamp)) {
       updatedTimestamp = _timeline.playheadPosition;
     }
-    updatedTimestamp = FrameModel.roundDuration(updatedTimestamp);
+    updatedTimestamp = TimeSpan.roundDuration(updatedTimestamp);
 
     final newSelectedDuration =
         _timeline.frameSeq.startTimeOf(_selectedFrameIndex) - updatedTimestamp;
@@ -197,7 +197,7 @@ class TimelineViewModel extends ChangeNotifier {
     final newPrevDuration =
         _timeline.frameSeq[_selectedFrameIndex - 1].duration - diff;
 
-    if (newPrevDuration < FrameModel.singleFrameDuration) return;
+    if (newPrevDuration < TimeSpan.singleFrameDuration) return;
 
     _timeline.changeFrameDurationAt(
       _selectedFrameIndex - 1,
@@ -212,7 +212,7 @@ class TimelineViewModel extends ChangeNotifier {
     if (_shouldSnapToPlayhead(updatedTimestamp)) {
       updatedTimestamp = _timeline.playheadPosition;
     }
-    updatedTimestamp = FrameModel.roundDuration(updatedTimestamp);
+    updatedTimestamp = TimeSpan.roundDuration(updatedTimestamp);
 
     final newDuration =
         updatedTimestamp - _timeline.frameSeq.startTimeOf(_selectedFrameIndex);

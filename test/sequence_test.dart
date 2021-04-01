@@ -3,9 +3,7 @@ import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 
 class TestSpan extends TimeSpan {
-  TestSpan(this.duration);
-
-  final Duration duration;
+  TestSpan(Duration duration) : super(duration);
 }
 
 void main() {
