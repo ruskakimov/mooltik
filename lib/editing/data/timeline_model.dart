@@ -49,6 +49,9 @@ class TimelineModel extends ChangeNotifier {
 
   /// Instantly scrolls the timeline by a [fraction] of total duration.
   void scrub(double fraction) {
+    if (isPlaying) {
+      _playheadController.stop();
+    }
     // TODO: Switch to passing duration
     final diff = totalDuration * fraction;
     frameSeq.playhead += diff;
