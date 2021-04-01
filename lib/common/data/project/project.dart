@@ -61,10 +61,16 @@ class Project extends ChangeNotifier {
   }
 
   static bool validProjectDirectory(Directory directory) {
-    final dirName = p.basename(directory.path);
-    final creationEpoch = parseCreationEpochFromDirectoryName(dirName);
-    final binned = parseBinnedFromDirectoryName(dirName);
-    return dirName == directoryName(creationEpoch, binned);
+    bool valid;
+    try {
+      final dirName = p.basename(directory.path);
+      final creationEpoch = parseCreationEpochFromDirectoryName(dirName);
+      final binned = parseBinnedFromDirectoryName(dirName);
+      valid = dirName == directoryName(creationEpoch, binned);
+    } catch (e) {
+      valid = false;
+    }
+    return valid;
   }
 
   final Directory directory;
