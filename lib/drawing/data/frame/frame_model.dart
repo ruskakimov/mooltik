@@ -11,7 +11,7 @@ class FrameModel extends ChangeNotifier implements TimeSpan {
     ui.Image initialSnapshot,
   })  : id = id ?? DateTime.now().millisecondsSinceEpoch,
         _size = size,
-        _duration = duration,
+        _duration = roundDuration(duration),
         _snapshot = initialSnapshot;
 
   /// Output is set to 50fps, therefore 1 frame = 20 ms.
