@@ -94,8 +94,6 @@ class Project extends ChangeNotifier {
 
   bool _shouldClose;
 
-  Timer _autoSaveTimer;
-
   /// Loads project files into memory.
   Future<void> open() async {
     // Check if already open.
@@ -126,22 +124,12 @@ class Project extends ChangeNotifier {
       _frameSize = const Size(1280, 720);
       _frames = Sequence<FrameModel>([await createNewFrame()]);
     }
-
-    _startAutoSaveTimer();
-  }
-
-  void _startAutoSaveTimer() {
-    _autoSaveTimer = Timer.periodic(
-      Duration(minutes: 1),
-      (_) => save(),
-    );
   }
 
   /// Frees the memory of project files and stops auto-save.
   void _close() {
     _frames = null;
     _soundClips.clear();
-    _autoSaveTimer?.cancel();
   }
 
   Future<void> saveAndClose() async {
