@@ -192,7 +192,7 @@ class TimelineViewModel extends ChangeNotifier {
     updatedTimestamp = TimeSpan.roundDuration(updatedTimestamp);
 
     final newSelectedDuration =
-        _timeline.frameSeq.startTimeOf(_selectedFrameIndex) - updatedTimestamp;
+        _timeline.frameSeq.endTimeOf(_selectedFrameIndex) - updatedTimestamp;
     final diff = newSelectedDuration - _selectedFrameDuration;
     final newPrevDuration =
         _timeline.frameSeq[_selectedFrameIndex - 1].duration - diff;
