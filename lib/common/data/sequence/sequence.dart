@@ -34,8 +34,8 @@ class Sequence<T extends TimeSpan> {
 
     if (index < _currentIndex) {
       _currentSpanStart += diff;
-      _syncIndexWithPlayhead();
     }
+    _syncIndexWithPlayhead();
   }
 
   int get length => _spans.length;
