@@ -99,7 +99,6 @@ class TimelineModel extends ChangeNotifier {
       frameSeq.currentIndex + 1,
       FrameModel(size: frameSeq[0].size),
     );
-    notifyListeners();
   }
 
   void insertFrameAt(int frameIndex, FrameModel frame) {
