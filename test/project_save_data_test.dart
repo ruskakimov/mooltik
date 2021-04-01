@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
+import 'package:mooltik/drawing/data/frame/frame_model.dart';
 
 void main() {
   group('ProjectSaveData should', () {
@@ -12,8 +14,9 @@ void main() {
         width: 200,
         height: 100,
         frames: [
-          FrameSaveData(
+          FrameModel(
             id: 0,
+            size: Size(200, 200),
             duration: Duration(seconds: 3),
           ),
         ],

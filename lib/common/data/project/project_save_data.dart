@@ -1,5 +1,6 @@
-import 'package:mooltik/common/data/parse_duration.dart';
+import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
+import 'package:mooltik/drawing/data/frame/frame_model.dart';
 
 class ProjectSaveData {
   ProjectSaveData({
@@ -13,7 +14,10 @@ class ProjectSaveData {
       : width = json['width'],
         height = json['height'],
         frames = (json['frames'] as List<dynamic>)
-            .map((d) => FrameSaveData.fromJson(d))
+            .map((d) => FrameModel.fromJson(
+                  d,
+                  Size(json['width'], json['height']),
+                ))
             .toList(),
         sounds = json['sounds'] != null
             ? (json['sounds'] as List<dynamic>)
@@ -30,23 +34,6 @@ class ProjectSaveData {
 
   final double width;
   final double height;
-  final List<FrameSaveData> frames;
+  final List<FrameModel> frames;
   final List<SoundClip> sounds;
-}
-
-class FrameSaveData {
-  const FrameSaveData({this.id, this.duration});
-
-  FrameSaveData.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        duration = parseDuration(json['duration']);
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'duration': duration.toString(),
-      };
-
-  // TODO: Save file path instead. This will allow changing project folder structure.
-  final int id;
-  final Duration duration;
 }

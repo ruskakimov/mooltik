@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/parse_duration.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 
 class FrameModel extends TimeSpan {
@@ -29,4 +30,16 @@ class FrameModel extends TimeSpan {
     _snapshot = snapshot;
     notifyListeners();
   }
+
+  factory FrameModel.fromJson(Map<String, dynamic> json, Size frameSize) =>
+      FrameModel(
+        id: json['id'],
+        size: frameSize,
+        duration: parseDuration(json['duration']),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'duration': duration.toString(),
+      };
 }

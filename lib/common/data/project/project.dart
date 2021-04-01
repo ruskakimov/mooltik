@@ -115,7 +115,7 @@ class Project extends ChangeNotifier {
       );
       _frameSize = Size(data.width, data.height);
       _frames = Sequence<FrameModel>(await Future.wait(
-        data.frames.map((frameData) => _getFrame(frameData, frameSize)),
+        data.frames.map((frame) => _loadImage(frame, frameSize)),
       ));
       _soundClips =
           data.sounds.where((sound) => sound.file.existsSync()).toList();
@@ -157,9 +157,7 @@ class Project extends ChangeNotifier {
     final data = ProjectSaveData(
       width: _frameSize.width,
       height: _frameSize.height,
-      frames: _frames.iterable
-          .map((f) => FrameSaveData(id: f.id, duration: f.duration))
-          .toList(),
+      frames: _frames.iterable.toList(),
       sounds: _soundClips,
     );
     await _dataFile.writeAsString(jsonEncode(data));
@@ -221,8 +219,8 @@ class Project extends ChangeNotifier {
     await deleteFilesWhere(soundDir, _isUnusedSoundFile);
   }
 
-  Future<FrameModel> _getFrame(FrameSaveData frameData, Size size) async {
-    final file = _getFrameFile(frameData.id);
+  Future<FrameModel> _loadImage(FrameModel frame, Size size) async {
+    final file = _getFrameFile(frame.id);
     ui.Image image;
 
     try {
@@ -232,8 +230,8 @@ class Project extends ChangeNotifier {
     }
 
     return FrameModel(
-      id: frameData.id,
-      duration: frameData.duration,
+      id: frame.id,
+      duration: frame.duration,
       size: size,
       initialSnapshot: image,
     );
