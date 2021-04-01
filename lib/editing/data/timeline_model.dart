@@ -5,7 +5,8 @@ import 'package:mooltik/drawing/data/frame/frame_model.dart';
 class TimelineModel extends ChangeNotifier {
   TimelineModel({
     @required this.frameSeq,
-    TickerProvider vsync,
+    @required TickerProvider vsync,
+    @required this.createNewFrame,
   })  : assert(frameSeq != null && frameSeq.length > 0),
         _playheadController = AnimationController(
           vsync: vsync,
@@ -22,6 +23,7 @@ class TimelineModel extends ChangeNotifier {
 
   final Sequence<FrameModel> frameSeq;
   final AnimationController _playheadController;
+  final Future<FrameModel> Function() createNewFrame;
 
   Duration get playheadPosition => frameSeq.playhead;
 
@@ -92,10 +94,10 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addFrameAfterCurrent() {
+  Future<void> addFrameAfterCurrent() async {
     insertFrameAt(
       frameSeq.currentIndex + 1,
-      FrameModel(size: frameSeq[0].size),
+      await createNewFrame(),
     );
   }
 
@@ -109,13 +111,11 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void duplicateFrameAt(int frameIndex) {
-    final newFrame = FrameModel(
-      size: frameSeq[0].size,
-      initialSnapshot: frameSeq[frameIndex].snapshot,
-      duration: frameSeq[frameIndex].duration,
-    );
-    insertFrameAt(frameIndex + 1, newFrame);
+  Future<void> duplicateFrameAt(int frameIndex) async {
+    final duplicate = await createNewFrame();
+    duplicate.snapshot = frameSeq[frameIndex].snapshot;
+    duplicate.duration = frameSeq[frameIndex].duration;
+    insertFrameAt(frameIndex + 1, duplicate);
   }
 
   void changeFrameDurationAt(int frameIndex, Duration newDuration) {

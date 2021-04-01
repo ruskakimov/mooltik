@@ -21,6 +21,7 @@ class _EditingPageState extends State<EditingPage>
       create: (context) => TimelineModel(
         frameSeq: context.read<Project>().frames,
         vsync: this,
+        createNewFrame: context.read<Project>().createNewFrame,
       ),
       child: WillPopScope(
         // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
