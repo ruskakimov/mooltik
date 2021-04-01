@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:mooltik/common/data/sequence/time_span.dart';
 
 /// A sequence of `TimeSpan`s with a playhead.
@@ -77,10 +79,12 @@ class Sequence<T extends TimeSpan> {
   Duration get playhead => _playhead;
   Duration _playhead;
   set playhead(Duration value) {
-    if (value < Duration.zero || value > totalDuration) {
-      throw Exception('Invalid playhead value.');
-    }
-    _playhead = value;
+    _playhead = Duration(
+      milliseconds: min(
+        totalDuration.inMilliseconds,
+        max(0, value.inMilliseconds),
+      ),
+    );
     _syncIndexWithPlayhead();
   }
 
