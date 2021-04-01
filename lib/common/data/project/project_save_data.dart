@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 
@@ -10,14 +9,14 @@ class ProjectSaveData {
     this.sounds,
   });
 
-  ProjectSaveData.fromJson(Map<String, dynamic> json, String soundDirPath)
-      : width = json['width'],
+  ProjectSaveData.fromJson(
+    Map<String, dynamic> json,
+    String frameDirPath,
+    String soundDirPath,
+  )   : width = json['width'],
         height = json['height'],
         frames = (json['frames'] as List<dynamic>)
-            .map((d) => FrameModel.fromJson(
-                  d,
-                  Size(json['width'], json['height']),
-                ))
+            .map((d) => FrameModel.fromJson(d, frameDirPath))
             .toList(),
         sounds = json['sounds'] != null
             ? (json['sounds'] as List<dynamic>)
