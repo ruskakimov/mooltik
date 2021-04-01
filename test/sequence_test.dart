@@ -159,8 +159,8 @@ void main() {
       expect(seq.currentIndex, 1);
       expect(seq.totalDuration, Duration(milliseconds: 1000));
       seq[0] = TestSpan(Duration(milliseconds: 10));
-      expect(seq.currentIndex, 1);
-      expect(seq.playhead, Duration(milliseconds: 60));
+      expect(seq.currentIndex, 2);
+      expect(seq.playhead, Duration(milliseconds: 800));
       expect(seq.totalDuration, Duration(milliseconds: 260));
     });
 
@@ -174,8 +174,8 @@ void main() {
       expect(seq.currentIndex, 1);
       expect(seq.totalDuration, Duration(milliseconds: 1000));
       seq[0] = TestSpan(Duration(seconds: 5));
-      expect(seq.currentIndex, 1);
-      expect(seq.playhead, Duration(seconds: 5, milliseconds: 50));
+      expect(seq.currentIndex, 0);
+      expect(seq.playhead, Duration(milliseconds: 800));
       expect(seq.totalDuration, Duration(seconds: 5, milliseconds: 250));
     });
   });
