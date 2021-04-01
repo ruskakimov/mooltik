@@ -56,7 +56,7 @@ class EditingActionbar extends StatelessWidget {
         context: context,
         builder: (BuildContext context) => ChangeNotifierProvider(
           create: (context) => ExporterModel(
-            frames: project.frames.iterable,
+            frames: project.frames.iterable.toList(),
             soundClips: project.soundClips,
             tempDir: tempDir,
           ),
