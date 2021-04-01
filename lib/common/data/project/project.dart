@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
@@ -111,18 +110,21 @@ class Project extends ChangeNotifier {
       final contents = await _dataFile.readAsString();
       final data = ProjectSaveData.fromJson(
         jsonDecode(contents),
+        directory.path,
         _getSoundDirectoryPath(),
       );
       _frameSize = Size(data.width, data.height);
-      _frames = Sequence<FrameModel>(await Future.wait(
-        data.frames.map((frame) => _loadImage(frame, frameSize)),
-      ));
+      _frames = Sequence<FrameModel>(data.frames);
+
+      // TODO: Remove later
+      await Future.wait(_frames.iterable.map((frame) => frame.loadSnapshot()));
+
       _soundClips =
           data.sounds.where((sound) => sound.file.existsSync()).toList();
     } else {
       // New project.
       _frameSize = const Size(1280, 720);
-      _frames = Sequence<FrameModel>([FrameModel(size: frameSize)]);
+      _frames = Sequence<FrameModel>([await createNewFrame()]);
     }
 
     _startAutoSaveTimer();
@@ -163,16 +165,7 @@ class Project extends ChangeNotifier {
     await _dataFile.writeAsString(jsonEncode(data));
 
     // Write images.
-    await Future.wait(
-      _frames.iterable.where((frame) {
-        return frame.snapshot != null;
-      }).map(
-        (frame) => pngWrite(
-          _getFrameFile(frame.id),
-          frame.snapshot,
-        ),
-      ),
-    );
+    await Future.wait(_frames.iterable.map((frame) => frame.saveSnapshot()));
 
     // Write thumbnail.
     final image = await generateImage(
@@ -196,7 +189,7 @@ class Project extends ChangeNotifier {
 
   Future<void> _deleteUnusedFrameImages() async {
     final Set<String> usedFrameImages =
-        _frames.iterable.map((frame) => _getFrameFilePath(frame.id)).toSet();
+        _frames.iterable.map((frame) => frame.file.path).toSet();
 
     bool _isUnusedFrameImage(String path) =>
         p.extension(path) == '.png' &&
@@ -219,22 +212,15 @@ class Project extends ChangeNotifier {
     await deleteFilesWhere(soundDir, _isUnusedSoundFile);
   }
 
-  Future<FrameModel> _loadImage(FrameModel frame, Size size) async {
-    final file = _getFrameFile(frame.id);
-    ui.Image image;
-
-    try {
-      image = await pngRead(file);
-    } catch (e) {
-      // Failed to read.
-    }
-
-    return FrameModel(
-      id: frame.id,
-      duration: frame.duration,
-      size: size,
-      initialSnapshot: image,
+  Future<FrameModel> createNewFrame() async {
+    final image = await generateImage(
+      null,
+      _frameSize.width.toInt(),
+      _frameSize.height.toInt(),
     );
+    final file = _getFrameFile(DateTime.now().millisecondsSinceEpoch);
+    await pngWrite(file, image);
+    return FrameModel(file: file);
   }
 
   File _getFrameFile(int id) => File(_getFrameFilePath(id));
