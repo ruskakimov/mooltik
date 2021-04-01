@@ -1,28 +1,25 @@
+import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/parse_duration.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
+import 'package:path/path.dart' as p;
 
 class FrameModel extends TimeSpan {
   FrameModel({
-    int id,
-    @required Size size,
+    @required this.file,
     Duration duration = const Duration(seconds: 1),
-    ui.Image initialSnapshot,
-  })  : id = id ?? DateTime.now().millisecondsSinceEpoch,
-        _size = size,
-        _snapshot = initialSnapshot,
-        super(duration);
+  }) : super(duration);
 
-  final int id;
+  final File file;
 
-  Size get size => _size;
-  final Size _size;
+  Size get size => Size(width.toDouble(), height.toDouble());
 
-  double get width => _size.width;
+  int get width => _snapshot?.width;
 
-  double get height => _size.height;
+  int get height => _snapshot?.height;
 
   ui.Image get snapshot => _snapshot;
   ui.Image _snapshot;
@@ -31,15 +28,22 @@ class FrameModel extends TimeSpan {
     notifyListeners();
   }
 
-  factory FrameModel.fromJson(Map<String, dynamic> json, Size frameSize) =>
+  Future<void> loadSnapshot() async {
+    _snapshot = await pngRead(file);
+  }
+
+  Future<void> saveSnapshot() async {
+    await pngWrite(file, _snapshot);
+  }
+
+  factory FrameModel.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       FrameModel(
-        id: json['id'],
-        size: frameSize,
+        file: File(p.join(frameDirPath, json['file_name'])),
         duration: parseDuration(json['duration']),
       );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
+        'file_name': p.basename(file.path),
         'duration': duration.toString(),
       };
 }
