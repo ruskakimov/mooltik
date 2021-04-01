@@ -23,7 +23,7 @@ class DrawingPage extends StatelessWidget {
           update: (context, timeline, model) =>
               model..updateSelectedIndex(timeline.currentFrameIndex),
           create: (context) => OnionModel(
-            frames: context.read<TimelineModel>().frameSeq.iterable,
+            frames: context.read<TimelineModel>().frameSeq.iterable.toList(),
             selectedIndex: context.read<TimelineModel>().currentFrameIndex,
             sharedPreferences: context.read<SharedPreferences>(),
           ),
