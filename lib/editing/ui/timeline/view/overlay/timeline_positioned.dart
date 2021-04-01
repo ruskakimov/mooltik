@@ -13,6 +13,7 @@ class TimelinePositioned extends StatefulWidget {
     @required this.height,
     @required this.child,
     this.onDragUpdate,
+    this.onDragEnd,
   }) : super(key: key);
 
   /// Timeline timestamp. Determines center of horizontal position.
@@ -30,6 +31,7 @@ class TimelinePositioned extends StatefulWidget {
   final Widget child;
 
   final TimelinePositionedDragUpdate onDragUpdate;
+  final GestureDragEndCallback onDragEnd;
 
   @override
   _TimelinePositionedState createState() => _TimelinePositionedState();
@@ -66,6 +68,7 @@ class _TimelinePositionedState extends State<TimelinePositioned> {
                 widget.onDragUpdate(updatedTimestamp);
               }
             : null,
+        onHorizontalDragEnd: widget.onDragEnd,
         child: widget.child,
       ),
     );

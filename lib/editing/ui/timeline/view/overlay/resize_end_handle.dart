@@ -18,6 +18,10 @@ class ResizeEndHandle extends StatelessWidget {
       height: resizeHandleHeight,
       onDragUpdate: (Duration updatedTime) =>
           timelineView.onEndTimeHandleDragUpdate(updatedTime),
+      onDragEnd: (_) {
+        // Keep playhead within boundaries.
+        timeline.frameSeq.playhead = timeline.frameSeq.playhead;
+      },
       child: ResizeHandle(),
     );
   }
