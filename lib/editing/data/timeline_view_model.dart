@@ -41,7 +41,9 @@ class TimelineViewModel extends ChangeNotifier {
     _setScale(_prevMsPerPx / (details.scale + _scaleOffset));
 
     final diff = (details.localFocalPoint - _prevFocalPoint);
-    _timeline.scrub(-diff.dx / timelineWidth);
+    final timeDiff = pxToDuration(-diff.dx, _msPerPx);
+    _timeline.scrub(timeDiff);
+
     closeFrameMenu();
 
     _prevFocalPoint = details.localFocalPoint;

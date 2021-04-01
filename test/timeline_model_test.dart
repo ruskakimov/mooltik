@@ -27,9 +27,9 @@ void main() {
         ]),
         vsync: TestVSync(),
       );
-      timeline.scrub(0.5);
+      timeline.scrub(Duration(seconds: 2));
       expect(timeline.currentFrame.id, 2);
-      timeline.scrub(-0.01);
+      timeline.scrub(Duration(milliseconds: -1));
       expect(timeline.currentFrame.id, 1);
     });
 
@@ -42,7 +42,7 @@ void main() {
         ]),
         vsync: TestVSync(),
       );
-      timeline.scrub(0.25);
+      timeline.scrub(Duration(milliseconds: 250));
       expect(timeline.playheadPosition, Duration(milliseconds: 250));
       timeline.changeFrameDurationAt(0, Duration(milliseconds: 900));
       expect(timeline.playheadPosition, Duration(milliseconds: 250));
@@ -58,7 +58,7 @@ void main() {
         ]),
         vsync: TestVSync(),
       );
-      timeline.scrub(0.25);
+      timeline.scrub(Duration(milliseconds: 250));
       expect(timeline.playheadPosition, Duration(milliseconds: 250));
       timeline.changeFrameDurationAt(0, Duration(milliseconds: 200));
       expect(timeline.playheadPosition, Duration(milliseconds: 250));
@@ -145,7 +145,7 @@ void main() {
         ]),
         vsync: TestVSync(),
       );
-      timeline.scrub(0.8);
+      timeline.scrub(Duration(seconds: 272));
       expect(timeline.totalDuration, Duration(seconds: 340));
       expect(timeline.currentFrame.id, 2);
       expect(timeline.playheadPosition, Duration(seconds: 272));
@@ -210,7 +210,7 @@ void main() {
         ]),
         vsync: TestVSync(),
       );
-      timeline.scrub(0.5);
+      timeline.scrub(Duration(milliseconds: 2500));
       expect(timeline.totalDuration, Duration(seconds: 5));
       expect(timeline.currentFrame.id, 2);
       expect(timeline.playheadPosition, Duration(milliseconds: 2500));

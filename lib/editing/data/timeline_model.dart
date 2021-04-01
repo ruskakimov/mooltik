@@ -49,13 +49,11 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Instantly scrolls the timeline by a [fraction] of total duration.
-  void scrub(double fraction) {
+  /// Moves playhead by [diff].
+  void scrub(Duration diff) {
     if (isPlaying) {
       _playheadController.stop();
     }
-    // TODO: Switch to passing duration
-    final diff = totalDuration * fraction;
     frameSeq.playhead += diff;
     notifyListeners();
   }
