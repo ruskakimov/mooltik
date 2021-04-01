@@ -40,11 +40,13 @@ class TimelineModel extends ChangeNotifier {
   /// Jumps to a new playhead position.
   void jumpTo(Duration playheadPosition) {
     frameSeq.playhead = playheadPosition;
+    notifyListeners();
   }
 
   /// Jumps to the start of the specified frame.
   void jumpToFrameStart(int frameIndex) {
     frameSeq.currentIndex = frameIndex;
+    notifyListeners();
   }
 
   /// Instantly scrolls the timeline by a [fraction] of total duration.
@@ -55,6 +57,7 @@ class TimelineModel extends ChangeNotifier {
     // TODO: Switch to passing duration
     final diff = totalDuration * fraction;
     frameSeq.playhead += diff;
+    notifyListeners();
   }
 
   /// Reset playhead to the beginning.
