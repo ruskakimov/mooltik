@@ -34,7 +34,7 @@ class Sequence<T extends TimeSpan> {
 
     if (index < _currentIndex) {
       _currentSpanStart += diff;
-      _playhead += diff;
+      _syncIndexWithPlayhead();
     } else if (index == _currentIndex && diff.isNegative) {
       if (_playhead >= _totalDuration) _playhead = _totalDuration;
       _syncIndexWithPlayhead();
