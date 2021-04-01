@@ -130,7 +130,12 @@ class Sequence<T extends TimeSpan> {
   }
 
   void insert(int index, T span) {
-    _validateIndex(index);
+    if (index < 0 || index > _spans.length) {
+      throw Exception(
+        'Index value $index is outside of 0-${_spans.length} range.',
+      );
+    }
+
     _spans.insert(index, span);
 
     _totalDuration += span.duration;
