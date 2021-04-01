@@ -23,12 +23,6 @@ class SoundClip {
   Duration get duration => _duration;
   Duration _duration;
 
-  SoundClip copyWith({Duration duration}) => SoundClip(
-        file: file,
-        startTime: startTime,
-        duration: duration ?? this.duration,
-      );
-
   SoundClip.fromJson(Map<String, dynamic> json, String soundDirPath)
       : file = File(p.join(soundDirPath, json['file_name'])),
         _startTime = parseDuration(json['start_time']),
