@@ -92,14 +92,8 @@ class ExporterModel extends ChangeNotifier {
   }
 
   Future<Slide> _slideFromFrame(FrameModel frame) async {
-    final image = await generateImage(
-      FramePainter(frame: frame),
-      frame.width.toInt(),
-      frame.height.toInt(),
-    );
-    final pngFile = _tempFile('${frame.id}.png');
-    await pngWrite(pngFile, image);
-    return Slide(pngFile, frame.duration);
+    await frame.saveSnapshot();
+    return Slide(frame.file, frame.duration);
   }
 
   File _tempFile(String fileName) => File(p.join(tempDir.path, fileName));

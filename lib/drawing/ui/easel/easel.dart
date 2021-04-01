@@ -48,15 +48,15 @@ class _EaselState extends State<Easel> {
                     fit: StackFit.expand,
                     children: [
                       Container(
-                        width: frame.width,
-                        height: frame.height,
+                        width: frame.size.width,
+                        height: frame.size.height,
                         color: Colors.white,
                       ),
                       if (onion.frameBefore != null)
                         Opacity(
                           opacity: 0.2,
                           child: CustomPaint(
-                            size: Size(frame.width, frame.height),
+                            size: frame.size,
                             foregroundPainter: FramePainter(
                               frame: onion.frameBefore,
                               background: Colors.transparent,
@@ -71,7 +71,7 @@ class _EaselState extends State<Easel> {
                         Opacity(
                           opacity: 0.2,
                           child: CustomPaint(
-                            size: Size(frame.width, frame.height),
+                            size: frame.size,
                             foregroundPainter: FramePainter(
                               frame: onion.frameAfter,
                               background: Colors.transparent,
@@ -83,7 +83,7 @@ class _EaselState extends State<Easel> {
                           ),
                         ),
                       CustomPaint(
-                        size: Size(frame.width, frame.height),
+                        size: frame.size,
                         foregroundPainter: FramePainter(
                           frame: frame,
                           strokes: easel.unrasterizedStrokes,

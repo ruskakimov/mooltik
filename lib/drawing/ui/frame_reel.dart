@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/editing/ui/preview/frame_thumbnail.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
@@ -108,10 +108,10 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
           itemBuilder: (context, index) {
             if (index == timeline.frameSeq.length) {
               return GestureDetector(
-                onTap: () {
+                onTap: () async {
                   timeline.insertFrameAt(
                     timeline.frameSeq.length,
-                    FrameModel(size: timeline.frameSeq[0].size),
+                    await context.read<Project>().createNewFrame(),
                   );
                   scrollTo(timeline.frameSeq.length - 1);
                 },
