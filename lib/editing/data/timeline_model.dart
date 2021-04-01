@@ -123,6 +123,7 @@ class TimelineModel extends ChangeNotifier {
       file: frameSeq[frameIndex].file,
       duration: newDuration,
     );
+    newFrame.snapshot = frameSeq[frameIndex].snapshot;
     frameSeq[frameIndex] = newFrame;
     notifyListeners();
   }
