@@ -12,7 +12,7 @@ class ResizeStartHandle extends StatelessWidget {
     final timeline = context.watch<TimelineModel>();
 
     return TimelinePositioned(
-      timestamp: timeline.frameStartTimeAt(timelineView.selectedFrameIndex),
+      timestamp: timeline.frameSeq.startTimeOf(timelineView.selectedFrameIndex),
       y: timelineView.frameSliverMid,
       width: resizeHandleWidth,
       height: resizeHandleHeight,

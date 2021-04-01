@@ -190,7 +190,7 @@ class TimelineViewModel extends ChangeNotifier {
     updatedTimestamp = FrameModel.roundDuration(updatedTimestamp);
 
     final newSelectedDuration =
-        _timeline.frameEndTimeAt(_selectedFrameIndex) - updatedTimestamp;
+        _timeline.frameSeq.startTimeOf(_selectedFrameIndex) - updatedTimestamp;
     final diff = newSelectedDuration - _selectedFrameDuration;
     final newPrevDuration =
         _timeline.frameSeq[_selectedFrameIndex - 1].duration - diff;
@@ -213,7 +213,7 @@ class TimelineViewModel extends ChangeNotifier {
     updatedTimestamp = FrameModel.roundDuration(updatedTimestamp);
 
     final newDuration =
-        updatedTimestamp - _timeline.frameStartTimeAt(_selectedFrameIndex);
+        updatedTimestamp - _timeline.frameSeq.startTimeOf(_selectedFrameIndex);
     _timeline.changeFrameDurationAt(_selectedFrameIndex, newDuration);
     notifyListeners();
   }

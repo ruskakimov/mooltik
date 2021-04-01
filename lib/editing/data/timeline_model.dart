@@ -130,8 +130,4 @@ class TimelineModel extends ChangeNotifier {
     frameSeq[frameIndex] = newFrame;
     notifyListeners();
   }
-
-  Duration frameStartTimeAt(int frameIndex) => frameSeq.startTimeOf(frameIndex);
-
-  Duration frameEndTimeAt(int frameIndex) => frameSeq.endTimeOf(frameIndex);
 }
