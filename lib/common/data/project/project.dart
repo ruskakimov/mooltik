@@ -220,7 +220,7 @@ class Project extends ChangeNotifier {
     );
     final file = _getFrameFile(DateTime.now().millisecondsSinceEpoch);
     await pngWrite(file, image);
-    return FrameModel(file: file);
+    return FrameModel(file: file)..snapshot = image;
   }
 
   File _getFrameFile(int id) => File(_getFrameFilePath(id));
