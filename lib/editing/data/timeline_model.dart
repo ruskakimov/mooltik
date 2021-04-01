@@ -120,9 +120,7 @@ class TimelineModel extends ChangeNotifier {
 
   void changeFrameDurationAt(int frameIndex, Duration newDuration) {
     final newFrame = FrameModel(
-      id: frameSeq[frameIndex].id,
-      size: frameSeq[frameIndex].size,
-      initialSnapshot: frameSeq[frameIndex].snapshot,
+      file: frameSeq[frameIndex].file,
       duration: newDuration,
     );
     frameSeq[frameIndex] = newFrame;
