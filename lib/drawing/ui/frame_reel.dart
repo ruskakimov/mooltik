@@ -109,10 +109,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
             if (index == timeline.frameSeq.length) {
               return GestureDetector(
                 onTap: () async {
-                  timeline.insertFrameAt(
-                    timeline.frameSeq.length,
-                    await context.read<Project>().createNewFrame(),
-                  );
+                  await timeline.addEmptyFrameAtEnd();
                   scrollTo(timeline.frameSeq.length - 1);
                 },
                 child: _FrameReelItem(
