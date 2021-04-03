@@ -94,7 +94,7 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addFrameAfterCurrent() async {
+  Future<void> addEmptyFrameAfterCurrent() async {
     insertFrameAt(
       frameSeq.currentIndex + 1,
       await createNewFrame(),

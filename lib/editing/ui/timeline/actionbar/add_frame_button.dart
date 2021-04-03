@@ -10,7 +10,7 @@ class AddFrameButton extends StatelessWidget {
     final timeline = context.watch<TimelineModel>();
     return AppIconButton(
       icon: FontAwesomeIcons.plus,
-      onTap: timeline.isPlaying ? null : timeline.addFrameAfterCurrent,
+      onTap: timeline.isPlaying ? null : timeline.addEmptyFrameAfterCurrent,
     );
   }
 }
