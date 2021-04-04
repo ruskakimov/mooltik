@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-/// Manages a single debounce task.
+/// Manages a single debounce timer.
 class Debouncer {
   Debouncer(this.timeout);
 
