@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/debouncer.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
@@ -10,6 +11,9 @@ import 'package:mooltik/drawing/ui/frame_painter.dart';
 
 /// Maximum number of consecutive undos.
 const int maxUndos = 50;
+
+/// No changes for this time period would trigger write to disk.
+const Duration diskWriteTimeout = Duration(seconds: 2);
 
 const twoPi = pi * 2;
 
@@ -47,6 +51,8 @@ class EaselModel extends ChangeNotifier {
   final List<Stroke> unrasterizedStrokes = [];
 
   ImageHistoryStack _historyStack;
+
+  final Debouncer _diskWriteDebouncer = Debouncer(diskWriteTimeout);
 
   /// Canvas offset from top of the easel area.
   double get canvasTopOffset => _offset.dy;
@@ -192,6 +198,7 @@ class EaselModel extends ChangeNotifier {
     // TODO: Queue snapshots.
     if (unrasterizedStrokes.last.boundingRect.overlaps(_frameArea)) {
       _generateLastSnapshot();
+      _diskWriteDebouncer.debounce(() => _frame.saveSnapshot());
     }
 
     notifyListeners();
