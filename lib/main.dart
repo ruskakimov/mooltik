@@ -11,8 +11,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Remove system top and bottom bars.
-  SystemChrome.setEnabledSystemUIOverlays([]);
+  // Remove system top bar.
+  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
   await Firebase.initializeApp();
 
