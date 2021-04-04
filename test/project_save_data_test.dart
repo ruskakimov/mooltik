@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
@@ -15,14 +14,13 @@ void main() {
         height: 100,
         frames: [
           FrameModel(
-            id: 0,
-            size: Size(200, 200),
+            file: File('sample.png'),
             duration: Duration(seconds: 3),
           ),
         ],
         sounds: [
           SoundClip(
-            file: File(''),
+            file: File('sample.mp3'),
             startTime: Duration(seconds: 1),
             duration: Duration(seconds: 2),
           ),
@@ -30,21 +28,14 @@ void main() {
       );
       expect(
         jsonEncode(data),
-        '{"width":200.0,"height":100.0,"frames":[{"id":0,"duration":"0:00:03.000000"}],"sounds":[{"file_name":"","start_time":"0:00:01.000000","duration":"0:00:02.000000"}]}',
+        '{"width":200.0,"height":100.0,"frames":[{"file_name":"sample.png","duration":"0:00:03.000000"}],"sounds":[{"file_name":"sample.mp3","start_time":"0:00:01.000000","duration":"0:00:02.000000"}]}',
       );
     });
 
     test('decode and encode back', () {
       final json =
-          '{"width":200.0,"height":100.0,"frames":[{"id":0,"duration":"0:00:03.000000"}],"sounds":[{"file_name":"01234.mp3","start_time":"0:00:01.000000","duration":"0:00:02.000000"}]}';
-      final data = ProjectSaveData.fromJson(jsonDecode(json), '');
-      expect(jsonEncode(data), json);
-    });
-
-    test('handle complex durations', () {
-      final json =
-          '{"width":200.0,"height":100.0,"frames":[{"id":0,"duration":"1:12:03.000123"}],"sounds":[{"file_name":"1235234.ogg","start_time":"0:00:01.010100","duration":"0:00:02.123000"}]}';
-      final data = ProjectSaveData.fromJson(jsonDecode(json), '');
+          '{"width":200.0,"height":100.0,"frames":[{"file_name":"123.png","duration":"0:00:03.000000"}],"sounds":[{"file_name":"01234.mp3","start_time":"0:00:01.000000","duration":"0:00:02.000000"}]}';
+      final data = ProjectSaveData.fromJson(jsonDecode(json), '', '');
       expect(jsonEncode(data), json);
     });
   });
