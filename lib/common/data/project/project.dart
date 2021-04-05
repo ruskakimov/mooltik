@@ -87,8 +87,13 @@ class Project extends ChangeNotifier {
   Sequence<SceneModel> get scenes => _scenes;
   Sequence<SceneModel> _scenes;
 
-  Iterable<FrameModel> get allFrames =>
-      _scenes.iterable.map((scene) => scene.frameSeq.iterable).expand((x) => x);
+  Iterable<FrameModel> get allFrames => _scenes.iterable
+      .map((scene) => scene.frameSeq.iterable)
+      .expand((iterable) => iterable);
+
+  Iterable<FrameModel> get exportFrames => _scenes.iterable
+      .map((scene) => scene.exportFrames)
+      .expand((iterable) => iterable);
 
   // Sequence<FrameModel> get frames => _frames;
   // Sequence<FrameModel> _frames;

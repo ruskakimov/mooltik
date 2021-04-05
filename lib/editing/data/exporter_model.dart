@@ -26,7 +26,7 @@ class ExporterModel extends ChangeNotifier {
   });
 
   /// For output video.
-  final List<FrameModel> frames;
+  final Iterable<FrameModel> frames;
 
   /// For output audio.
   final List<SoundClip> soundClips;
