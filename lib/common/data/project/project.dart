@@ -152,10 +152,6 @@ class Project extends ChangeNotifier {
     );
     await _dataFile.writeAsString(jsonEncode(data));
 
-    // Write images.
-    // TODO: Remove when saving frame after each change
-    await Future.wait(_frames.iterable.map((frame) => frame.saveSnapshot()));
-
     // Write thumbnail.
     final image = await generateImage(
       FramePainter(frame: frames[0]),
