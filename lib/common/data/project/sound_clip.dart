@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:mooltik/common/data/parse_duration.dart';
+import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:path/path.dart' as p;
 
 class SoundClip {

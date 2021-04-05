@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/png.dart';
-import 'package:mooltik/common/data/parse_duration.dart';
+import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:path/path.dart' as p;
 

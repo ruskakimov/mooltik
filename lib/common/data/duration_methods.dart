@@ -13,3 +13,11 @@ Duration parseDuration(String source) {
     microseconds: int.parse(match.group(4)),
   );
 }
+
+extension DurationHelpers on Duration {
+  Duration clamp(Duration min, Duration max) => Duration(
+      microseconds: this.inMicroseconds.clamp(
+            min.inMicroseconds,
+            max.inMicroseconds,
+          ));
+}
