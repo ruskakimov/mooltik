@@ -10,4 +10,7 @@ class SceneModel extends TimeSpan {
   }) : super(duration);
 
   final Sequence<FrameModel> frameSeq;
+
+  // TODO: Frames for export
+  List<FrameModel> get exportFrames => null;
 }
