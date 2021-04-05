@@ -4,6 +4,18 @@ import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 
+/// Play behaviour when scene duration is longer than the total duration of frames.
+enum PlayMode {
+  /// Last frame is extended.
+  extendLast,
+
+  /// Frames are repeated again from the start.
+  loop,
+
+  /// Playhead goes back and forth.
+  pingPong,
+}
+
 class SceneModel extends TimeSpan {
   SceneModel({
     @required List<FrameModel> frames,
