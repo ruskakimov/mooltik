@@ -75,7 +75,7 @@ class Sequence<T extends TimeSpan> {
   Duration get playhead => _playhead;
   Duration _playhead;
   set playhead(Duration value) {
-    _playhead = _playhead.clamp(Duration.zero, totalDuration);
+    _playhead = value.clamp(Duration.zero, totalDuration);
     _syncIndexWithPlayhead();
   }
 
