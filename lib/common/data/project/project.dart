@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
+import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
@@ -83,8 +84,11 @@ class Project extends ChangeNotifier {
 
   final File _dataFile;
 
-  Sequence<FrameModel> get frames => _frames;
-  Sequence<FrameModel> _frames;
+  Sequence<SceneModel> get scenes => _scenes;
+  Sequence<SceneModel> _scenes;
+
+  // Sequence<FrameModel> get frames => _frames;
+  // Sequence<FrameModel> _frames;
 
   List<SoundClip> get soundClips => _soundClips;
   List<SoundClip> _soundClips = [];

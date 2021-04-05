@@ -1,11 +1,11 @@
+import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
 
 class ProjectSaveData {
   ProjectSaveData({
     this.width,
     this.height,
-    this.frames,
+    this.scenes,
     this.sounds,
   });
 
@@ -15,8 +15,8 @@ class ProjectSaveData {
     String soundDirPath,
   )   : width = json['width'],
         height = json['height'],
-        frames = (json['frames'] as List<dynamic>)
-            .map((d) => FrameModel.fromJson(d, frameDirPath))
+        scenes = (json['scenes'] as List<dynamic>)
+            .map((d) => SceneModel.fromJson(d, frameDirPath))
             .toList(),
         sounds = json['sounds'] != null
             ? (json['sounds'] as List<dynamic>)
@@ -27,12 +27,12 @@ class ProjectSaveData {
   Map<String, dynamic> toJson() => {
         'width': width,
         'height': height,
-        'frames': frames.map((d) => d.toJson()).toList(),
+        'scenes': scenes.map((d) => d.toJson()).toList(),
         'sounds': sounds.map((d) => d.toJson()).toList(),
       };
 
   final double width;
   final double height;
-  final List<FrameModel> frames;
+  final List<SceneModel> scenes;
   final List<SoundClip> sounds;
 }
