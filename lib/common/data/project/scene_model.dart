@@ -42,6 +42,8 @@ class SceneModel extends TimeSpan {
       playhead = playhead % (frameSeq.totalDuration * 2);
       if (playhead >= frameSeq.totalDuration) {
         playhead = frameSeq.totalDuration * 2 - playhead;
+        // Reverse precendence on the edge.
+        playhead -= Duration(microseconds: 1);
       }
     }
 
