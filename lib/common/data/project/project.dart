@@ -87,11 +87,14 @@ class Project extends ChangeNotifier {
   Sequence<SceneModel> get scenes => _scenes;
   Sequence<SceneModel> _scenes;
 
+  Iterable<FrameModel> get allFrames =>
+      _scenes.iterable.map((scene) => scene.frameSeq.iterable).expand((x) => x);
+
   // Sequence<FrameModel> get frames => _frames;
   // Sequence<FrameModel> _frames;
 
   List<SoundClip> get soundClips => _soundClips;
-  List<SoundClip> _soundClips = [];
+  List<SoundClip> _soundClips;
 
   Size get frameSize => _frameSize;
   Size _frameSize;
@@ -101,7 +104,7 @@ class Project extends ChangeNotifier {
   /// Loads project files into memory.
   Future<void> open() async {
     // Check if already open.
-    if (_frames != null) {
+    if (_scenes != null) {
       // Prevent freeing memory after closing and quickly opening the project again.
       _shouldClose = false;
       return;
@@ -116,24 +119,26 @@ class Project extends ChangeNotifier {
         _getSoundDirectoryPath(),
       );
       _frameSize = Size(data.width, data.height);
-      _frames = Sequence<FrameModel>(data.frames);
+      _scenes = Sequence<SceneModel>(data.scenes);
 
       // TODO: Remove later
-      await Future.wait(_frames.iterable.map((frame) => frame.loadSnapshot()));
+      await Future.wait(allFrames.map((frame) => frame.loadSnapshot()));
 
       _soundClips =
           data.sounds.where((sound) => sound.file.existsSync()).toList();
     } else {
       // New project.
       _frameSize = const Size(1280, 720);
-      _frames = Sequence<FrameModel>([await createNewFrame()]);
+      _scenes = Sequence<SceneModel>([
+        SceneModel(frames: [await createNewFrame()]),
+      ]);
     }
   }
 
   /// Frees the memory of project files and stops auto-save.
   void _close() {
-    _frames = null;
-    _soundClips.clear();
+    _scenes = null;
+    _soundClips = null;
   }
 
   Future<void> saveAndClose() async {
@@ -151,14 +156,14 @@ class Project extends ChangeNotifier {
     final data = ProjectSaveData(
       width: _frameSize.width,
       height: _frameSize.height,
-      frames: _frames.iterable.toList(),
+      scenes: _scenes.iterable.toList(),
       sounds: _soundClips,
     );
     await _dataFile.writeAsString(jsonEncode(data));
 
     // Write thumbnail.
     final image = await generateImage(
-      FramePainter(frame: frames[0]),
+      FramePainter(frame: allFrames.first),
       _frameSize.width.toInt(),
       _frameSize.height.toInt(),
     );
@@ -178,7 +183,7 @@ class Project extends ChangeNotifier {
 
   Future<void> _deleteUnusedFrameImages() async {
     final Set<String> usedFrameImages =
-        _frames.iterable.map((frame) => frame.file.path).toSet();
+        allFrames.map((frame) => frame.file.path).toSet();
 
     bool _isUnusedFrameImage(String path) =>
         p.extension(path) == '.png' &&
