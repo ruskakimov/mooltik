@@ -26,8 +26,8 @@ class SoundClip {
   factory SoundClip.fromJson(Map<String, dynamic> json, String soundDirPath) =>
       SoundClip(
         file: File(p.join(soundDirPath, json['file_name'])),
-        startTime: parseDuration(json['start_time']),
-        duration: parseDuration(json['duration']),
+        startTime: (json['start_time'] as String).parseDuration(),
+        duration: (json['duration'] as String).parseDuration(),
       );
 
   Map<String, dynamic> toJson() => {

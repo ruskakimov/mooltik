@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/parse_duration.dart';
+import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
@@ -20,10 +20,34 @@ class SceneModel extends TimeSpan {
   SceneModel({
     @required List<FrameModel> frames,
     Duration duration = const Duration(seconds: 5),
+    this.playMode = PlayMode.extendLast,
   })  : frameSeq = Sequence<FrameModel>(frames),
         super(duration);
 
   final Sequence<FrameModel> frameSeq;
+  final PlayMode playMode;
+
+  /// Frame at a given playhead position.
+  FrameModel frameAt(Duration playhead) {
+    if (playhead < Duration.zero || playhead > duration) {
+      throw Exception(
+          'Given playhead value $playhead is outside of scene range.');
+    }
+
+    if (playMode == PlayMode.extendLast) {
+      // playhead
+      // clamp between 0, frameSeq.totalDuration
+    } else if (playMode == PlayMode.loop) {
+      // playhead
+      // mod frameSeq.totalDuration
+    } else if (playMode == PlayMode.pingPong) {
+      // playhead
+      //
+    }
+
+    frameSeq.playhead = playhead;
+    return frameSeq.current;
+  }
 
   // TODO: Frames for export
   List<FrameModel> get exportFrames => null;
@@ -33,7 +57,7 @@ class SceneModel extends TimeSpan {
         frames: (json['frames'] as List<dynamic>)
             .map((d) => FrameModel.fromJson(d, frameDirPath))
             .toList(),
-        duration: parseDuration(json['duration']),
+        duration: (json['duration'] as String).parseDuration(),
       );
 
   Map<String, dynamic> toJson() => {

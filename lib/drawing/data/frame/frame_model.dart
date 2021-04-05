@@ -39,7 +39,7 @@ class FrameModel extends TimeSpan {
   factory FrameModel.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       FrameModel(
         file: File(p.join(frameDirPath, json['file_name'])),
-        duration: parseDuration(json['duration']),
+        duration: (json['duration'] as String).parseDuration(),
       );
 
   Map<String, dynamic> toJson() => {
