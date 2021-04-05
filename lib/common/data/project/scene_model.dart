@@ -35,14 +35,14 @@ class SceneModel extends TimeSpan {
     }
 
     if (playMode == PlayMode.extendLast) {
-      // playhead
-      // clamp between 0, frameSeq.totalDuration
+      playhead = playhead.clamp(Duration.zero, frameSeq.totalDuration);
     } else if (playMode == PlayMode.loop) {
-      // playhead
-      // mod frameSeq.totalDuration
+      playhead = playhead % frameSeq.totalDuration;
     } else if (playMode == PlayMode.pingPong) {
-      // playhead
-      //
+      playhead = playhead % (frameSeq.totalDuration * 2);
+      if (playhead >= frameSeq.totalDuration) {
+        playhead = frameSeq.totalDuration * 2 - playhead;
+      }
     }
 
     frameSeq.playhead = playhead;

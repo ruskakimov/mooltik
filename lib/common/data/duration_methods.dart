@@ -4,6 +4,9 @@ extension DurationMethods on Duration {
             min.inMicroseconds,
             max.inMicroseconds,
           ));
+
+  Duration operator %(Duration other) =>
+      Duration(microseconds: this.inMicroseconds % other.inMicroseconds);
 }
 
 extension DurationParsing on String {
