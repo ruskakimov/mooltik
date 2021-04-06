@@ -4,6 +4,9 @@ import 'package:mooltik/common/data/sequence/time_span.dart';
 
 class TestSpan extends TimeSpan {
   TestSpan(Duration duration) : super(duration);
+
+  @override
+  TimeSpan copyWith({Duration duration}) => TestSpan(duration ?? this.duration);
 }
 
 void main() {
