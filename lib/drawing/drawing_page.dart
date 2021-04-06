@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/drawing_actionbar.dart';
@@ -56,7 +55,6 @@ class DrawingPage extends StatelessWidget {
                     EaselModel>(
                   create: (context) => EaselModel(
                     frame: timeline.currentFrame,
-                    frameSize: context.read<Project>().frameSize,
                     selectedTool: context.read<ToolboxModel>().selectedTool,
                   ),
                   update: (_, reel, toolbox, easel) => easel

@@ -20,7 +20,6 @@ const twoPi = pi * 2;
 class EaselModel extends ChangeNotifier {
   EaselModel({
     @required FrameModel frame,
-    @required this.frameSize,
     @required Tool selectedTool,
   })  : _frame = frame,
         _historyStack = ImageHistoryStack(
@@ -29,11 +28,12 @@ class EaselModel extends ChangeNotifier {
         ),
         _selectedTool = selectedTool;
 
+  FrameModel get frame => _frame;
   FrameModel _frame;
 
   Tool _selectedTool;
 
-  final Size frameSize;
+  Size get frameSize => _frame.size;
 
   Size _easelSize;
 
