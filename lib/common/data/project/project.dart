@@ -218,7 +218,7 @@ class Project extends ChangeNotifier {
     );
     final file = _getFrameFile(DateTime.now().millisecondsSinceEpoch);
     await pngWrite(file, image);
-    return FrameModel(file: file)..snapshot = image;
+    return FrameModel(file: file, snapshot: image);
   }
 
   Future<SceneModel> createNewScene() async {
