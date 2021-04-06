@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/drawing_actionbar.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
@@ -20,11 +19,15 @@ class DrawingPage extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProxyProvider<TimelineModel, OnionModel>(
-          update: (context, timeline, model) =>
-              model..updateSelectedIndex(timeline.currentFrameIndex),
+          update: (context, timeline, model) => model
+            ..updateSelectedIndex(timeline.currentScene.frameSeq.currentIndex),
           create: (context) => OnionModel(
-            frames: context.read<TimelineModel>().frameSeq,
-            selectedIndex: context.read<TimelineModel>().currentFrameIndex,
+            frames: context.read<TimelineModel>().currentScene.frameSeq,
+            selectedIndex: context
+                .read<TimelineModel>()
+                .currentScene
+                .frameSeq
+                .currentIndex,
             sharedPreferences: context.read<SharedPreferences>(),
           ),
         ),
@@ -49,9 +52,6 @@ class DrawingPage extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.background,
             body: MultiProvider(
               providers: [
-                ChangeNotifierProvider<FrameModel>.value(
-                  value: timeline.currentFrame,
-                ),
                 ChangeNotifierProxyProvider2<TimelineModel, ToolboxModel,
                     EaselModel>(
                   create: (context) => EaselModel(
