@@ -30,6 +30,7 @@ class TimelinePanel extends StatelessWidget {
           create: (context) => TimelineViewModel(
             timeline: context.read<TimelineModel>(),
             sharedPreferences: context.read<SharedPreferences>(),
+            createNewFrame: context.read<Project>().createNewFrame,
           ),
         ),
       ],

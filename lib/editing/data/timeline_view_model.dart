@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
@@ -18,6 +19,7 @@ class TimelineViewModel extends ChangeNotifier {
   TimelineViewModel({
     @required TimelineModel timeline,
     @required SharedPreferences sharedPreferences,
+    @required this.createNewFrame,
   })  : _timeline = timeline,
         _preferences = sharedPreferences,
         _msPerPx = sharedPreferences.getDouble(_msPerPxKey) ?? 10 {
@@ -26,6 +28,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   SharedPreferences _preferences;
   final TimelineModel _timeline;
+  final CreateNewFrame createNewFrame;
 
   bool get isEditingScene => _sceneEdit;
   bool _sceneEdit = false;
@@ -189,11 +192,26 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void duplicateSelected() {
+  Future<void> duplicateSelected() async {
     if (_selectedSliverIndex == null) return;
-    imageSpans.duplicateFrameAt(_selectedSliverIndex);
+    if (isEditingScene) {
+      await _duplicateSelectedFrame();
+    } else {
+      await _duplicateSelectedScene();
+    }
     closeSliverMenu();
     notifyListeners();
+  }
+
+  Future<void> _duplicateSelectedFrame() async {
+    final newFrame = await createNewFrame();
+    final duplicate = (imageSpans as Sequence<FrameModel>)[_selectedSliverIndex]
+        .copyWith(file: newFrame.file);
+    imageSpans.insert(_selectedSliverIndex, duplicate);
+  }
+
+  Future<void> _duplicateSelectedScene() async {
+    // TODO: Implement scene duplication
   }
 
   /// Handle start time drag handle's new [updatedTimestamp].
