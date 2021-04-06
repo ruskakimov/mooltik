@@ -1,53 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 
 class TimelineModel extends ChangeNotifier {
   TimelineModel({
-    @required this.frameSeq,
+    @required this.sceneSeq,
     @required TickerProvider vsync,
     @required this.createNewFrame,
-  })  : assert(frameSeq != null && frameSeq.length > 0),
+  })  : assert(sceneSeq != null && sceneSeq.length > 0),
         _playheadController = AnimationController(
           vsync: vsync,
-          duration: frameSeq.totalDuration,
+          duration: sceneSeq.totalDuration,
         ) {
     _playheadController.addListener(() {
-      frameSeq.playhead = Duration(
+      sceneSeq.playhead = Duration(
         milliseconds:
-            (frameSeq.totalDuration * _playheadController.value).inMilliseconds,
+            (sceneSeq.totalDuration * _playheadController.value).inMilliseconds,
       );
       notifyListeners();
     });
   }
 
-  final Sequence<FrameModel> frameSeq;
+  final Sequence<SceneModel> sceneSeq;
   final AnimationController _playheadController;
   final Future<FrameModel> Function() createNewFrame;
 
-  Duration get playheadPosition => frameSeq.playhead;
+  Duration get playheadPosition => sceneSeq.playhead;
 
   bool get isPlaying => _playheadController.isAnimating;
 
-  Duration get totalDuration => frameSeq.totalDuration;
+  Duration get totalDuration => sceneSeq.totalDuration;
 
-  FrameModel get currentFrame => frameSeq.current;
+  SceneModel get currentScene => sceneSeq.current;
 
-  int get currentFrameIndex => frameSeq.currentIndex;
+  Duration get currentSceneStartTime => sceneSeq.currentSpanStart;
 
-  Duration get currentFrameStartTime => frameSeq.currentSpanStart;
+  Duration get currentSceneEndTime => sceneSeq.currentSpanEnd;
 
-  Duration get currentFrameEndTime => frameSeq.currentSpanEnd;
+  FrameModel get currentFrame =>
+      currentScene.frameAt(playheadPosition - currentSceneStartTime);
 
   /// Jumps to a new playhead position.
   void jumpTo(Duration playheadPosition) {
-    frameSeq.playhead = playheadPosition;
+    sceneSeq.playhead = playheadPosition;
     notifyListeners();
   }
 
   /// Jumps to the start of the specified frame.
-  void jumpToFrameStart(int frameIndex) {
-    frameSeq.currentIndex = frameIndex;
+  void jumpToSceneStart(int frameIndex) {
+    sceneSeq.currentIndex = frameIndex;
     notifyListeners();
   }
 
@@ -56,13 +58,13 @@ class TimelineModel extends ChangeNotifier {
     if (isPlaying) {
       _playheadController.stop();
     }
-    frameSeq.playhead += diff;
+    sceneSeq.playhead += diff;
     notifyListeners();
   }
 
   /// Reset playhead to the beginning.
   void reset() {
-    frameSeq.playhead = Duration.zero;
+    sceneSeq.playhead = Duration.zero;
     notifyListeners();
   }
 
@@ -79,59 +81,35 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get stepBackwardAvailable =>
-      !isPlaying && frameSeq.stepBackwardAvailable;
-
-  void stepBackward() {
-    frameSeq.stepBackward();
-    notifyListeners();
-  }
-
-  bool get stepForwardAvailable => !isPlaying && frameSeq.stepForwardAvailable;
-
-  void stepForward() {
-    frameSeq.stepForward();
-    notifyListeners();
-  }
-
-  Future<void> addEmptyFrameAfterCurrent() async {
-    insertFrameAt(
-      frameSeq.currentIndex + 1,
-      await createNewFrame(),
+  Future<SceneModel> createNewScene() async {
+    return SceneModel(
+      frames: [
+        await createNewFrame(),
+      ],
     );
   }
 
-  Future<void> addEmptyFrameAtEnd() async {
-    insertFrameAt(
-      frameSeq.length,
-      await createNewFrame(),
-    );
-  }
-
-  void insertFrameAt(int frameIndex, FrameModel frame) {
-    frameSeq.insert(frameIndex, frame);
+  Future<void> addNewSceneAfterCurrent() async {
+    sceneSeq.insert(sceneSeq.currentIndex + 1, await createNewScene());
     notifyListeners();
   }
 
-  void deleteFrameAt(int frameIndex) {
-    frameSeq.removeAt(frameIndex);
+  void deleteSceneAt(int index) {
+    sceneSeq.removeAt(index);
     notifyListeners();
   }
 
-  Future<void> duplicateFrameAt(int frameIndex) async {
-    final duplicate = await createNewFrame();
-    duplicate.snapshot = frameSeq[frameIndex].snapshot;
-    duplicate.duration = frameSeq[frameIndex].duration;
-    insertFrameAt(frameIndex + 1, duplicate);
+  Future<void> duplicateSceneAt(int index) async {
+    // TODO: Duplicate frames
+    sceneSeq.insert(
+      index + 1,
+      sceneSeq[index].copyWith(),
+    );
+    notifyListeners();
   }
 
-  void changeFrameDurationAt(int frameIndex, Duration newDuration) {
-    final newFrame = FrameModel(
-      file: frameSeq[frameIndex].file,
-      duration: newDuration,
-    );
-    newFrame.snapshot = frameSeq[frameIndex].snapshot;
-    frameSeq[frameIndex] = newFrame;
+  void changeSceneDurationAt(int index, Duration newDuration) {
+    sceneSeq[index] = sceneSeq[index].copyWith(duration: newDuration);
     notifyListeners();
   }
 }
