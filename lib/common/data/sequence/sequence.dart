@@ -162,4 +162,9 @@ class Sequence<T extends TimeSpan> {
       }
     }
   }
+
+  void changeSpanDurationAt(int index, Duration newDuration) {
+    _validateIndex(index);
+    _spans[index] = _spans[index].copyWith(duration: newDuration);
+  }
 }

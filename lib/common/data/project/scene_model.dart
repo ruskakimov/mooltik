@@ -66,4 +66,15 @@ class SceneModel extends TimeSpan {
         'frames': frameSeq.iterable.map((d) => d.toJson()).toList(),
         'duration': duration.toString(),
       };
+
+  SceneModel copyWith({
+    List<FrameModel> frames,
+    Duration duration,
+    PlayMode playMode,
+  }) =>
+      SceneModel(
+        frames: frames ?? this.frameSeq.iterable,
+        duration: duration ?? this.duration,
+        playMode: playMode ?? this.playMode,
+      );
 }

@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-
-abstract class TimeSpan extends ChangeNotifier {
+abstract class TimeSpan {
   TimeSpan(Duration duration) : _duration = roundDuration(duration);
 
   /// Output is set to 50fps, therefore 1 frame = 20 ms.
@@ -17,8 +15,6 @@ abstract class TimeSpan extends ChangeNotifier {
 
   Duration get duration => _duration;
   Duration _duration;
-  set duration(Duration value) {
-    _duration = roundDuration(value);
-    notifyListeners();
-  }
+
+  TimeSpan copyWith({Duration duration});
 }
