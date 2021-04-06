@@ -16,6 +16,8 @@ import 'package:path/path.dart' as p;
 
 const String _binnedPostfix = '_binned';
 
+typedef CreateNewFrame = Future<FrameModel> Function();
+
 /// Holds project data, reads and writes to project folder.
 ///
 /// Project file structure looks like the following:

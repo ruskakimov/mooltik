@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
@@ -7,9 +8,10 @@ class TimelineModel extends ChangeNotifier {
   TimelineModel({
     @required Sequence<SceneModel> sceneSeq,
     @required TickerProvider vsync,
-    @required this.createNewFrame,
+    @required CreateNewFrame createNewFrame,
   })  : assert(sceneSeq != null && sceneSeq.length > 0),
         _sceneSeq = sceneSeq,
+        _createNewFrame = createNewFrame,
         _playheadController = AnimationController(
           vsync: vsync,
           duration: sceneSeq.totalDuration,
@@ -25,7 +27,7 @@ class TimelineModel extends ChangeNotifier {
 
   final Sequence<SceneModel> _sceneSeq;
   final AnimationController _playheadController;
-  final Future<FrameModel> Function() createNewFrame;
+  final CreateNewFrame _createNewFrame;
 
   Duration get playheadPosition => _sceneSeq.playhead;
 
@@ -85,7 +87,7 @@ class TimelineModel extends ChangeNotifier {
   Future<SceneModel> createNewScene() async {
     return SceneModel(
       frames: [
-        await createNewFrame(),
+        await _createNewFrame(),
       ],
     );
   }
