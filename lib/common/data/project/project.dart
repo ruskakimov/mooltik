@@ -221,6 +221,12 @@ class Project extends ChangeNotifier {
     return FrameModel(file: file)..snapshot = image;
   }
 
+  Future<SceneModel> createNewScene() async {
+    return SceneModel(
+      frames: [await createNewFrame()],
+    );
+  }
+
   File _getFrameFile(int id) => File(_getFrameFilePath(id));
 
   String _getFrameFilePath(int id) => p.join(directory.path, 'frame$id.png');

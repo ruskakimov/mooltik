@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
@@ -8,10 +7,8 @@ class TimelineModel extends ChangeNotifier {
   TimelineModel({
     @required Sequence<SceneModel> sceneSeq,
     @required TickerProvider vsync,
-    @required CreateNewFrame createNewFrame,
   })  : assert(sceneSeq != null && sceneSeq.length > 0),
         _sceneSeq = sceneSeq,
-        _createNewFrame = createNewFrame,
         _playheadController = AnimationController(
           vsync: vsync,
           duration: sceneSeq.totalDuration,
@@ -27,7 +24,6 @@ class TimelineModel extends ChangeNotifier {
 
   final Sequence<SceneModel> _sceneSeq;
   final AnimationController _playheadController;
-  final CreateNewFrame _createNewFrame;
 
   Duration get playheadPosition => _sceneSeq.playhead;
 
@@ -84,30 +80,13 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<SceneModel> createNewScene() async {
-    return SceneModel(
-      frames: [
-        await _createNewFrame(),
-      ],
-    );
-  }
-
-  Future<void> addNewSceneAfterCurrent() async {
-    _sceneSeq.insert(_sceneSeq.currentIndex + 1, await createNewScene());
+  void insertSceneAt(int index, SceneModel scene) {
+    _sceneSeq.insert(index, scene);
     notifyListeners();
   }
 
   void deleteSceneAt(int index) {
     _sceneSeq.removeAt(index);
-    notifyListeners();
-  }
-
-  Future<void> duplicateSceneAt(int index) async {
-    // TODO: Duplicate frames
-    _sceneSeq.insert(
-      index + 1,
-      _sceneSeq[index].copyWith(),
-    );
     notifyListeners();
   }
 
