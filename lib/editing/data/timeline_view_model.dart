@@ -35,11 +35,13 @@ class TimelineViewModel extends ChangeNotifier {
 
   void editScene() {
     _sceneEdit = true;
+    closeSliverMenu();
     notifyListeners();
   }
 
   void finishSceneEdit() {
     _sceneEdit = false;
+    closeSliverMenu();
     notifyListeners();
   }
 
