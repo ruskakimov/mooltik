@@ -64,11 +64,12 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
     super.initState();
     final timeline = context.read<TimelineModel>();
     _controller = ScrollController(
-      initialScrollOffset: frameOffset(timeline.currentFrameIndex),
+      initialScrollOffset:
+          frameOffset(timeline.currentScene.frameSeq.currentIndex),
     );
     _controller.addListener(() {
-      if (centeredFrameIndex != timeline.currentFrameIndex) {
-        timeline.jumpToFrameStart(centeredFrameIndex);
+      if (centeredFrameIndex != timeline.currentScene.frameSeq.currentIndex) {
+        timeline.currentScene.frameSeq.currentIndex = centeredFrameIndex;
       }
     });
   }
@@ -103,14 +104,17 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
             right: (widget.width - widget.itemWidth) / 2 - widget.itemWidth,
           ),
           primary: false,
-          itemCount: timeline.frameSeq.length + 1,
+          itemCount: timeline.currentScene.frameSeq.length + 1,
           itemExtent: widget.itemWidth,
           itemBuilder: (context, index) {
-            if (index == timeline.frameSeq.length) {
+            if (index == timeline.currentScene.frameSeq.length) {
               return GestureDetector(
                 onTap: () async {
-                  await timeline.addEmptyFrameAtEnd();
-                  scrollTo(timeline.frameSeq.length - 1);
+                  timeline.currentScene.frameSeq.insert(
+                    timeline.currentScene.frameSeq.length,
+                    await context.read<Project>().createNewFrame(),
+                  );
+                  scrollTo(timeline.currentScene.frameSeq.length - 1);
                 },
                 child: _FrameReelItem(
                   child: ColoredBox(
@@ -124,7 +128,9 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
             return GestureDetector(
               onTap: () => scrollTo(index),
               child: _FrameReelItem(
-                child: FrameThumbnail(frame: timeline.frameSeq[index]),
+                child: FrameThumbnail(
+                  frame: timeline.currentScene.frameSeq[index],
+                ),
               ),
             );
           },
