@@ -8,7 +8,7 @@ abstract class Sliver {
 
   RRect getRrect(double startY, double endY) => RRect.fromRectAndRadius(
         Rect.fromLTRB(startX, startY, endX, endY).deflate(1),
-        Radius.circular(4),
+        Radius.circular(8),
       );
 
   void paint(Canvas canvas, double startY, double endY);
