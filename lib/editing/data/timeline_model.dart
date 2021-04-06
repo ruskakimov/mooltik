@@ -5,10 +5,9 @@ import 'package:mooltik/drawing/data/frame/frame_model.dart';
 
 class TimelineModel extends ChangeNotifier {
   TimelineModel({
-    @required Sequence<SceneModel> sceneSeq,
+    @required this.sceneSeq,
     @required TickerProvider vsync,
   })  : assert(sceneSeq != null && sceneSeq.length > 0),
-        _sceneSeq = sceneSeq,
         _playheadController = AnimationController(
           vsync: vsync,
           duration: sceneSeq.totalDuration,
@@ -20,35 +19,26 @@ class TimelineModel extends ChangeNotifier {
       );
       notifyListeners();
     });
+    sceneSeq.addListener(notifyListeners);
   }
 
-  final Sequence<SceneModel> _sceneSeq;
+  final Sequence<SceneModel> sceneSeq;
   final AnimationController _playheadController;
 
-  Duration get playheadPosition => _sceneSeq.playhead;
+  Duration get playheadPosition => sceneSeq.playhead;
 
   bool get isPlaying => _playheadController.isAnimating;
 
-  Duration get totalDuration => _sceneSeq.totalDuration;
+  Duration get totalDuration => sceneSeq.totalDuration;
 
-  SceneModel get currentScene => _sceneSeq.current;
-
-  Duration get currentSceneStartTime => _sceneSeq.currentSpanStart;
-
-  Duration get currentSceneEndTime => _sceneSeq.currentSpanEnd;
+  SceneModel get currentScene => sceneSeq.current;
 
   FrameModel get currentFrame =>
-      currentScene.frameAt(playheadPosition - currentSceneStartTime);
+      currentScene.frameAt(playheadPosition - sceneSeq.currentSpanStart);
 
   /// Jumps to a new playhead position.
   void jumpTo(Duration playheadPosition) {
-    _sceneSeq.playhead = playheadPosition;
-    notifyListeners();
-  }
-
-  /// Jumps to the start of the specified scene.
-  void jumpToSceneStart(int index) {
-    _sceneSeq.currentIndex = index;
+    sceneSeq.playhead = playheadPosition;
     notifyListeners();
   }
 
@@ -57,13 +47,13 @@ class TimelineModel extends ChangeNotifier {
     if (isPlaying) {
       _playheadController.stop();
     }
-    _sceneSeq.playhead += diff;
+    sceneSeq.playhead += diff;
     notifyListeners();
   }
 
   /// Reset playhead to the beginning.
   void reset() {
-    _sceneSeq.playhead = Duration.zero;
+    sceneSeq.playhead = Duration.zero;
     notifyListeners();
   }
 
@@ -77,21 +67,6 @@ class TimelineModel extends ChangeNotifier {
 
   void pause() {
     _playheadController.stop();
-    notifyListeners();
-  }
-
-  void insertSceneAt(int index, SceneModel scene) {
-    _sceneSeq.insert(index, scene);
-    notifyListeners();
-  }
-
-  void deleteSceneAt(int index) {
-    _sceneSeq.removeAt(index);
-    notifyListeners();
-  }
-
-  void changeSceneDurationAt(int index, Duration newDuration) {
-    _sceneSeq[index] = _sceneSeq[index].copyWith(duration: newDuration);
     notifyListeners();
   }
 }

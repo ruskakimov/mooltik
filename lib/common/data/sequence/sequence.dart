@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 
@@ -7,7 +8,7 @@ import 'package:mooltik/common/data/sequence/time_span.dart';
 ///
 /// When playhead is right on the edge between two spans,
 /// latest time span takes precedence.
-class Sequence<T extends TimeSpan> {
+class Sequence<T extends TimeSpan> extends ChangeNotifier {
   Sequence(List<T> spans)
       : _spans = spans.sublist(0),
         _playhead = Duration.zero,
@@ -35,6 +36,7 @@ class Sequence<T extends TimeSpan> {
       _currentSpanStart += diff;
     }
     _syncIndexWithPlayhead();
+    notifyListeners();
   }
 
   int get length => _spans.length;
@@ -57,6 +59,7 @@ class Sequence<T extends TimeSpan> {
     while (_currentIndex < index && stepForwardAvailable) {
       stepForward();
     }
+    notifyListeners();
   }
 
   void _validateIndex(int index) {
@@ -77,6 +80,7 @@ class Sequence<T extends TimeSpan> {
   set playhead(Duration value) {
     _playhead = value.clamp(Duration.zero, totalDuration);
     _syncIndexWithPlayhead();
+    notifyListeners();
   }
 
   void _syncIndexWithPlayhead() {
@@ -136,6 +140,7 @@ class Sequence<T extends TimeSpan> {
       _currentSpanStart += span.duration;
       _playhead += span.duration;
     }
+    notifyListeners();
   }
 
   void removeAt(int index) {
@@ -161,10 +166,12 @@ class Sequence<T extends TimeSpan> {
         _currentSpanStart -= _spans.last.duration;
       }
     }
+    notifyListeners();
   }
 
   void changeSpanDurationAt(int index, Duration newDuration) {
     _validateIndex(index);
     _spans[index] = _spans[index].copyWith(duration: newDuration);
+    notifyListeners();
   }
 }
