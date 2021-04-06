@@ -4,8 +4,8 @@ import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class FrameMenu extends StatelessWidget {
-  const FrameMenu({
+class SliverMenu extends StatelessWidget {
+  const SliverMenu({
     Key key,
   }) : super(key: key);
 

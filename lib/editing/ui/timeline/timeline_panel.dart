@@ -47,10 +47,10 @@ class TimelinePanel extends StatelessWidget {
                   children: [
                     TimelineView(),
                     Playhead(),
-                    if (timelineView.showFrameMenu &&
-                        timelineView.selectedFrameIndex != 0)
+                    if (timelineView.showSliverMenu &&
+                        timelineView.selectedSliverIndex != 0)
                       ResizeStartHandle(),
-                    if (timelineView.showFrameMenu) ResizeEndHandle(),
+                    if (timelineView.showSliverMenu) ResizeEndHandle(),
                   ],
                 ),
               ),

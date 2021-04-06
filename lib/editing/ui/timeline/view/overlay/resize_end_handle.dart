@@ -9,18 +9,19 @@ class ResizeEndHandle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timelineView = context.watch<TimelineViewModel>();
-    final timeline = context.watch<TimelineModel>();
 
     return TimelinePositioned(
-      timestamp: timeline.frameSeq.endTimeOf(timelineView.selectedFrameIndex),
-      y: timelineView.frameSliverMid,
+      timestamp:
+          timelineView.imageSpans.endTimeOf(timelineView.selectedSliverIndex),
+      y: timelineView.imageSliverMid,
       width: resizeHandleWidth,
       height: resizeHandleHeight,
       onDragUpdate: (Duration updatedTime) =>
           timelineView.onEndTimeHandleDragUpdate(updatedTime),
       onDragEnd: (_) {
         // Keep playhead within boundaries.
-        timeline.frameSeq.playhead = timeline.frameSeq.playhead;
+        final timeline = context.read<TimelineModel>();
+        timeline.jumpTo(timeline.playheadPosition);
       },
       child: ResizeHandle(),
     );

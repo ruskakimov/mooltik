@@ -1,11 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/editing/data/convert.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/time_label.dart';
-import 'package:mooltik/editing/ui/timeline/view/sliver/frame_sliver.dart';
+import 'package:mooltik/editing/ui/timeline/view/sliver/image_sliver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const _msPerPxKey = 'timeline_view_ms_per_px';
@@ -22,6 +23,12 @@ class TimelineViewModel extends ChangeNotifier {
 
   SharedPreferences _preferences;
   final TimelineModel _timeline;
+
+  bool get isEditingScene => _sceneEdit;
+  bool _sceneEdit = false;
+
+  Sequence<TimeSpan> get imageSpans =>
+      _sceneEdit ? _timeline.currentScene.frameSeq : _timeline.sceneSeq;
 
   double get msPerPx => _msPerPx;
   double _msPerPx;
@@ -44,7 +51,7 @@ class TimelineViewModel extends ChangeNotifier {
     final timeDiff = pxToDuration(-diff.dx, _msPerPx);
     _timeline.scrub(timeDiff);
 
-    closeFrameMenu();
+    closeSliverMenu();
 
     _prevFocalPoint = details.localFocalPoint;
 
@@ -61,19 +68,18 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   void onTapUp(TapUpDetails details) {
-    _selectedFrameIndex = _getFrameIndexUnderPosition(details.localPosition);
+    _selectedSliverIndex = _getIndexUnderPosition(details.localPosition);
     notifyListeners();
   }
 
-  int _getFrameIndexUnderPosition(Offset position) {
-    // Tapped outside of frame y range.
-    if (position.dy < frameSliverTop || position.dy > frameSliverBottom)
+  int _getIndexUnderPosition(Offset position) {
+    if (position.dy < imageSliverTop || position.dy > imageSliverBottom)
       return null;
 
     // TODO: Reuse slivers used for painting
-    for (final sliver in getVisibleFrameSlivers()) {
+    for (final sliver in getVisibleImageSlivers()) {
       if (position.dx > sliver.startX && position.dx < sliver.endX) {
-        return sliver.frameIndex;
+        return sliver.index;
       }
     }
     return null;
@@ -83,24 +89,24 @@ class TimelineViewModel extends ChangeNotifier {
   /// Update before painting or gesture detection.
   Size size = Size.zero;
 
-  bool get showFrameMenu => _selectedFrameIndex != null;
+  bool get showSliverMenu => _selectedSliverIndex != null;
 
-  int get selectedFrameIndex => _selectedFrameIndex;
-  int _selectedFrameIndex;
+  int get selectedSliverIndex => _selectedSliverIndex;
+  int _selectedSliverIndex;
 
-  Duration get _selectedFrameDuration =>
-      _timeline.frameSeq[_selectedFrameIndex].duration;
+  Duration get _selectedSliverDuration =>
+      imageSpans[_selectedSliverIndex].duration;
 
-  String get selectedFrameDurationLabel =>
-      durationToLabel(_selectedFrameDuration);
+  String get selectedSliverDurationLabel =>
+      durationToLabel(_selectedSliverDuration);
 
   double get _midX => size.width / 2;
 
   double get sliverHeight => min((size.height - 24) / 2, 80);
 
-  double get frameSliverTop => 8;
-  double get frameSliverBottom => frameSliverTop + sliverHeight;
-  double get frameSliverMid => (frameSliverTop + frameSliverBottom) / 2;
+  double get imageSliverTop => 8;
+  double get imageSliverBottom => imageSliverTop + sliverHeight;
+  double get imageSliverMid => (imageSliverTop + imageSliverBottom) / 2;
 
   double xFromTime(Duration time) =>
       _midX + durationToPx(time - _timeline.playheadPosition, _msPerPx);
@@ -111,76 +117,71 @@ class TimelineViewModel extends ChangeNotifier {
   double widthFromDuration(Duration duration) =>
       durationToPx(duration, _msPerPx);
 
-  FrameSliver getCurrentFrameSliver() {
-    final double currentFrameStartX =
-        xFromTime(_timeline.currentFrameStartTime);
-    final double currentFrameWidth =
-        widthFromDuration(_timeline.currentFrame.duration);
-    return FrameSliver(
-      startX: currentFrameStartX,
-      endX: currentFrameStartX + currentFrameWidth,
-      thumbnail: _timeline.currentFrame.snapshot,
-      frameIndex: _timeline.currentFrameIndex,
+  ImageSliver getCurrentImageSliver() {
+    return ImageSliver(
+      startX: xFromTime(imageSpans.currentSpanStart),
+      endX: xFromTime(imageSpans.currentSpanEnd),
+      thumbnail: imageSpans.current.snapshot,
+      index: imageSpans.currentIndex,
     );
   }
 
-  List<FrameSliver> getVisibleFrameSlivers() {
-    final List<FrameSliver> slivers = [getCurrentFrameSliver()];
+  List<ImageSliver> getVisibleImageSlivers() {
+    final List<ImageSliver> slivers = [getCurrentImageSliver()];
 
     // Fill with slivers on left side.
-    for (int i = _timeline.currentFrameIndex - 1;
+    for (int i = imageSpans.currentIndex - 1;
         i >= 0 && slivers.first.startX > 0;
         i--) {
       slivers.insert(
         0,
-        FrameSliver(
-          startX: slivers.first.startX -
-              widthFromDuration(_timeline.frameSeq[i].duration),
+        ImageSliver(
+          startX:
+              slivers.first.startX - widthFromDuration(imageSpans[i].duration),
           endX: slivers.first.startX,
-          thumbnail: _timeline.frameSeq[i].snapshot,
-          frameIndex: i,
+          thumbnail: imageSpans[i].snapshot,
+          index: i,
         ),
       );
     }
 
     // Fill with slivers on right side.
-    for (int i = _timeline.currentFrameIndex + 1;
-        i < _timeline.frameSeq.length && slivers.last.endX < size.width;
+    for (int i = imageSpans.currentIndex + 1;
+        i < imageSpans.length && slivers.last.endX < size.width;
         i++) {
-      slivers.add(FrameSliver(
+      slivers.add(ImageSliver(
         startX: slivers.last.endX,
-        endX: slivers.last.endX +
-            widthFromDuration(_timeline.frameSeq[i].duration),
-        thumbnail: _timeline.frameSeq[i].snapshot,
-        frameIndex: i,
+        endX: slivers.last.endX + widthFromDuration(imageSpans[i].duration),
+        thumbnail: imageSpans[i].snapshot,
+        index: i,
       ));
     }
     return slivers;
   }
 
   /*
-    Frame menu methods:
+    Sliver menu methods:
   */
 
-  void closeFrameMenu() {
-    _selectedFrameIndex = null;
+  void closeSliverMenu() {
+    _selectedSliverIndex = null;
     notifyListeners();
   }
 
-  bool get canDeleteSelected => _timeline.frameSeq.length > 1;
+  bool get canDeleteSelected => imageSpans.length > 1;
 
   void deleteSelected() {
-    if (_selectedFrameIndex == null) return;
+    if (_selectedSliverIndex == null) return;
     if (!canDeleteSelected) return;
-    _timeline.deleteFrameAt(_selectedFrameIndex);
-    closeFrameMenu();
+    imageSpans.removeAt(_selectedSliverIndex);
+    closeSliverMenu();
     notifyListeners();
   }
 
   void duplicateSelected() {
-    if (_selectedFrameIndex == null) return;
-    _timeline.duplicateFrameAt(_selectedFrameIndex);
-    closeFrameMenu();
+    if (_selectedSliverIndex == null) return;
+    imageSpans.duplicateFrameAt(_selectedSliverIndex);
+    closeSliverMenu();
     notifyListeners();
   }
 
@@ -192,18 +193,15 @@ class TimelineViewModel extends ChangeNotifier {
     updatedTimestamp = TimeSpan.roundDuration(updatedTimestamp);
 
     final newSelectedDuration =
-        _timeline.frameSeq.endTimeOf(_selectedFrameIndex) - updatedTimestamp;
-    final diff = newSelectedDuration - _selectedFrameDuration;
+        imageSpans.endTimeOf(_selectedSliverIndex) - updatedTimestamp;
+    final diff = newSelectedDuration - _selectedSliverDuration;
     final newPrevDuration =
-        _timeline.frameSeq[_selectedFrameIndex - 1].duration - diff;
+        imageSpans[_selectedSliverIndex - 1].duration - diff;
 
     if (newPrevDuration < TimeSpan.singleFrameDuration) return;
 
-    _timeline.changeFrameDurationAt(
-      _selectedFrameIndex - 1,
-      newPrevDuration,
-    );
-    _timeline.changeFrameDurationAt(_selectedFrameIndex, newSelectedDuration);
+    imageSpans.changeSpanDurationAt(_selectedSliverIndex - 1, newPrevDuration);
+    imageSpans.changeSpanDurationAt(_selectedSliverIndex, newSelectedDuration);
     notifyListeners();
   }
 
@@ -213,10 +211,10 @@ class TimelineViewModel extends ChangeNotifier {
       updatedTimestamp = _timeline.playheadPosition;
     }
     updatedTimestamp = TimeSpan.roundDuration(updatedTimestamp);
-
     final newDuration =
-        updatedTimestamp - _timeline.frameSeq.startTimeOf(_selectedFrameIndex);
-    _timeline.changeFrameDurationAt(_selectedFrameIndex, newDuration);
+        updatedTimestamp - imageSpans.startTimeOf(_selectedSliverIndex);
+
+    imageSpans.changeSpanDurationAt(_selectedSliverIndex, newDuration);
     notifyListeners();
   }
 
