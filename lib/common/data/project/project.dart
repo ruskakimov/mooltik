@@ -133,9 +133,7 @@ class Project extends ChangeNotifier {
     } else {
       // New project.
       _frameSize = const Size(1280, 720);
-      _scenes = Sequence<SceneModel>([
-        SceneModel(frames: [await createNewFrame()]),
-      ]);
+      _scenes = Sequence<SceneModel>([await createNewScene()]);
     }
   }
 
@@ -223,7 +221,7 @@ class Project extends ChangeNotifier {
 
   Future<SceneModel> createNewScene() async {
     return SceneModel(
-      frames: [await createNewFrame()],
+      frameSeq: Sequence<FrameModel>([await createNewFrame()]),
     );
   }
 

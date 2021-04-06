@@ -18,11 +18,10 @@ enum PlayMode {
 
 class SceneModel extends TimeSpan {
   SceneModel({
-    @required List<FrameModel> frames,
+    @required this.frameSeq,
     Duration duration = const Duration(seconds: 5),
     this.playMode = PlayMode.extendLast,
-  })  : frameSeq = Sequence<FrameModel>(frames),
-        super(duration);
+  }) : super(duration);
 
   final Sequence<FrameModel> frameSeq;
   final PlayMode playMode;
@@ -56,9 +55,9 @@ class SceneModel extends TimeSpan {
 
   factory SceneModel.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       SceneModel(
-        frames: (json['frames'] as List<dynamic>)
+        frameSeq: Sequence<FrameModel>((json['frames'] as List<dynamic>)
             .map((d) => FrameModel.fromJson(d, frameDirPath))
-            .toList(),
+            .toList()),
         duration: (json['duration'] as String).parseDuration(),
       );
 
@@ -73,7 +72,7 @@ class SceneModel extends TimeSpan {
     PlayMode playMode,
   }) =>
       SceneModel(
-        frames: frames ?? this.frameSeq.iterable,
+        frameSeq: frames ?? this.frameSeq,
         duration: duration ?? this.duration,
         playMode: playMode ?? this.playMode,
       );
