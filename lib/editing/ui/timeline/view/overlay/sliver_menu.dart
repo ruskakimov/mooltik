@@ -23,6 +23,13 @@ class SliverMenu extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (!timelineView.isEditingScene)
+              LabeledIconButton(
+                icon: FontAwesomeIcons.film,
+                label: 'Frames',
+                color: Theme.of(context).colorScheme.onPrimary,
+                onTap: timelineView.editScene,
+              ),
             LabeledIconButton(
               icon: FontAwesomeIcons.copy,
               label: 'Duplicate',

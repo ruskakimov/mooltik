@@ -33,6 +33,16 @@ class TimelineViewModel extends ChangeNotifier {
   bool get isEditingScene => _sceneEdit;
   bool _sceneEdit = false;
 
+  void editScene() {
+    _sceneEdit = true;
+    notifyListeners();
+  }
+
+  void finishSceneEdit() {
+    _sceneEdit = false;
+    notifyListeners();
+  }
+
   Sequence<TimeSpan> get imageSpans =>
       _sceneEdit ? _timeline.currentScene.frameSeq : _timeline.sceneSeq;
 
