@@ -19,7 +19,7 @@ class _EditingPageState extends State<EditingPage>
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => TimelineModel(
-        frameSeq: context.read<Project>().frames,
+        sceneSeq: context.read<Project>().scenes,
         vsync: this,
         createNewFrame: context.read<Project>().createNewFrame,
       ),
