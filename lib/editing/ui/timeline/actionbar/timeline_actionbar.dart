@@ -39,18 +39,20 @@ class TimelineActionbar extends StatelessWidget {
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                if (!timelineView.isEditingScene) ImportAudioButton(),
-                if (!timelineView.isEditingScene) AddSceneButton(),
-                if (timelineView.isEditingScene)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 12.0),
-                    child: ElevatedButton(
-                      onPressed: () => timelineView.finishSceneEdit(),
-                      child: Text('Done'),
-                    ),
-                  ),
-              ],
+              children: timelineView.isEditingScene
+                  ? [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 12.0),
+                        child: ElevatedButton(
+                          onPressed: () => timelineView.finishSceneEdit(),
+                          child: Text('Done'),
+                        ),
+                      ),
+                    ]
+                  : [
+                      ImportAudioButton(),
+                      AddSceneButton(),
+                    ],
             ),
           ),
         ],
