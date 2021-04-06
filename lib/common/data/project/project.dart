@@ -95,9 +95,6 @@ class Project extends ChangeNotifier {
       .map((scene) => scene.exportFrames)
       .expand((iterable) => iterable);
 
-  // Sequence<FrameModel> get frames => _frames;
-  // Sequence<FrameModel> _frames;
-
   List<SoundClip> get soundClips => _soundClips;
   List<SoundClip> _soundClips;
 
