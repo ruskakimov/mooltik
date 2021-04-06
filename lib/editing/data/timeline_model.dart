@@ -5,10 +5,11 @@ import 'package:mooltik/drawing/data/frame/frame_model.dart';
 
 class TimelineModel extends ChangeNotifier {
   TimelineModel({
-    @required this.sceneSeq,
+    @required Sequence<SceneModel> sceneSeq,
     @required TickerProvider vsync,
     @required this.createNewFrame,
   })  : assert(sceneSeq != null && sceneSeq.length > 0),
+        _sceneSeq = sceneSeq,
         _playheadController = AnimationController(
           vsync: vsync,
           duration: sceneSeq.totalDuration,
@@ -22,34 +23,34 @@ class TimelineModel extends ChangeNotifier {
     });
   }
 
-  final Sequence<SceneModel> sceneSeq;
+  final Sequence<SceneModel> _sceneSeq;
   final AnimationController _playheadController;
   final Future<FrameModel> Function() createNewFrame;
 
-  Duration get playheadPosition => sceneSeq.playhead;
+  Duration get playheadPosition => _sceneSeq.playhead;
 
   bool get isPlaying => _playheadController.isAnimating;
 
-  Duration get totalDuration => sceneSeq.totalDuration;
+  Duration get totalDuration => _sceneSeq.totalDuration;
 
-  SceneModel get currentScene => sceneSeq.current;
+  SceneModel get currentScene => _sceneSeq.current;
 
-  Duration get currentSceneStartTime => sceneSeq.currentSpanStart;
+  Duration get currentSceneStartTime => _sceneSeq.currentSpanStart;
 
-  Duration get currentSceneEndTime => sceneSeq.currentSpanEnd;
+  Duration get currentSceneEndTime => _sceneSeq.currentSpanEnd;
 
   FrameModel get currentFrame =>
       currentScene.frameAt(playheadPosition - currentSceneStartTime);
 
   /// Jumps to a new playhead position.
   void jumpTo(Duration playheadPosition) {
-    sceneSeq.playhead = playheadPosition;
+    _sceneSeq.playhead = playheadPosition;
     notifyListeners();
   }
 
-  /// Jumps to the start of the specified frame.
-  void jumpToSceneStart(int frameIndex) {
-    sceneSeq.currentIndex = frameIndex;
+  /// Jumps to the start of the specified scene.
+  void jumpToSceneStart(int index) {
+    _sceneSeq.currentIndex = index;
     notifyListeners();
   }
 
@@ -58,13 +59,13 @@ class TimelineModel extends ChangeNotifier {
     if (isPlaying) {
       _playheadController.stop();
     }
-    sceneSeq.playhead += diff;
+    _sceneSeq.playhead += diff;
     notifyListeners();
   }
 
   /// Reset playhead to the beginning.
   void reset() {
-    sceneSeq.playhead = Duration.zero;
+    _sceneSeq.playhead = Duration.zero;
     notifyListeners();
   }
 
@@ -90,26 +91,26 @@ class TimelineModel extends ChangeNotifier {
   }
 
   Future<void> addNewSceneAfterCurrent() async {
-    sceneSeq.insert(sceneSeq.currentIndex + 1, await createNewScene());
+    _sceneSeq.insert(_sceneSeq.currentIndex + 1, await createNewScene());
     notifyListeners();
   }
 
   void deleteSceneAt(int index) {
-    sceneSeq.removeAt(index);
+    _sceneSeq.removeAt(index);
     notifyListeners();
   }
 
   Future<void> duplicateSceneAt(int index) async {
     // TODO: Duplicate frames
-    sceneSeq.insert(
+    _sceneSeq.insert(
       index + 1,
-      sceneSeq[index].copyWith(),
+      _sceneSeq[index].copyWith(),
     );
     notifyListeners();
   }
 
   void changeSceneDurationAt(int index, Duration newDuration) {
-    sceneSeq[index] = sceneSeq[index].copyWith(duration: newDuration);
+    _sceneSeq[index] = _sceneSeq[index].copyWith(duration: newDuration);
     notifyListeners();
   }
 }
