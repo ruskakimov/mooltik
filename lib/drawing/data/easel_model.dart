@@ -108,14 +108,18 @@ class EaselModel extends ChangeNotifier {
 
   void undo() {
     _historyStack.undo();
-    _frame.snapshot = _historyStack.currentSnapshot;
+    _updateFrame();
     notifyListeners();
   }
 
   void redo() {
     _historyStack.redo();
-    _frame.snapshot = _historyStack.currentSnapshot;
+    _updateFrame();
     notifyListeners();
+  }
+
+  void _updateFrame() {
+    _frame = _frame.copyWith(snapshot: _historyStack.currentSnapshot);
   }
 
   void fitToScreen() {
@@ -221,8 +225,8 @@ class EaselModel extends ChangeNotifier {
       _frame.width.toInt(),
       _frame.height.toInt(),
     );
-    _frame.snapshot = snapshot;
     _historyStack.push(snapshot);
+    _updateFrame();
     unrasterizedStrokes.clear();
     notifyListeners();
   }
