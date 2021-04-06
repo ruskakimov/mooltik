@@ -28,7 +28,7 @@ class ProjectSaveData {
         'width': width,
         'height': height,
         'scenes': scenes.map((d) => d.toJson()).toList(),
-        'sounds': sounds.map((d) => d.toJson()).toList(),
+        'sounds': sounds?.map((d) => d.toJson())?.toList() ?? [],
       };
 
   final double width;

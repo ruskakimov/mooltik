@@ -24,9 +24,10 @@ class TimelineView extends StatelessWidget {
             painter: TimelinePainter(
               timelineView: timelineView,
               soundBite: context.select<Project, SoundClip>(
-                (Project player) => player.soundClips.isNotEmpty
-                    ? player.soundClips.first
-                    : null,
+                (Project player) =>
+                    player.soundClips != null && player.soundClips.isNotEmpty
+                        ? player.soundClips.first
+                        : null,
               ),
             ),
           ),
