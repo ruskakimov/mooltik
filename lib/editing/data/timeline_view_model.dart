@@ -1,8 +1,11 @@
 import 'dart:math';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
+import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/editing/data/convert.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/time_label.dart';
@@ -117,11 +120,19 @@ class TimelineViewModel extends ChangeNotifier {
   double widthFromDuration(Duration duration) =>
       durationToPx(duration, _msPerPx);
 
+  ui.Image _getImageSpanThumbnail(int index) {
+    if (isEditingScene) {
+      return (imageSpans as Sequence<FrameModel>)[index].snapshot;
+    } else {
+      return (imageSpans as Sequence<SceneModel>)[index].frameSeq[0].snapshot;
+    }
+  }
+
   ImageSliver getCurrentImageSliver() {
     return ImageSliver(
       startX: xFromTime(imageSpans.currentSpanStart),
       endX: xFromTime(imageSpans.currentSpanEnd),
-      thumbnail: imageSpans.current.snapshot,
+      thumbnail: _getImageSpanThumbnail(imageSpans.currentIndex),
       index: imageSpans.currentIndex,
     );
   }
@@ -139,7 +150,7 @@ class TimelineViewModel extends ChangeNotifier {
           startX:
               slivers.first.startX - widthFromDuration(imageSpans[i].duration),
           endX: slivers.first.startX,
-          thumbnail: imageSpans[i].snapshot,
+          thumbnail: _getImageSpanThumbnail(i),
           index: i,
         ),
       );
@@ -152,7 +163,7 @@ class TimelineViewModel extends ChangeNotifier {
       slivers.add(ImageSliver(
         startX: slivers.last.endX,
         endX: slivers.last.endX + widthFromDuration(imageSpans[i].duration),
-        thumbnail: imageSpans[i].snapshot,
+        thumbnail: _getImageSpanThumbnail(i),
         index: i,
       ));
     }
