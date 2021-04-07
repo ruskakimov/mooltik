@@ -34,6 +34,7 @@ class TimelineViewModel extends ChangeNotifier {
   bool _sceneEdit = false;
 
   void editScene() {
+    _timeline.sceneSeq.currentIndex = _selectedSliverIndex;
     _sceneEdit = true;
     closeSliverMenu();
     notifyListeners();
@@ -66,7 +67,18 @@ class TimelineViewModel extends ChangeNotifier {
     _setScale(_prevMsPerPx / (details.scale + _scaleOffset));
 
     final diff = (details.localFocalPoint - _prevFocalPoint);
-    final timeDiff = pxToDuration(-diff.dx, _msPerPx);
+    var timeDiff = pxToDuration(-diff.dx, _msPerPx);
+
+    // Clamp playhead within the scene bounds.
+    if (isEditingScene) {
+      final futurePlayhead = _timeline.playheadPosition + timeDiff;
+      if (futurePlayhead >= _sceneEnd) {
+        timeDiff -= futurePlayhead - _sceneEnd + Duration(microseconds: 1);
+      } else if (futurePlayhead < _sceneStart) {
+        timeDiff += _sceneStart - futurePlayhead;
+      }
+    }
+
     _timeline.scrub(timeDiff);
 
     closeSliverMenu();
@@ -144,6 +156,8 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   Duration get _sceneStart => _timeline.sceneSeq.currentSpanStart;
+
+  Duration get _sceneEnd => _timeline.sceneSeq.currentSpanEnd;
 
   Duration get _currentImageSpanStart => isEditingScene
       ? _sceneStart + imageSpans.currentSpanStart
