@@ -171,7 +171,7 @@ class Sequence<T extends TimeSpan> extends ChangeNotifier {
 
   void changeSpanDurationAt(int index, Duration newDuration) {
     _validateIndex(index);
-    _spans[index] = _spans[index].copyWith(duration: newDuration);
+    this[index] = _spans[index].copyWith(duration: newDuration);
     notifyListeners();
   }
 }
