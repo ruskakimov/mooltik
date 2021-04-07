@@ -143,10 +143,20 @@ class TimelineViewModel extends ChangeNotifier {
     }
   }
 
+  Duration get _sceneStart => _timeline.sceneSeq.currentSpanStart;
+
+  Duration get _currentImageSpanStart => isEditingScene
+      ? _sceneStart + imageSpans.currentSpanStart
+      : imageSpans.currentSpanStart;
+
+  Duration get _currentImageSpanEnd => isEditingScene
+      ? _sceneStart + imageSpans.currentSpanEnd
+      : imageSpans.currentSpanEnd;
+
   ImageSliver getCurrentImageSliver() {
     return ImageSliver(
-      startX: xFromTime(imageSpans.currentSpanStart),
-      endX: xFromTime(imageSpans.currentSpanEnd),
+      startX: xFromTime(_currentImageSpanStart),
+      endX: xFromTime(_currentImageSpanEnd),
       thumbnail: _getImageSpanThumbnail(imageSpans.currentIndex),
       index: imageSpans.currentIndex,
     );
