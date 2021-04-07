@@ -28,10 +28,7 @@ class SceneModel extends TimeSpan {
 
   /// Frame at a given playhead position.
   FrameModel frameAt(Duration playhead) {
-    if (playhead < Duration.zero || playhead > duration) {
-      throw Exception(
-          'Given playhead value $playhead is outside of scene range.');
-    }
+    playhead = playhead.clamp(Duration.zero, duration);
 
     if (playMode == PlayMode.extendLast) {
       playhead = playhead.clamp(Duration.zero, frameSeq.totalDuration);
