@@ -236,6 +236,10 @@ class TimelineViewModel extends ChangeNotifier {
     // TODO: Implement scene duplication
   }
 
+  Duration get selectedSliverStartTime => isEditingScene
+      ? _sceneStart + imageSpans.startTimeOf(_selectedSliverIndex)
+      : imageSpans.startTimeOf(_selectedSliverIndex);
+
   /// Handle start time drag handle's new [updatedTimestamp].
   void onStartTimeHandleDragUpdate(Duration updatedTimestamp) {
     if (_shouldSnapToPlayhead(updatedTimestamp)) {
@@ -243,8 +247,7 @@ class TimelineViewModel extends ChangeNotifier {
     }
     updatedTimestamp = TimeSpan.roundDuration(updatedTimestamp);
 
-    final newSelectedDuration =
-        imageSpans.endTimeOf(_selectedSliverIndex) - updatedTimestamp;
+    final newSelectedDuration = selectedSliverEndTime - updatedTimestamp;
     final diff = newSelectedDuration - _selectedSliverDuration;
     final newPrevDuration =
         imageSpans[_selectedSliverIndex - 1].duration - diff;
@@ -256,14 +259,17 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Duration get selectedSliverEndTime => isEditingScene
+      ? _sceneStart + imageSpans.endTimeOf(_selectedSliverIndex)
+      : imageSpans.endTimeOf(_selectedSliverIndex);
+
   /// Handle end time drag handle's new [updatedTimestamp].
   void onEndTimeHandleDragUpdate(Duration updatedTimestamp) {
     if (_shouldSnapToPlayhead(updatedTimestamp)) {
       updatedTimestamp = _timeline.playheadPosition;
     }
     updatedTimestamp = TimeSpan.roundDuration(updatedTimestamp);
-    final newDuration =
-        updatedTimestamp - imageSpans.startTimeOf(_selectedSliverIndex);
+    final newDuration = updatedTimestamp - selectedSliverStartTime;
 
     imageSpans.changeSpanDurationAt(_selectedSliverIndex, newDuration);
     notifyListeners();
