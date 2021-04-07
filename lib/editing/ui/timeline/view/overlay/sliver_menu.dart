@@ -26,7 +26,7 @@ class SliverMenu extends StatelessWidget {
             if (!timelineView.isEditingScene)
               LabeledIconButton(
                 icon: FontAwesomeIcons.film,
-                label: 'Frames',
+                label: 'Edit frames',
                 color: Theme.of(context).colorScheme.onPrimary,
                 onTap: timelineView.editScene,
               ),
