@@ -64,6 +64,28 @@ class TimelinePainter extends CustomPainter {
         soundSliverBottom,
       );
     }
+
+    if (timelineView.isEditingScene) {
+      final fogPaint = Paint()..color = Colors.black45;
+      canvas.drawRect(
+        Rect.fromLTRB(
+          0,
+          0,
+          timelineView.xFromTime(timelineView.sceneStart),
+          size.height,
+        ),
+        fogPaint,
+      );
+      canvas.drawRect(
+        Rect.fromLTRB(
+          timelineView.xFromTime(timelineView.sceneEnd),
+          0,
+          size.width,
+          size.height,
+        ),
+        fogPaint,
+      );
+    }
   }
 
   @override

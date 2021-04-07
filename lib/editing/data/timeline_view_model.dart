@@ -72,10 +72,10 @@ class TimelineViewModel extends ChangeNotifier {
     // Clamp playhead within the scene bounds.
     if (isEditingScene) {
       final futurePlayhead = _timeline.playheadPosition + timeDiff;
-      if (futurePlayhead >= _sceneEnd) {
-        timeDiff -= futurePlayhead - _sceneEnd + Duration(microseconds: 1);
-      } else if (futurePlayhead < _sceneStart) {
-        timeDiff += _sceneStart - futurePlayhead;
+      if (futurePlayhead >= sceneEnd) {
+        timeDiff -= futurePlayhead - sceneEnd + Duration(microseconds: 1);
+      } else if (futurePlayhead < sceneStart) {
+        timeDiff += sceneStart - futurePlayhead;
       }
     }
 
@@ -155,16 +155,16 @@ class TimelineViewModel extends ChangeNotifier {
     }
   }
 
-  Duration get _sceneStart => _timeline.sceneSeq.currentSpanStart;
+  Duration get sceneStart => _timeline.sceneSeq.currentSpanStart;
 
-  Duration get _sceneEnd => _timeline.sceneSeq.currentSpanEnd;
+  Duration get sceneEnd => _timeline.sceneSeq.currentSpanEnd;
 
   Duration get _currentImageSpanStart => isEditingScene
-      ? _sceneStart + imageSpans.currentSpanStart
+      ? sceneStart + imageSpans.currentSpanStart
       : imageSpans.currentSpanStart;
 
   Duration get _currentImageSpanEnd => isEditingScene
-      ? _sceneStart + imageSpans.currentSpanEnd
+      ? sceneStart + imageSpans.currentSpanEnd
       : imageSpans.currentSpanEnd;
 
   ImageSliver getCurrentImageSliver() {
@@ -251,7 +251,7 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   Duration get selectedSliverStartTime => isEditingScene
-      ? _sceneStart + imageSpans.startTimeOf(_selectedSliverIndex)
+      ? sceneStart + imageSpans.startTimeOf(_selectedSliverIndex)
       : imageSpans.startTimeOf(_selectedSliverIndex);
 
   /// Handle start time drag handle's new [updatedTimestamp].
@@ -274,7 +274,7 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   Duration get selectedSliverEndTime => isEditingScene
-      ? _sceneStart + imageSpans.endTimeOf(_selectedSliverIndex)
+      ? sceneStart + imageSpans.endTimeOf(_selectedSliverIndex)
       : imageSpans.endTimeOf(_selectedSliverIndex);
 
   /// Handle end time drag handle's new [updatedTimestamp].
