@@ -77,13 +77,21 @@ class TimelineViewModel extends ChangeNotifier {
   void onTapUp(TapUpDetails details) {
     _selectedSliverIndex = _getIndexUnderPosition(details.localPosition);
     if (_selectedSliverIndex == null) return;
+    _onSelectedSliver();
+    notifyListeners();
+  }
 
+  void _onSelectedSliver() {
+    if (_timeline.isPlaying) {
+      _timeline.pause();
+    }
+
+    // Animate to selected sliver.
     if (selectedSliverStartTime > _timeline.playheadPosition) {
       _timeline.animateTo(selectedSliverStartTime);
     } else if (selectedSliverEndTime <= _timeline.playheadPosition) {
       _timeline.animateTo(selectedSliverEndTime - Duration(microseconds: 1));
     }
-    notifyListeners();
   }
 
   int _getIndexUnderPosition(Offset position) {
