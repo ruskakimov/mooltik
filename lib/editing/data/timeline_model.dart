@@ -15,18 +15,10 @@ class TimelineModel extends ChangeNotifier {
         ) {
     _playheadController.addListener(() {
       final newPlayhead = _fractionAsPlayhead(_playheadController.value);
+      _setPlayhead(newPlayhead);
 
-      if (isSceneBound) {
-        sceneSeq.playhead = newPlayhead.clamp(
-          currentSceneStart,
-          currentSceneEndInclusive,
-        );
-
-        if (sceneSeq.playhead == currentSceneEndInclusive) {
-          _playheadController.stop();
-        }
-      } else {
-        sceneSeq.playhead = newPlayhead;
+      if (playheadPosition == playheadEndBound) {
+        _playheadController.stop();
       }
 
       notifyListeners();
@@ -51,6 +43,14 @@ class TimelineModel extends ChangeNotifier {
 
   Duration get currentSceneEndInclusive =>
       sceneSeq.currentSpanEnd - Duration(microseconds: 1);
+
+  /// Inclusive playhead start bound.
+  Duration get playheadStartBound =>
+      isSceneBound ? currentSceneStart : Duration.zero;
+
+  /// Inclusive playhead end bound.
+  Duration get playheadEndBound =>
+      isSceneBound ? currentSceneEndInclusive : totalDuration;
 
   FrameModel get currentFrame =>
       currentScene.frameAt(playheadPosition - sceneSeq.currentSpanStart);
@@ -84,24 +84,14 @@ class TimelineModel extends ChangeNotifier {
     if (isPlaying) {
       _playheadController.stop();
     }
-    if (isSceneBound) {
-      sceneSeq.playhead = (sceneSeq.playhead + diff).clamp(
-        currentSceneStart,
-        currentSceneEndInclusive,
-      );
-    } else {
-      sceneSeq.playhead += diff;
-    }
-    notifyListeners();
-  }
-
-  /// Reset playhead to the beginning.
-  void reset() {
-    sceneSeq.playhead = Duration.zero;
+    _setPlayhead(playheadPosition + diff);
     notifyListeners();
   }
 
   void play() {
+    if (playheadPosition == playheadEndBound) {
+      _setPlayhead(playheadStartBound);
+    }
     _preparePlayheadController();
     _playheadController.forward();
     notifyListeners();
@@ -115,6 +105,10 @@ class TimelineModel extends ChangeNotifier {
   void pause() {
     _playheadController.stop();
     notifyListeners();
+  }
+
+  void _setPlayhead(Duration playhead) {
+    sceneSeq.playhead = (playhead).clamp(playheadStartBound, playheadEndBound);
   }
 
   double _playheadAsFraction(Duration playhead) =>
