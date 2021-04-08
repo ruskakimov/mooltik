@@ -24,6 +24,7 @@ class TimelineViewModel extends ChangeNotifier {
         _preferences = sharedPreferences,
         _msPerPx = sharedPreferences.getDouble(_msPerPxKey) ?? 10 {
     _prevMsPerPx = _msPerPx;
+    timeline.addListener(notifyListeners);
   }
 
   SharedPreferences _preferences;
@@ -99,6 +100,13 @@ class TimelineViewModel extends ChangeNotifier {
 
   void onTapUp(TapUpDetails details) {
     _selectedSliverIndex = _getIndexUnderPosition(details.localPosition);
+    if (_selectedSliverIndex == null) return;
+
+    if (selectedSliverStartTime > _timeline.playheadPosition) {
+      _timeline.animateTo(selectedSliverStartTime);
+    } else if (selectedSliverEndTime <= _timeline.playheadPosition) {
+      _timeline.animateTo(selectedSliverEndTime - Duration(microseconds: 1));
+    }
     notifyListeners();
   }
 

@@ -42,6 +42,16 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Animates to a new playhead position.
+  void animateTo(Duration newPlayheadPosition) {
+    _preparePlayheadController();
+    _playheadController.animateTo(
+      _playheadAsFraction(newPlayheadPosition),
+      duration: const Duration(milliseconds: 150),
+    );
+    notifyListeners();
+  }
+
   /// Moves playhead by [diff].
   void scrub(Duration diff) {
     if (isPlaying) {
@@ -58,12 +68,18 @@ class TimelineModel extends ChangeNotifier {
   }
 
   void play() {
-    _playheadController.duration = totalDuration;
-    _playheadController.value =
-        playheadPosition.inMicroseconds / totalDuration.inMicroseconds;
+    _preparePlayheadController();
     _playheadController.forward();
     notifyListeners();
   }
+
+  void _preparePlayheadController() {
+    _playheadController.duration = totalDuration;
+    _playheadController.value = _playheadAsFraction(playheadPosition);
+  }
+
+  double _playheadAsFraction(Duration playhead) =>
+      playhead.inMicroseconds / totalDuration.inMicroseconds;
 
   void pause() {
     _playheadController.stop();
