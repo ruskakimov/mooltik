@@ -34,19 +34,6 @@ class TimelineViewModel extends ChangeNotifier {
   bool get isEditingScene => _sceneEdit;
   bool _sceneEdit = false;
 
-  void editScene() {
-    _timeline.sceneSeq.currentIndex = _selectedSliverIndex;
-    _sceneEdit = true;
-    closeSliverMenu();
-    notifyListeners();
-  }
-
-  void finishSceneEdit() {
-    _sceneEdit = false;
-    closeSliverMenu();
-    notifyListeners();
-  }
-
   Sequence<TimeSpan> get imageSpans =>
       _sceneEdit ? _timeline.currentScene.frameSeq : _timeline.sceneSeq;
 
@@ -223,6 +210,19 @@ class TimelineViewModel extends ChangeNotifier {
 
   void closeSliverMenu() {
     _selectedSliverIndex = null;
+    notifyListeners();
+  }
+
+  void editScene() {
+    _timeline.sceneSeq.currentIndex = _selectedSliverIndex;
+    _sceneEdit = true;
+    closeSliverMenu();
+    notifyListeners();
+  }
+
+  void finishSceneEdit() {
+    _sceneEdit = false;
+    closeSliverMenu();
     notifyListeners();
   }
 
