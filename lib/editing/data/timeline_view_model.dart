@@ -56,17 +56,6 @@ class TimelineViewModel extends ChangeNotifier {
 
     final diff = (details.localFocalPoint - _prevFocalPoint);
     var timeDiff = pxToDuration(-diff.dx, _msPerPx);
-
-    // Clamp playhead within the scene bounds.
-    if (isEditingScene) {
-      final futurePlayhead = _timeline.playheadPosition + timeDiff;
-      if (futurePlayhead >= sceneEnd) {
-        timeDiff -= futurePlayhead - sceneEnd + Duration(microseconds: 1);
-      } else if (futurePlayhead < sceneStart) {
-        timeDiff += sceneStart - futurePlayhead;
-      }
-    }
-
     _timeline.scrub(timeDiff);
 
     closeSliverMenu();
@@ -150,9 +139,9 @@ class TimelineViewModel extends ChangeNotifier {
     }
   }
 
-  Duration get sceneStart => _timeline.sceneSeq.currentSpanStart;
+  Duration get sceneStart => _timeline.currentSceneStart;
 
-  Duration get sceneEnd => _timeline.sceneSeq.currentSpanEnd;
+  Duration get sceneEnd => _timeline.currentSceneEnd;
 
   Duration get _currentImageSpanStart => isEditingScene
       ? sceneStart + imageSpans.currentSpanStart
@@ -216,12 +205,14 @@ class TimelineViewModel extends ChangeNotifier {
   void editScene() {
     _timeline.sceneSeq.currentIndex = _selectedSliverIndex;
     _sceneEdit = true;
+    _timeline.isSceneBound = true;
     closeSliverMenu();
     notifyListeners();
   }
 
   void finishSceneEdit() {
     _sceneEdit = false;
+    _timeline.isSceneBound = false;
     closeSliverMenu();
     notifyListeners();
   }

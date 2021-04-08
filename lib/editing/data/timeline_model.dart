@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
@@ -13,10 +14,21 @@ class TimelineModel extends ChangeNotifier {
           duration: sceneSeq.totalDuration,
         ) {
     _playheadController.addListener(() {
-      sceneSeq.playhead = Duration(
-        milliseconds:
-            (sceneSeq.totalDuration * _playheadController.value).inMilliseconds,
-      );
+      final newPlayhead = _fractionAsPlayhead(_playheadController.value);
+
+      if (isSceneBound) {
+        sceneSeq.playhead = newPlayhead.clamp(
+          currentSceneStart,
+          currentSceneEndInclusive,
+        );
+
+        if (sceneSeq.playhead == currentSceneEndInclusive) {
+          _playheadController.stop();
+        }
+      } else {
+        sceneSeq.playhead = newPlayhead;
+      }
+
       notifyListeners();
     });
     sceneSeq.addListener(notifyListeners);
@@ -33,8 +45,23 @@ class TimelineModel extends ChangeNotifier {
 
   SceneModel get currentScene => sceneSeq.current;
 
+  Duration get currentSceneStart => sceneSeq.currentSpanStart;
+
+  Duration get currentSceneEnd => sceneSeq.currentSpanEnd;
+
+  Duration get currentSceneEndInclusive =>
+      sceneSeq.currentSpanEnd - Duration(microseconds: 1);
+
   FrameModel get currentFrame =>
       currentScene.frameAt(playheadPosition - sceneSeq.currentSpanStart);
+
+  /// Playhead is constrained to the current scene bounds.
+  bool get isSceneBound => _isSceneBound;
+  bool _isSceneBound = false;
+  set isSceneBound(bool value) {
+    _isSceneBound = value;
+    notifyListeners();
+  }
 
   /// Jumps to a new playhead position.
   void jumpTo(Duration playheadPosition) {
@@ -57,7 +84,14 @@ class TimelineModel extends ChangeNotifier {
     if (isPlaying) {
       _playheadController.stop();
     }
-    sceneSeq.playhead += diff;
+    if (isSceneBound) {
+      sceneSeq.playhead = (sceneSeq.playhead + diff).clamp(
+        currentSceneStart,
+        currentSceneEndInclusive,
+      );
+    } else {
+      sceneSeq.playhead += diff;
+    }
     notifyListeners();
   }
 
@@ -78,11 +112,14 @@ class TimelineModel extends ChangeNotifier {
     _playheadController.value = _playheadAsFraction(playheadPosition);
   }
 
-  double _playheadAsFraction(Duration playhead) =>
-      playhead.inMicroseconds / totalDuration.inMicroseconds;
-
   void pause() {
     _playheadController.stop();
     notifyListeners();
   }
+
+  double _playheadAsFraction(Duration playhead) =>
+      playhead.inMicroseconds / totalDuration.inMicroseconds;
+
+  Duration _fractionAsPlayhead(double fraction) =>
+      Duration(microseconds: (totalDuration * fraction).inMicroseconds);
 }
