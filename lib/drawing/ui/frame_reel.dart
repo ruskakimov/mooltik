@@ -110,14 +110,10 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
             if (index == reel.frames.length) {
               return GestureDetector(
                 onTap: () async {
-                  reel.frames.insert(
-                    reel.frames.length,
+                  reel.appendFrame(
                     await context.read<Project>().createNewFrame(),
                   );
-
-                  // TODO: Find a better way
                   scrollTo(reel.frames.length - 1);
-                  reel.setCurrent(reel.frames.length - 1);
                 },
                 child: _FrameReelItem(
                   child: ColoredBox(

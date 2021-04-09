@@ -36,4 +36,9 @@ class FrameReelModel extends ChangeNotifier {
     _currentIndex = index;
     notifyListeners();
   }
+
+  void appendFrame(FrameModel frame) {
+    frames.insert(frames.length, frame);
+    notifyListeners();
+  }
 }
