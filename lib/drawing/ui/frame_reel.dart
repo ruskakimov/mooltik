@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
+import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/editing/ui/preview/frame_thumbnail.dart';
 import 'package:provider/provider.dart';
-import 'package:mooltik/editing/data/timeline_model.dart';
 
 const _framePadding = const EdgeInsets.only(
   left: 4.0,
@@ -62,14 +62,14 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
   @override
   void initState() {
     super.initState();
-    final timeline = context.read<TimelineModel>();
+    final reel = context.read<FrameReelModel>();
+
     _controller = ScrollController(
-      initialScrollOffset:
-          frameOffset(timeline.currentScene.frameSeq.currentIndex),
+      initialScrollOffset: frameOffset(reel.currentIndex),
     );
     _controller.addListener(() {
-      if (centeredFrameIndex != timeline.currentScene.frameSeq.currentIndex) {
-        timeline.currentScene.frameSeq.currentIndex = centeredFrameIndex;
+      if (centeredFrameIndex != reel.currentIndex) {
+        reel.setCurrent(centeredFrameIndex);
       }
     });
   }
@@ -83,7 +83,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
 
   @override
   Widget build(BuildContext context) {
-    final timeline = context.watch<TimelineModel>();
+    final reel = context.watch<FrameReelModel>();
 
     return GestureDetector(
       // By catching onTapDown gesture, it's possible to keep animateTo from removing user's scroll listener.
@@ -104,17 +104,20 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
             right: (widget.width - widget.itemWidth) / 2 - widget.itemWidth,
           ),
           primary: false,
-          itemCount: timeline.currentScene.frameSeq.length + 1,
+          itemCount: reel.frames.length + 1,
           itemExtent: widget.itemWidth,
           itemBuilder: (context, index) {
-            if (index == timeline.currentScene.frameSeq.length) {
+            if (index == reel.frames.length) {
               return GestureDetector(
                 onTap: () async {
-                  timeline.currentScene.frameSeq.insert(
-                    timeline.currentScene.frameSeq.length,
+                  reel.frames.insert(
+                    reel.frames.length,
                     await context.read<Project>().createNewFrame(),
                   );
-                  scrollTo(timeline.currentScene.frameSeq.length - 1);
+
+                  // TODO: Find a better way
+                  scrollTo(reel.frames.length - 1);
+                  reel.setCurrent(reel.frames.length - 1);
                 },
                 child: _FrameReelItem(
                   child: ColoredBox(
@@ -129,7 +132,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
               onTap: () => scrollTo(index),
               child: _FrameReelItem(
                 child: FrameThumbnail(
-                  frame: timeline.currentScene.frameSeq[index],
+                  frame: reel.frames[index],
                 ),
               ),
             );

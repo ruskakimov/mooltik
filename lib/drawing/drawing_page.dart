@@ -37,13 +37,12 @@ class DrawingPage extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => FrameReelModel(
-            context.read<SharedPreferences>(),
+            frames: context.read<TimelineModel>().currentScene.frameSeq,
+            sharedPreferences: context.read<SharedPreferences>(),
           ),
         ),
       ],
       builder: (context, child) {
-        final timeline = context.watch<TimelineModel>();
-
         return WillPopScope(
           // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
           onWillPop: () async => true,
@@ -51,10 +50,10 @@ class DrawingPage extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.background,
             body: MultiProvider(
               providers: [
-                ChangeNotifierProxyProvider2<TimelineModel, ToolboxModel,
+                ChangeNotifierProxyProvider2<FrameReelModel, ToolboxModel,
                     EaselModel>(
                   create: (context) => EaselModel(
-                    frame: timeline.currentFrame,
+                    frame: context.read<FrameReelModel>().currentFrame,
                     selectedTool: context.read<ToolboxModel>().selectedTool,
                   ),
                   update: (_, reel, toolbox, easel) => easel
