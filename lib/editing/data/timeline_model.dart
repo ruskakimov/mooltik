@@ -65,7 +65,7 @@ class TimelineModel extends ChangeNotifier {
 
   /// Jumps to a new playhead position.
   void jumpTo(Duration playheadPosition) {
-    sceneSeq.playhead = playheadPosition;
+    _setPlayhead(playheadPosition);
     notifyListeners();
   }
 
@@ -89,9 +89,6 @@ class TimelineModel extends ChangeNotifier {
   }
 
   void play() {
-    if (playheadPosition == playheadEndBound) {
-      _setPlayhead(playheadStartBound);
-    }
     _preparePlayheadController();
     _playheadController.forward();
     notifyListeners();
