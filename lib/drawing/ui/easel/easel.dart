@@ -54,7 +54,7 @@ class _EaselState extends State<Easel> {
                         Opacity(
                           opacity: 0.2,
                           child: CustomPaint(
-                            size: onion.frameAfter.size,
+                            size: onion.frameBefore.size,
                             foregroundPainter: FramePainter(
                               frame: onion.frameBefore,
                               background: Colors.transparent,
