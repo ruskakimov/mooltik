@@ -12,6 +12,7 @@ class TimelinePositioned extends StatefulWidget {
     @required this.width,
     @required this.height,
     @required this.child,
+    this.offset,
     this.onDragUpdate,
     this.onDragEnd,
   }) : super(key: key);
@@ -30,6 +31,8 @@ class TimelinePositioned extends StatefulWidget {
 
   final Widget child;
 
+  final Offset offset;
+
   final TimelinePositionedDragUpdate onDragUpdate;
   final GestureDragEndCallback onDragEnd;
 
@@ -45,9 +48,10 @@ class _TimelinePositionedState extends State<TimelinePositioned> {
     final timelineView = context.watch<TimelineViewModel>();
 
     final offset = Offset(
-      timelineView.xFromTime(widget.timestamp) - widget.width / 2,
-      widget.y - widget.height / 2,
-    );
+          timelineView.xFromTime(widget.timestamp) - widget.width / 2,
+          widget.y - widget.height / 2,
+        ) +
+        (widget.offset ?? Offset.zero);
 
     return Positioned(
       left: offset.dx,
@@ -69,7 +73,11 @@ class _TimelinePositionedState extends State<TimelinePositioned> {
               }
             : null,
         onHorizontalDragEnd: widget.onDragEnd,
-        child: widget.child,
+        child: SizedBox(
+          width: widget.width,
+          height: widget.height,
+          child: widget.child,
+        ),
       ),
     );
   }

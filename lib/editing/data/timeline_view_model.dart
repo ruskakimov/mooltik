@@ -218,6 +218,16 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void nextScenePlayMode() {
+    final scene = _timeline.currentScene;
+    final i = _timeline.sceneSeq.currentIndex;
+    final nextMode =
+        PlayMode.values[(scene.playMode.index + 1) % PlayMode.values.length];
+
+    _timeline.sceneSeq[i] = scene.copyWith(playMode: nextMode);
+    notifyListeners();
+  }
+
   bool get canDeleteSelected => imageSpans.length > 1;
 
   void deleteSelected() {

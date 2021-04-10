@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/player_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/play_mode_button.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_end_handle.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_start_handle.dart';
@@ -52,6 +53,7 @@ class TimelinePanel extends StatelessWidget {
                         timelineView.selectedSliverIndex != 0)
                       ResizeStartHandle(),
                     if (timelineView.showSliverMenu) ResizeEndHandle(),
+                    if (timelineView.isEditingScene) PlayModeButton(),
                   ],
                 ),
               ),
