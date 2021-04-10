@@ -33,6 +33,7 @@ class FrameReelModel extends ChangeNotifier {
   int _currentIndex;
 
   void setCurrent(int index) {
+    if (index < 0 || index >= frames.length) return;
     _currentIndex = index;
     notifyListeners();
   }
