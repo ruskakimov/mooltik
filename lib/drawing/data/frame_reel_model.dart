@@ -41,4 +41,10 @@ class FrameReelModel extends ChangeNotifier {
     frames.insert(frames.length, frame);
     notifyListeners();
   }
+
+  /// Used by easel to update the frame image.
+  void replaceCurrentFrame(FrameModel newFrame) {
+    frames[_currentIndex] = newFrame;
+    notifyListeners();
+  }
 }

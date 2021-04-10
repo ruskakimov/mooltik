@@ -21,6 +21,7 @@ class EaselModel extends ChangeNotifier {
   EaselModel({
     @required FrameModel frame,
     @required Tool selectedTool,
+    @required this.onChanged,
   })  : _frame = frame,
         _historyStack = ImageHistoryStack(
           maxCount: maxUndos + 1,
@@ -32,6 +33,8 @@ class EaselModel extends ChangeNotifier {
   FrameModel _frame;
 
   Tool _selectedTool;
+
+  final ValueChanged<FrameModel> onChanged;
 
   Size get frameSize => _frame.size;
 
@@ -120,6 +123,7 @@ class EaselModel extends ChangeNotifier {
 
   void _updateFrame() {
     _frame = _frame.copyWith(snapshot: _historyStack.currentSnapshot);
+    onChanged(_frame);
   }
 
   void fitToScreen() {
