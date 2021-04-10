@@ -85,13 +85,6 @@ class TimelineViewModel extends ChangeNotifier {
     if (_timeline.isPlaying) {
       _timeline.pause();
     }
-
-    // Animate to selected sliver.
-    if (selectedSliverStartTime > _timeline.playheadPosition) {
-      _timeline.animateTo(selectedSliverStartTime);
-    } else if (selectedSliverEndTime <= _timeline.playheadPosition) {
-      _timeline.animateTo(selectedSliverEndTime - Duration(microseconds: 1));
-    }
   }
 
   int _getIndexUnderPosition(Offset position) {
