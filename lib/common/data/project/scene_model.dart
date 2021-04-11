@@ -52,15 +52,18 @@ class SceneModel extends TimeSpan {
     var i = 0;
 
     while (elapsed < duration) {
-      final frame = _frameAt(i);
+      var frame = _frameAt(i);
 
-      if (elapsed + frame.duration <= duration) {
-        yield frame;
-      } else {
+      final extendedFrame =
+          playMode == PlayMode.extendLast && i == frameSeq.length - 1;
+      final overflowingFrame = elapsed + frame.duration > duration;
+
+      if (extendedFrame || overflowingFrame) {
         final leftover = duration - elapsed;
-        yield frame.copyWith(duration: leftover);
+        frame = frame.copyWith(duration: leftover);
       }
 
+      yield frame;
       elapsed += frame.duration;
       i++;
     }
