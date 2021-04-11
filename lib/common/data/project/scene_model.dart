@@ -77,7 +77,7 @@ class SceneModel extends TimeSpan {
         break;
       case PlayMode.pingPong:
         i %= L * 2;
-        if (i >= L) i = 2 * L - i;
+        if (i >= L) i = 2 * L - i - 1;
         break;
     }
     return frameSeq[i];
