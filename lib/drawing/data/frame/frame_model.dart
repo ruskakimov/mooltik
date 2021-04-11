@@ -1,13 +1,14 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:path/path.dart' as p;
 
-class FrameModel extends TimeSpan {
+class FrameModel extends TimeSpan with EquatableMixin {
   FrameModel({
     @required this.file,
     Duration duration = const Duration(seconds: 1),
@@ -56,4 +57,7 @@ class FrameModel extends TimeSpan {
         duration: duration ?? this.duration,
         snapshot: snapshot ?? this._snapshot,
       );
+
+  @override
+  List<Object> get props => [file.path, duration];
 }
