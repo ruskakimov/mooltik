@@ -56,11 +56,13 @@ class SceneModel extends TimeSpan {
             .map((d) => FrameModel.fromJson(d, frameDirPath))
             .toList()),
         duration: (json['duration'] as String).parseDuration(),
+        playMode: PlayMode.values[json['play_mode'] as int ?? 0],
       );
 
   Map<String, dynamic> toJson() => {
         'frames': frameSeq.iterable.map((d) => d.toJson()).toList(),
         'duration': duration.toString(),
+        'play_mode': playMode.index,
       };
 
   SceneModel copyWith({
