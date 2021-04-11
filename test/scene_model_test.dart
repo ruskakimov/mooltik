@@ -73,7 +73,7 @@ void main() {
       expect(scene.frameAt(Duration(seconds: 16)).file.path, '2.png');
     });
 
-    test('extend last returns correct export frames', () {
+    test('returns correct export frames for extend last mode', () {
       final scene = SceneModel(
         frameSeq: Sequence<FrameModel>([
           FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
@@ -88,7 +88,7 @@ void main() {
       ]);
     });
 
-    test('loop returns correct export frames', () {
+    test('returns correct export frames for loop mode', () {
       final scene = SceneModel(
         frameSeq: Sequence<FrameModel>([
           FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
@@ -108,7 +108,7 @@ void main() {
       ]);
     });
 
-    test('ping-pong returns correct export frames', () {
+    test('returns correct export frames for ping-pong mode', () {
       final scene = SceneModel(
         frameSeq: Sequence<FrameModel>([
           FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
