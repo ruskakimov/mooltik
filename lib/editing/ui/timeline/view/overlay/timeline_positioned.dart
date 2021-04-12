@@ -43,6 +43,8 @@ class TimelinePositioned extends StatefulWidget {
 class _TimelinePositionedState extends State<TimelinePositioned> {
   Offset _dragStartOffset;
 
+  Offset get _visualOffset => widget.offset ?? Offset.zero;
+
   @override
   Widget build(BuildContext context) {
     final timelineView = context.watch<TimelineViewModel>();
@@ -51,7 +53,7 @@ class _TimelinePositionedState extends State<TimelinePositioned> {
           timelineView.xFromTime(widget.timestamp) - widget.width / 2,
           widget.y - widget.height / 2,
         ) +
-        (widget.offset ?? Offset.zero);
+        _visualOffset;
 
     return Positioned(
       left: offset.dx,
@@ -60,7 +62,7 @@ class _TimelinePositionedState extends State<TimelinePositioned> {
         behavior: HitTestBehavior.opaque,
         onHorizontalDragStart: widget.onDragUpdate != null
             ? (details) {
-                _dragStartOffset = offset;
+                _dragStartOffset = offset - _visualOffset;
               }
             : null,
         onHorizontalDragUpdate: widget.onDragUpdate != null
