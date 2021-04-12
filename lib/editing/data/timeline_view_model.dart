@@ -189,6 +189,7 @@ class TimelineViewModel extends ChangeNotifier {
         endX: slivers.last.endX + widthFromDuration(imageSpans[i].duration),
         thumbnail: _getImageSpanThumbnail(i),
         index: i,
+        opacity: 0.5,
       ));
     }
     return slivers;
