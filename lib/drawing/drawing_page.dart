@@ -18,19 +18,6 @@ class DrawingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProxyProvider<TimelineModel, OnionModel>(
-          update: (context, timeline, model) => model
-            ..updateSelectedIndex(timeline.currentScene.frameSeq.currentIndex),
-          create: (context) => OnionModel(
-            frames: context.read<TimelineModel>().currentScene.frameSeq,
-            selectedIndex: context
-                .read<TimelineModel>()
-                .currentScene
-                .frameSeq
-                .currentIndex,
-            sharedPreferences: context.read<SharedPreferences>(),
-          ),
-        ),
         ChangeNotifierProvider(
           create: (context) => ToolboxModel(
             context.read<SharedPreferences>(),
@@ -39,6 +26,15 @@ class DrawingPage extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => FrameReelModel(
             frames: context.read<TimelineModel>().currentScene.frameSeq,
+            sharedPreferences: context.read<SharedPreferences>(),
+          ),
+        ),
+        ChangeNotifierProxyProvider<FrameReelModel, OnionModel>(
+          update: (context, reel, model) =>
+              model..updateSelectedIndex(reel.currentIndex),
+          create: (context) => OnionModel(
+            frames: context.read<TimelineModel>().currentScene.frameSeq,
+            selectedIndex: context.read<FrameReelModel>().currentIndex,
             sharedPreferences: context.read<SharedPreferences>(),
           ),
         ),
