@@ -6,6 +6,7 @@ import 'package:mooltik/editing/ui/timeline/view/overlay/play_mode_button.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_end_handle.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_start_handle.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/scene_end_handle.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editing/ui/timeline/view/timeline_view.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/timeline_actionbar.dart';
@@ -54,6 +55,7 @@ class TimelinePanel extends StatelessWidget {
                       ResizeStartHandle(),
                     if (timelineView.showSliverMenu) ResizeEndHandle(),
                     if (timelineView.isEditingScene) PlayModeButton(),
+                    if (timelineView.isEditingScene) SceneEndHandle(),
                   ],
                 ),
               ),

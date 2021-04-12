@@ -305,4 +305,15 @@ class TimelineViewModel extends ChangeNotifier {
     final pxDiff = durationToPx(diff, _msPerPx);
     return pxDiff <= 12;
   }
+
+  void onSceneEndHandleDragUpdate(Duration updatedTimestamp) {
+    if (_shouldSnapToPlayhead(updatedTimestamp)) {
+      updatedTimestamp = _timeline.playheadPosition;
+    }
+    updatedTimestamp = TimeSpan.roundDuration(updatedTimestamp);
+    final newDuration = updatedTimestamp - sceneStart;
+
+    _timeline.sceneSeq.changeCurrentSpanDuration(newDuration);
+    notifyListeners();
+  }
 }

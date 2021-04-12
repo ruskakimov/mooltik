@@ -174,4 +174,8 @@ class Sequence<T extends TimeSpan> extends ChangeNotifier {
     this[index] = _spans[index].copyWith(duration: newDuration);
     notifyListeners();
   }
+
+  void changeCurrentSpanDuration(Duration newDuration) {
+    changeSpanDurationAt(_currentIndex, newDuration);
+  }
 }
