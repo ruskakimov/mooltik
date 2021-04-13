@@ -178,7 +178,7 @@ class TimelineViewModel extends ChangeNotifier {
           startX: slivers.first.startX - widthFromDuration(spans[i].duration),
           endX: slivers.first.startX,
           thumbnail: thumbnailAt(i),
-          index: i,
+          index: isGhostFrame(i) ? null : i,
         ),
       );
     }
@@ -191,7 +191,7 @@ class TimelineViewModel extends ChangeNotifier {
         startX: slivers.last.endX,
         endX: slivers.last.endX + widthFromDuration(spans[i].duration),
         thumbnail: thumbnailAt(i),
-        index: i,
+        index: isGhostFrame(i) ? null : i,
         opacity: isGhostFrame(i) ? 0.5 : 1,
       ));
     }

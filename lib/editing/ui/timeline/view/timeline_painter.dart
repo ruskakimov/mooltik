@@ -33,7 +33,8 @@ class TimelinePainter extends CustomPainter {
         timelineView.imageSliverBottom,
       );
 
-      if (timelineView.selectedSliverIndex == sliver.index) {
+      if (timelineView.selectedSliverIndex != null &&
+          timelineView.selectedSliverIndex == sliver.index) {
         paintSelection(
           canvas,
           sliver.getRrect(
