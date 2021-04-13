@@ -47,6 +47,8 @@ class SceneModel extends TimeSpan {
     return frameSeq.current;
   }
 
+  Iterable<FrameModel> get ghostFrames => exportFrames.skip(frameSeq.length);
+
   Iterable<FrameModel> get exportFrames sync* {
     var elapsed = Duration.zero;
     var i = 0;
@@ -55,7 +57,7 @@ class SceneModel extends TimeSpan {
       var frame = _frameAt(i);
 
       final extendedFrame =
-          playMode == PlayMode.extendLast && i == frameSeq.length - 1;
+          playMode == PlayMode.extendLast && i == frameSeq.length;
       final overflowingFrame = elapsed + frame.duration > duration;
 
       if (extendedFrame || overflowingFrame) {

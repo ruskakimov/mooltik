@@ -132,14 +132,6 @@ class TimelineViewModel extends ChangeNotifier {
   double widthFromDuration(Duration duration) =>
       durationToPx(duration, _msPerPx);
 
-  ui.Image _getImageSpanThumbnail(int index) {
-    if (isEditingScene) {
-      return (imageSpans as Sequence<FrameModel>)[index].snapshot;
-    } else {
-      return (imageSpans as Sequence<SceneModel>)[index].frameSeq[0].snapshot;
-    }
-  }
-
   Duration get sceneStart => _timeline.currentSceneStart;
 
   Duration get sceneEnd => _timeline.currentSceneEnd;
@@ -156,40 +148,51 @@ class TimelineViewModel extends ChangeNotifier {
     return ImageSliver(
       startX: xFromTime(_currentImageSpanStart),
       endX: xFromTime(_currentImageSpanEnd),
-      thumbnail: _getImageSpanThumbnail(imageSpans.currentIndex),
+      thumbnail: isEditingScene
+          ? (imageSpans.current as FrameModel).snapshot
+          : (imageSpans.current as SceneModel).frameSeq[0].snapshot,
       index: imageSpans.currentIndex,
     );
   }
 
   List<ImageSliver> getVisibleImageSlivers() {
+    final midIndex = imageSpans.currentIndex;
+    final spans = imageSpans.iterable.toList();
+    if (isEditingScene) {
+      spans.addAll(_timeline.currentScene.ghostFrames);
+    }
+
+    ui.Image thumbnailAt(int i) => isEditingScene
+        ? (spans[i] as FrameModel).snapshot
+        : (spans[i] as SceneModel).frameSeq[0].snapshot;
+
+    bool isGhostFrame(int i) => i >= imageSpans.length;
+
     final List<ImageSliver> slivers = [getCurrentImageSliver()];
 
     // Fill with slivers on left side.
-    for (int i = imageSpans.currentIndex - 1;
-        i >= 0 && slivers.first.startX > 0;
-        i--) {
+    for (int i = midIndex - 1; i >= 0 && slivers.first.startX > 0; i--) {
       slivers.insert(
         0,
         ImageSliver(
-          startX:
-              slivers.first.startX - widthFromDuration(imageSpans[i].duration),
+          startX: slivers.first.startX - widthFromDuration(spans[i].duration),
           endX: slivers.first.startX,
-          thumbnail: _getImageSpanThumbnail(i),
+          thumbnail: thumbnailAt(i),
           index: i,
         ),
       );
     }
 
     // Fill with slivers on right side.
-    for (int i = imageSpans.currentIndex + 1;
-        i < imageSpans.length && slivers.last.endX < size.width;
+    for (int i = midIndex + 1;
+        i < spans.length && slivers.last.endX < size.width;
         i++) {
       slivers.add(ImageSliver(
         startX: slivers.last.endX,
-        endX: slivers.last.endX + widthFromDuration(imageSpans[i].duration),
-        thumbnail: _getImageSpanThumbnail(i),
+        endX: slivers.last.endX + widthFromDuration(spans[i].duration),
+        thumbnail: thumbnailAt(i),
         index: i,
-        opacity: 0.5,
+        opacity: isGhostFrame(i) ? 0.5 : 1,
       ));
     }
     return slivers;

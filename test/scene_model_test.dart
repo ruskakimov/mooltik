@@ -84,7 +84,8 @@ void main() {
       );
       expect(scene.exportFrames.toList(), [
         FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
-        FrameModel(file: File('2.png'), duration: Duration(seconds: 9)),
+        FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
+        FrameModel(file: File('2.png'), duration: Duration(seconds: 7)),
       ]);
     });
 
