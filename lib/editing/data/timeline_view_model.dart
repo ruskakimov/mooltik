@@ -106,6 +106,10 @@ class TimelineViewModel extends ChangeNotifier {
 
   bool get showSliverMenu => _selectedSliverIndex != null;
 
+  bool get showResizeStartHandle => showSliverMenu && _selectedSliverIndex != 0;
+
+  bool get showResizeEndHandle => showSliverMenu;
+
   int get selectedSliverIndex => _selectedSliverIndex;
   int _selectedSliverIndex;
 

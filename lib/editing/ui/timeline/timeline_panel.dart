@@ -50,12 +50,12 @@ class TimelinePanel extends StatelessWidget {
                   children: [
                     TimelineView(),
                     Playhead(),
-                    if (timelineView.showSliverMenu &&
-                        timelineView.selectedSliverIndex != 0)
-                      ResizeStartHandle(),
-                    if (timelineView.isEditingScene) SceneEndHandle(),
-                    if (timelineView.isEditingScene) PlayModeButton(),
-                    if (timelineView.showSliverMenu) ResizeEndHandle(),
+                    if (timelineView.isEditingScene) ...[
+                      PlayModeButton(),
+                      SceneEndHandle(),
+                    ],
+                    if (timelineView.showResizeStartHandle) ResizeStartHandle(),
+                    if (timelineView.showResizeEndHandle) ResizeEndHandle(),
                   ],
                 ),
               ),
