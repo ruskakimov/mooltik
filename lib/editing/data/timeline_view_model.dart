@@ -75,8 +75,8 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   void onTapUp(TapUpDetails details) {
-    _selectedSliverIndex = _getIndexUnderPosition(details.localPosition);
-    if (_selectedSliverIndex == null) return;
+    _selectedImageSpanIndex = _getIndexUnderPosition(details.localPosition);
+    if (_selectedImageSpanIndex == null) return;
     _onSelectedSliver();
     notifyListeners();
   }
@@ -104,17 +104,21 @@ class TimelineViewModel extends ChangeNotifier {
   /// Update before painting or gesture detection.
   Size size = Size.zero;
 
-  bool get showSliverMenu => _selectedSliverIndex != null;
+  bool get showSliverMenu => _selectedImageSpanIndex != null;
 
-  bool get showResizeStartHandle => showSliverMenu && _selectedSliverIndex != 0;
+  bool get showResizeStartHandle =>
+      showSliverMenu && _selectedImageSpanIndex != 0;
 
   bool get showResizeEndHandle => showSliverMenu;
 
-  int get selectedSliverIndex => _selectedSliverIndex;
-  int _selectedSliverIndex;
+  int get selectedImageSpanIndex => _selectedImageSpanIndex;
+  int _selectedImageSpanIndex;
 
-  Duration get _selectedSliverDuration =>
-      imageSpans[_selectedSliverIndex].duration;
+  TimeSpan get selectedImageSpan => imageSpans[_selectedImageSpanIndex];
+  FrameModel get selectedFrame => selectedImageSpan as FrameModel;
+  SceneModel get selectedScene => selectedImageSpan as SceneModel;
+
+  Duration get _selectedSliverDuration => selectedImageSpan.duration;
 
   String get selectedSliverDurationLabel =>
       durationToLabel(_selectedSliverDuration);
@@ -219,12 +223,12 @@ class TimelineViewModel extends ChangeNotifier {
   */
 
   void closeSliverMenu() {
-    _selectedSliverIndex = null;
+    _selectedImageSpanIndex = null;
     notifyListeners();
   }
 
   void editScene() {
-    _timeline.sceneSeq.currentIndex = _selectedSliverIndex;
+    _timeline.sceneSeq.currentIndex = _selectedImageSpanIndex;
     _sceneEdit = true;
     _timeline.isSceneBound = true;
     closeSliverMenu();
@@ -251,15 +255,15 @@ class TimelineViewModel extends ChangeNotifier {
   bool get canDeleteSelected => imageSpans.length > 1;
 
   void deleteSelected() {
-    if (_selectedSliverIndex == null) return;
+    if (_selectedImageSpanIndex == null) return;
     if (!canDeleteSelected) return;
-    imageSpans.removeAt(_selectedSliverIndex);
+    imageSpans.removeAt(_selectedImageSpanIndex);
     closeSliverMenu();
     notifyListeners();
   }
 
   Future<void> duplicateSelected() async {
-    if (_selectedSliverIndex == null) return;
+    if (_selectedImageSpanIndex == null) return;
     if (isEditingScene) {
       await _duplicateSelectedFrame();
     } else {
@@ -270,19 +274,28 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   Future<void> _duplicateSelectedFrame() async {
+    imageSpans.insert(
+      _selectedImageSpanIndex + 1,
+      await _duplicateFrame(selectedFrame),
+    );
+  }
+
+  Future<FrameModel> _duplicateFrame(FrameModel frame) async {
     final newFrame = await createNewFrame();
-    final duplicate = (imageSpans as Sequence<FrameModel>)[_selectedSliverIndex]
-        .copyWith(file: newFrame.file);
-    imageSpans.insert(_selectedSliverIndex, duplicate);
+    return frame.copyWith(file: newFrame.file);
   }
 
   Future<void> _duplicateSelectedScene() async {
-    // TODO: Implement scene duplication
+    final duplicateFrames = await Future.wait(
+      selectedScene.frameSeq.iterable.map((frame) => _duplicateFrame(frame)),
+    );
+    final duplicate = selectedScene.copyWith(frames: duplicateFrames);
+    imageSpans.insert(_selectedImageSpanIndex + 1, duplicate);
   }
 
   Duration get selectedSliverStartTime => isEditingScene
-      ? sceneStart + imageSpans.startTimeOf(_selectedSliverIndex)
-      : imageSpans.startTimeOf(_selectedSliverIndex);
+      ? sceneStart + imageSpans.startTimeOf(_selectedImageSpanIndex)
+      : imageSpans.startTimeOf(_selectedImageSpanIndex);
 
   /// Handle start time drag handle's new [updatedTimestamp].
   void onStartTimeHandleDragUpdate(Duration updatedTimestamp) {
@@ -294,18 +307,20 @@ class TimelineViewModel extends ChangeNotifier {
     final newSelectedDuration = selectedSliverEndTime - updatedTimestamp;
     final diff = newSelectedDuration - _selectedSliverDuration;
     final newPrevDuration =
-        imageSpans[_selectedSliverIndex - 1].duration - diff;
+        imageSpans[_selectedImageSpanIndex - 1].duration - diff;
 
     if (newPrevDuration < TimeSpan.singleFrameDuration) return;
 
-    imageSpans.changeSpanDurationAt(_selectedSliverIndex - 1, newPrevDuration);
-    imageSpans.changeSpanDurationAt(_selectedSliverIndex, newSelectedDuration);
+    imageSpans.changeSpanDurationAt(
+        _selectedImageSpanIndex - 1, newPrevDuration);
+    imageSpans.changeSpanDurationAt(
+        _selectedImageSpanIndex, newSelectedDuration);
     notifyListeners();
   }
 
   Duration get selectedSliverEndTime => isEditingScene
-      ? sceneStart + imageSpans.endTimeOf(_selectedSliverIndex)
-      : imageSpans.endTimeOf(_selectedSliverIndex);
+      ? sceneStart + imageSpans.endTimeOf(_selectedImageSpanIndex)
+      : imageSpans.endTimeOf(_selectedImageSpanIndex);
 
   /// Handle end time drag handle's new [updatedTimestamp].
   void onEndTimeHandleDragUpdate(Duration updatedTimestamp) {
@@ -315,7 +330,7 @@ class TimelineViewModel extends ChangeNotifier {
     updatedTimestamp = TimeSpan.roundDuration(updatedTimestamp);
     final newDuration = updatedTimestamp - selectedSliverStartTime;
 
-    imageSpans.changeSpanDurationAt(_selectedSliverIndex, newDuration);
+    imageSpans.changeSpanDurationAt(_selectedImageSpanIndex, newDuration);
     notifyListeners();
   }
 

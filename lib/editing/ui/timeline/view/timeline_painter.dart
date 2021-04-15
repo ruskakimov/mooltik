@@ -29,8 +29,8 @@ class TimelinePainter extends CustomPainter {
     for (final sliver in imageSlivers) {
       sliver.paint(canvas);
 
-      if (timelineView.selectedSliverIndex != null &&
-          timelineView.selectedSliverIndex == sliver.index) {
+      if (timelineView.selectedImageSpanIndex != null &&
+          timelineView.selectedImageSpanIndex == sliver.index) {
         paintSelection(
           canvas,
           sliver.rrect,

@@ -109,7 +109,7 @@ class SceneModel extends TimeSpan {
     PlayMode playMode,
   }) =>
       SceneModel(
-        frameSeq: frames ?? this.frameSeq,
+        frameSeq: frames != null ? Sequence<FrameModel>(frames) : this.frameSeq,
         duration: duration ?? this.duration,
         playMode: playMode ?? this.playMode,
       );
