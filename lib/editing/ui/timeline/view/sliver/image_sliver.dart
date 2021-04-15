@@ -18,32 +18,33 @@ class ImageSliver extends Sliver {
   @override
   void paint(Canvas canvas) {
     final paint = Paint()..color = Colors.white.withOpacity(opacity);
-
     canvas.drawRRect(rrect, paint);
 
-    if (thumbnail != null) {
-      canvas.save();
-      canvas.clipRRect(rrect);
-      canvas.translate(area.left, area.top);
-      final double scaleFactor = area.height / thumbnail.height;
-      canvas.scale(scaleFactor);
+    if (thumbnail != null) _paintThumbnail(canvas, paint);
+  }
 
-      final sliverWidth = rrect.width / scaleFactor;
+  void _paintThumbnail(Canvas canvas, Paint paint) {
+    canvas.save();
+    canvas.clipRRect(rrect);
+    canvas.translate(area.left, area.top);
+    final double scaleFactor = area.height / thumbnail.height;
+    canvas.scale(scaleFactor);
 
-      if (thumbnail.width > sliverWidth) {
-        // Center thumbnail if it overflows sliver.
-        final xOffset = (sliverWidth - thumbnail.width) / 2;
+    final sliverWidth = rrect.width / scaleFactor;
+
+    if (thumbnail.width > sliverWidth) {
+      // Center thumbnail if it overflows sliver.
+      final xOffset = (sliverWidth - thumbnail.width) / 2;
+      canvas.drawImage(thumbnail, Offset(xOffset, 0), paint);
+    } else {
+      // Repeat thumbnails until overflow.
+      for (double xOffset = 0;
+          xOffset < sliverWidth;
+          xOffset += thumbnail.width) {
         canvas.drawImage(thumbnail, Offset(xOffset, 0), paint);
-      } else {
-        // Repeat thumbnails until overflow.
-        for (double xOffset = 0;
-            xOffset < sliverWidth;
-            xOffset += thumbnail.width) {
-          canvas.drawImage(thumbnail, Offset(xOffset, 0), paint);
-        }
       }
-
-      canvas.restore();
     }
+
+    canvas.restore();
   }
 }
