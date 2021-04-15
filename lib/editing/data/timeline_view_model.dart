@@ -264,20 +264,12 @@ class TimelineViewModel extends ChangeNotifier {
 
   Future<void> duplicateSelected() async {
     if (_selectedImageSpanIndex == null) return;
-    if (isEditingScene) {
-      await _duplicateSelectedFrame();
-    } else {
-      await _duplicateSelectedScene();
-    }
+    final duplicate = isEditingScene
+        ? await _duplicateFrame(selectedFrame)
+        : await _duplicateScene(selectedScene);
+    imageSpans.insert(_selectedImageSpanIndex + 1, duplicate);
     closeSliverMenu();
     notifyListeners();
-  }
-
-  Future<void> _duplicateSelectedFrame() async {
-    imageSpans.insert(
-      _selectedImageSpanIndex + 1,
-      await _duplicateFrame(selectedFrame),
-    );
   }
 
   Future<FrameModel> _duplicateFrame(FrameModel frame) async {
@@ -285,12 +277,11 @@ class TimelineViewModel extends ChangeNotifier {
     return frame.copyWith(file: newFrame.file);
   }
 
-  Future<void> _duplicateSelectedScene() async {
+  Future<SceneModel> _duplicateScene(SceneModel scene) async {
     final duplicateFrames = await Future.wait(
-      selectedScene.frameSeq.iterable.map((frame) => _duplicateFrame(frame)),
+      scene.frameSeq.iterable.map((frame) => _duplicateFrame(frame)),
     );
-    final duplicate = selectedScene.copyWith(frames: duplicateFrames);
-    imageSpans.insert(_selectedImageSpanIndex + 1, duplicate);
+    return scene.copyWith(frames: duplicateFrames);
   }
 
   Duration get selectedSliverStartTime => isEditingScene
