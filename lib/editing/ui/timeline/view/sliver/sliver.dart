@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 abstract class Sliver {
-  Sliver(this.startX, this.endX);
+  Sliver(this.area)
+      : rrect = RRect.fromRectAndRadius(
+          area.deflate(1),
+          Radius.circular(8),
+        );
 
-  final double startX;
-  final double endX;
+  final Rect area;
 
-  RRect getRrect(double startY, double endY) => RRect.fromRectAndRadius(
-        Rect.fromLTRB(startX, startY, endX, endY).deflate(1),
-        Radius.circular(8),
-      );
+  final RRect rrect;
 
-  void paint(Canvas canvas, double startY, double endY);
+  void paint(Canvas canvas);
 }

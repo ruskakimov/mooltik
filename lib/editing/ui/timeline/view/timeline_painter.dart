@@ -27,43 +27,27 @@ class TimelinePainter extends CustomPainter {
         timelineView.getVisibleImageSlivers();
 
     for (final sliver in imageSlivers) {
-      sliver.paint(
-        canvas,
-        timelineView.imageSliverTop,
-        timelineView.imageSliverBottom,
-      );
+      sliver.paint(canvas);
 
       if (timelineView.selectedSliverIndex != null &&
           timelineView.selectedSliverIndex == sliver.index) {
         paintSelection(
           canvas,
-          sliver.getRrect(
-            timelineView.imageSliverTop,
-            timelineView.imageSliverBottom,
-          ),
+          sliver.rrect,
           timelineView.selectedSliverDurationLabel,
         );
       }
     }
 
     if (soundBite != null) {
-      final double soundSliverTop = timelineView.imageSliverBottom + 8;
-      final double soundSliverBottom =
-          soundSliverTop + timelineView.sliverHeight;
-
-      final double soundSliverStartX =
-          timelineView.xFromTime(soundBite.startTime);
-      final double soundSliverWidth =
-          timelineView.widthFromDuration(soundBite.duration);
-
       SoundSliver(
-        startX: soundSliverStartX,
-        endX: soundSliverStartX + soundSliverWidth,
-      ).paint(
-        canvas,
-        soundSliverTop,
-        soundSliverBottom,
-      );
+        area: Rect.fromLTWH(
+          timelineView.xFromTime(soundBite.startTime),
+          timelineView.imageSliverBottom + 8,
+          timelineView.widthFromDuration(soundBite.duration),
+          timelineView.sliverHeight,
+        ),
+      ).paint(canvas);
     }
 
     if (timelineView.isEditingScene) {

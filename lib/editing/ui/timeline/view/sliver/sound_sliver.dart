@@ -3,13 +3,11 @@ import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 
 class SoundSliver extends Sliver {
   SoundSliver({
-    @required double startX,
-    @required double endX,
-  }) : super(startX, endX);
+    @required Rect area,
+  }) : super(area);
 
   @override
-  void paint(Canvas canvas, double startY, double endY) {
-    final RRect rrect = getRrect(startY, endY);
+  void paint(Canvas canvas) {
     canvas.drawRRect(rrect, Paint()..color = Colors.green[300]);
   }
 }

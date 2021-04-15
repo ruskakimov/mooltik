@@ -93,7 +93,7 @@ class TimelineViewModel extends ChangeNotifier {
 
     // TODO: Reuse slivers used for painting
     for (final sliver in getVisibleImageSlivers()) {
-      if (position.dx > sliver.startX && position.dx < sliver.endX) {
+      if (sliver.area.contains(position)) {
         return sliver.index;
       }
     }
@@ -146,8 +146,12 @@ class TimelineViewModel extends ChangeNotifier {
 
   ImageSliver getCurrentImageSliver() {
     return ImageSliver(
-      startX: xFromTime(_currentImageSpanStart),
-      endX: xFromTime(_currentImageSpanEnd),
+      area: Rect.fromLTRB(
+        xFromTime(_currentImageSpanStart),
+        imageSliverTop,
+        xFromTime(_currentImageSpanEnd),
+        imageSliverBottom,
+      ),
       thumbnail: isEditingScene
           ? (imageSpans.current as FrameModel).snapshot
           : (imageSpans.current as SceneModel).frameSeq[0].snapshot,
@@ -171,12 +175,16 @@ class TimelineViewModel extends ChangeNotifier {
     final List<ImageSliver> slivers = [getCurrentImageSliver()];
 
     // Fill with slivers on left side.
-    for (int i = midIndex - 1; i >= 0 && slivers.first.startX > 0; i--) {
+    for (int i = midIndex - 1; i >= 0 && slivers.first.area.left > 0; i--) {
       slivers.insert(
         0,
         ImageSliver(
-          startX: slivers.first.startX - widthFromDuration(spans[i].duration),
-          endX: slivers.first.startX,
+          area: Rect.fromLTRB(
+            slivers.first.area.left - widthFromDuration(spans[i].duration),
+            imageSliverTop,
+            slivers.first.area.left,
+            imageSliverBottom,
+          ),
           thumbnail: thumbnailAt(i),
           index: isGhostFrame(i) ? null : i,
         ),
@@ -185,11 +193,15 @@ class TimelineViewModel extends ChangeNotifier {
 
     // Fill with slivers on right side.
     for (int i = midIndex + 1;
-        i < spans.length && slivers.last.endX < size.width;
+        i < spans.length && slivers.last.area.right < size.width;
         i++) {
       slivers.add(ImageSliver(
-        startX: slivers.last.endX,
-        endX: slivers.last.endX + widthFromDuration(spans[i].duration),
+        area: Rect.fromLTRB(
+          slivers.last.area.right,
+          imageSliverTop,
+          slivers.last.area.right + widthFromDuration(spans[i].duration),
+          imageSliverBottom,
+        ),
         thumbnail: thumbnailAt(i),
         index: isGhostFrame(i) ? null : i,
         opacity: isGhostFrame(i) ? 0.5 : 1,
