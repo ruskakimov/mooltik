@@ -83,6 +83,12 @@ class EaselModel extends ChangeNotifier {
   /// Used by provider to update dependency.
   void updateFrame(FrameModel frame) {
     if (frame.file == _frame.file) return;
+
+    if (_diskWriteDebouncer.isActive) {
+      _diskWriteDebouncer.cancel();
+      _frame.saveSnapshot();
+    }
+
     _frame = frame;
     _historyStack = ImageHistoryStack(
       maxCount: maxUndos + 1,

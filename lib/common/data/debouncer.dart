@@ -9,8 +9,15 @@ class Debouncer {
   final Duration timeout;
   Timer _timer;
 
+  bool get isActive => _timer?.isActive ?? false;
+
   void debounce(VoidCallback callback) {
-    _timer?.cancel();
+    cancel();
     _timer = Timer(timeout, callback);
+  }
+
+  void cancel() {
+    _timer?.cancel();
+    _timer = null;
   }
 }
