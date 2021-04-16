@@ -274,7 +274,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   Future<FrameModel> _duplicateFrame(FrameModel frame) async {
     final newFrame = await createNewFrame();
-    return frame.copyWith(file: newFrame.file);
+    return frame.copyWith(file: newFrame.file)..saveSnapshot();
   }
 
   Future<SceneModel> _duplicateScene(SceneModel scene) async {

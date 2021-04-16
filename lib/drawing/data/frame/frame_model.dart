@@ -47,7 +47,7 @@ class FrameModel extends TimeSpan with EquatableMixin {
       };
 
   @override
-  TimeSpan copyWith({
+  FrameModel copyWith({
     File file,
     Duration duration,
     ui.Image snapshot,
