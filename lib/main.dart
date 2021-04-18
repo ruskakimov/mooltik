@@ -27,6 +27,8 @@ void main() async {
   ));
 }
 
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
 class App extends StatelessWidget {
   const App({Key key, this.sharedPreferences}) : super(key: key);
 
@@ -34,8 +36,11 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider<SharedPreferences>.value(
-      value: sharedPreferences,
+    return MultiProvider(
+      providers: [
+        Provider<SharedPreferences>.value(value: sharedPreferences),
+        Provider<RouteObserver>.value(value: routeObserver),
+      ],
       child: Portal(
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -69,6 +74,7 @@ class App extends StatelessWidget {
               onError: Colors.white,
             ),
           ),
+          navigatorObservers: [routeObserver],
           routes: {
             Navigator.defaultRouteName: (context) => GalleryPage(),
           },
