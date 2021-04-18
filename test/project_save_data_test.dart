@@ -8,6 +8,15 @@ import 'package:mooltik/common/data/project/project_save_data.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 
+// To solve the issue of inconsistent directory from where tests are run (https://github.com/flutter/flutter/issues/20907).
+File testFile(String filePath) {
+  var dir = Directory.current.path;
+  if (dir.endsWith('/test')) {
+    dir = dir.replaceAll('/test', '');
+  }
+  return File('$dir/test/$filePath');
+}
+
 void main() {
   group('ProjectSaveData should', () {
     test('encode', () {
@@ -142,6 +151,17 @@ void main() {
           .replaceAll(RegExp(r'\s'), '');
       final data = ProjectSaveData.fromJson(jsonDecode(json), '', '');
       expect(jsonEncode(data), json);
+    });
+
+    test('transcode old project data', () {
+      final oldData =
+          testFile('project_data/v0_8_project_data.json').readAsStringSync();
+      final transcodedData =
+          testFile('project_data/v0_8_transcoded_project_data.json')
+              .readAsStringSync();
+
+      final data = ProjectSaveData.fromJson(jsonDecode(oldData), '', '');
+      expect(jsonEncode(data), transcodedData);
     });
   });
 }
