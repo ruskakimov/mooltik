@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
+import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 
 void main() {
@@ -16,7 +17,7 @@ void main() {
         scenes: [
           SceneModel(
             duration: Duration(seconds: 12),
-            frames: [
+            frameSeq: Sequence([
               FrameModel(
                 file: File('1.png'),
                 duration: Duration(seconds: 3),
@@ -25,11 +26,11 @@ void main() {
                 file: File('2.png'),
                 duration: Duration(seconds: 2),
               ),
-            ],
+            ]),
           ),
           SceneModel(
             duration: Duration(seconds: 4),
-            frames: [
+            frameSeq: Sequence([
               FrameModel(
                 file: File('3.png'),
                 duration: Duration(seconds: 1),
@@ -38,7 +39,7 @@ void main() {
                 file: File('4.png'),
                 duration: Duration(seconds: 10),
               ),
-            ],
+            ]),
           ),
         ],
         sounds: [
@@ -66,7 +67,8 @@ void main() {
                   "duration":"0:00:02.000000"
                 }
               ],
-              "duration":"0:00:12.000000"
+              "duration":"0:00:12.000000",
+              "play_mode": 0
             },
             {
               "frames": [
@@ -79,7 +81,8 @@ void main() {
                   "duration":"0:00:10.000000"
                 }
               ],
-              "duration":"0:00:04.000000"
+              "duration":"0:00:04.000000",
+              "play_mode": 0
             }
           ],
           "sounds":[
@@ -110,7 +113,8 @@ void main() {
                     "duration":"0:00:02.000000"
                   }
                 ],
-                "duration":"0:00:12.000000"
+                "duration":"0:00:12.000000",
+                "play_mode": 0
               },
               {
                 "frames": [
@@ -123,7 +127,8 @@ void main() {
                     "duration":"0:00:10.000000"
                   }
                 ],
-                "duration":"0:00:04.000000"
+                "duration":"0:00:04.000000",
+                "play_mode": 2
               }
             ],
             "sounds":[
