@@ -154,11 +154,13 @@ void main() {
     });
 
     test('transcode old project data', () {
-      final oldData =
-          testFile('project_data/v0_8_project_data.json').readAsStringSync();
+      final oldData = testFile('project_data/v0_8_project_data.json')
+          .readAsStringSync()
+          .replaceAll(RegExp(r'\s'), '');
       final transcodedData =
           testFile('project_data/v0_8_transcoded_project_data.json')
-              .readAsStringSync();
+              .readAsStringSync()
+              .replaceAll(RegExp(r'\s'), '');
 
       final data = ProjectSaveData.fromJson(jsonDecode(oldData), '', '');
       expect(jsonEncode(data), transcodedData);

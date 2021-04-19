@@ -5,15 +5,16 @@
         {
             "frames": [
                 {
-                    "id": 0,
+                    "file_name": "frame0.png",
                     "duration": "0:00:03.000000"
                 },
                 {
-                    "id": 1,
+                    "file_name": "frame1.png",
                     "duration": "0:00:01.000000"
                 }
             ],
-            "duration": "0:00:4.000000"
+            "duration": "0:00:04.000000",
+            "play_mode": 1
         }
     ],
     "sounds": [
