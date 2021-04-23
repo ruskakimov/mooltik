@@ -10,7 +10,7 @@ import 'package:mooltik/editing/data/timeline_view_model.dart';
 
 void main() {
   group('TimelineViewModel', () {
-    test('does not allow moving SceneEndHandle past playhead', () {
+    test('does not resize scene past playhead in scene mode', () {
       final sceneA = SceneModel(
         frameSeq: Sequence<FrameModel>([
           FrameModel(file: File('1.png'), duration: Duration(seconds: 2)),
@@ -41,13 +41,17 @@ void main() {
       timelineView.selectSliver(0);
       timelineView.editScene();
 
-      timeline
-          .scrub(TimeSpan.singleFrameDuration * 50 + Duration(milliseconds: 1));
-
+      timeline.jumpTo(TimeSpan.singleFrameDuration * 50);
       timelineView
-          .onSceneEndHandleDragUpdate(TimeSpan.singleFrameDuration * 50);
+          .onSceneEndHandleDragUpdate(TimeSpan.singleFrameDuration * 40);
+      expect(timeline.currentScene.frameSeq, sceneA.frameSeq);
+      expect(timeline.currentSceneEnd, TimeSpan.singleFrameDuration * 51);
 
-      expect(timeline.currentScene, sceneA);
+      timeline.jumpTo(
+          TimeSpan.singleFrameDuration * 50 + Duration(milliseconds: 1));
+      timelineView.onSceneEndHandleDragUpdate(
+          timeline.playheadPosition + Duration(milliseconds: 1));
+      expect(timeline.currentScene.frameSeq, sceneA.frameSeq);
       expect(timeline.currentSceneEnd, TimeSpan.singleFrameDuration * 51);
     });
   });

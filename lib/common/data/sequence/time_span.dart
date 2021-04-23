@@ -7,8 +7,17 @@ abstract class TimeSpan {
   /// Round duration so that it is a multiple of [singleFrameDuration].
   static Duration roundDurationToFrames(Duration duration) {
     final frames =
-        (duration.inMilliseconds / singleFrameDuration.inMilliseconds)
+        (duration.inMicroseconds / singleFrameDuration.inMicroseconds)
             .round()
+            .clamp(1, double.infinity);
+    return singleFrameDuration * frames;
+  }
+
+  /// Ceils duration so that it is a multiple of [singleFrameDuration].
+  static Duration ceilDurationToFrames(Duration duration) {
+    final frames =
+        (duration.inMicroseconds / singleFrameDuration.inMicroseconds)
+            .ceil()
             .clamp(1, double.infinity);
     return singleFrameDuration * frames;
   }

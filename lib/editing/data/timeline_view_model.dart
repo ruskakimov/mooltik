@@ -332,10 +332,15 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   void onSceneEndHandleDragUpdate(Duration updatedTimestamp) {
-    if (_shouldSnapToPlayhead(updatedTimestamp)) {
-      updatedTimestamp = _timeline.playheadPosition;
-    }
     updatedTimestamp = TimeSpan.roundDurationToFrames(updatedTimestamp);
+
+    // Keep playhead within current scene.
+    if (updatedTimestamp <= _timeline.playheadPosition) {
+      updatedTimestamp = TimeSpan.ceilDurationToFrames(
+        _timeline.playheadPosition + Duration(microseconds: 1),
+      );
+    }
+
     final newDuration = updatedTimestamp - sceneStart;
 
     _timeline.sceneSeq.changeCurrentSpanDuration(newDuration);
