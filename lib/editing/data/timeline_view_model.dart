@@ -22,7 +22,7 @@ class TimelineViewModel extends ChangeNotifier {
     @required this.createNewFrame,
   })  : _timeline = timeline,
         _preferences = sharedPreferences,
-        _msPerPx = sharedPreferences.getDouble(_msPerPxKey) ?? 10 {
+        _msPerPx = sharedPreferences?.getDouble(_msPerPxKey) ?? 10 {
     _prevMsPerPx = _msPerPx;
     timeline.addListener(notifyListeners);
   }
@@ -75,16 +75,15 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   void onTapUp(TapUpDetails details) {
-    _selectedImageSpanIndex = _getIndexUnderPosition(details.localPosition);
-    if (_selectedImageSpanIndex == null) return;
-    _onSelectedSliver();
-    notifyListeners();
+    final sliverIndex = _getIndexUnderPosition(details.localPosition);
+    selectSliver(sliverIndex);
   }
 
-  void _onSelectedSliver() {
-    if (_timeline.isPlaying) {
-      _timeline.pause();
-    }
+  /// Selects a given sliver or removes selection if [sliverIndex] is `null`.
+  void selectSliver(int sliverIndex) {
+    if (_timeline.isPlaying) _timeline.pause();
+    _selectedImageSpanIndex = sliverIndex;
+    notifyListeners();
   }
 
   int _getIndexUnderPosition(Offset position) {
