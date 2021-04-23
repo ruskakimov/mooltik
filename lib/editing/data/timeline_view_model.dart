@@ -293,7 +293,7 @@ class TimelineViewModel extends ChangeNotifier {
     if (_shouldSnapToPlayhead(updatedTimestamp)) {
       updatedTimestamp = _timeline.playheadPosition;
     }
-    updatedTimestamp = TimeSpan.roundDuration(updatedTimestamp);
+    updatedTimestamp = TimeSpan.roundDurationToFrames(updatedTimestamp);
 
     final newSelectedDuration = selectedSliverEndTime - updatedTimestamp;
     final diff = newSelectedDuration - _selectedSliverDuration;
@@ -318,7 +318,7 @@ class TimelineViewModel extends ChangeNotifier {
     if (_shouldSnapToPlayhead(updatedTimestamp)) {
       updatedTimestamp = _timeline.playheadPosition;
     }
-    updatedTimestamp = TimeSpan.roundDuration(updatedTimestamp);
+    updatedTimestamp = TimeSpan.roundDurationToFrames(updatedTimestamp);
     final newDuration = updatedTimestamp - selectedSliverStartTime;
 
     imageSpans.changeSpanDurationAt(_selectedImageSpanIndex, newDuration);
@@ -336,7 +336,7 @@ class TimelineViewModel extends ChangeNotifier {
     if (_shouldSnapToPlayhead(updatedTimestamp)) {
       updatedTimestamp = _timeline.playheadPosition;
     }
-    updatedTimestamp = TimeSpan.roundDuration(updatedTimestamp);
+    updatedTimestamp = TimeSpan.roundDurationToFrames(updatedTimestamp);
     final newDuration = updatedTimestamp - sceneStart;
 
     _timeline.sceneSeq.changeCurrentSpanDuration(newDuration);
