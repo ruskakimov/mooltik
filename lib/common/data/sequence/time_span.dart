@@ -14,7 +14,7 @@ abstract class TimeSpan {
   }
 
   Duration get duration => _duration;
-  Duration _duration;
+  final Duration _duration;
 
   TimeSpan copyWith({Duration duration});
 }
