@@ -113,4 +113,8 @@ class SceneModel extends TimeSpan {
         duration: duration ?? this.duration,
         playMode: playMode ?? this.playMode,
       );
+
+  @override
+  String toString() => frameSeq.iterable
+      .fold('', (previousValue, frame) => previousValue + frame.toString());
 }
