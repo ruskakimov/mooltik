@@ -28,10 +28,20 @@ class VideoSliver extends Sliver {
 
     for (var x = area.left; x < area.right; x += area.height) {
       final thumbnail = thumbnailAt(x);
+      final thumbnailStart = (x - area.left) / scaleFactor;
+      final availableWidth = area.height / scaleFactor;
+      final centeringOffset = -thumbnail.width / 2 + availableWidth / 2;
       canvas.drawImage(
         thumbnail,
-        Offset((x - area.left) / scaleFactor, 0),
+        Offset(thumbnailStart + centeringOffset, 0),
         Paint(),
+      );
+
+      // Separator.
+      canvas.drawLine(
+        Offset(thumbnailStart, 0),
+        Offset(thumbnailStart, thumbnail.height.toDouble()),
+        Paint()..strokeWidth = 0.5 / scaleFactor,
       );
     }
 
