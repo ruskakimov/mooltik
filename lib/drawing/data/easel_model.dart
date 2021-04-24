@@ -129,6 +129,7 @@ class EaselModel extends ChangeNotifier {
 
   void _updateFrame() {
     _frame = _frame.copyWith(snapshot: _historyStack.currentSnapshot);
+    _diskWriteDebouncer.debounce(() => _frame.saveSnapshot());
     onChanged(_frame);
   }
 
@@ -212,7 +213,6 @@ class EaselModel extends ChangeNotifier {
     // TODO: Queue snapshots.
     if (unrasterizedStrokes.last.boundingRect.overlaps(_frameArea)) {
       _generateLastSnapshot();
-      _diskWriteDebouncer.debounce(() => _frame.saveSnapshot());
     }
 
     notifyListeners();
