@@ -134,6 +134,7 @@ class Project extends ChangeNotifier {
       // New project.
       _frameSize = const Size(1280, 720);
       _scenes = Sequence<SceneModel>([await createNewScene()]);
+      _soundClips = [];
     }
   }
 
