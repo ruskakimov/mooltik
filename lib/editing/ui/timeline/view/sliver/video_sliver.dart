@@ -8,13 +8,11 @@ class VideoSliver extends Sliver {
   VideoSliver({
     @required Rect area,
     @required this.thumbnailAt,
-    @required this.index,
-  }) : super(area);
+    @required int index,
+  }) : super(area, index);
 
   /// Image at a given X coordinate.
   final ThumbnailAt thumbnailAt;
-
-  final int index;
 
   @override
   void paint(Canvas canvas) {
@@ -30,7 +28,11 @@ class VideoSliver extends Sliver {
 
     for (var x = area.left; x < area.right; x += area.height) {
       final thumbnail = thumbnailAt(x);
-      canvas.drawImage(thumbnail, Offset(x / scaleFactor, 0), Paint());
+      canvas.drawImage(
+        thumbnail,
+        Offset((x - area.left) / scaleFactor, 0),
+        Paint(),
+      );
     }
 
     canvas.restore();

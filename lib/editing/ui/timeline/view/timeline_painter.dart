@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/ui/paint_text.dart';
-import 'package:mooltik/editing/ui/timeline/view/sliver/image_sliver.dart';
+import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sound_sliver.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 
@@ -23,8 +23,7 @@ class TimelinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     timelineView.size = size;
 
-    final List<ImageSliver> imageSlivers =
-        timelineView.getVisibleImageSlivers();
+    final List<Sliver> imageSlivers = timelineView.getVisibleImageSlivers();
 
     for (final sliver in imageSlivers) {
       sliver.paint(canvas);

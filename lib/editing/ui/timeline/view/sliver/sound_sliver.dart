@@ -4,7 +4,7 @@ import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 class SoundSliver extends Sliver {
   SoundSliver({
     @required Rect area,
-  }) : super(area);
+  }) : super(area, null);
 
   @override
   void paint(Canvas canvas) {

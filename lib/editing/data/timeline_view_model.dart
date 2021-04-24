@@ -11,6 +11,8 @@ import 'package:mooltik/editing/data/convert.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/time_label.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/image_sliver.dart';
+import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
+import 'package:mooltik/editing/ui/timeline/view/sliver/video_sliver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const _msPerPxKey = 'timeline_view_ms_per_px';
@@ -151,49 +153,58 @@ class TimelineViewModel extends ChangeNotifier {
       ? sceneStart + imageSpans.currentSpanEnd
       : imageSpans.currentSpanEnd;
 
-  ImageSliver getCurrentImageSliver() {
-    return ImageSliver(
-      area: Rect.fromLTRB(
-        xFromTime(_currentImageSpanStart),
-        imageSliverTop,
-        xFromTime(_currentImageSpanEnd),
-        imageSliverBottom,
-      ),
-      thumbnail: isEditingScene
-          ? (imageSpans.current as FrameModel).snapshot
-          : (imageSpans.current as SceneModel).frameSeq[0].snapshot,
-      index: imageSpans.currentIndex,
+  Sliver getCurrentImageSliver() {
+    final area = Rect.fromLTRB(
+      xFromTime(_currentImageSpanStart),
+      imageSliverTop,
+      xFromTime(_currentImageSpanEnd),
+      imageSliverBottom,
     );
+    return _makeSliver(area, imageSpans.current, imageSpans.currentIndex);
   }
 
-  List<ImageSliver> getVisibleImageSlivers() {
+  bool _isGhostFrame(int i) => i >= imageSpans.length;
+
+  Sliver _makeSliver(Rect area, TimeSpan imageSpan, int imageSpanIndex) =>
+      isEditingScene
+          ? ImageSliver(
+              area: area,
+              thumbnail: (imageSpan as FrameModel).snapshot,
+              index: _isGhostFrame(imageSpanIndex) ? null : imageSpanIndex,
+              opacity: _isGhostFrame(imageSpanIndex) ? 0.5 : 1,
+            )
+          : VideoSliver(
+              area: area,
+              thumbnailAt: (double x) {
+                final scene = imageSpan as SceneModel;
+                final position = pxToDuration(x - area.left, msPerPx);
+                return scene.frameAt(position).snapshot;
+              },
+              index: imageSpanIndex,
+            );
+
+  List<Sliver> getVisibleImageSlivers() {
     final midIndex = imageSpans.currentIndex;
     final spans = imageSpans.iterable.toList();
     if (isEditingScene) {
       spans.addAll(_timeline.currentScene.ghostFrames);
     }
 
-    ui.Image thumbnailAt(int i) => isEditingScene
-        ? (spans[i] as FrameModel).snapshot
-        : (spans[i] as SceneModel).frameSeq[0].snapshot;
-
-    bool isGhostFrame(int i) => i >= imageSpans.length;
-
-    final List<ImageSliver> slivers = [getCurrentImageSliver()];
+    final List<Sliver> slivers = [getCurrentImageSliver()];
 
     // Fill with slivers on left side.
     for (int i = midIndex - 1; i >= 0 && slivers.first.area.left > 0; i--) {
       slivers.insert(
         0,
-        ImageSliver(
-          area: Rect.fromLTRB(
+        _makeSliver(
+          Rect.fromLTRB(
             slivers.first.area.left - widthFromDuration(spans[i].duration),
             imageSliverTop,
             slivers.first.area.left,
             imageSliverBottom,
           ),
-          thumbnail: thumbnailAt(i),
-          index: isGhostFrame(i) ? null : i,
+          spans[i],
+          i,
         ),
       );
     }
@@ -202,17 +213,18 @@ class TimelineViewModel extends ChangeNotifier {
     for (int i = midIndex + 1;
         i < spans.length && slivers.last.area.right < size.width;
         i++) {
-      slivers.add(ImageSliver(
-        area: Rect.fromLTRB(
-          slivers.last.area.right,
-          imageSliverTop,
-          slivers.last.area.right + widthFromDuration(spans[i].duration),
-          imageSliverBottom,
+      slivers.add(
+        _makeSliver(
+          Rect.fromLTRB(
+            slivers.last.area.right,
+            imageSliverTop,
+            slivers.last.area.right + widthFromDuration(spans[i].duration),
+            imageSliverBottom,
+          ),
+          spans[i],
+          i,
         ),
-        thumbnail: thumbnailAt(i),
-        index: isGhostFrame(i) ? null : i,
-        opacity: isGhostFrame(i) ? 0.5 : 1,
-      ));
+      );
     }
     return slivers;
   }
