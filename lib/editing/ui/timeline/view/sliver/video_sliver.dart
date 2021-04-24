@@ -18,32 +18,48 @@ class VideoSliver extends Sliver {
   void paint(Canvas canvas) {
     canvas.drawRRect(rrect, Paint()..color = Colors.white);
 
-    final firstThumbnail = thumbnailAt(area.left);
-
     canvas.save();
     canvas.clipRRect(rrect);
-    canvas.translate(area.left, area.top);
-    final double scaleFactor = area.height / firstThumbnail.height;
-    canvas.scale(scaleFactor);
 
     for (var x = area.left; x < area.right; x += area.height) {
-      final thumbnail = thumbnailAt(x);
-      final thumbnailStart = (x - area.left) / scaleFactor;
-      final availableWidth = area.height / scaleFactor;
-      final centeringOffset = -thumbnail.width / 2 + availableWidth / 2;
-      canvas.drawImage(
-        thumbnail,
-        Offset(thumbnailStart + centeringOffset, 0),
-        Paint(),
-      );
-
       // Separator.
       canvas.drawLine(
-        Offset(thumbnailStart, 0),
-        Offset(thumbnailStart, thumbnail.height.toDouble()),
-        Paint()..strokeWidth = 0.5 / scaleFactor,
+        Offset(x, area.top),
+        Offset(x, area.bottom),
+        Paint()..strokeWidth = 0.5,
+      );
+
+      _paintCenteredThumbnail(
+        canvas,
+        thumbnailAt(x),
+        Rect.fromLTRB(x, area.top, x + area.height, area.bottom),
       );
     }
+
+    canvas.restore();
+  }
+
+  void _paintCenteredThumbnail(
+    Canvas canvas,
+    ui.Image thumbnail,
+    Rect paintArea,
+  ) {
+    canvas.save();
+    canvas.clipRect(paintArea);
+    canvas.translate(paintArea.left, paintArea.top);
+    final scaleFactor = paintArea.height / thumbnail.height;
+    canvas.scale(scaleFactor);
+
+    final centeringOffset = Offset(
+      -thumbnail.width / 2 + paintArea.width / scaleFactor / 2,
+      0,
+    );
+
+    canvas.drawImage(
+      thumbnail,
+      centeringOffset,
+      Paint(),
+    );
 
     canvas.restore();
   }
