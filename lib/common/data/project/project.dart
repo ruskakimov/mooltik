@@ -106,8 +106,8 @@ class Project extends ChangeNotifier {
 
   bool _shouldClose;
 
-  String _saveData;
-  Timer _saveTimer;
+  String _saveDataOnDisk;
+  Timer _autosaveTimer;
 
   /// Loads project files into memory.
   Future<void> open() async {
@@ -120,9 +120,9 @@ class Project extends ChangeNotifier {
 
     if (await _dataFile.exists()) {
       // Existing project.
-      _saveData = await _dataFile.readAsString();
+      _saveDataOnDisk = await _dataFile.readAsString();
       final data = ProjectSaveData.fromJson(
-        jsonDecode(_saveData),
+        jsonDecode(_saveDataOnDisk),
         directory.path,
         _getSoundDirectoryPath(),
       );
@@ -141,7 +141,7 @@ class Project extends ChangeNotifier {
       _soundClips = [];
     }
 
-    _saveTimer = Timer.periodic(
+    _autosaveTimer = Timer.periodic(
       Duration(minutes: 1),
       (_) => _updateSaveDataOnDisk(),
     );
@@ -149,7 +149,7 @@ class Project extends ChangeNotifier {
 
   Future<void> saveAndClose() async {
     _shouldClose = true;
-    _saveTimer?.cancel();
+    _autosaveTimer?.cancel();
     await save();
 
     // User might have opened the project again while it was writing to disk.
@@ -181,11 +181,11 @@ class Project extends ChangeNotifier {
   }
 
   Future<void> _updateSaveDataOnDisk() async {
-    final newSaveData = _generateSaveData();
+    final saveData = _generateSaveData();
 
-    if (newSaveData != _saveData) {
-      await _dataFile.writeAsString(newSaveData);
-      _saveData = newSaveData;
+    if (saveData != _saveDataOnDisk) {
+      await _dataFile.writeAsString(saveData);
+      _saveDataOnDisk = saveData;
     }
   }
 
