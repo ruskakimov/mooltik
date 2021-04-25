@@ -106,6 +106,8 @@ class Project extends ChangeNotifier {
 
   bool _shouldClose;
 
+  String _saveData;
+
   /// Loads project files into memory.
   Future<void> open() async {
     // Check if already open.
@@ -117,9 +119,9 @@ class Project extends ChangeNotifier {
 
     if (await _dataFile.exists()) {
       // Existing project.
-      final contents = await _dataFile.readAsString();
+      _saveData = await _dataFile.readAsString();
       final data = ProjectSaveData.fromJson(
-        jsonDecode(contents),
+        jsonDecode(_saveData),
         directory.path,
         _getSoundDirectoryPath(),
       );
@@ -165,8 +167,17 @@ class Project extends ChangeNotifier {
     return jsonEncode(data);
   }
 
+  Future<void> _updateSaveDataOnDisk() async {
+    final newSaveData = _generateSaveData();
+
+    if (newSaveData != _saveData) {
+      await _dataFile.writeAsString(newSaveData);
+      _saveData = newSaveData;
+    }
+  }
+
   Future<void> save() async {
-    await _dataFile.writeAsString(_generateSaveData());
+    await _updateSaveDataOnDisk();
 
     // Write thumbnail.
     final image = await generateImage(
