@@ -106,6 +106,9 @@ class Project extends ChangeNotifier {
 
   bool _shouldClose;
 
+  String _saveDataOnDisk;
+  Timer _autosaveTimer;
+
   /// Loads project files into memory.
   Future<void> open() async {
     // Check if already open.
@@ -117,9 +120,9 @@ class Project extends ChangeNotifier {
 
     if (await _dataFile.exists()) {
       // Existing project.
-      final contents = await _dataFile.readAsString();
+      _saveDataOnDisk = await _dataFile.readAsString();
       final data = ProjectSaveData.fromJson(
-        jsonDecode(contents),
+        jsonDecode(_saveDataOnDisk),
         directory.path,
         _getSoundDirectoryPath(),
       );
@@ -137,33 +140,31 @@ class Project extends ChangeNotifier {
       _scenes = Sequence<SceneModel>([await createNewScene()]);
       _soundClips = [];
     }
-  }
 
-  /// Frees the memory of project files and stops auto-save.
-  void _close() {
-    _scenes = null;
-    _soundClips = null;
+    _autosaveTimer = Timer.periodic(
+      Duration(minutes: 1),
+      (_) => _updateSaveDataOnDisk(),
+    );
   }
 
   Future<void> saveAndClose() async {
     _shouldClose = true;
+    _autosaveTimer?.cancel();
     await save();
 
     // User might have opened the project again while it was writing to disk.
     if (_shouldClose) {
-      _close();
+      _freeMemory();
     }
   }
 
+  void _freeMemory() {
+    _scenes = null;
+    _soundClips = null;
+  }
+
   Future<void> save() async {
-    // Write project data.
-    final data = ProjectSaveData(
-      width: _frameSize.width,
-      height: _frameSize.height,
-      scenes: _scenes.iterable.toList(),
-      sounds: _soundClips,
-    );
-    await _dataFile.writeAsString(jsonEncode(data));
+    await _updateSaveDataOnDisk();
 
     // Write thumbnail.
     final image = await generateImage(
@@ -177,6 +178,25 @@ class Project extends ChangeNotifier {
 
     // Refresh gallery thumbnails.
     notifyListeners();
+  }
+
+  Future<void> _updateSaveDataOnDisk() async {
+    final saveData = _generateSaveData();
+
+    if (saveData != _saveDataOnDisk) {
+      await _dataFile.writeAsString(saveData);
+      _saveDataOnDisk = saveData;
+    }
+  }
+
+  String _generateSaveData() {
+    final data = ProjectSaveData(
+      width: _frameSize.width,
+      height: _frameSize.height,
+      scenes: _scenes.iterable.toList(),
+      sounds: _soundClips,
+    );
+    return jsonEncode(data);
   }
 
   /// Deletes frames and sound clips that were removed from the project.
