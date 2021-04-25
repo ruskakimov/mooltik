@@ -107,6 +107,7 @@ class Project extends ChangeNotifier {
   bool _shouldClose;
 
   String _saveData;
+  Timer _saveTimer;
 
   /// Loads project files into memory.
   Future<void> open() async {
@@ -139,21 +140,26 @@ class Project extends ChangeNotifier {
       _scenes = Sequence<SceneModel>([await createNewScene()]);
       _soundClips = [];
     }
+
+    _saveTimer = Timer.periodic(
+      Duration(minutes: 1),
+      (_) => _updateSaveDataOnDisk(),
+    );
   }
 
-  /// Frees the memory of project files and stops auto-save.
-  void _close() {
+  void _freeMemory() {
     _scenes = null;
     _soundClips = null;
   }
 
   Future<void> saveAndClose() async {
     _shouldClose = true;
+    _saveTimer?.cancel();
     await save();
 
     // User might have opened the project again while it was writing to disk.
     if (_shouldClose) {
-      _close();
+      _freeMemory();
     }
   }
 
