@@ -147,11 +147,6 @@ class Project extends ChangeNotifier {
     );
   }
 
-  void _freeMemory() {
-    _scenes = null;
-    _soundClips = null;
-  }
-
   Future<void> saveAndClose() async {
     _shouldClose = true;
     _saveTimer?.cancel();
@@ -163,23 +158,9 @@ class Project extends ChangeNotifier {
     }
   }
 
-  String _generateSaveData() {
-    final data = ProjectSaveData(
-      width: _frameSize.width,
-      height: _frameSize.height,
-      scenes: _scenes.iterable.toList(),
-      sounds: _soundClips,
-    );
-    return jsonEncode(data);
-  }
-
-  Future<void> _updateSaveDataOnDisk() async {
-    final newSaveData = _generateSaveData();
-
-    if (newSaveData != _saveData) {
-      await _dataFile.writeAsString(newSaveData);
-      _saveData = newSaveData;
-    }
+  void _freeMemory() {
+    _scenes = null;
+    _soundClips = null;
   }
 
   Future<void> save() async {
@@ -197,6 +178,25 @@ class Project extends ChangeNotifier {
 
     // Refresh gallery thumbnails.
     notifyListeners();
+  }
+
+  Future<void> _updateSaveDataOnDisk() async {
+    final newSaveData = _generateSaveData();
+
+    if (newSaveData != _saveData) {
+      await _dataFile.writeAsString(newSaveData);
+      _saveData = newSaveData;
+    }
+  }
+
+  String _generateSaveData() {
+    final data = ProjectSaveData(
+      width: _frameSize.width,
+      height: _frameSize.height,
+      scenes: _scenes.iterable.toList(),
+      sounds: _soundClips,
+    );
+    return jsonEncode(data);
   }
 
   /// Deletes frames and sound clips that were removed from the project.
