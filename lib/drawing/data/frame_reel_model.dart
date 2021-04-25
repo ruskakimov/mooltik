@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/sequence/sequence.dart';
+import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const _visibleKey = 'frame_reel_visible';
 
 class FrameReelModel extends ChangeNotifier {
-  FrameReelModel(SharedPreferences sharedPreferences)
-      : _preferences = sharedPreferences,
+  FrameReelModel({
+    @required this.frames,
+    @required SharedPreferences sharedPreferences,
+  })  : _preferences = sharedPreferences,
+        _currentIndex = frames.currentIndex,
         _visible = sharedPreferences.getBool(_visibleKey) ?? true;
 
   SharedPreferences _preferences;
@@ -18,5 +23,29 @@ class FrameReelModel extends ChangeNotifier {
     notifyListeners();
 
     await _preferences.setBool(_visibleKey, _visible);
+  }
+
+  final Sequence<FrameModel> frames;
+
+  FrameModel get currentFrame => frames[_currentIndex];
+
+  int get currentIndex => _currentIndex;
+  int _currentIndex;
+
+  void setCurrent(int index) {
+    if (index < 0 || index >= frames.length) return;
+    _currentIndex = index;
+    notifyListeners();
+  }
+
+  void appendFrame(FrameModel frame) {
+    frames.insert(frames.length, frame);
+    notifyListeners();
+  }
+
+  /// Used by easel to update the frame image.
+  void replaceCurrentFrame(FrameModel newFrame) {
+    frames[_currentIndex] = newFrame;
+    notifyListeners();
   }
 }

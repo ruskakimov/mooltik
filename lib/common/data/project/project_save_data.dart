@@ -1,20 +1,23 @@
-import 'package:mooltik/common/data/parse_duration.dart';
+import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
+import 'package:mooltik/common/data/sequence/sequence.dart';
+import 'package:mooltik/drawing/data/frame/frame_model.dart';
 
 class ProjectSaveData {
   ProjectSaveData({
     this.width,
     this.height,
-    this.frames,
+    this.scenes,
     this.sounds,
   });
 
-  ProjectSaveData.fromJson(Map<String, dynamic> json, String soundDirPath)
-      : width = json['width'],
+  ProjectSaveData.fromJson(
+    Map<String, dynamic> json,
+    String frameDirPath,
+    String soundDirPath,
+  )   : width = json['width'],
         height = json['height'],
-        frames = (json['frames'] as List<dynamic>)
-            .map((d) => FrameSaveData.fromJson(d))
-            .toList(),
+        scenes = _parseScenes(json, frameDirPath),
         sounds = json['sounds'] != null
             ? (json['sounds'] as List<dynamic>)
                 .map((d) => SoundClip.fromJson(d, soundDirPath))
@@ -24,29 +27,50 @@ class ProjectSaveData {
   Map<String, dynamic> toJson() => {
         'width': width,
         'height': height,
-        'frames': frames.map((d) => d.toJson()).toList(),
-        'sounds': sounds.map((d) => d.toJson()).toList(),
+        'scenes': scenes.map((d) => d.toJson()).toList(),
+        'sounds': sounds?.map((d) => d.toJson())?.toList() ?? [],
       };
 
   final double width;
   final double height;
-  final List<FrameSaveData> frames;
+  final List<SceneModel> scenes;
   final List<SoundClip> sounds;
-}
 
-class FrameSaveData {
-  const FrameSaveData({this.id, this.duration});
+  static List<SceneModel> _parseScenes(
+    Map<String, dynamic> json,
+    String frameDirPath,
+  ) {
+    // Latest format.
+    if (json.containsKey('scenes')) {
+      return (json['scenes'] as List<dynamic>)
+          .map((d) => SceneModel.fromJson(d, frameDirPath))
+          .toList();
+    }
 
-  FrameSaveData.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        duration = parseDuration(json['duration']);
+    // Convert v0.8 format to the latest.
+    if (json.containsKey('frames')) {
+      final frameSeq = Sequence<FrameModel>(
+        (json['frames'] as List<dynamic>)
+            .map((d) => _parseLegacyFrameData(d, frameDirPath))
+            .toList(),
+      );
+      return [
+        SceneModel(
+          frameSeq: frameSeq,
+          duration: frameSeq.totalDuration,
+          playMode: PlayMode.loop, // Showcase new loop feature.
+        )
+      ];
+    }
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'duration': duration.toString(),
-      };
+    throw Exception('Unable to parse project scenes.');
+  }
 
-  // TODO: Save file path instead. This will allow changing project folder structure.
-  final int id;
-  final Duration duration;
+  static FrameModel _parseLegacyFrameData(
+    Map<String, dynamic> json,
+    String frameDirPath,
+  ) {
+    json['file_name'] = 'frame${json['id']}.png';
+    return FrameModel.fromJson(json, frameDirPath);
+  }
 }

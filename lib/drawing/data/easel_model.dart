@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/debouncer.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
@@ -11,13 +12,16 @@ import 'package:mooltik/drawing/ui/frame_painter.dart';
 /// Maximum number of consecutive undos.
 const int maxUndos = 50;
 
+/// No changes for this time period would trigger write to disk.
+const Duration diskWriteTimeout = Duration(seconds: 2);
+
 const twoPi = pi * 2;
 
 class EaselModel extends ChangeNotifier {
   EaselModel({
     @required FrameModel frame,
-    @required this.frameSize,
     @required Tool selectedTool,
+    @required this.onChanged,
   })  : _frame = frame,
         _historyStack = ImageHistoryStack(
           maxCount: maxUndos + 1,
@@ -25,11 +29,14 @@ class EaselModel extends ChangeNotifier {
         ),
         _selectedTool = selectedTool;
 
+  FrameModel get frame => _frame;
   FrameModel _frame;
 
   Tool _selectedTool;
 
-  final Size frameSize;
+  final ValueChanged<FrameModel> onChanged;
+
+  Size get frameSize => _frame.size;
 
   Size _easelSize;
 
@@ -47,6 +54,8 @@ class EaselModel extends ChangeNotifier {
   final List<Stroke> unrasterizedStrokes = [];
 
   ImageHistoryStack _historyStack;
+
+  final Debouncer _diskWriteDebouncer = Debouncer(diskWriteTimeout);
 
   /// Canvas offset from top of the easel area.
   double get canvasTopOffset => _offset.dy;
@@ -73,7 +82,13 @@ class EaselModel extends ChangeNotifier {
 
   /// Used by provider to update dependency.
   void updateFrame(FrameModel frame) {
-    if (frame.id == _frame.id) return;
+    if (frame.file == _frame.file) return;
+
+    if (_diskWriteDebouncer.isActive) {
+      _diskWriteDebouncer.cancel();
+      _frame.saveSnapshot();
+    }
+
     _frame = frame;
     _historyStack = ImageHistoryStack(
       maxCount: maxUndos + 1,
@@ -102,14 +117,20 @@ class EaselModel extends ChangeNotifier {
 
   void undo() {
     _historyStack.undo();
-    _frame.snapshot = _historyStack.currentSnapshot;
+    _updateFrame();
     notifyListeners();
   }
 
   void redo() {
     _historyStack.redo();
-    _frame.snapshot = _historyStack.currentSnapshot;
+    _updateFrame();
     notifyListeners();
+  }
+
+  void _updateFrame() {
+    _frame = _frame.copyWith(snapshot: _historyStack.currentSnapshot);
+    _diskWriteDebouncer.debounce(() => _frame.saveSnapshot());
+    onChanged(_frame);
   }
 
   void fitToScreen() {
@@ -214,8 +235,8 @@ class EaselModel extends ChangeNotifier {
       _frame.width.toInt(),
       _frame.height.toInt(),
     );
-    _frame.snapshot = snapshot;
     _historyStack.push(snapshot);
+    _updateFrame();
     unrasterizedStrokes.clear();
     notifyListeners();
   }

@@ -29,7 +29,10 @@ class FramePainter extends CustomPainter {
     canvas.scale(size.width / frame.width, size.height / frame.height);
 
     // Save layer to erase paintings on it with `BlendMode.clear`.
-    canvas.saveLayer(Rect.fromLTWH(0, 0, frame.width, frame.height), Paint());
+    canvas.saveLayer(
+      Rect.fromLTWH(0, 0, frame.size.width, frame.size.height),
+      Paint(),
+    );
 
     if (frame.snapshot != null) {
       canvas.drawImage(

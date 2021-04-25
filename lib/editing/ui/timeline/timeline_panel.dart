@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/player_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/play_mode_button.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_end_handle.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_start_handle.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/scene_end_handle.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editing/ui/timeline/view/timeline_view.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/timeline_actionbar.dart';
@@ -30,6 +32,7 @@ class TimelinePanel extends StatelessWidget {
           create: (context) => TimelineViewModel(
             timeline: context.read<TimelineModel>(),
             sharedPreferences: context.read<SharedPreferences>(),
+            createNewFrame: context.read<Project>().createNewFrame,
           ),
         ),
       ],
@@ -47,10 +50,12 @@ class TimelinePanel extends StatelessWidget {
                   children: [
                     TimelineView(),
                     Playhead(),
-                    if (timelineView.showFrameMenu &&
-                        timelineView.selectedFrameIndex != 0)
-                      ResizeStartHandle(),
-                    if (timelineView.showFrameMenu) ResizeEndHandle(),
+                    if (timelineView.isEditingScene) ...[
+                      PlayModeButton(),
+                      SceneEndHandle(),
+                    ],
+                    if (timelineView.showResizeStartHandle) ResizeStartHandle(),
+                    if (timelineView.showResizeEndHandle) ResizeEndHandle(),
                   ],
                 ),
               ),

@@ -9,7 +9,7 @@ Future<Image> generateImage(
 ) async {
   final recorder = PictureRecorder();
   final canvas = Canvas(recorder);
-  painter.paint(canvas, Size(width.toDouble(), height.toDouble()));
+  painter?.paint(canvas, Size(width.toDouble(), height.toDouble()));
   final picture = recorder.endRecording();
   return picture.toImage(width, height);
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +17,6 @@ class _EaselState extends State<Easel> {
   @override
   Widget build(BuildContext context) {
     final easel = context.watch<EaselModel>();
-    final frame = context.watch<FrameModel>();
     final onion = context.watch<OnionModel>();
 
     return LayoutBuilder(builder: (context, constraints) {
@@ -48,15 +46,15 @@ class _EaselState extends State<Easel> {
                     fit: StackFit.expand,
                     children: [
                       Container(
-                        width: frame.width,
-                        height: frame.height,
+                        width: easel.frameSize.width,
+                        height: easel.frameSize.height,
                         color: Colors.white,
                       ),
                       if (onion.frameBefore != null)
                         Opacity(
                           opacity: 0.2,
                           child: CustomPaint(
-                            size: Size(frame.width, frame.height),
+                            size: onion.frameBefore.size,
                             foregroundPainter: FramePainter(
                               frame: onion.frameBefore,
                               background: Colors.transparent,
@@ -71,7 +69,7 @@ class _EaselState extends State<Easel> {
                         Opacity(
                           opacity: 0.2,
                           child: CustomPaint(
-                            size: Size(frame.width, frame.height),
+                            size: onion.frameAfter.size,
                             foregroundPainter: FramePainter(
                               frame: onion.frameAfter,
                               background: Colors.transparent,
@@ -83,9 +81,9 @@ class _EaselState extends State<Easel> {
                           ),
                         ),
                       CustomPaint(
-                        size: Size(frame.width, frame.height),
+                        size: easel.frameSize,
                         foregroundPainter: FramePainter(
-                          frame: frame,
+                          frame: easel.frame,
                           strokes: easel.unrasterizedStrokes,
                           showCursor: true,
                           background: Colors.transparent,

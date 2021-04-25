@@ -4,8 +4,8 @@ import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class FrameMenu extends StatelessWidget {
-  const FrameMenu({
+class SliverMenu extends StatelessWidget {
+  const SliverMenu({
     Key key,
   }) : super(key: key);
 
@@ -23,6 +23,13 @@ class FrameMenu extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (!timelineView.isEditingScene)
+              LabeledIconButton(
+                icon: FontAwesomeIcons.film,
+                label: 'Edit scene',
+                color: Theme.of(context).colorScheme.onPrimary,
+                onTap: timelineView.editScene,
+              ),
             LabeledIconButton(
               icon: FontAwesomeIcons.copy,
               label: 'Duplicate',

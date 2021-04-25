@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
@@ -19,15 +18,6 @@ class DrawingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProxyProvider<TimelineModel, OnionModel>(
-          update: (context, timeline, model) =>
-              model..updateSelectedIndex(timeline.currentFrameIndex),
-          create: (context) => OnionModel(
-            frames: context.read<TimelineModel>().frames,
-            selectedIndex: context.read<TimelineModel>().currentFrameIndex,
-            sharedPreferences: context.read<SharedPreferences>(),
-          ),
-        ),
         ChangeNotifierProvider(
           create: (context) => ToolboxModel(
             context.read<SharedPreferences>(),
@@ -35,13 +25,21 @@ class DrawingPage extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => FrameReelModel(
-            context.read<SharedPreferences>(),
+            frames: context.read<TimelineModel>().currentScene.frameSeq,
+            sharedPreferences: context.read<SharedPreferences>(),
+          ),
+        ),
+        ChangeNotifierProxyProvider<FrameReelModel, OnionModel>(
+          update: (context, reel, model) =>
+              model..updateSelectedIndex(reel.currentIndex),
+          create: (context) => OnionModel(
+            frames: context.read<TimelineModel>().currentScene.frameSeq,
+            selectedIndex: context.read<FrameReelModel>().currentIndex,
+            sharedPreferences: context.read<SharedPreferences>(),
           ),
         ),
       ],
       builder: (context, child) {
-        final timeline = context.watch<TimelineModel>();
-
         return WillPopScope(
           // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
           onWillPop: () async => true,
@@ -49,16 +47,16 @@ class DrawingPage extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.background,
             body: MultiProvider(
               providers: [
-                ChangeNotifierProvider<FrameModel>.value(
-                  value: timeline.currentFrame,
-                ),
-                ChangeNotifierProxyProvider2<TimelineModel, ToolboxModel,
+                ChangeNotifierProxyProvider2<FrameReelModel, ToolboxModel,
                     EaselModel>(
                   create: (context) => EaselModel(
-                    frame: timeline.currentFrame,
-                    frameSize: context.read<Project>().frameSize,
-                    selectedTool: context.read<ToolboxModel>().selectedTool,
-                  ),
+                      frame: context.read<FrameReelModel>().currentFrame,
+                      selectedTool: context.read<ToolboxModel>().selectedTool,
+                      onChanged: (FrameModel frame) {
+                        context
+                            .read<FrameReelModel>()
+                            .replaceCurrentFrame(frame);
+                      }),
                   update: (_, reel, toolbox, easel) => easel
                     ..updateFrame(reel.currentFrame)
                     ..updateSelectedTool(toolbox.selectedTool),

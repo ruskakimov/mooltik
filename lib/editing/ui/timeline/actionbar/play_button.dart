@@ -23,8 +23,8 @@ class PlayButton extends StatelessWidget {
     return AppIconButton(
       icon: FontAwesomeIcons.play,
       onTap: () async {
-        if (timeline.playheadPosition == timeline.totalDuration) {
-          timeline.reset();
+        if (timeline.playheadPosition == timeline.playheadEndBound) {
+          timeline.jumpTo(timeline.playheadStartBound);
         }
         await context.read<PlayerModel>().prepare();
         timeline.play();

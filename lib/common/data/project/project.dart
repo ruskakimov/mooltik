@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
+import 'package:mooltik/common/data/project/scene_model.dart';
+import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/io/png.dart';
@@ -14,6 +15,8 @@ import 'package:mooltik/editing/data/player_model.dart';
 import 'package:path/path.dart' as p;
 
 const String _binnedPostfix = '_binned';
+
+typedef CreateNewFrame = Future<FrameModel> Function();
 
 /// Holds project data, reads and writes to project folder.
 ///
@@ -60,10 +63,16 @@ class Project extends ChangeNotifier {
   }
 
   static bool validProjectDirectory(Directory directory) {
-    final dirName = p.basename(directory.path);
-    final creationEpoch = parseCreationEpochFromDirectoryName(dirName);
-    final binned = parseBinnedFromDirectoryName(dirName);
-    return dirName == directoryName(creationEpoch, binned);
+    bool valid;
+    try {
+      final dirName = p.basename(directory.path);
+      final creationEpoch = parseCreationEpochFromDirectoryName(dirName);
+      final binned = parseBinnedFromDirectoryName(dirName);
+      valid = dirName == directoryName(creationEpoch, binned);
+    } catch (e) {
+      valid = false;
+    }
+    return valid;
   }
 
   final Directory directory;
@@ -77,23 +86,30 @@ class Project extends ChangeNotifier {
 
   final File _dataFile;
 
-  List<FrameModel> get frames => _frames;
-  List<FrameModel> _frames = [];
+  Sequence<SceneModel> get scenes => _scenes;
+  Sequence<SceneModel> _scenes;
+
+  // TODO: Check if lazy or not
+  Iterable<FrameModel> get allFrames => _scenes.iterable
+      .map((scene) => scene.frameSeq.iterable)
+      .expand((iterable) => iterable);
+
+  Iterable<FrameModel> get exportFrames => _scenes.iterable
+      .map((scene) => scene.exportFrames)
+      .expand((iterable) => iterable);
 
   List<SoundClip> get soundClips => _soundClips;
-  List<SoundClip> _soundClips = [];
+  List<SoundClip> _soundClips;
 
   Size get frameSize => _frameSize;
   Size _frameSize;
 
   bool _shouldClose;
 
-  Timer _autoSaveTimer;
-
   /// Loads project files into memory.
   Future<void> open() async {
     // Check if already open.
-    if (_frames.isNotEmpty) {
+    if (_scenes != null) {
       // Prevent freeing memory after closing and quickly opening the project again.
       _shouldClose = false;
       return;
@@ -104,35 +120,29 @@ class Project extends ChangeNotifier {
       final contents = await _dataFile.readAsString();
       final data = ProjectSaveData.fromJson(
         jsonDecode(contents),
+        directory.path,
         _getSoundDirectoryPath(),
       );
       _frameSize = Size(data.width, data.height);
-      _frames = await Future.wait(
-        data.frames.map((frameData) => _getFrame(frameData, frameSize)),
-      );
+      _scenes = Sequence<SceneModel>(data.scenes);
+
+      // TODO: Loading all frames into memory doesn't scale.
+      await Future.wait(allFrames.map((frame) => frame.loadSnapshot()));
+
       _soundClips =
           data.sounds.where((sound) => sound.file.existsSync()).toList();
     } else {
       // New project.
       _frameSize = const Size(1280, 720);
-      _frames = [FrameModel(size: frameSize)];
+      _scenes = Sequence<SceneModel>([await createNewScene()]);
+      _soundClips = [];
     }
-
-    _startAutoSaveTimer();
-  }
-
-  void _startAutoSaveTimer() {
-    _autoSaveTimer = Timer.periodic(
-      Duration(minutes: 1),
-      (_) => save(),
-    );
   }
 
   /// Frees the memory of project files and stops auto-save.
   void _close() {
-    _frames.clear();
-    _soundClips.clear();
-    _autoSaveTimer?.cancel();
+    _scenes = null;
+    _soundClips = null;
   }
 
   Future<void> saveAndClose() async {
@@ -150,28 +160,14 @@ class Project extends ChangeNotifier {
     final data = ProjectSaveData(
       width: _frameSize.width,
       height: _frameSize.height,
-      frames: _frames
-          .map((f) => FrameSaveData(id: f.id, duration: f.duration))
-          .toList(),
+      scenes: _scenes.iterable.toList(),
       sounds: _soundClips,
     );
     await _dataFile.writeAsString(jsonEncode(data));
 
-    // Write images.
-    await Future.wait(
-      frames.where((frame) {
-        return frame.snapshot != null;
-      }).map(
-        (frame) => pngWrite(
-          _getFrameFile(frame.id),
-          frame.snapshot,
-        ),
-      ),
-    );
-
     // Write thumbnail.
     final image = await generateImage(
-      FramePainter(frame: frames.first),
+      FramePainter(frame: allFrames.first),
       _frameSize.width.toInt(),
       _frameSize.height.toInt(),
     );
@@ -191,7 +187,7 @@ class Project extends ChangeNotifier {
 
   Future<void> _deleteUnusedFrameImages() async {
     final Set<String> usedFrameImages =
-        frames.map((frame) => _getFrameFilePath(frame.id)).toSet();
+        allFrames.map((frame) => frame.file.path).toSet();
 
     bool _isUnusedFrameImage(String path) =>
         p.extension(path) == '.png' &&
@@ -214,21 +210,20 @@ class Project extends ChangeNotifier {
     await deleteFilesWhere(soundDir, _isUnusedSoundFile);
   }
 
-  Future<FrameModel> _getFrame(FrameSaveData frameData, Size size) async {
-    final file = _getFrameFile(frameData.id);
-    ui.Image image;
+  Future<FrameModel> createNewFrame() async {
+    final image = await generateImage(
+      null,
+      _frameSize.width.toInt(),
+      _frameSize.height.toInt(),
+    );
+    final file = _getFrameFile(DateTime.now().millisecondsSinceEpoch);
+    await pngWrite(file, image);
+    return FrameModel(file: file, snapshot: image);
+  }
 
-    try {
-      image = await pngRead(file);
-    } catch (e) {
-      // Failed to read.
-    }
-
-    return FrameModel(
-      id: frameData.id,
-      duration: frameData.duration,
-      size: size,
-      initialSnapshot: image,
+  Future<SceneModel> createNewScene() async {
+    return SceneModel(
+      frameSeq: Sequence<FrameModel>([await createNewFrame()]),
     );
   }
 

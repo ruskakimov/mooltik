@@ -26,6 +26,7 @@ dependencies:
   
   # State management:
   provider: ^4.3.2+2
+  equatable: ^2.0.0
 
   # UI:
   font_awesome_flutter: ^8.8.1

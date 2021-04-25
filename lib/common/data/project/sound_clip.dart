@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:mooltik/common/data/parse_duration.dart';
+import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:path/path.dart' as p;
 
 class SoundClip {
@@ -23,16 +23,12 @@ class SoundClip {
   Duration get duration => _duration;
   Duration _duration;
 
-  SoundClip copyWith({Duration duration}) => SoundClip(
-        file: file,
-        startTime: startTime,
-        duration: duration ?? this.duration,
+  factory SoundClip.fromJson(Map<String, dynamic> json, String soundDirPath) =>
+      SoundClip(
+        file: File(p.join(soundDirPath, json['file_name'])),
+        startTime: (json['start_time'] as String).parseDuration(),
+        duration: (json['duration'] as String).parseDuration(),
       );
-
-  SoundClip.fromJson(Map<String, dynamic> json, String soundDirPath)
-      : file = File(p.join(soundDirPath, json['file_name'])),
-        _startTime = parseDuration(json['start_time']),
-        _duration = parseDuration(json['duration']);
 
   Map<String, dynamic> toJson() => {
         'file_name': p.basename(file.path),

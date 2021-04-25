@@ -26,7 +26,7 @@ class ExporterModel extends ChangeNotifier {
   });
 
   /// For output video.
-  final List<FrameModel> frames;
+  final Iterable<FrameModel> frames;
 
   /// For output audio.
   final List<SoundClip> soundClips;
@@ -97,7 +97,7 @@ class ExporterModel extends ChangeNotifier {
       frame.width.toInt(),
       frame.height.toInt(),
     );
-    final pngFile = _tempFile('${frame.id}.png');
+    final pngFile = _tempFile(p.basename(frame.file.path));
     await pngWrite(pngFile, image);
     return Slide(pngFile, frame.duration);
   }

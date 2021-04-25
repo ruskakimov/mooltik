@@ -12,7 +12,9 @@ class TimelinePositioned extends StatefulWidget {
     @required this.width,
     @required this.height,
     @required this.child,
+    this.offset,
     this.onDragUpdate,
+    this.onDragEnd,
   }) : super(key: key);
 
   /// Timeline timestamp. Determines center of horizontal position.
@@ -29,7 +31,10 @@ class TimelinePositioned extends StatefulWidget {
 
   final Widget child;
 
+  final Offset offset;
+
   final TimelinePositionedDragUpdate onDragUpdate;
+  final GestureDragEndCallback onDragEnd;
 
   @override
   _TimelinePositionedState createState() => _TimelinePositionedState();
@@ -38,14 +43,17 @@ class TimelinePositioned extends StatefulWidget {
 class _TimelinePositionedState extends State<TimelinePositioned> {
   Offset _dragStartOffset;
 
+  Offset get _visualOffset => widget.offset ?? Offset.zero;
+
   @override
   Widget build(BuildContext context) {
     final timelineView = context.watch<TimelineViewModel>();
 
     final offset = Offset(
-      timelineView.xFromTime(widget.timestamp) - widget.width / 2,
-      widget.y - widget.height / 2,
-    );
+          timelineView.xFromTime(widget.timestamp) - widget.width / 2,
+          widget.y - widget.height / 2,
+        ) +
+        _visualOffset;
 
     return Positioned(
       left: offset.dx,
@@ -54,7 +62,7 @@ class _TimelinePositionedState extends State<TimelinePositioned> {
         behavior: HitTestBehavior.opaque,
         onHorizontalDragStart: widget.onDragUpdate != null
             ? (details) {
-                _dragStartOffset = offset;
+                _dragStartOffset = offset - _visualOffset;
               }
             : null,
         onHorizontalDragUpdate: widget.onDragUpdate != null
@@ -66,7 +74,12 @@ class _TimelinePositionedState extends State<TimelinePositioned> {
                 widget.onDragUpdate(updatedTimestamp);
               }
             : null,
-        child: widget.child,
+        onHorizontalDragEnd: widget.onDragEnd,
+        child: SizedBox(
+          width: widget.width,
+          height: widget.height,
+          child: widget.child,
+        ),
       ),
     );
   }

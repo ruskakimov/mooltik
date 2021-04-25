@@ -14,12 +14,25 @@ class EditingPage extends StatefulWidget {
 }
 
 class _EditingPageState extends State<EditingPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, RouteAware {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    context.read<RouteObserver>().subscribe(this, ModalRoute.of(context));
+  }
+
+  @override
+  void didPopNext() {
+    // Refresh visible frames.
+    setState(() {});
+    super.didPopNext();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => TimelineModel(
-        frames: context.read<Project>().frames,
+        sceneSeq: context.read<Project>().scenes,
         vsync: this,
       ),
       child: WillPopScope(

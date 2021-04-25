@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/popup_entry.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
-import 'package:mooltik/editing/ui/timeline/actionbar/add_frame_button.dart';
+import 'package:mooltik/editing/ui/timeline/actionbar/add_scene_button.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/import_audio_button.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/play_button.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/time_label.dart';
-import 'package:mooltik/editing/ui/timeline/view/overlay/frame_menu.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/sliver_menu.dart';
 
 import 'package:provider/provider.dart';
 
@@ -27,22 +27,32 @@ class TimelineActionbar extends StatelessWidget {
             child: TimeLabel(),
           ),
           PopupEntry(
-            visible: timelineView.showFrameMenu,
+            visible: timelineView.showSliverMenu,
             childAnchor: Alignment.center,
             popupAnchor: Alignment.center,
-            popup: FrameMenu(),
+            popup: SliverMenu(),
             child: PlayButton(),
             onTapOutside: () {
-              timelineView.closeFrameMenu();
+              timelineView.closeSliverMenu();
             },
           ),
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ImportAudioButton(),
-                AddFrameButton(),
-              ],
+              children: timelineView.isEditingScene
+                  ? [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 12.0),
+                        child: ElevatedButton(
+                          onPressed: () => timelineView.finishSceneEdit(),
+                          child: Text('Done'),
+                        ),
+                      ),
+                    ]
+                  : [
+                      ImportAudioButton(),
+                      AddSceneButton(),
+                    ],
             ),
           ),
         ],

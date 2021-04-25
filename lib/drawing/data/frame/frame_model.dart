@@ -1,50 +1,63 @@
+import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/io/png.dart';
+import 'package:mooltik/common/data/duration_methods.dart';
+import 'package:mooltik/common/data/sequence/time_span.dart';
+import 'package:path/path.dart' as p;
 
-class FrameModel extends ChangeNotifier {
+class FrameModel extends TimeSpan with EquatableMixin {
   FrameModel({
-    int id,
-    @required Size size,
+    @required this.file,
     Duration duration = const Duration(seconds: 1),
-    ui.Image initialSnapshot,
-  })  : id = id ?? DateTime.now().millisecondsSinceEpoch,
-        _size = size,
-        _duration = duration,
-        _snapshot = initialSnapshot;
+    ui.Image snapshot,
+  })  : _snapshot = snapshot,
+        super(duration);
 
-  /// Output is set to 50fps, therefore 1 frame = 20 ms.
-  static const Duration singleFrameDuration = Duration(milliseconds: 20);
+  final File file;
 
-  /// Round duration so that it is a multiple of [singleFrameDuration].
-  static Duration roundDuration(Duration duration) {
-    final frames =
-        (duration.inMilliseconds / singleFrameDuration.inMilliseconds)
-            .round()
-            .clamp(1, double.infinity);
-    return singleFrameDuration * frames;
-  }
+  Size get size => Size(width.toDouble(), height.toDouble());
 
-  final int id;
+  int get width => _snapshot?.width;
 
-  Duration get duration => _duration;
-  Duration _duration;
-  set duration(Duration value) {
-    _duration = roundDuration(value);
-    notifyListeners();
-  }
-
-  Size get size => _size;
-  final Size _size;
-
-  double get width => _size.width;
-
-  double get height => _size.height;
+  int get height => _snapshot?.height;
 
   ui.Image get snapshot => _snapshot;
   ui.Image _snapshot;
-  set snapshot(ui.Image snapshot) {
-    _snapshot = snapshot;
-    notifyListeners();
+
+  Future<void> loadSnapshot() async {
+    _snapshot = await pngRead(file);
   }
+
+  Future<void> saveSnapshot() async {
+    await pngWrite(file, _snapshot);
+  }
+
+  factory FrameModel.fromJson(Map<String, dynamic> json, String frameDirPath) =>
+      FrameModel(
+        file: File(p.join(frameDirPath, json['file_name'])),
+        duration: (json['duration'] as String).parseDuration(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'file_name': p.basename(file.path),
+        'duration': duration.toString(),
+      };
+
+  @override
+  FrameModel copyWith({
+    File file,
+    Duration duration,
+    ui.Image snapshot,
+  }) =>
+      FrameModel(
+        file: file ?? this.file,
+        duration: duration ?? this.duration,
+        snapshot: snapshot ?? this._snapshot,
+      );
+
+  @override
+  List<Object> get props => [file.path, duration];
 }
