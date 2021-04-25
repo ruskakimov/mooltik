@@ -155,15 +155,18 @@ class Project extends ChangeNotifier {
     }
   }
 
-  Future<void> save() async {
-    // Write project data.
+  String _generateSaveData() {
     final data = ProjectSaveData(
       width: _frameSize.width,
       height: _frameSize.height,
       scenes: _scenes.iterable.toList(),
       sounds: _soundClips,
     );
-    await _dataFile.writeAsString(jsonEncode(data));
+    return jsonEncode(data);
+  }
+
+  Future<void> save() async {
+    await _dataFile.writeAsString(_generateSaveData());
 
     // Write thumbnail.
     final image = await generateImage(
