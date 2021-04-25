@@ -24,10 +24,16 @@ class DrawingPage extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(
-          create: (context) => FrameReelModel(
-            frameSeq: context.read<TimelineModel>().currentScene.frameSeq,
-            sharedPreferences: context.read<SharedPreferences>(),
-          ),
+          create: (context) {
+            // Read current frame to reset `frameSeq.currentIndex`.
+            // This index can get out of sync because of VideoSliver rendering.
+            context.read<TimelineModel>().currentFrame;
+
+            return FrameReelModel(
+              frameSeq: context.read<TimelineModel>().currentScene.frameSeq,
+              sharedPreferences: context.read<SharedPreferences>(),
+            );
+          },
         ),
         ChangeNotifierProxyProvider<FrameReelModel, OnionModel>(
           update: (context, reel, model) =>
