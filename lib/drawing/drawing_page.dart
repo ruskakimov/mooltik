@@ -25,7 +25,7 @@ class DrawingPage extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => FrameReelModel(
-            frames: context.read<TimelineModel>().currentScene.frameSeq,
+            frameSeq: context.read<TimelineModel>().currentScene.frameSeq,
             sharedPreferences: context.read<SharedPreferences>(),
           ),
         ),

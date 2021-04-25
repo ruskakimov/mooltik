@@ -104,16 +104,16 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
             right: (widget.width - widget.itemWidth) / 2 - widget.itemWidth,
           ),
           primary: false,
-          itemCount: reel.frames.length + 1,
+          itemCount: reel.frameSeq.length + 1,
           itemExtent: widget.itemWidth,
           itemBuilder: (context, index) {
-            if (index == reel.frames.length) {
+            if (index == reel.frameSeq.length) {
               return GestureDetector(
                 onTap: () async {
                   reel.appendFrame(
                     await context.read<Project>().createNewFrame(),
                   );
-                  scrollTo(reel.frames.length - 1);
+                  scrollTo(reel.frameSeq.length - 1);
                 },
                 child: _FrameReelItem(
                   child: ColoredBox(
@@ -128,7 +128,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
               onTap: () => scrollTo(index),
               child: _FrameReelItem(
                 child: FrameThumbnail(
-                  frame: reel.frames[index],
+                  frame: reel.frameSeq[index],
                 ),
               ),
             );
