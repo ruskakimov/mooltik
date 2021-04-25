@@ -89,6 +89,7 @@ class Project extends ChangeNotifier {
   Sequence<SceneModel> get scenes => _scenes;
   Sequence<SceneModel> _scenes;
 
+  // TODO: Check if lazy or not
   Iterable<FrameModel> get allFrames => _scenes.iterable
       .map((scene) => scene.frameSeq.iterable)
       .expand((iterable) => iterable);
@@ -125,7 +126,7 @@ class Project extends ChangeNotifier {
       _frameSize = Size(data.width, data.height);
       _scenes = Sequence<SceneModel>(data.scenes);
 
-      // TODO: Remove later
+      // TODO: Loading all frames into memory doesn't scale.
       await Future.wait(allFrames.map((frame) => frame.loadSnapshot()));
 
       _soundClips =
