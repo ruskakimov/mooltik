@@ -32,6 +32,10 @@
 	<string>Unused dependency code.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Unused dependency code.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Unused dependency code.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Unused dependency code.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
