@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
@@ -91,6 +92,16 @@ class DrawingPage extends StatelessWidget {
                         height: 44,
                         child: FrameReel(),
                       ),
+                    Positioned(
+                      bottom: 48,
+                      left: 4,
+                      child: FloatingActionButton(
+                        mini: true,
+                        elevation: 2,
+                        child: Icon(FontAwesomeIcons.layerGroup, size: 20),
+                        onPressed: () {},
+                      ),
+                    ),
                   ],
                 ),
               ),
