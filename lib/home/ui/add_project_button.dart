@@ -3,7 +3,8 @@ import 'package:mooltik/editing/editing_page.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mooltik/gallery/data/gallery_model.dart';
+
+import '../data/gallery_model.dart';
 
 class AddProjectButton extends StatelessWidget {
   const AddProjectButton({

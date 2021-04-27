@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/gallery/ui/bin_button.dart';
+
+import 'bin_button.dart';
 
 class HomeBar extends StatelessWidget {
   const HomeBar({
