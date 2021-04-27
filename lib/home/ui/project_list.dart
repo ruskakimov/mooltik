@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
+import 'package:mooltik/home/ui/add_project_button.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editing/editing_page.dart';
 
@@ -24,6 +25,7 @@ class ProjectList extends StatelessWidget {
         mainAxisSpacing: 32,
         crossAxisSpacing: 32,
         children: [
+          AddProjectButton(),
           for (final project in projects)
             ChangeNotifierProvider<Project>.value(
               key: Key('${project.creationEpoch}'),
