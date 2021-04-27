@@ -1,22 +1,23 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mooltik/gallery/ui/add_project_button.dart';
-import 'package:mooltik/gallery/ui/home_bar.dart';
-import 'package:mooltik/gallery/ui/project_list.dart';
-import 'package:mooltik/gallery/data/gallery_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-class GalleryPage extends StatefulWidget {
-  const GalleryPage({Key key}) : super(key: key);
+import 'ui/add_project_button.dart';
+import 'ui/home_bar.dart';
+import 'ui/project_list.dart';
+import 'data/gallery_model.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({Key key}) : super(key: key);
 
   @override
-  _GalleryPageState createState() => _GalleryPageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _GalleryPageState extends State<GalleryPage> {
+class _HomePageState extends State<HomePage> {
   final GalleryModel manager = GalleryModel();
 
   @override

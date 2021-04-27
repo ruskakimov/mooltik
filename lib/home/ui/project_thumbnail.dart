@@ -4,8 +4,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
-import 'package:mooltik/gallery/data/gallery_model.dart';
 import 'package:provider/provider.dart';
+
+import '../data/gallery_model.dart';
 
 class ProjectThumbnail extends StatefulWidget {
   const ProjectThumbnail({

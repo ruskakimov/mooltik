@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_portal/flutter_portal.dart';
-import 'package:mooltik/gallery/gallery_page.dart';
+import 'package:mooltik/home/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -76,7 +76,7 @@ class App extends StatelessWidget {
           ),
           navigatorObservers: [routeObserver],
           routes: {
-            Navigator.defaultRouteName: (context) => GalleryPage(),
+            Navigator.defaultRouteName: (context) => HomePage(),
           },
         ),
       ),
