@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DiscordSliver extends StatelessWidget {
   const DiscordSliver({Key key}) : super(key: key);
@@ -15,7 +16,7 @@ class DiscordSliver extends StatelessWidget {
           ElevatedButton.icon(
             icon: Icon(FontAwesomeIcons.discord),
             label: Text('Join Discord community'),
-            onPressed: () {},
+            onPressed: () => launch('https://discord.gg/qCra96BsN4'),
           ),
         ],
       ),

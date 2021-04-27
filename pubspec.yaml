@@ -46,6 +46,9 @@ dependencies:
   # Import assets:
   file_picker: ^3.0.1
 
+  # Open links:
+  url_launcher: ^6.0.3
+
   # Export video:
   flutter_ffmpeg: ^0.3.0
   image_gallery_saver: ^1.5.0
