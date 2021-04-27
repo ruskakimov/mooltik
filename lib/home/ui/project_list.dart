@@ -16,34 +16,36 @@ class ProjectList extends StatelessWidget {
     final gallery = context.watch<GalleryModel>();
     final projects = gallery.projects;
 
-    return GridView.count(
+    return SliverPadding(
       padding: const EdgeInsets.all(32),
-      scrollDirection: Axis.vertical,
-      crossAxisCount: MediaQuery.of(context).size.width ~/ 300,
-      childAspectRatio: 16 / 9,
-      mainAxisSpacing: 32,
-      crossAxisSpacing: 32,
-      children: [
-        for (final project in projects)
-          ChangeNotifierProvider<Project>.value(
-            key: Key('${project.creationEpoch}'),
-            value: project,
-            child: ProjectThumbnail(
-              thumbnail: project.thumbnail,
-              onTap: () async {
-                await project.open();
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ChangeNotifierProvider<Project>.value(
-                      value: project,
-                      child: EditingPage(),
+      sliver: SliverGrid.count(
+        crossAxisCount: MediaQuery.of(context).size.width ~/ 300,
+        childAspectRatio: 16 / 9,
+        mainAxisSpacing: 32,
+        crossAxisSpacing: 32,
+        children: [
+          for (final project in projects)
+            ChangeNotifierProvider<Project>.value(
+              key: Key('${project.creationEpoch}'),
+              value: project,
+              child: ProjectThumbnail(
+                thumbnail: project.thumbnail,
+                onTap: () async {
+                  await project.open();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ChangeNotifierProvider<Project>.value(
+                        value: project,
+                        child: EditingPage(),
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-          )
-      ],
+                  );
+                },
+              ),
+            )
+        ],
+      ),
     );
   }
 }

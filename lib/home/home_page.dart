@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/home/ui/discord_sliver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +44,12 @@ class _HomePageState extends State<HomePage> {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 56),
-              child: ProjectList(),
+              child: CustomScrollView(
+                slivers: [
+                  DiscordSliver(),
+                  ProjectList(),
+                ],
+              ),
             ),
             HomeBar(),
           ],
