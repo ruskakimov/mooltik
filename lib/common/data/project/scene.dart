@@ -16,8 +16,8 @@ enum PlayMode {
   pingPong,
 }
 
-class SceneModel extends TimeSpan {
-  SceneModel({
+class Scene extends TimeSpan {
+  Scene({
     @required this.frameSeq,
     Duration duration = const Duration(seconds: 5),
     this.playMode = PlayMode.extendLast,
@@ -88,8 +88,8 @@ class SceneModel extends TimeSpan {
     return frameSeq[i];
   }
 
-  factory SceneModel.fromJson(Map<String, dynamic> json, String frameDirPath) =>
-      SceneModel(
+  factory Scene.fromJson(Map<String, dynamic> json, String frameDirPath) =>
+      Scene(
         frameSeq: Sequence<Frame>((json['frames'] as List<dynamic>)
             .map((d) => Frame.fromJson(d, frameDirPath))
             .toList()),
@@ -103,12 +103,12 @@ class SceneModel extends TimeSpan {
         'play_mode': playMode.index,
       };
 
-  SceneModel copyWith({
+  Scene copyWith({
     List<Frame> frames,
     Duration duration,
     PlayMode playMode,
   }) =>
-      SceneModel(
+      Scene(
         frameSeq: frames != null ? Sequence<Frame>(frames) : this.frameSeq,
         duration: duration ?? this.duration,
         playMode: playMode ?? this.playMode,

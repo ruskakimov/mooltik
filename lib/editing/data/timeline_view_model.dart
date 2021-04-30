@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
-import 'package:mooltik/common/data/project/scene_model.dart';
+import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
@@ -116,7 +116,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   TimeSpan get selectedImageSpan => imageSpans[_selectedImageSpanIndex];
   Frame get selectedFrame => selectedImageSpan as Frame;
-  SceneModel get selectedScene => selectedImageSpan as SceneModel;
+  Scene get selectedScene => selectedImageSpan as Scene;
 
   Duration get _selectedSliverDuration => selectedImageSpan.duration;
 
@@ -175,7 +175,7 @@ class TimelineViewModel extends ChangeNotifier {
           : VideoSliver(
               area: area,
               thumbnailAt: (double x) {
-                final scene = imageSpan as SceneModel;
+                final scene = imageSpan as Scene;
                 final position = pxToDuration(x - area.left, msPerPx);
                 return scene.frameAt(position).snapshot;
               },
@@ -287,7 +287,7 @@ class TimelineViewModel extends ChangeNotifier {
     return frame.copyWith(file: newFrame.file)..saveSnapshot();
   }
 
-  Future<SceneModel> _duplicateScene(SceneModel scene) async {
+  Future<Scene> _duplicateScene(Scene scene) async {
     final duplicateFrames = await Future.wait(
       scene.frameSeq.iterable.map((frame) => _duplicateFrame(frame)),
     );

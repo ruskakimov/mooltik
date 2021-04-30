@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/scene_model.dart';
+import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/timeline_positioned.dart';

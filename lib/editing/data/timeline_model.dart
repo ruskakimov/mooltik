@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/duration_methods.dart';
-import 'package:mooltik/common/data/project/scene_model.dart';
+import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 
@@ -26,7 +26,7 @@ class TimelineModel extends ChangeNotifier {
     sceneSeq.addListener(notifyListeners);
   }
 
-  final Sequence<SceneModel> sceneSeq;
+  final Sequence<Scene> sceneSeq;
   final AnimationController _playheadController;
 
   Duration get playheadPosition => sceneSeq.playhead;
@@ -35,7 +35,7 @@ class TimelineModel extends ChangeNotifier {
 
   Duration get totalDuration => sceneSeq.totalDuration;
 
-  SceneModel get currentScene => sceneSeq.current;
+  Scene get currentScene => sceneSeq.current;
 
   Duration get currentSceneStart => sceneSeq.currentSpanStart;
 

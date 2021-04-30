@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
-import 'package:mooltik/common/data/project/scene_model.dart';
+import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
@@ -86,8 +86,8 @@ class Project extends ChangeNotifier {
 
   final File _dataFile;
 
-  Sequence<SceneModel> get scenes => _scenes;
-  Sequence<SceneModel> _scenes;
+  Sequence<Scene> get scenes => _scenes;
+  Sequence<Scene> _scenes;
 
   // TODO: Check if lazy or not
   Iterable<Frame> get allFrames => _scenes.iterable
@@ -127,7 +127,7 @@ class Project extends ChangeNotifier {
         _getSoundDirectoryPath(),
       );
       _frameSize = Size(data.width, data.height);
-      _scenes = Sequence<SceneModel>(data.scenes);
+      _scenes = Sequence<Scene>(data.scenes);
 
       // TODO: Loading all frames into memory doesn't scale.
       await Future.wait(allFrames.map((frame) => frame.loadSnapshot()));
@@ -137,7 +137,7 @@ class Project extends ChangeNotifier {
     } else {
       // New project.
       _frameSize = const Size(1280, 720);
-      _scenes = Sequence<SceneModel>([await createNewScene()]);
+      _scenes = Sequence<Scene>([await createNewScene()]);
       _soundClips = [];
     }
 
@@ -241,8 +241,8 @@ class Project extends ChangeNotifier {
     return Frame(file: file, snapshot: image);
   }
 
-  Future<SceneModel> createNewScene() async {
-    return SceneModel(
+  Future<Scene> createNewScene() async {
+    return Scene(
       frameSeq: Sequence<Frame>([await createNewFrame()]),
     );
   }

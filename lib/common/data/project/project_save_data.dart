@@ -1,4 +1,4 @@
-import 'package:mooltik/common/data/project/scene_model.dart';
+import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
@@ -33,17 +33,17 @@ class ProjectSaveData {
 
   final double width;
   final double height;
-  final List<SceneModel> scenes;
+  final List<Scene> scenes;
   final List<SoundClip> sounds;
 
-  static List<SceneModel> _parseScenes(
+  static List<Scene> _parseScenes(
     Map<String, dynamic> json,
     String frameDirPath,
   ) {
     // Latest format.
     if (json.containsKey('scenes')) {
       return (json['scenes'] as List<dynamic>)
-          .map((d) => SceneModel.fromJson(d, frameDirPath))
+          .map((d) => Scene.fromJson(d, frameDirPath))
           .toList();
     }
 
@@ -55,7 +55,7 @@ class ProjectSaveData {
             .toList(),
       );
       return [
-        SceneModel(
+        Scene(
           frameSeq: frameSeq,
           duration: frameSeq.totalDuration,
           playMode: PlayMode.loop, // Showcase new loop feature.

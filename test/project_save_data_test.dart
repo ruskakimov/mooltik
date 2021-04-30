@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mooltik/common/data/project/scene_model.dart';
+import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
@@ -24,7 +24,7 @@ void main() {
         width: 200,
         height: 100,
         scenes: [
-          SceneModel(
+          Scene(
             duration: Duration(seconds: 12),
             frameSeq: Sequence([
               Frame(
@@ -37,7 +37,7 @@ void main() {
               ),
             ]),
           ),
-          SceneModel(
+          Scene(
             duration: Duration(seconds: 4),
             frameSeq: Sequence([
               Frame(

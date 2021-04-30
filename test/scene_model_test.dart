@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mooltik/common/data/project/scene_model.dart';
+import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 
 void main() {
   group('SceneModel', () {
     test('handles extend last mode', () {
-      final scene = SceneModel(
+      final scene = Scene(
         frameSeq: Sequence<Frame>([
           Frame(file: File('1.png'), duration: Duration(seconds: 2)),
           Frame(file: File('2.png'), duration: Duration(seconds: 2)),
@@ -24,7 +24,7 @@ void main() {
     });
 
     test('handles loop mode', () {
-      final scene = SceneModel(
+      final scene = Scene(
         frameSeq: Sequence<Frame>([
           Frame(file: File('1.png'), duration: Duration(seconds: 2)),
           Frame(file: File('2.png'), duration: Duration(seconds: 2)),
@@ -45,7 +45,7 @@ void main() {
     });
 
     test('handles ping-pong mode', () {
-      final scene = SceneModel(
+      final scene = Scene(
         frameSeq: Sequence<Frame>([
           Frame(file: File('1.png'), duration: Duration(seconds: 1)),
           Frame(file: File('2.png'), duration: Duration(seconds: 1)),
@@ -74,7 +74,7 @@ void main() {
     });
 
     test('returns correct export frames for extend last mode', () {
-      final scene = SceneModel(
+      final scene = Scene(
         frameSeq: Sequence<Frame>([
           Frame(file: File('1.png'), duration: Duration(seconds: 1)),
           Frame(file: File('2.png'), duration: Duration(seconds: 2)),
@@ -90,7 +90,7 @@ void main() {
     });
 
     test('returns correct export frames for loop mode', () {
-      final scene = SceneModel(
+      final scene = Scene(
         frameSeq: Sequence<Frame>([
           Frame(file: File('1.png'), duration: Duration(seconds: 1)),
           Frame(file: File('2.png'), duration: Duration(seconds: 2)),
@@ -110,7 +110,7 @@ void main() {
     });
 
     test('returns correct export frames for ping-pong mode', () {
-      final scene = SceneModel(
+      final scene = Scene(
         frameSeq: Sequence<Frame>([
           Frame(file: File('1.png'), duration: Duration(seconds: 1)),
           Frame(file: File('2.png'), duration: Duration(seconds: 2)),
