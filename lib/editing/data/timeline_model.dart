@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 
 class TimelineModel extends ChangeNotifier {
   TimelineModel({
@@ -52,7 +52,7 @@ class TimelineModel extends ChangeNotifier {
   Duration get playheadEndBound =>
       isSceneBound ? currentSceneEndInclusive : totalDuration;
 
-  FrameModel get currentFrame =>
+  Frame get currentFrame =>
       currentScene.frameAt(playheadPosition - sceneSeq.currentSpanStart);
 
   /// Playhead is constrained to the current scene bounds.

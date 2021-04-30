@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 
 class FrameThumbnail extends StatelessWidget {
@@ -8,7 +8,7 @@ class FrameThumbnail extends StatelessWidget {
     @required this.frame,
   }) : super(key: key);
 
-  final FrameModel frame;
+  final Frame frame;
 
   @override
   Widget build(BuildContext context) {

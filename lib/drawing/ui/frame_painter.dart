@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 
-import '../data/frame/frame_model.dart';
+import '../data/frame/frame.dart';
 
 class FramePainter extends CustomPainter {
   FramePainter({
@@ -12,7 +12,7 @@ class FramePainter extends CustomPainter {
     this.filter,
   });
 
-  final FrameModel frame;
+  final Frame frame;
   final List<Stroke> strokes;
   final bool showCursor;
   final Color background;

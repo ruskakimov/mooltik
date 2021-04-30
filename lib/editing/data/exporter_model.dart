@@ -10,7 +10,7 @@ import 'package:path/path.dart' as p;
 import 'package:mooltik/common/data/io/mp4/slide.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 
 enum ExporterState {
   initial,
@@ -26,7 +26,7 @@ class ExporterModel extends ChangeNotifier {
   });
 
   /// For output video.
-  final Iterable<FrameModel> frames;
+  final Iterable<Frame> frames;
 
   /// For output audio.
   final List<SoundClip> soundClips;
@@ -91,7 +91,7 @@ class ExporterModel extends ChangeNotifier {
     OpenFile.open(p.fromUri(_outputFilePath));
   }
 
-  Future<Slide> _slideFromFrame(FrameModel frame) async {
+  Future<Slide> _slideFromFrame(Frame frame) async {
     final image = await generateImage(
       FramePainter(frame: frame),
       frame.width.toInt(),

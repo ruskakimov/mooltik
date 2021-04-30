@@ -1,12 +1,11 @@
 import 'dart:math';
-import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/editing/data/convert.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/time_label.dart';
@@ -116,7 +115,7 @@ class TimelineViewModel extends ChangeNotifier {
   int _selectedImageSpanIndex;
 
   TimeSpan get selectedImageSpan => imageSpans[_selectedImageSpanIndex];
-  FrameModel get selectedFrame => selectedImageSpan as FrameModel;
+  Frame get selectedFrame => selectedImageSpan as Frame;
   SceneModel get selectedScene => selectedImageSpan as SceneModel;
 
   Duration get _selectedSliverDuration => selectedImageSpan.duration;
@@ -169,7 +168,7 @@ class TimelineViewModel extends ChangeNotifier {
       isEditingScene
           ? ImageSliver(
               area: area,
-              thumbnail: (imageSpan as FrameModel).snapshot,
+              thumbnail: (imageSpan as Frame).snapshot,
               index: _isGhostFrame(imageSpanIndex) ? null : imageSpanIndex,
               opacity: _isGhostFrame(imageSpanIndex) ? 0.5 : 1,
             )
@@ -283,7 +282,7 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<FrameModel> _duplicateFrame(FrameModel frame) async {
+  Future<Frame> _duplicateFrame(Frame frame) async {
     final newFrame = await createNewFrame();
     return frame.copyWith(file: newFrame.file)..saveSnapshot();
   }

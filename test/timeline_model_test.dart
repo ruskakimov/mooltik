@@ -3,16 +3,16 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 
 void main() {
   group('TimelineModel', () {
     test('starts with first frame selected', () {
       final sceneA = SceneModel(
-        frameSeq: Sequence<FrameModel>([
-          FrameModel(file: File('1.png'), duration: Duration(seconds: 2)),
-          FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
+        frameSeq: Sequence<Frame>([
+          Frame(file: File('1.png'), duration: Duration(seconds: 2)),
+          Frame(file: File('2.png'), duration: Duration(seconds: 2)),
         ]),
         duration: Duration(seconds: 4),
       );
@@ -25,9 +25,9 @@ void main() {
 
     test('scrubbing updates current frame', () {
       final sceneA = SceneModel(
-        frameSeq: Sequence<FrameModel>([
-          FrameModel(file: File('1.png'), duration: Duration(seconds: 2)),
-          FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
+        frameSeq: Sequence<Frame>([
+          Frame(file: File('1.png'), duration: Duration(seconds: 2)),
+          Frame(file: File('2.png'), duration: Duration(seconds: 2)),
         ]),
         duration: Duration(seconds: 4),
       );

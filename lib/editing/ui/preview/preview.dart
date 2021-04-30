@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/drawing_page.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/preview/frame_thumbnail.dart';
 import 'package:mooltik/common/data/project/project.dart';
@@ -30,7 +30,7 @@ class Preview extends StatelessWidget {
       },
       child: Center(
         child: FrameThumbnail(
-          frame: context.select<TimelineModel, FrameModel>(
+          frame: context.select<TimelineModel, Frame>(
             (timeline) => timeline.currentFrame,
           ),
         ),

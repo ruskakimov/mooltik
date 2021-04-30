@@ -1,7 +1,7 @@
 import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 
 class ProjectSaveData {
   ProjectSaveData({
@@ -49,7 +49,7 @@ class ProjectSaveData {
 
     // Convert v0.8 format to the latest.
     if (json.containsKey('frames')) {
-      final frameSeq = Sequence<FrameModel>(
+      final frameSeq = Sequence<Frame>(
         (json['frames'] as List<dynamic>)
             .map((d) => _parseLegacyFrameData(d, frameDirPath))
             .toList(),
@@ -66,11 +66,11 @@ class ProjectSaveData {
     throw Exception('Unable to parse project scenes.');
   }
 
-  static FrameModel _parseLegacyFrameData(
+  static Frame _parseLegacyFrameData(
     Map<String, dynamic> json,
     String frameDirPath,
   ) {
     json['file_name'] = 'frame${json['id']}.png';
-    return FrameModel.fromJson(json, frameDirPath);
+    return Frame.fromJson(json, frameDirPath);
   }
 }

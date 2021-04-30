@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/debouncer.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
@@ -19,7 +19,7 @@ const twoPi = pi * 2;
 
 class EaselModel extends ChangeNotifier {
   EaselModel({
-    @required FrameModel frame,
+    @required Frame frame,
     @required Tool selectedTool,
     @required this.onChanged,
   })  : _frame = frame,
@@ -29,12 +29,12 @@ class EaselModel extends ChangeNotifier {
         ),
         _selectedTool = selectedTool;
 
-  FrameModel get frame => _frame;
-  FrameModel _frame;
+  Frame get frame => _frame;
+  Frame _frame;
 
   Tool _selectedTool;
 
-  final ValueChanged<FrameModel> onChanged;
+  final ValueChanged<Frame> onChanged;
 
   Size get frameSize => _frame.size;
 
@@ -81,7 +81,7 @@ class EaselModel extends ChangeNotifier {
   }
 
   /// Used by provider to update dependency.
-  void updateFrame(FrameModel frame) {
+  void updateFrame(Frame frame) {
     if (frame.file == _frame.file) return;
 
     if (_diskWriteDebouncer.isActive) {

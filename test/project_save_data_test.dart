@@ -6,7 +6,7 @@ import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 
 // To solve the issue of inconsistent directory from where tests are run (https://github.com/flutter/flutter/issues/20907).
 File testFile(String filePath) {
@@ -27,11 +27,11 @@ void main() {
           SceneModel(
             duration: Duration(seconds: 12),
             frameSeq: Sequence([
-              FrameModel(
+              Frame(
                 file: File('1.png'),
                 duration: Duration(seconds: 3),
               ),
-              FrameModel(
+              Frame(
                 file: File('2.png'),
                 duration: Duration(seconds: 2),
               ),
@@ -40,11 +40,11 @@ void main() {
           SceneModel(
             duration: Duration(seconds: 4),
             frameSeq: Sequence([
-              FrameModel(
+              Frame(
                 file: File('3.png'),
                 duration: Duration(seconds: 1),
               ),
-              FrameModel(
+              Frame(
                 file: File('4.png'),
                 duration: Duration(seconds: 10),
               ),

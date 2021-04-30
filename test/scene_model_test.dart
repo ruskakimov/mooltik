@@ -3,15 +3,15 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 
 void main() {
   group('SceneModel', () {
     test('handles extend last mode', () {
       final scene = SceneModel(
-        frameSeq: Sequence<FrameModel>([
-          FrameModel(file: File('1.png'), duration: Duration(seconds: 2)),
-          FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
+        frameSeq: Sequence<Frame>([
+          Frame(file: File('1.png'), duration: Duration(seconds: 2)),
+          Frame(file: File('2.png'), duration: Duration(seconds: 2)),
         ]),
         duration: Duration(seconds: 20),
         playMode: PlayMode.extendLast,
@@ -25,9 +25,9 @@ void main() {
 
     test('handles loop mode', () {
       final scene = SceneModel(
-        frameSeq: Sequence<FrameModel>([
-          FrameModel(file: File('1.png'), duration: Duration(seconds: 2)),
-          FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
+        frameSeq: Sequence<Frame>([
+          Frame(file: File('1.png'), duration: Duration(seconds: 2)),
+          Frame(file: File('2.png'), duration: Duration(seconds: 2)),
         ]),
         duration: Duration(seconds: 20),
         playMode: PlayMode.loop,
@@ -46,10 +46,10 @@ void main() {
 
     test('handles ping-pong mode', () {
       final scene = SceneModel(
-        frameSeq: Sequence<FrameModel>([
-          FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
-          FrameModel(file: File('2.png'), duration: Duration(seconds: 1)),
-          FrameModel(file: File('3.png'), duration: Duration(seconds: 1)),
+        frameSeq: Sequence<Frame>([
+          Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+          Frame(file: File('2.png'), duration: Duration(seconds: 1)),
+          Frame(file: File('3.png'), duration: Duration(seconds: 1)),
         ]),
         duration: Duration(seconds: 16),
         playMode: PlayMode.pingPong,
@@ -75,63 +75,63 @@ void main() {
 
     test('returns correct export frames for extend last mode', () {
       final scene = SceneModel(
-        frameSeq: Sequence<FrameModel>([
-          FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
-          FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
+        frameSeq: Sequence<Frame>([
+          Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+          Frame(file: File('2.png'), duration: Duration(seconds: 2)),
         ]),
         duration: Duration(seconds: 10),
         playMode: PlayMode.extendLast,
       );
       expect(scene.exportFrames.toList(), [
-        FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
-        FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
-        FrameModel(file: File('2.png'), duration: Duration(seconds: 7)),
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 7)),
       ]);
     });
 
     test('returns correct export frames for loop mode', () {
       final scene = SceneModel(
-        frameSeq: Sequence<FrameModel>([
-          FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
-          FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
+        frameSeq: Sequence<Frame>([
+          Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+          Frame(file: File('2.png'), duration: Duration(seconds: 2)),
         ]),
         duration: Duration(seconds: 10),
         playMode: PlayMode.loop,
       );
       expect(scene.exportFrames.toList(), [
-        FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
-        FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
-        FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
-        FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
-        FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
-        FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
-        FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
       ]);
     });
 
     test('returns correct export frames for ping-pong mode', () {
       final scene = SceneModel(
-        frameSeq: Sequence<FrameModel>([
-          FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
-          FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
-          FrameModel(file: File('3.png'), duration: Duration(seconds: 3)),
+        frameSeq: Sequence<Frame>([
+          Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+          Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+          Frame(file: File('3.png'), duration: Duration(seconds: 3)),
         ]),
         duration: Duration(seconds: 24),
         playMode: PlayMode.pingPong,
       );
       expect(scene.exportFrames.toList(), [
-        FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
-        FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
-        FrameModel(file: File('3.png'), duration: Duration(seconds: 3)),
-        FrameModel(file: File('3.png'), duration: Duration(seconds: 3)),
-        FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
-        FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
-        FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
-        FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
-        FrameModel(file: File('3.png'), duration: Duration(seconds: 3)),
-        FrameModel(file: File('3.png'), duration: Duration(seconds: 3)),
-        FrameModel(file: File('2.png'), duration: Duration(seconds: 2)),
-        FrameModel(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('3.png'), duration: Duration(seconds: 3)),
+        Frame(file: File('3.png'), duration: Duration(seconds: 3)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('3.png'), duration: Duration(seconds: 3)),
+        Frame(file: File('3.png'), duration: Duration(seconds: 3)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
       ]);
     });
   });

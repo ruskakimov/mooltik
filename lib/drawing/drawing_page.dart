@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/drawing_actionbar.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
@@ -59,7 +59,7 @@ class DrawingPage extends StatelessWidget {
                   create: (context) => EaselModel(
                       frame: context.read<FrameReelModel>().currentFrame,
                       selectedTool: context.read<ToolboxModel>().selectedTool,
-                      onChanged: (FrameModel frame) {
+                      onChanged: (Frame frame) {
                         context
                             .read<FrameReelModel>()
                             .replaceCurrentFrame(frame);

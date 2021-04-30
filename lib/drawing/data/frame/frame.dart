@@ -8,8 +8,8 @@ import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:path/path.dart' as p;
 
-class FrameModel extends TimeSpan with EquatableMixin {
-  FrameModel({
+class Frame extends TimeSpan with EquatableMixin {
+  Frame({
     @required this.file,
     Duration duration = const Duration(seconds: 1),
     ui.Image snapshot,
@@ -35,8 +35,8 @@ class FrameModel extends TimeSpan with EquatableMixin {
     await pngWrite(file, _snapshot);
   }
 
-  factory FrameModel.fromJson(Map<String, dynamic> json, String frameDirPath) =>
-      FrameModel(
+  factory Frame.fromJson(Map<String, dynamic> json, String frameDirPath) =>
+      Frame(
         file: File(p.join(frameDirPath, json['file_name'])),
         duration: (json['duration'] as String).parseDuration(),
       );
@@ -47,12 +47,12 @@ class FrameModel extends TimeSpan with EquatableMixin {
       };
 
   @override
-  FrameModel copyWith({
+  Frame copyWith({
     File file,
     Duration duration,
     ui.Image snapshot,
   }) =>
-      FrameModel(
+      Frame(
         file: file ?? this.file,
         duration: duration ?? this.duration,
         snapshot: snapshot ?? this._snapshot,

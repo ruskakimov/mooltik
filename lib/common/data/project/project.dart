@@ -6,7 +6,7 @@ import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/project/scene_model.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
@@ -16,7 +16,7 @@ import 'package:path/path.dart' as p;
 
 const String _binnedPostfix = '_binned';
 
-typedef CreateNewFrame = Future<FrameModel> Function();
+typedef CreateNewFrame = Future<Frame> Function();
 
 /// Holds project data, reads and writes to project folder.
 ///
@@ -90,11 +90,11 @@ class Project extends ChangeNotifier {
   Sequence<SceneModel> _scenes;
 
   // TODO: Check if lazy or not
-  Iterable<FrameModel> get allFrames => _scenes.iterable
+  Iterable<Frame> get allFrames => _scenes.iterable
       .map((scene) => scene.frameSeq.iterable)
       .expand((iterable) => iterable);
 
-  Iterable<FrameModel> get exportFrames => _scenes.iterable
+  Iterable<Frame> get exportFrames => _scenes.iterable
       .map((scene) => scene.exportFrames)
       .expand((iterable) => iterable);
 
@@ -230,7 +230,7 @@ class Project extends ChangeNotifier {
     await deleteFilesWhere(soundDir, _isUnusedSoundFile);
   }
 
-  Future<FrameModel> createNewFrame() async {
+  Future<Frame> createNewFrame() async {
     final image = await generateImage(
       null,
       _frameSize.width.toInt(),
@@ -238,12 +238,12 @@ class Project extends ChangeNotifier {
     );
     final file = _getFrameFile(DateTime.now().millisecondsSinceEpoch);
     await pngWrite(file, image);
-    return FrameModel(file: file, snapshot: image);
+    return Frame(file: file, snapshot: image);
   }
 
   Future<SceneModel> createNewScene() async {
     return SceneModel(
-      frameSeq: Sequence<FrameModel>([await createNewFrame()]),
+      frameSeq: Sequence<Frame>([await createNewFrame()]),
     );
   }
 

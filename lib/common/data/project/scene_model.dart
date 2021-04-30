@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 
 /// Play behaviour when scene duration is longer than the total duration of frames.
 enum PlayMode {
@@ -23,11 +23,11 @@ class SceneModel extends TimeSpan {
     this.playMode = PlayMode.extendLast,
   }) : super(duration);
 
-  final Sequence<FrameModel> frameSeq;
+  final Sequence<Frame> frameSeq;
   final PlayMode playMode;
 
   /// Frame at a given playhead position.
-  FrameModel frameAt(Duration playhead) {
+  Frame frameAt(Duration playhead) {
     playhead = playhead.clamp(Duration.zero, duration);
 
     if (playMode == PlayMode.extendLast) {
@@ -47,9 +47,9 @@ class SceneModel extends TimeSpan {
     return frameSeq.current;
   }
 
-  Iterable<FrameModel> get ghostFrames => exportFrames.skip(frameSeq.length);
+  Iterable<Frame> get ghostFrames => exportFrames.skip(frameSeq.length);
 
-  Iterable<FrameModel> get exportFrames sync* {
+  Iterable<Frame> get exportFrames sync* {
     var elapsed = Duration.zero;
     var i = 0;
 
@@ -71,7 +71,7 @@ class SceneModel extends TimeSpan {
     }
   }
 
-  FrameModel _frameAt(int i) {
+  Frame _frameAt(int i) {
     final L = frameSeq.length;
     switch (playMode) {
       case PlayMode.extendLast:
@@ -90,8 +90,8 @@ class SceneModel extends TimeSpan {
 
   factory SceneModel.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       SceneModel(
-        frameSeq: Sequence<FrameModel>((json['frames'] as List<dynamic>)
-            .map((d) => FrameModel.fromJson(d, frameDirPath))
+        frameSeq: Sequence<Frame>((json['frames'] as List<dynamic>)
+            .map((d) => Frame.fromJson(d, frameDirPath))
             .toList()),
         duration: (json['duration'] as String).parseDuration(),
         playMode: PlayMode.values[json['play_mode'] as int ?? 0],
@@ -104,12 +104,12 @@ class SceneModel extends TimeSpan {
       };
 
   SceneModel copyWith({
-    List<FrameModel> frames,
+    List<Frame> frames,
     Duration duration,
     PlayMode playMode,
   }) =>
       SceneModel(
-        frameSeq: frames != null ? Sequence<FrameModel>(frames) : this.frameSeq,
+        frameSeq: frames != null ? Sequence<Frame>(frames) : this.frameSeq,
         duration: duration ?? this.duration,
         playMode: playMode ?? this.playMode,
       );
