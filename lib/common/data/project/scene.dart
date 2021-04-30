@@ -18,17 +18,61 @@ enum PlayMode {
 
 class Scene extends TimeSpan {
   Scene({
-    @required this.frameSeq,
+    @required Sequence<Frame> frameSeq,
     Duration duration = const Duration(seconds: 5),
-    this.playMode = PlayMode.extendLast,
-  }) : super(duration);
+    PlayMode playMode = PlayMode.extendLast,
+  })  : layer = SceneLayer(frameSeq, playMode),
+        super(duration);
+
+  final SceneLayer layer;
+
+  Iterable<Frame> get uniqueFrames => layer.frameSeq.iterable;
+
+  Iterable<Frame> get ghostFrames => layer.getGhostFrames(duration);
+
+  Iterable<Frame> get exportFrames => layer.getExportFrames(duration);
+
+  factory Scene.fromJson(Map<String, dynamic> json, String frameDirPath) =>
+      Scene(
+        frameSeq: Sequence<Frame>((json['frames'] as List<dynamic>)
+            .map((d) => Frame.fromJson(d, frameDirPath))
+            .toList()),
+        duration: (json['duration'] as String).parseDuration(),
+        playMode: PlayMode.values[json['play_mode'] as int ?? 0],
+      );
+
+  Map<String, dynamic> toJson() => {
+        'frames': layer.frameSeq.iterable.map((d) => d.toJson()).toList(),
+        'duration': duration.toString(),
+        'play_mode': layer.playMode.index,
+      };
+
+  Scene copyWith({
+    List<Frame> frames,
+    Duration duration,
+    PlayMode playMode,
+  }) =>
+      Scene(
+        frameSeq:
+            frames != null ? Sequence<Frame>(frames) : this.layer.frameSeq,
+        duration: duration ?? this.duration,
+        playMode: playMode ?? this.layer.playMode,
+      );
+
+  @override
+  String toString() => layer.frameSeq.iterable
+      .fold('', (previousValue, frame) => previousValue + frame.toString());
+}
+
+class SceneLayer {
+  SceneLayer(this.frameSeq, this.playMode);
 
   final Sequence<Frame> frameSeq;
   final PlayMode playMode;
 
   /// Frame at a given playhead position.
   Frame frameAt(Duration playhead) {
-    playhead = playhead.clamp(Duration.zero, duration);
+    // playhead = playhead.clamp(Duration.zero, duration);
 
     if (playMode == PlayMode.extendLast) {
       playhead = playhead.clamp(Duration.zero, frameSeq.totalDuration);
@@ -47,21 +91,22 @@ class Scene extends TimeSpan {
     return frameSeq.current;
   }
 
-  Iterable<Frame> get ghostFrames => exportFrames.skip(frameSeq.length);
+  Iterable<Frame> getGhostFrames(Duration totalDuration) =>
+      getExportFrames(totalDuration).skip(frameSeq.length);
 
-  Iterable<Frame> get exportFrames sync* {
+  Iterable<Frame> getExportFrames(Duration totalDuration) sync* {
     var elapsed = Duration.zero;
     var i = 0;
 
-    while (elapsed < duration) {
+    while (elapsed < totalDuration) {
       var frame = _frameAt(i);
 
       final extendedFrame =
           playMode == PlayMode.extendLast && i == frameSeq.length;
-      final overflowingFrame = elapsed + frame.duration > duration;
+      final overflowingFrame = elapsed + frame.duration > totalDuration;
 
       if (extendedFrame || overflowingFrame) {
-        final leftover = duration - elapsed;
+        final leftover = totalDuration - elapsed;
         frame = frame.copyWith(duration: leftover);
       }
 
@@ -87,34 +132,4 @@ class Scene extends TimeSpan {
     }
     return frameSeq[i];
   }
-
-  factory Scene.fromJson(Map<String, dynamic> json, String frameDirPath) =>
-      Scene(
-        frameSeq: Sequence<Frame>((json['frames'] as List<dynamic>)
-            .map((d) => Frame.fromJson(d, frameDirPath))
-            .toList()),
-        duration: (json['duration'] as String).parseDuration(),
-        playMode: PlayMode.values[json['play_mode'] as int ?? 0],
-      );
-
-  Map<String, dynamic> toJson() => {
-        'frames': frameSeq.iterable.map((d) => d.toJson()).toList(),
-        'duration': duration.toString(),
-        'play_mode': playMode.index,
-      };
-
-  Scene copyWith({
-    List<Frame> frames,
-    Duration duration,
-    PlayMode playMode,
-  }) =>
-      Scene(
-        frameSeq: frames != null ? Sequence<Frame>(frames) : this.frameSeq,
-        duration: duration ?? this.duration,
-        playMode: playMode ?? this.playMode,
-      );
-
-  @override
-  String toString() => frameSeq.iterable
-      .fold('', (previousValue, frame) => previousValue + frame.toString());
 }
