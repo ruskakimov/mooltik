@@ -5,27 +5,13 @@ import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 
-/// Play behaviour when scene duration is longer than the total duration of frames.
-enum PlayMode {
-  /// Last frame is extended.
-  extendLast,
-
-  /// Frames are repeated again from the start.
-  loop,
-
-  /// Playhead goes back and forth.
-  pingPong,
-}
-
 class Scene extends TimeSpan {
   Scene({
-    @required Sequence<Frame> frameSeq,
+    @required this.layers,
     Duration duration = const Duration(seconds: 5),
-    PlayMode playMode = PlayMode.extendLast,
-  })  : layer = SceneLayer(frameSeq, playMode),
-        super(duration);
+  }) : super(duration);
 
-  final SceneLayer layer;
+  final List<SceneLayer> layers;
 
   Iterable<Frame> get uniqueFrames => layer.frameSeq.iterable;
 
@@ -54,15 +40,12 @@ class Scene extends TimeSpan {
       };
 
   Scene copyWith({
-    List<Frame> frames,
+    List<SceneLayer> layers,
     Duration duration,
-    PlayMode playMode,
   }) =>
       Scene(
-        frameSeq:
-            frames != null ? Sequence<Frame>(frames) : this.layer.frameSeq,
+        layers: layers ?? this.layers,
         duration: duration ?? this.duration,
-        playMode: playMode ?? this.layer.playMode,
       );
 
   @override

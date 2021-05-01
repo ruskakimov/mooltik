@@ -1,10 +1,21 @@
 import 'package:mooltik/common/data/duration_methods.dart';
-import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 
+/// Play behaviour when scene duration is longer than the total duration of frames.
+enum PlayMode {
+  /// Last frame is extended.
+  extendLast,
+
+  /// Frames are repeated again from the start.
+  loop,
+
+  /// Playhead goes back and forth.
+  pingPong,
+}
+
 class SceneLayer {
-  SceneLayer(this.frameSeq, this.playMode);
+  SceneLayer(this.frameSeq, [this.playMode = PlayMode.extendLast]);
 
   final Sequence<Frame> frameSeq;
   final PlayMode playMode;
