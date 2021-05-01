@@ -33,6 +33,11 @@ class Scene extends TimeSpan {
 
   Iterable<Frame> get exportFrames => layer.getExportFrames(duration);
 
+  Frame frameAt(Duration playhead) {
+    playhead = playhead.clamp(Duration.zero, duration);
+    return layer.frameAt(playhead);
+  }
+
   factory Scene.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       Scene(
         frameSeq: Sequence<Frame>((json['frames'] as List<dynamic>)

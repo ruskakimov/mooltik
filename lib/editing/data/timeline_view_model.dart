@@ -36,7 +36,7 @@ class TimelineViewModel extends ChangeNotifier {
   bool _sceneEdit = false;
 
   Sequence<TimeSpan> get imageSpans =>
-      _sceneEdit ? _timeline.currentScene.frameSeq : _timeline.sceneSeq;
+      _sceneEdit ? _timeline.currentScene.layer.frameSeq : _timeline.sceneSeq;
 
   double get msPerPx => _msPerPx;
   double _msPerPx;
@@ -255,8 +255,8 @@ class TimelineViewModel extends ChangeNotifier {
   void nextScenePlayMode() {
     final scene = _timeline.currentScene;
     final i = _timeline.sceneSeq.currentIndex;
-    final nextMode =
-        PlayMode.values[(scene.playMode.index + 1) % PlayMode.values.length];
+    final nextMode = PlayMode
+        .values[(scene.layer.playMode.index + 1) % PlayMode.values.length];
 
     _timeline.sceneSeq[i] = scene.copyWith(playMode: nextMode);
     notifyListeners();
@@ -289,7 +289,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   Future<Scene> _duplicateScene(Scene scene) async {
     final duplicateFrames = await Future.wait(
-      scene.frameSeq.iterable.map((frame) => _duplicateFrame(frame)),
+      scene.layer.frameSeq.iterable.map((frame) => _duplicateFrame(frame)),
     );
     return scene.copyWith(frames: duplicateFrames);
   }
