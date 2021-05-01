@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/duration_methods.dart';
+import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
@@ -13,6 +14,14 @@ class Scene extends TimeSpan {
 
   final List<SceneLayer> layers;
 
+  /// Visible image at a given playhead position.
+  CompositeImage imageAt(Duration playhead) {
+    playhead = playhead.clamp(Duration.zero, duration);
+    return CompositeImage(
+      layers.map((layer) => layer.frameAt(playhead).snapshot).toList(),
+    );
+  }
+
   /// All unique frames in this scene.
   Iterable<Frame> get allFrames sync* {
     for (var layer in layers) {
@@ -20,14 +29,7 @@ class Scene extends TimeSpan {
     }
   }
 
-  Iterable<Frame> get ghostFrames => layer.getGhostFrames(duration);
-
   Iterable<Frame> get exportFrames => layer.getExportFrames(duration);
-
-  Frame frameAt(Duration playhead) {
-    playhead = playhead.clamp(Duration.zero, duration);
-    return layer.frameAt(playhead);
-  }
 
   factory Scene.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       Scene(
