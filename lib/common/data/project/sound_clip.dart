@@ -25,14 +25,18 @@ class SoundClip {
 
   factory SoundClip.fromJson(Map<String, dynamic> json, String soundDirPath) =>
       SoundClip(
-        file: File(p.join(soundDirPath, json['file_name'])),
-        startTime: (json['start_time'] as String).parseDuration(),
-        duration: (json['duration'] as String).parseDuration(),
+        file: File(p.join(soundDirPath, json[_fileNameKey])),
+        startTime: (json[_startTimeKey] as String).parseDuration(),
+        duration: (json[_durationKey] as String).parseDuration(),
       );
 
   Map<String, dynamic> toJson() => {
-        'file_name': p.basename(file.path),
-        'start_time': _startTime.toString(),
-        'duration': _duration.toString(),
+        _fileNameKey: p.basename(file.path),
+        _startTimeKey: _startTime.toString(),
+        _durationKey: _duration.toString(),
       };
 }
+
+const String _fileNameKey = 'file_name';
+const String _startTimeKey = 'start_time';
+const String _durationKey = 'duration';

@@ -15,20 +15,20 @@ class ProjectSaveData {
     Map<String, dynamic> json,
     String frameDirPath,
     String soundDirPath,
-  )   : width = json['width'],
-        height = json['height'],
+  )   : width = json[_widthKey],
+        height = json[_heightKey],
         scenes = _parseScenes(json, frameDirPath),
-        sounds = json['sounds'] != null
-            ? (json['sounds'] as List<dynamic>)
+        sounds = json[_soundsKey] != null
+            ? (json[_soundsKey] as List<dynamic>)
                 .map((d) => SoundClip.fromJson(d, soundDirPath))
                 .toList()
             : [];
 
   Map<String, dynamic> toJson() => {
-        'width': width,
-        'height': height,
-        'scenes': scenes.map((d) => d.toJson()).toList(),
-        'sounds': sounds?.map((d) => d.toJson())?.toList() ?? [],
+        _widthKey: width,
+        _heightKey: height,
+        _scenesKey: scenes.map((d) => d.toJson()).toList(),
+        _soundsKey: sounds?.map((d) => d.toJson())?.toList() ?? [],
       };
 
   final double width;
@@ -41,16 +41,16 @@ class ProjectSaveData {
     String frameDirPath,
   ) {
     // Latest format.
-    if (json.containsKey('scenes')) {
-      return (json['scenes'] as List<dynamic>)
+    if (json.containsKey(_scenesKey)) {
+      return (json[_scenesKey] as List<dynamic>)
           .map((d) => Scene.fromJson(d, frameDirPath))
           .toList();
     }
 
     // Convert v0.8 format to the latest.
-    if (json.containsKey('frames')) {
+    if (json.containsKey(_legacyFramesKey)) {
       final frameSeq = Sequence<Frame>(
-        (json['frames'] as List<dynamic>)
+        (json[_legacyFramesKey] as List<dynamic>)
             .map((d) => _parseLegacyFrameData(d, frameDirPath))
             .toList(),
       );
@@ -74,3 +74,10 @@ class ProjectSaveData {
     return Frame.fromJson(json, frameDirPath);
   }
 }
+
+const String _widthKey = 'width';
+const String _heightKey = 'height';
+const String _scenesKey = 'scenes';
+const String _soundsKey = 'sounds';
+
+const String _legacyFramesKey = 'frames';
