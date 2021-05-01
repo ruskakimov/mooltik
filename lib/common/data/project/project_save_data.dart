@@ -51,7 +51,7 @@ class ProjectSaveData {
     if (json.containsKey(_legacyFramesKey)) {
       final frameSeq = Sequence<Frame>(
         (json[_legacyFramesKey] as List<dynamic>)
-            .map((d) => _parseLegacyFrameData(d, frameDirPath))
+            .map((d) => Frame.fromLegacyJsonWithId(d, frameDirPath))
             .toList(),
       );
       return [
@@ -64,14 +64,6 @@ class ProjectSaveData {
     }
 
     throw Exception('Unable to parse project scenes.');
-  }
-
-  static Frame _parseLegacyFrameData(
-    Map<String, dynamic> json,
-    String frameDirPath,
-  ) {
-    json['file_name'] = 'frame${json['id']}.png';
-    return Frame.fromJson(json, frameDirPath);
   }
 }
 
