@@ -38,13 +38,13 @@ class Frame extends TimeSpan with EquatableMixin {
 
   factory Frame.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       Frame(
-        file: File(p.join(frameDirPath, json['file_name'])),
-        duration: (json['duration'] as String).parseDuration(),
+        file: File(p.join(frameDirPath, json[_fileNameKey])),
+        duration: (json[_durationKey] as String).parseDuration(),
       );
 
   Map<String, dynamic> toJson() => {
-        'file_name': p.basename(file.path),
-        'duration': duration.toString(),
+        _fileNameKey: p.basename(file.path),
+        _durationKey: duration.toString(),
       };
 
   @override
@@ -62,3 +62,6 @@ class Frame extends TimeSpan with EquatableMixin {
   @override
   List<Object> get props => [file.path, duration];
 }
+
+const String _fileNameKey = 'file_name';
+const String _durationKey = 'duration';

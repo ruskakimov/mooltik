@@ -85,14 +85,17 @@ class SceneLayer {
 
   factory SceneLayer.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       SceneLayer(
-        Sequence<Frame>((json['frames'] as List<dynamic>)
+        Sequence<Frame>((json[_framesKey] as List<dynamic>)
             .map((d) => Frame.fromJson(d, frameDirPath))
             .toList()),
-        PlayMode.values[json['play_mode'] as int ?? 0],
+        PlayMode.values[json[_playModeKey] as int ?? 0],
       );
 
   Map<String, dynamic> toJson() => {
-        'frames': frameSeq.iterable.map((d) => d.toJson()).toList(),
-        'play_mode': playMode.index,
+        _framesKey: frameSeq.iterable.map((d) => d.toJson()).toList(),
+        _playModeKey: playMode.index,
       };
 }
+
+const String _framesKey = 'frames';
+const String _playModeKey = 'play_mode';

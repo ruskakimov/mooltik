@@ -35,15 +35,15 @@ class Scene extends TimeSpan {
 
   factory Scene.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       Scene(
-        layers: (json['layers'] as List<dynamic>)
+        layers: (json[_layersKey] as List<dynamic>)
             .map((d) => SceneLayer.fromJson(d, frameDirPath))
             .toList(),
-        duration: (json['duration'] as String).parseDuration(),
+        duration: (json[_durationKey] as String).parseDuration(),
       );
 
   Map<String, dynamic> toJson() => {
-        'layers': layers.map((layer) => layer.toJson()).toList(),
-        'duration': duration.toString(),
+        _layersKey: layers.map((layer) => layer.toJson()).toList(),
+        _durationKey: duration.toString(),
       };
 
   Scene copyWith({
@@ -59,3 +59,6 @@ class Scene extends TimeSpan {
   String toString() => layer.frameSeq.iterable
       .fold('', (previousValue, frame) => previousValue + frame.toString());
 }
+
+const String _layersKey = 'layers';
+const String _durationKey = 'duration';
