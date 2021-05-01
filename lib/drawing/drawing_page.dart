@@ -31,7 +31,8 @@ class DrawingPage extends StatelessWidget {
             context.read<TimelineModel>().currentFrame;
 
             return FrameReelModel(
-              frameSeq: context.read<TimelineModel>().currentScene.frameSeq,
+              frameSeq:
+                  context.read<TimelineModel>().currentScene.layer.frameSeq,
               sharedPreferences: context.read<SharedPreferences>(),
             );
           },
@@ -40,7 +41,7 @@ class DrawingPage extends StatelessWidget {
           update: (context, reel, model) =>
               model..updateSelectedIndex(reel.currentIndex),
           create: (context) => OnionModel(
-            frames: context.read<TimelineModel>().currentScene.frameSeq,
+            frames: context.read<FrameReelModel>().frameSeq,
             selectedIndex: context.read<FrameReelModel>().currentIndex,
             sharedPreferences: context.read<SharedPreferences>(),
           ),
