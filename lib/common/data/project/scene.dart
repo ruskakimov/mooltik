@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/duration_methods.dart';
+import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
@@ -29,7 +30,9 @@ class Scene extends TimeSpan {
     }
   }
 
-  Iterable<Frame> get exportFrames => layer.getExportFrames(duration);
+  /// Frames for export video.
+  /// TODO: Implement
+  Iterable<CompositeFrame> get exportFrames => throw UnimplementedError();
 
   factory Scene.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       Scene(
