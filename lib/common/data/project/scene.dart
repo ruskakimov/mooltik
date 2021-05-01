@@ -13,7 +13,11 @@ class Scene extends TimeSpan {
 
   final List<SceneLayer> layers;
 
-  Iterable<Frame> get uniqueFrames => layer.frameSeq.iterable;
+  Iterable<Frame> get allFrames sync* {
+    for (var layer in layers) {
+      yield* layer.frameSeq.iterable;
+    }
+  }
 
   Iterable<Frame> get ghostFrames => layer.getGhostFrames(duration);
 

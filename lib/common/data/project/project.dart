@@ -91,7 +91,7 @@ class Project extends ChangeNotifier {
 
   // TODO: Check if lazy or not
   Iterable<Frame> get allFrames => _scenes.iterable
-      .map((scene) => scene.uniqueFrames)
+      .map((scene) => scene.allFrames)
       .expand((iterable) => iterable);
 
   Iterable<Frame> get exportFrames => _scenes.iterable
