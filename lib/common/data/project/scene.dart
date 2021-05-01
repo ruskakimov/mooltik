@@ -3,7 +3,6 @@ import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
-import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 
@@ -36,17 +35,15 @@ class Scene extends TimeSpan {
 
   factory Scene.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       Scene(
-        frameSeq: Sequence<Frame>((json['frames'] as List<dynamic>)
-            .map((d) => Frame.fromJson(d, frameDirPath))
-            .toList()),
+        layers: (json['layers'] as List<dynamic>)
+            .map((d) => SceneLayer.fromJson(d, frameDirPath))
+            .toList(),
         duration: (json['duration'] as String).parseDuration(),
-        playMode: PlayMode.values[json['play_mode'] as int ?? 0],
       );
 
   Map<String, dynamic> toJson() => {
-        'frames': layer.frameSeq.iterable.map((d) => d.toJson()).toList(),
+        'layers': layers.map((layer) => layer.toJson()).toList(),
         'duration': duration.toString(),
-        'play_mode': layer.playMode.index,
       };
 
   Scene copyWith({
