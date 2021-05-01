@@ -8,6 +8,7 @@ import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:path/path.dart' as p;
 
+/// Single image with duration.
 class Frame extends TimeSpan with EquatableMixin {
   Frame({
     @required this.file,
