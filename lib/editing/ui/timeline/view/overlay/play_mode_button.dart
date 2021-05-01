@@ -25,7 +25,7 @@ class PlayModeButton extends StatelessWidget {
 
   IconData _getIcon(BuildContext context) {
     final timeline = context.watch<TimelineModel>();
-    switch (timeline.currentScene.playMode) {
+    switch (timeline.currentScene.layer.playMode) {
       case PlayMode.extendLast:
         return Icons.trending_flat_rounded;
       case PlayMode.loop:
