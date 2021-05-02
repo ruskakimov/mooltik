@@ -31,8 +31,12 @@ class DrawingPage extends StatelessWidget {
             context.read<TimelineModel>().currentFrame;
 
             return FrameReelModel(
-              frameSeq:
-                  context.read<TimelineModel>().currentScene.layer.frameSeq,
+              frameSeq: context
+                  .read<TimelineModel>()
+                  .currentScene
+                  .layers
+                  .first
+                  .frameSeq,
               sharedPreferences: context.read<SharedPreferences>(),
             );
           },
