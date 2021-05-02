@@ -55,7 +55,7 @@ class VideoSliver extends Sliver {
       0,
     );
 
-    canvas.drawImage(
+    canvas.drawCompositeImage(
       thumbnail,
       centeringOffset,
       Paint(),

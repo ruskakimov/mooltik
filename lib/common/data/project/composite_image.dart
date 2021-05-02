@@ -1,17 +1,26 @@
-import 'dart:ui' as ui;
+import 'dart:ui';
 
 /// Stack of images of the same size.
 class CompositeImage {
-  CompositeImage(this.images)
-      : assert(images != null),
-        assert(images.isNotEmpty),
-        assert(images.every((image) =>
-            image.height == images.first.height &&
-            image.width == images.first.width));
+  CompositeImage(this.layers)
+      : assert(layers != null),
+        assert(layers.isNotEmpty),
+        assert(layers.every((image) =>
+            image.height == layers.first.height &&
+            image.width == layers.first.width));
 
-  final List<ui.Image> images;
+  /// Image layers from top to bottom.
+  final List<Image> layers;
 
-  int get width => images.first.width;
+  int get width => layers.first.width;
 
-  int get height => images.first.height;
+  int get height => layers.first.height;
+}
+
+extension CompositeImageDrawing on Canvas {
+  void drawCompositeImage(CompositeImage image, Offset offset, Paint paint) {
+    for (final layer in image.layers.reversed) {
+      drawImage(layer, offset, paint);
+    }
+  }
 }
