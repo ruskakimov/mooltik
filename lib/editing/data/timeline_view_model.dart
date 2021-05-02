@@ -187,7 +187,8 @@ class TimelineViewModel extends ChangeNotifier {
     final midIndex = imageSpans.currentIndex;
     final spans = imageSpans.iterable.toList();
     if (isEditingScene) {
-      spans.addAll(_timeline.currentScene.ghostFrames);
+      spans.addAll(_timeline.currentScene.layers.first
+          .getGhostFrames(_timeline.currentScene.duration));
     }
 
     final List<Sliver> slivers = [getCurrentImageSliver()];
@@ -253,13 +254,14 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Shouldn't this be part of SceneLayer?
   void nextScenePlayMode() {
-    final scene = _timeline.currentScene;
-    final i = _timeline.sceneSeq.currentIndex;
-    final nextMode = PlayMode
-        .values[(scene.layer.playMode.index + 1) % PlayMode.values.length];
+    // final scene = _timeline.currentScene;
+    // final i = _timeline.sceneSeq.currentIndex;
+    // final nextMode = PlayMode
+    //     .values[(scene.layer.playMode.index + 1) % PlayMode.values.length];
 
-    _timeline.sceneSeq[i] = scene.copyWith(playMode: nextMode);
+    // _timeline.sceneSeq[i] = scene.copyWith(playMode: nextMode);
     notifyListeners();
   }
 
@@ -288,11 +290,12 @@ class TimelineViewModel extends ChangeNotifier {
     return frame.copyWith(file: newFrame.file)..saveSnapshot();
   }
 
+  // Shouldn't this be part of Scene?
   Future<Scene> _duplicateScene(Scene scene) async {
-    final duplicateFrames = await Future.wait(
-      scene.layer.frameSeq.iterable.map((frame) => _duplicateFrame(frame)),
-    );
-    return scene.copyWith(frames: duplicateFrames);
+    // final duplicateFrames = await Future.wait(
+    //   scene.layer.frameSeq.iterable.map((frame) => _duplicateFrame(frame)),
+    // );
+    // return scene.copyWith(frames: duplicateFrames);
   }
 
   Duration get selectedSliverStartTime => isEditingScene
