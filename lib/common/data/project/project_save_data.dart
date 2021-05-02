@@ -1,4 +1,5 @@
 import 'package:mooltik/common/data/project/scene.dart';
+import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
@@ -56,9 +57,8 @@ class ProjectSaveData {
       );
       return [
         Scene(
-          frameSeq: frameSeq,
+          layers: [SceneLayer(frameSeq, PlayMode.loop)],
           duration: frameSeq.totalDuration,
-          playMode: PlayMode.loop, // Showcase new loop feature.
         )
       ];
     }
