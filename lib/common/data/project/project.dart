@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
+import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/scene.dart';
+import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
@@ -94,7 +96,7 @@ class Project extends ChangeNotifier {
       .map((scene) => scene.allFrames)
       .expand((iterable) => iterable);
 
-  Iterable<Frame> get exportFrames => _scenes.iterable
+  Iterable<CompositeFrame> get exportFrames => _scenes.iterable
       .map((scene) => scene.exportFrames)
       .expand((iterable) => iterable);
 
@@ -242,9 +244,8 @@ class Project extends ChangeNotifier {
   }
 
   Future<Scene> createNewScene() async {
-    return Scene(
-      frameSeq: Sequence<Frame>([await createNewFrame()]),
-    );
+    final frameSeq = Sequence<Frame>([await createNewFrame()]);
+    return Scene(layers: [SceneLayer(frameSeq)]);
   }
 
   File _getFrameFile(int id) => File(_getFrameFilePath(id));
