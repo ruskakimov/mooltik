@@ -35,8 +35,9 @@ class TimelineViewModel extends ChangeNotifier {
   bool get isEditingScene => _sceneEdit;
   bool _sceneEdit = false;
 
-  Sequence<TimeSpan> get imageSpans =>
-      _sceneEdit ? _timeline.currentScene.layer.frameSeq : _timeline.sceneSeq;
+  Sequence<TimeSpan> get imageSpans => _sceneEdit
+      ? _timeline.currentScene.layers.first.frameSeq
+      : _timeline.sceneSeq;
 
   double get msPerPx => _msPerPx;
   double _msPerPx;
@@ -177,7 +178,7 @@ class TimelineViewModel extends ChangeNotifier {
               thumbnailAt: (double x) {
                 final scene = imageSpan as Scene;
                 final position = pxToDuration(x - area.left, msPerPx);
-                return scene.frameAt(position).snapshot;
+                return scene.imageAt(position);
               },
               index: imageSpanIndex,
             );
