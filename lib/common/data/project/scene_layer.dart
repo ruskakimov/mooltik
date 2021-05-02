@@ -95,6 +95,12 @@ class SceneLayer {
         _framesKey: frameSeq.iterable.map((d) => d.toJson()).toList(),
         _playModeKey: playMode.index,
       };
+
+  @override
+  String toString() => frameSeq.iterable.fold(
+        '',
+        (previousValue, frame) => previousValue + frame.toString(),
+      );
 }
 
 const String _framesKey = 'frames';

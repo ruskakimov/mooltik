@@ -56,8 +56,10 @@ class Scene extends TimeSpan {
       );
 
   @override
-  String toString() => layer.frameSeq.iterable
-      .fold('', (previousValue, frame) => previousValue + frame.toString());
+  String toString() => layers.fold(
+        '',
+        (previousValue, layer) => previousValue + layer.toString(),
+      );
 }
 
 const String _layersKey = 'layers';
