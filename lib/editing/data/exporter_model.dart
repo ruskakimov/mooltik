@@ -5,7 +5,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/io/mp4/mp4.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
-import 'package:mooltik/common/ui/composite_frame_painter.dart';
+import 'package:mooltik/common/ui/composite_image_painter.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as p;
 import 'package:mooltik/common/data/io/mp4/slide.dart';
@@ -95,7 +95,7 @@ class ExporterModel extends ChangeNotifier {
 
   Future<Slide> _slideFromFrame(CompositeFrame frame) async {
     final image = await generateImage(
-      CompositeFramePainter(frame),
+      CompositeImagePainter(frame.compositeImage),
       frame.width,
       frame.height,
     );
