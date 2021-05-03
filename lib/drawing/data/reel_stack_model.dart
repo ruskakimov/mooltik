@@ -11,7 +11,9 @@ class ReelStackModel extends ChangeNotifier {
   })  : _scene = scene,
         _sharedPreferences = sharedPreferences,
         _showFrameReel = sharedPreferences.getBool(_showFrameReelKey) ?? true,
-        reels = scene.layers.map((layer) => FrameReelModel(layer.frameSeq));
+        reels = scene.layers
+            .map((layer) => FrameReelModel(layer.frameSeq))
+            .toList();
 
   final Scene _scene;
   SharedPreferences _sharedPreferences;
