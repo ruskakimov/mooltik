@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/io/mp4/mp4.dart';
-import 'package:mooltik/drawing/ui/frame_painter.dart';
+import 'package:mooltik/common/data/project/composite_frame.dart';
+import 'package:mooltik/common/ui/composite_frame_painter.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as p;
 import 'package:mooltik/common/data/io/mp4/slide.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
-import 'package:mooltik/drawing/data/frame/frame.dart';
 
 enum ExporterState {
   initial,
@@ -26,7 +26,7 @@ class ExporterModel extends ChangeNotifier {
   });
 
   /// For output video.
-  final Iterable<Frame> frames;
+  final Iterable<CompositeFrame> frames;
 
   /// For output audio.
   final List<SoundClip> soundClips;
@@ -91,13 +91,15 @@ class ExporterModel extends ChangeNotifier {
     OpenFile.open(p.fromUri(_outputFilePath));
   }
 
-  Future<Slide> _slideFromFrame(Frame frame) async {
+  int _slideCount = 0;
+
+  Future<Slide> _slideFromFrame(CompositeFrame frame) async {
     final image = await generateImage(
-      FramePainter(frame: frame),
-      frame.width.toInt(),
-      frame.height.toInt(),
+      CompositeFramePainter(frame),
+      frame.width,
+      frame.height,
     );
-    final pngFile = _tempFile(p.basename(frame.file.path));
+    final pngFile = _tempFile('${_slideCount++}.png');
     await pngWrite(pngFile, image);
     return Slide(pngFile, frame.duration);
   }
