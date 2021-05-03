@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
-import 'package:mooltik/editing/ui/preview/frame_thumbnail.dart';
+import 'package:mooltik/drawing/ui/frame_thumbnail.dart';
 import 'package:provider/provider.dart';
 
 const _framePadding = const EdgeInsets.only(

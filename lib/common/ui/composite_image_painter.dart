@@ -19,7 +19,8 @@ class CompositeImagePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CompositeImagePainter oldDelegate) => true;
+  bool shouldRepaint(CompositeImagePainter oldDelegate) =>
+      image != oldDelegate.image;
 
   @override
   bool shouldRebuildSemantics(CompositeImagePainter oldDelegate) => false;
