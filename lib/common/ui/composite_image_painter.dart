@@ -17,7 +17,9 @@ class CompositeImagePainter extends CustomPainter {
     canvas.drawCompositeImage(
       image,
       Offset.zero,
-      Paint()..isAntiAlias = true,
+      Paint()
+        ..isAntiAlias = true
+        ..filterQuality = FilterQuality.high,
     );
   }
 
