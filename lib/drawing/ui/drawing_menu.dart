@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
-import 'package:mooltik/drawing/data/frame_reel_model.dart';
+import 'package:mooltik/drawing/data/reel_stack_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 
@@ -17,43 +17,56 @@ class DrawingMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final onion = context.watch<OnionModel>();
-    final frameReel = context.watch<FrameReelModel>();
-
     return SizedBox(
       width: width,
       child: ListView(
         shrinkWrap: true,
         physics: ScrollPhysics(),
         children: [
-          _MenuTile(
-            icon: FontAwesomeIcons.lightbulb,
-            title: 'Onion skinning',
-            trailing: Switch(
-              value: onion.enabled,
-              onChanged: (_) => onion.toggle(),
-            ),
-            onTap: () => onion.toggle(),
-          ),
-          _MenuTile(
-            icon: FontAwesomeIcons.film,
-            title: 'Frame reel',
-            trailing: Switch(
-              value: frameReel.visible,
-              onChanged: (_) => frameReel.toggleVisibility(),
-            ),
-            onTap: () => frameReel.toggleVisibility(),
-          ),
-          _MenuTile(
-            icon: FontAwesomeIcons.expand,
-            title: 'Fit canvas to screen',
-            onTap: () {
-              context.read<EaselModel>().fitToScreen();
-              onDone?.call();
-            },
-          ),
+          _buildOnionToggle(context),
+          _buildFrameReelToggle(context),
+          _buildFitToScreen(context),
         ],
       ),
+    );
+  }
+
+  _MenuTile _buildOnionToggle(BuildContext context) {
+    final onion = context.watch<OnionModel>();
+
+    return _MenuTile(
+      icon: FontAwesomeIcons.lightbulb,
+      title: 'Onion skinning',
+      trailing: Switch(
+        value: onion.enabled,
+        onChanged: (_) => onion.toggle(),
+      ),
+      onTap: () => onion.toggle(),
+    );
+  }
+
+  _MenuTile _buildFrameReelToggle(BuildContext context) {
+    final reelStack = context.watch<ReelStackModel>();
+
+    return _MenuTile(
+      icon: FontAwesomeIcons.film,
+      title: 'Frame reel',
+      trailing: Switch(
+        value: reelStack.showFrameReel,
+        onChanged: (_) => reelStack.toggleFrameReelVisibility(),
+      ),
+      onTap: () => reelStack.toggleFrameReelVisibility(),
+    );
+  }
+
+  _MenuTile _buildFitToScreen(BuildContext context) {
+    return _MenuTile(
+      icon: FontAwesomeIcons.expand,
+      title: 'Fit canvas to screen',
+      onTap: () {
+        context.read<EaselModel>().fitToScreen();
+        onDone?.call();
+      },
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
+import 'package:mooltik/drawing/data/reel_stack_model.dart';
 import 'package:mooltik/drawing/ui/drawing_actionbar.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 import 'package:mooltik/drawing/ui/frame_reel.dart';
@@ -25,24 +25,24 @@ class DrawingPage extends StatelessWidget {
             context.read<SharedPreferences>(),
           ),
         ),
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<ReelStackModel>(
           create: (context) {
             // Read current frame to reset `frameSeq.currentIndex`.
             // This index can get out of sync because of VideoSliver rendering.
             context.read<TimelineModel>().currentFrame;
 
-            return FrameReelModel(
-              frameSeq: context
-                  .read<TimelineModel>()
-                  .currentScene
-                  .layers
-                  .first
-                  .frameSeq,
+            return ReelStackModel(
+              scene: context.read<TimelineModel>().currentScene,
               sharedPreferences: context.read<SharedPreferences>(),
             );
           },
         ),
+        ChangeNotifierProvider(
+          // TODO: Check whether it listens to active reel change
+          create: (context) => context.read<ReelStackModel>().activeReel,
+        ),
         ChangeNotifierProxyProvider<FrameReelModel, OnionModel>(
+          // TODO: Update frames when reel changes
           update: (context, reel, model) =>
               model..updateSelectedIndex(reel.currentIndex),
           create: (context) => OnionModel(
@@ -90,7 +90,7 @@ class DrawingPage extends StatelessWidget {
                       right: 0,
                       child: DrawingActionbar(),
                     ),
-                    if (context.watch<FrameReelModel>().visible)
+                    if (context.watch<ReelStackModel>().showFrameReel)
                       Positioned(
                         bottom: 0,
                         left: 0,
