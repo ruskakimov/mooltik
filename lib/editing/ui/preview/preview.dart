@@ -30,12 +30,20 @@ class Preview extends StatelessWidget {
       },
       child: FittedBox(
         fit: BoxFit.fitWidth,
-        child: CustomPaint(
-          painter: CompositeImagePainter(
-            context.select<TimelineModel, CompositeImage>(
-              (timeline) => timeline.currentFrame,
-            ),
-          ),
+        child: _buildImage(context),
+      ),
+    );
+  }
+
+  Widget _buildImage(BuildContext context) {
+    final image = context.select<TimelineModel, CompositeImage>(
+      (timeline) => timeline.currentFrame,
+    );
+    return CustomPaint(
+      size: image.size,
+      painter: CompositeImagePainter(
+        context.select<TimelineModel, CompositeImage>(
+          (timeline) => timeline.currentFrame,
         ),
       ),
     );

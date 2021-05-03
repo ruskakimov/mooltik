@@ -15,6 +15,8 @@ class CompositeImage {
   int get width => layers.first.width;
 
   int get height => layers.first.height;
+
+  Size get size => Size(width.toDouble(), height.toDouble());
 }
 
 extension CompositeImageDrawing on Canvas {

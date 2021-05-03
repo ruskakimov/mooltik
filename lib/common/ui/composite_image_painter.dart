@@ -8,7 +8,10 @@ class CompositeImagePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawColor(Colors.white, BlendMode.srcOver);
+    canvas.drawRect(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      Paint()..color = Colors.white,
+    );
     canvas.scale(size.width / image.width, size.height / image.height);
 
     canvas.drawCompositeImage(
