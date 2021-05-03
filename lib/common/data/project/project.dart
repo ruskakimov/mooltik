@@ -8,11 +8,11 @@ import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
+import 'package:mooltik/common/ui/composite_image_painter.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
-import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:mooltik/editing/data/player_model.dart';
 import 'package:path/path.dart' as p;
 
@@ -91,7 +91,6 @@ class Project extends ChangeNotifier {
   Sequence<Scene> get scenes => _scenes;
   Sequence<Scene> _scenes;
 
-  // TODO: Check if lazy or not
   Iterable<Frame> get allFrames => _scenes.iterable
       .map((scene) => scene.allFrames)
       .expand((iterable) => iterable);
@@ -170,7 +169,7 @@ class Project extends ChangeNotifier {
 
     // Write thumbnail.
     final image = await generateImage(
-      FramePainter(frame: allFrames.first),
+      CompositeImagePainter(exportFrames.first.compositeImage),
       _frameSize.width.toInt(),
       _frameSize.height.toInt(),
     );
