@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/scene.dart';
+import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/timeline_positioned.dart';
@@ -25,7 +25,7 @@ class PlayModeButton extends StatelessWidget {
 
   IconData _getIcon(BuildContext context) {
     final timeline = context.watch<TimelineModel>();
-    switch (timeline.currentScene.layer.playMode) {
+    switch (timeline.currentScene.layers.first.playMode) {
       case PlayMode.extendLast:
         return Icons.trending_flat_rounded;
       case PlayMode.loop:
