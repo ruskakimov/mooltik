@@ -6,6 +6,7 @@ import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/drawing_actionbar.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 import 'package:mooltik/drawing/ui/frame_reel.dart';
+import 'package:mooltik/drawing/ui/layer_button.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/ui/easel/easel.dart';
@@ -100,12 +101,7 @@ class DrawingPage extends StatelessWidget {
                     Positioned(
                       bottom: 48,
                       left: 4,
-                      child: FloatingActionButton(
-                        mini: true,
-                        elevation: 2,
-                        child: Icon(FontAwesomeIcons.layerGroup, size: 20),
-                        onPressed: () {},
-                      ),
+                      child: LayerButton(),
                     ),
                   ],
                 ),
