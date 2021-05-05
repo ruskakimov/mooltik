@@ -21,8 +21,15 @@ class LayerButton extends StatelessWidget {
     showSideSheet(
       context: context,
       builder: (context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Layers'),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              'Layers',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ),
           Expanded(
             child: ListView(
               children: [
