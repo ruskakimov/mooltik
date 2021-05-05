@@ -26,14 +26,13 @@ showSideSheet({
         ),
       );
     },
-    transitionDuration: Duration(milliseconds: 200),
+    transitionDuration: Duration(milliseconds: 250),
     transitionBuilder: (context, animation1, animation2, child) {
-      // TODO: Ease transition
       return SlideTransition(
         position: Tween(
           begin: Offset((rightSide ? 1 : -1), 0),
           end: Offset(0, 0),
-        ).animate(animation1),
+        ).chain(CurveTween(curve: Curves.ease)).animate(animation1),
         child: child,
       );
     },
