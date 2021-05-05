@@ -23,14 +23,31 @@ class LayerSheet extends StatelessWidget {
           child: ListView(
             children: [
               for (final reel in reelStack.reels)
-                Container(
-                  color: Colors.red,
-                  height: 80,
+                LayerRow(
+                  selected: reel == reelStack.activeReel,
                 ),
             ],
           ),
         ),
       ],
+    );
+  }
+}
+
+class LayerRow extends StatelessWidget {
+  const LayerRow({
+    Key key,
+    this.selected,
+  }) : super(key: key);
+
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color:
+          selected ? Theme.of(context).colorScheme.primary : Colors.transparent,
+      height: 80,
     );
   }
 }
