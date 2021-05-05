@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/drawing/data/reel_stack_model.dart';
+import 'package:mooltik/drawing/ui/layer_sheet.dart';
 import 'package:mooltik/common/ui/show_side_sheet.dart';
 
 class LayerButton extends StatelessWidget {
@@ -18,43 +21,13 @@ class LayerButton extends StatelessWidget {
   }
 
   void _openLayersSheet(BuildContext context) {
+    final reelStack = context.read<ReelStackModel>();
+
     showSideSheet(
       context: context,
-      builder: (context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              'Layers',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          ),
-          Expanded(
-            child: ListView(
-              children: [
-                Container(color: Colors.red, height: 80),
-                Container(color: Colors.orange, height: 80),
-                Container(color: Colors.yellow, height: 80),
-                Container(color: Colors.red, height: 80),
-                Container(color: Colors.orange, height: 80),
-                Container(color: Colors.yellow, height: 80),
-                Container(color: Colors.red, height: 80),
-                Container(color: Colors.orange, height: 80),
-                Container(color: Colors.yellow, height: 80),
-                Container(color: Colors.red, height: 80),
-                Container(color: Colors.orange, height: 80),
-                Container(color: Colors.yellow, height: 80),
-                Container(color: Colors.red, height: 80),
-                Container(color: Colors.orange, height: 80),
-                Container(color: Colors.yellow, height: 80),
-                Container(color: Colors.red, height: 80),
-                Container(color: Colors.orange, height: 80),
-                Container(color: Colors.yellow, height: 80),
-              ],
-            ),
-          ),
-        ],
+      builder: (context) => ChangeNotifierProvider.value(
+        value: reelStack,
+        child: LayerSheet(),
       ),
     );
   }
