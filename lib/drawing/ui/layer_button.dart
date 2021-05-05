@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/common/ui/show_side_sheet.dart';
 
 class LayerButton extends StatelessWidget {
   const LayerButton({
@@ -17,17 +18,37 @@ class LayerButton extends StatelessWidget {
   }
 
   void _openLayersSheet(BuildContext context) {
-    showModalBottomSheet(
+    showSideSheet(
       context: context,
-      builder: (context) => Container(height: 300),
-      shape: _roundedTopCorners,
+      builder: (context) => Column(
+        children: [
+          Text('Layers'),
+          Expanded(
+            child: ListView(
+              children: [
+                Container(color: Colors.red, height: 80),
+                Container(color: Colors.orange, height: 80),
+                Container(color: Colors.yellow, height: 80),
+                Container(color: Colors.red, height: 80),
+                Container(color: Colors.orange, height: 80),
+                Container(color: Colors.yellow, height: 80),
+                Container(color: Colors.red, height: 80),
+                Container(color: Colors.orange, height: 80),
+                Container(color: Colors.yellow, height: 80),
+                Container(color: Colors.red, height: 80),
+                Container(color: Colors.orange, height: 80),
+                Container(color: Colors.yellow, height: 80),
+                Container(color: Colors.red, height: 80),
+                Container(color: Colors.orange, height: 80),
+                Container(color: Colors.yellow, height: 80),
+                Container(color: Colors.red, height: 80),
+                Container(color: Colors.orange, height: 80),
+                Container(color: Colors.yellow, height: 80),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
-
-const _roundedTopCorners = RoundedRectangleBorder(
-  borderRadius: BorderRadius.only(
-    topLeft: Radius.circular(16),
-    topRight: Radius.circular(16),
-  ),
-);
