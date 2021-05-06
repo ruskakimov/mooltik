@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/scene.dart';
+import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,7 +21,8 @@ class ReelStackModel extends ChangeNotifier {
 
   final List<FrameReelModel> reels;
 
-  FrameReelModel get activeReel => reels.first;
+  FrameReelModel get activeReel => reels[_activeReelIndex];
+  int _activeReelIndex = 0;
 
   /// Whether frame reel UI is visible.
   bool get showFrameReel => _showFrameReel;
@@ -30,6 +32,12 @@ class ReelStackModel extends ChangeNotifier {
     _showFrameReel = !_showFrameReel;
     notifyListeners();
     await _sharedPreferences.setBool(_showFrameReelKey, _showFrameReel);
+  }
+
+  void addLayerAboveActive(SceneLayer layer) {
+    _scene.layers.insert(_activeReelIndex, layer);
+    reels.insert(_activeReelIndex, FrameReelModel(layer.frameSeq));
+    notifyListeners();
   }
 }
 
