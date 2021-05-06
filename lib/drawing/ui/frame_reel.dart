@@ -25,6 +25,7 @@ class FrameReel extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           _FrameReelItemList(
+            key: Key('${context.watch<FrameReelModel>().hashCode}'),
             width: constraints.maxWidth,
             itemWidth: itemWidth,
           ),

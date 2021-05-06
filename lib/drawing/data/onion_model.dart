@@ -24,6 +24,12 @@ class OnionModel extends ChangeNotifier {
 
   int _selectedIndex;
 
+  void updateFrames(Sequence<Frame> frames) {
+    if (frames != _frames) {
+      _frames = frames;
+    }
+  }
+
   void updateSelectedIndex(int selectedIndex) {
     _selectedIndex = selectedIndex;
   }

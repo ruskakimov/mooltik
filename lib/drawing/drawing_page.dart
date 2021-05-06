@@ -50,8 +50,9 @@ class DrawingPage extends StatelessWidget {
               providers: [
                 ChangeNotifierProvider.value(value: reelStack.activeReel),
                 ChangeNotifierProxyProvider<FrameReelModel, OnionModel>(
-                  update: (context, reel, model) =>
-                      model..updateSelectedIndex(reel.currentIndex),
+                  update: (context, reel, model) => model
+                    ..updateFrames(reel.frameSeq)
+                    ..updateSelectedIndex(reel.currentIndex),
                   create: (context) => OnionModel(
                     frames: context.read<FrameReelModel>().frameSeq,
                     selectedIndex: context.read<FrameReelModel>().currentIndex,
