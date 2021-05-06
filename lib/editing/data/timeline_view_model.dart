@@ -128,7 +128,15 @@ class TimelineViewModel extends ChangeNotifier {
 
   double get sliverHeight => 56;
 
-  double get imageSliverTop => 8;
+  double get sliverGap => 8;
+
+  int get sliverRows =>
+      isEditingScene ? _timeline.currentScene.layers.length + 1 : 2;
+
+  double get viewHeight =>
+      sliverRows * sliverHeight + (sliverRows + 1) * sliverGap;
+
+  double get imageSliverTop => sliverGap;
   double get imageSliverBottom => imageSliverTop + sliverHeight;
   double get imageSliverMid => (imageSliverTop + imageSliverBottom) / 2;
 

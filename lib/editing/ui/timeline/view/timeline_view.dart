@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/play_mode_button.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/resize_end_handle.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/resize_start_handle.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/scene_end_handle.dart';
 import 'package:mooltik/editing/ui/timeline/view/timeline_painter.dart';
 import 'package:provider/provider.dart';
 
@@ -12,25 +16,36 @@ class TimelineView extends StatelessWidget {
   Widget build(BuildContext context) {
     final timelineView = context.watch<TimelineViewModel>();
 
-    return GestureDetector(
-      onScaleStart: timelineView.onScaleStart,
-      onScaleUpdate: timelineView.onScaleUpdate,
-      onScaleEnd: timelineView.onScaleEnd,
-      onTapUp: timelineView.onTapUp,
-      child: SizedBox.expand(
-        child: ColoredBox(
-          color: Colors.black.withOpacity(0.2),
-          child: CustomPaint(
-            painter: TimelinePainter(
-              timelineView: timelineView,
-              soundBite: context.select<Project, SoundClip>(
-                (Project player) =>
-                    player.soundClips != null && player.soundClips.isNotEmpty
+    return SingleChildScrollView(
+      child: SizedBox(
+        height: timelineView.viewHeight,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            GestureDetector(
+              onScaleStart: timelineView.onScaleStart,
+              onScaleUpdate: timelineView.onScaleUpdate,
+              onScaleEnd: timelineView.onScaleEnd,
+              onTapUp: timelineView.onTapUp,
+              child: CustomPaint(
+                painter: TimelinePainter(
+                  timelineView: timelineView,
+                  soundBite: context.select<Project, SoundClip>(
+                    (Project player) => player.soundClips != null &&
+                            player.soundClips.isNotEmpty
                         ? player.soundClips.first
                         : null,
+                  ),
+                ),
               ),
             ),
-          ),
+            if (timelineView.isEditingScene) ...[
+              PlayModeButton(),
+              SceneEndHandle(),
+            ],
+            if (timelineView.showResizeStartHandle) ResizeStartHandle(),
+            if (timelineView.showResizeEndHandle) ResizeEndHandle(),
+          ],
         ),
       ),
     );
