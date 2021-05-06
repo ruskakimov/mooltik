@@ -243,8 +243,16 @@ class Project extends ChangeNotifier {
   }
 
   Future<Scene> createNewScene() async {
-    final frameSeq = Sequence<Frame>([await createNewFrame()]);
-    return Scene(layers: [SceneLayer(frameSeq)]);
+    return Scene(layers: [
+      await createNewSceneLayer(),
+    ]);
+  }
+
+  Future<SceneLayer> createNewSceneLayer() async {
+    final frameSeq = Sequence<Frame>([
+      await createNewFrame(),
+    ]);
+    return SceneLayer(frameSeq);
   }
 
   File _getFrameFile(int id) => File(_getFrameFilePath(id));
