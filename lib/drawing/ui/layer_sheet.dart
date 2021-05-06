@@ -16,6 +16,7 @@ class LayerSheet extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buildTitle(),
             Spacer(),
