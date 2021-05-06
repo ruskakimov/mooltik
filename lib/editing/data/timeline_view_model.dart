@@ -126,7 +126,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   double get _midX => size.width / 2;
 
-  double get sliverHeight => min((size.height - 24) / 2, 80);
+  double get sliverHeight => min((size.height - 24) / 2, 56);
 
   double get imageSliverTop => 8;
   double get imageSliverBottom => imageSliverTop + sliverHeight;
