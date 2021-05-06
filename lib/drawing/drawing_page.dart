@@ -37,22 +37,10 @@ class DrawingPage extends StatelessWidget {
             );
           },
         ),
-        ChangeNotifierProvider(
-          // TODO: Check whether it listens to active reel change
-          create: (context) => context.read<ReelStackModel>().activeReel,
-        ),
-        ChangeNotifierProxyProvider<FrameReelModel, OnionModel>(
-          // TODO: Update frames when reel changes
-          update: (context, reel, model) =>
-              model..updateSelectedIndex(reel.currentIndex),
-          create: (context) => OnionModel(
-            frames: context.read<FrameReelModel>().frameSeq,
-            selectedIndex: context.read<FrameReelModel>().currentIndex,
-            sharedPreferences: context.read<SharedPreferences>(),
-          ),
-        ),
       ],
       builder: (context, child) {
+        final reelStack = context.watch<ReelStackModel>();
+
         return WillPopScope(
           // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
           onWillPop: () async => true,
@@ -60,6 +48,16 @@ class DrawingPage extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.background,
             body: MultiProvider(
               providers: [
+                ChangeNotifierProvider.value(value: reelStack.activeReel),
+                ChangeNotifierProxyProvider<FrameReelModel, OnionModel>(
+                  update: (context, reel, model) =>
+                      model..updateSelectedIndex(reel.currentIndex),
+                  create: (context) => OnionModel(
+                    frames: context.read<FrameReelModel>().frameSeq,
+                    selectedIndex: context.read<FrameReelModel>().currentIndex,
+                    sharedPreferences: context.read<SharedPreferences>(),
+                  ),
+                ),
                 ChangeNotifierProxyProvider2<FrameReelModel, ToolboxModel,
                     EaselModel>(
                   create: (context) => EaselModel(
@@ -90,7 +88,7 @@ class DrawingPage extends StatelessWidget {
                       right: 0,
                       child: DrawingActionbar(),
                     ),
-                    if (context.watch<ReelStackModel>().showFrameReel)
+                    if (reelStack.showFrameReel)
                       Positioned(
                         bottom: 0,
                         left: 0,
