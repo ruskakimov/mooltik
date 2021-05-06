@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
@@ -16,38 +17,40 @@ class TimelineView extends StatelessWidget {
   Widget build(BuildContext context) {
     final timelineView = context.watch<TimelineViewModel>();
 
-    return SingleChildScrollView(
-      child: SizedBox(
-        height: timelineView.viewHeight,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            GestureDetector(
-              onScaleStart: timelineView.onScaleStart,
-              onScaleUpdate: timelineView.onScaleUpdate,
-              onScaleEnd: timelineView.onScaleEnd,
-              onTapUp: timelineView.onTapUp,
-              child: CustomPaint(
-                painter: TimelinePainter(
-                  timelineView: timelineView,
-                  soundBite: context.select<Project, SoundClip>(
-                    (Project player) => player.soundClips != null &&
-                            player.soundClips.isNotEmpty
-                        ? player.soundClips.first
-                        : null,
+    return LayoutBuilder(builder: (context, constraints) {
+      return SingleChildScrollView(
+        child: SizedBox(
+          height: max(timelineView.viewHeight, constraints.maxHeight),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              GestureDetector(
+                onScaleStart: timelineView.onScaleStart,
+                onScaleUpdate: timelineView.onScaleUpdate,
+                onScaleEnd: timelineView.onScaleEnd,
+                onTapUp: timelineView.onTapUp,
+                child: CustomPaint(
+                  painter: TimelinePainter(
+                    timelineView: timelineView,
+                    soundBite: context.select<Project, SoundClip>(
+                      (Project player) => player.soundClips != null &&
+                              player.soundClips.isNotEmpty
+                          ? player.soundClips.first
+                          : null,
+                    ),
                   ),
                 ),
               ),
-            ),
-            if (timelineView.isEditingScene) ...[
-              PlayModeButton(),
-              SceneEndHandle(),
+              if (timelineView.isEditingScene) ...[
+                PlayModeButton(),
+                SceneEndHandle(),
+              ],
+              if (timelineView.showResizeStartHandle) ResizeStartHandle(),
+              if (timelineView.showResizeEndHandle) ResizeEndHandle(),
             ],
-            if (timelineView.showResizeStartHandle) ResizeStartHandle(),
-            if (timelineView.showResizeEndHandle) ResizeEndHandle(),
-          ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
