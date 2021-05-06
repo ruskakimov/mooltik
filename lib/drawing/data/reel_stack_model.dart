@@ -24,6 +24,14 @@ class ReelStackModel extends ChangeNotifier {
   FrameReelModel get activeReel => reels[_activeReelIndex];
   int _activeReelIndex = 0;
 
+  void changeActiveReel(FrameReelModel reel) {
+    final index = reels.indexOf(reel);
+    if (index != -1) {
+      _activeReelIndex = index;
+      notifyListeners();
+    }
+  }
+
   /// Whether frame reel UI is visible.
   bool get showFrameReel => _showFrameReel;
   bool _showFrameReel;

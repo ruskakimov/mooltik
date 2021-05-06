@@ -31,6 +31,7 @@ class LayerSheet extends StatelessWidget {
                 LayerRow(
                   selected: reel == reelStack.activeReel,
                   reel: reel,
+                  onTap: () => reelStack.changeActiveReel(reel),
                 ),
             ],
           ),
@@ -74,18 +75,24 @@ class LayerRow extends StatelessWidget {
     Key key,
     this.selected,
     this.reel,
+    this.onTap,
   }) : super(key: key);
 
   final bool selected;
   final FrameReelModel reel;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color:
-          selected ? Theme.of(context).colorScheme.primary : Colors.transparent,
-      height: 80,
-      child: Text('${reel.frameSeq.length}'),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        color: selected
+            ? Theme.of(context).colorScheme.primary
+            : Colors.transparent,
+        height: 80,
+        child: Text('${reel.frameSeq.length}'),
+      ),
     );
   }
 }
