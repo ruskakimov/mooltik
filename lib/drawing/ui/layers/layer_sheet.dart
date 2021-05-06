@@ -72,6 +72,7 @@ class LayerRow extends StatelessWidget {
       color:
           selected ? Theme.of(context).colorScheme.primary : Colors.transparent,
       height: 80,
+      child: Text('${reel.frameSeq.length}'),
     );
   }
 }
