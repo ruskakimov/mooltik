@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
@@ -13,12 +15,12 @@ class LayerSheet extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            'Layers',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
+        Row(
+          children: [
+            _buildTitle(),
+            Spacer(),
+            _buildAddLayerButton(reelStack),
+          ],
         ),
         Expanded(
           child: ListView(
@@ -32,6 +34,23 @@ class LayerSheet extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildTitle() {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Text(
+        'Layers',
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _buildAddLayerButton(ReelStackModel reelStack) {
+    return AppIconButton(
+      icon: FontAwesomeIcons.plus,
+      onTap: () {},
     );
   }
 }
