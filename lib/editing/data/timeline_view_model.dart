@@ -157,44 +157,6 @@ class TimelineViewModel extends ChangeNotifier {
 
   Duration get sceneEnd => _timeline.currentSceneEnd;
 
-  Duration get _currentImageSpanStart => isEditingScene
-      ? sceneStart + imageSpans.currentSpanStart
-      : imageSpans.currentSpanStart;
-
-  Duration get _currentImageSpanEnd => isEditingScene
-      ? sceneStart + imageSpans.currentSpanEnd
-      : imageSpans.currentSpanEnd;
-
-  Sliver getCurrentImageSliver() {
-    final area = Rect.fromLTRB(
-      xFromTime(_currentImageSpanStart),
-      imageSliverTop,
-      xFromTime(_currentImageSpanEnd),
-      imageSliverBottom,
-    );
-    return _makeSliver(area, imageSpans.current, imageSpans.currentIndex);
-  }
-
-  bool _isGhostFrame(int i) => i >= imageSpans.length;
-
-  Sliver _makeSliver(Rect area, TimeSpan imageSpan, int imageSpanIndex) =>
-      isEditingScene
-          ? ImageSliver(
-              area: area,
-              thumbnail: (imageSpan as Frame).snapshot,
-              index: _isGhostFrame(imageSpanIndex) ? null : imageSpanIndex,
-              opacity: _isGhostFrame(imageSpanIndex) ? 0.5 : 1,
-            )
-          : VideoSliver(
-              area: area,
-              thumbnailAt: (double x) {
-                final scene = imageSpan as Scene;
-                final position = pxToDuration(x - area.left, msPerPx);
-                return scene.imageAt(position);
-              },
-              index: imageSpanIndex,
-            );
-
   // TODO: Implement
   List<List<Sliver>> getSliverRows() {
     final rows = <List<Sliver>>[];
@@ -267,6 +229,44 @@ class TimelineViewModel extends ChangeNotifier {
     }
     return slivers;
   }
+
+  Sliver getCurrentImageSliver() {
+    final area = Rect.fromLTRB(
+      xFromTime(_currentImageSpanStart),
+      imageSliverTop,
+      xFromTime(_currentImageSpanEnd),
+      imageSliverBottom,
+    );
+    return _makeSliver(area, imageSpans.current, imageSpans.currentIndex);
+  }
+
+  Duration get _currentImageSpanStart => isEditingScene
+      ? sceneStart + imageSpans.currentSpanStart
+      : imageSpans.currentSpanStart;
+
+  Duration get _currentImageSpanEnd => isEditingScene
+      ? sceneStart + imageSpans.currentSpanEnd
+      : imageSpans.currentSpanEnd;
+
+  Sliver _makeSliver(Rect area, TimeSpan imageSpan, int imageSpanIndex) =>
+      isEditingScene
+          ? ImageSliver(
+              area: area,
+              thumbnail: (imageSpan as Frame).snapshot,
+              index: _isGhostFrame(imageSpanIndex) ? null : imageSpanIndex,
+              opacity: _isGhostFrame(imageSpanIndex) ? 0.5 : 1,
+            )
+          : VideoSliver(
+              area: area,
+              thumbnailAt: (double x) {
+                final scene = imageSpan as Scene;
+                final position = pxToDuration(x - area.left, msPerPx);
+                return scene.imageAt(position);
+              },
+              index: imageSpanIndex,
+            );
+
+  bool _isGhostFrame(int i) => i >= imageSpans.length;
 
   /*
     Sliver menu methods:
