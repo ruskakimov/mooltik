@@ -115,6 +115,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   bool get showResizeEndHandle => showSliverMenu;
 
+  // TODO: Convert to 2D coordinate (row index & span index)
   int get selectedImageSpanIndex => _selectedImageSpanIndex;
   int _selectedImageSpanIndex;
 
