@@ -23,7 +23,7 @@ class TimelineViewModel extends ChangeNotifier {
     @required SharedPreferences sharedPreferences,
     @required this.createNewFrame,
   })  : _timeline = timeline,
-        _soundClips = soundClips,
+        _soundClips = soundClips ?? [],
         _preferences = sharedPreferences,
         _msPerPx = sharedPreferences?.getDouble(_msPerPxKey) ?? 10 {
     _prevMsPerPx = _msPerPx;
@@ -195,7 +195,6 @@ class TimelineViewModel extends ChangeNotifier {
             );
 
   List<Sliver> getVisibleSoundSlivers() {
-    if (_soundClips == null) return [];
     return _soundClips
         .map((soundClip) => SoundSliver(
               area: Rect.fromLTWH(
