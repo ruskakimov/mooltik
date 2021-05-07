@@ -1,7 +1,5 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/project.dart';
-import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/play_mode_button.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_end_handle.dart';
@@ -30,15 +28,7 @@ class TimelineView extends StatelessWidget {
                 onScaleEnd: timelineView.onScaleEnd,
                 onTapUp: timelineView.onTapUp,
                 child: CustomPaint(
-                  painter: TimelinePainter(
-                    timelineView: timelineView,
-                    soundBite: context.select<Project, SoundClip>(
-                      (Project player) => player.soundClips != null &&
-                              player.soundClips.isNotEmpty
-                          ? player.soundClips.first
-                          : null,
-                    ),
-                  ),
+                  painter: TimelinePainter(timelineView),
                 ),
               ),
               if (timelineView.isEditingScene) ...[

@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/scene.dart';
+import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
@@ -11,6 +10,7 @@ import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/time_label.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/image_sliver.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
+import 'package:mooltik/editing/ui/timeline/view/sliver/sound_sliver.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/video_sliver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,9 +19,11 @@ const _msPerPxKey = 'timeline_view_ms_per_px';
 class TimelineViewModel extends ChangeNotifier {
   TimelineViewModel({
     @required TimelineModel timeline,
+    @required List<SoundClip> soundClips,
     @required SharedPreferences sharedPreferences,
     @required this.createNewFrame,
   })  : _timeline = timeline,
+        _soundClips = soundClips,
         _preferences = sharedPreferences,
         _msPerPx = sharedPreferences?.getDouble(_msPerPxKey) ?? 10 {
     _prevMsPerPx = _msPerPx;
@@ -30,6 +32,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   SharedPreferences _preferences;
   final TimelineModel _timeline;
+  final List<SoundClip> _soundClips;
   final CreateNewFrame createNewFrame;
 
   bool get isEditingScene => _sceneEdit;
@@ -190,6 +193,20 @@ class TimelineViewModel extends ChangeNotifier {
               },
               index: imageSpanIndex,
             );
+
+  List<Sliver> getVisibleSoundSlivers() {
+    if (_soundClips == null) return [];
+    return _soundClips
+        .map((soundClip) => SoundSliver(
+              area: Rect.fromLTWH(
+                xFromTime(soundClip.startTime),
+                imageSliverBottom + 8,
+                widthFromDuration(soundClip.duration),
+                sliverHeight,
+              ),
+            ))
+        .toList();
+  }
 
   List<Sliver> getVisibleImageSlivers() {
     final midIndex = imageSpans.currentIndex;

@@ -27,6 +27,7 @@ class TimelinePanel extends StatelessWidget {
         ChangeNotifierProvider<TimelineViewModel>(
           create: (context) => TimelineViewModel(
             timeline: context.read<TimelineModel>(),
+            soundClips: context.read<Project>().soundClips,
             sharedPreferences: context.read<SharedPreferences>(),
             createNewFrame: context.read<Project>().createNewFrame,
           ),

@@ -1,23 +1,14 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/ui/paint_text.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
-import 'package:mooltik/editing/ui/timeline/view/sliver/sound_sliver.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 
 class TimelinePainter extends CustomPainter {
-  TimelinePainter({
-    @required this.timelineView,
-    this.soundBite,
-  });
+  TimelinePainter(this.timelineView);
 
   final TimelineViewModel timelineView;
-
-  // TODO: Add multiple sound bites support.
-  // TODO: Move to timeline view model
-  final SoundClip soundBite;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -38,15 +29,8 @@ class TimelinePainter extends CustomPainter {
       }
     }
 
-    if (soundBite != null) {
-      SoundSliver(
-        area: Rect.fromLTWH(
-          timelineView.xFromTime(soundBite.startTime),
-          timelineView.imageSliverBottom + 8,
-          timelineView.widthFromDuration(soundBite.duration),
-          timelineView.sliverHeight,
-        ),
-      ).paint(canvas);
+    for (final sliver in timelineView.getVisibleSoundSlivers()) {
+      sliver.paint(canvas);
     }
 
     if (timelineView.isEditingScene) {
