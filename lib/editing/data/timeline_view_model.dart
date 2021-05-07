@@ -195,6 +195,19 @@ class TimelineViewModel extends ChangeNotifier {
               index: imageSpanIndex,
             );
 
+  // TODO: Implement
+  List<List<Sliver>> getSliverRows() {
+    final rows = <List<Sliver>>[];
+
+    if (isEditingScene) {
+      // getVisibleImageSlivers(_timeline.)
+    } else {}
+
+    rows.add(getVisibleSoundSlivers());
+
+    return rows;
+  }
+
   List<Sliver> getVisibleSoundSlivers() {
     return _soundClips
         .map((soundClip) => SoundSliver(
