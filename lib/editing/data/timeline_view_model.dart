@@ -160,14 +160,69 @@ class TimelineViewModel extends ChangeNotifier {
   // TODO: Implement
   List<List<Sliver>> getSliverRows() {
     final rows = <List<Sliver>>[];
+    double rowTop = sliverGap;
 
     if (isEditingScene) {
       // getVisibleImageSlivers(_timeline.)
-    } else {}
+    } else {
+      final sceneSeq = _timeline.sceneSeq;
+      final sceneRow = sceneSlivers(
+        areas: timeSpanAreas(
+          timeSpans: sceneSeq.iterable,
+          top: rowTop,
+          bottom: rowTop + sliverHeight,
+        ),
+        scenes: sceneSeq.iterable,
+      ).toList();
+
+      rows.add(sceneRow);
+    }
 
     rows.add(getVisibleSoundSlivers());
 
     return rows;
+  }
+
+  Iterable<VideoSliver> sceneSlivers({
+    @required Iterable<Rect> areas,
+    @required Iterable<Scene> scenes,
+  }) sync* {
+    int index = 0;
+    final areaIt = areas.iterator;
+    final sceneIt = scenes.iterator;
+
+    while (areaIt.moveNext() && sceneIt.moveNext()) {
+      final area = areaIt.current;
+      final scene = sceneIt.current;
+
+      yield VideoSliver(
+        area: area,
+        thumbnailAt: (double x) {
+          final position = pxToDuration(x - area.left, msPerPx);
+          return scene.imageAt(position);
+        },
+        index: index,
+      );
+
+      index++;
+    }
+  }
+
+  Iterable<Rect> timeSpanAreas({
+    @required Iterable<TimeSpan> timeSpans,
+    @required double top,
+    @required double bottom,
+    Duration start = Duration.zero,
+  }) sync* {
+    for (final timeSpan in timeSpans) {
+      final end = start + timeSpan.duration;
+      final left = xFromTime(start);
+      final right = xFromTime(end);
+
+      yield Rect.fromLTRB(left, top, right, bottom);
+
+      start += timeSpan.duration;
+    }
   }
 
   List<Sliver> getVisibleSoundSlivers() {

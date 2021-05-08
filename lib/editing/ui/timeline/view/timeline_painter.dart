@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/paint_text.dart';
-import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 
 class TimelinePainter extends CustomPainter {
@@ -14,23 +13,28 @@ class TimelinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     timelineView.size = size;
 
-    final List<Sliver> imageSlivers = timelineView.getVisibleImageSlivers();
+    // final List<Sliver> imageSlivers = timelineView.getVisibleImageSlivers();
 
-    for (final sliver in imageSlivers) {
-      sliver.paint(canvas);
+    // for (final sliver in imageSlivers) {
+    //   sliver.paint(canvas);
 
-      if (timelineView.selectedImageSpanIndex != null &&
-          timelineView.selectedImageSpanIndex == sliver.index) {
-        paintSelection(
-          canvas,
-          sliver.rrect,
-          timelineView.selectedSliverDurationLabel,
-        );
+    //   if (timelineView.selectedImageSpanIndex != null &&
+    //       timelineView.selectedImageSpanIndex == sliver.index) {
+    //     paintSelection(
+    //       canvas,
+    //       sliver.rrect,
+    //       timelineView.selectedSliverDurationLabel,
+    //     );
+    //   }
+    // }
+
+    final rows = timelineView.getSliverRows();
+
+    for (var row in rows) {
+      for (var sliver in row) {
+        // TODO: check for overlap with canvas
+        sliver.paint(canvas);
       }
-    }
-
-    for (final sliver in timelineView.getVisibleSoundSlivers()) {
-      sliver.paint(canvas);
     }
 
     if (timelineView.isEditingScene) {
