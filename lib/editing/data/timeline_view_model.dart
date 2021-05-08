@@ -36,7 +36,7 @@ class TimelineViewModel extends ChangeNotifier {
   final CreateNewFrame createNewFrame;
 
   bool get isEditingScene => _sceneEdit;
-  bool _sceneEdit = false;
+  bool _sceneEdit = true;
 
   Sequence<TimeSpan> get imageSpans => _sceneEdit
       ? _timeline.currentScene.layers.first.frameSeq
@@ -162,14 +162,20 @@ class TimelineViewModel extends ChangeNotifier {
     double rowTop = sliverGap;
 
     if (isEditingScene) {
-      // getVisibleImageSlivers(_timeline.)
-      // ImageSliver(
-      //   area: area,
-      //   thumbnail: (imageSpan as Frame).snapshot,
-      //   index: _isGhostFrame(imageSpanIndex) ? null : imageSpanIndex,
-      //   opacity: _isGhostFrame(imageSpanIndex) ? 0.5 : 1,
-      // )
-      // bool _isGhostFrame(int i) => i >= imageSpans.length
+      final layer = _timeline.currentScene.layers.first;
+      final frames = layer.frameSeq.iterable
+          .followedBy(layer.getGhostFrames(_timeline.currentScene.duration));
+      final frameRow = frameSlivers(
+        areas: timeSpanAreas(
+          timeSpans: frames,
+          top: rowTop,
+          bottom: rowTop + sliverHeight,
+        ),
+        frames: frames,
+        numberOfRealFrames: layer.frameSeq.length,
+      ).toList();
+
+      rows.add(frameRow);
     } else {
       final sceneSeq = _timeline.sceneSeq;
       final sceneRow = sceneSlivers(
@@ -187,6 +193,31 @@ class TimelineViewModel extends ChangeNotifier {
     rows.add(getVisibleSoundSlivers());
 
     return rows;
+  }
+
+  Iterable<ImageSliver> frameSlivers({
+    @required Iterable<Rect> areas,
+    @required Iterable<Frame> frames,
+    @required int numberOfRealFrames,
+  }) sync* {
+    int index = 0;
+    final areaIt = areas.iterator;
+    final frameIt = frames.iterator;
+
+    while (areaIt.moveNext() && frameIt.moveNext()) {
+      final area = areaIt.current;
+      final frame = frameIt.current;
+      final isGhostFrame = index >= numberOfRealFrames;
+
+      yield ImageSliver(
+        area: area,
+        thumbnail: frame.snapshot,
+        index: isGhostFrame ? null : index,
+        opacity: isGhostFrame ? 0.5 : 1,
+      );
+
+      index++;
+    }
   }
 
   Iterable<VideoSliver> sceneSlivers({
