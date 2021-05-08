@@ -197,7 +197,10 @@ class TimelineViewModel extends ChangeNotifier {
       addRow(sceneRow);
     }
 
-    addRow(getSoundSliverRow());
+    addRow(soundSliverRow(
+      rowTop: rowTop,
+      rowBottom: rowTop + sliverHeight,
+    ).toList());
 
     return rows;
   }
@@ -252,6 +255,20 @@ class TimelineViewModel extends ChangeNotifier {
     }
   }
 
+  Iterable<SoundSliver> soundSliverRow({
+    @required double rowTop,
+    @required double rowBottom,
+  }) {
+    return _soundClips.map((soundClip) => SoundSliver(
+          area: Rect.fromLTRB(
+            xFromTime(soundClip.startTime),
+            rowTop,
+            xFromTime(soundClip.endTime),
+            rowBottom,
+          ),
+        ));
+  }
+
   Iterable<Rect> timeSpanAreas({
     @required Iterable<TimeSpan> timeSpans,
     @required double top,
@@ -267,19 +284,6 @@ class TimelineViewModel extends ChangeNotifier {
 
       start += timeSpan.duration;
     }
-  }
-
-  List<Sliver> getSoundSliverRow() {
-    return _soundClips
-        .map((soundClip) => SoundSliver(
-              area: Rect.fromLTWH(
-                xFromTime(soundClip.startTime),
-                imageSliverBottom + 8,
-                widthFromDuration(soundClip.duration),
-                sliverHeight,
-              ),
-            ))
-        .toList();
   }
 
   /*
