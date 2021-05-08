@@ -165,7 +165,7 @@ class TimelineViewModel extends ChangeNotifier {
       final layer = _timeline.currentScene.layers.first;
       final frames = layer.frameSeq.iterable
           .followedBy(layer.getGhostFrames(_timeline.currentScene.duration));
-      final frameRow = frameSlivers(
+      final frameRow = frameSliverRow(
         areas: timeSpanAreas(
           timeSpans: frames,
           top: rowTop,
@@ -178,7 +178,7 @@ class TimelineViewModel extends ChangeNotifier {
       rows.add(frameRow);
     } else {
       final sceneSeq = _timeline.sceneSeq;
-      final sceneRow = sceneSlivers(
+      final sceneRow = sceneSliverRow(
         areas: timeSpanAreas(
           timeSpans: sceneSeq.iterable,
           top: rowTop,
@@ -195,7 +195,7 @@ class TimelineViewModel extends ChangeNotifier {
     return rows;
   }
 
-  Iterable<ImageSliver> frameSlivers({
+  Iterable<ImageSliver> frameSliverRow({
     @required Iterable<Rect> areas,
     @required Iterable<Frame> frames,
     @required int numberOfRealFrames,
@@ -220,7 +220,7 @@ class TimelineViewModel extends ChangeNotifier {
     }
   }
 
-  Iterable<VideoSliver> sceneSlivers({
+  Iterable<VideoSliver> sceneSliverRow({
     @required Iterable<Rect> areas,
     @required Iterable<Scene> scenes,
   }) sync* {
