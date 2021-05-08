@@ -96,11 +96,11 @@ class TimelineViewModel extends ChangeNotifier {
       return null;
 
     // TODO: Reuse slivers used for painting
-    for (final sliver in getVisibleImageSlivers()) {
-      if (sliver.area.contains(position)) {
-        return sliver.index;
-      }
-    }
+    // for (final sliver in getVisibleImageSlivers()) {
+    //   if (sliver.area.contains(position)) {
+    //     return sliver.index;
+    //   }
+    // }
     return null;
   }
 
@@ -157,13 +157,19 @@ class TimelineViewModel extends ChangeNotifier {
 
   Duration get sceneEnd => _timeline.currentSceneEnd;
 
-  // TODO: Implement
   List<List<Sliver>> getSliverRows() {
     final rows = <List<Sliver>>[];
     double rowTop = sliverGap;
 
     if (isEditingScene) {
       // getVisibleImageSlivers(_timeline.)
+      // ImageSliver(
+      //   area: area,
+      //   thumbnail: (imageSpan as Frame).snapshot,
+      //   index: _isGhostFrame(imageSpanIndex) ? null : imageSpanIndex,
+      //   opacity: _isGhostFrame(imageSpanIndex) ? 0.5 : 1,
+      // )
+      // bool _isGhostFrame(int i) => i >= imageSpans.length
     } else {
       final sceneSeq = _timeline.sceneSeq;
       final sceneRow = sceneSlivers(
@@ -237,91 +243,6 @@ class TimelineViewModel extends ChangeNotifier {
             ))
         .toList();
   }
-
-  List<Sliver> getVisibleImageSlivers() {
-    final midIndex = imageSpans.currentIndex;
-    final spans = imageSpans.iterable.toList();
-    if (isEditingScene) {
-      spans.addAll(_timeline.currentScene.layers.first
-          .getGhostFrames(_timeline.currentScene.duration));
-    }
-
-    final List<Sliver> slivers = [getCurrentImageSliver()];
-
-    // Fill with slivers on left side.
-    for (int i = midIndex - 1; i >= 0 && slivers.first.area.left > 0; i--) {
-      slivers.insert(
-        0,
-        _makeSliver(
-          Rect.fromLTRB(
-            slivers.first.area.left - widthFromDuration(spans[i].duration),
-            imageSliverTop,
-            slivers.first.area.left,
-            imageSliverBottom,
-          ),
-          spans[i],
-          i,
-        ),
-      );
-    }
-
-    // Fill with slivers on right side.
-    for (int i = midIndex + 1;
-        i < spans.length && slivers.last.area.right < size.width;
-        i++) {
-      slivers.add(
-        _makeSliver(
-          Rect.fromLTRB(
-            slivers.last.area.right,
-            imageSliverTop,
-            slivers.last.area.right + widthFromDuration(spans[i].duration),
-            imageSliverBottom,
-          ),
-          spans[i],
-          i,
-        ),
-      );
-    }
-    return slivers;
-  }
-
-  Sliver getCurrentImageSliver() {
-    final area = Rect.fromLTRB(
-      xFromTime(_currentImageSpanStart),
-      imageSliverTop,
-      xFromTime(_currentImageSpanEnd),
-      imageSliverBottom,
-    );
-    return _makeSliver(area, imageSpans.current, imageSpans.currentIndex);
-  }
-
-  Duration get _currentImageSpanStart => isEditingScene
-      ? sceneStart + imageSpans.currentSpanStart
-      : imageSpans.currentSpanStart;
-
-  Duration get _currentImageSpanEnd => isEditingScene
-      ? sceneStart + imageSpans.currentSpanEnd
-      : imageSpans.currentSpanEnd;
-
-  Sliver _makeSliver(Rect area, TimeSpan imageSpan, int imageSpanIndex) =>
-      isEditingScene
-          ? ImageSliver(
-              area: area,
-              thumbnail: (imageSpan as Frame).snapshot,
-              index: _isGhostFrame(imageSpanIndex) ? null : imageSpanIndex,
-              opacity: _isGhostFrame(imageSpanIndex) ? 0.5 : 1,
-            )
-          : VideoSliver(
-              area: area,
-              thumbnailAt: (double x) {
-                final scene = imageSpan as Scene;
-                final position = pxToDuration(x - area.left, msPerPx);
-                return scene.imageAt(position);
-              },
-              index: imageSpanIndex,
-            );
-
-  bool _isGhostFrame(int i) => i >= imageSpans.length;
 
   /*
     Sliver menu methods:
