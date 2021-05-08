@@ -176,6 +176,7 @@ class TimelineViewModel extends ChangeNotifier {
             timeSpans: frames,
             top: rowTop,
             bottom: rowTop + sliverHeight,
+            start: sceneStart,
           ),
           frames: frames,
           numberOfRealFrames: layer.frameSeq.length,
