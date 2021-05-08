@@ -27,13 +27,14 @@ class TimelinePainter extends CustomPainter {
     //     );
     //   }
     // }
-
+    final canvasArea = Rect.fromLTWH(0, 0, size.width, size.height);
     final rows = timelineView.getSliverRows();
 
     for (var row in rows) {
       for (var sliver in row) {
-        // TODO: check for overlap with canvas
-        sliver.paint(canvas);
+        if (sliver.area.overlaps(canvasArea)) {
+          sliver.paint(canvas);
+        }
       }
     }
 

@@ -36,7 +36,7 @@ class TimelineViewModel extends ChangeNotifier {
   final CreateNewFrame createNewFrame;
 
   bool get isEditingScene => _sceneEdit;
-  bool _sceneEdit = true;
+  bool _sceneEdit = false;
 
   Sequence<TimeSpan> get imageSpans => _sceneEdit
       ? _timeline.currentScene.layers.first.frameSeq
