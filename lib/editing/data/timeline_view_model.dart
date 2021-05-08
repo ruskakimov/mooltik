@@ -190,7 +190,7 @@ class TimelineViewModel extends ChangeNotifier {
       rows.add(sceneRow);
     }
 
-    rows.add(getVisibleSoundSlivers());
+    rows.add(getSoundSliverRow());
 
     return rows;
   }
@@ -262,7 +262,7 @@ class TimelineViewModel extends ChangeNotifier {
     }
   }
 
-  List<Sliver> getVisibleSoundSlivers() {
+  List<Sliver> getSoundSliverRow() {
     return _soundClips
         .map((soundClip) => SoundSliver(
               area: Rect.fromLTWH(
