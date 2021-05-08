@@ -101,7 +101,7 @@ class TimelineViewModel extends ChangeNotifier {
     //     return sliver.index;
     //   }
     // }
-    return null;
+    return 0;
   }
 
   /// Size of the timeline view.
@@ -161,21 +161,28 @@ class TimelineViewModel extends ChangeNotifier {
     final rows = <List<Sliver>>[];
     double rowTop = sliverGap;
 
-    if (isEditingScene) {
-      final layer = _timeline.currentScene.layers.first;
-      final frames = layer.frameSeq.iterable
-          .followedBy(layer.getGhostFrames(_timeline.currentScene.duration));
-      final frameRow = frameSliverRow(
-        areas: timeSpanAreas(
-          timeSpans: frames,
-          top: rowTop,
-          bottom: rowTop + sliverHeight,
-        ),
-        frames: frames,
-        numberOfRealFrames: layer.frameSeq.length,
-      ).toList();
+    void addRow(List<Sliver> row) {
+      rows.add(row);
+      rowTop += sliverHeight + sliverGap;
+    }
 
-      rows.add(frameRow);
+    if (isEditingScene) {
+      for (final layer in _timeline.currentScene.layers) {
+        final frames = layer.frameSeq.iterable.followedBy(
+          layer.getGhostFrames(_timeline.currentScene.duration),
+        );
+        final frameRow = frameSliverRow(
+          areas: timeSpanAreas(
+            timeSpans: frames,
+            top: rowTop,
+            bottom: rowTop + sliverHeight,
+          ),
+          frames: frames,
+          numberOfRealFrames: layer.frameSeq.length,
+        ).toList();
+
+        addRow(frameRow);
+      }
     } else {
       final sceneSeq = _timeline.sceneSeq;
       final sceneRow = sceneSliverRow(
@@ -187,10 +194,10 @@ class TimelineViewModel extends ChangeNotifier {
         scenes: sceneSeq.iterable,
       ).toList();
 
-      rows.add(sceneRow);
+      addRow(sceneRow);
     }
 
-    rows.add(getSoundSliverRow());
+    addRow(getSoundSliverRow());
 
     return rows;
   }
