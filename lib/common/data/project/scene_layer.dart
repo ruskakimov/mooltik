@@ -15,10 +15,13 @@ enum PlayMode {
 }
 
 class SceneLayer {
-  SceneLayer(this.frameSeq, [this.playMode = PlayMode.extendLast]);
+  SceneLayer(this.frameSeq, [PlayMode playMode = PlayMode.extendLast])
+      : assert(playMode != null),
+        _playMode = playMode;
 
   final Sequence<Frame> frameSeq;
-  final PlayMode playMode;
+  PlayMode get playMode => _playMode;
+  PlayMode _playMode;
 
   /// Frame at a given playhead position.
   Frame frameAt(Duration playhead) {
@@ -81,6 +84,10 @@ class SceneLayer {
         break;
     }
     return frameSeq[i];
+  }
+
+  void nextPlayMode() {
+    _playMode = PlayMode.values[(playMode.index + 1) % PlayMode.values.length];
   }
 
   factory SceneLayer.fromJson(Map<String, dynamic> json, String frameDirPath) =>

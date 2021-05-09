@@ -25,7 +25,7 @@ class PlayModeButton extends StatelessWidget {
       offset: Offset(-32, 0),
       child: IconButton(
         icon: Icon(_getIcon(playMode)),
-        onPressed: timelineView.nextScenePlayMode,
+        onPressed: () => timelineView.nextScenePlayModeForLayer(layerIndex),
       ),
     );
   }

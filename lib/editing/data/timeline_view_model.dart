@@ -334,14 +334,9 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Shouldn't this be part of SceneLayer?
-  void nextScenePlayMode() {
-    // final scene = _timeline.currentScene;
-    // final i = _timeline.sceneSeq.currentIndex;
-    // final nextMode = PlayMode
-    //     .values[(scene.layer.playMode.index + 1) % PlayMode.values.length];
-
-    // _timeline.sceneSeq[i] = scene.copyWith(playMode: nextMode);
+  void nextScenePlayModeForLayer(int layerIndex) {
+    final layer = sceneLayers[layerIndex];
+    layer.nextPlayMode();
     notifyListeners();
   }
 
