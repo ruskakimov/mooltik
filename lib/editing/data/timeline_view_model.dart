@@ -384,23 +384,23 @@ class TimelineViewModel extends ChangeNotifier {
 
   /// Handle start time drag handle's new [updatedTimestamp].
   void onStartTimeHandleDragUpdate(Duration updatedTimestamp) {
-    // if (_shouldSnapToPlayhead(updatedTimestamp)) {
-    //   updatedTimestamp = _timeline.playheadPosition;
-    // }
-    // updatedTimestamp = TimeSpan.roundDurationToFrames(updatedTimestamp);
+    if (_shouldSnapToPlayhead(updatedTimestamp)) {
+      updatedTimestamp = _timeline.playheadPosition;
+    }
+    updatedTimestamp = TimeSpan.roundDurationToFrames(updatedTimestamp);
 
-    // final newSelectedDuration = selectedSliverEndTime - updatedTimestamp;
-    // final diff = newSelectedDuration - _selectedSliverDuration;
-    // final newPrevDuration =
-    //     selectedSliverSequence[_selectedSliverId.spanIndex - 1].duration - diff;
+    final newSelectedDuration = selectedSliverEndTime - updatedTimestamp;
+    final diff = newSelectedDuration - _selectedSliverDuration;
+    final newPrevDuration =
+        selectedSliverSequence[_selectedSliverId.spanIndex - 1].duration - diff;
 
-    // if (newPrevDuration < TimeSpan.singleFrameDuration) return;
+    if (newPrevDuration < TimeSpan.singleFrameDuration) return;
 
-    // selectedSliverSequence.changeSpanDurationAt(
-    //     _selectedSliverId.spanIndex - 1, newPrevDuration);
-    // selectedSliverSequence.changeSpanDurationAt(
-    //     _selectedSliverId.spanIndex, newSelectedDuration);
-    // notifyListeners();
+    selectedSliverSequence.changeSpanDurationAt(
+        _selectedSliverId.spanIndex - 1, newPrevDuration);
+    selectedSliverSequence.changeSpanDurationAt(
+        _selectedSliverId.spanIndex, newSelectedDuration);
+    notifyListeners();
   }
 
   Duration get selectedSliverEndTime => isEditingScene
@@ -410,14 +410,15 @@ class TimelineViewModel extends ChangeNotifier {
 
   /// Handle end time drag handle's new [updatedTimestamp].
   void onEndTimeHandleDragUpdate(Duration updatedTimestamp) {
-    // if (_shouldSnapToPlayhead(updatedTimestamp)) {
-    //   updatedTimestamp = _timeline.playheadPosition;
-    // }
-    // updatedTimestamp = TimeSpan.roundDurationToFrames(updatedTimestamp);
-    // final newDuration = updatedTimestamp - selectedSliverStartTime;
+    if (_shouldSnapToPlayhead(updatedTimestamp)) {
+      updatedTimestamp = _timeline.playheadPosition;
+    }
+    updatedTimestamp = TimeSpan.roundDurationToFrames(updatedTimestamp);
+    final newDuration = updatedTimestamp - selectedSliverStartTime;
 
-    // selectedSliverSequence.changeSpanDurationAt(_selectedSliverId.spanIndex, newDuration);
-    // notifyListeners();
+    selectedSliverSequence.changeSpanDurationAt(
+        _selectedSliverId.spanIndex, newDuration);
+    notifyListeners();
   }
 
   /// Whether timestamp is close enough to playhead for it to snap to it.
