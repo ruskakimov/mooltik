@@ -38,10 +38,6 @@ class TimelineViewModel extends ChangeNotifier {
   bool get isEditingScene => _sceneEdit;
   bool _sceneEdit = false;
 
-  // Sequence<TimeSpan> get selectedSliverSequence => _sceneEdit
-  //     ? _timeline.currentScene.layers.first.frameSeq
-  //     : _timeline.sceneSeq;
-
   double get msPerPx => _msPerPx;
   double _msPerPx;
   double _prevMsPerPx;
