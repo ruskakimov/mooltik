@@ -347,21 +347,21 @@ class TimelineViewModel extends ChangeNotifier {
   bool get canDeleteSelected => selectedSliverSequence.length > 1;
 
   void deleteSelected() {
-    // if (_selectedImageSpanIndex == null) return;
-    // if (!canDeleteSelected) return;
-    // selectedSliverSequence.removeAt(_selectedImageSpanIndex);
-    // closeSliverMenu();
-    // notifyListeners();
+    if (_selectedSliverId == null) return;
+    if (!canDeleteSelected) return;
+    selectedSliverSequence.removeAt(_selectedSliverId.spanIndex);
+    closeSliverMenu();
+    notifyListeners();
   }
 
   Future<void> duplicateSelected() async {
-    // if (_selectedImageSpanIndex == null) return;
-    // final duplicate = isEditingScene
-    //     ? await _duplicateFrame(selectedFrame)
-    //     : await _duplicateScene(selectedScene);
-    // selectedSliverSequence.insert(_selectedImageSpanIndex + 1, duplicate);
-    // closeSliverMenu();
-    // notifyListeners();
+    if (_selectedSliverId == null) return;
+    final duplicate = isEditingScene
+        ? await _duplicateFrame(selectedFrame)
+        : await _duplicateScene(selectedScene);
+    selectedSliverSequence.insert(_selectedSliverId.spanIndex + 1, duplicate);
+    closeSliverMenu();
+    notifyListeners();
   }
 
   Future<Frame> _duplicateFrame(Frame frame) async {
