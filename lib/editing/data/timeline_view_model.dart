@@ -123,7 +123,7 @@ class TimelineViewModel extends ChangeNotifier {
   double get viewHeight =>
       sliverRows * sliverHeight + (sliverRows + 1) * sliverGap;
 
-  // TODO: Remove
+  // TODO: Support multiple rows
   double get imageSliverTop => sliverGap;
   double get imageSliverBottom => imageSliverTop + sliverHeight;
   double get imageSliverMid => (imageSliverTop + imageSliverBottom) / 2;
