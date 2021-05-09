@@ -13,27 +13,22 @@ class TimelinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     timelineView.size = size;
 
-    // final List<Sliver> imageSlivers = timelineView.getVisibleImageSlivers();
-
-    // for (final sliver in imageSlivers) {
-    //   sliver.paint(canvas);
-
-    //   if (timelineView.selectedImageSpanIndex != null &&
-    //       timelineView.selectedImageSpanIndex == sliver.index) {
-    //     paintSelection(
-    //       canvas,
-    //       sliver.rrect,
-    //       timelineView.selectedSliverDurationLabel,
-    //     );
-    //   }
-    // }
     final canvasArea = Rect.fromLTWH(0, 0, size.width, size.height);
     final rows = timelineView.getSliverRows();
+    final selectedSliverId = timelineView.selectedSliver?.id;
 
     for (var row in rows) {
       for (var sliver in row) {
         if (sliver.area.overlaps(canvasArea)) {
           sliver.paint(canvas);
+
+          if (selectedSliverId != null && selectedSliverId == sliver.id) {
+            paintSelection(
+              canvas,
+              sliver.rrect,
+              timelineView.selectedSliverDurationLabel,
+            );
+          }
         }
       }
     }
