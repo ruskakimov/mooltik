@@ -340,7 +340,9 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get canDeleteSelected => selectedSliverSequence.length > 1;
+  bool get canDeleteSelected => selectedSliverSequence != null
+      ? selectedSliverSequence.length > 1
+      : false;
 
   void deleteSelected() {
     if (_selectedSliverId == null) return;
