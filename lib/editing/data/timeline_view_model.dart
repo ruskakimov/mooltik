@@ -38,7 +38,7 @@ class TimelineViewModel extends ChangeNotifier {
   bool get isEditingScene => _sceneEdit;
   bool _sceneEdit = false;
 
-  // Sequence<TimeSpan> get imageSpans => _sceneEdit
+  // Sequence<TimeSpan> get selectedSliverSequence => _sceneEdit
   //     ? _timeline.currentScene.layers.first.frameSeq
   //     : _timeline.sceneSeq;
 
@@ -114,6 +114,11 @@ class TimelineViewModel extends ChangeNotifier {
 
   int get sliverRows =>
       isEditingScene ? _timeline.currentScene.layers.length + 1 : 2;
+
+  // TODO: Sound sequence support
+  List<Sequence<TimeSpan>> get sequenceRows => isEditingScene
+      ? _timeline.currentScene.layers.map((layer) => layer.frameSeq).toList()
+      : [_timeline.sceneSeq];
 
   double get viewHeight =>
       sliverRows * sliverHeight + (sliverRows + 1) * sliverGap;
@@ -282,6 +287,10 @@ class TimelineViewModel extends ChangeNotifier {
   SliverId get selectedSliverId => _selectedSliverId;
   SliverId _selectedSliverId;
 
+  Sequence<TimeSpan> get selectedSliverSequence => _selectedSliverId != null
+      ? sequenceRows[_selectedSliverId.rowIndex]
+      : null;
+
   void selectSliver(SliverId sliverId) {
     if (_timeline.isPlaying) _timeline.pause();
     _selectedSliverId = sliverId;
@@ -297,14 +306,15 @@ class TimelineViewModel extends ChangeNotifier {
 
   bool get showResizeEndHandle => showSliverMenu;
 
-  // TimeSpan get selectedImageSpan => imageSpans[_selectedImageSpanIndex];
-  // Frame get selectedFrame => selectedImageSpan as Frame;
-  // Scene get selectedScene => selectedImageSpan as Scene;
+  TimeSpan get selectedSpan =>
+      selectedSliverSequence[_selectedSliverId.spanIndex];
+  Frame get selectedFrame => selectedSpan as Frame;
+  Scene get selectedScene => selectedSpan as Scene;
 
-  // Duration get _selectedSliverDuration => selectedImageSpan.duration;
+  Duration get _selectedSliverDuration => selectedSpan.duration;
 
-  // TODO: Fix
-  String get selectedSliverDurationLabel => durationToLabel(Duration.zero);
+  String get selectedSliverDurationLabel =>
+      durationToLabel(_selectedSliverDuration);
 
   void editScene() {
     if (isEditingScene) return;
@@ -334,14 +344,12 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // TODO: Fix
-  bool get canDeleteSelected => true;
-  // imageSpans.length > 1;
+  bool get canDeleteSelected => selectedSliverSequence.length > 1;
 
   void deleteSelected() {
     // if (_selectedImageSpanIndex == null) return;
     // if (!canDeleteSelected) return;
-    // imageSpans.removeAt(_selectedImageSpanIndex);
+    // selectedSliverSequence.removeAt(_selectedImageSpanIndex);
     // closeSliverMenu();
     // notifyListeners();
   }
@@ -351,7 +359,7 @@ class TimelineViewModel extends ChangeNotifier {
     // final duplicate = isEditingScene
     //     ? await _duplicateFrame(selectedFrame)
     //     : await _duplicateScene(selectedScene);
-    // imageSpans.insert(_selectedImageSpanIndex + 1, duplicate);
+    // selectedSliverSequence.insert(_selectedImageSpanIndex + 1, duplicate);
     // closeSliverMenu();
     // notifyListeners();
   }
@@ -369,10 +377,10 @@ class TimelineViewModel extends ChangeNotifier {
     // return scene.copyWith(frames: duplicateFrames);
   }
 
-  Duration get selectedSliverStartTime => sceneStart;
-  // isEditingScene
-  //     ? sceneStart + imageSpans.startTimeOf(_selectedImageSpanIndex)
-  //     : imageSpans.startTimeOf(_selectedImageSpanIndex);
+  Duration get selectedSliverStartTime => isEditingScene
+      ? sceneStart +
+          selectedSliverSequence.startTimeOf(_selectedSliverId.spanIndex)
+      : selectedSliverSequence.startTimeOf(_selectedSliverId.spanIndex);
 
   /// Handle start time drag handle's new [updatedTimestamp].
   void onStartTimeHandleDragUpdate(Duration updatedTimestamp) {
@@ -384,21 +392,21 @@ class TimelineViewModel extends ChangeNotifier {
     // final newSelectedDuration = selectedSliverEndTime - updatedTimestamp;
     // final diff = newSelectedDuration - _selectedSliverDuration;
     // final newPrevDuration =
-    //     imageSpans[_selectedImageSpanIndex - 1].duration - diff;
+    //     selectedSliverSequence[_selectedSliverId.spanIndex - 1].duration - diff;
 
     // if (newPrevDuration < TimeSpan.singleFrameDuration) return;
 
-    // imageSpans.changeSpanDurationAt(
-    //     _selectedImageSpanIndex - 1, newPrevDuration);
-    // imageSpans.changeSpanDurationAt(
-    //     _selectedImageSpanIndex, newSelectedDuration);
+    // selectedSliverSequence.changeSpanDurationAt(
+    //     _selectedSliverId.spanIndex - 1, newPrevDuration);
+    // selectedSliverSequence.changeSpanDurationAt(
+    //     _selectedSliverId.spanIndex, newSelectedDuration);
     // notifyListeners();
   }
 
-  Duration get selectedSliverEndTime => sceneStart;
-  // isEditingScene
-  // ? sceneStart + imageSpans.endTimeOf(_selectedImageSpanIndex)
-  // : imageSpans.endTimeOf(_selectedImageSpanIndex);
+  Duration get selectedSliverEndTime => isEditingScene
+      ? sceneStart +
+          selectedSliverSequence.endTimeOf(_selectedSliverId.spanIndex)
+      : selectedSliverSequence.endTimeOf(_selectedSliverId.spanIndex);
 
   /// Handle end time drag handle's new [updatedTimestamp].
   void onEndTimeHandleDragUpdate(Duration updatedTimestamp) {
@@ -408,7 +416,7 @@ class TimelineViewModel extends ChangeNotifier {
     // updatedTimestamp = TimeSpan.roundDurationToFrames(updatedTimestamp);
     // final newDuration = updatedTimestamp - selectedSliverStartTime;
 
-    // imageSpans.changeSpanDurationAt(_selectedImageSpanIndex, newDuration);
+    // selectedSliverSequence.changeSpanDurationAt(_selectedSliverId.spanIndex, newDuration);
     // notifyListeners();
   }
 
