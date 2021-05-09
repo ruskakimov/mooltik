@@ -35,8 +35,10 @@ class TimelineView extends StatelessWidget {
                 PlayModeButton(),
                 SceneEndHandle(),
               ],
-              if (timelineView.showResizeStartHandle) ResizeStartHandle(),
-              if (timelineView.showResizeEndHandle) ResizeEndHandle(),
+              if (timelineView.showResizeStartHandle)
+                ResizeStartHandle(timelineView: timelineView),
+              if (timelineView.showResizeEndHandle)
+                ResizeEndHandle(timelineView: timelineView),
             ],
           ),
         ),

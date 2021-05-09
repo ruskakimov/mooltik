@@ -6,10 +6,15 @@ import 'package:mooltik/editing/ui/timeline/view/overlay/timeline_positioned.dar
 import 'package:provider/provider.dart';
 
 class ResizeEndHandle extends StatelessWidget {
+  const ResizeEndHandle({
+    Key key,
+    @required this.timelineView,
+  }) : super(key: key);
+
+  final TimelineViewModel timelineView;
+
   @override
   Widget build(BuildContext context) {
-    final timelineView = context.watch<TimelineViewModel>();
-
     return TimelinePositioned(
       timestamp: timelineView.selectedSliverEndTime,
       y: timelineView.imageSliverMid,
