@@ -17,7 +17,7 @@ class ResizeEndHandle extends StatelessWidget {
   Widget build(BuildContext context) {
     return TimelinePositioned(
       timestamp: timelineView.selectedSliverEndTime,
-      y: timelineView.imageSliverMid,
+      y: timelineView.selectedSliverMidY,
       width: resizeHandleWidth,
       height: resizeHandleHeight,
       onDragUpdate: (Duration updatedTime) =>

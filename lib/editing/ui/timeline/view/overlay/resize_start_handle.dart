@@ -15,7 +15,7 @@ class ResizeStartHandle extends StatelessWidget {
   Widget build(BuildContext context) {
     return TimelinePositioned(
       timestamp: timelineView.selectedSliverStartTime,
-      y: timelineView.imageSliverMid,
+      y: timelineView.selectedSliverMidY,
       width: resizeHandleWidth,
       height: resizeHandleHeight,
       onDragUpdate: (Duration updatedTime) =>

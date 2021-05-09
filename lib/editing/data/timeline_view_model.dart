@@ -105,7 +105,6 @@ class TimelineViewModel extends ChangeNotifier {
   double get _midX => size.width / 2;
 
   double get sliverHeight => 56;
-
   double get sliverGap => 8;
 
   int get sliverRows =>
@@ -119,7 +118,15 @@ class TimelineViewModel extends ChangeNotifier {
   double get viewHeight =>
       sliverRows * sliverHeight + (sliverRows + 1) * sliverGap;
 
-  // TODO: Support multiple rows
+  double rowTop(int rowIndex) =>
+      (rowIndex + 1) * sliverGap + rowIndex * sliverHeight;
+
+  double rowMiddle(int rowIndex) =>
+      (rowTop(rowIndex) + rowBottom(rowIndex)) / 2;
+
+  double rowBottom(int rowIndex) => rowTop(rowIndex) + sliverHeight;
+
+  // TODO: Remove
   double get imageSliverTop => sliverGap;
   double get imageSliverBottom => imageSliverTop + sliverHeight;
   double get imageSliverMid => (imageSliverTop + imageSliverBottom) / 2;
@@ -142,11 +149,9 @@ class TimelineViewModel extends ChangeNotifier {
   List<List<Sliver>> getSliverRows() {
     final rows = <List<Sliver>>[];
     int rowIndex = 0;
-    double rowTop = sliverGap;
 
     void addRow(List<Sliver> row) {
       rows.add(row);
-      rowTop += sliverHeight + sliverGap;
       rowIndex++;
     }
 
@@ -158,8 +163,8 @@ class TimelineViewModel extends ChangeNotifier {
         final frameRow = frameSliverRow(
           areas: timeSpanAreas(
             timeSpans: frames,
-            top: rowTop,
-            bottom: rowTop + sliverHeight,
+            top: rowTop(rowIndex),
+            bottom: rowBottom(rowIndex),
             start: sceneStart,
           ),
           frames: frames,
@@ -174,8 +179,8 @@ class TimelineViewModel extends ChangeNotifier {
       final sceneRow = sceneSliverRow(
         areas: timeSpanAreas(
           timeSpans: sceneSeq.iterable,
-          top: rowTop,
-          bottom: rowTop + sliverHeight,
+          top: rowTop(rowIndex),
+          bottom: rowBottom(rowIndex),
         ),
         scenes: sceneSeq.iterable,
         rowIndex: rowIndex,
@@ -185,8 +190,8 @@ class TimelineViewModel extends ChangeNotifier {
     }
 
     addRow(soundSliverRow(
-      rowTop: rowTop,
-      rowBottom: rowTop + sliverHeight,
+      rowTop: rowTop(rowIndex),
+      rowBottom: rowBottom(rowIndex),
     ).toList());
 
     _renderedSliverRows = rows;
@@ -296,6 +301,8 @@ class TimelineViewModel extends ChangeNotifier {
   void removeSliverSelection() => selectSliver(null);
 
   bool get showSliverMenu => _selectedSliverId != null;
+
+  double get selectedSliverMidY => rowMiddle(_selectedSliverId.rowIndex);
 
   bool get showResizeStartHandle =>
       showSliverMenu && _selectedSliverId.spanIndex != 0;
