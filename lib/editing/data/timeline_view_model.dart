@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/scene.dart';
+import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
@@ -110,9 +111,11 @@ class TimelineViewModel extends ChangeNotifier {
   int get sliverRows =>
       isEditingScene ? _timeline.currentScene.layers.length + 1 : 2;
 
+  List<SceneLayer> get sceneLayers => _timeline.currentScene.layers;
+
   // TODO: Sound sequence support
   List<Sequence<TimeSpan>> get sequenceRows => isEditingScene
-      ? _timeline.currentScene.layers.map((layer) => layer.frameSeq).toList()
+      ? sceneLayers.map((layer) => layer.frameSeq).toList()
       : [_timeline.sceneSeq];
 
   double get viewHeight =>
@@ -125,11 +128,6 @@ class TimelineViewModel extends ChangeNotifier {
       (rowTop(rowIndex) + rowBottom(rowIndex)) / 2;
 
   double rowBottom(int rowIndex) => rowTop(rowIndex) + sliverHeight;
-
-  // TODO: Remove
-  double get imageSliverTop => sliverGap;
-  double get imageSliverBottom => imageSliverTop + sliverHeight;
-  double get imageSliverMid => (imageSliverTop + imageSliverBottom) / 2;
 
   double xFromTime(Duration time) =>
       _midX + durationToPx(time - _timeline.playheadPosition, _msPerPx);

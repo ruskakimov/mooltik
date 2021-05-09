@@ -6,13 +6,20 @@ import 'package:mooltik/editing/ui/timeline/view/overlay/timeline_positioned.dar
 import 'package:provider/provider.dart';
 
 class PlayModeButton extends StatelessWidget {
+  const PlayModeButton({
+    Key key,
+    @required this.y,
+  }) : super(key: key);
+
+  final double y;
+
   @override
   Widget build(BuildContext context) {
     final timelineView = context.watch<TimelineViewModel>();
 
     return TimelinePositioned(
       timestamp: timelineView.sceneStart,
-      y: timelineView.imageSliverMid,
+      y: y,
       width: 48,
       height: 48,
       offset: Offset(-32, 0),
