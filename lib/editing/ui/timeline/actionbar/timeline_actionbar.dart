@@ -33,7 +33,7 @@ class TimelineActionbar extends StatelessWidget {
             popup: SliverMenu(),
             child: PlayButton(),
             onTapOutside: () {
-              timelineView.closeSliverMenu();
+              timelineView.removeSliverSelection();
             },
           ),
           Expanded(

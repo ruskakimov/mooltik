@@ -59,7 +59,7 @@ class TimelineViewModel extends ChangeNotifier {
     var timeDiff = pxToDuration(-diff.dx, _msPerPx);
     _timeline.scrub(timeDiff);
 
-    closeSliverMenu();
+    removeSliverSelection();
 
     _prevFocalPoint = details.localFocalPoint;
 
@@ -293,9 +293,9 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get showSliverMenu => _selectedSliverId != null;
+  void removeSliverSelection() => selectSliver(null);
 
-  void closeSliverMenu() => selectSliver(null);
+  bool get showSliverMenu => _selectedSliverId != null;
 
   bool get showResizeStartHandle =>
       showSliverMenu && _selectedSliverId.spanIndex != 0;
@@ -317,7 +317,7 @@ class TimelineViewModel extends ChangeNotifier {
     _timeline.sceneSeq.currentIndex = _selectedSliverId.spanIndex;
     _sceneEdit = true;
     _timeline.isSceneBound = true;
-    closeSliverMenu();
+    removeSliverSelection();
     notifyListeners();
   }
 
@@ -325,7 +325,7 @@ class TimelineViewModel extends ChangeNotifier {
     if (!isEditingScene) return;
     _sceneEdit = false;
     _timeline.isSceneBound = false;
-    closeSliverMenu();
+    removeSliverSelection();
     notifyListeners();
   }
 
@@ -346,7 +346,7 @@ class TimelineViewModel extends ChangeNotifier {
     if (_selectedSliverId == null) return;
     if (!canDeleteSelected) return;
     selectedSliverSequence.removeAt(_selectedSliverId.spanIndex);
-    closeSliverMenu();
+    removeSliverSelection();
     notifyListeners();
   }
 
@@ -356,7 +356,7 @@ class TimelineViewModel extends ChangeNotifier {
         ? await _duplicateFrame(selectedFrame)
         : await _duplicateScene(selectedScene);
     selectedSliverSequence.insert(_selectedSliverId.spanIndex + 1, duplicate);
-    closeSliverMenu();
+    removeSliverSelection();
     notifyListeners();
   }
 
