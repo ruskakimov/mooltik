@@ -8,8 +8,8 @@ class VideoSliver extends Sliver {
   VideoSliver({
     @required Rect area,
     @required this.thumbnailAt,
-    @required int index,
-  }) : super(area, index);
+    @required SliverId id,
+  }) : super(area, id);
 
   /// Image at a given X coordinate.
   final ThumbnailAt thumbnailAt;

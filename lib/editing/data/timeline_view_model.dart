@@ -159,11 +159,13 @@ class TimelineViewModel extends ChangeNotifier {
 
   List<List<Sliver>> getSliverRows() {
     final rows = <List<Sliver>>[];
+    int rowIndex = 0;
     double rowTop = sliverGap;
 
     void addRow(List<Sliver> row) {
       rows.add(row);
       rowTop += sliverHeight + sliverGap;
+      rowIndex++;
     }
 
     if (isEditingScene) {
@@ -180,6 +182,7 @@ class TimelineViewModel extends ChangeNotifier {
           ),
           frames: frames,
           numberOfRealFrames: layer.frameSeq.length,
+          rowIndex: rowIndex,
         ).toList();
 
         addRow(frameRow);
@@ -193,6 +196,7 @@ class TimelineViewModel extends ChangeNotifier {
           bottom: rowTop + sliverHeight,
         ),
         scenes: sceneSeq.iterable,
+        rowIndex: rowIndex,
       ).toList();
 
       addRow(sceneRow);
@@ -210,32 +214,34 @@ class TimelineViewModel extends ChangeNotifier {
     @required Iterable<Rect> areas,
     @required Iterable<Frame> frames,
     @required int numberOfRealFrames,
+    @required int rowIndex,
   }) sync* {
-    int index = 0;
+    int frameIndex = 0;
     final areaIt = areas.iterator;
     final frameIt = frames.iterator;
 
     while (areaIt.moveNext() && frameIt.moveNext()) {
       final area = areaIt.current;
       final frame = frameIt.current;
-      final isGhostFrame = index >= numberOfRealFrames;
+      final isGhostFrame = frameIndex >= numberOfRealFrames;
 
       yield ImageSliver(
         area: area,
         thumbnail: frame.snapshot,
-        index: isGhostFrame ? null : index,
+        id: SliverId(rowIndex, isGhostFrame ? null : frameIndex),
         opacity: isGhostFrame ? 0.5 : 1,
       );
 
-      index++;
+      frameIndex++;
     }
   }
 
   Iterable<VideoSliver> sceneSliverRow({
     @required Iterable<Rect> areas,
     @required Iterable<Scene> scenes,
+    @required int rowIndex,
   }) sync* {
-    int index = 0;
+    int sceneIndex = 0;
     final areaIt = areas.iterator;
     final sceneIt = scenes.iterator;
 
@@ -249,10 +255,10 @@ class TimelineViewModel extends ChangeNotifier {
           final position = pxToDuration(x - area.left, msPerPx);
           return scene.imageAt(position);
         },
-        index: index,
+        id: SliverId(rowIndex, sceneIndex),
       );
 
-      index++;
+      sceneIndex++;
     }
   }
 

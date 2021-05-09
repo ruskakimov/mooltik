@@ -7,9 +7,9 @@ class ImageSliver extends Sliver {
   ImageSliver({
     @required Rect area,
     @required this.thumbnail,
-    @required int index,
+    @required SliverId id,
     this.opacity = 1,
-  }) : super(area, index);
+  }) : super(area, id);
 
   final ui.Image thumbnail;
   final double opacity;
