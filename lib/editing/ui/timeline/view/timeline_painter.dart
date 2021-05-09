@@ -15,7 +15,7 @@ class TimelinePainter extends CustomPainter {
 
     final canvasArea = Rect.fromLTWH(0, 0, size.width, size.height);
     final rows = timelineView.getSliverRows();
-    final selectedSliverId = timelineView.selectedSliver?.id;
+    final selectedSliverId = timelineView.selectedSliverId;
 
     for (var row in rows) {
       for (var sliver in row) {

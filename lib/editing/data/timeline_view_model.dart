@@ -81,7 +81,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   void onTapUp(TapUpDetails details) {
     final sliver = _getSliverUnderPosition(details.localPosition);
-    selectSliver(sliver);
+    selectSliver(sliver?.id);
   }
 
   Sliver _getSliverUnderPosition(Offset position) {
@@ -210,7 +210,7 @@ class TimelineViewModel extends ChangeNotifier {
       yield ImageSliver(
         area: area,
         thumbnail: frame.snapshot,
-        id: SliverId(rowIndex, isGhostFrame ? null : frameIndex),
+        id: isGhostFrame ? null : SliverId(rowIndex, frameIndex),
         opacity: isGhostFrame ? 0.5 : 1,
       );
 
@@ -279,21 +279,21 @@ class TimelineViewModel extends ChangeNotifier {
   // Selected sliver operations:
   // ===========================
 
-  Sliver get selectedSliver => _selectedSliver;
-  Sliver _selectedSliver;
+  SliverId get selectedSliverId => _selectedSliverId;
+  SliverId _selectedSliverId;
 
-  void selectSliver(Sliver sliver) {
+  void selectSliver(SliverId sliverId) {
     if (_timeline.isPlaying) _timeline.pause();
-    _selectedSliver = sliver;
+    _selectedSliverId = sliverId;
     notifyListeners();
   }
 
-  bool get showSliverMenu => _selectedSliver != null;
+  bool get showSliverMenu => _selectedSliverId != null;
 
   void closeSliverMenu() => selectSliver(null);
 
   bool get showResizeStartHandle =>
-      showSliverMenu && _selectedSliver.id.spanIndex != 0;
+      showSliverMenu && _selectedSliverId.spanIndex != 0;
 
   bool get showResizeEndHandle => showSliverMenu;
 
@@ -308,7 +308,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   void editScene() {
     if (isEditingScene) return;
-    _timeline.sceneSeq.currentIndex = _selectedSliver.id.spanIndex;
+    _timeline.sceneSeq.currentIndex = _selectedSliverId.spanIndex;
     _sceneEdit = true;
     _timeline.isSceneBound = true;
     closeSliverMenu();
