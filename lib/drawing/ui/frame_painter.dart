@@ -18,6 +18,8 @@ class FramePainter extends CustomPainter {
   final Color background;
   final ColorFilter filter;
 
+  bool get hasStrokes => strokes != null && strokes.isNotEmpty;
+
   @override
   void paint(Canvas canvas, Size size) {
     // Clip paint outside canvas.
@@ -28,11 +30,13 @@ class FramePainter extends CustomPainter {
     // Scale image to fit the given size.
     canvas.scale(size.width / frame.width, size.height / frame.height);
 
-    // Save layer to erase paintings on it with `BlendMode.clear`.
-    canvas.saveLayer(
-      Rect.fromLTWH(0, 0, frame.size.width, frame.size.height),
-      Paint(),
-    );
+    if (hasStrokes) {
+      // Save layer to erase paintings on it with `BlendMode.clear`.
+      canvas.saveLayer(
+        Rect.fromLTWH(0, 0, frame.size.width, frame.size.height),
+        Paint(),
+      );
+    }
 
     if (frame.snapshot != null) {
       canvas.drawImage(
@@ -47,7 +51,7 @@ class FramePainter extends CustomPainter {
 
     strokes?.forEach((stroke) => stroke.paintOn(canvas));
 
-    if (showCursor && strokes.isNotEmpty) {
+    if (showCursor && hasStrokes) {
       final scale = size.width / frame.width;
       _drawCursor(
         canvas,
@@ -57,8 +61,10 @@ class FramePainter extends CustomPainter {
       );
     }
 
-    // Flatten layer. Combine drawing lines with erasing lines.
-    canvas.restore();
+    if (hasStrokes) {
+      // Flatten layer. Combine drawing lines with erasing lines.
+      canvas.restore();
+    }
   }
 
   @override
