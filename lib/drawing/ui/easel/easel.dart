@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
+import 'package:mooltik/drawing/data/reel_stack_model.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +19,6 @@ class _EaselState extends State<Easel> {
   @override
   Widget build(BuildContext context) {
     final easel = context.watch<EaselModel>();
-    final onion = context.watch<OnionModel>();
 
     return LayoutBuilder(builder: (context, constraints) {
       easel.updateSize(constraints.biggest);
@@ -50,45 +51,7 @@ class _EaselState extends State<Easel> {
                         height: easel.frameSize.height,
                         color: Colors.white,
                       ),
-                      if (onion.frameBefore != null)
-                        Opacity(
-                          opacity: 0.2,
-                          child: CustomPaint(
-                            size: onion.frameBefore.size,
-                            foregroundPainter: FramePainter(
-                              frame: onion.frameBefore,
-                              background: Colors.transparent,
-                              filter: ColorFilter.mode(
-                                Colors.red,
-                                BlendMode.srcATop,
-                              ),
-                            ),
-                          ),
-                        ),
-                      if (onion.frameAfter != null)
-                        Opacity(
-                          opacity: 0.2,
-                          child: CustomPaint(
-                            size: onion.frameAfter.size,
-                            foregroundPainter: FramePainter(
-                              frame: onion.frameAfter,
-                              background: Colors.transparent,
-                              filter: ColorFilter.mode(
-                                Colors.green,
-                                BlendMode.srcATop,
-                              ),
-                            ),
-                          ),
-                        ),
-                      CustomPaint(
-                        size: easel.frameSize,
-                        foregroundPainter: FramePainter(
-                          frame: easel.frame,
-                          strokes: easel.unrasterizedStrokes,
-                          showCursor: true,
-                          background: Colors.transparent,
-                        ),
-                      ),
+                      ..._buildLayers(),
                     ],
                   ),
                 ),
@@ -98,5 +61,81 @@ class _EaselState extends State<Easel> {
         ),
       );
     });
+  }
+
+  List<Widget> _buildLayers() {
+    final easelFrame = context.read<EaselModel>().frame;
+    final frames = context
+        .read<ReelStackModel>()
+        .reels
+        .map((reel) => reel.currentFrame)
+        .toList()
+        .reversed;
+    final onion = context.read<OnionModel>();
+    final layers = <Widget>[];
+
+    for (final frame in frames) {
+      if (frame == easelFrame) {
+        layers.addAll(_activeLayer(frame, onion.frameBefore, onion.frameAfter));
+      } else {
+        layers.add(_inactiveLayer(frame));
+      }
+    }
+
+    return layers;
+  }
+
+  List<Widget> _activeLayer(Frame frame, Frame before, Frame after) {
+    return [
+      if (before != null)
+        Opacity(
+          opacity: 0.2,
+          child: CustomPaint(
+            size: before.size,
+            foregroundPainter: FramePainter(
+              frame: before,
+              background: Colors.transparent,
+              filter: ColorFilter.mode(
+                Colors.red,
+                BlendMode.srcATop,
+              ),
+            ),
+          ),
+        ),
+      if (after != null)
+        Opacity(
+          opacity: 0.2,
+          child: CustomPaint(
+            size: after.size,
+            foregroundPainter: FramePainter(
+              frame: after,
+              background: Colors.transparent,
+              filter: ColorFilter.mode(
+                Colors.green,
+                BlendMode.srcATop,
+              ),
+            ),
+          ),
+        ),
+      CustomPaint(
+        size: frame.size,
+        foregroundPainter: FramePainter(
+          frame: frame,
+          // strokes: easel.unrasterizedStrokes,
+          showCursor: true,
+          background: Colors.transparent,
+        ),
+      ),
+    ];
+  }
+
+  CustomPaint _inactiveLayer(Frame frame) {
+    return CustomPaint(
+      size: frame.size,
+      foregroundPainter: FramePainter(
+        frame: frame,
+        background: Colors.transparent,
+      ),
+    );
   }
 }
