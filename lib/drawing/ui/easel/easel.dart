@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
+import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
@@ -51,7 +52,7 @@ class _EaselState extends State<Easel> {
                         height: easel.frameSize.height,
                         color: Colors.white,
                       ),
-                      ..._buildLayers(),
+                      ..._buildLayers(easel),
                     ],
                   ),
                 ),
@@ -63,8 +64,7 @@ class _EaselState extends State<Easel> {
     });
   }
 
-  List<Widget> _buildLayers() {
-    final easelFrame = context.read<EaselModel>().frame;
+  List<Widget> _buildLayers(EaselModel easel) {
     final frames = context
         .read<ReelStackModel>()
         .reels
@@ -75,8 +75,13 @@ class _EaselState extends State<Easel> {
     final layers = <Widget>[];
 
     for (final frame in frames) {
-      if (frame == easelFrame) {
-        layers.addAll(_activeLayer(frame, onion.frameBefore, onion.frameAfter));
+      if (frame == easel.frame) {
+        layers.addAll(_activeLayer(
+          frame: frame,
+          before: onion.frameBefore,
+          after: onion.frameAfter,
+          strokes: easel.unrasterizedStrokes,
+        ));
       } else {
         layers.add(_inactiveLayer(frame));
       }
@@ -85,7 +90,12 @@ class _EaselState extends State<Easel> {
     return layers;
   }
 
-  List<Widget> _activeLayer(Frame frame, Frame before, Frame after) {
+  List<Widget> _activeLayer({
+    Frame frame,
+    Frame before,
+    Frame after,
+    List<Stroke> strokes,
+  }) {
     return [
       if (before != null)
         Opacity(
@@ -121,7 +131,7 @@ class _EaselState extends State<Easel> {
         size: frame.size,
         foregroundPainter: FramePainter(
           frame: frame,
-          // strokes: easel.unrasterizedStrokes,
+          strokes: strokes,
           showCursor: true,
           background: Colors.transparent,
         ),

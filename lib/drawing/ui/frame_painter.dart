@@ -14,6 +14,7 @@ class FramePainter extends CustomPainter {
 
   final Frame frame;
   final List<Stroke> strokes;
+  // TODO: Extract cursor painter.
   final bool showCursor;
   final Color background;
   final ColorFilter filter;
