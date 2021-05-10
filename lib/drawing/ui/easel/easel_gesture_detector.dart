@@ -73,6 +73,7 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
       onPointerUp: (e) => changePointerOnScreenBy(-1),
       onPointerCancel: (e) => changePointerOnScreenBy(-1),
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onScaleStart: (ScaleStartDetails details) {
           _lastContactPoint = details.focalPoint;
 

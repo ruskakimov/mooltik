@@ -34,7 +34,6 @@ class _EaselState extends State<Easel> {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Container(color: Colors.transparent),
             Positioned(
               top: easel.canvasTopOffset,
               left: easel.canvasLeftOffset,
