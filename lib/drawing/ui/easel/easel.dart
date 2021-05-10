@@ -3,6 +3,7 @@ import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
+import 'package:mooltik/drawing/ui/easel/cursor_painter.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 import 'package:provider/provider.dart';
@@ -52,6 +53,8 @@ class _EaselState extends State<Easel> {
                         color: Colors.white,
                       ),
                       ..._buildLayers(easel),
+                      if (easel.unrasterizedStrokes.isNotEmpty)
+                        _buildCursor(easel),
                     ],
                   ),
                 ),
@@ -61,6 +64,16 @@ class _EaselState extends State<Easel> {
         ),
       );
     });
+  }
+
+  CustomPaint _buildCursor(EaselModel easel) {
+    return CustomPaint(
+      size: easel.frameSize,
+      painter: CursorPainter(
+        frameSize: easel.frameSize,
+        lastStroke: easel.unrasterizedStrokes.last,
+      ),
+    );
   }
 
   List<Widget> _buildLayers(EaselModel easel) {
@@ -131,7 +144,6 @@ class _EaselState extends State<Easel> {
         foregroundPainter: FramePainter(
           frame: frame,
           strokes: strokes,
-          showCursor: true,
           background: Colors.transparent,
         ),
       ),
