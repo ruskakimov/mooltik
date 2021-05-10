@@ -29,7 +29,7 @@ class Preview extends StatelessWidget {
         );
       },
       child: FittedBox(
-        fit: BoxFit.fitWidth,
+        fit: BoxFit.contain,
         child: _buildImage(context),
       ),
     );
