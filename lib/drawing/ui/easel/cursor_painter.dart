@@ -18,7 +18,7 @@ class CursorPainter extends CustomPainter {
       canvas,
       lastStroke.lastPoint,
       lastStroke.width / 2,
-      1 / scale,
+      scale,
     );
   }
 
@@ -32,14 +32,14 @@ class CursorPainter extends CustomPainter {
     Canvas canvas,
     Offset center,
     double radius,
-    double lineWidth,
+    double scale,
   ) {
     canvas.drawCircle(
       center,
       radius,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = lineWidth + 2
+        ..strokeWidth = 3 / scale
         ..color = Colors.white,
     );
     canvas.drawCircle(
@@ -47,7 +47,7 @@ class CursorPainter extends CustomPainter {
       radius,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = lineWidth
+        ..strokeWidth = 1 / scale
         ..color = Colors.black,
     );
   }
