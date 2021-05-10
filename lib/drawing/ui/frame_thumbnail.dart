@@ -17,7 +17,10 @@ class FrameThumbnail extends StatelessWidget {
       fit: BoxFit.cover,
       child: CustomPaint(
         size: frame.size,
-        painter: FramePainter(frame: frame),
+        painter: FramePainter(
+          frame: frame,
+          background: Colors.transparent,
+        ),
       ),
     );
   }

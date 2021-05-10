@@ -117,10 +117,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
                   scrollTo(reel.frameSeq.length - 1);
                 },
                 child: _FrameReelItem(
-                  child: ColoredBox(
-                    color: Theme.of(context).colorScheme.secondary,
-                    child: Icon(FontAwesomeIcons.plus, size: 16),
-                  ),
+                  child: Icon(FontAwesomeIcons.plus, size: 16),
                 ),
               );
             }
@@ -166,19 +163,26 @@ class _FrameReelItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final borderRadius = BorderRadius.circular(8);
+
     return Padding(
       padding: _framePadding,
       child: AspectRatio(
         aspectRatio: 16 / 9,
-        child: DecoratedBox(
+        child: Container(
+          foregroundDecoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey.withOpacity(0.8),
+              width: 1,
+            ),
+            borderRadius: borderRadius,
+          ),
           decoration: BoxDecoration(
-            boxShadow: [BoxShadow(blurRadius: 8, color: Colors.black12)],
-            borderRadius: BorderRadius.circular(8),
+            color: Colors.grey.withOpacity(0.5),
+            borderRadius: borderRadius,
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: child,
-          ),
+          clipBehavior: Clip.hardEdge,
+          child: child,
         ),
       ),
     );
