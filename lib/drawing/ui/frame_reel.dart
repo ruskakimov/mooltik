@@ -21,23 +21,10 @@ class FrameReel extends StatelessWidget {
       final frameWidth = frameHeight / 9 * 16;
       final itemWidth = frameWidth + _framePadding.horizontal;
 
-      return Stack(
-        clipBehavior: Clip.none,
-        children: [
-          _FrameReelItemList(
-            key: Key('${context.watch<FrameReelModel>().hashCode}'),
-            width: constraints.maxWidth,
-            itemWidth: itemWidth,
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: frameWidth,
-              height: 2,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-        ],
+      return _FrameReelItemList(
+        key: Key('${context.watch<FrameReelModel>().hashCode}'),
+        width: constraints.maxWidth,
+        itemWidth: itemWidth,
       );
     });
   }
@@ -117,7 +104,10 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
                   scrollTo(reel.frameSeq.length - 1);
                 },
                 child: _FrameReelItem(
-                  child: Icon(FontAwesomeIcons.plus, size: 16),
+                  child: ColoredBox(
+                    color: Theme.of(context).colorScheme.secondary,
+                    child: Icon(FontAwesomeIcons.plus, size: 16),
+                  ),
                 ),
               );
             }
@@ -125,6 +115,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
             return GestureDetector(
               onTap: () => scrollTo(index),
               child: _FrameReelItem(
+                selected: index == reel.currentIndex,
                 child: FrameThumbnail(
                   frame: reel.frameSeq[index],
                 ),
@@ -157,9 +148,11 @@ class _FrameReelItem extends StatelessWidget {
   const _FrameReelItem({
     Key key,
     @required this.child,
+    this.selected = false,
   }) : super(key: key);
 
   final Widget child;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
@@ -172,12 +165,15 @@ class _FrameReelItem extends StatelessWidget {
         child: Container(
           foregroundDecoration: BoxDecoration(
             border: Border.all(
-              color: Colors.grey.withOpacity(0.8),
-              width: 1,
+              color: selected
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.grey.withOpacity(0.8),
+              width: 2,
             ),
             borderRadius: borderRadius,
           ),
           decoration: BoxDecoration(
+            // TODO: Try a checkerboard background.
             color: Colors.grey.withOpacity(0.5),
             borderRadius: borderRadius,
           ),
