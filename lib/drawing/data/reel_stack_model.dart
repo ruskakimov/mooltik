@@ -52,11 +52,19 @@ class ReelStackModel extends ChangeNotifier {
 
   void deleteLayer(int layerIndex) {
     if (!canDeleteLayer) return;
-    if (layerIndex >= 0 && layerIndex < reels.length) {
-      reels.removeAt(layerIndex);
-      _scene.layers.removeAt(layerIndex);
-      notifyListeners();
+    if (layerIndex < 0 || layerIndex >= reels.length) return;
+
+    final activeReelBefore = activeReel;
+
+    reels.removeAt(layerIndex);
+    _scene.layers.removeAt(layerIndex);
+
+    if (layerIndex == _activeReelIndex) {
+      _activeReelIndex = _activeReelIndex.clamp(0, reels.length - 1);
+    } else {
+      _activeReelIndex = reels.indexOf(activeReelBefore);
     }
+    notifyListeners();
   }
 }
 
