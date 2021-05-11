@@ -227,11 +227,7 @@ class EaselModel extends ChangeNotifier {
 
   Future<void> _generateLastSnapshot() async {
     final snapshot = await generateImage(
-      FramePainter(
-        frame: _frame,
-        strokes: unrasterizedStrokes,
-        background: Colors.transparent,
-      ),
+      FramePainter(frame: _frame, strokes: unrasterizedStrokes),
       _frame.width.toInt(),
       _frame.height.toInt(),
     );

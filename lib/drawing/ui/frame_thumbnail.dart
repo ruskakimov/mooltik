@@ -15,10 +15,7 @@ class FrameThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: CheckerboardPainter(),
-      foregroundPainter: FramePainter(
-        frame: frame,
-        background: Colors.transparent,
-      ),
+      foregroundPainter: FramePainter(frame: frame),
     );
   }
 }

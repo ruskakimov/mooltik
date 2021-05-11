@@ -116,11 +116,7 @@ class _EaselState extends State<Easel> {
             size: before.size,
             foregroundPainter: FramePainter(
               frame: before,
-              background: Colors.transparent,
-              filter: ColorFilter.mode(
-                Colors.red,
-                BlendMode.srcATop,
-              ),
+              filter: ColorFilter.mode(Colors.red, BlendMode.srcATop),
             ),
           ),
         ),
@@ -131,21 +127,13 @@ class _EaselState extends State<Easel> {
             size: after.size,
             foregroundPainter: FramePainter(
               frame: after,
-              background: Colors.transparent,
-              filter: ColorFilter.mode(
-                Colors.green,
-                BlendMode.srcATop,
-              ),
+              filter: ColorFilter.mode(Colors.green, BlendMode.srcATop),
             ),
           ),
         ),
       CustomPaint(
         size: frame.size,
-        foregroundPainter: FramePainter(
-          frame: frame,
-          strokes: strokes,
-          background: Colors.transparent,
-        ),
+        foregroundPainter: FramePainter(frame: frame, strokes: strokes),
       ),
     ];
   }
@@ -153,10 +141,7 @@ class _EaselState extends State<Easel> {
   CustomPaint _inactiveLayer(Frame frame) {
     return CustomPaint(
       size: frame.size,
-      foregroundPainter: FramePainter(
-        frame: frame,
-        background: Colors.transparent,
-      ),
+      foregroundPainter: FramePainter(frame: frame),
     );
   }
 }

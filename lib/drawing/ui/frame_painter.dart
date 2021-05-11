@@ -7,13 +7,11 @@ class FramePainter extends CustomPainter {
   FramePainter({
     @required this.frame,
     this.strokes,
-    this.background = Colors.white,
     this.filter,
   });
 
   final Frame frame;
   final List<Stroke> strokes;
-  final Color background;
   final ColorFilter filter;
 
   bool get hasStrokes => strokes != null && strokes.isNotEmpty;
@@ -22,8 +20,6 @@ class FramePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     // Clip paint outside canvas.
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
-
-    canvas.drawColor(background, BlendMode.srcOver);
 
     // Scale image to fit the given size.
     canvas.scale(size.width / frame.width, size.height / frame.height);
