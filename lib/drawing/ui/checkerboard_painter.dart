@@ -9,6 +9,8 @@ class CheckerboardPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
+
     final grey = Paint()..color = Colors.grey[300];
     final white = Paint()..color = Colors.white;
 

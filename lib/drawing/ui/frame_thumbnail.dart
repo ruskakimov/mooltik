@@ -15,7 +15,7 @@ class FrameThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: AspectRatio(
-        aspectRatio: 16 / 9,
+        aspectRatio: frame.width / frame.height,
         child: CustomPaint(
           painter: CheckerboardPainter(),
           foregroundPainter: FramePainter(frame: frame),
