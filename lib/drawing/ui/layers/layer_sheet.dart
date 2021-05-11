@@ -33,6 +33,7 @@ class LayerSheet extends StatelessWidget {
                 Slidable(
                   key: Key(reel.currentFrame.file.path),
                   actionPane: SlidableDrawerActionPane(),
+                  closeOnScroll: true,
                   secondaryActions: [
                     SlideAction(
                       color: Colors.red,
