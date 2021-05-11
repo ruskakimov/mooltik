@@ -15,47 +15,31 @@ class LayerSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final reelStack = context.watch<ReelStackModel>();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildTitle(),
-            Spacer(),
-            AddLayerButton(),
-          ],
-        ),
-        Expanded(
-          child: ListView(
-            children: [
-              for (final reel in reelStack.reels)
-                Slidable(
-                  key: Key(reel.currentFrame.file.path),
-                  actionPane: SlidableDrawerActionPane(),
-                  closeOnScroll: true,
-                  secondaryActions: [
-                    SlideAction(
-                      color: Colors.red,
-                      closeOnTap: true,
-                      child: AppIconButton(
-                        icon: FontAwesomeIcons.trashAlt,
-                        onTap: reelStack.canDeleteLayer
-                            ? () => reelStack
-                                .deleteLayer(reelStack.reels.indexOf(reel))
-                            : null,
-                      ),
-                    ),
-                  ],
-                  child: LayerRow(
-                    selected: reel == reelStack.activeReel,
-                    reel: reel,
-                    onTap: () => reelStack.changeActiveReel(reel),
-                  ),
-                ),
-            ],
+    return ClipRect(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(),
+          Expanded(
+            child: ListView(
+              children: [
+                for (final reel in reelStack.reels)
+                  _buildInteractiveLayerRow(reel, reelStack),
+              ],
+            ),
           ),
-        ),
+        ],
+      ),
+    );
+  }
+
+  Row _buildHeader() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _buildTitle(),
+        Spacer(),
+        AddLayerButton(),
       ],
     );
   }
@@ -66,6 +50,34 @@ class LayerSheet extends StatelessWidget {
       child: Text(
         'Layers',
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Slidable _buildInteractiveLayerRow(
+    FrameReelModel reel,
+    ReelStackModel reelStack,
+  ) {
+    return Slidable(
+      key: Key(reel.currentFrame.file.path),
+      actionPane: SlidableDrawerActionPane(),
+      closeOnScroll: true,
+      secondaryActions: [
+        SlideAction(
+          color: Colors.red,
+          closeOnTap: true,
+          child: AppIconButton(
+            icon: FontAwesomeIcons.trashAlt,
+            onTap: reelStack.canDeleteLayer
+                ? () => reelStack.deleteLayer(reelStack.reels.indexOf(reel))
+                : null,
+          ),
+        ),
+      ],
+      child: LayerRow(
+        selected: reel == reelStack.activeReel,
+        reel: reel,
+        onTap: () => reelStack.changeActiveReel(reel),
       ),
     );
   }
