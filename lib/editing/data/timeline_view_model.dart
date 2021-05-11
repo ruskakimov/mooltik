@@ -367,12 +367,17 @@ class TimelineViewModel extends ChangeNotifier {
     return frame.copyWith(file: newFrame.file)..saveSnapshot();
   }
 
-  // Shouldn't this be part of Scene?
   Future<Scene> _duplicateScene(Scene scene) async {
-    // final duplicateFrames = await Future.wait(
-    //   scene.layer.frameSeq.iterable.map((frame) => _duplicateFrame(frame)),
-    // );
-    // return scene.copyWith(frames: duplicateFrames);
+    final duplicateLayers =
+        await Future.wait(scene.layers.map((layer) => _duplicateLayer(layer)));
+    return scene.copyWith(layers: duplicateLayers);
+  }
+
+  Future<SceneLayer> _duplicateLayer(SceneLayer sceneLayer) async {
+    final duplicateFrames = await Future.wait(
+      sceneLayer.frameSeq.iterable.map((frame) => _duplicateFrame(frame)),
+    );
+    return SceneLayer(Sequence(duplicateFrames), sceneLayer.playMode);
   }
 
   Duration get selectedSliverStartTime => isEditingScene
