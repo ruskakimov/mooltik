@@ -213,6 +213,8 @@ class EaselModel extends ChangeNotifier {
     // TODO: Queue snapshots.
     if (unrasterizedStrokes.last.boundingRect.overlaps(_frameArea)) {
       _generateLastSnapshot();
+    } else {
+      unrasterizedStrokes.removeLast();
     }
 
     notifyListeners();
