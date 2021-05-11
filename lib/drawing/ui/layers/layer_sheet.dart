@@ -85,23 +85,25 @@ class LayerRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
+    return SizedBox(
+      height: 80,
+      child: Material(
         color: selected
             ? Theme.of(context).colorScheme.primary
             : Colors.transparent,
-        height: 80,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FrameThumbnail(frame: reel.currentFrame),
-            ),
-            SizedBox(width: 4),
-            _buildLabel(context),
-          ],
+        child: InkWell(
+          onTap: onTap,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FrameThumbnail(frame: reel.currentFrame),
+              ),
+              SizedBox(width: 4),
+              _buildLabel(context),
+            ],
+          ),
         ),
       ),
     );
