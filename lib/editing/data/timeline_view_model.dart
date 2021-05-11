@@ -187,10 +187,12 @@ class TimelineViewModel extends ChangeNotifier {
       addRow(sceneRow);
     }
 
-    addRow(soundSliverRow(
-      rowTop: rowTop(rowIndex),
-      rowBottom: rowBottom(rowIndex),
-    ).toList());
+    if (_soundClips.isNotEmpty) {
+      addRow(soundSliverRow(
+        rowTop: rowTop(rowIndex),
+        rowBottom: rowBottom(rowIndex),
+      ).toList());
+    }
 
     _renderedSliverRows = rows;
     return rows;
