@@ -30,8 +30,52 @@ class Scene extends TimeSpan {
   }
 
   /// Frames for export video.
-  /// TODO: Implement
-  Iterable<CompositeFrame> get exportFrames => throw UnimplementedError();
+  Iterable<CompositeFrame> get exportFrames sync* {
+    final rows =
+        layers.map((layer) => layer.getExportFrames(duration)).toList();
+
+    final rowIterators =
+        rows.map((frames) => frames.iterator..moveNext()).toList();
+
+    final iteratorStartTimes = List.filled(rows.length, Duration.zero);
+
+    var elapsed = Duration.zero;
+
+    while (elapsed < duration) {
+      final compositeImage = CompositeImage(
+        rowIterators.map((it) => it.current.snapshot).toList(),
+      );
+
+      var smallestJump = duration;
+      var progressingIndices = <int>[];
+
+      for (var i = 0; i < rowIterators.length; i++) {
+        final frame = rowIterators[i].current;
+
+        final frameStartTime = iteratorStartTimes[i];
+        final frameEndTime = frameStartTime + frame.duration;
+
+        final jump = frameEndTime - elapsed;
+
+        if (jump < smallestJump) {
+          progressingIndices = [i];
+          smallestJump = jump;
+        } else if (jump == smallestJump) {
+          progressingIndices.add(i);
+        }
+      }
+
+      yield CompositeFrame(compositeImage, smallestJump);
+
+      progressingIndices.forEach((i) {
+        final it = rowIterators[i];
+        iteratorStartTimes[i] += it.current.duration;
+        it.moveNext();
+      });
+
+      elapsed += smallestJump;
+    }
+  }
 
   factory Scene.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       Scene(
