@@ -169,7 +169,7 @@ class _FrameReelItem extends StatelessWidget {
           borderRadius: borderRadius,
         ),
         decoration: BoxDecoration(borderRadius: borderRadius),
-        clipBehavior: Clip.hardEdge,
+        clipBehavior: Clip.antiAlias,
         child: child,
       ),
     );
