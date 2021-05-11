@@ -116,9 +116,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
               onTap: () => scrollTo(index),
               child: _FrameReelItem(
                 selected: index == reel.currentIndex,
-                child: FrameThumbnail(
-                  frame: reel.frameSeq[index],
-                ),
+                child: FrameThumbnail(frame: reel.frameSeq[index]),
               ),
             );
           },
@@ -172,11 +170,7 @@ class _FrameReelItem extends StatelessWidget {
             ),
             borderRadius: borderRadius,
           ),
-          decoration: BoxDecoration(
-            // TODO: Try a checkerboard background.
-            color: Colors.grey.withOpacity(0.5),
-            borderRadius: borderRadius,
-          ),
+          decoration: BoxDecoration(borderRadius: borderRadius),
           clipBehavior: Clip.hardEdge,
           child: child,
         ),

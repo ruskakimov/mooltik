@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
+import 'package:mooltik/drawing/ui/checkerboard_painter.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 
 class FrameThumbnail extends StatelessWidget {
@@ -12,15 +13,11 @@ class FrameThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      alignment: Alignment.center,
-      fit: BoxFit.cover,
-      child: CustomPaint(
-        size: frame.size,
-        painter: FramePainter(
-          frame: frame,
-          background: Colors.transparent,
-        ),
+    return CustomPaint(
+      painter: CheckerboardPainter(),
+      foregroundPainter: FramePainter(
+        frame: frame,
+        background: Colors.transparent,
       ),
     );
   }
