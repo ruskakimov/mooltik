@@ -47,6 +47,17 @@ class ReelStackModel extends ChangeNotifier {
     reels.insert(_activeReelIndex, FrameReelModel(layer.frameSeq));
     notifyListeners();
   }
+
+  bool get canDeleteLayer => reels.length > 1;
+
+  void deleteLayer(int layerIndex) {
+    if (!canDeleteLayer) return;
+    if (layerIndex >= 0 && layerIndex < reels.length) {
+      reels.removeAt(layerIndex);
+      _scene.layers.removeAt(layerIndex);
+      notifyListeners();
+    }
+  }
 }
 
 const _showFrameReelKey = 'frame_reel_visible';

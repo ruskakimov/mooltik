@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
@@ -29,10 +30,27 @@ class LayerSheet extends StatelessWidget {
           child: ListView(
             children: [
               for (final reel in reelStack.reels)
-                LayerRow(
-                  selected: reel == reelStack.activeReel,
-                  reel: reel,
-                  onTap: () => reelStack.changeActiveReel(reel),
+                Slidable(
+                  key: Key(reel.currentFrame.file.path),
+                  actionPane: SlidableDrawerActionPane(),
+                  secondaryActions: [
+                    SlideAction(
+                      color: Colors.red,
+                      closeOnTap: true,
+                      child: AppIconButton(
+                        icon: FontAwesomeIcons.trashAlt,
+                        onTap: reelStack.canDeleteLayer
+                            ? () => reelStack
+                                .deleteLayer(reelStack.reels.indexOf(reel))
+                            : null,
+                      ),
+                    ),
+                  ],
+                  child: LayerRow(
+                    selected: reel == reelStack.activeReel,
+                    reel: reel,
+                    onTap: () => reelStack.changeActiveReel(reel),
+                  ),
                 ),
             ],
           ),
