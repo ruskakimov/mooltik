@@ -21,6 +21,7 @@ class _EaselState extends State<Easel> {
   @override
   Widget build(BuildContext context) {
     final easel = context.watch<EaselModel>();
+    final onion = context.watch<OnionModel>();
 
     return LayoutBuilder(builder: (context, constraints) {
       easel.updateSize(constraints.biggest);
@@ -52,7 +53,7 @@ class _EaselState extends State<Easel> {
                         height: easel.frameSize.height,
                         color: Colors.white,
                       ),
-                      ..._buildLayers(easel),
+                      ..._buildLayers(easel, onion),
                       if (easel.unrasterizedStrokes.isNotEmpty)
                         _buildCursor(easel),
                     ],
@@ -76,14 +77,13 @@ class _EaselState extends State<Easel> {
     );
   }
 
-  List<Widget> _buildLayers(EaselModel easel) {
+  List<Widget> _buildLayers(EaselModel easel, OnionModel onion) {
     final frames = context
         .read<ReelStackModel>()
         .reels
         .map((reel) => reel.currentFrame)
         .toList()
         .reversed;
-    final onion = context.read<OnionModel>();
     final layers = <Widget>[];
 
     for (final frame in frames) {
