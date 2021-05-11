@@ -66,6 +66,21 @@ class ReelStackModel extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void onLayerReorder(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) newIndex -= 1;
+    final activeReelBefore = activeReel;
+
+    final reel = reels.removeAt(oldIndex);
+    reels.insert(newIndex, reel);
+
+    final layer = _scene.layers.removeAt(oldIndex);
+    _scene.layers.insert(newIndex, layer);
+
+    _activeReelIndex = reels.indexOf(activeReelBefore);
+
+    notifyListeners();
+  }
 }
 
 const _showFrameReelKey = 'frame_reel_visible';

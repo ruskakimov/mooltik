@@ -21,7 +21,8 @@ class LayerSheet extends StatelessWidget {
         children: [
           _buildHeader(),
           Expanded(
-            child: ListView(
+            child: ReorderableListView(
+              onReorder: reelStack.onLayerReorder,
               children: [
                 for (final reel in reelStack.reels)
                   _buildInteractiveLayerRow(reel, reelStack),
