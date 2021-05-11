@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
+import 'package:mooltik/drawing/ui/frame_thumbnail.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
 
@@ -91,7 +92,14 @@ class LayerRow extends StatelessWidget {
             ? Theme.of(context).colorScheme.primary
             : Colors.transparent,
         height: 80,
-        child: Text('${reel.frameSeq.length}'),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FrameThumbnail(frame: reel.currentFrame),
+            ),
+          ],
+        ),
       ),
     );
   }

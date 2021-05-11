@@ -158,22 +158,19 @@ class _FrameReelItem extends StatelessWidget {
 
     return Padding(
       padding: _framePadding,
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: Container(
-          foregroundDecoration: BoxDecoration(
-            border: Border.all(
-              color: selected
-                  ? Theme.of(context).colorScheme.primary
-                  : Colors.grey.withOpacity(0.8),
-              width: 2,
-            ),
-            borderRadius: borderRadius,
+      child: Container(
+        foregroundDecoration: BoxDecoration(
+          border: Border.all(
+            color: selected
+                ? Theme.of(context).colorScheme.primary
+                : Colors.grey.withOpacity(0.8),
+            width: 2,
           ),
-          decoration: BoxDecoration(borderRadius: borderRadius),
-          clipBehavior: Clip.hardEdge,
-          child: child,
+          borderRadius: borderRadius,
         ),
+        decoration: BoxDecoration(borderRadius: borderRadius),
+        clipBehavior: Clip.hardEdge,
+        child: child,
       ),
     );
   }

@@ -13,9 +13,12 @@ class FrameThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: CheckerboardPainter(),
-      foregroundPainter: FramePainter(frame: frame),
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: CustomPaint(
+        painter: CheckerboardPainter(),
+        foregroundPainter: FramePainter(frame: frame),
+      ),
     );
   }
 }
