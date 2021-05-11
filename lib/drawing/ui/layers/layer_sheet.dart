@@ -93,14 +93,31 @@ class LayerRow extends StatelessWidget {
             : Colors.transparent,
         height: 80,
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: FrameThumbnail(frame: reel.currentFrame),
             ),
+            SizedBox(width: 4),
+            _buildLabel(context),
           ],
         ),
       ),
+    );
+  }
+
+  Text _buildLabel(BuildContext context) {
+    final count = reel.frameSeq.length;
+    final appendix = count > 1 ? 'frames' : 'frame';
+    return Text(
+      '$count $appendix',
+      style: selected
+          ? TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.bold,
+            )
+          : null,
     );
   }
 }
