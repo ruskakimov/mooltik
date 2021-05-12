@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mooltik/common/data/project/scene.dart';
+import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
@@ -26,29 +27,37 @@ void main() {
         scenes: [
           Scene(
             duration: Duration(seconds: 12),
-            frameSeq: Sequence([
-              Frame(
-                file: File('1.png'),
-                duration: Duration(seconds: 3),
-              ),
-              Frame(
-                file: File('2.png'),
-                duration: Duration(seconds: 2),
-              ),
-            ]),
+            layers: [
+              SceneLayer(
+                Sequence([
+                  Frame(
+                    file: File('1.png'),
+                    duration: Duration(seconds: 3),
+                  ),
+                  Frame(
+                    file: File('2.png'),
+                    duration: Duration(seconds: 2),
+                  ),
+                ]),
+              )
+            ],
           ),
           Scene(
             duration: Duration(seconds: 4),
-            frameSeq: Sequence([
-              Frame(
-                file: File('3.png'),
-                duration: Duration(seconds: 1),
+            layers: [
+              SceneLayer(
+                Sequence([
+                  Frame(
+                    file: File('3.png'),
+                    duration: Duration(seconds: 1),
+                  ),
+                  Frame(
+                    file: File('4.png'),
+                    duration: Duration(seconds: 10),
+                  ),
+                ]),
               ),
-              Frame(
-                file: File('4.png'),
-                duration: Duration(seconds: 10),
-              ),
-            ]),
+            ],
           ),
         ],
         sounds: [
