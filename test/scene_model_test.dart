@@ -86,66 +86,78 @@ void main() {
       expect(scene.imageFilesAt(Duration(seconds: 16)).first.path, '2.png');
     });
 
-    // test('returns correct export frames for extend last mode', () {
-    //   final scene = Scene(
-    //     frameSeq: Sequence<Frame>([
-    //       Frame(file: File('1.png'), duration: Duration(seconds: 1)),
-    //       Frame(file: File('2.png'), duration: Duration(seconds: 2)),
-    //     ]),
-    //     duration: Duration(seconds: 10),
-    //     playMode: PlayMode.extendLast,
-    //   );
-    //   expect(scene.exportFrames.toList(), [
-    //     Frame(file: File('1.png'), duration: Duration(seconds: 1)),
-    //     Frame(file: File('2.png'), duration: Duration(seconds: 2)),
-    //     Frame(file: File('2.png'), duration: Duration(seconds: 7)),
-    //   ]);
-    // });
+    test('returns correct export frames for extend last mode', () {
+      final scene = Scene(
+        layers: [
+          SceneLayer(
+            Sequence<Frame>([
+              Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+              Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+            ]),
+            PlayMode.extendLast,
+          ),
+        ],
+        duration: Duration(seconds: 10),
+      );
+      expect(scene.exportFrames.toList(), [
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 7)),
+      ]);
+    });
 
-    // test('returns correct export frames for loop mode', () {
-    //   final scene = Scene(
-    //     frameSeq: Sequence<Frame>([
-    //       Frame(file: File('1.png'), duration: Duration(seconds: 1)),
-    //       Frame(file: File('2.png'), duration: Duration(seconds: 2)),
-    //     ]),
-    //     duration: Duration(seconds: 10),
-    //     playMode: PlayMode.loop,
-    //   );
-    //   expect(scene.exportFrames.toList(), [
-    //     Frame(file: File('1.png'), duration: Duration(seconds: 1)),
-    //     Frame(file: File('2.png'), duration: Duration(seconds: 2)),
-    //     Frame(file: File('1.png'), duration: Duration(seconds: 1)),
-    //     Frame(file: File('2.png'), duration: Duration(seconds: 2)),
-    //     Frame(file: File('1.png'), duration: Duration(seconds: 1)),
-    //     Frame(file: File('2.png'), duration: Duration(seconds: 2)),
-    //     Frame(file: File('1.png'), duration: Duration(seconds: 1)),
-    //   ]);
-    // });
+    test('returns correct export frames for loop mode', () {
+      final scene = Scene(
+        layers: [
+          SceneLayer(
+            Sequence<Frame>([
+              Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+              Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+            ]),
+            PlayMode.loop,
+          ),
+        ],
+        duration: Duration(seconds: 10),
+      );
+      expect(scene.exportFrames.toList(), [
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+      ]);
+    });
 
-    // test('returns correct export frames for ping-pong mode', () {
-    //   final scene = Scene(
-    //     frameSeq: Sequence<Frame>([
-    //       Frame(file: File('1.png'), duration: Duration(seconds: 1)),
-    //       Frame(file: File('2.png'), duration: Duration(seconds: 2)),
-    //       Frame(file: File('3.png'), duration: Duration(seconds: 3)),
-    //     ]),
-    //     duration: Duration(seconds: 24),
-    //     playMode: PlayMode.pingPong,
-    //   );
-    //   expect(scene.exportFrames.toList(), [
-    //     Frame(file: File('1.png'), duration: Duration(seconds: 1)),
-    //     Frame(file: File('2.png'), duration: Duration(seconds: 2)),
-    //     Frame(file: File('3.png'), duration: Duration(seconds: 3)),
-    //     Frame(file: File('3.png'), duration: Duration(seconds: 3)),
-    //     Frame(file: File('2.png'), duration: Duration(seconds: 2)),
-    //     Frame(file: File('1.png'), duration: Duration(seconds: 1)),
-    //     Frame(file: File('1.png'), duration: Duration(seconds: 1)),
-    //     Frame(file: File('2.png'), duration: Duration(seconds: 2)),
-    //     Frame(file: File('3.png'), duration: Duration(seconds: 3)),
-    //     Frame(file: File('3.png'), duration: Duration(seconds: 3)),
-    //     Frame(file: File('2.png'), duration: Duration(seconds: 2)),
-    //     Frame(file: File('1.png'), duration: Duration(seconds: 1)),
-    //   ]);
-    // });
+    test('returns correct export frames for ping-pong mode', () {
+      final scene = Scene(
+        layers: [
+          SceneLayer(
+            Sequence<Frame>([
+              Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+              Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+              Frame(file: File('3.png'), duration: Duration(seconds: 3)),
+            ]),
+            PlayMode.pingPong,
+          ),
+        ],
+        duration: Duration(seconds: 24),
+      );
+      expect(scene.exportFrames.toList(), [
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('3.png'), duration: Duration(seconds: 3)),
+        Frame(file: File('3.png'), duration: Duration(seconds: 3)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('3.png'), duration: Duration(seconds: 3)),
+        Frame(file: File('3.png'), duration: Duration(seconds: 3)),
+        Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+        Frame(file: File('1.png'), duration: Duration(seconds: 1)),
+      ]);
+    });
   });
 }
