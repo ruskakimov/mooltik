@@ -1,6 +1,21 @@
 import 'package:mooltik/common/data/duration_methods.dart';
 
 class SaveDataTranscoder {
+  /// Transcodes save data in old formats to the latest format.
+  Map<String, dynamic> transcodeToLatest(Map<String, dynamic> json) {
+    var data = json;
+
+    if (is_v0_8(data)) {
+      data = convert_v0_8_to_v0_9(data);
+    }
+
+    if (is_v0_9(data)) {
+      data = convert_v0_9_to_v1_0(data);
+    }
+
+    return data;
+  }
+
   bool is_v0_8(Map<String, dynamic> json) => json.containsKey('frames');
 
   Map<String, dynamic> convert_v0_8_to_v0_9(Map<String, dynamic> json) {

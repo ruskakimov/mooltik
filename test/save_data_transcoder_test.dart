@@ -17,6 +17,18 @@ String testData(String filePath) {
 
 void main() {
   group('SaveDataTranscoder should', () {
+    test('transcode A to the latest', () {
+      final transcoder = SaveDataTranscoder();
+      final data_v0_8 = testData('project_data/a_v0_8.json');
+      final data_v1_0 = testData('project_data/a_v1_0.json');
+      final transcodedJson =
+          transcoder.transcodeToLatest(jsonDecode(data_v0_8));
+      expect(
+        jsonEncode(transcodedJson),
+        data_v1_0,
+      );
+    });
+
     test('transcode v0.8 to v0.9', () {
       final transcoder = SaveDataTranscoder();
       final data_v0_8 = testData('project_data/a_v0_8.json');
