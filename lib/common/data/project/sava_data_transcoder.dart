@@ -30,4 +30,10 @@ class SaveDataTranscoder {
       'sounds': json['sounds'],
     };
   }
+
+  bool is_v0_9(Map<String, dynamic> json) => null;
+
+  Map<String, dynamic> convert_v0_9_to_v1_0(Map<String, dynamic> json) {
+    if (!is_v0_9(json)) throw Exception('Data is not in v0.9 format.');
+  }
 }
