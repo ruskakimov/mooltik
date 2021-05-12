@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
@@ -20,6 +22,13 @@ class Scene extends TimeSpan {
     return CompositeImage(
       layers.map((layer) => layer.frameAt(playhead).snapshot).toList(),
     );
+  }
+
+  /// Files instead of a composite image for testing purposes.
+  @visibleForTesting
+  List<File> imageFilesAt(Duration playhead) {
+    playhead = playhead.clamp(Duration.zero, duration);
+    return layers.map((layer) => layer.frameAt(playhead).file).toList();
   }
 
   /// All unique frames in this scene.
