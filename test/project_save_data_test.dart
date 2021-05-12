@@ -25,7 +25,12 @@ void main() {
     });
 
     test('decode and encode back B', () {
-      // TODO: Get a real sample
+      final rawSaveData = testFile('project_data/b_v1_0.json')
+          .readAsStringSync()
+          .replaceAll(RegExp(r'\s'), '');
+
+      final data = ProjectSaveData.fromJson(jsonDecode(rawSaveData), '', '');
+      expect(jsonEncode(data), rawSaveData);
     });
   });
 }
