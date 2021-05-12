@@ -20,7 +20,7 @@ void main() {
     test('transcode v0.8 to v0.9', () {
       final transcoder = SaveDataTranscoder();
       final data_v0_8 = testData('project_data/a_v0_8.json');
-      final data_v0_9 = testData('project_data/a_v0_8.json');
+      final data_v0_9 = testData('project_data/a_v0_9.json');
       final transcodedJson =
           transcoder.convert_v0_8_to_v0_9(jsonDecode(data_v0_8));
       expect(

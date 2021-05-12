@@ -16,20 +16,20 @@ class ProjectSaveData {
     Map<String, dynamic> json,
     String frameDirPath,
     String soundDirPath,
-  )   : width = json[_widthKey],
-        height = json[_heightKey],
+  )   : width = json[widthKey],
+        height = json[heightKey],
         scenes = _parseScenes(json, frameDirPath),
-        sounds = json[_soundsKey] != null
-            ? (json[_soundsKey] as List<dynamic>)
+        sounds = json[soundsKey] != null
+            ? (json[soundsKey] as List<dynamic>)
                 .map((d) => SoundClip.fromJson(d, soundDirPath))
                 .toList()
             : [];
 
   Map<String, dynamic> toJson() => {
-        _widthKey: width,
-        _heightKey: height,
-        _scenesKey: scenes.map((d) => d.toJson()).toList(),
-        _soundsKey: sounds?.map((d) => d.toJson())?.toList() ?? [],
+        widthKey: width,
+        heightKey: height,
+        scenesKey: scenes.map((d) => d.toJson()).toList(),
+        soundsKey: sounds?.map((d) => d.toJson())?.toList() ?? [],
       };
 
   final double width;
@@ -42,16 +42,16 @@ class ProjectSaveData {
     String frameDirPath,
   ) {
     // Latest format.
-    if (json.containsKey(_scenesKey)) {
-      return (json[_scenesKey] as List<dynamic>)
+    if (json.containsKey(scenesKey)) {
+      return (json[scenesKey] as List<dynamic>)
           .map((d) => Scene.fromJson(d, frameDirPath))
           .toList();
     }
 
     // Convert v0.8 format to the latest.
-    if (json.containsKey(_legacyFramesKey)) {
+    if (json.containsKey(legacyFramesKey)) {
       final frameSeq = Sequence<Frame>(
-        (json[_legacyFramesKey] as List<dynamic>)
+        (json[legacyFramesKey] as List<dynamic>)
             .map((d) => Frame.fromLegacyJsonWithId(d, frameDirPath))
             .toList(),
       );
@@ -65,11 +65,11 @@ class ProjectSaveData {
 
     throw Exception('Unable to parse project scenes.');
   }
+
+  static const String widthKey = 'width';
+  static const String heightKey = 'height';
+  static const String scenesKey = 'scenes';
+  static const String soundsKey = 'sounds';
+
+  static const String legacyFramesKey = 'frames';
 }
-
-const String _widthKey = 'width';
-const String _heightKey = 'height';
-const String _scenesKey = 'scenes';
-const String _soundsKey = 'sounds';
-
-const String _legacyFramesKey = 'frames';
