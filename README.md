@@ -8,6 +8,8 @@
 #### Extract app data
 
 ```
-adb backup -noapk com.your.packagename
-( printf "\x1f\x8b\x08\x00\x00\x00\x00\x00" ; tail -c +25 backup.ab ) |  tar xfvz -
+adb shell 
+run-as com.kakimov.mooltik
+mkdir -p /sdcard/Documents/mooltik_data 
+cp -r app_flutter/ /sdcard/Documents/mooltik_data/
 ```
