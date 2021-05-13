@@ -46,10 +46,25 @@ class ProjectList extends StatelessWidget {
                     );
                   } catch (e) {
                     final snackBar = SnackBar(
-                      content: Text('Oops, could not read project data.'),
+                      content: Text(
+                        'Oops, could not read project data.',
+                        style: TextStyle(color: Colors.white),
+                      ),
                       backgroundColor: Colors.red,
+                      action: SnackBarAction(
+                        textColor: Colors.white,
+                        label: 'OPEN LOG',
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Error log'),
+                              content: SelectableText(e.toString()),
+                            ),
+                          );
+                        },
+                      ),
                     );
-                    print(e.toString());
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
                 },
