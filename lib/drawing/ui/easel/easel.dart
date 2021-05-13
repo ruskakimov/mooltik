@@ -22,6 +22,7 @@ class _EaselState extends State<Easel> {
   Widget build(BuildContext context) {
     final easel = context.watch<EaselModel>();
     final onion = context.watch<OnionModel>();
+    final reelStack = context.watch<ReelStackModel>();
 
     return LayoutBuilder(builder: (context, constraints) {
       easel.updateSize(constraints.biggest);
@@ -44,20 +45,17 @@ class _EaselState extends State<Easel> {
               child: Transform.rotate(
                 alignment: Alignment.topLeft,
                 angle: easel.canvasRotation,
-                child: RepaintBoundary(
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Container(
-                        width: easel.frameSize.width,
-                        height: easel.frameSize.height,
-                        color: Colors.white,
-                      ),
-                      ..._buildLayers(easel, onion),
-                      if (easel.unrasterizedStrokes.isNotEmpty)
-                        _buildCursor(easel),
-                    ],
-                  ),
+                child: EaselCanvas(
+                  size: easel.frameSize,
+                  frames: reelStack.reels
+                      .map((reel) => reel.currentFrame)
+                      .toList()
+                      .reversed
+                      .toList(),
+                  activeFrame: easel.frame,
+                  beforeActiveFrame: onion.frameBefore,
+                  afterActiveFrame: onion.frameAfter,
+                  strokes: easel.unrasterizedStrokes,
                 ),
               ),
             ),
@@ -66,33 +64,68 @@ class _EaselState extends State<Easel> {
       );
     });
   }
+}
 
-  CustomPaint _buildCursor(EaselModel easel) {
-    return CustomPaint(
-      size: easel.frameSize,
-      painter: CursorPainter(
-        frameSize: easel.frameSize,
-        lastStroke: easel.unrasterizedStrokes.last,
+class EaselCanvas extends StatelessWidget {
+  const EaselCanvas({
+    Key key,
+    @required this.size,
+    @required this.frames,
+    @required this.activeFrame,
+    @required this.beforeActiveFrame,
+    @required this.afterActiveFrame,
+    @required this.strokes,
+  }) : super(key: key);
+
+  final Size size;
+  final List<Frame> frames;
+  final Frame activeFrame;
+  final Frame beforeActiveFrame;
+  final Frame afterActiveFrame;
+  final List<Stroke> strokes;
+
+  @override
+  Widget build(BuildContext context) {
+    return RepaintBoundary(
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          _buildBackground(),
+          ..._buildLayers(),
+          if (strokes.isNotEmpty) _buildCursor(),
+        ],
       ),
     );
   }
 
-  List<Widget> _buildLayers(EaselModel easel, OnionModel onion) {
-    final frames = context
-        .read<ReelStackModel>()
-        .reels
-        .map((reel) => reel.currentFrame)
-        .toList()
-        .reversed;
+  Widget _buildBackground() {
+    return Container(
+      width: size.width,
+      height: size.height,
+      color: Colors.white,
+    );
+  }
+
+  CustomPaint _buildCursor() {
+    return CustomPaint(
+      size: size,
+      painter: CursorPainter(
+        frameSize: size,
+        lastStroke: strokes.last,
+      ),
+    );
+  }
+
+  List<Widget> _buildLayers() {
     final layers = <Widget>[];
 
     for (final frame in frames) {
-      if (frame == easel.frame) {
+      if (frame == activeFrame) {
         layers.addAll(_activeLayer(
           frame: frame,
-          before: onion.frameBefore,
-          after: onion.frameAfter,
-          strokes: easel.unrasterizedStrokes,
+          before: beforeActiveFrame,
+          after: afterActiveFrame,
+          strokes: strokes,
         ));
       } else {
         layers.add(_inactiveLayer(frame));
