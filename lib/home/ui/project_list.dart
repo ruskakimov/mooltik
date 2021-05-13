@@ -34,38 +34,9 @@ class ProjectList extends StatelessWidget {
                 thumbnail: project.thumbnail,
                 onTap: () async {
                   try {
-                    await project.open();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ChangeNotifierProvider<Project>.value(
-                          value: project,
-                          child: EditingPage(),
-                        ),
-                      ),
-                    );
+                    await _openProject(context, project);
                   } catch (e) {
-                    final snackBar = SnackBar(
-                      content: Text(
-                        'Oops, could not read project data.',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.red,
-                      action: SnackBarAction(
-                        textColor: Colors.white,
-                        label: 'OPEN LOG',
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text('Error log'),
-                              content: SelectableText(e.toString()),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    _showErrorSnackbar(context, e);
                   }
                 },
               ),
@@ -73,5 +44,41 @@ class ProjectList extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _openProject(BuildContext context, Project project) async {
+    await project.open();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ChangeNotifierProvider<Project>.value(
+          value: project,
+          child: EditingPage(),
+        ),
+      ),
+    );
+  }
+
+  void _showErrorSnackbar(BuildContext context, dynamic e) {
+    final snackBar = SnackBar(
+      content: Text(
+        'Oops, could not read project data.',
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: Colors.red,
+      action: SnackBarAction(
+        textColor: Colors.white,
+        label: 'OPEN LOG',
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Error log'),
+              content: SelectableText(e.toString()),
+            ),
+          );
+        },
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
