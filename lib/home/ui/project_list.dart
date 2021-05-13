@@ -33,16 +33,25 @@ class ProjectList extends StatelessWidget {
               child: ProjectThumbnail(
                 thumbnail: project.thumbnail,
                 onTap: () async {
-                  await project.open();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ChangeNotifierProvider<Project>.value(
-                        value: project,
-                        child: EditingPage(),
+                  try {
+                    await project.open();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ChangeNotifierProvider<Project>.value(
+                          value: project,
+                          child: EditingPage(),
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  } catch (e) {
+                    final snackBar = SnackBar(
+                      content: Text('Oops, could not read project data.'),
+                      backgroundColor: Colors.red,
+                    );
+                    print(e.toString());
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
                 },
               ),
             )
