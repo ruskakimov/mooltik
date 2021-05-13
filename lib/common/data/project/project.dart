@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
+import 'package:mooltik/common/data/project/sava_data_transcoder.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
@@ -122,8 +123,11 @@ class Project extends ChangeNotifier {
     if (await _dataFile.exists()) {
       // Existing project.
       _saveDataOnDisk = await _dataFile.readAsString();
+      final json = jsonDecode(_saveDataOnDisk);
+      final transcodedJson = SaveDataTranscoder().transcodeToLatest(json);
+
       final data = ProjectSaveData.fromJson(
-        jsonDecode(_saveDataOnDisk),
+        transcodedJson,
         directory.path,
         _getSoundDirectoryPath(),
       );

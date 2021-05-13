@@ -42,14 +42,6 @@ class Frame extends TimeSpan with EquatableMixin {
         duration: (json[_durationKey] as String).parseDuration(),
       );
 
-  factory Frame.fromLegacyJsonWithId(
-    Map<String, dynamic> json,
-    String frameDirPath,
-  ) {
-    json[_fileNameKey] = 'frame${json[_legacyIdKey]}.png';
-    return Frame.fromJson(json, frameDirPath);
-  }
-
   Map<String, dynamic> toJson() => {
         _fileNameKey: p.basename(file.path),
         _durationKey: duration.toString(),
@@ -73,5 +65,3 @@ class Frame extends TimeSpan with EquatableMixin {
 
 const String _fileNameKey = 'file_name';
 const String _durationKey = 'duration';
-
-const String _legacyIdKey = 'id';
