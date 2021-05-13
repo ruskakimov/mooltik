@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
-import 'package:mooltik/common/data/sequence/time_span.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 
 /// Play behaviour when scene duration is longer than the total duration of frames.
 enum PlayMode {
@@ -16,19 +14,18 @@ enum PlayMode {
   pingPong,
 }
 
-class SceneModel extends TimeSpan {
-  SceneModel({
-    @required this.frameSeq,
-    Duration duration = const Duration(seconds: 5),
-    this.playMode = PlayMode.extendLast,
-  }) : super(duration);
+class SceneLayer {
+  SceneLayer(this.frameSeq, [PlayMode playMode = PlayMode.extendLast])
+      : assert(playMode != null),
+        _playMode = playMode;
 
-  final Sequence<FrameModel> frameSeq;
-  final PlayMode playMode;
+  final Sequence<Frame> frameSeq;
+  PlayMode get playMode => _playMode;
+  PlayMode _playMode;
 
   /// Frame at a given playhead position.
-  FrameModel frameAt(Duration playhead) {
-    playhead = playhead.clamp(Duration.zero, duration);
+  Frame frameAt(Duration playhead) {
+    // playhead = playhead.clamp(Duration.zero, duration);
 
     if (playMode == PlayMode.extendLast) {
       playhead = playhead.clamp(Duration.zero, frameSeq.totalDuration);
@@ -47,21 +44,22 @@ class SceneModel extends TimeSpan {
     return frameSeq.current;
   }
 
-  Iterable<FrameModel> get ghostFrames => exportFrames.skip(frameSeq.length);
+  Iterable<Frame> getGhostFrames(Duration totalDuration) =>
+      getExportFrames(totalDuration).skip(frameSeq.length);
 
-  Iterable<FrameModel> get exportFrames sync* {
+  Iterable<Frame> getExportFrames(Duration totalDuration) sync* {
     var elapsed = Duration.zero;
     var i = 0;
 
-    while (elapsed < duration) {
+    while (elapsed < totalDuration) {
       var frame = _frameAt(i);
 
       final extendedFrame =
           playMode == PlayMode.extendLast && i == frameSeq.length;
-      final overflowingFrame = elapsed + frame.duration > duration;
+      final overflowingFrame = elapsed + frame.duration > totalDuration;
 
       if (extendedFrame || overflowingFrame) {
-        final leftover = duration - elapsed;
+        final leftover = totalDuration - elapsed;
         frame = frame.copyWith(duration: leftover);
       }
 
@@ -71,7 +69,7 @@ class SceneModel extends TimeSpan {
     }
   }
 
-  FrameModel _frameAt(int i) {
+  Frame _frameAt(int i) {
     final L = frameSeq.length;
     switch (playMode) {
       case PlayMode.extendLast:
@@ -88,33 +86,29 @@ class SceneModel extends TimeSpan {
     return frameSeq[i];
   }
 
-  factory SceneModel.fromJson(Map<String, dynamic> json, String frameDirPath) =>
-      SceneModel(
-        frameSeq: Sequence<FrameModel>((json['frames'] as List<dynamic>)
-            .map((d) => FrameModel.fromJson(d, frameDirPath))
+  void nextPlayMode() {
+    _playMode = PlayMode.values[(playMode.index + 1) % PlayMode.values.length];
+  }
+
+  factory SceneLayer.fromJson(Map<String, dynamic> json, String frameDirPath) =>
+      SceneLayer(
+        Sequence<Frame>((json[_framesKey] as List<dynamic>)
+            .map((d) => Frame.fromJson(d, frameDirPath))
             .toList()),
-        duration: (json['duration'] as String).parseDuration(),
-        playMode: PlayMode.values[json['play_mode'] as int ?? 0],
+        PlayMode.values[json[_playModeKey] as int ?? 0],
       );
 
   Map<String, dynamic> toJson() => {
-        'frames': frameSeq.iterable.map((d) => d.toJson()).toList(),
-        'duration': duration.toString(),
-        'play_mode': playMode.index,
+        _framesKey: frameSeq.iterable.map((d) => d.toJson()).toList(),
+        _playModeKey: playMode.index,
       };
 
-  SceneModel copyWith({
-    List<FrameModel> frames,
-    Duration duration,
-    PlayMode playMode,
-  }) =>
-      SceneModel(
-        frameSeq: frames != null ? Sequence<FrameModel>(frames) : this.frameSeq,
-        duration: duration ?? this.duration,
-        playMode: playMode ?? this.playMode,
-      );
-
   @override
-  String toString() => frameSeq.iterable
-      .fold('', (previousValue, frame) => previousValue + frame.toString());
+  String toString() => frameSeq.iterable.fold(
+        '',
+        (previousValue, frame) => previousValue + frame.toString(),
+      );
 }
+
+const String _framesKey = 'frames';
+const String _playModeKey = 'play_mode';

@@ -1,15 +1,15 @@
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 
-typedef ThumbnailAt = ui.Image Function(double x);
+typedef ThumbnailAt = CompositeImage Function(double x);
 
 class VideoSliver extends Sliver {
   VideoSliver({
     @required Rect area,
     @required this.thumbnailAt,
-    @required int index,
-  }) : super(area, index);
+    @required SliverId id,
+  }) : super(area, id);
 
   /// Image at a given X coordinate.
   final ThumbnailAt thumbnailAt;
@@ -41,7 +41,7 @@ class VideoSliver extends Sliver {
 
   void _paintCenteredThumbnail(
     Canvas canvas,
-    ui.Image thumbnail,
+    CompositeImage thumbnail,
     Rect paintArea,
   ) {
     canvas.save();
@@ -55,7 +55,7 @@ class VideoSliver extends Sliver {
       0,
     );
 
-    canvas.drawImage(
+    canvas.drawCompositeImage(
       thumbnail,
       centeringOffset,
       Paint(),

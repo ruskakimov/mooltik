@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/composite_image.dart';
+import 'package:mooltik/common/ui/composite_image_painter.dart';
 import 'package:mooltik/drawing/drawing_page.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
-import 'package:mooltik/editing/ui/preview/frame_thumbnail.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:provider/provider.dart';
 
@@ -28,11 +28,22 @@ class Preview extends StatelessWidget {
           ),
         );
       },
-      child: Center(
-        child: FrameThumbnail(
-          frame: context.select<TimelineModel, FrameModel>(
-            (timeline) => timeline.currentFrame,
-          ),
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: _buildImage(context),
+      ),
+    );
+  }
+
+  Widget _buildImage(BuildContext context) {
+    final image = context.select<TimelineModel, CompositeImage>(
+      (timeline) => timeline.currentFrame,
+    );
+    return CustomPaint(
+      size: image.size,
+      painter: CompositeImagePainter(
+        context.select<TimelineModel, CompositeImage>(
+          (timeline) => timeline.currentFrame,
         ),
       ),
     );

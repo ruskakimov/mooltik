@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const _enabledKey = 'onion_enabled';
 
 class OnionModel extends ChangeNotifier {
   OnionModel({
-    @required Sequence<FrameModel> frames,
+    @required Sequence<Frame> frames,
     @required int selectedIndex,
     @required SharedPreferences sharedPreferences,
   })  : assert(frames != null),
@@ -20,9 +20,15 @@ class OnionModel extends ChangeNotifier {
         _enabled = sharedPreferences.getBool(_enabledKey) ?? true;
 
   SharedPreferences _preferences;
-  Sequence<FrameModel> _frames;
+  Sequence<Frame> _frames;
 
   int _selectedIndex;
+
+  void updateFrames(Sequence<Frame> frames) {
+    if (frames != _frames) {
+      _frames = frames;
+    }
+  }
 
   void updateSelectedIndex(int selectedIndex) {
     _selectedIndex = selectedIndex;
@@ -38,10 +44,10 @@ class OnionModel extends ChangeNotifier {
     await _preferences.setBool(_enabledKey, _enabled);
   }
 
-  FrameModel get frameBefore =>
+  Frame get frameBefore =>
       _enabled && _selectedIndex > 0 ? _frames[_selectedIndex - 1] : null;
 
-  FrameModel get frameAfter => _enabled && _selectedIndex < _frames.length - 1
+  Frame get frameAfter => _enabled && _selectedIndex < _frames.length - 1
       ? _frames[_selectedIndex + 1]
       : null;
 }

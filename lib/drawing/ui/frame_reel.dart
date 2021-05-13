@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
-import 'package:mooltik/editing/ui/preview/frame_thumbnail.dart';
+import 'package:mooltik/drawing/ui/frame_thumbnail.dart';
 import 'package:provider/provider.dart';
 
 const _framePadding = const EdgeInsets.only(
@@ -21,22 +21,10 @@ class FrameReel extends StatelessWidget {
       final frameWidth = frameHeight / 9 * 16;
       final itemWidth = frameWidth + _framePadding.horizontal;
 
-      return Stack(
-        clipBehavior: Clip.none,
-        children: [
-          _FrameReelItemList(
-            width: constraints.maxWidth,
-            itemWidth: itemWidth,
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: frameWidth,
-              height: 2,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-        ],
+      return _FrameReelItemList(
+        key: Key('${context.watch<FrameReelModel>().hashCode}'),
+        width: constraints.maxWidth,
+        itemWidth: itemWidth,
       );
     });
   }
@@ -127,9 +115,8 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
             return GestureDetector(
               onTap: () => scrollTo(index),
               child: _FrameReelItem(
-                child: FrameThumbnail(
-                  frame: reel.frameSeq[index],
-                ),
+                selected: index == reel.currentIndex,
+                child: FrameThumbnail(frame: reel.frameSeq[index]),
               ),
             );
           },
@@ -159,26 +146,31 @@ class _FrameReelItem extends StatelessWidget {
   const _FrameReelItem({
     Key key,
     @required this.child,
+    this.selected = false,
   }) : super(key: key);
 
   final Widget child;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
+    final borderRadius = BorderRadius.circular(8);
+
     return Padding(
       padding: _framePadding,
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            boxShadow: [BoxShadow(blurRadius: 8, color: Colors.black12)],
-            borderRadius: BorderRadius.circular(8),
+      child: Container(
+        foregroundDecoration: BoxDecoration(
+          border: Border.all(
+            color: selected
+                ? Theme.of(context).colorScheme.primary
+                : Colors.grey.withOpacity(0.8),
+            width: 2,
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: child,
-          ),
+          borderRadius: borderRadius,
         ),
+        decoration: BoxDecoration(borderRadius: borderRadius),
+        clipBehavior: Clip.antiAlias,
+        child: child,
       ),
     );
   }

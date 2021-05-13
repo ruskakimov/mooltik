@@ -1,7 +1,10 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/project.dart';
-import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/play_mode_button.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/resize_end_handle.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/resize_start_handle.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/scene_end_handle.dart';
 import 'package:mooltik/editing/ui/timeline/view/timeline_painter.dart';
 import 'package:provider/provider.dart';
 
@@ -12,27 +15,35 @@ class TimelineView extends StatelessWidget {
   Widget build(BuildContext context) {
     final timelineView = context.watch<TimelineViewModel>();
 
-    return GestureDetector(
-      onScaleStart: timelineView.onScaleStart,
-      onScaleUpdate: timelineView.onScaleUpdate,
-      onScaleEnd: timelineView.onScaleEnd,
-      onTapUp: timelineView.onTapUp,
-      child: SizedBox.expand(
-        child: ColoredBox(
-          color: Colors.black.withOpacity(0.2),
-          child: CustomPaint(
-            painter: TimelinePainter(
-              timelineView: timelineView,
-              soundBite: context.select<Project, SoundClip>(
-                (Project player) =>
-                    player.soundClips != null && player.soundClips.isNotEmpty
-                        ? player.soundClips.first
-                        : null,
+    return LayoutBuilder(builder: (context, constraints) {
+      return SingleChildScrollView(
+        child: SizedBox(
+          height: max(timelineView.viewHeight, constraints.maxHeight),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              GestureDetector(
+                onScaleStart: timelineView.onScaleStart,
+                onScaleUpdate: timelineView.onScaleUpdate,
+                onScaleEnd: timelineView.onScaleEnd,
+                onTapUp: timelineView.onTapUp,
+                child: CustomPaint(
+                  painter: TimelinePainter(timelineView),
+                ),
               ),
-            ),
+              if (timelineView.isEditingScene) ...[
+                for (var i = 0; i < timelineView.sceneLayers.length; i++)
+                  PlayModeButton(layerIndex: i),
+                SceneEndHandle(),
+              ],
+              if (timelineView.showResizeStartHandle)
+                ResizeStartHandle(timelineView: timelineView),
+              if (timelineView.showResizeEndHandle)
+                ResizeEndHandle(timelineView: timelineView),
+            ],
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

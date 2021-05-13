@@ -4,19 +4,22 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
-import 'package:mooltik/common/data/project/scene_model.dart';
+import 'package:mooltik/common/data/project/composite_frame.dart';
+import 'package:mooltik/common/data/project/sava_data_transcoder.dart';
+import 'package:mooltik/common/data/project/scene.dart';
+import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/common/ui/composite_image_painter.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/project_save_data.dart';
-import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:mooltik/editing/data/player_model.dart';
 import 'package:path/path.dart' as p;
 
 const String _binnedPostfix = '_binned';
 
-typedef CreateNewFrame = Future<FrameModel> Function();
+typedef CreateNewFrame = Future<Frame> Function();
 
 /// Holds project data, reads and writes to project folder.
 ///
@@ -86,15 +89,14 @@ class Project extends ChangeNotifier {
 
   final File _dataFile;
 
-  Sequence<SceneModel> get scenes => _scenes;
-  Sequence<SceneModel> _scenes;
+  Sequence<Scene> get scenes => _scenes;
+  Sequence<Scene> _scenes;
 
-  // TODO: Check if lazy or not
-  Iterable<FrameModel> get allFrames => _scenes.iterable
-      .map((scene) => scene.frameSeq.iterable)
+  Iterable<Frame> get allFrames => _scenes.iterable
+      .map((scene) => scene.allFrames)
       .expand((iterable) => iterable);
 
-  Iterable<FrameModel> get exportFrames => _scenes.iterable
+  Iterable<CompositeFrame> get exportFrames => _scenes.iterable
       .map((scene) => scene.exportFrames)
       .expand((iterable) => iterable);
 
@@ -121,13 +123,16 @@ class Project extends ChangeNotifier {
     if (await _dataFile.exists()) {
       // Existing project.
       _saveDataOnDisk = await _dataFile.readAsString();
+      final json = jsonDecode(_saveDataOnDisk);
+      final transcodedJson = SaveDataTranscoder().transcodeToLatest(json);
+
       final data = ProjectSaveData.fromJson(
-        jsonDecode(_saveDataOnDisk),
+        transcodedJson,
         directory.path,
         _getSoundDirectoryPath(),
       );
       _frameSize = Size(data.width, data.height);
-      _scenes = Sequence<SceneModel>(data.scenes);
+      _scenes = Sequence<Scene>(data.scenes);
 
       // TODO: Loading all frames into memory doesn't scale.
       await Future.wait(allFrames.map((frame) => frame.loadSnapshot()));
@@ -137,7 +142,7 @@ class Project extends ChangeNotifier {
     } else {
       // New project.
       _frameSize = const Size(1280, 720);
-      _scenes = Sequence<SceneModel>([await createNewScene()]);
+      _scenes = Sequence<Scene>([await createNewScene()]);
       _soundClips = [];
     }
 
@@ -168,7 +173,7 @@ class Project extends ChangeNotifier {
 
     // Write thumbnail.
     final image = await generateImage(
-      FramePainter(frame: allFrames.first),
+      CompositeImagePainter(exportFrames.first.compositeImage),
       _frameSize.width.toInt(),
       _frameSize.height.toInt(),
     );
@@ -230,7 +235,7 @@ class Project extends ChangeNotifier {
     await deleteFilesWhere(soundDir, _isUnusedSoundFile);
   }
 
-  Future<FrameModel> createNewFrame() async {
+  Future<Frame> createNewFrame() async {
     final image = await generateImage(
       null,
       _frameSize.width.toInt(),
@@ -238,13 +243,20 @@ class Project extends ChangeNotifier {
     );
     final file = _getFrameFile(DateTime.now().millisecondsSinceEpoch);
     await pngWrite(file, image);
-    return FrameModel(file: file, snapshot: image);
+    return Frame(file: file, snapshot: image);
   }
 
-  Future<SceneModel> createNewScene() async {
-    return SceneModel(
-      frameSeq: Sequence<FrameModel>([await createNewFrame()]),
-    );
+  Future<Scene> createNewScene() async {
+    return Scene(layers: [
+      await createNewSceneLayer(),
+    ]);
+  }
+
+  Future<SceneLayer> createNewSceneLayer() async {
+    final frameSeq = Sequence<Frame>([
+      await createNewFrame(),
+    ]);
+    return SceneLayer(frameSeq);
   }
 
   File _getFrameFile(int id) => File(_getFrameFilePath(id));

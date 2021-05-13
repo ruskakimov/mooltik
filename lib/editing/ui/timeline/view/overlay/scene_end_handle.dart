@@ -11,7 +11,7 @@ class SceneEndHandle extends StatelessWidget {
 
     return TimelinePositioned(
       timestamp: timelineView.sceneEnd,
-      y: timelineView.imageSliverMid,
+      y: timelineView.rowMiddle(0),
       offset: const Offset(48 / 2, 0),
       width: 48,
       height: 48,

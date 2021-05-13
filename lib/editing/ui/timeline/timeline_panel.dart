@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/player_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
-import 'package:mooltik/editing/ui/timeline/view/overlay/play_mode_button.dart';
-import 'package:mooltik/editing/ui/timeline/view/overlay/resize_end_handle.dart';
 import 'package:mooltik/common/data/project/project.dart';
-import 'package:mooltik/editing/ui/timeline/view/overlay/resize_start_handle.dart';
-import 'package:mooltik/editing/ui/timeline/view/overlay/scene_end_handle.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editing/ui/timeline/view/timeline_view.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/timeline_actionbar.dart';
@@ -31,16 +27,16 @@ class TimelinePanel extends StatelessWidget {
         ChangeNotifierProvider<TimelineViewModel>(
           create: (context) => TimelineViewModel(
             timeline: context.read<TimelineModel>(),
+            soundClips: context.read<Project>().soundClips,
             sharedPreferences: context.read<SharedPreferences>(),
             createNewFrame: context.read<Project>().createNewFrame,
           ),
         ),
       ],
       builder: (context, child) {
-        final timelineView = context.watch<TimelineViewModel>();
-
         return Material(
           elevation: 0,
+          color: Theme.of(context).colorScheme.surface,
           child: Column(
             children: [
               TimelineActionbar(),
@@ -50,12 +46,6 @@ class TimelinePanel extends StatelessWidget {
                   children: [
                     TimelineView(),
                     Playhead(),
-                    if (timelineView.isEditingScene) ...[
-                      PlayModeButton(),
-                      SceneEndHandle(),
-                    ],
-                    if (timelineView.showResizeStartHandle) ResizeStartHandle(),
-                    if (timelineView.showResizeEndHandle) ResizeEndHandle(),
                   ],
                 ),
               ),

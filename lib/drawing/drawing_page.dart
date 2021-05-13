@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
-import 'package:mooltik/drawing/data/frame/frame_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
+import 'package:mooltik/drawing/data/reel_stack_model.dart';
 import 'package:mooltik/drawing/ui/drawing_actionbar.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 import 'package:mooltik/drawing/ui/frame_reel.dart';
+import 'package:mooltik/drawing/ui/layers/layer_button.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/ui/easel/easel.dart';
@@ -23,29 +25,22 @@ class DrawingPage extends StatelessWidget {
             context.read<SharedPreferences>(),
           ),
         ),
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<ReelStackModel>(
           create: (context) {
             // Read current frame to reset `frameSeq.currentIndex`.
             // This index can get out of sync because of VideoSliver rendering.
             context.read<TimelineModel>().currentFrame;
 
-            return FrameReelModel(
-              frameSeq: context.read<TimelineModel>().currentScene.frameSeq,
+            return ReelStackModel(
+              scene: context.read<TimelineModel>().currentScene,
               sharedPreferences: context.read<SharedPreferences>(),
             );
           },
         ),
-        ChangeNotifierProxyProvider<FrameReelModel, OnionModel>(
-          update: (context, reel, model) =>
-              model..updateSelectedIndex(reel.currentIndex),
-          create: (context) => OnionModel(
-            frames: context.read<TimelineModel>().currentScene.frameSeq,
-            selectedIndex: context.read<FrameReelModel>().currentIndex,
-            sharedPreferences: context.read<SharedPreferences>(),
-          ),
-        ),
       ],
       builder: (context, child) {
+        final reelStack = context.watch<ReelStackModel>();
+
         return WillPopScope(
           // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
           onWillPop: () async => true,
@@ -53,12 +48,23 @@ class DrawingPage extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.background,
             body: MultiProvider(
               providers: [
+                ChangeNotifierProvider.value(value: reelStack.activeReel),
+                ChangeNotifierProxyProvider<FrameReelModel, OnionModel>(
+                  update: (context, reel, model) => model
+                    ..updateFrames(reel.frameSeq)
+                    ..updateSelectedIndex(reel.currentIndex),
+                  create: (context) => OnionModel(
+                    frames: context.read<FrameReelModel>().frameSeq,
+                    selectedIndex: context.read<FrameReelModel>().currentIndex,
+                    sharedPreferences: context.read<SharedPreferences>(),
+                  ),
+                ),
                 ChangeNotifierProxyProvider2<FrameReelModel, ToolboxModel,
                     EaselModel>(
                   create: (context) => EaselModel(
                       frame: context.read<FrameReelModel>().currentFrame,
                       selectedTool: context.read<ToolboxModel>().selectedTool,
-                      onChanged: (FrameModel frame) {
+                      onChanged: (Frame frame) {
                         context
                             .read<FrameReelModel>()
                             .replaceCurrentFrame(frame);
@@ -83,7 +89,7 @@ class DrawingPage extends StatelessWidget {
                       right: 0,
                       child: DrawingActionbar(),
                     ),
-                    if (context.watch<FrameReelModel>().visible)
+                    if (reelStack.showFrameReel)
                       Positioned(
                         bottom: 0,
                         left: 0,
@@ -91,6 +97,11 @@ class DrawingPage extends StatelessWidget {
                         height: 44,
                         child: FrameReel(),
                       ),
+                    Positioned(
+                      bottom: 48,
+                      right: 4,
+                      child: LayerButton(),
+                    ),
                   ],
                 ),
               ),

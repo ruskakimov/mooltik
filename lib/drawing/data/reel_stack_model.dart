@@ -1,0 +1,86 @@
+import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/scene.dart';
+import 'package:mooltik/common/data/project/scene_layer.dart';
+import 'package:mooltik/drawing/data/frame_reel_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+/// Manages a stack of frame reels.
+class ReelStackModel extends ChangeNotifier {
+  ReelStackModel({
+    @required Scene scene,
+    @required SharedPreferences sharedPreferences,
+  })  : _scene = scene,
+        _sharedPreferences = sharedPreferences,
+        _showFrameReel = sharedPreferences.getBool(_showFrameReelKey) ?? true,
+        reels = scene.layers
+            .map((layer) => FrameReelModel(layer.frameSeq))
+            .toList();
+
+  final Scene _scene;
+  SharedPreferences _sharedPreferences;
+
+  final List<FrameReelModel> reels;
+
+  FrameReelModel get activeReel => reels[_activeReelIndex];
+  int _activeReelIndex = 0;
+
+  void changeActiveReel(FrameReelModel reel) {
+    final index = reels.indexOf(reel);
+    if (index != -1) {
+      _activeReelIndex = index;
+      notifyListeners();
+    }
+  }
+
+  /// Whether frame reel UI is visible.
+  bool get showFrameReel => _showFrameReel;
+  bool _showFrameReel;
+
+  Future<void> toggleFrameReelVisibility() async {
+    _showFrameReel = !_showFrameReel;
+    notifyListeners();
+    await _sharedPreferences.setBool(_showFrameReelKey, _showFrameReel);
+  }
+
+  void addLayerAboveActive(SceneLayer layer) {
+    _scene.layers.insert(_activeReelIndex, layer);
+    reels.insert(_activeReelIndex, FrameReelModel(layer.frameSeq));
+    notifyListeners();
+  }
+
+  bool get canDeleteLayer => reels.length > 1;
+
+  void deleteLayer(int layerIndex) {
+    if (!canDeleteLayer) return;
+    if (layerIndex < 0 || layerIndex >= reels.length) return;
+
+    final activeReelBefore = activeReel;
+
+    reels.removeAt(layerIndex);
+    _scene.layers.removeAt(layerIndex);
+
+    if (layerIndex == _activeReelIndex) {
+      _activeReelIndex = _activeReelIndex.clamp(0, reels.length - 1);
+    } else {
+      _activeReelIndex = reels.indexOf(activeReelBefore);
+    }
+    notifyListeners();
+  }
+
+  void onLayerReorder(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) newIndex -= 1;
+    final activeReelBefore = activeReel;
+
+    final reel = reels.removeAt(oldIndex);
+    reels.insert(newIndex, reel);
+
+    final layer = _scene.layers.removeAt(oldIndex);
+    _scene.layers.insert(newIndex, layer);
+
+    _activeReelIndex = reels.indexOf(activeReelBefore);
+
+    notifyListeners();
+  }
+}
+
+const _showFrameReelKey = 'frame_reel_visible';
