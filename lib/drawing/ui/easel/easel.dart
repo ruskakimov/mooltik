@@ -143,28 +143,31 @@ class EaselCanvas extends StatelessWidget {
   }) {
     return [
       if (before != null)
-        Opacity(
-          opacity: 0.2,
-          child: CustomPaint(
-            size: before.size,
-            foregroundPainter: FramePainter(
-              frame: before,
-              filter: ColorFilter.mode(Colors.red, BlendMode.srcATop),
+        CustomPaint(
+          isComplex: true,
+          size: before.size,
+          foregroundPainter: FramePainter(
+            frame: before,
+            filter: ColorFilter.mode(
+              Colors.red.withOpacity(0.2),
+              BlendMode.srcIn,
             ),
           ),
         ),
       if (after != null)
-        Opacity(
-          opacity: 0.2,
-          child: CustomPaint(
-            size: after.size,
-            foregroundPainter: FramePainter(
-              frame: after,
-              filter: ColorFilter.mode(Colors.green, BlendMode.srcATop),
+        CustomPaint(
+          isComplex: true,
+          size: after.size,
+          foregroundPainter: FramePainter(
+            frame: after,
+            filter: ColorFilter.mode(
+              Colors.green.withOpacity(0.2),
+              BlendMode.srcIn,
             ),
           ),
         ),
       CustomPaint(
+        isComplex: true,
         size: frame.size,
         foregroundPainter: FramePainter(frame: frame, strokes: strokes),
       ),
@@ -173,6 +176,7 @@ class EaselCanvas extends StatelessWidget {
 
   CustomPaint _inactiveLayer(Frame frame) {
     return CustomPaint(
+      isComplex: true,
       size: frame.size,
       foregroundPainter: FramePainter(frame: frame),
     );
