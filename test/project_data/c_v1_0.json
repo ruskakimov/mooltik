@@ -1,0 +1,87 @@
+{
+    "width": 1280.0,
+    "height": 720.0,
+    "scenes": [
+        {
+            "layers": [
+                {
+                    "frames": [
+                        {
+                            "file_name": "frame1620873684152.png",
+                            "duration": "0:00:01.000000"
+                        },
+                        {
+                            "file_name": "frame1620873707886.png",
+                            "duration": "0:00:01.000000"
+                        },
+                        {
+                            "file_name": "frame1620873713128.png",
+                            "duration": "0:00:01.000000"
+                        }
+                    ],
+                    "play_mode": 0
+                }
+            ],
+            "duration": "0:00:03.000000"
+        },
+        {
+            "layers": [
+                {
+                    "frames": [
+                        {
+                            "file_name": "frame1620873732599.png",
+                            "duration": "0:00:01.000000"
+                        },
+                        {
+                            "file_name": "frame1620873748372.png",
+                            "duration": "0:00:01.000000"
+                        },
+                        {
+                            "file_name": "frame1620873757853.png",
+                            "duration": "0:00:01.000000"
+                        }
+                    ],
+                    "play_mode": 0
+                }
+            ],
+            "duration": "0:00:04.040000"
+        },
+        {
+            "layers": [
+                {
+                    "frames": [
+                        {
+                            "file_name": "frame1620873765416.png",
+                            "duration": "0:00:01.000000"
+                        },
+                        {
+                            "file_name": "frame1620873773737.png",
+                            "duration": "0:00:01.000000"
+                        }
+                    ],
+                    "play_mode": 1
+                }
+            ],
+            "duration": "0:00:08.260000"
+        },
+        {
+            "layers": [
+                {
+                    "frames": [
+                        {
+                            "file_name": "frame1620873792351.png",
+                            "duration": "0:00:00.080000"
+                        },
+                        {
+                            "file_name": "frame1620873800056.png",
+                            "duration": "0:00:00.080000"
+                        }
+                    ],
+                    "play_mode": 1
+                }
+            ],
+            "duration": "0:00:05.000000"
+        }
+    ],
+    "sounds": []
+}
