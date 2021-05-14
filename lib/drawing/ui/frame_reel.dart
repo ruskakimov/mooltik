@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
+import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/frame_thumbnail.dart';
 import 'package:provider/provider.dart';
@@ -110,17 +111,36 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
               );
             }
 
-            return _FrameReelItem(
-              selected: index == reel.currentIndex,
+            final selected = index == reel.currentIndex;
+
+            final item = _FrameReelItem(
+              selected: selected,
               child: FrameThumbnail(
                 frame: reel.frameSeq[index],
                 background: Colors.transparent,
               ),
               onTap: () => scrollTo(index),
             );
+
+            return selected ? _wrapWithPopupEntry(item) : item;
           },
         ),
       ),
+    );
+  }
+
+  Widget _wrapWithPopupEntry(Widget child) {
+    return PopupWithArrowEntry(
+      visible: true,
+      arrowSide: ArrowSide.bottom,
+      arrowSidePosition: ArrowSidePosition.middle,
+      arrowAnchor: Alignment(0, -1.1),
+      popupColor: Theme.of(context).colorScheme.secondary,
+      popupBody: Container(
+        width: 100,
+        height: 100,
+      ),
+      child: child,
     );
   }
 
