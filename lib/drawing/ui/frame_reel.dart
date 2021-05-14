@@ -116,7 +116,10 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
               onTap: () => scrollTo(index),
               child: _FrameReelItem(
                 selected: index == reel.currentIndex,
-                child: FrameThumbnail(frame: reel.frameSeq[index]),
+                child: FrameThumbnail(
+                  frame: reel.frameSeq[index],
+                  background: Colors.transparent,
+                ),
               ),
             );
           },
@@ -160,15 +163,20 @@ class _FrameReelItem extends StatelessWidget {
       padding: _framePadding,
       child: Container(
         foregroundDecoration: BoxDecoration(
+          borderRadius: borderRadius,
           border: Border.all(
+            width: 2,
             color: selected
                 ? Theme.of(context).colorScheme.primary
-                : Colors.grey.withOpacity(0.8),
-            width: 2,
+                : Colors.transparent,
           ),
-          borderRadius: borderRadius,
         ),
-        decoration: BoxDecoration(borderRadius: borderRadius),
+        decoration: BoxDecoration(
+          borderRadius: borderRadius,
+          color: selected
+              ? Colors.white
+              : Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+        ),
         clipBehavior: Clip.antiAlias,
         child: child,
       ),

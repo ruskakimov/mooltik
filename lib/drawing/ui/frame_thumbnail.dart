@@ -6,9 +6,11 @@ class FrameThumbnail extends StatelessWidget {
   const FrameThumbnail({
     Key key,
     @required this.frame,
+    this.background,
   }) : super(key: key);
 
   final Frame frame;
+  final Color background;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,8 @@ class FrameThumbnail extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: frame.width / frame.height,
         child: ColoredBox(
-          color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+          color: background ??
+              Theme.of(context).colorScheme.secondary.withOpacity(0.5),
           child: CustomPaint(foregroundPainter: FramePainter(frame: frame)),
         ),
       ),
