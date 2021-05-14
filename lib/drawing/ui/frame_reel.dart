@@ -96,31 +96,27 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
           itemExtent: widget.itemWidth,
           itemBuilder: (context, index) {
             if (index == reel.frameSeq.length) {
-              return GestureDetector(
+              return _FrameReelItem(
+                child: ColoredBox(
+                  color: Theme.of(context).colorScheme.secondary,
+                  child: Icon(FontAwesomeIcons.plus, size: 16),
+                ),
                 onTap: () async {
                   reel.appendFrame(
                     await context.read<Project>().createNewFrame(),
                   );
                   scrollTo(reel.frameSeq.length - 1);
                 },
-                child: _FrameReelItem(
-                  child: ColoredBox(
-                    color: Theme.of(context).colorScheme.secondary,
-                    child: Icon(FontAwesomeIcons.plus, size: 16),
-                  ),
-                ),
               );
             }
 
-            return GestureDetector(
-              onTap: () => scrollTo(index),
-              child: _FrameReelItem(
-                selected: index == reel.currentIndex,
-                child: FrameThumbnail(
-                  frame: reel.frameSeq[index],
-                  background: Colors.transparent,
-                ),
+            return _FrameReelItem(
+              selected: index == reel.currentIndex,
+              child: FrameThumbnail(
+                frame: reel.frameSeq[index],
+                background: Colors.transparent,
               ),
+              onTap: () => scrollTo(index),
             );
           },
         ),
@@ -150,10 +146,12 @@ class _FrameReelItem extends StatelessWidget {
     Key key,
     @required this.child,
     this.selected = false,
+    this.onTap,
   }) : super(key: key);
 
   final Widget child;
   final bool selected;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -161,25 +159,36 @@ class _FrameReelItem extends StatelessWidget {
 
     return Padding(
       padding: _framePadding,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        foregroundDecoration: BoxDecoration(
-          borderRadius: borderRadius,
-          border: Border.all(
-            width: 2,
-            color: selected
-                ? Theme.of(context).colorScheme.primary
-                : Colors.transparent,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            foregroundDecoration: BoxDecoration(
+              borderRadius: borderRadius,
+              border: Border.all(
+                width: 2,
+                color: selected
+                    ? Theme.of(context).colorScheme.primary
+                    : Colors.transparent,
+              ),
+            ),
+            decoration: BoxDecoration(
+              borderRadius: borderRadius,
+              color: selected
+                  ? Colors.white
+                  : Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: child,
           ),
-        ),
-        decoration: BoxDecoration(
-          borderRadius: borderRadius,
-          color: selected
-              ? Colors.white
-              : Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: child,
+          Material(
+            type: MaterialType.transparency,
+            borderRadius: borderRadius,
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(onTap: onTap),
+          ),
+        ],
       ),
     );
   }
