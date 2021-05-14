@@ -128,8 +128,12 @@ class LayerRow extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              Container(
+                margin: const EdgeInsets.all(8.0),
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 child: FrameThumbnail(frame: reel.currentFrame),
               ),
               SizedBox(width: 4),

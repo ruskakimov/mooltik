@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
-import 'package:mooltik/drawing/ui/checkerboard_painter.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 
 class FrameThumbnail extends StatelessWidget {
@@ -16,9 +15,9 @@ class FrameThumbnail extends StatelessWidget {
     return RepaintBoundary(
       child: AspectRatio(
         aspectRatio: frame.width / frame.height,
-        child: CustomPaint(
-          painter: CheckerboardPainter(),
-          foregroundPainter: FramePainter(frame: frame),
+        child: ColoredBox(
+          color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+          child: CustomPaint(foregroundPainter: FramePainter(frame: frame)),
         ),
       ),
     );
