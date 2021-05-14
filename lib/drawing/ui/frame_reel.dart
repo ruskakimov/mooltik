@@ -161,7 +161,8 @@ class _FrameReelItem extends StatelessWidget {
 
     return Padding(
       padding: _framePadding,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
         foregroundDecoration: BoxDecoration(
           borderRadius: borderRadius,
           border: Border.all(
