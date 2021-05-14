@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
+import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/frame_thumbnail.dart';
@@ -136,10 +137,38 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
       arrowSide: ArrowSide.bottom,
       arrowSidePosition: ArrowSidePosition.middle,
       arrowAnchor: Alignment(0, -1.1),
-      popupColor: Theme.of(context).colorScheme.secondary,
-      popupBody: Container(
-        width: 100,
-        height: 100,
+      popupColor: Theme.of(context).colorScheme.primary,
+      popupBody: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            LabeledIconButton(
+              icon: FontAwesomeIcons.plusSquare,
+              label: 'Add before',
+              color: Theme.of(context).colorScheme.onPrimary,
+              onTap: () {},
+            ),
+            LabeledIconButton(
+              icon: FontAwesomeIcons.copy,
+              label: 'Duplicate',
+              color: Theme.of(context).colorScheme.onPrimary,
+              onTap: () {},
+            ),
+            LabeledIconButton(
+              icon: FontAwesomeIcons.trashAlt,
+              label: 'Delete',
+              color: Theme.of(context).colorScheme.onPrimary,
+              // onTap: () {},
+            ),
+            LabeledIconButton(
+              icon: FontAwesomeIcons.plusSquare,
+              label: 'Add after',
+              color: Theme.of(context).colorScheme.onPrimary,
+              onTap: () {},
+            ),
+          ],
+        ),
       ),
       child: child,
       onDragOutside: _closePopup,
