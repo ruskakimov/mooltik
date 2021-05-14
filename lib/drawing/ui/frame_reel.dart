@@ -138,38 +138,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
       arrowSidePosition: ArrowSidePosition.middle,
       arrowAnchor: Alignment(0, -1.1),
       popupColor: Theme.of(context).colorScheme.primary,
-      popupBody: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            LabeledIconButton(
-              icon: FontAwesomeIcons.plusSquare,
-              label: 'Add before',
-              color: Theme.of(context).colorScheme.onPrimary,
-              onTap: () {},
-            ),
-            LabeledIconButton(
-              icon: FontAwesomeIcons.copy,
-              label: 'Duplicate',
-              color: Theme.of(context).colorScheme.onPrimary,
-              onTap: () {},
-            ),
-            LabeledIconButton(
-              icon: FontAwesomeIcons.trashAlt,
-              label: 'Delete',
-              color: Theme.of(context).colorScheme.onPrimary,
-              // onTap: () {},
-            ),
-            LabeledIconButton(
-              icon: FontAwesomeIcons.plusSquare,
-              label: 'Add after',
-              color: Theme.of(context).colorScheme.onPrimary,
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
+      popupBody: FramePopupBody(),
       child: child,
       onDragOutside: _closePopup,
       onTapOutside: _closePopup,
@@ -251,6 +220,44 @@ class _FrameReelItem extends StatelessWidget {
             borderRadius: borderRadius,
             clipBehavior: Clip.antiAlias,
             child: InkWell(onTap: onTap),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FramePopupBody extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          LabeledIconButton(
+            icon: FontAwesomeIcons.plusSquare,
+            label: 'Add before',
+            color: Theme.of(context).colorScheme.onPrimary,
+            onTap: () {},
+          ),
+          LabeledIconButton(
+            icon: FontAwesomeIcons.copy,
+            label: 'Duplicate',
+            color: Theme.of(context).colorScheme.onPrimary,
+            onTap: () {},
+          ),
+          LabeledIconButton(
+            icon: FontAwesomeIcons.trashAlt,
+            label: 'Delete',
+            color: Theme.of(context).colorScheme.onPrimary,
+            // onTap: () {},
+          ),
+          LabeledIconButton(
+            icon: FontAwesomeIcons.plusSquare,
+            label: 'Add after',
+            color: Theme.of(context).colorScheme.onPrimary,
+            onTap: () {},
           ),
         ],
       ),
