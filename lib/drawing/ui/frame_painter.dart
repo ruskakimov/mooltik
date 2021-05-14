@@ -52,7 +52,10 @@ class FramePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(FramePainter oldDelegate) => true;
+  bool shouldRepaint(FramePainter oldDelegate) =>
+      oldDelegate.frame.snapshot != frame.snapshot ||
+      oldDelegate.strokes != strokes ||
+      oldDelegate.filter != filter;
 
   @override
   bool shouldRebuildSemantics(FramePainter oldDelegate) => false;

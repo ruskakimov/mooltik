@@ -20,7 +20,10 @@ class FrameThumbnail extends StatelessWidget {
         child: ColoredBox(
           color: background ??
               Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-          child: CustomPaint(foregroundPainter: FramePainter(frame: frame)),
+          child: CustomPaint(
+            isComplex: true,
+            foregroundPainter: FramePainter(frame: frame),
+          ),
         ),
       ),
     );
