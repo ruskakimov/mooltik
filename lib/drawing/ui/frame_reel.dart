@@ -47,6 +47,7 @@ class _FrameReelItemList extends StatefulWidget {
 
 class __FrameReelItemListState extends State<_FrameReelItemList> {
   ScrollController _controller;
+  bool _showFramePopup = false;
 
   @override
   void initState() {
@@ -119,7 +120,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
                 frame: reel.frameSeq[index],
                 background: Colors.transparent,
               ),
-              onTap: () => scrollTo(index),
+              onTap: selected ? _openPopup : () => scrollTo(index),
             );
 
             return selected ? _wrapWithPopupEntry(item) : item;
@@ -131,7 +132,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
 
   Widget _wrapWithPopupEntry(Widget child) {
     return PopupWithArrowEntry(
-      visible: true,
+      visible: _showFramePopup,
       arrowSide: ArrowSide.bottom,
       arrowSidePosition: ArrowSidePosition.middle,
       arrowAnchor: Alignment(0, -1.1),
@@ -141,7 +142,21 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
         height: 100,
       ),
       child: child,
+      onDragOutside: _closePopup,
+      onTapOutside: _closePopup,
     );
+  }
+
+  void _openPopup() {
+    setState(() {
+      _showFramePopup = true;
+    });
+  }
+
+  void _closePopup() {
+    setState(() {
+      _showFramePopup = false;
+    });
   }
 
   void scrollTo(int frameIndex) {
