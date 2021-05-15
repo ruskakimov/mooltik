@@ -141,6 +141,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
       popupBody: FramePopupBody(
         scrollTo: scrollTo,
         jumpTo: jumpTo,
+        closePopup: _closePopup,
       ),
       child: child,
       onDragOutside: _closePopup,
@@ -241,10 +242,12 @@ class FramePopupBody extends StatelessWidget {
     Key key,
     @required this.scrollTo,
     @required this.jumpTo,
+    @required this.closePopup,
   }) : super(key: key);
 
   final Function(int) scrollTo;
   final Function(int) jumpTo;
+  final VoidCallback closePopup;
 
   @override
   Widget build(BuildContext context) {
@@ -263,20 +266,26 @@ class FramePopupBody extends StatelessWidget {
               reel.addBeforeCurrent(
                 await context.read<Project>().createNewFrame(),
               );
+              // Keep current centered.
               jumpTo(reel.currentIndex);
+              closePopup();
             },
           ),
           LabeledIconButton(
             icon: FontAwesomeIcons.copy,
             label: 'Duplicate',
             color: Theme.of(context).colorScheme.onPrimary,
-            onTap: () {},
+            onTap: () {
+              closePopup();
+            },
           ),
           LabeledIconButton(
             icon: FontAwesomeIcons.trashAlt,
             label: 'Delete',
             color: Theme.of(context).colorScheme.onPrimary,
-            onTap: () {},
+            onTap: () {
+              closePopup();
+            },
           ),
           LabeledIconButton(
             icon: FontAwesomeIcons.plusSquare,
@@ -286,6 +295,7 @@ class FramePopupBody extends StatelessWidget {
               reel.addAfterCurrent(
                 await context.read<Project>().createNewFrame(),
               );
+              closePopup();
             },
           ),
         ],
