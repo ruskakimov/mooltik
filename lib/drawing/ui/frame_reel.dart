@@ -138,7 +138,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
       arrowSidePosition: ArrowSidePosition.middle,
       arrowAnchor: Alignment(0, -1.1),
       popupColor: Theme.of(context).colorScheme.primary,
-      popupBody: FramePopupBody(),
+      popupBody: FramePopupBody(scrollTo: scrollTo),
       child: child,
       onDragOutside: _closePopup,
       onTapOutside: _closePopup,
@@ -228,8 +228,17 @@ class _FrameReelItem extends StatelessWidget {
 }
 
 class FramePopupBody extends StatelessWidget {
+  const FramePopupBody({
+    Key key,
+    @required this.scrollTo,
+  }) : super(key: key);
+
+  final Function(int) scrollTo;
+
   @override
   Widget build(BuildContext context) {
+    final reel = context.watch<FrameReelModel>();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
@@ -239,7 +248,12 @@ class FramePopupBody extends StatelessWidget {
             icon: FontAwesomeIcons.plusSquare,
             label: 'Add before',
             color: Theme.of(context).colorScheme.onPrimary,
-            onTap: () {},
+            onTap: () async {
+              reel.addBeforeCurrent(
+                await context.read<Project>().createNewFrame(),
+              );
+              // scrollTo(reel.currentIndex);
+            },
           ),
           LabeledIconButton(
             icon: FontAwesomeIcons.copy,
@@ -257,7 +271,12 @@ class FramePopupBody extends StatelessWidget {
             icon: FontAwesomeIcons.plusSquare,
             label: 'Add after',
             color: Theme.of(context).colorScheme.onPrimary,
-            onTap: () {},
+            onTap: () async {
+              reel.addAfterCurrent(
+                await context.read<Project>().createNewFrame(),
+              );
+              // scrollTo(reel.currentIndex + 1);
+            },
           ),
         ],
       ),
