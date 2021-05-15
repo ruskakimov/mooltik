@@ -266,9 +266,16 @@ class FramePopupBody extends StatelessWidget {
               reel.addBeforeCurrent(
                 await context.read<Project>().createNewFrame(),
               );
+
               // Keep current centered.
               jumpTo(reel.currentIndex);
+
               closePopup();
+
+              await Future.delayed(Duration(milliseconds: 150));
+
+              // Scroll to new frame.
+              scrollTo(reel.currentIndex - 1);
             },
           ),
           LabeledIconButton(
@@ -295,7 +302,13 @@ class FramePopupBody extends StatelessWidget {
               reel.addAfterCurrent(
                 await context.read<Project>().createNewFrame(),
               );
+
               closePopup();
+
+              await Future.delayed(Duration(milliseconds: 150));
+
+              // Scroll to new frame.
+              scrollTo(reel.currentIndex + 1);
             },
           ),
         ],
