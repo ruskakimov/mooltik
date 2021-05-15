@@ -138,7 +138,10 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
       arrowSidePosition: ArrowSidePosition.middle,
       arrowAnchor: Alignment(0, -1.1),
       popupColor: Theme.of(context).colorScheme.primary,
-      popupBody: FramePopupBody(scrollTo: scrollTo),
+      popupBody: FramePopupBody(
+        scrollTo: scrollTo,
+        jumpTo: jumpTo,
+      ),
       child: child,
       onDragOutside: _closePopup,
       onTapOutside: _closePopup,
@@ -165,6 +168,12 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
         curve: Curves.easeInOut,
       );
     });
+  }
+
+  void jumpTo(int frameIndex) {
+    final offset = frameOffset(frameIndex);
+    print(offset);
+    _controller.jumpTo(offset);
   }
 
   @override
@@ -231,9 +240,11 @@ class FramePopupBody extends StatelessWidget {
   const FramePopupBody({
     Key key,
     @required this.scrollTo,
+    @required this.jumpTo,
   }) : super(key: key);
 
   final Function(int) scrollTo;
+  final Function(int) jumpTo;
 
   @override
   Widget build(BuildContext context) {
@@ -252,7 +263,7 @@ class FramePopupBody extends StatelessWidget {
               reel.addBeforeCurrent(
                 await context.read<Project>().createNewFrame(),
               );
-              // scrollTo(reel.currentIndex);
+              jumpTo(reel.currentIndex);
             },
           ),
           LabeledIconButton(
@@ -265,7 +276,7 @@ class FramePopupBody extends StatelessWidget {
             icon: FontAwesomeIcons.trashAlt,
             label: 'Delete',
             color: Theme.of(context).colorScheme.onPrimary,
-            // onTap: () {},
+            onTap: () {},
           ),
           LabeledIconButton(
             icon: FontAwesomeIcons.plusSquare,
@@ -275,7 +286,6 @@ class FramePopupBody extends StatelessWidget {
               reel.addAfterCurrent(
                 await context.read<Project>().createNewFrame(),
               );
-              // scrollTo(reel.currentIndex + 1);
             },
           ),
         ],
