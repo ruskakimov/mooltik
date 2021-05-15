@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
@@ -34,13 +33,8 @@ class FrameMenu extends StatelessWidget {
             label: 'Add before',
             color: Theme.of(context).colorScheme.onPrimary,
             onTap: () async {
-              reel.addBeforeCurrent(
-                await context.read<Project>().createNewFrame(),
-              );
-
-              // Keep current centered.
-              jumpTo(reel.currentIndex);
-
+              await reel.addBeforeCurrent();
+              jumpTo(reel.currentIndex); // Keep current centered.
               closePopup();
 
               await Future.delayed(Duration(milliseconds: 100));
@@ -54,11 +48,7 @@ class FrameMenu extends StatelessWidget {
             label: 'Duplicate',
             color: Theme.of(context).colorScheme.onPrimary,
             onTap: () async {
-              final newFrame = await context.read<Project>().createNewFrame();
-              reel.addAfterCurrent(
-                selectedFrame.copyWith(file: newFrame.file)..saveSnapshot(),
-              );
-
+              await reel.duplicateCurrent();
               closePopup();
 
               await Future.delayed(Duration(milliseconds: 100));
@@ -83,10 +73,7 @@ class FrameMenu extends StatelessWidget {
             label: 'Add after',
             color: Theme.of(context).colorScheme.onPrimary,
             onTap: () async {
-              reel.addAfterCurrent(
-                await context.read<Project>().createNewFrame(),
-              );
-
+              await reel.addAfterCurrent();
               closePopup();
 
               await Future.delayed(Duration(milliseconds: 100));

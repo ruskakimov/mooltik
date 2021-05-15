@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
@@ -9,15 +10,21 @@ class ReelStackModel extends ChangeNotifier {
   ReelStackModel({
     @required Scene scene,
     @required SharedPreferences sharedPreferences,
+    @required CreateNewFrame createNewFrame,
   })  : _scene = scene,
         _sharedPreferences = sharedPreferences,
+        _createNewFrame = createNewFrame,
         _showFrameReel = sharedPreferences.getBool(_showFrameReelKey) ?? true,
         reels = scene.layers
-            .map((layer) => FrameReelModel(layer.frameSeq))
+            .map((layer) => FrameReelModel(
+                  frameSeq: layer.frameSeq,
+                  createNewFrame: createNewFrame,
+                ))
             .toList();
 
   final Scene _scene;
   SharedPreferences _sharedPreferences;
+  final CreateNewFrame _createNewFrame;
 
   final List<FrameReelModel> reels;
 
@@ -44,7 +51,12 @@ class ReelStackModel extends ChangeNotifier {
 
   void addLayerAboveActive(SceneLayer layer) {
     _scene.layers.insert(_activeReelIndex, layer);
-    reels.insert(_activeReelIndex, FrameReelModel(layer.frameSeq));
+    reels.insert(
+        _activeReelIndex,
+        FrameReelModel(
+          frameSeq: layer.frameSeq,
+          createNewFrame: _createNewFrame,
+        ));
     notifyListeners();
   }
 
