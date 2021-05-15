@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mooltik/common/data/project/project.dart';
+import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
+import 'package:mooltik/drawing/ui/reel/frame_menu.dart';
 import 'package:mooltik/drawing/ui/frame_thumbnail.dart';
 import 'package:provider/provider.dart';
 
@@ -46,6 +47,7 @@ class _FrameReelItemList extends StatefulWidget {
 
 class __FrameReelItemListState extends State<_FrameReelItemList> {
   ScrollController _controller;
+  bool _showFramePopup = false;
 
   @override
   void initState() {
@@ -96,33 +98,65 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
           itemExtent: widget.itemWidth,
           itemBuilder: (context, index) {
             if (index == reel.frameSeq.length) {
-              return GestureDetector(
+              return _FrameReelItem(
+                child: ColoredBox(
+                  color: Theme.of(context).colorScheme.secondary,
+                  child: const Icon(FontAwesomeIcons.plus, size: 16),
+                ),
                 onTap: () async {
-                  reel.appendFrame(
-                    await context.read<Project>().createNewFrame(),
-                  );
+                  await reel.appendFrame();
                   scrollTo(reel.frameSeq.length - 1);
                 },
-                child: _FrameReelItem(
-                  child: ColoredBox(
-                    color: Theme.of(context).colorScheme.secondary,
-                    child: Icon(FontAwesomeIcons.plus, size: 16),
-                  ),
-                ),
               );
             }
 
-            return GestureDetector(
-              onTap: () => scrollTo(index),
-              child: _FrameReelItem(
-                selected: index == reel.currentIndex,
-                child: FrameThumbnail(frame: reel.frameSeq[index]),
+            final selected = index == reel.currentIndex;
+            final frame = reel.frameSeq[index];
+
+            final item = _FrameReelItem(
+              selected: selected,
+              child: FrameThumbnail(
+                frame: frame,
+                background: Colors.transparent,
               ),
+              onTap: selected ? _openPopup : () => scrollTo(index),
             );
+
+            return selected ? _wrapWithPopupEntry(item) : item;
           },
         ),
       ),
     );
+  }
+
+  Widget _wrapWithPopupEntry(Widget child) {
+    return PopupWithArrowEntry(
+      visible: _showFramePopup,
+      arrowSide: ArrowSide.bottom,
+      arrowSidePosition: ArrowSidePosition.middle,
+      arrowAnchor: Alignment(0, -1.1),
+      popupColor: Theme.of(context).colorScheme.primary,
+      popupBody: FrameMenu(
+        scrollTo: scrollTo,
+        jumpTo: jumpTo,
+        closePopup: _closePopup,
+      ),
+      child: child,
+      onDragOutside: _closePopup,
+      onTapOutside: _closePopup,
+    );
+  }
+
+  void _openPopup() {
+    setState(() {
+      _showFramePopup = true;
+    });
+  }
+
+  void _closePopup() {
+    setState(() {
+      _showFramePopup = false;
+    });
   }
 
   void scrollTo(int frameIndex) {
@@ -133,6 +167,11 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
         curve: Curves.easeInOut,
       );
     });
+  }
+
+  void jumpTo(int frameIndex) {
+    final offset = frameOffset(frameIndex);
+    _controller.jumpTo(offset);
   }
 
   @override
@@ -147,10 +186,12 @@ class _FrameReelItem extends StatelessWidget {
     Key key,
     @required this.child,
     this.selected = false,
+    this.onTap,
   }) : super(key: key);
 
   final Widget child;
   final bool selected;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -158,19 +199,35 @@ class _FrameReelItem extends StatelessWidget {
 
     return Padding(
       padding: _framePadding,
-      child: Container(
-        foregroundDecoration: BoxDecoration(
-          border: Border.all(
-            color: selected
-                ? Theme.of(context).colorScheme.primary
-                : Colors.grey.withOpacity(0.8),
-            width: 2,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            foregroundDecoration: selected
+                ? BoxDecoration(
+                    borderRadius: borderRadius,
+                    border: Border.all(
+                      width: 2,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  )
+                : null,
+            decoration: BoxDecoration(
+              borderRadius: borderRadius,
+              color: selected
+                  ? Colors.white
+                  : Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: child,
           ),
-          borderRadius: borderRadius,
-        ),
-        decoration: BoxDecoration(borderRadius: borderRadius),
-        clipBehavior: Clip.antiAlias,
-        child: child,
+          Material(
+            type: MaterialType.transparency,
+            borderRadius: borderRadius,
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(onTap: onTap),
+          ),
+        ],
       ),
     );
   }

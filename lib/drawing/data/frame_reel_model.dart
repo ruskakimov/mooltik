@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 
 class FrameReelModel extends ChangeNotifier {
-  FrameReelModel(this.frameSeq) : _currentIndex = frameSeq.currentIndex;
+  FrameReelModel({
+    @required this.frameSeq,
+    @required CreateNewFrame createNewFrame,
+  })  : _currentIndex = frameSeq.currentIndex,
+        _createNewFrame = createNewFrame;
 
   final Sequence<Frame> frameSeq;
+  final CreateNewFrame _createNewFrame;
 
   Frame get currentFrame => frameSeq[_currentIndex];
 
@@ -18,8 +24,36 @@ class FrameReelModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void appendFrame(Frame frame) {
-    frameSeq.insert(frameSeq.length, frame);
+  Future<void> appendFrame() async {
+    frameSeq.insert(frameSeq.length, await _createNewFrame());
+    notifyListeners();
+  }
+
+  Future<void> addBeforeCurrent() async {
+    frameSeq.insert(_currentIndex, await _createNewFrame());
+    _currentIndex++;
+    notifyListeners();
+  }
+
+  Future<void> addAfterCurrent() async {
+    frameSeq.insert(_currentIndex + 1, await _createNewFrame());
+    notifyListeners();
+  }
+
+  Future<void> duplicateCurrent() async {
+    final newFrame = await _createNewFrame();
+    frameSeq.insert(
+      _currentIndex + 1,
+      currentFrame.copyWith(file: newFrame.file)..saveSnapshot(),
+    );
+    notifyListeners();
+  }
+
+  bool get canDeleteCurrent => frameSeq.length > 1;
+
+  void deleteCurrent() {
+    frameSeq.removeAt(_currentIndex);
+    _currentIndex = _currentIndex.clamp(0, frameSeq.length - 1);
     notifyListeners();
   }
 

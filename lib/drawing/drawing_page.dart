@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
 import 'package:mooltik/drawing/ui/drawing_actionbar.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
-import 'package:mooltik/drawing/ui/frame_reel.dart';
+import 'package:mooltik/drawing/ui/reel/frame_reel.dart';
 import 'package:mooltik/drawing/ui/layers/layer_button.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
@@ -34,6 +35,7 @@ class DrawingPage extends StatelessWidget {
             return ReelStackModel(
               scene: context.read<TimelineModel>().currentScene,
               sharedPreferences: context.read<SharedPreferences>(),
+              createNewFrame: context.read<Project>().createNewFrame,
             );
           },
         ),

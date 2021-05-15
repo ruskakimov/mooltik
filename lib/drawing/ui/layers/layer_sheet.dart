@@ -3,6 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
+import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/frame_thumbnail.dart';
 import 'package:provider/provider.dart';
@@ -67,8 +68,10 @@ class LayerSheet extends StatelessWidget {
         SlideAction(
           color: Colors.red,
           closeOnTap: true,
-          child: AppIconButton(
+          child: LabeledIconButton(
             icon: FontAwesomeIcons.trashAlt,
+            label: 'Delete',
+            color: Colors.white,
             onTap: reelStack.canDeleteLayer
                 ? () => reelStack.deleteLayer(reelStack.reels.indexOf(reel))
                 : null,
@@ -128,8 +131,12 @@ class LayerRow extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              Container(
+                margin: const EdgeInsets.all(8.0),
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 child: FrameThumbnail(frame: reel.currentFrame),
               ),
               SizedBox(width: 4),
