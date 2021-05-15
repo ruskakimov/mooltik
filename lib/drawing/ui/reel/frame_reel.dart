@@ -4,7 +4,7 @@ import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
-import 'package:mooltik/drawing/ui/frame_popup.dart';
+import 'package:mooltik/drawing/ui/reel/frame_popup.dart';
 import 'package:mooltik/drawing/ui/frame_thumbnail.dart';
 import 'package:provider/provider.dart';
 
