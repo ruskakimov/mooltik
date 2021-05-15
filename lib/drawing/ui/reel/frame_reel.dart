@@ -212,12 +212,12 @@ class _FrameReelItem extends StatelessWidget {
             duration: const Duration(milliseconds: 150),
             foregroundDecoration: BoxDecoration(
               borderRadius: borderRadius,
-              border: Border.all(
-                width: 2,
-                color: selected
-                    ? Theme.of(context).colorScheme.primary
-                    : Colors.transparent,
-              ),
+              border: selected
+                  ? Border.all(
+                      width: 2,
+                      color: Theme.of(context).colorScheme.primary,
+                    )
+                  : null,
             ),
             decoration: BoxDecoration(
               borderRadius: borderRadius,
