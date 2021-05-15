@@ -19,6 +19,8 @@ class FrameMenu extends StatelessWidget {
   final Function(int) jumpTo;
   final VoidCallback closePopup;
 
+  static const Duration scrollDelay = Duration(milliseconds: 100);
+
   @override
   Widget build(BuildContext context) {
     final reel = context.watch<FrameReelModel>();
@@ -37,7 +39,7 @@ class FrameMenu extends StatelessWidget {
               jumpTo(reel.currentIndex); // Keep current centered.
               closePopup();
 
-              await Future.delayed(Duration(milliseconds: 100));
+              await Future.delayed(scrollDelay);
 
               // Scroll to new frame.
               scrollTo(reel.currentIndex - 1);
@@ -51,7 +53,7 @@ class FrameMenu extends StatelessWidget {
               await reel.duplicateCurrent();
               closePopup();
 
-              await Future.delayed(Duration(milliseconds: 100));
+              await Future.delayed(scrollDelay);
 
               // Scroll to duplicated frame.
               scrollTo(reel.currentIndex + 1);
@@ -76,7 +78,7 @@ class FrameMenu extends StatelessWidget {
               await reel.addAfterCurrent();
               closePopup();
 
-              await Future.delayed(Duration(milliseconds: 100));
+              await Future.delayed(scrollDelay);
 
               // Scroll to new frame.
               scrollTo(reel.currentIndex + 1);
