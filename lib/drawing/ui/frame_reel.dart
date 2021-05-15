@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/frame_thumbnail.dart';
 import 'package:provider/provider.dart';
@@ -114,24 +115,25 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
             }
 
             final selected = index == reel.currentIndex;
+            final frame = reel.frameSeq[index];
 
             final item = _FrameReelItem(
               selected: selected,
               child: FrameThumbnail(
-                frame: reel.frameSeq[index],
+                frame: frame,
                 background: Colors.transparent,
               ),
               onTap: selected ? _openPopup : () => scrollTo(index),
             );
 
-            return selected ? _wrapWithPopupEntry(item) : item;
+            return selected ? _wrapWithPopupEntry(item, frame) : item;
           },
         ),
       ),
     );
   }
 
-  Widget _wrapWithPopupEntry(Widget child) {
+  Widget _wrapWithPopupEntry(Widget child, Frame selectedFrame) {
     return PopupWithArrowEntry(
       visible: _showFramePopup,
       arrowSide: ArrowSide.bottom,
@@ -139,6 +141,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
       arrowAnchor: Alignment(0, -1.1),
       popupColor: Theme.of(context).colorScheme.primary,
       popupBody: FramePopupBody(
+        selectedFrame: selectedFrame,
         scrollTo: scrollTo,
         jumpTo: jumpTo,
         closePopup: _closePopup,
@@ -240,11 +243,13 @@ class _FrameReelItem extends StatelessWidget {
 class FramePopupBody extends StatelessWidget {
   const FramePopupBody({
     Key key,
+    @required this.selectedFrame,
     @required this.scrollTo,
     @required this.jumpTo,
     @required this.closePopup,
   }) : super(key: key);
 
+  final Frame selectedFrame;
   final Function(int) scrollTo;
   final Function(int) jumpTo;
   final VoidCallback closePopup;
@@ -282,8 +287,18 @@ class FramePopupBody extends StatelessWidget {
             icon: FontAwesomeIcons.copy,
             label: 'Duplicate',
             color: Theme.of(context).colorScheme.onPrimary,
-            onTap: () {
+            onTap: () async {
+              final newFrame = await context.read<Project>().createNewFrame();
+              reel.addAfterCurrent(
+                selectedFrame.copyWith(file: newFrame.file)..saveSnapshot(),
+              );
+
               closePopup();
+
+              await Future.delayed(Duration(milliseconds: 150));
+
+              // Scroll to duplicated frame.
+              scrollTo(reel.currentIndex + 1);
             },
           ),
           LabeledIconButton(
