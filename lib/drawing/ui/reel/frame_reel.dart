@@ -123,14 +123,14 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
               onTap: selected ? _openPopup : () => scrollTo(index),
             );
 
-            return selected ? _wrapWithPopupEntry(item, frame) : item;
+            return selected ? _wrapWithPopupEntry(item) : item;
           },
         ),
       ),
     );
   }
 
-  Widget _wrapWithPopupEntry(Widget child, Frame selectedFrame) {
+  Widget _wrapWithPopupEntry(Widget child) {
     return PopupWithArrowEntry(
       visible: _showFramePopup,
       arrowSide: ArrowSide.bottom,
@@ -138,7 +138,6 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
       arrowAnchor: Alignment(0, -1.1),
       popupColor: Theme.of(context).colorScheme.primary,
       popupBody: FrameMenu(
-        selectedFrame: selectedFrame,
         scrollTo: scrollTo,
         jumpTo: jumpTo,
         closePopup: _closePopup,

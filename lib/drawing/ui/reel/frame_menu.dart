@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
-import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:provider/provider.dart';
 
 class FrameMenu extends StatelessWidget {
   const FrameMenu({
     Key key,
-    @required this.selectedFrame,
     @required this.scrollTo,
     @required this.jumpTo,
     @required this.closePopup,
   }) : super(key: key);
 
-  final Frame selectedFrame;
   final Function(int) scrollTo;
   final Function(int) jumpTo;
   final VoidCallback closePopup;
