@@ -4,7 +4,7 @@ import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
-import 'package:mooltik/drawing/ui/reel/frame_popup.dart';
+import 'package:mooltik/drawing/ui/reel/frame_menu.dart';
 import 'package:mooltik/drawing/ui/frame_thumbnail.dart';
 import 'package:provider/provider.dart';
 
@@ -140,7 +140,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
       arrowSidePosition: ArrowSidePosition.middle,
       arrowAnchor: Alignment(0, -1.1),
       popupColor: Theme.of(context).colorScheme.primary,
-      popupBody: FramePopupBody(
+      popupBody: FrameMenu(
         selectedFrame: selectedFrame,
         scrollTo: scrollTo,
         jumpTo: jumpTo,

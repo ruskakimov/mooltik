@@ -6,8 +6,8 @@ import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:provider/provider.dart';
 
-class FramePopupBody extends StatelessWidget {
-  const FramePopupBody({
+class FrameMenu extends StatelessWidget {
+  const FrameMenu({
     Key key,
     @required this.selectedFrame,
     @required this.scrollTo,
