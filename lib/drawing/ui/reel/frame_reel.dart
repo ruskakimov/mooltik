@@ -210,15 +210,15 @@ class _FrameReelItem extends StatelessWidget {
         children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 150),
-            foregroundDecoration: BoxDecoration(
-              borderRadius: borderRadius,
-              border: selected
-                  ? Border.all(
+            foregroundDecoration: selected
+                ? BoxDecoration(
+                    borderRadius: borderRadius,
+                    border: Border.all(
                       width: 2,
                       color: Theme.of(context).colorScheme.primary,
-                    )
-                  : null,
-            ),
+                    ),
+                  )
+                : null,
             decoration: BoxDecoration(
               borderRadius: borderRadius,
               color: selected
