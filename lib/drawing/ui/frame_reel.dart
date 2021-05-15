@@ -277,7 +277,7 @@ class FramePopupBody extends StatelessWidget {
 
               closePopup();
 
-              await Future.delayed(Duration(milliseconds: 150));
+              await Future.delayed(Duration(milliseconds: 100));
 
               // Scroll to new frame.
               scrollTo(reel.currentIndex - 1);
@@ -295,7 +295,7 @@ class FramePopupBody extends StatelessWidget {
 
               closePopup();
 
-              await Future.delayed(Duration(milliseconds: 150));
+              await Future.delayed(Duration(milliseconds: 100));
 
               // Scroll to duplicated frame.
               scrollTo(reel.currentIndex + 1);
@@ -321,7 +321,7 @@ class FramePopupBody extends StatelessWidget {
 
               closePopup();
 
-              await Future.delayed(Duration(milliseconds: 150));
+              await Future.delayed(Duration(milliseconds: 100));
 
               // Scroll to new frame.
               scrollTo(reel.currentIndex + 1);
