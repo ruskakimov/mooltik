@@ -306,6 +306,7 @@ class FramePopupBody extends StatelessWidget {
             label: 'Delete',
             color: Theme.of(context).colorScheme.onPrimary,
             onTap: () {
+              reel.removeCurrent();
               closePopup();
             },
           ),
