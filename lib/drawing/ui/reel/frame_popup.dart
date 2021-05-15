@@ -71,10 +71,12 @@ class FramePopupBody extends StatelessWidget {
             icon: FontAwesomeIcons.trashAlt,
             label: 'Delete',
             color: Theme.of(context).colorScheme.onPrimary,
-            onTap: () {
-              reel.removeCurrent();
-              closePopup();
-            },
+            onTap: reel.canDeleteCurrent
+                ? () {
+                    reel.deleteCurrent();
+                    closePopup();
+                  }
+                : null,
           ),
           LabeledIconButton(
             icon: FontAwesomeIcons.plusSquare,
