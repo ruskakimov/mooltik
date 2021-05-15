@@ -102,7 +102,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
               return _FrameReelItem(
                 child: ColoredBox(
                   color: Theme.of(context).colorScheme.secondary,
-                  child: Icon(FontAwesomeIcons.plus, size: 16),
+                  child: const Icon(FontAwesomeIcons.plus, size: 16),
                 ),
                 onTap: () async {
                   reel.appendFrame(
