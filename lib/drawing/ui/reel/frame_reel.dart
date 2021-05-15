@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
-import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/reel/frame_menu.dart';
 import 'package:mooltik/drawing/ui/frame_thumbnail.dart';
@@ -172,7 +171,6 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
 
   void jumpTo(int frameIndex) {
     final offset = frameOffset(frameIndex);
-    print(offset);
     _controller.jumpTo(offset);
   }
 
