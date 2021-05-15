@@ -208,8 +208,7 @@ class _FrameReelItem extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
+          Container(
             foregroundDecoration: selected
                 ? BoxDecoration(
                     borderRadius: borderRadius,
