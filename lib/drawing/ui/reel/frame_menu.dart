@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/copy_paster_model.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
+import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:provider/provider.dart';
 
@@ -80,7 +81,9 @@ class FrameMenu extends StatelessWidget {
           color: Theme.of(context).colorScheme.onPrimary,
           onTap: copyPaster.canPaste
               ? () async {
-                  // TODO: Paste into current frame.
+                  final easel = context.read<EaselModel>();
+                  final newSnapshot = copyPaster.pasteOn(easel.frame.snapshot);
+                  easel.pushSnapshot(newSnapshot);
                   closePopup();
                 }
               : null,
