@@ -36,7 +36,7 @@ class FrameMenu extends StatelessWidget {
   }
 
   Widget _buildSeparator() {
-    return Container(
+    return Ink(
       width: 150,
       height: 1,
       color: Colors.black12,
