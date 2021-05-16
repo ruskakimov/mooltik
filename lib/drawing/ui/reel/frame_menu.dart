@@ -81,10 +81,12 @@ class FrameMenu extends StatelessWidget {
           color: Theme.of(context).colorScheme.onPrimary,
           onTap: copyPaster.canPaste
               ? () async {
-                  final easel = context.read<EaselModel>();
-                  final newSnapshot = copyPaster.pasteOn(easel.frame.snapshot);
-                  easel.pushSnapshot(newSnapshot);
                   closePopup();
+                  final easel = context.read<EaselModel>();
+                  final newSnapshot = await copyPaster.pasteOn(
+                    easel.frame.snapshot,
+                  );
+                  easel.pushSnapshot(newSnapshot);
                 }
               : null,
         ),
