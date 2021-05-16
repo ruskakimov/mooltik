@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/io/generate_image.dart';
 
 class CopyPasterModel extends ChangeNotifier {
   ui.Image get copiedImage => _copiedImage;
@@ -13,7 +14,33 @@ class CopyPasterModel extends ChangeNotifier {
 
   bool get canPaste => _copiedImage != null;
 
-  ui.Image pasteOn(ui.Image destination) {
-    // TODO: Implement paste.
+  Future<ui.Image> pasteOn(ui.Image destination) async {
+    return generateImage(
+      PastePainter(source: _copiedImage, destination: destination),
+      destination.width,
+      destination.height,
+    );
   }
+}
+
+class PastePainter extends CustomPainter {
+  PastePainter({
+    @required this.source,
+    @required this.destination,
+  });
+
+  final ui.Image source;
+  final ui.Image destination;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawImage(destination, Offset.zero, Paint());
+    canvas.drawImage(source, Offset.zero, Paint());
+  }
+
+  @override
+  bool shouldRepaint(PastePainter oldDelegate) => false;
+
+  @override
+  bool shouldRebuildSemantics(PastePainter oldDelegate) => false;
 }
