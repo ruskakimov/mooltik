@@ -24,65 +24,109 @@ class FrameMenu extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Row(
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          LabeledIconButton(
-            icon: FontAwesomeIcons.plusSquare,
-            label: 'Add before',
-            color: Theme.of(context).colorScheme.onPrimary,
-            onTap: () async {
-              await reel.addBeforeCurrent();
-              jumpTo(reel.currentIndex); // Keep current centered.
-              closePopup();
-
-              await Future.delayed(scrollDelay);
-
-              // Scroll to new frame.
-              scrollTo(reel.currentIndex - 1);
-            },
-          ),
-          LabeledIconButton(
-            icon: FontAwesomeIcons.copy,
-            label: 'Duplicate',
-            color: Theme.of(context).colorScheme.onPrimary,
-            onTap: () async {
-              await reel.duplicateCurrent();
-              closePopup();
-
-              await Future.delayed(scrollDelay);
-
-              // Scroll to duplicated frame.
-              scrollTo(reel.currentIndex + 1);
-            },
-          ),
-          LabeledIconButton(
-            icon: FontAwesomeIcons.trashAlt,
-            label: 'Delete',
-            color: Theme.of(context).colorScheme.onPrimary,
-            onTap: reel.canDeleteCurrent
-                ? () {
-                    reel.deleteCurrent();
-                    closePopup();
-                  }
-                : null,
-          ),
-          LabeledIconButton(
-            icon: FontAwesomeIcons.plusSquare,
-            label: 'Add after',
-            color: Theme.of(context).colorScheme.onPrimary,
-            onTap: () async {
-              await reel.addAfterCurrent();
-              closePopup();
-
-              await Future.delayed(scrollDelay);
-
-              // Scroll to new frame.
-              scrollTo(reel.currentIndex + 1);
-            },
-          ),
+          _buildFirstRow(context, reel),
+          _buildSeparator(),
+          _buildSecondRow(context, reel),
         ],
       ),
+    );
+  }
+
+  Widget _buildSeparator() {
+    return Container(
+      width: 150,
+      height: 1,
+      color: Colors.black12,
+    );
+  }
+
+  Row _buildFirstRow(BuildContext context, FrameReelModel reel) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        LabeledIconButton(
+          icon: Icons.copy_rounded,
+          label: 'Copy',
+          color: Theme.of(context).colorScheme.onPrimary,
+          onTap: () async {
+            closePopup();
+          },
+        ),
+        LabeledIconButton(
+          icon: Icons.cut_rounded,
+          label: 'Cut',
+          color: Theme.of(context).colorScheme.onPrimary,
+          onTap: reel.canDeleteCurrent
+              ? () {
+                  // TODO: Copy first
+                  reel.deleteCurrent();
+                  closePopup();
+                }
+              : null,
+        ),
+        LabeledIconButton(
+          icon: Icons.paste_rounded,
+          label: 'Paste',
+          color: Theme.of(context).colorScheme.onPrimary,
+          onTap: () async {
+            closePopup();
+          },
+        ),
+      ],
+    );
+  }
+
+  Row _buildSecondRow(BuildContext context, FrameReelModel reel) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        LabeledIconButton(
+          icon: FontAwesomeIcons.plusSquare,
+          label: 'Add before',
+          color: Theme.of(context).colorScheme.onPrimary,
+          onTap: () async {
+            await reel.addBeforeCurrent();
+            jumpTo(reel.currentIndex); // Keep current centered.
+            closePopup();
+
+            await Future.delayed(scrollDelay);
+
+            // Scroll to new frame.
+            scrollTo(reel.currentIndex - 1);
+          },
+        ),
+        LabeledIconButton(
+          icon: FontAwesomeIcons.copy,
+          label: 'Duplicate',
+          color: Theme.of(context).colorScheme.onPrimary,
+          onTap: () async {
+            await reel.duplicateCurrent();
+            closePopup();
+
+            await Future.delayed(scrollDelay);
+
+            // Scroll to duplicated frame.
+            scrollTo(reel.currentIndex + 1);
+          },
+        ),
+        LabeledIconButton(
+          icon: FontAwesomeIcons.plusSquare,
+          label: 'Add after',
+          color: Theme.of(context).colorScheme.onPrimary,
+          onTap: () async {
+            await reel.addAfterCurrent();
+            closePopup();
+
+            await Future.delayed(scrollDelay);
+
+            // Scroll to new frame.
+            scrollTo(reel.currentIndex + 1);
+          },
+        ),
+      ],
     );
   }
 }
