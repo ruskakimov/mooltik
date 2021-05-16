@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/debouncer.dart';
@@ -210,9 +211,8 @@ class EaselModel extends ChangeNotifier {
 
     unrasterizedStrokes.last.finish();
 
-    // TODO: Queue snapshots.
     if (unrasterizedStrokes.last.boundingRect.overlaps(_frameArea)) {
-      _generateLastSnapshot();
+      _applyStrokes();
     } else {
       unrasterizedStrokes.removeLast();
     }
@@ -227,15 +227,24 @@ class EaselModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _generateLastSnapshot() async {
+  Future<void> _applyStrokes() async {
+    final newSnapshot = await _generateLastSnapshot();
+    unrasterizedStrokes.clear();
+    pushSnapshot(newSnapshot);
+  }
+
+  Future<ui.Image> _generateLastSnapshot() async {
     final snapshot = await generateImage(
       FramePainter(frame: _frame, strokes: unrasterizedStrokes),
       _frame.width.toInt(),
       _frame.height.toInt(),
     );
+    return snapshot;
+  }
+
+  void pushSnapshot(ui.Image snapshot) {
     _historyStack.push(snapshot);
     _updateFrame();
-    unrasterizedStrokes.clear();
     notifyListeners();
   }
 }
