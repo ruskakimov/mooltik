@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/common/data/copy_paster_model.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:provider/provider.dart';
@@ -21,13 +22,14 @@ class FrameMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final reel = context.watch<FrameReelModel>();
+    final copyPaster = context.watch<CopyPasterModel>();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildFirstRow(context, reel),
+          _buildFirstRow(context, reel, copyPaster),
           _buildSeparator(),
           _buildSecondRow(context, reel),
         ],
@@ -43,7 +45,11 @@ class FrameMenu extends StatelessWidget {
     );
   }
 
-  Row _buildFirstRow(BuildContext context, FrameReelModel reel) {
+  Row _buildFirstRow(
+    BuildContext context,
+    FrameReelModel reel,
+    CopyPasterModel copyPaster,
+  ) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -51,7 +57,8 @@ class FrameMenu extends StatelessWidget {
           icon: Icons.copy_rounded,
           label: 'Copy',
           color: Theme.of(context).colorScheme.onPrimary,
-          onTap: () async {
+          onTap: () {
+            copyPaster.copyImage(reel.currentFrame.snapshot);
             closePopup();
           },
         ),
@@ -61,7 +68,7 @@ class FrameMenu extends StatelessWidget {
           color: Theme.of(context).colorScheme.onPrimary,
           onTap: reel.canDeleteCurrent
               ? () {
-                  // TODO: Copy first
+                  copyPaster.copyImage(reel.currentFrame.snapshot);
                   reel.deleteCurrent();
                   closePopup();
                 }
@@ -71,9 +78,12 @@ class FrameMenu extends StatelessWidget {
           icon: Icons.paste_rounded,
           label: 'Paste',
           color: Theme.of(context).colorScheme.onPrimary,
-          onTap: () async {
-            closePopup();
-          },
+          onTap: copyPaster.canPaste
+              ? () async {
+                  // TODO: Paste into current frame.
+                  closePopup();
+                }
+              : null,
         ),
       ],
     );
