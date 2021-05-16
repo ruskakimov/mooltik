@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_portal/flutter_portal.dart';
+import 'package:mooltik/common/data/copy_paster_model.dart';
 import 'package:mooltik/home/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,6 +41,7 @@ class App extends StatelessWidget {
       providers: [
         Provider<SharedPreferences>.value(value: sharedPreferences),
         Provider<RouteObserver>.value(value: routeObserver),
+        ChangeNotifierProvider(create: (context) => CopyPasterModel()),
       ],
       child: Portal(
         child: MaterialApp(
