@@ -61,14 +61,16 @@ class DrawingMenu extends StatelessWidget {
   }
 
   _MenuTile _buildFingerDrawToggle(BuildContext context) {
+    final easel = context.watch<EaselModel>();
+
     return _MenuTile(
       icon: FontAwesomeIcons.handPointUp,
       title: 'Draw with finger',
       trailing: Switch(
-        value: true,
-        onChanged: (_) {},
+        value: easel.allowDrawingWithFinger,
+        onChanged: (_) => easel.toggleDrawingWithFinger(),
       ),
-      onTap: () {},
+      onTap: () => easel.toggleDrawingWithFinger(),
     );
   }
 

@@ -16,6 +16,7 @@ class EaselGestureDetector extends StatefulWidget {
     this.onStrokeCancel,
     this.onScaleStart,
     this.onScaleUpdate,
+    this.allowDrawingWithFinger,
   }) : super(key: key);
 
   final Widget child;
@@ -25,6 +26,7 @@ class EaselGestureDetector extends StatefulWidget {
   final VoidCallback onStrokeCancel;
   final GestureScaleStartCallback onScaleStart;
   final GestureScaleUpdateCallback onScaleUpdate;
+  final bool allowDrawingWithFinger;
 
   @override
   _EaselGestureDetectorState createState() => _EaselGestureDetectorState();
@@ -102,7 +104,9 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
     );
   }
 
-  bool get _blockDrawing => _firstPointerKind == PointerDeviceKind.touch;
+  bool get _blockDrawing =>
+      !widget.allowDrawingWithFinger &&
+      _firstPointerKind == PointerDeviceKind.touch;
 
   void _onSinglePointerStart(ScaleStartDetails details) {
     if (_blockDrawing) return;

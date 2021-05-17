@@ -64,13 +64,13 @@ class DrawingPage extends StatelessWidget {
                 ChangeNotifierProxyProvider2<FrameReelModel, ToolboxModel,
                     EaselModel>(
                   create: (context) => EaselModel(
-                      frame: context.read<FrameReelModel>().currentFrame,
-                      selectedTool: context.read<ToolboxModel>().selectedTool,
-                      onChanged: (Frame frame) {
-                        context
-                            .read<FrameReelModel>()
-                            .replaceCurrentFrame(frame);
-                      }),
+                    frame: context.read<FrameReelModel>().currentFrame,
+                    selectedTool: context.read<ToolboxModel>().selectedTool,
+                    onChanged: (Frame frame) {
+                      context.read<FrameReelModel>().replaceCurrentFrame(frame);
+                    },
+                    sharedPreferences: context.read<SharedPreferences>(),
+                  ),
                   update: (_, reel, toolbox, easel) => easel
                     ..updateFrame(reel.currentFrame)
                     ..updateSelectedTool(toolbox.selectedTool),

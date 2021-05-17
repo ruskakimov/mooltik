@@ -34,6 +34,7 @@ class _EaselState extends State<Easel> {
         onStrokeCancel: easel.onStrokeCancel,
         onScaleStart: easel.onScaleStart,
         onScaleUpdate: easel.onScaleUpdate,
+        allowDrawingWithFinger: easel.allowDrawingWithFinger,
         child: Stack(
           fit: StackFit.expand,
           children: [
