@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 typedef void StrokeStartCallback(Offset position);
@@ -35,6 +36,7 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
   Offset _lastContactPoint;
   bool _startedStroke = false;
   bool _veryQuickStroke = false;
+  PointerDeviceKind _firstPointerKind;
 
   bool get _firstPointerDown =>
       _prevPointersOnScreen == 0 && _pointersOnScreen == 1;
@@ -69,7 +71,12 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
   @override
   Widget build(BuildContext context) {
     return Listener(
-      onPointerDown: (e) => changePointerOnScreenBy(1),
+      onPointerDown: (e) {
+        changePointerOnScreenBy(1);
+        if (_firstPointerDown) {
+          _firstPointerKind = e.kind;
+        }
+      },
       onPointerUp: (e) => changePointerOnScreenBy(-1),
       onPointerCancel: (e) => changePointerOnScreenBy(-1),
       child: GestureDetector(
@@ -95,7 +102,11 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
     );
   }
 
+  bool get _blockDrawing => _firstPointerKind == PointerDeviceKind.touch;
+
   void _onSinglePointerStart(ScaleStartDetails details) {
+    if (_blockDrawing) return;
+
     widget.onStrokeStart?.call(DragStartDetails(
       globalPosition: details.focalPoint,
       localPosition: details.localFocalPoint,
@@ -108,6 +119,8 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
   }
 
   void _onSinglePointerMove(ScaleUpdateDetails details) {
+    if (_blockDrawing) return;
+
     final currentContactPoint = details.focalPoint;
     final dragUpdateDetails = DragUpdateDetails(
       delta: currentContactPoint - _lastContactPoint,
