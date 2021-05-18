@@ -5,19 +5,17 @@ class AppIconButton extends StatelessWidget {
     Key key,
     this.icon,
     this.selected = false,
-    this.selectedColor = Colors.black,
     this.onTap,
   }) : super(key: key);
 
   final IconData icon;
   final bool selected;
-  final Color selectedColor;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: selected ? Colors.white : Colors.transparent,
+      type: MaterialType.transparency,
       child: InkResponse(
         splashColor: Colors.transparent,
         onTap: onTap,
@@ -35,7 +33,7 @@ class AppIconButton extends StatelessWidget {
   }
 
   Color _getColor(BuildContext context) {
-    if (selected) return selectedColor;
+    if (selected) return Theme.of(context).colorScheme.primary;
     if (onTap == null) return Theme.of(context).disabledColor;
     return Theme.of(context).colorScheme.onSurface;
   }
