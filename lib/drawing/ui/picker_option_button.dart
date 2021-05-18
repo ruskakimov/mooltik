@@ -30,7 +30,7 @@ class PickerOptionButton extends StatelessWidget {
         decoration: BoxDecoration(
           border: selected
               ? Border.all(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.primary,
                   width: 3,
                 )
               : null,
