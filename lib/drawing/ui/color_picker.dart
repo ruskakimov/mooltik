@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 const _buttonWidth = 40.0;
@@ -65,7 +67,7 @@ class ColorPicker extends StatelessWidget {
                 for (var shade in _shades)
                   _ColorOption(
                     color: color[shade],
-                    selected: color.value == selectedColor.value,
+                    selected: color[shade].value == selectedColor.value,
                     onSelected: onSelected,
                   ),
             if (orientation == Orientation.landscape)
@@ -73,7 +75,7 @@ class ColorPicker extends StatelessWidget {
                 for (var color in _materialColors.reversed)
                   _ColorOption(
                     color: color[shade],
-                    selected: color.value == selectedColor.value,
+                    selected: color[shade].value == selectedColor.value,
                     onSelected: onSelected,
                   ),
           ],
@@ -101,11 +103,40 @@ class _ColorOption extends StatelessWidget {
       onPointerDown: (_) {
         onSelected?.call(color);
       },
-      child: Container(
+      child: SizedBox(
         width: _buttonWidth,
         height: _buttonWidth,
-        color: color,
+        child: selected
+            ? _addSelectionRing(ColoredBox(color: color))
+            : ColoredBox(color: color),
       ),
     );
   }
+
+  Widget _addSelectionRing(Widget child) => Stack(
+        fit: StackFit.expand,
+        children: [
+          child,
+          Container(
+            margin: const EdgeInsets.all(2),
+            foregroundDecoration: BoxDecoration(
+              border: Border.all(
+                width: 8,
+                color: Colors.black38,
+              ),
+              shape: BoxShape.circle,
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.all(4),
+            foregroundDecoration: BoxDecoration(
+              border: Border.all(
+                width: 4,
+                color: Colors.white,
+              ),
+              shape: BoxShape.circle,
+            ),
+          ),
+        ],
+      );
 }
