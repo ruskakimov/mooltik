@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/color_picker.dart';
-import 'package:mooltik/drawing/ui/picker_option_button.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 
@@ -45,11 +44,7 @@ class _ColorButtonState extends State<ColorButton> {
             }
           },
           child: Center(
-            child: PickerOptionButton(
-              selected: true,
-              size: 32,
-              innerCircleColor: toolbox.selectedTool.color,
-            ),
+            child: _ColorIndicator(color: toolbox.selectedTool.color),
           ),
         ),
       ),
@@ -62,5 +57,27 @@ class _ColorButtonState extends State<ColorButton> {
 
   void _closePicker() {
     setState(() => _pickerOpen = false);
+  }
+}
+
+class _ColorIndicator extends StatelessWidget {
+  const _ColorIndicator({
+    Key key,
+    @required this.color,
+  }) : super(key: key);
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 28,
+      height: 28,
+      decoration: BoxDecoration(
+        color: color,
+        border: Border.all(width: 2, color: Colors.white),
+        shape: BoxShape.circle,
+      ),
+    );
   }
 }
