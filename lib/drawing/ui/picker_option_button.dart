@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 class PickerOptionButton extends StatelessWidget {
   const PickerOptionButton({
     Key key,
-    this.innerCircleWidth = circleSize,
+    this.size = 44,
+    this.innerCircleWidth = maxInnerCircleWidth,
     this.innerCircleColor = Colors.white,
     this.selected = false,
     this.onTap,
   }) : super(key: key);
 
-  static const double circleSize = 44;
-
   static const double minInnerCircleWidth = 4;
   static const double maxInnerCircleWidth = 34;
 
+  final double size;
   final double innerCircleWidth;
   final Color innerCircleColor;
   final bool selected;
@@ -22,15 +22,15 @@ class PickerOptionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkResponse(
-      radius: circleSize / 2,
+      radius: size / 2,
       onTap: onTap,
       child: Container(
-        width: circleSize,
-        height: circleSize,
+        width: size,
+        height: size,
         decoration: BoxDecoration(
           border: selected
               ? Border.all(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.primary,
                   width: 3,
                 )
               : null,

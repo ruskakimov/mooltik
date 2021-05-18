@@ -32,14 +32,6 @@ abstract class Tool {
   double get minStrokeWidth;
 
   List<double> get strokeWidthOptions;
-  List<Color> get colorOptions => [
-        Colors.black,
-        Colors.redAccent,
-        Colors.yellow,
-        Colors.teal,
-        Colors.blue,
-        Colors.deepPurple,
-      ];
 
   /// Tool name used to prefix shared preferences keys.
   String get name;
