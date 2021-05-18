@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/ui/picker_option_button.dart';
 
+const _columns = 3;
+const _buttonWidth = 44.0;
+const _gap = 12.0;
+
 class ColorPicker extends StatelessWidget {
   const ColorPicker({
     Key key,
@@ -23,13 +27,13 @@ class ColorPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 180,
+      width: _buttonWidth * _columns + _gap * (_columns + 1),
       child: GridView.count(
-        crossAxisCount: 3,
+        crossAxisCount: _columns,
         shrinkWrap: true,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-        padding: const EdgeInsets.all(12),
+        mainAxisSpacing: _gap,
+        crossAxisSpacing: _gap,
+        padding: const EdgeInsets.all(_gap),
         children: [
           for (final color in colorOptions)
             PickerOptionButton(
