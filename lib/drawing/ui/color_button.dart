@@ -6,12 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 
 class ColorButton extends StatefulWidget {
-  const ColorButton({
-    Key key,
-    this.reversePopupSide = false,
-  }) : super(key: key);
-
-  final bool reversePopupSide;
+  const ColorButton({Key key}) : super(key: key);
 
   @override
   _ColorButtonState createState() => _ColorButtonState();
@@ -26,10 +21,8 @@ class _ColorButtonState extends State<ColorButton> {
 
     return PopupWithArrowEntry(
         visible: _pickerOpen,
-        arrowSide: widget.reversePopupSide ? ArrowSide.bottom : ArrowSide.top,
-        arrowAnchor: widget.reversePopupSide
-            ? const Alignment(0, -0.6)
-            : const Alignment(0, 0.6),
+        arrowSide: ArrowSide.top,
+        arrowAnchor: const Alignment(0, 0.6),
         arrowSidePosition: ArrowSidePosition.middle,
         popupBody: SizedBox(
           width: 180,

@@ -5,12 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/ui/tool_button.dart';
 
 class Toolbar extends StatelessWidget {
-  const Toolbar({
-    Key key,
-    this.reversePopupSide = false,
-  }) : super(key: key);
-
-  final bool reversePopupSide;
+  const Toolbar({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +18,6 @@ class Toolbar extends StatelessWidget {
           ToolButton(
             tool: tool,
             selected: tool == toolbox.selectedTool,
-            reversePopupSide: reversePopupSide,
           ),
         ColorButton(),
       ],

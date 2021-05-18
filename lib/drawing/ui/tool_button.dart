@@ -12,12 +12,10 @@ class ToolButton extends StatefulWidget {
     Key key,
     @required this.tool,
     this.selected = false,
-    this.reversePopupSide = false,
   }) : super(key: key);
 
   final Tool tool;
   final bool selected;
-  final bool reversePopupSide;
 
   @override
   _ToolButtonState createState() => _ToolButtonState();
@@ -32,10 +30,8 @@ class _ToolButtonState extends State<ToolButton> {
 
     return PopupWithArrowEntry(
       visible: _pickerOpen && widget.selected,
-      arrowSide: widget.reversePopupSide ? ArrowSide.bottom : ArrowSide.top,
-      arrowAnchor: widget.reversePopupSide
-          ? const Alignment(0, -0.6)
-          : const Alignment(0, 0.6),
+      arrowSide: ArrowSide.top,
+      arrowAnchor: const Alignment(0, 0.6),
       arrowSidePosition: ArrowSidePosition.middle,
       popupBody: SizedBox(
         width: 180,
