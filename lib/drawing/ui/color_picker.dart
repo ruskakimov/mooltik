@@ -57,6 +57,10 @@ class ColorPicker extends StatelessWidget {
       return Container(
         margin: const EdgeInsets.all(_gap),
         width: _buttonWidth * columns,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+        ),
+        clipBehavior: Clip.antiAlias,
         child: GridView.count(
           primary: false,
           crossAxisCount: columns,
