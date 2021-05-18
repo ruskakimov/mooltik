@@ -1,49 +1,93 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/drawing/ui/picker_option_button.dart';
 
-const _columns = 3;
-const _buttonWidth = 44.0;
+const _buttonWidth = 40.0;
 const _gap = 12.0;
+
+const _customGreyMaterial = MaterialColor(
+  0xFF9E9E9E,
+  <int, Color>{
+    100: Colors.white,
+    200: Color(0xFFEEEEEE),
+    300: Color(0xFFE0E0E0),
+    400: Color(0xFFBDBDBD),
+    500: Color(0xFF9E9E9E),
+    600: Color(0xFF757575),
+    700: Color(0xFF616161),
+    800: Color(0xFF424242),
+    900: Color(0xFF212121),
+  },
+);
+
+const _materialColors = <MaterialColor>[
+  _customGreyMaterial,
+  Colors.blueGrey,
+  Colors.brown,
+  Colors.red,
+  Colors.pink,
+  Colors.purple,
+  Colors.blue,
+  Colors.teal,
+  Colors.lime,
+  Colors.yellow,
+];
+
+const _shades = [100, 300, 400, 500, 700, 900];
 
 class ColorPicker extends StatelessWidget {
   const ColorPicker({
     Key key,
     @required this.selectedColor,
-    this.colorOptions = const [
-      Colors.black,
-      Colors.redAccent,
-      Colors.yellow,
-      Colors.teal,
-      Colors.blue,
-      Colors.deepPurple,
-    ],
     this.onSelected,
   }) : super(key: key);
 
   final Color selectedColor;
-  final List<Color> colorOptions;
   final void Function(Color) onSelected;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: _buttonWidth * _columns + _gap * (_columns + 1),
+    return Container(
+      margin: const EdgeInsets.all(_gap),
+      width: _buttonWidth * _shades.length,
       child: GridView.count(
-        crossAxisCount: _columns,
+        primary: false,
+        crossAxisCount: _shades.length,
         shrinkWrap: true,
-        mainAxisSpacing: _gap,
-        crossAxisSpacing: _gap,
-        padding: const EdgeInsets.all(_gap),
         children: [
-          for (final color in colorOptions)
-            PickerOptionButton(
-              innerCircleColor: color,
-              selected: color.value == selectedColor.value,
-              onTap: () {
-                onSelected?.call(color);
-              },
-            ),
+          for (var color in _materialColors)
+            for (var shade in _shades)
+              _ColorOption(
+                color: color[shade],
+                selected: color.value == selectedColor.value,
+                onSelected: onSelected,
+              ),
         ],
+      ),
+    );
+  }
+}
+
+class _ColorOption extends StatelessWidget {
+  const _ColorOption({
+    Key key,
+    @required this.color,
+    @required this.selected,
+    @required this.onSelected,
+  }) : super(key: key);
+
+  final Color color;
+  final bool selected;
+  final void Function(Color) onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Listener(
+      onPointerDown: (_) {
+        onSelected?.call(color);
+      },
+      child: Container(
+        width: _buttonWidth,
+        height: _buttonWidth,
+        color: color,
       ),
     );
   }
