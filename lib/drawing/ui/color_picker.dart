@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-const _buttonWidth = 40.0;
+const _buttonWidth = 36.0;
 
 const _customGreyMaterial = MaterialColor(
   0xFF9E9E9E,
@@ -23,15 +23,16 @@ const _materialColors = <MaterialColor>[
   _customGreyMaterial,
   Colors.blueGrey,
   Colors.brown,
-  Colors.red,
-  Colors.pink,
-  Colors.purple,
-  Colors.indigo,
-  Colors.blue,
-  Colors.teal,
-  Colors.green,
-  Colors.lime,
+  Colors.orange,
   Colors.yellow,
+  Colors.lime,
+  Colors.green,
+  Colors.teal,
+  Colors.blue,
+  Colors.indigo,
+  Colors.purple,
+  Colors.pink,
+  Colors.red,
 ];
 
 const _shades = [100, 300, 400, 500, 700, 900];
