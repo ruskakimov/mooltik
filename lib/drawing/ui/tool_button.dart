@@ -31,7 +31,7 @@ class _ToolButtonState extends State<ToolButton> {
     return PopupWithArrowEntry(
       visible: _pickerOpen && widget.selected,
       arrowSide: ArrowSide.top,
-      arrowAnchor: const Alignment(0, 0.6),
+      arrowAnchor: const Alignment(0, 0.8),
       arrowSidePosition: ArrowSidePosition.middle,
       popupBody: SizedBox(
         width: 180,

@@ -23,7 +23,7 @@ class _ColorButtonState extends State<ColorButton> {
     return PopupWithArrowEntry(
       visible: _pickerOpen,
       arrowSide: ArrowSide.top,
-      arrowAnchor: const Alignment(0, 0.6),
+      arrowAnchor: const Alignment(0, 0.8),
       arrowSidePosition: ArrowSidePosition.middle,
       popupBody: SizedBox(
         width: 180,
@@ -52,15 +52,21 @@ class _ColorButtonState extends State<ColorButton> {
       onDragOutside: _closePicker,
       child: SizedBox(
         width: 52,
-        child: PickerOptionButton(
-          selected: true,
-          size: 32,
-          innerCircleColor: toolbox.selectedTool.color,
+        height: 44,
+        child: InkWell(
+          splashColor: Colors.transparent,
           onTap: () {
             if (toolbox.selectedTool is! Eraser) {
               _openPicker();
             }
           },
+          child: Center(
+            child: PickerOptionButton(
+              selected: true,
+              size: 32,
+              innerCircleColor: toolbox.selectedTool.color,
+            ),
+          ),
         ),
       ),
     );
