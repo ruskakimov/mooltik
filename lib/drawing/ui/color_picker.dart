@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 const _buttonWidth = 40.0;
-const _gap = 12.0;
 
 const _customGreyMaterial = MaterialColor(
   0xFF9E9E9E,
@@ -55,7 +54,7 @@ class ColorPicker extends StatelessWidget {
           : _materialColors.length;
 
       return Container(
-        margin: const EdgeInsets.all(_gap),
+        margin: const EdgeInsets.all(8),
         width: _buttonWidth * columns,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4),
