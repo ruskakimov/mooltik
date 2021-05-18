@@ -25,8 +25,10 @@ const _materialColors = <MaterialColor>[
   Colors.red,
   Colors.pink,
   Colors.purple,
+  Colors.indigo,
   Colors.blue,
   Colors.teal,
+  Colors.green,
   Colors.lime,
   Colors.yellow,
 ];
@@ -45,24 +47,39 @@ class ColorPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(_gap),
-      width: _buttonWidth * _shades.length,
-      child: GridView.count(
-        primary: false,
-        crossAxisCount: _shades.length,
-        shrinkWrap: true,
-        children: [
-          for (var color in _materialColors)
-            for (var shade in _shades)
-              _ColorOption(
-                color: color[shade],
-                selected: color.value == selectedColor.value,
-                onSelected: onSelected,
-              ),
-        ],
-      ),
-    );
+    return OrientationBuilder(builder: (context, orientation) {
+      final columns = orientation == Orientation.portrait
+          ? _shades.length
+          : _materialColors.length;
+
+      return Container(
+        margin: const EdgeInsets.all(_gap),
+        width: _buttonWidth * columns,
+        child: GridView.count(
+          primary: false,
+          crossAxisCount: columns,
+          shrinkWrap: true,
+          children: [
+            if (orientation == Orientation.portrait)
+              for (var color in _materialColors)
+                for (var shade in _shades)
+                  _ColorOption(
+                    color: color[shade],
+                    selected: color.value == selectedColor.value,
+                    onSelected: onSelected,
+                  ),
+            if (orientation == Orientation.landscape)
+              for (var shade in _shades)
+                for (var color in _materialColors.reversed)
+                  _ColorOption(
+                    color: color[shade],
+                    selected: color.value == selectedColor.value,
+                    onSelected: onSelected,
+                  ),
+          ],
+        ),
+      );
+    });
   }
 }
 
