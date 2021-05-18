@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
+import 'package:mooltik/drawing/ui/color_button.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/ui/tool_button.dart';
 
@@ -24,6 +25,7 @@ class Toolbar extends StatelessWidget {
             selected: tool == toolbox.selectedTool,
             reversePopupSide: reversePopupSide,
           ),
+        ColorButton(),
       ],
     );
   }
