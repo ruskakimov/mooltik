@@ -25,23 +25,12 @@ class _ColorButtonState extends State<ColorButton> {
       arrowSide: ArrowSide.top,
       arrowAnchor: const Alignment(0, 0.8),
       arrowSidePosition: ArrowSidePosition.middle,
-      popupBody: SizedBox(
-        width: 180,
-        child: ColorPicker(
-          selectedColor: toolbox.selectedTool.color,
-          colorOptions: const [
-            Colors.black,
-            Colors.redAccent,
-            Colors.yellow,
-            Colors.teal,
-            Colors.blue,
-            Colors.deepPurple,
-          ],
-          onSelected: (Color color) {
-            toolbox.changeToolColor(color);
-            _closePicker();
-          },
-        ),
+      popupBody: ColorPicker(
+        selectedColor: toolbox.selectedTool.color,
+        onSelected: (Color color) {
+          toolbox.changeToolColor(color);
+          _closePicker();
+        },
       ),
       onTapOutside: _closePicker,
       onDragOutside: _closePicker,

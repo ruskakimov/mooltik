@@ -5,7 +5,14 @@ class ColorPicker extends StatelessWidget {
   const ColorPicker({
     Key key,
     @required this.selectedColor,
-    @required this.colorOptions,
+    this.colorOptions = const [
+      Colors.black,
+      Colors.redAccent,
+      Colors.yellow,
+      Colors.teal,
+      Colors.blue,
+      Colors.deepPurple,
+    ],
     this.onSelected,
   }) : super(key: key);
 
@@ -15,22 +22,25 @@ class ColorPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 3,
-      shrinkWrap: true,
-      mainAxisSpacing: 12,
-      crossAxisSpacing: 12,
-      padding: const EdgeInsets.all(12),
-      children: [
-        for (final color in colorOptions)
-          PickerOptionButton(
-            innerCircleColor: color,
-            selected: color.value == selectedColor.value,
-            onTap: () {
-              onSelected?.call(color);
-            },
-          ),
-      ],
+    return SizedBox(
+      width: 180,
+      child: GridView.count(
+        crossAxisCount: 3,
+        shrinkWrap: true,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        padding: const EdgeInsets.all(12),
+        children: [
+          for (final color in colorOptions)
+            PickerOptionButton(
+              innerCircleColor: color,
+              selected: color.value == selectedColor.value,
+              onTap: () {
+                onSelected?.call(color);
+              },
+            ),
+        ],
+      ),
     );
   }
 }
