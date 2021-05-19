@@ -40,7 +40,7 @@ class EditingActionbar extends StatelessWidget {
         ),
         Spacer(),
         AppIconButton(
-          icon: FontAwesomeIcons.fileDownload,
+          icon: FontAwesomeIcons.solidFileVideo,
           onTap: playing ? null : () => _openExportDialog(context),
         ),
       ],
