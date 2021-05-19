@@ -72,6 +72,10 @@ class PreviewArea extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         EditingActionbar(
+          title: Text(
+            isPortrait ? 'Scene 1' : '1',
+            style: TextStyle(fontSize: 18),
+          ),
           direction: isPortrait ? Axis.horizontal : Axis.vertical,
         ),
         Preview(),
@@ -90,21 +94,7 @@ class NoteArea extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Scene 1',
-            style: TextStyle(
-              color: Colors.grey[700],
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 8),
-          Text('Boat in the distance hidden behind the fog. \n*sea noises*'),
-        ],
-      ),
+      child: Text('Boat in the distance hidden behind the fog. \n*sea noises*'),
     );
   }
 }
