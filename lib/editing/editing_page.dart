@@ -63,16 +63,15 @@ class PreviewArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+
     return Flex(
-      direction: MediaQuery.of(context).orientation == Orientation.portrait
-          ? Axis.vertical
-          : Axis.horizontal,
+      direction: isPortrait ? Axis.vertical : Axis.horizontal,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         EditingActionbar(
-          direction: MediaQuery.of(context).orientation == Orientation.portrait
-              ? Axis.horizontal
-              : Axis.vertical,
+          direction: isPortrait ? Axis.horizontal : Axis.vertical,
         ),
         Preview(),
       ],
