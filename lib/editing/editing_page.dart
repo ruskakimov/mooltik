@@ -39,6 +39,7 @@ class _EditingPageState extends State<EditingPage>
         // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
         onWillPop: () async => true,
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Theme.of(context).colorScheme.background,
           body: SafeArea(
             child: Column(
@@ -74,7 +75,36 @@ class PreviewArea extends StatelessWidget {
           direction: isPortrait ? Axis.horizontal : Axis.vertical,
         ),
         Preview(),
+        Expanded(child: NoteArea()),
       ],
+    );
+  }
+}
+
+class NoteArea extends StatelessWidget {
+  const NoteArea({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Scene 1',
+            style: TextStyle(
+              color: Colors.grey[700],
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 8),
+          Text('Boat in the distance hidden behind the fog. \n*sea noises*'),
+        ],
+      ),
     );
   }
 }
