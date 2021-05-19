@@ -74,7 +74,7 @@ class PreviewArea extends StatelessWidget {
               ? Axis.horizontal
               : Axis.vertical,
         ),
-        Expanded(child: Preview()),
+        Preview(),
       ],
     );
   }
