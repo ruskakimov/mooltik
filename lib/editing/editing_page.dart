@@ -44,22 +44,7 @@ class _EditingPageState extends State<EditingPage>
             child: Column(
               children: <Widget>[
                 Expanded(
-                  child: Flex(
-                    direction: MediaQuery.of(context).orientation ==
-                            Orientation.portrait
-                        ? Axis.vertical
-                        : Axis.horizontal,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      EditingActionbar(
-                        direction: MediaQuery.of(context).orientation ==
-                                Orientation.portrait
-                            ? Axis.horizontal
-                            : Axis.vertical,
-                      ),
-                      Expanded(child: Preview()),
-                    ],
-                  ),
+                  child: PreviewArea(),
                 ),
                 Expanded(
                   child: TimelinePanel(),
@@ -69,6 +54,28 @@ class _EditingPageState extends State<EditingPage>
           ),
         ),
       ),
+    );
+  }
+}
+
+class PreviewArea extends StatelessWidget {
+  const PreviewArea({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Flex(
+      direction: MediaQuery.of(context).orientation == Orientation.portrait
+          ? Axis.vertical
+          : Axis.horizontal,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        EditingActionbar(
+          direction: MediaQuery.of(context).orientation == Orientation.portrait
+              ? Axis.horizontal
+              : Axis.vertical,
+        ),
+        Expanded(child: Preview()),
+      ],
     );
   }
 }
