@@ -66,6 +66,7 @@ class PreviewArea extends StatelessWidget {
   Widget build(BuildContext context) {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
+    final sceneNumber = context.watch<TimelineModel>().currentSceneNumber;
 
     return Flex(
       direction: isPortrait ? Axis.vertical : Axis.horizontal,
@@ -73,7 +74,7 @@ class PreviewArea extends StatelessWidget {
       children: [
         EditingActionbar(
           title: Text(
-            isPortrait ? 'Scene 1' : '1',
+            isPortrait ? 'Scene $sceneNumber' : '$sceneNumber',
             style: TextStyle(fontSize: 18),
           ),
           direction: isPortrait ? Axis.horizontal : Axis.vertical,
