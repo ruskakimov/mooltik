@@ -148,7 +148,7 @@ class Project extends ChangeNotifier {
 
     _autosaveTimer = Timer.periodic(
       Duration(minutes: 1),
-      (_) => _updateSaveDataOnDisk(),
+      (_) => updateSaveDataOnDisk(),
     );
   }
 
@@ -169,7 +169,7 @@ class Project extends ChangeNotifier {
   }
 
   Future<void> save() async {
-    await _updateSaveDataOnDisk();
+    await updateSaveDataOnDisk();
 
     // Write thumbnail.
     final image = await generateImage(
@@ -185,7 +185,7 @@ class Project extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _updateSaveDataOnDisk() async {
+  Future<void> updateSaveDataOnDisk() async {
     final saveData = _generateSaveData();
 
     if (saveData != _saveDataOnDisk) {

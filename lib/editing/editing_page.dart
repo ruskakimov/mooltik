@@ -39,6 +39,7 @@ class _EditingPageState extends State<EditingPage>
         ChangeNotifierProvider(
           create: (context) => EditorModel(
             sceneSeq: context.read<Project>().scenes,
+            writeToDisk: context.read<Project>().updateSaveDataOnDisk,
           ),
         ),
         ChangeNotifierProvider(

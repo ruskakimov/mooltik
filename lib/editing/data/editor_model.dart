@@ -5,9 +5,11 @@ import 'package:mooltik/common/data/sequence/sequence.dart';
 class EditorModel extends ChangeNotifier {
   EditorModel({
     @required Sequence<Scene> sceneSeq,
+    this.writeToDisk,
   }) : _sceneSeq = sceneSeq;
 
   final Sequence<Scene> _sceneSeq;
+  final VoidCallback writeToDisk;
 
   void changeCurrentSceneDescription(String newDescription) {
     final currentScene = _sceneSeq.current;
@@ -16,5 +18,6 @@ class EditorModel extends ChangeNotifier {
       currentScene.copyWith(description: newDescription),
     );
     notifyListeners();
+    writeToDisk?.call();
   }
 }
