@@ -80,22 +80,38 @@ class PreviewArea extends StatelessWidget {
           direction: isPortrait ? Axis.horizontal : Axis.vertical,
         ),
         Preview(),
-        Expanded(child: NoteArea()),
+        Expanded(
+          child: DescriptionArea(),
+        ),
       ],
     );
   }
 }
 
-class NoteArea extends StatelessWidget {
-  const NoteArea({
+class DescriptionArea extends StatelessWidget {
+  const DescriptionArea({
     Key key,
+    this.description,
   }) : super(key: key);
+
+  final String description;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Text('Boat in the distance hidden behind the fog. \n*sea noises*'),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: description == null
+            ? _buildPlaceholder(context)
+            : Text(description),
+      ),
+    );
+  }
+
+  Text _buildPlaceholder(BuildContext context) {
+    return Text(
+      'Tap to add scene description',
+      style: TextStyle(color: Theme.of(context).colorScheme.secondary),
     );
   }
 }
