@@ -25,7 +25,14 @@ class DescriptionArea extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: emptyDescription
                 ? _buildPlaceholder(context)
-                : Text(description, textAlign: textAlign),
+                : Text(
+                    description,
+                    style: TextStyle(
+                      fontSize: 14,
+                      height: 1.2,
+                    ),
+                    textAlign: textAlign,
+                  ),
           ),
         ),
         _buildTopShadow(context),
@@ -74,7 +81,11 @@ class DescriptionArea extends StatelessWidget {
   Text _buildPlaceholder(BuildContext context) {
     return Text(
       'Tap to add scene description',
-      style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.secondary,
+        fontSize: 14,
+        height: 1.2,
+      ),
       textAlign: textAlign,
     );
   }
