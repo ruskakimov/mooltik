@@ -27,10 +27,10 @@ class _ProjectListState extends State<ProjectList> {
     return SliverPadding(
       padding: const EdgeInsets.all(32),
       sliver: SliverGrid.count(
-        crossAxisCount: MediaQuery.of(context).size.width ~/ 300,
+        crossAxisCount: MediaQuery.of(context).size.width ~/ 250,
         childAspectRatio: 16 / 9,
         mainAxisSpacing: 32,
-        crossAxisSpacing: 32,
+        crossAxisSpacing: 24,
         children: [
           AddProjectButton(),
           for (final project in projects)
