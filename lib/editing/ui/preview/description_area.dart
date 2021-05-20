@@ -13,10 +13,10 @@ class DescriptionArea extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: GestureDetector(
-            onTap: () => _openEditDialog(context),
+        GestureDetector(
+          onTap: () => _openEditDialog(context),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
             child: description == null
                 ? _buildPlaceholder(context)
                 : Text(description),
