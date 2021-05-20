@@ -12,9 +12,11 @@ import 'package:mooltik/common/ui/app_icon_button.dart';
 class EditingActionbar extends StatelessWidget {
   const EditingActionbar({
     Key key,
+    this.title,
     this.direction = Axis.horizontal,
   }) : super(key: key);
 
+  final Text title;
   final Axis direction;
 
   @override
@@ -39,8 +41,10 @@ class EditingActionbar extends StatelessWidget {
                 },
         ),
         Spacer(),
+        title,
+        Spacer(),
         AppIconButton(
-          icon: FontAwesomeIcons.fileDownload,
+          icon: FontAwesomeIcons.solidFileVideo,
           onTap: playing ? null : () => _openExportDialog(context),
         ),
       ],

@@ -37,6 +37,8 @@ class TimelineModel extends ChangeNotifier {
 
   Scene get currentScene => sceneSeq.current;
 
+  int get currentSceneNumber => sceneSeq.currentIndex + 1;
+
   Duration get currentSceneStart => sceneSeq.currentSpanStart;
 
   Duration get currentSceneEnd => sceneSeq.currentSpanEnd;

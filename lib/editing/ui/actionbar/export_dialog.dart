@@ -137,6 +137,7 @@ class _ExportButton extends StatelessWidget {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
+              letterSpacing: -0.9,
               color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),

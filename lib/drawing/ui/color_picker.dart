@@ -15,7 +15,7 @@ const _customGreyMaterial = MaterialColor(
     600: Color(0xFF757575),
     700: Color(0xFF616161),
     800: Color(0xFF424242),
-    900: Color(0xFF212121),
+    900: Colors.black,
   },
 );
 

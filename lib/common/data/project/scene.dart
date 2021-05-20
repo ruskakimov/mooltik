@@ -12,9 +12,11 @@ class Scene extends TimeSpan {
   Scene({
     @required this.layers,
     Duration duration = const Duration(seconds: 5),
+    this.description,
   }) : super(duration);
 
   final List<SceneLayer> layers;
+  final String description;
 
   /// Visible image at a given playhead position.
   CompositeImage imageAt(Duration playhead) {
@@ -92,20 +94,24 @@ class Scene extends TimeSpan {
             .map((d) => SceneLayer.fromJson(d, frameDirPath))
             .toList(),
         duration: (json[_durationKey] as String).parseDuration(),
+        description: json[_descriptionKey] as String,
       );
 
   Map<String, dynamic> toJson() => {
         _layersKey: layers.map((layer) => layer.toJson()).toList(),
         _durationKey: duration.toString(),
+        _descriptionKey: description,
       };
 
   Scene copyWith({
     List<SceneLayer> layers,
     Duration duration,
+    String description,
   }) =>
       Scene(
         layers: layers ?? this.layers,
         duration: duration ?? this.duration,
+        description: description ?? this.description,
       );
 
   @override
@@ -117,3 +123,4 @@ class Scene extends TimeSpan {
 
 const String _layersKey = 'layers';
 const String _durationKey = 'duration';
+const String _descriptionKey = 'description';

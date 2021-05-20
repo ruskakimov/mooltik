@@ -10,7 +10,7 @@ class DrawingActionbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final easel = context.watch<EaselModel>();
-    final twoRow = MediaQuery.of(context).size.width < 600;
+    final twoRow = MediaQuery.of(context).size.width < (9 * 52);
 
     return Material(
       elevation: 10,

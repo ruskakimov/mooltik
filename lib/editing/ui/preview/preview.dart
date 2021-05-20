@@ -9,28 +9,33 @@ import 'package:provider/provider.dart';
 class Preview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Listener(
-      onPointerDown: (_) {
-        final project = context.read<Project>();
-        final timeline = context.read<TimelineModel>();
+    return ColoredBox(
+      color: Colors.black,
+      child: Center(
+        child: Listener(
+          onPointerDown: (_) {
+            final project = context.read<Project>();
+            final timeline = context.read<TimelineModel>();
 
-        if (timeline.isPlaying) return;
+            if (timeline.isPlaying) return;
 
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => MultiProvider(
-              providers: [
-                ChangeNotifierProvider.value(value: project),
-                ChangeNotifierProvider.value(value: timeline),
-              ],
-              child: DrawingPage(),
-            ),
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider.value(value: project),
+                    ChangeNotifierProvider.value(value: timeline),
+                  ],
+                  child: DrawingPage(),
+                ),
+              ),
+            );
+          },
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: _buildImage(context),
           ),
-        );
-      },
-      child: FittedBox(
-        fit: BoxFit.contain,
-        child: _buildImage(context),
+        ),
       ),
     );
   }

@@ -36,7 +36,8 @@
                     "play_mode": 0
                 }
             ],
-            "duration": "0:00:01.540000"
+            "duration": "0:00:01.540000",
+            "description": "Hello"
         },
         {
             "layers": [
@@ -72,7 +73,8 @@
                     "play_mode": 0
                 }
             ],
-            "duration": "0:00:01.600000"
+            "duration": "0:00:01.600000",
+            "description": "World"
         },
         {
             "layers": [
@@ -99,7 +101,8 @@
                     "play_mode": 0
                 }
             ],
-            "duration": "0:00:01.600000"
+            "duration": "0:00:01.600000",
+            "description": "And friends"
         }
     ],
     "sounds": []
