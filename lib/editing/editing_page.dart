@@ -100,6 +100,7 @@ class PreviewArea extends StatelessWidget {
           flex: 1,
           child: DescriptionArea(
             description: sceneDesciption,
+            textAlign: isPortrait ? TextAlign.center : TextAlign.left,
             onDone: (newDescription) {
               final editor = context.read<EditorModel>();
               editor.changeCurrentSceneDescription(newDescription);

@@ -5,10 +5,12 @@ class DescriptionArea extends StatelessWidget {
     Key key,
     this.description,
     this.onDone,
+    this.textAlign = TextAlign.left,
   }) : super(key: key);
 
   final String description;
   final ValueChanged<String> onDone;
+  final TextAlign textAlign;
 
   bool get emptyDescription => description == null || description == '';
 
@@ -23,7 +25,7 @@ class DescriptionArea extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: emptyDescription
                 ? _buildPlaceholder(context)
-                : Text(description),
+                : Text(description, textAlign: textAlign),
           ),
         ),
         _buildTopShadow(context),
@@ -73,6 +75,7 @@ class DescriptionArea extends StatelessWidget {
     return Text(
       'Tap to add scene description',
       style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+      textAlign: textAlign,
     );
   }
 
