@@ -169,6 +169,12 @@ class Sequence<T extends TimeSpan> extends ChangeNotifier {
     notifyListeners();
   }
 
+  void swapSpanAt(int index, T newSpan) {
+    _validateIndex(index);
+    this[index] = newSpan;
+    notifyListeners();
+  }
+
   void changeSpanDurationAt(int index, Duration newDuration) {
     _validateIndex(index);
     this[index] = _spans[index].copyWith(duration: newDuration);

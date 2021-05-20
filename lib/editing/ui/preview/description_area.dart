@@ -4,9 +4,11 @@ class DescriptionArea extends StatelessWidget {
   const DescriptionArea({
     Key key,
     this.description,
+    this.onChanged,
   }) : super(key: key);
 
   final String description;
+  final ValueChanged<String> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,7 @@ class DescriptionArea extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.done),
                 onPressed: () {
+                  // TODO: Call onChanged.
                   Navigator.of(context).pop();
                 },
                 tooltip: 'Done',

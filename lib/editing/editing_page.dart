@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editing/data/editor_model.dart';
 import 'package:mooltik/editing/ui/actionbar/editing_actionbar.dart';
 import 'package:mooltik/editing/ui/preview/description_area.dart';
 import 'package:mooltik/editing/ui/preview/preview.dart';
@@ -31,11 +32,20 @@ class _EditingPageState extends State<EditingPage>
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => TimelineModel(
-        sceneSeq: context.read<Project>().scenes,
-        vsync: this,
-      ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => EditorModel(
+            sceneSeq: context.read<Project>().scenes,
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TimelineModel(
+            sceneSeq: context.read<Project>().scenes,
+            vsync: this,
+          ),
+        ),
+      ],
       child: WillPopScope(
         // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
         onWillPop: () async => true,
@@ -68,6 +78,8 @@ class PreviewArea extends StatelessWidget {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
     final sceneNumber = context.watch<TimelineModel>().currentSceneNumber;
+    final sceneDesciption =
+        context.watch<TimelineModel>().currentScene.description;
 
     return Flex(
       direction: isPortrait ? Axis.vertical : Axis.horizontal,
@@ -83,7 +95,11 @@ class PreviewArea extends StatelessWidget {
         Preview(),
         Expanded(
           child: DescriptionArea(
-            description: null,
+            description: sceneDesciption,
+            onChanged: (newDescription) {
+              final editor = context.read<EditorModel>();
+              editor.changeCurrentSceneDescription(newDescription);
+            },
           ),
         ),
       ],
