@@ -4,11 +4,11 @@ class DescriptionArea extends StatelessWidget {
   const DescriptionArea({
     Key key,
     this.description,
-    this.onChanged,
+    this.onDone,
   }) : super(key: key);
 
   final String description;
-  final ValueChanged<String> onChanged;
+  final ValueChanged<String> onDone;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +31,10 @@ class DescriptionArea extends StatelessWidget {
   }
 
   void _openEditDialog(BuildContext context) {
+    final controller = TextEditingController.fromValue(TextEditingValue(
+      text: description,
+    ));
+
     Navigator.of(context).push(
       MaterialPageRoute(
         fullscreenDialog: true,
@@ -41,7 +45,7 @@ class DescriptionArea extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.done),
                 onPressed: () {
-                  // TODO: Call onChanged.
+                  onDone?.call(controller.text);
                   Navigator.of(context).pop();
                 },
                 tooltip: 'Done',
@@ -51,6 +55,7 @@ class DescriptionArea extends StatelessWidget {
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
+              controller: controller,
               autofocus: true,
               minLines: 1,
               maxLines: 5,

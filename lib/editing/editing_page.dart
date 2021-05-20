@@ -96,7 +96,7 @@ class PreviewArea extends StatelessWidget {
         Expanded(
           child: DescriptionArea(
             description: sceneDesciption,
-            onChanged: (newDescription) {
+            onDone: (newDescription) {
               final editor = context.read<EditorModel>();
               editor.changeCurrentSceneDescription(newDescription);
             },
