@@ -93,7 +93,7 @@ class EditingTopPanel extends StatelessWidget {
           direction: isPortrait ? Axis.horizontal : Axis.vertical,
         ),
         Expanded(
-          flex: 2,
+          flex: isPortrait ? 2 : 0, // Good enough cross-device solution.
           child: Preview(),
         ),
         Expanded(
