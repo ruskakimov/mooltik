@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/editor_model.dart';
 import 'package:mooltik/editing/ui/actionbar/editing_actionbar.dart';
@@ -88,7 +90,10 @@ class EditingTopPanel extends StatelessWidget {
         EditingActionbar(
           title: Text(
             isPortrait ? 'Scene $sceneNumber' : '$sceneNumber',
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(
+              fontSize: 18,
+              fontFeatures: [FontFeature.tabularFigures()],
+            ),
           ),
           direction: isPortrait ? Axis.horizontal : Axis.vertical,
         ),
