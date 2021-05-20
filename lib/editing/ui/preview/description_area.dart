@@ -10,6 +10,8 @@ class DescriptionArea extends StatelessWidget {
   final String description;
   final ValueChanged<String> onDone;
 
+  bool get emptyDescription => description == null || description == '';
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -19,7 +21,7 @@ class DescriptionArea extends StatelessWidget {
           onTap: () => _openEditDialog(context),
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
-            child: description == null
+            child: emptyDescription
                 ? _buildPlaceholder(context)
                 : Text(description),
           ),
