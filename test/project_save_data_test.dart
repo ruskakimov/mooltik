@@ -16,7 +16,7 @@ File testFile(String filePath) {
 void main() {
   group('ProjectSaveData should', () {
     test('decode and encode back A', () {
-      final rawSaveData = testFile('project_data/a_v1_0.json')
+      final rawSaveData = testFile('project_data/a_v1_5.json')
           .readAsStringSync()
           .replaceAll(RegExp(r'\s'), '');
 
@@ -25,7 +25,7 @@ void main() {
     });
 
     test('decode and encode back B', () {
-      final rawSaveData = testFile('project_data/b_v1_0.json')
+      final rawSaveData = testFile('project_data/b_v1_5.json')
           .readAsStringSync()
           .replaceAll(RegExp(r'\s'), '');
 
