@@ -12,9 +12,11 @@ class Scene extends TimeSpan {
   Scene({
     @required this.layers,
     Duration duration = const Duration(seconds: 5),
+    this.description,
   }) : super(duration);
 
   final List<SceneLayer> layers;
+  final String description;
 
   /// Visible image at a given playhead position.
   CompositeImage imageAt(Duration playhead) {
@@ -102,10 +104,12 @@ class Scene extends TimeSpan {
   Scene copyWith({
     List<SceneLayer> layers,
     Duration duration,
+    String description,
   }) =>
       Scene(
         layers: layers ?? this.layers,
         duration: duration ?? this.duration,
+        description: description ?? this.description,
       );
 
   @override
