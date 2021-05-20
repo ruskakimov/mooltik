@@ -32,7 +32,7 @@ class DescriptionArea extends StatelessWidget {
 
   void _openEditDialog(BuildContext context) {
     final controller = TextEditingController.fromValue(TextEditingValue(
-      text: description,
+      text: description ?? '',
     ));
 
     Navigator.of(context).push(
