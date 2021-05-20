@@ -83,7 +83,7 @@ class PreviewArea extends StatelessWidget {
         Preview(),
         Expanded(
           child: DescriptionArea(
-            description: 'Hello ' * 300,
+            description: null,
           ),
         ),
       ],

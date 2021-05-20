@@ -15,13 +15,47 @@ class DescriptionArea extends StatelessWidget {
       children: [
         SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
-          child: description == null
-              ? _buildPlaceholder(context)
-              : Text(description),
+          child: GestureDetector(
+            onTap: () => _openEditDialog(context),
+            child: description == null
+                ? _buildPlaceholder(context)
+                : Text(description),
+          ),
         ),
         _buildTopShadow(context),
         _buildBottomShadow(context),
       ],
+    );
+  }
+
+  void _openEditDialog(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            title: Text('Scene description'),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.done),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                tooltip: 'Done',
+              )
+            ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              autofocus: true,
+              minLines: 1,
+              maxLines: 5,
+              maxLength: 500,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
