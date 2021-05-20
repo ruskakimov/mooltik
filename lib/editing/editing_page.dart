@@ -92,8 +92,12 @@ class PreviewArea extends StatelessWidget {
           ),
           direction: isPortrait ? Axis.horizontal : Axis.vertical,
         ),
-        Preview(),
         Expanded(
+          flex: 2,
+          child: Preview(),
+        ),
+        Expanded(
+          flex: 1,
           child: DescriptionArea(
             description: sceneDesciption,
             onDone: (newDescription) {
