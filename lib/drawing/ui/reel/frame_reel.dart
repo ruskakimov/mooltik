@@ -206,10 +206,7 @@ class _FrameReelItem extends StatelessWidget {
             foregroundDecoration: selected
                 ? BoxDecoration(
                     borderRadius: borderRadius,
-                    border: Border.all(
-                      width: 2,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                    border: Border.all(width: 2, color: Colors.white),
                   )
                 : null,
             decoration: BoxDecoration(
@@ -217,6 +214,9 @@ class _FrameReelItem extends StatelessWidget {
               color: selected
                   ? Theme.of(context).colorScheme.secondary
                   : Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+              boxShadow: [
+                if (selected) BoxShadow(color: Colors.black26, blurRadius: 4),
+              ],
             ),
             clipBehavior: Clip.antiAlias,
             child: child,
