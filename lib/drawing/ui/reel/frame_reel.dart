@@ -215,7 +215,7 @@ class _FrameReelItem extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: borderRadius,
               color: selected
-                  ? Colors.white
+                  ? Theme.of(context).colorScheme.secondary
                   : Theme.of(context).colorScheme.secondary.withOpacity(0.5),
             ),
             clipBehavior: Clip.antiAlias,
