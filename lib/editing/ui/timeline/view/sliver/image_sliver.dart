@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/ui/frame_window.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 
 class ImageSliver extends Sliver {
@@ -16,8 +17,9 @@ class ImageSliver extends Sliver {
 
   @override
   void paint(Canvas canvas) {
-    final backgroundPaint = Paint()
-      ..color = Colors.grey[600].withOpacity(opacity);
+    final backgroundColor =
+        frostedGlassColor.withOpacity(frostedGlassColor.opacity * opacity);
+    final backgroundPaint = Paint()..color = backgroundColor;
     canvas.drawRRect(rrect, backgroundPaint);
 
     if (thumbnail != null) _paintThumbnail(canvas);

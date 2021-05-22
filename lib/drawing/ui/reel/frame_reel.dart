@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/reel/frame_menu.dart';
-import 'package:mooltik/drawing/ui/frame_thumbnail.dart';
+import 'package:mooltik/drawing/ui/frame_window.dart';
 import 'package:provider/provider.dart';
 
 const _framePadding = const EdgeInsets.only(
@@ -115,10 +115,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
 
             final item = _FrameReelItem(
               selected: selected,
-              child: FrameThumbnail(
-                frame: frame,
-                background: Colors.transparent,
-              ),
+              child: FrameWindow(frame: frame),
               onTap: selected ? _openPopup : () => scrollTo(index),
             );
 
@@ -202,22 +199,8 @@ class _FrameReelItem extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Container(
-            foregroundDecoration: selected
-                ? BoxDecoration(
-                    borderRadius: borderRadius,
-                    border: Border.all(width: 2, color: Colors.white),
-                  )
-                : null,
-            decoration: BoxDecoration(
-              borderRadius: borderRadius,
-              color: selected
-                  ? Theme.of(context).colorScheme.secondary
-                  : Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-              boxShadow: [
-                if (selected) BoxShadow(color: Colors.black26, blurRadius: 4),
-              ],
-            ),
+          ClipRRect(
+            borderRadius: borderRadius,
             clipBehavior: Clip.antiAlias,
             child: child,
           ),
