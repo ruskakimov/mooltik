@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
@@ -118,6 +120,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
 
             final item = _FrameReelItem(
               selected: selected,
+              number: index + 1,
               child: FrameWindow(frame: frame),
               onTap: selected ? _openPopup : () => scrollTo(index),
             );
@@ -186,11 +189,13 @@ class _FrameReelItem extends StatelessWidget {
     Key key,
     @required this.child,
     this.selected = false,
+    this.number,
     this.onTap,
   }) : super(key: key);
 
   final Widget child;
   final bool selected;
+  final int number;
   final VoidCallback onTap;
 
   @override
@@ -225,6 +230,7 @@ class _FrameReelItem extends StatelessWidget {
               clipBehavior: Clip.antiAlias,
               child: child,
             ),
+            if (number != null) _buildFrameNumber(innerRadius),
             Material(
               type: MaterialType.transparency,
               borderRadius: innerRadius,
@@ -232,6 +238,32 @@ class _FrameReelItem extends StatelessWidget {
               child: InkWell(onTap: onTap),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Positioned _buildFrameNumber(BorderRadius radius) {
+    return Positioned(
+      top: 2,
+      left: 2,
+      height: 20,
+      width: 20,
+      child: Container(
+        decoration: BoxDecoration(
+          color: selected ? Colors.white : Colors.transparent,
+          borderRadius: radius,
+        ),
+        child: Center(
+          child: Text(
+            '$number',
+            style: TextStyle(
+              color: selected ? Colors.grey[900] : Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              fontFeatures: [FontFeature.tabularFigures()],
+            ),
+          ),
         ),
       ),
     );
