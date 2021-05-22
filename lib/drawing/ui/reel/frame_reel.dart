@@ -1,11 +1,10 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/reel/frame_menu.dart';
 import 'package:mooltik/drawing/ui/frame_window.dart';
+import 'package:mooltik/drawing/ui/reel/frame_number_box.dart';
 import 'package:provider/provider.dart';
 
 const _itemSize = Size(80, 45);
@@ -230,7 +229,15 @@ class _FrameReelItem extends StatelessWidget {
               clipBehavior: Clip.antiAlias,
               child: child,
             ),
-            if (number != null) _buildFrameNumber(innerRadius),
+            if (number != null)
+              Positioned(
+                top: 2,
+                left: 2,
+                child: FrameNumberBox(
+                  selected: selected,
+                  number: number,
+                ),
+              ),
             Material(
               type: MaterialType.transparency,
               borderRadius: innerRadius,
@@ -238,32 +245,6 @@ class _FrameReelItem extends StatelessWidget {
               child: InkWell(onTap: onTap),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Positioned _buildFrameNumber(BorderRadius radius) {
-    return Positioned(
-      top: 2,
-      left: 2,
-      height: 20,
-      width: 20,
-      child: Container(
-        decoration: BoxDecoration(
-          color: selected ? Colors.white : Colors.transparent,
-          borderRadius: radius,
-        ),
-        child: Center(
-          child: Text(
-            '$number',
-            style: TextStyle(
-              color: selected ? Colors.grey[900] : Colors.white,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              fontFeatures: [FontFeature.tabularFigures()],
-            ),
-          ),
         ),
       ),
     );
