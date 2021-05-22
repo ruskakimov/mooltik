@@ -6,28 +6,30 @@ import 'package:mooltik/drawing/ui/reel/frame_menu.dart';
 import 'package:mooltik/drawing/ui/frame_window.dart';
 import 'package:provider/provider.dart';
 
-const _framePadding = const EdgeInsets.only(
-  left: 4.0,
-  right: 4.0,
-  bottom: 8.0,
+const _itemSize = Size(80, 45);
+const _itemGap = 8;
+const _itemPadding = const EdgeInsets.only(
+  left: _itemGap / 2,
+  right: _itemGap / 2,
 );
+
+const _bottomPadding = 8.0;
 
 class FrameReel extends StatelessWidget {
   const FrameReel({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      final frameHeight = constraints.maxHeight - _framePadding.vertical;
-      final frameWidth = frameHeight / 9 * 16;
-      final itemWidth = frameWidth + _framePadding.horizontal;
-
-      return _FrameReelItemList(
-        key: Key('${context.watch<FrameReelModel>().hashCode}'),
-        width: constraints.maxWidth,
-        itemWidth: itemWidth,
-      );
-    });
+    return SizedBox(
+      height: _itemSize.height + _bottomPadding,
+      child: LayoutBuilder(builder: (context, constraints) {
+        return _FrameReelItemList(
+          key: Key('${context.watch<FrameReelModel>().hashCode}'),
+          width: constraints.maxWidth,
+          itemWidth: _itemSize.width,
+        );
+      }),
+    );
   }
 }
 
@@ -92,6 +94,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
           padding: EdgeInsets.only(
             left: (widget.width - widget.itemWidth) / 2,
             right: (widget.width - widget.itemWidth) / 2 - widget.itemWidth,
+            bottom: _bottomPadding,
           ),
           primary: false,
           itemCount: reel.frameSeq.length + 1,
@@ -195,22 +198,40 @@ class _FrameReelItem extends StatelessWidget {
     final borderRadius = BorderRadius.circular(8);
 
     return Padding(
-      padding: _framePadding,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          ClipRRect(
-            borderRadius: borderRadius,
-            clipBehavior: Clip.antiAlias,
-            child: child,
+      padding: _itemPadding,
+      child: Container(
+        foregroundDecoration: selected
+            ? BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  width: 2,
+                  color: Colors.white,
+                ),
+              )
+            : null,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            width: 4,
+            color: selected ? Colors.black38 : Colors.transparent,
           ),
-          Material(
-            type: MaterialType.transparency,
-            borderRadius: borderRadius,
-            clipBehavior: Clip.antiAlias,
-            child: InkWell(onTap: onTap),
-          ),
-        ],
+        ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            ClipRRect(
+              borderRadius: borderRadius,
+              clipBehavior: Clip.antiAlias,
+              child: child,
+            ),
+            Material(
+              type: MaterialType.transparency,
+              borderRadius: borderRadius,
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(onTap: onTap),
+            ),
+          ],
+        ),
       ),
     );
   }
