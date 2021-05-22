@@ -99,7 +99,7 @@ class DrawingPage extends StatelessWidget {
                         child: FrameReel(),
                       ),
                     Positioned(
-                      bottom: 48,
+                      bottom: 60,
                       right: 4,
                       child: LayerButton(),
                     ),
