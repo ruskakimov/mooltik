@@ -195,14 +195,15 @@ class _FrameReelItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.circular(8);
+    final outerRadius = BorderRadius.circular(12);
+    final innerRadius = BorderRadius.circular(8);
 
     return Padding(
       padding: _itemPadding,
       child: Container(
         foregroundDecoration: selected
             ? BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: outerRadius,
                 border: Border.all(
                   width: 2,
                   color: Colors.white,
@@ -210,7 +211,7 @@ class _FrameReelItem extends StatelessWidget {
               )
             : null,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: outerRadius,
           border: Border.all(
             width: 4,
             color: selected ? Colors.black38 : Colors.transparent,
@@ -220,13 +221,13 @@ class _FrameReelItem extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             ClipRRect(
-              borderRadius: borderRadius,
+              borderRadius: innerRadius,
               clipBehavior: Clip.antiAlias,
               child: child,
             ),
             Material(
               type: MaterialType.transparency,
-              borderRadius: borderRadius,
+              borderRadius: innerRadius,
               clipBehavior: Clip.antiAlias,
               child: InkWell(onTap: onTap),
             ),
