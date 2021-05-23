@@ -18,14 +18,18 @@ class SceneLayer {
   SceneLayer(
     this.frameSeq, [
     PlayMode playMode = PlayMode.extendLast,
-    this.visible = true,
+    bool visible = true,
   ])  : assert(playMode != null),
-        _playMode = playMode;
+        _playMode = playMode,
+        _visible = visible;
 
   final Sequence<Frame> frameSeq;
+
   PlayMode get playMode => _playMode;
   PlayMode _playMode;
-  final bool visible;
+
+  bool get visible => _visible;
+  bool _visible;
 
   /// Frame at a given playhead position.
   Frame frameAt(Duration playhead) {
@@ -92,6 +96,10 @@ class SceneLayer {
 
   void nextPlayMode() {
     _playMode = PlayMode.values[(playMode.index + 1) % PlayMode.values.length];
+  }
+
+  void setVisibility(bool value) {
+    _visible = value;
   }
 
   factory SceneLayer.fromJson(Map<String, dynamic> json, String frameDirPath) =>

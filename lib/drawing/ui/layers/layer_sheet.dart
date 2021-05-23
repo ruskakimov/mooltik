@@ -142,8 +142,9 @@ class LayerRow extends StatelessWidget {
                 value: visible,
                 onChanged: (value) {
                   final reelStack = context.read<ReelStackModel>();
-                  reelStack.toggleLayerVisibility(
+                  reelStack.setLayerVisibility(
                     reelStack.reels.indexOf(reel),
+                    value,
                   );
                 },
               ),
