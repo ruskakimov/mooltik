@@ -132,28 +132,10 @@ class LayerRow extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                margin: const EdgeInsets.all(8.0),
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Stack(
-                  children: [
-                    FrameWindow(frame: reel.currentFrame),
-                    Positioned(
-                      top: 4,
-                      left: 4,
-                      child: FrameNumberBox(
-                        selected: true,
-                        number: reel.currentIndex + 1,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              _buildCell(),
               SizedBox(width: 4),
               _buildLabel(context),
+              Spacer(),
             ],
           ),
         ),
@@ -161,7 +143,30 @@ class LayerRow extends StatelessWidget {
     );
   }
 
-  Text _buildLabel(BuildContext context) {
+  Widget _buildCell() {
+    return Container(
+      margin: const EdgeInsets.all(8.0),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Stack(
+        children: [
+          FrameWindow(frame: reel.currentFrame),
+          Positioned(
+            top: 4,
+            left: 4,
+            child: FrameNumberBox(
+              selected: true,
+              number: reel.currentIndex + 1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLabel(BuildContext context) {
     final count = reel.frameSeq.length;
     final appendix = count > 1 ? 'frames' : 'frame';
     return Text(
