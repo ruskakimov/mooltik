@@ -22,7 +22,10 @@ class Scene extends TimeSpan {
   CompositeImage imageAt(Duration playhead) {
     playhead = playhead.clamp(Duration.zero, duration);
     return CompositeImage(
-      layers.map((layer) => layer.frameAt(playhead).snapshot).toList(),
+      layers
+          .where((layer) => layer.visible)
+          .map((layer) => layer.frameAt(playhead).snapshot)
+          .toList(),
     );
   }
 
