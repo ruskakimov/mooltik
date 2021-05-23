@@ -18,14 +18,14 @@ class Scene extends TimeSpan {
   final List<SceneLayer> layers;
   final String description;
 
+  Iterable<SceneLayer> get visibleLayers =>
+      layers.where((layer) => layer.visible);
+
   /// Visible image at a given playhead position.
   CompositeImage imageAt(Duration playhead) {
     playhead = playhead.clamp(Duration.zero, duration);
     return CompositeImage(
-      layers
-          .where((layer) => layer.visible)
-          .map((layer) => layer.frameAt(playhead).snapshot)
-          .toList(),
+      visibleLayers.map((layer) => layer.frameAt(playhead).snapshot).toList(),
     );
   }
 
@@ -46,7 +46,7 @@ class Scene extends TimeSpan {
   /// Frames for export video.
   Iterable<CompositeFrame> get exportFrames sync* {
     final rows =
-        layers.map((layer) => layer.getExportFrames(duration)).toList();
+        visibleLayers.map((layer) => layer.getExportFrames(duration)).toList();
 
     final rowIterators =
         rows.map((frames) => frames.iterator..moveNext()).toList();
