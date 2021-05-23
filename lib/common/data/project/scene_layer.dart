@@ -15,13 +15,17 @@ enum PlayMode {
 }
 
 class SceneLayer {
-  SceneLayer(this.frameSeq, [PlayMode playMode = PlayMode.extendLast])
-      : assert(playMode != null),
+  SceneLayer(
+    this.frameSeq, [
+    PlayMode playMode = PlayMode.extendLast,
+    this.visible = true,
+  ])  : assert(playMode != null),
         _playMode = playMode;
 
   final Sequence<Frame> frameSeq;
   PlayMode get playMode => _playMode;
   PlayMode _playMode;
+  final bool visible;
 
   /// Frame at a given playhead position.
   Frame frameAt(Duration playhead) {

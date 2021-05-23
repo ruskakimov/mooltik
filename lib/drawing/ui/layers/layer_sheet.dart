@@ -82,6 +82,7 @@ class LayerSheet extends StatelessWidget {
       ],
       child: LayerRow(
         selected: reel == reelStack.activeReel,
+        visible: reelStack.isVisible(reelStack.reels.indexOf(reel)),
         reel: reel,
         onTap: () => reelStack.changeActiveReel(reel),
       ),
@@ -112,11 +113,13 @@ class LayerRow extends StatelessWidget {
   const LayerRow({
     Key key,
     this.selected,
+    this.visible,
     this.reel,
     this.onTap,
   }) : super(key: key);
 
   final bool selected;
+  final bool visible;
   final FrameReelModel reel;
   final VoidCallback onTap;
 
@@ -136,8 +139,13 @@ class LayerRow extends StatelessWidget {
               _buildLabel(context),
               Spacer(),
               VisibilitySwitch(
-                value: true,
-                onChanged: (value) {},
+                value: visible,
+                onChanged: (value) {
+                  final reelStack = context.read<ReelStackModel>();
+                  reelStack.toggleLayerVisibility(
+                    reelStack.reels.indexOf(reel),
+                  );
+                },
               ),
             ],
           ),

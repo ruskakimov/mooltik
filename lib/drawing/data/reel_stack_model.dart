@@ -93,6 +93,10 @@ class ReelStackModel extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  bool isVisible(int layerIndex) => _scene.layers[layerIndex].visible;
+
+  void toggleLayerVisibility(int layerIndex) {}
 }
 
 const _showFrameReelKey = 'frame_reel_visible';
