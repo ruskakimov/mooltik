@@ -20,8 +20,9 @@ class VisibilitySwitch extends StatelessWidget {
         height: 52,
         width: 52,
         child: Icon(
-          value ? FontAwesomeIcons.eye : FontAwesomeIcons.eyeSlash,
-          size: 16,
+          value ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+          color: Theme.of(context).colorScheme.onSurface,
+          size: 20,
         ),
       ),
     );
