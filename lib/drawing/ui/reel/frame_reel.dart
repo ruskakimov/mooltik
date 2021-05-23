@@ -229,15 +229,14 @@ class _FrameReelItem extends StatelessWidget {
               clipBehavior: Clip.antiAlias,
               child: child,
             ),
-            if (number != null)
-              Positioned(
-                top: 2,
-                left: 2,
-                child: FrameNumberBox(
-                  selected: selected,
-                  number: number,
-                ),
+            Positioned(
+              top: 2,
+              left: 2,
+              child: FrameNumberBox(
+                selected: selected,
+                number: number,
               ),
+            ),
             Material(
               type: MaterialType.transparency,
               borderRadius: innerRadius,
