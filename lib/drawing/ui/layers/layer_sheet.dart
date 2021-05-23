@@ -135,7 +135,10 @@ class LayerRow extends StatelessWidget {
               SizedBox(width: 4),
               _buildLabel(context),
               Spacer(),
-              VisibilitySwitch(),
+              VisibilitySwitch(
+                value: true,
+                onChanged: (value) {},
+              ),
             ],
           ),
         ),
