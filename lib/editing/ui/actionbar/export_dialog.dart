@@ -78,6 +78,9 @@ class _LoadingIndicator extends StatelessWidget {
           Positioned.fill(
             child: CircularProgressIndicator(
               value: value,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                Theme.of(context).colorScheme.primary,
+              ),
               backgroundColor: Colors.black12,
               strokeWidth: strokeWidth,
             ),
