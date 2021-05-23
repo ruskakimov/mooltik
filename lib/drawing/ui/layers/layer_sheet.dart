@@ -5,7 +5,8 @@ import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
-import 'package:mooltik/drawing/ui/frame_thumbnail.dart';
+import 'package:mooltik/drawing/ui/frame_window.dart';
+import 'package:mooltik/drawing/ui/reel/frame_number_box.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
 
@@ -137,7 +138,19 @@ class LayerRow extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: FrameThumbnail(frame: reel.currentFrame),
+                child: Stack(
+                  children: [
+                    FrameWindow(frame: reel.currentFrame),
+                    Positioned(
+                      top: 4,
+                      left: 4,
+                      child: FrameNumberBox(
+                        selected: true,
+                        number: reel.currentIndex + 1,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(width: 4),
               _buildLabel(context),

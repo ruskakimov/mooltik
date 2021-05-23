@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/ui/frame_window.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 
 class ImageSliver extends Sliver {
@@ -16,13 +17,15 @@ class ImageSliver extends Sliver {
 
   @override
   void paint(Canvas canvas) {
-    final paint = Paint()..color = Colors.white.withOpacity(opacity);
-    canvas.drawRRect(rrect, paint);
+    final backgroundColor =
+        frostedGlassColor.withOpacity(frostedGlassColor.opacity * opacity);
+    final backgroundPaint = Paint()..color = backgroundColor;
+    canvas.drawRRect(rrect, backgroundPaint);
 
-    if (thumbnail != null) _paintThumbnail(canvas, paint);
+    if (thumbnail != null) _paintThumbnail(canvas);
   }
 
-  void _paintThumbnail(Canvas canvas, Paint paint) {
+  void _paintThumbnail(Canvas canvas) {
     canvas.save();
     canvas.clipRRect(rrect);
     canvas.translate(area.left, area.top);
@@ -30,6 +33,7 @@ class ImageSliver extends Sliver {
     canvas.scale(scaleFactor);
 
     final sliverWidth = rrect.width / scaleFactor;
+    final paint = Paint()..color = Colors.black.withOpacity(opacity);
 
     if (thumbnail.width > sliverWidth) {
       // Center thumbnail if it overflows sliver.

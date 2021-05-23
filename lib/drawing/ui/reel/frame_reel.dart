@@ -3,31 +3,34 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/reel/frame_menu.dart';
-import 'package:mooltik/drawing/ui/frame_thumbnail.dart';
+import 'package:mooltik/drawing/ui/frame_window.dart';
+import 'package:mooltik/drawing/ui/reel/frame_number_box.dart';
 import 'package:provider/provider.dart';
 
-const _framePadding = const EdgeInsets.only(
-  left: 4.0,
-  right: 4.0,
-  bottom: 8.0,
+const _itemSize = Size(80, 45);
+const _itemGap = 8;
+const _itemPadding = const EdgeInsets.only(
+  left: _itemGap / 2,
+  right: _itemGap / 2,
 );
+
+const _bottomPadding = 8.0;
 
 class FrameReel extends StatelessWidget {
   const FrameReel({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      final frameHeight = constraints.maxHeight - _framePadding.vertical;
-      final frameWidth = frameHeight / 9 * 16;
-      final itemWidth = frameWidth + _framePadding.horizontal;
-
-      return _FrameReelItemList(
-        key: Key('${context.watch<FrameReelModel>().hashCode}'),
-        width: constraints.maxWidth,
-        itemWidth: itemWidth,
-      );
-    });
+    return SizedBox(
+      height: _itemSize.height + _bottomPadding,
+      child: LayoutBuilder(builder: (context, constraints) {
+        return _FrameReelItemList(
+          key: Key('${context.watch<FrameReelModel>().hashCode}'),
+          width: constraints.maxWidth,
+          itemWidth: _itemSize.width,
+        );
+      }),
+    );
   }
 }
 
@@ -92,6 +95,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
           padding: EdgeInsets.only(
             left: (widget.width - widget.itemWidth) / 2,
             right: (widget.width - widget.itemWidth) / 2 - widget.itemWidth,
+            bottom: _bottomPadding,
           ),
           primary: false,
           itemCount: reel.frameSeq.length + 1,
@@ -115,10 +119,8 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
 
             final item = _FrameReelItem(
               selected: selected,
-              child: FrameThumbnail(
-                frame: frame,
-                background: Colors.transparent,
-              ),
+              number: index + 1,
+              child: FrameWindow(frame: frame),
               onTap: selected ? _openPopup : () => scrollTo(index),
             );
 
@@ -186,48 +188,64 @@ class _FrameReelItem extends StatelessWidget {
     Key key,
     @required this.child,
     this.selected = false,
+    this.number,
     this.onTap,
   }) : super(key: key);
 
   final Widget child;
   final bool selected;
+  final int number;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.circular(8);
+    final outerRadius = BorderRadius.circular(12);
+    final innerRadius = BorderRadius.circular(8);
 
     return Padding(
-      padding: _framePadding,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Container(
-            foregroundDecoration: selected
-                ? BoxDecoration(
-                    borderRadius: borderRadius,
-                    border: Border.all(
-                      width: 2,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  )
-                : null,
-            decoration: BoxDecoration(
-              borderRadius: borderRadius,
-              color: selected
-                  ? Colors.white
-                  : Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+      padding: _itemPadding,
+      child: Container(
+        foregroundDecoration: selected
+            ? BoxDecoration(
+                borderRadius: outerRadius,
+                border: Border.all(
+                  width: 2,
+                  color: Colors.white,
+                ),
+              )
+            : null,
+        decoration: BoxDecoration(
+          borderRadius: outerRadius,
+          border: Border.all(
+            width: 4,
+            color: selected ? Colors.black38 : Colors.transparent,
+          ),
+        ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            ClipRRect(
+              borderRadius: innerRadius,
+              clipBehavior: Clip.antiAlias,
+              child: child,
             ),
-            clipBehavior: Clip.antiAlias,
-            child: child,
-          ),
-          Material(
-            type: MaterialType.transparency,
-            borderRadius: borderRadius,
-            clipBehavior: Clip.antiAlias,
-            child: InkWell(onTap: onTap),
-          ),
-        ],
+            if (number != null)
+              Positioned(
+                top: 2,
+                left: 2,
+                child: FrameNumberBox(
+                  selected: selected,
+                  number: number,
+                ),
+              ),
+            Material(
+              type: MaterialType.transparency,
+              borderRadius: innerRadius,
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(onTap: onTap),
+            ),
+          ],
+        ),
       ),
     );
   }

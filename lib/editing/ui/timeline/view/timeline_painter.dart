@@ -67,7 +67,7 @@ void paintSelection(Canvas canvas, RRect rect, String label) {
   canvas.drawRRect(
     rect,
     Paint()
-      ..color = Colors.black54
+      ..color = Colors.black45
       ..style = PaintingStyle.fill,
   );
 

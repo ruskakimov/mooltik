@@ -49,7 +49,7 @@ class App extends StatelessWidget {
           title: 'Mooltik',
           theme: ThemeData(
             // Overscroll
-            accentColor: Colors.amber,
+            accentColor: Colors.white38,
             // Splash
             splashColor: Colors.white30,
             highlightColor: Colors.white.withOpacity(0.2),

@@ -217,7 +217,7 @@ class TimelineViewModel extends ChangeNotifier {
         area: area,
         thumbnail: frame.snapshot,
         id: isGhostFrame ? null : SliverId(rowIndex, frameIndex),
-        opacity: isGhostFrame ? 0.5 : 1,
+        opacity: isGhostFrame ? 0.3 : 1,
       );
 
       frameIndex++;
