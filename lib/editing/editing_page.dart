@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/editor_model.dart';
+import 'package:mooltik/editing/data/player_model.dart';
+import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/actionbar/editing_actionbar.dart';
 import 'package:mooltik/editing/ui/preview/description_area.dart';
 import 'package:mooltik/editing/ui/preview/preview.dart';
@@ -9,6 +11,7 @@ import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/timeline/timeline_panel.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditingPage extends StatefulWidget {
   static const routeName = '/editor';
@@ -46,6 +49,20 @@ class _EditingPageState extends State<EditingPage>
           create: (context) => TimelineModel(
             sceneSeq: context.read<Project>().scenes,
             vsync: this,
+          ),
+        ),
+        ChangeNotifierProvider<PlayerModel>(
+          create: (context) => PlayerModel(
+            soundClips: context.read<Project>().soundClips,
+            timeline: context.read<TimelineModel>(),
+          ),
+        ),
+        ChangeNotifierProvider<TimelineViewModel>(
+          create: (context) => TimelineViewModel(
+            timeline: context.read<TimelineModel>(),
+            soundClips: context.read<Project>().soundClips,
+            sharedPreferences: context.read<SharedPreferences>(),
+            createNewFrame: context.read<Project>().createNewFrame,
           ),
         ),
       ],
