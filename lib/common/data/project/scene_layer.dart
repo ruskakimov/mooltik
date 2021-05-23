@@ -21,7 +21,7 @@ class SceneLayer {
     bool visible = true,
   ])  : assert(playMode != null),
         _playMode = playMode,
-        _visible = visible;
+        _visible = visible ?? true;
 
   final Sequence<Frame> frameSeq;
 
