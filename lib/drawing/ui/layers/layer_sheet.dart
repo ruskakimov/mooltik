@@ -6,6 +6,7 @@ import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/frame_window.dart';
+import 'package:mooltik/drawing/ui/layers/visibility_switch.dart';
 import 'package:mooltik/drawing/ui/reel/frame_number_box.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
@@ -134,10 +135,7 @@ class LayerRow extends StatelessWidget {
               SizedBox(width: 4),
               _buildLabel(context),
               Spacer(),
-              AppIconButton(
-                icon: FontAwesomeIcons.eye,
-                onTap: () {},
-              ),
+              VisibilitySwitch(),
             ],
           ),
         ),
