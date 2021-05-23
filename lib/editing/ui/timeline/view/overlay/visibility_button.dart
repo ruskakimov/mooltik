@@ -26,6 +26,7 @@ class VisibilityButton extends StatelessWidget {
         icon: Icon(
           visible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
           color: Theme.of(context).colorScheme.onBackground,
+          size: 20,
         ),
         onPressed: () => timelineView.toggleLayerVisibility(layerIndex),
       ),
