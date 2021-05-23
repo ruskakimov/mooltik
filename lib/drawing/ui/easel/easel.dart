@@ -48,7 +48,7 @@ class _EaselState extends State<Easel> {
                 angle: easel.canvasRotation,
                 child: EaselCanvas(
                   size: easel.frameSize,
-                  frames: reelStack.reels
+                  frames: reelStack.visibleReels
                       .map((reel) => reel.currentFrame)
                       .toList()
                       .reversed

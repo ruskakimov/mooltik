@@ -28,6 +28,9 @@ class ReelStackModel extends ChangeNotifier {
 
   final List<FrameReelModel> reels;
 
+  Iterable<FrameReelModel> get visibleReels => reels
+      .where((reel) => isVisible(reels.indexOf(reel)) || reel == activeReel);
+
   FrameReelModel get activeReel => reels[_activeReelIndex];
   int _activeReelIndex = 0;
 
