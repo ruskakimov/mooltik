@@ -16,7 +16,8 @@ class FrameNumberBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 20,
-      width: 20,
+      constraints: const BoxConstraints(minWidth: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
         color: selected ? Colors.white : Colors.transparent,
         borderRadius: BorderRadius.circular(6),
