@@ -124,9 +124,7 @@ class LayerRow extends StatelessWidget {
     return SizedBox(
       height: 80,
       child: Material(
-        color: selected
-            ? Theme.of(context).colorScheme.primary
-            : Colors.transparent,
+        color: selected ? Colors.white24 : Colors.transparent,
         child: InkWell(
           onTap: onTap,
           child: Row(
@@ -136,6 +134,10 @@ class LayerRow extends StatelessWidget {
               SizedBox(width: 4),
               _buildLabel(context),
               Spacer(),
+              AppIconButton(
+                icon: FontAwesomeIcons.eye,
+                onTap: () {},
+              ),
             ],
           ),
         ),
@@ -169,14 +171,6 @@ class LayerRow extends StatelessWidget {
   Widget _buildLabel(BuildContext context) {
     final count = reel.frameSeq.length;
     final appendix = count > 1 ? 'frames' : 'frame';
-    return Text(
-      '$count $appendix',
-      style: selected
-          ? TextStyle(
-              color: Theme.of(context).colorScheme.onPrimary,
-              fontWeight: FontWeight.bold,
-            )
-          : null,
-    );
+    return Text('$count $appendix');
   }
 }
