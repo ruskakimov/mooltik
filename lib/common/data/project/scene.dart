@@ -18,11 +18,21 @@ class Scene extends TimeSpan {
   final List<SceneLayer> layers;
   final String description;
 
+  Iterable<SceneLayer> get visibleLayers =>
+      layers.where((layer) => layer.visible);
+
+  int get frameWidth => layers.first.frameSeq.current.width;
+  int get frameHeight => layers.first.frameSeq.current.height;
+
   /// Visible image at a given playhead position.
   CompositeImage imageAt(Duration playhead) {
     playhead = playhead.clamp(Duration.zero, duration);
     return CompositeImage(
-      layers.map((layer) => layer.frameAt(playhead).snapshot).toList(),
+      width: frameWidth,
+      height: frameHeight,
+      layers: visibleLayers
+          .map((layer) => layer.frameAt(playhead).snapshot)
+          .toList(),
     );
   }
 
@@ -43,7 +53,7 @@ class Scene extends TimeSpan {
   /// Frames for export video.
   Iterable<CompositeFrame> get exportFrames sync* {
     final rows =
-        layers.map((layer) => layer.getExportFrames(duration)).toList();
+        visibleLayers.map((layer) => layer.getExportFrames(duration)).toList();
 
     final rowIterators =
         rows.map((frames) => frames.iterator..moveNext()).toList();
@@ -54,7 +64,9 @@ class Scene extends TimeSpan {
 
     while (elapsed < duration) {
       final compositeImage = CompositeImage(
-        rowIterators.map((it) => it.current.snapshot).toList(),
+        width: frameWidth,
+        height: frameHeight,
+        layers: rowIterators.map((it) => it.current.snapshot).toList(),
       );
 
       var smallestJump = duration;

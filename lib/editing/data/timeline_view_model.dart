@@ -342,6 +342,12 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void toggleLayerVisibility(int layerIndex) {
+    final layer = sceneLayers[layerIndex];
+    layer.setVisibility(!layer.visible);
+    notifyListeners();
+  }
+
   bool get canDeleteSelected => selectedSliverSequence != null
       ? selectedSliverSequence.length > 1
       : false;

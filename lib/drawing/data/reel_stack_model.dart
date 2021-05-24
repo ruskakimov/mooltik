@@ -28,6 +28,9 @@ class ReelStackModel extends ChangeNotifier {
 
   final List<FrameReelModel> reels;
 
+  Iterable<FrameReelModel> get visibleReels => reels
+      .where((reel) => isVisible(reels.indexOf(reel)) || reel == activeReel);
+
   FrameReelModel get activeReel => reels[_activeReelIndex];
   int _activeReelIndex = 0;
 
@@ -91,6 +94,13 @@ class ReelStackModel extends ChangeNotifier {
 
     _activeReelIndex = reels.indexOf(activeReelBefore);
 
+    notifyListeners();
+  }
+
+  bool isVisible(int layerIndex) => _scene.layers[layerIndex].visible;
+
+  void setLayerVisibility(int layerIndex, bool value) {
+    _scene.layers[layerIndex].setVisibility(value);
     notifyListeners();
   }
 }

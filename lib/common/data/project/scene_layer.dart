@@ -15,13 +15,21 @@ enum PlayMode {
 }
 
 class SceneLayer {
-  SceneLayer(this.frameSeq, [PlayMode playMode = PlayMode.extendLast])
-      : assert(playMode != null),
-        _playMode = playMode;
+  SceneLayer(
+    this.frameSeq, [
+    PlayMode playMode = PlayMode.extendLast,
+    bool visible = true,
+  ])  : assert(playMode != null),
+        _playMode = playMode,
+        _visible = visible ?? true;
 
   final Sequence<Frame> frameSeq;
+
   PlayMode get playMode => _playMode;
   PlayMode _playMode;
+
+  bool get visible => _visible;
+  bool _visible;
 
   /// Frame at a given playhead position.
   Frame frameAt(Duration playhead) {
@@ -90,17 +98,23 @@ class SceneLayer {
     _playMode = PlayMode.values[(playMode.index + 1) % PlayMode.values.length];
   }
 
+  void setVisibility(bool value) {
+    _visible = value;
+  }
+
   factory SceneLayer.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       SceneLayer(
         Sequence<Frame>((json[_framesKey] as List<dynamic>)
             .map((d) => Frame.fromJson(d, frameDirPath))
             .toList()),
         PlayMode.values[json[_playModeKey] as int ?? 0],
+        json[_visibilityKey] as bool,
       );
 
   Map<String, dynamic> toJson() => {
         _framesKey: frameSeq.iterable.map((d) => d.toJson()).toList(),
         _playModeKey: playMode.index,
+        _visibilityKey: visible,
       };
 
   @override
@@ -112,3 +126,4 @@ class SceneLayer {
 
 const String _framesKey = 'frames';
 const String _playModeKey = 'play_mode';
+const String _visibilityKey = 'visible';

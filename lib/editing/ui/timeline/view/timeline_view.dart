@@ -5,6 +5,7 @@ import 'package:mooltik/editing/ui/timeline/view/overlay/play_mode_button.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_end_handle.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_start_handle.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/scene_end_handle.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/visibility_button.dart';
 import 'package:mooltik/editing/ui/timeline/view/timeline_painter.dart';
 import 'package:provider/provider.dart';
 
@@ -32,8 +33,10 @@ class TimelineView extends StatelessWidget {
                 ),
               ),
               if (timelineView.isEditingScene) ...[
-                for (var i = 0; i < timelineView.sceneLayers.length; i++)
+                for (var i = 0; i < timelineView.sceneLayers.length; i++) ...[
                   PlayModeButton(layerIndex: i),
+                  VisibilityButton(layerIndex: i),
+                ],
                 SceneEndHandle(),
               ],
               if (timelineView.showResizeStartHandle)

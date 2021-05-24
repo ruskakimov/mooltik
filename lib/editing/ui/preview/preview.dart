@@ -4,11 +4,14 @@ import 'package:mooltik/common/ui/composite_image_painter.dart';
 import 'package:mooltik/drawing/drawing_page.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/common/data/project/project.dart';
+import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:provider/provider.dart';
 
 class Preview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    context.watch<TimelineViewModel>(); // Listen to visibility toggle.
+
     return ColoredBox(
       color: Colors.black,
       child: Center(
@@ -46,11 +49,7 @@ class Preview extends StatelessWidget {
     );
     return CustomPaint(
       size: image.size,
-      painter: CompositeImagePainter(
-        context.select<TimelineModel, CompositeImage>(
-          (timeline) => timeline.currentFrame,
-        ),
-      ),
+      painter: CompositeImagePainter(image),
     );
   }
 }
