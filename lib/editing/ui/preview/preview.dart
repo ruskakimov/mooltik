@@ -49,11 +49,7 @@ class Preview extends StatelessWidget {
     );
     return CustomPaint(
       size: image.size,
-      painter: CompositeImagePainter(
-        context.select<TimelineModel, CompositeImage>(
-          (timeline) => timeline.currentFrame,
-        ),
-      ),
+      painter: CompositeImagePainter(image),
     );
   }
 }
