@@ -17,6 +17,8 @@ class TimelineView extends StatelessWidget {
     final timelineView = context.watch<TimelineViewModel>();
 
     return LayoutBuilder(builder: (context, constraints) {
+      timelineView.size = constraints.biggest;
+
       return SingleChildScrollView(
         child: SizedBox(
           height: max(timelineView.viewHeight, constraints.maxHeight),

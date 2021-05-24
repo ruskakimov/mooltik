@@ -11,8 +11,6 @@ class TimelinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    timelineView.size = size;
-
     final canvasArea = Rect.fromLTWH(0, 0, size.width, size.height);
     final rows = timelineView.getSliverRows();
     final selectedSliverId = timelineView.selectedSliverId;
