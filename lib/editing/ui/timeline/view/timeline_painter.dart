@@ -77,7 +77,7 @@ void paintSelection(Canvas canvas, RRect rect, String label) {
       color: Colors.white,
       fontSize: 12,
       fontWeight: FontWeight.bold,
-      shadows: [Shadow(blurRadius: 2, color: Colors.black)],
+      shadows: [Shadow(blurRadius: 4, color: Colors.black)],
       fontFeatures: [FontFeature.tabularFigures()],
     ),
   );
