@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/data/toolbox/tools/brush.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'tools/tools.dart';
@@ -26,17 +27,23 @@ class ToolboxModel extends ChangeNotifier {
   }
 
   void changeToolStrokeWidth(double strokeWidth) {
-    selectedTool.strokeWidth = strokeWidth;
-    notifyListeners();
+    if (selectedTool is Brush) {
+      (selectedTool as Brush).strokeWidth = strokeWidth;
+      notifyListeners();
+    }
   }
 
   void changeToolColor(Color color) {
-    selectedTool.color = color;
-    notifyListeners();
+    if (selectedTool is Brush) {
+      (selectedTool as Brush).color = color;
+      notifyListeners();
+    }
   }
 
   void changeToolOpacity(double opacity) {
-    selectedTool.opacity = opacity;
-    notifyListeners();
+    if (selectedTool is Brush) {
+      (selectedTool as Brush).opacity = opacity;
+      notifyListeners();
+    }
   }
 }

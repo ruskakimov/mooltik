@@ -7,6 +7,7 @@ import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
+import 'package:mooltik/drawing/data/toolbox/tools/brush.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -200,9 +201,11 @@ class EaselModel extends ChangeNotifier {
 
   void onStrokeStart(DragStartDetails details) {
     final framePoint = _toFramePoint(details.localPosition);
-    unrasterizedStrokes.add(
-      _selectedTool.makeStroke(framePoint),
-    );
+    if (_selectedTool is Brush) {
+      unrasterizedStrokes.add(
+        (_selectedTool as Brush).makeStroke(framePoint),
+      );
+    }
     notifyListeners();
   }
 

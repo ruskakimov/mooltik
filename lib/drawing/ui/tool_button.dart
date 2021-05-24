@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/app_slider.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
+import 'package:mooltik/drawing/data/toolbox/tools/brush.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
@@ -27,6 +28,9 @@ class _ToolButtonState extends State<ToolButton> {
   @override
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
+    final showSizePicker = widget.tool is Brush
+        ? (widget.tool as Brush).strokeWidthOptions.isNotEmpty
+        : false;
 
     return PopupWithArrowEntry(
       visible: _pickerOpen && widget.selected,
@@ -38,23 +42,24 @@ class _ToolButtonState extends State<ToolButton> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (widget.tool.strokeWidthOptions.isNotEmpty)
+            if (showSizePicker)
               SizePicker(
-                selectedValue: toolbox.selectedTool.strokeWidth,
-                valueOptions: widget.tool.strokeWidthOptions,
-                minValue: widget.tool.minStrokeWidth,
-                maxValue: widget.tool.maxStrokeWidth,
+                selectedValue: (toolbox.selectedTool as Brush).strokeWidth,
+                valueOptions: (widget.tool as Brush).strokeWidthOptions,
+                minValue: (widget.tool as Brush).minStrokeWidth,
+                maxValue: (widget.tool as Brush).maxStrokeWidth,
                 onSelected: (double newValue) {
                   toolbox.changeToolStrokeWidth(newValue);
                   _closePicker();
                 },
               ),
-            AppSlider(
-              value: toolbox.selectedTool.opacity,
-              onChanged: (double value) {
-                toolbox.changeToolOpacity(value);
-              },
-            ),
+            if (toolbox.selectedTool is Brush)
+              AppSlider(
+                value: (toolbox.selectedTool as Brush).opacity,
+                onChanged: (double value) {
+                  toolbox.changeToolOpacity(value);
+                },
+              ),
           ],
         ),
       ),

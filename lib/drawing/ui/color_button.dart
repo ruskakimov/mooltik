@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
+import 'package:mooltik/drawing/data/toolbox/tools/brush.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/color_picker.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,9 @@ class _ColorButtonState extends State<ColorButton> {
   @override
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
+    final selectedTool = toolbox.selectedTool;
+    final selectedColor =
+        selectedTool is Brush ? selectedTool.color : Colors.black;
 
     return PopupWithArrowEntry(
       visible: _pickerOpen,
@@ -25,7 +29,7 @@ class _ColorButtonState extends State<ColorButton> {
       arrowAnchor: const Alignment(0, 0.8),
       arrowSidePosition: ArrowSidePosition.middle,
       popupBody: ColorPicker(
-        selectedColor: toolbox.selectedTool.color,
+        selectedColor: selectedColor,
         onSelected: (Color color) {
           toolbox.changeToolColor(color);
           _closePicker();
@@ -39,12 +43,12 @@ class _ColorButtonState extends State<ColorButton> {
         child: InkWell(
           splashColor: Colors.transparent,
           onTap: () {
-            if (toolbox.selectedTool is! Eraser) {
+            if (selectedTool is Brush && selectedTool is! Eraser) {
               _openPicker();
             }
           },
           child: Center(
-            child: _ColorIndicator(color: toolbox.selectedTool.color),
+            child: _ColorIndicator(color: selectedColor),
           ),
         ),
       ),
