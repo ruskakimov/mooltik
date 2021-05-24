@@ -15,7 +15,8 @@
                             "duration": "0:00:01.000000"
                         }
                     ],
-                    "play_mode": 1
+                    "play_mode": 1,
+                    "visible": true
                 }
             ],
             "duration": "0:00:04.000000",

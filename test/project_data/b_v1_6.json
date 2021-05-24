@@ -11,7 +11,8 @@
                             "duration": "0:00:01.000000"
                         }
                     ],
-                    "play_mode": 0
+                    "play_mode": 0,
+                    "visible": true
                 },
                 {
                     "frames": [
@@ -24,7 +25,8 @@
                             "duration": "0:00:00.120000"
                         }
                     ],
-                    "play_mode": 1
+                    "play_mode": 1,
+                    "visible": true
                 },
                 {
                     "frames": [
@@ -33,7 +35,8 @@
                             "duration": "0:00:01.000000"
                         }
                     ],
-                    "play_mode": 0
+                    "play_mode": 0,
+                    "visible": true
                 }
             ],
             "duration": "0:00:01.540000",
@@ -48,7 +51,8 @@
                             "duration": "0:00:01.000000"
                         }
                     ],
-                    "play_mode": 0
+                    "play_mode": 0,
+                    "visible": true
                 },
                 {
                     "frames": [
@@ -61,7 +65,8 @@
                             "duration": "0:00:00.120000"
                         }
                     ],
-                    "play_mode": 1
+                    "play_mode": 1,
+                    "visible": false
                 },
                 {
                     "frames": [
@@ -70,7 +75,8 @@
                             "duration": "0:00:01.000000"
                         }
                     ],
-                    "play_mode": 0
+                    "play_mode": 0,
+                    "visible": true
                 }
             ],
             "duration": "0:00:01.600000",
@@ -89,7 +95,8 @@
                             "duration": "0:00:00.160000"
                         }
                     ],
-                    "play_mode": 1
+                    "play_mode": 1,
+                    "visible": true
                 },
                 {
                     "frames": [
@@ -98,7 +105,8 @@
                             "duration": "0:00:01.000000"
                         }
                     ],
-                    "play_mode": 0
+                    "play_mode": 0,
+                    "visible": true
                 }
             ],
             "duration": "0:00:01.600000",

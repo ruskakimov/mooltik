@@ -126,4 +126,4 @@ class SceneLayer {
 
 const String _framesKey = 'frames';
 const String _playModeKey = 'play_mode';
-const String _visibilityKey = 'visibility';
+const String _visibilityKey = 'visible';
