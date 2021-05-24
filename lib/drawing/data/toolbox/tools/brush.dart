@@ -4,8 +4,8 @@ import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'tool.dart';
 
-class Pen extends Tool {
-  Pen(SharedPreferences sharedPreferences)
+class Brush extends Tool {
+  Brush(SharedPreferences sharedPreferences)
       : super(
           Paint()
             ..color = Colors.black
@@ -17,10 +17,10 @@ class Pen extends Tool {
         );
 
   @override
-  String get name => 'pen';
+  String get name => 'brush';
 
   @override
-  IconData get icon => FontAwesomeIcons.marker;
+  IconData get icon => FontAwesomeIcons.paintBrush;
 
   @override
   Stroke makeStroke(Offset startPoint) {

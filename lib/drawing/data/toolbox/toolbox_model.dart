@@ -9,7 +9,7 @@ class ToolboxModel extends ChangeNotifier {
         tools = [
           FillPen(sharedPreferences),
           AirBrush(sharedPreferences),
-          Pen(sharedPreferences),
+          Brush(sharedPreferences),
           Eraser(sharedPreferences),
         ],
         _selectedToolId = 2;
