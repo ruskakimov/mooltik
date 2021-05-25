@@ -70,20 +70,28 @@ abstract class Brush extends Tool {
   // UI helpers:
   // ===========
 
-  double get lineWidthPercentage =>
+  double get strokeWidthPercentage =>
       (selectedBrushTip.strokeWidth - minStrokeWidth) /
       (maxStrokeWidth - minStrokeWidth);
 
-  double get opacityPercentage => selectedBrushTip.opacity;
+  void setStrokeWidthPercentage(double percentage) {
+    final newStrokeWidth =
+        minStrokeWidth + percentage * (maxStrokeWidth - minStrokeWidth);
+    _replaceCurrentBrushTip(
+      selectedBrushTip.copyWith(strokeWidth: newStrokeWidth),
+    );
+  }
 
-  // TODO: Add min and max
-  double get blurPercentage => selectedBrushTip.blur;
+  double get opacityPercentage => selectedBrushTip.opacity;
 
   void setOpacityPercentage(double percentage) {
     _replaceCurrentBrushTip(
       selectedBrushTip.copyWith(opacity: percentage),
     );
   }
+
+  // TODO: Add min and max
+  double get blurPercentage => selectedBrushTip.blur;
 
   void _replaceCurrentBrushTip(BrushTip newBrushTip) {
     brushTips.removeAt(_selectedBrushTipIndex);

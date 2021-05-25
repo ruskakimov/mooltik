@@ -86,7 +86,7 @@ class _BrushPopupState extends State<BrushPopup> {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizePicker(
-            selectedValue: widget.brush.paint.strokeWidth,
+            selectedIndex: widget.brush.selectedBrushTipIndex,
             valueOptions:
                 widget.brush.brushTips.map((tip) => tip.strokeWidth).toList(),
             minValue: widget.brush.minStrokeWidth,
@@ -97,10 +97,12 @@ class _BrushPopupState extends State<BrushPopup> {
             },
           ),
           AppSlider(
-            value: widget.brush.lineWidthPercentage,
+            value: widget.brush.strokeWidthPercentage,
             icon: Icons.line_weight_rounded,
             onChanged: (double value) {
-              // toolbox.changeToolOpacity(value);
+              setState(() {
+                widget.brush.setStrokeWidthPercentage(value);
+              });
             },
           ),
           AppSlider(

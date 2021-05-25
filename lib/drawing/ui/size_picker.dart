@@ -4,14 +4,14 @@ import 'package:mooltik/drawing/ui/picker_option_button.dart';
 class SizePicker extends StatelessWidget {
   const SizePicker({
     Key key,
-    @required this.selectedValue,
+    @required this.selectedIndex,
     @required this.valueOptions,
     @required this.minValue,
     @required this.maxValue,
     this.onSelected,
   }) : super(key: key);
 
-  final double selectedValue;
+  final int selectedIndex;
   final List<double> valueOptions;
   final double minValue;
   final double maxValue;
@@ -27,7 +27,7 @@ class SizePicker extends StatelessWidget {
           for (var i = 0; i < valueOptions.length; i++)
             PickerOptionButton(
               innerCircleWidth: _calculateInnerCircleWidth(valueOptions[i]),
-              selected: valueOptions[i] == selectedValue,
+              selected: i == selectedIndex,
               onTap: () {
                 onSelected?.call(i);
               },
