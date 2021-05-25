@@ -54,7 +54,7 @@ abstract class Brush extends Tool {
   int get selectedBrushTipIndex => _selectedBrushTipIndex;
   int _selectedBrushTipIndex = 0;
   set selectedBrushTipIndex(int index) {
-    // assert();
+    assert(index >= 0 && index < brushTips.length);
     _selectedBrushTipIndex = index;
     sharedPreferences.setInt(_selectedBrushTipIndexKey, index);
   }
