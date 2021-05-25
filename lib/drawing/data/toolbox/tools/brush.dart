@@ -96,8 +96,13 @@ abstract class Brush extends Tool {
     );
   }
 
-  // TODO: Add min and max
   double get blurPercentage => selectedBrushTip.blur;
+
+  void setBlurPercentage(double percentage) {
+    _replaceCurrentBrushTip(
+      selectedBrushTip.copyWith(blur: percentage),
+    );
+  }
 
   void _replaceCurrentBrushTip(BrushTip newBrushTip) {
     brushTips.removeAt(_selectedBrushTipIndex);
@@ -126,7 +131,7 @@ class BrushTip {
     @required this.blur,
   })  : assert(strokeWidth != null),
         assert(opacity != null && opacity >= 0 && opacity <= 1),
-        assert(blur != null);
+        assert(blur != null && blur >= 0 && blur <= 1);
 
   final double strokeWidth;
   final double opacity;
@@ -138,7 +143,7 @@ class BrushTip {
     ..style = PaintingStyle.stroke
     ..strokeCap = StrokeCap.round
     ..strokeJoin = StrokeJoin.round
-    ..maskFilter = MaskFilter.blur(BlurStyle.normal, blur);
+    ..maskFilter = MaskFilter.blur(BlurStyle.normal, blur * strokeWidth / 2);
 
   factory BrushTip.fromJson(Map<String, dynamic> json) => BrushTip(
         strokeWidth: json[_strokeWidthKey] as double,

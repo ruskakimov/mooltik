@@ -119,7 +119,9 @@ class _BrushPopupState extends State<BrushPopup> {
             icon: Icons.blur_on_rounded,
             negativeIcon: Icons.blur_off_rounded,
             onChanged: (double value) {
-              // toolbox.changeToolOpacity(value);
+              setState(() {
+                widget.brush.setBlurPercentage(value);
+              });
             },
           ),
           SizedBox(height: 4),
