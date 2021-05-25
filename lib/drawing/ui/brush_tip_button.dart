@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class PickerOptionButton extends StatelessWidget {
-  const PickerOptionButton({
+class BrushTipButton extends StatelessWidget {
+  const BrushTipButton({
     Key key,
     this.size = 44,
+    this.opacity = 1,
     this.innerCircleWidth = maxInnerCircleWidth,
-    this.innerCircleColor = Colors.white,
     this.selected = false,
     this.onTap,
   }) : super(key: key);
@@ -15,7 +15,7 @@ class PickerOptionButton extends StatelessWidget {
 
   final double size;
   final double innerCircleWidth;
-  final Color innerCircleColor;
+  final double opacity;
   final bool selected;
   final VoidCallback onTap;
 
@@ -41,7 +41,7 @@ class PickerOptionButton extends StatelessWidget {
           child: Container(
             width: innerCircleWidth,
             decoration: BoxDecoration(
-              color: innerCircleColor,
+              color: Colors.white.withOpacity(opacity),
               shape: BoxShape.circle,
             ),
           ),

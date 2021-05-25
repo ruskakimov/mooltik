@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
-import 'package:mooltik/drawing/ui/size_picker.dart';
+import 'package:mooltik/drawing/ui/brush_tip_picker.dart';
 
 class ToolButton extends StatefulWidget {
   const ToolButton({
@@ -85,12 +85,11 @@ class _BrushPopupState extends State<BrushPopup> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizePicker(
+          BrushTipPicker(
             selectedIndex: widget.brush.selectedBrushTipIndex,
-            valueOptions:
-                widget.brush.brushTips.map((tip) => tip.strokeWidth).toList(),
-            minValue: widget.brush.minStrokeWidth,
-            maxValue: widget.brush.maxStrokeWidth,
+            brushTips: widget.brush.brushTips,
+            minStrokeWidth: widget.brush.minStrokeWidth,
+            maxStrokeWidth: widget.brush.maxStrokeWidth,
             onSelected: (int index) {
               widget.brush.selectedBrushTipIndex = index;
               widget.onDone?.call();
