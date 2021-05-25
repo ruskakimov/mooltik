@@ -18,6 +18,7 @@ class Toolbar extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        SizedBox(width: 52), // Temporary centering fix
         for (final tool in leftTools)
           ToolButton(
             tool: tool,
