@@ -1,68 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'tool.dart';
 
 abstract class Brush extends Tool {
-  Brush(this.paint, SharedPreferences sharedPreferences)
-      : super(sharedPreferences) {
-    // Restore selected stroke width.
-    if (sharedPreferences.containsKey(strokeWidthKey)) {
-      paint.strokeWidth = sharedPreferences.getDouble(strokeWidthKey);
-    }
-
-    // Default to middle stroke width option if none selected.
-    if (strokeWidthOptions.isNotEmpty &&
-        !strokeWidthOptions.contains(paint.strokeWidth)) {
-      final midIndex = strokeWidthOptions.length ~/ 2;
-      paint.strokeWidth = strokeWidthOptions[midIndex];
-    }
-
+  Brush(SharedPreferences sharedPreferences) : super(sharedPreferences) {
     // Restore selected color.
-    if (sharedPreferences.containsKey(colorKey)) {
-      paint.color = Color(sharedPreferences.getInt(colorKey));
+    if (sharedPreferences.containsKey(_colorKey)) {
+      _color = Color(sharedPreferences.getInt(_colorKey));
+    }
+
+    // Restore selected opacity.
+    if (sharedPreferences.containsKey(_opacityKey)) {
+      _opacity = sharedPreferences.getDouble(_opacityKey);
+    }
+
+    // Restore selected brush tip.
+    if (sharedPreferences.containsKey(_selectedBrushTipIndexKey)) {
+      _selectedBrushTipIndex =
+          sharedPreferences.getInt(_selectedBrushTipIndexKey);
     }
   }
 
-  final Paint paint;
+  List<Paint> get brushTips;
 
-  double get maxStrokeWidth;
   double get minStrokeWidth;
+  double get maxStrokeWidth;
 
-  List<double> get strokeWidthOptions;
+  Paint get paint =>
+      brushTips[_selectedBrushTipIndex]..color = _color.withOpacity(_opacity);
 
-  /// Tool name used to prefix shared preferences keys.
-  String get name;
-
-  /// Shared preferences key for stroke width.
-  String get strokeWidthKey => name + '_stroke_width';
-
-  /// Shared preferences key for color.
-  String get colorKey => name + '_color';
-
-  double get strokeWidth => paint.strokeWidth;
-
-  Color get color => paint.color.withOpacity(1);
-
-  double get opacity => paint.color.opacity;
-
-  set strokeWidth(double value) {
-    assert(strokeWidth <= maxStrokeWidth && strokeWidth >= minStrokeWidth);
-    paint.strokeWidth = value;
-    sharedPreferences.setDouble(strokeWidthKey, strokeWidth);
-  }
-
+  /// Brush color.
+  Color get color => _color;
+  Color _color = Colors.black;
   set color(Color color) {
-    paint.color = color.withOpacity(opacity);
-    sharedPreferences.setInt(colorKey, paint.color.value);
+    _color = color;
+    sharedPreferences.setInt(_colorKey, _color.value);
   }
 
+  /// Brush opacity.
+  double get opacity => _opacity;
+  double _opacity = 1;
   set opacity(double value) {
-    assert(opacity >= 0 && opacity <= 1);
-    paint.color = paint.color.withOpacity(value);
-    sharedPreferences.setInt(colorKey, paint.color.value);
+    assert(value >= 0 && value <= 1);
+    _opacity = value;
+    sharedPreferences.setDouble(_opacityKey, _opacity);
   }
 
-  Stroke makeStroke(Offset startPoint);
+  /// Index of a selected brush tip option.
+  int get selectedBrushTipIndex => _selectedBrushTipIndex;
+  int _selectedBrushTipIndex = 0;
+  set selectedBrushTipIndex(int index) {
+    // assert();
+    _selectedBrushTipIndex = index;
+    sharedPreferences.setInt(_selectedBrushTipIndexKey, index);
+  }
+
+  // ========================
+  // Shared preferences keys:
+  // ========================
+
+  String get _colorKey => name + '_color';
+  String get _opacityKey => name + '_opacity';
+  String get _selectedBrushTipIndexKey => name + '_selected_brush_tip_index';
 }

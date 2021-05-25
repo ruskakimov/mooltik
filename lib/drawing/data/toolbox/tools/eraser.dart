@@ -1,20 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'brush.dart';
 
 class Eraser extends Brush {
-  Eraser(SharedPreferences sharedPreferences)
-      : super(
-          Paint()
-            ..color = Colors.black
-            ..style = PaintingStyle.stroke
-            ..strokeCap = StrokeCap.round
-            ..strokeJoin = StrokeJoin.round
-            ..blendMode = BlendMode.dstOut,
-          sharedPreferences,
-        );
+  Eraser(SharedPreferences sharedPreferences) : super(sharedPreferences);
 
   @override
   String get name => 'eraser';
@@ -23,16 +13,30 @@ class Eraser extends Brush {
   IconData get icon => FontAwesomeIcons.eraser;
 
   @override
-  Stroke makeStroke(Offset startPoint) {
-    return Stroke(startPoint, paint);
-  }
-
-  @override
-  double get maxStrokeWidth => 300;
+  List<Paint> get brushTips => [
+        Paint()
+          ..strokeWidth = 20
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round
+          ..blendMode = BlendMode.dstOut,
+        Paint()
+          ..strokeWidth = 100
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round
+          ..blendMode = BlendMode.dstOut,
+        Paint()
+          ..strokeWidth = 300
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round
+          ..blendMode = BlendMode.dstOut,
+      ];
 
   @override
   double get minStrokeWidth => 10;
 
   @override
-  List<double> get strokeWidthOptions => [20, 100, 300];
+  double get maxStrokeWidth => 300;
 }

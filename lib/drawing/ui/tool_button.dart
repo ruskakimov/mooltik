@@ -28,40 +28,15 @@ class _ToolButtonState extends State<ToolButton> {
   @override
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
-    final showSizePicker = widget.tool is Brush
-        ? (widget.tool as Brush).strokeWidthOptions.isNotEmpty
-        : false;
 
     return PopupWithArrowEntry(
       visible: _pickerOpen && widget.selected,
       arrowSide: ArrowSide.top,
       arrowAnchor: const Alignment(0, 0.8),
       arrowSidePosition: ArrowSidePosition.middle,
-      popupBody: SizedBox(
-        width: 180,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (showSizePicker)
-              SizePicker(
-                selectedValue: (toolbox.selectedTool as Brush).strokeWidth,
-                valueOptions: (widget.tool as Brush).strokeWidthOptions,
-                minValue: (widget.tool as Brush).minStrokeWidth,
-                maxValue: (widget.tool as Brush).maxStrokeWidth,
-                onSelected: (double newValue) {
-                  toolbox.changeToolStrokeWidth(newValue);
-                  _closePicker();
-                },
-              ),
-            if (toolbox.selectedTool is Brush)
-              AppSlider(
-                value: (toolbox.selectedTool as Brush).opacity,
-                onChanged: (double value) {
-                  toolbox.changeToolOpacity(value);
-                },
-              ),
-          ],
-        ),
+      popupBody: BrushPopup(
+        brush: toolbox.selectedTool,
+        onDone: _closePicker,
       ),
       onTapOutside: _closePicker,
       onDragOutside: _closePicker,
@@ -85,5 +60,45 @@ class _ToolButtonState extends State<ToolButton> {
 
   void _closePicker() {
     setState(() => _pickerOpen = false);
+  }
+}
+
+class BrushPopup extends StatelessWidget {
+  const BrushPopup({
+    Key key,
+    @required this.brush,
+    this.onDone,
+  }) : super(key: key);
+
+  final Brush brush;
+  final VoidCallback onDone;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 180,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizePicker(
+            selectedValue: brush.paint.strokeWidth,
+            valueOptions:
+                brush.brushTips.map((tip) => tip.strokeWidth).toList(),
+            minValue: brush.minStrokeWidth,
+            maxValue: brush.maxStrokeWidth,
+            onSelected: (double newValue) {
+              // toolbox.changeToolStrokeWidth(newValue);
+              onDone?.call();
+            },
+          ),
+          AppSlider(
+            value: brush.opacity,
+            onChanged: (double value) {
+              // toolbox.changeToolOpacity(value);
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

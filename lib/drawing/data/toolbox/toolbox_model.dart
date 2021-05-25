@@ -8,12 +8,10 @@ class ToolboxModel extends ChangeNotifier {
   ToolboxModel(SharedPreferences sharedPreferences)
       : assert(sharedPreferences != null),
         tools = [
-          FillPen(sharedPreferences),
-          AirBrush(sharedPreferences),
           PaintBrush(sharedPreferences),
           Eraser(sharedPreferences),
         ],
-        _selectedToolId = 2;
+        _selectedToolId = 0;
 
   final List<Tool> tools;
   int _selectedToolId;
@@ -26,12 +24,12 @@ class ToolboxModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeToolStrokeWidth(double strokeWidth) {
-    if (selectedTool is Brush) {
-      (selectedTool as Brush).strokeWidth = strokeWidth;
-      notifyListeners();
-    }
-  }
+  // void changeToolStrokeWidth(double strokeWidth) {
+  //   if (selectedTool is Brush) {
+  //     (selectedTool as Brush).strokeWidth = strokeWidth;
+  //     notifyListeners();
+  //   }
+  // }
 
   void changeToolColor(Color color) {
     if (selectedTool is Brush) {

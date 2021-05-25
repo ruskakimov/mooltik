@@ -201,10 +201,10 @@ class EaselModel extends ChangeNotifier {
 
   void onStrokeStart(DragStartDetails details) {
     final framePoint = _toFramePoint(details.localPosition);
+
     if (_selectedTool is Brush) {
-      unrasterizedStrokes.add(
-        (_selectedTool as Brush).makeStroke(framePoint),
-      );
+      final stroke = Stroke(framePoint, (_selectedTool as Brush).paint);
+      unrasterizedStrokes.add(stroke);
     }
     notifyListeners();
   }
