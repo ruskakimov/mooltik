@@ -27,15 +27,13 @@ class _ToolButtonState extends State<ToolButton> {
 
   @override
   Widget build(BuildContext context) {
-    final toolbox = context.watch<ToolboxModel>();
-
     return PopupWithArrowEntry(
       visible: _pickerOpen && widget.selected,
       arrowSide: ArrowSide.top,
       arrowAnchor: const Alignment(0, 0.8),
       arrowSidePosition: ArrowSidePosition.middle,
       popupBody: BrushPopup(
-        brush: toolbox.selectedTool,
+        brush: widget.tool,
         onDone: _closePicker,
       ),
       onTapOutside: _closePicker,
@@ -44,6 +42,7 @@ class _ToolButtonState extends State<ToolButton> {
         icon: widget.tool.icon,
         selected: widget.selected,
         onTap: () {
+          final toolbox = context.read<ToolboxModel>();
           if (widget.selected) {
             _openPicker();
           } else {
