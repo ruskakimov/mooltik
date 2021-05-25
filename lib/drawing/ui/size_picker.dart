@@ -15,7 +15,7 @@ class SizePicker extends StatelessWidget {
   final List<double> valueOptions;
   final double minValue;
   final double maxValue;
-  final void Function(double) onSelected;
+  final void Function(int) onSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +24,12 @@ class SizePicker extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          for (final optionValue in valueOptions)
+          for (var i = 0; i < valueOptions.length; i++)
             PickerOptionButton(
-              innerCircleWidth: _calculateInnerCircleWidth(optionValue),
-              selected: optionValue == selectedValue,
+              innerCircleWidth: _calculateInnerCircleWidth(valueOptions[i]),
+              selected: valueOptions[i] == selectedValue,
               onTap: () {
-                onSelected?.call(optionValue);
+                onSelected?.call(i);
               },
             ),
         ],
