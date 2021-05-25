@@ -6,11 +6,16 @@ class AppSlider extends StatefulWidget {
     this.height = 44,
     this.value = 0.5,
     this.innerPadding = 3,
+    this.icon,
+    this.negativeIcon,
     this.onChanged,
   }) : super(key: key);
 
   final double height;
   final double innerPadding;
+
+  final IconData icon;
+  final IconData negativeIcon;
 
   /// Slider value between 0 and 1.
   final double value;
@@ -42,7 +47,7 @@ class _AppSliderState extends State<AppSlider> {
           widget.onChanged?.call(newValue);
         },
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Container(
             height: widget.height,
             decoration: BoxDecoration(
@@ -51,7 +56,22 @@ class _AppSliderState extends State<AppSlider> {
             ),
             child: Padding(
               padding: EdgeInsets.all(widget.innerPadding),
-              child: _buildProgressBar(),
+              child: Stack(
+                children: [
+                  _buildProgressBar(),
+                  if (widget.icon != null)
+                    Align(
+                      alignment: Alignment(-0.82, 0.0),
+                      child: Icon(
+                        widget.value > 0
+                            ? widget.icon
+                            : widget.negativeIcon ?? widget.icon,
+                        color: Colors.grey,
+                        size: 28,
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         ),
