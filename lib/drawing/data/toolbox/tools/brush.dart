@@ -22,13 +22,16 @@ abstract class Brush extends Tool {
     }
   }
 
-  List<Paint> get brushTips;
+  List<BrushTip> brushTips;
 
   double get minStrokeWidth;
   double get maxStrokeWidth;
 
-  Paint get paint =>
-      brushTips[_selectedBrushTipIndex]..color = _color.withOpacity(_opacity);
+  Paint get paint {
+    final tipPaintStyle = brushTips[_selectedBrushTipIndex].paint;
+    return tipPaintStyle
+      ..color = _color.withOpacity(tipPaintStyle.color.opacity);
+  }
 
   /// Brush color.
   Color get color => _color;
@@ -63,4 +66,45 @@ abstract class Brush extends Tool {
   String get _colorKey => name + '_color';
   String get _opacityKey => name + '_opacity';
   String get _selectedBrushTipIndexKey => name + '_selected_brush_tip_index';
+}
+
+class BrushTip {
+  BrushTip({
+    @required this.strokeWidth,
+    @required this.opacity,
+    @required this.blur,
+  })  : assert(strokeWidth != null),
+        assert(opacity != null && opacity >= 0 && opacity <= 1),
+        assert(blur != null);
+
+  final double strokeWidth;
+  final double opacity;
+  final double blur;
+
+  BlendMode get blendMode => BlendMode.srcOver;
+
+  Paint get paint => Paint()
+    ..strokeWidth = strokeWidth
+    ..color = Colors.black.withOpacity(opacity)
+    ..style = PaintingStyle.stroke
+    ..strokeCap = StrokeCap.round
+    ..strokeJoin = StrokeJoin.round
+    ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5)
+    ..blendMode = blendMode;
+
+  factory BrushTip.fromJson(Map<String, dynamic> json) => BrushTip(
+        strokeWidth: json[_strokeWidthKey] as double,
+        opacity: json[_opacityKey] as double,
+        blur: json[_blurKey] as double,
+      );
+
+  Map<String, dynamic> toJson() => {
+        _strokeWidthKey: strokeWidth,
+        _opacityKey: opacity,
+        _blurKey: blur,
+      };
+
+  static const String _strokeWidthKey = 'stroke_width';
+  static const String _opacityKey = 'opacity';
+  static const String _blurKey = 'blur';
 }
