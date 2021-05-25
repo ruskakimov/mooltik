@@ -143,7 +143,7 @@ class BrushTip {
     ..style = PaintingStyle.stroke
     ..strokeCap = StrokeCap.round
     ..strokeJoin = StrokeJoin.round
-    ..maskFilter = MaskFilter.blur(BlurStyle.normal, blur * strokeWidth / 2);
+    ..maskFilter = MaskFilter.blur(BlurStyle.normal, blur * strokeWidth / 4);
 
   factory BrushTip.fromJson(Map<String, dynamic> json) => BrushTip(
         strokeWidth: json[_strokeWidthKey] as double,
