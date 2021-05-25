@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -5,14 +7,16 @@ import 'tool.dart';
 
 abstract class Brush extends Tool {
   Brush(SharedPreferences sharedPreferences) : super(sharedPreferences) {
-    // Restore selected color.
-    if (sharedPreferences.containsKey(_colorKey)) {
-      _color = Color(sharedPreferences.getInt(_colorKey));
-    }
-
-    // Restore selected opacity.
-    if (sharedPreferences.containsKey(_opacityKey)) {
-      _opacity = sharedPreferences.getDouble(_opacityKey);
+    // Restore brush tips state.
+    for (var i = 0; i < defaultBrushTips.length; i++) {
+      final tipKey = _getBrushTipKey(i);
+      if (sharedPreferences.containsKey(tipKey)) {
+        final encodedTip = sharedPreferences.getString(tipKey);
+        final tipJson = jsonDecode(encodedTip);
+        brushTips.add(BrushTip.fromJson(tipJson));
+      } else {
+        brushTips.add(defaultBrushTips[i]);
+      }
     }
 
     // Restore selected brush tip.
@@ -20,9 +24,18 @@ abstract class Brush extends Tool {
       _selectedBrushTipIndex =
           sharedPreferences.getInt(_selectedBrushTipIndexKey);
     }
+
+    // Restore selected color.
+    if (sharedPreferences.containsKey(_colorKey)) {
+      _color = Color(sharedPreferences.getInt(_colorKey));
+    }
   }
 
-  List<BrushTip> brushTips;
+  BlendMode get blendMode;
+
+  List<BrushTip> get defaultBrushTips;
+
+  final List<BrushTip> brushTips = [];
 
   double get minStrokeWidth;
   double get maxStrokeWidth;
@@ -30,24 +43,8 @@ abstract class Brush extends Tool {
   Paint get paint {
     final tipPaintStyle = brushTips[_selectedBrushTipIndex].paint;
     return tipPaintStyle
-      ..color = _color.withOpacity(tipPaintStyle.color.opacity);
-  }
-
-  /// Brush color.
-  Color get color => _color;
-  Color _color = Colors.black;
-  set color(Color color) {
-    _color = color;
-    sharedPreferences.setInt(_colorKey, _color.value);
-  }
-
-  /// Brush opacity.
-  double get opacity => _opacity;
-  double _opacity = 1;
-  set opacity(double value) {
-    assert(value >= 0 && value <= 1);
-    _opacity = value;
-    sharedPreferences.setDouble(_opacityKey, _opacity);
+      ..color = _color.withOpacity(tipPaintStyle.color.opacity)
+      ..blendMode = blendMode;
   }
 
   /// Index of a selected brush tip option.
@@ -59,13 +56,23 @@ abstract class Brush extends Tool {
     sharedPreferences.setInt(_selectedBrushTipIndexKey, index);
   }
 
+  /// Brush color.
+  Color get color => _color;
+  Color _color = Colors.black;
+  set color(Color color) {
+    _color = color;
+    sharedPreferences.setInt(_colorKey, _color.value);
+  }
+
   // ========================
   // Shared preferences keys:
   // ========================
 
-  String get _colorKey => name + '_color';
-  String get _opacityKey => name + '_opacity';
   String get _selectedBrushTipIndexKey => name + '_selected_brush_tip_index';
+  String get _colorKey => name + '_color';
+
+  String _getBrushTipKey(int brushTipIndex) =>
+      name + '_brush_tip_$brushTipIndex';
 }
 
 class BrushTip {
@@ -81,16 +88,13 @@ class BrushTip {
   final double opacity;
   final double blur;
 
-  BlendMode get blendMode => BlendMode.srcOver;
-
   Paint get paint => Paint()
     ..strokeWidth = strokeWidth
     ..color = Colors.black.withOpacity(opacity)
     ..style = PaintingStyle.stroke
     ..strokeCap = StrokeCap.round
     ..strokeJoin = StrokeJoin.round
-    ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5)
-    ..blendMode = blendMode;
+    ..maskFilter = MaskFilter.blur(BlurStyle.normal, blur);
 
   factory BrushTip.fromJson(Map<String, dynamic> json) => BrushTip(
         strokeWidth: json[_strokeWidthKey] as double,

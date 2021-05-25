@@ -13,30 +13,18 @@ class PaintBrush extends Brush {
   IconData get icon => FontAwesomeIcons.paintBrush;
 
   @override
-  List<Paint> get brushTips => [
-        Paint()
-          ..strokeWidth = 5
-          ..style = PaintingStyle.stroke
-          ..strokeCap = StrokeCap.round
-          ..strokeJoin = StrokeJoin.round
-          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
-        Paint()
-          ..strokeWidth = 10
-          ..style = PaintingStyle.stroke
-          ..strokeCap = StrokeCap.round
-          ..strokeJoin = StrokeJoin.round
-          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
-        Paint()
-          ..strokeWidth = 20
-          ..style = PaintingStyle.stroke
-          ..strokeCap = StrokeCap.round
-          ..strokeJoin = StrokeJoin.round
-          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 0.5),
-      ];
+  BlendMode get blendMode => BlendMode.srcOver;
 
   @override
   double get minStrokeWidth => 5;
 
   @override
   double get maxStrokeWidth => 50;
+
+  @override
+  List<BrushTip> get defaultBrushTips => [
+        BrushTip(strokeWidth: 5, opacity: 1, blur: 0.5),
+        BrushTip(strokeWidth: 10, opacity: 1, blur: 0.5),
+        BrushTip(strokeWidth: 20, opacity: 1, blur: 0.5),
+      ];
 }

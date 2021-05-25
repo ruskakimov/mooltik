@@ -39,9 +39,9 @@ class ToolboxModel extends ChangeNotifier {
   }
 
   void changeToolOpacity(double opacity) {
-    if (selectedTool is Brush) {
-      (selectedTool as Brush).opacity = opacity;
-      notifyListeners();
-    }
+    // if (selectedTool is Brush) {
+    //   (selectedTool as Brush).opacity = opacity;
+    //   notifyListeners();
+    // }
   }
 }

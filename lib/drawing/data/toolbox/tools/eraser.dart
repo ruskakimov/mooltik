@@ -13,30 +13,18 @@ class Eraser extends Brush {
   IconData get icon => FontAwesomeIcons.eraser;
 
   @override
-  List<Paint> get brushTips => [
-        Paint()
-          ..strokeWidth = 20
-          ..style = PaintingStyle.stroke
-          ..strokeCap = StrokeCap.round
-          ..strokeJoin = StrokeJoin.round
-          ..blendMode = BlendMode.dstOut,
-        Paint()
-          ..strokeWidth = 100
-          ..style = PaintingStyle.stroke
-          ..strokeCap = StrokeCap.round
-          ..strokeJoin = StrokeJoin.round
-          ..blendMode = BlendMode.dstOut,
-        Paint()
-          ..strokeWidth = 300
-          ..style = PaintingStyle.stroke
-          ..strokeCap = StrokeCap.round
-          ..strokeJoin = StrokeJoin.round
-          ..blendMode = BlendMode.dstOut,
-      ];
+  BlendMode get blendMode => BlendMode.dstOut;
 
   @override
   double get minStrokeWidth => 10;
 
   @override
   double get maxStrokeWidth => 300;
+
+  @override
+  List<BrushTip> get defaultBrushTips => [
+        BrushTip(strokeWidth: 20, opacity: 1, blur: 0),
+        BrushTip(strokeWidth: 100, opacity: 1, blur: 0),
+        BrushTip(strokeWidth: 300, opacity: 1, blur: 0),
+      ];
 }
