@@ -10,6 +10,7 @@ class ToolboxModel extends ChangeNotifier {
         tools = [
           PaintBrush(sharedPreferences),
           Eraser(sharedPreferences),
+          Lasso(sharedPreferences),
         ],
         _selectedToolId = 0;
 
@@ -24,24 +25,10 @@ class ToolboxModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // void changeToolStrokeWidth(double strokeWidth) {
-  //   if (selectedTool is Brush) {
-  //     (selectedTool as Brush).strokeWidth = strokeWidth;
-  //     notifyListeners();
-  //   }
-  // }
-
   void changeToolColor(Color color) {
     if (selectedTool is Brush) {
       (selectedTool as Brush).color = color;
       notifyListeners();
     }
-  }
-
-  void changeToolOpacity(double opacity) {
-    // if (selectedTool is Brush) {
-    //   (selectedTool as Brush).opacity = opacity;
-    //   notifyListeners();
-    // }
   }
 }

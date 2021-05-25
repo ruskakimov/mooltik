@@ -32,10 +32,12 @@ class _ToolButtonState extends State<ToolButton> {
       arrowSide: ArrowSide.top,
       arrowAnchor: const Alignment(0, 0.8),
       arrowSidePosition: ArrowSidePosition.middle,
-      popupBody: BrushPopup(
-        brush: widget.tool,
-        onDone: _closePicker,
-      ),
+      popupBody: widget.tool is Brush
+          ? BrushPopup(
+              brush: widget.tool,
+              onDone: _closePicker,
+            )
+          : null,
       onTapOutside: _closePicker,
       onDragOutside: _closePicker,
       child: AppIconButton(
