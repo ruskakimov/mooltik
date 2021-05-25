@@ -27,32 +27,42 @@ class _ToolButtonState extends State<ToolButton> {
 
   @override
   Widget build(BuildContext context) {
-    return PopupWithArrowEntry(
-      visible: _pickerOpen && widget.selected,
-      arrowSide: ArrowSide.top,
-      arrowAnchor: const Alignment(0, 0.8),
-      arrowSidePosition: ArrowSidePosition.middle,
-      popupBody: widget.tool is Brush
-          ? BrushPopup(
-              brush: widget.tool,
-              onDone: _closePicker,
-            )
-          : null,
-      onTapOutside: _closePicker,
-      onDragOutside: _closePicker,
-      child: AppIconButton(
-        icon: widget.tool.icon,
-        iconSize: 28,
-        selected: widget.selected,
-        onTap: () {
-          final toolbox = context.read<ToolboxModel>();
-          if (widget.selected) {
-            _openPicker();
-          } else {
-            toolbox.selectTool(widget.tool);
-          }
-        },
-      ),
+    if (widget.tool is Brush) {
+      return PopupWithArrowEntry(
+        visible: _pickerOpen && widget.selected,
+        arrowSide: ArrowSide.top,
+        arrowAnchor: const Alignment(0, 0.8),
+        arrowSidePosition: ArrowSidePosition.middle,
+        popupBody: BrushPopup(
+          brush: widget.tool,
+          onDone: _closePicker,
+        ),
+        onTapOutside: _closePicker,
+        onDragOutside: _closePicker,
+        child: AppIconButton(
+          icon: widget.tool.icon,
+          iconSize: 26,
+          selected: widget.selected,
+          onTap: () {
+            final toolbox = context.read<ToolboxModel>();
+            if (widget.selected) {
+              _openPicker();
+            } else {
+              toolbox.selectTool(widget.tool);
+            }
+          },
+        ),
+      );
+    }
+
+    return AppIconButton(
+      icon: widget.tool.icon,
+      iconSize: 26,
+      selected: widget.selected,
+      onTap: () {
+        final toolbox = context.read<ToolboxModel>();
+        toolbox.selectTool(widget.tool);
+      },
     );
   }
 
