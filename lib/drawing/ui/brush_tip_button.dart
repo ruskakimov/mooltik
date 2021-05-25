@@ -1,21 +1,23 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/data/toolbox/tools/brush.dart';
 
 class BrushTipButton extends StatelessWidget {
   const BrushTipButton({
     Key key,
-    this.size = 44,
-    this.opacity = 1,
-    this.innerCircleWidth = maxInnerCircleWidth,
+    this.size = 52,
+    @required this.canvasSize,
+    @required this.brushTip,
     this.selected = false,
     this.onTap,
   }) : super(key: key);
 
-  static const double minInnerCircleWidth = 4;
-  static const double maxInnerCircleWidth = 34;
-
   final double size;
-  final double innerCircleWidth;
-  final double opacity;
+
+  final Size canvasSize;
+  final BrushTip brushTip;
+
   final bool selected;
   final VoidCallback onTap;
 
@@ -27,26 +29,54 @@ class BrushTipButton extends StatelessWidget {
       child: Container(
         width: size,
         height: size,
-        decoration: BoxDecoration(
-          border: selected
-              ? Border.all(
+        foregroundDecoration: selected
+            ? BoxDecoration(
+                border: Border.all(
                   color: Theme.of(context).colorScheme.primary,
                   width: 3,
-                )
-              : null,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              )
+            : null,
+        decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.25),
-          shape: BoxShape.circle,
+          borderRadius: BorderRadius.circular(8),
         ),
-        child: Center(
-          child: Container(
-            width: innerCircleWidth,
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(opacity),
-              shape: BoxShape.circle,
-            ),
+        clipBehavior: Clip.antiAlias,
+        child: FittedBox(
+          alignment: Alignment.center,
+          fit: BoxFit.contain,
+          child: CustomPaint(
+            size: canvasSize,
+            painter: BrushTipPainter(brushTip),
           ),
         ),
       ),
     );
   }
+}
+
+class BrushTipPainter extends CustomPainter {
+  BrushTipPainter(this.brushTip);
+
+  final BrushTip brushTip;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final paint = brushTip.paint
+      ..color = Colors.white.withOpacity(brushTip.opacity);
+
+    canvas.drawPoints(
+      PointMode.points,
+      [center],
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(BrushTipPainter oldDelegate) => false;
+
+  @override
+  bool shouldRebuildSemantics(BrushTipPainter oldDelegate) => false;
 }

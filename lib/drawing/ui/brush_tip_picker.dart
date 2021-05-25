@@ -29,9 +29,8 @@ class BrushTipPicker extends StatelessWidget {
         children: [
           for (var i = 0; i < brushTips.length; i++)
             BrushTipButton(
-              innerCircleWidth:
-                  _calculateInnerCircleWidth(brushTips[i].strokeWidth),
-              opacity: brushTips[i].opacity,
+              canvasSize: Size.square(maxStrokeWidth * 2),
+              brushTip: brushTips[i],
               selected: i == selectedIndex,
               onTap: () {
                 onSelected?.call(i);
@@ -40,16 +39,5 @@ class BrushTipPicker extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  /// [minStrokeWidth] -> [_minInnerCircleWidth]
-  /// [maxStrokeWidth] -> [_maxInnerCircleWidth]
-  double _calculateInnerCircleWidth(double value) {
-    final min = BrushTipButton.minInnerCircleWidth;
-    final max = BrushTipButton.maxInnerCircleWidth;
-
-    final valueRange = maxStrokeWidth - minStrokeWidth;
-    final sliderValue = (value - minStrokeWidth) / valueRange;
-    return min + sliderValue * (max - min);
   }
 }

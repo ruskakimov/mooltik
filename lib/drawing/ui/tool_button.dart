@@ -81,7 +81,7 @@ class _BrushPopupState extends State<BrushPopup> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 180,
+      width: 204,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
