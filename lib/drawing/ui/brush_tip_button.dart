@@ -23,8 +23,10 @@ class BrushTipButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkResponse(
-      radius: size / 2,
+    final borderRadius = BorderRadius.circular(8);
+
+    return InkWell(
+      borderRadius: borderRadius,
       onTap: onTap,
       child: Container(
         width: size,
@@ -35,12 +37,12 @@ class BrushTipButton extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                   width: 3,
                 ),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: borderRadius,
               )
             : null,
         decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.25),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: borderRadius,
         ),
         clipBehavior: Clip.antiAlias,
         child: FittedBox(
