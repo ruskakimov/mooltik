@@ -4,11 +4,13 @@ class AppIconButton extends StatelessWidget {
   const AppIconButton({
     Key key,
     this.icon,
+    this.iconSize = 20,
     this.selected = false,
     this.onTap,
   }) : super(key: key);
 
   final IconData icon;
+  final double iconSize;
   final bool selected;
   final VoidCallback onTap;
 
@@ -25,7 +27,7 @@ class AppIconButton extends StatelessWidget {
           child: Icon(
             icon,
             color: _getColor(context),
-            size: 20,
+            size: iconSize,
           ),
         ),
       ),

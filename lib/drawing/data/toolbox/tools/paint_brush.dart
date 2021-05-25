@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'brush.dart';
 
@@ -10,7 +10,7 @@ class PaintBrush extends Brush {
   String get name => 'paint_brush';
 
   @override
-  IconData get icon => FontAwesomeIcons.paintBrush;
+  IconData get icon => MdiIcons.brush;
 
   @override
   BlendMode get blendMode => BlendMode.srcOver;

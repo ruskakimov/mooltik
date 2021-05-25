@@ -40,6 +40,7 @@ class _ToolButtonState extends State<ToolButton> {
       onDragOutside: _closePicker,
       child: AppIconButton(
         icon: widget.tool.icon,
+        iconSize: 28,
         selected: widget.selected,
         onTap: () {
           final toolbox = context.read<ToolboxModel>();
