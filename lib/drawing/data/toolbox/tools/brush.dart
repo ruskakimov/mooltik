@@ -66,9 +66,9 @@ abstract class Brush extends Tool {
     sharedPreferences.setInt(_colorKey, _color.value);
   }
 
-  // ===============
-  // Display values:
-  // ===============
+  // ===========
+  // UI helpers:
+  // ===========
 
   double get lineWidthPercentage =>
       (selectedBrushTip.strokeWidth - minStrokeWidth) /
@@ -78,6 +78,17 @@ abstract class Brush extends Tool {
 
   // TODO: Add min and max
   double get blurPercentage => selectedBrushTip.blur;
+
+  void setOpacityPercentage(double percentage) {
+    _replaceCurrentBrushTip(
+      selectedBrushTip.copyWith(opacity: percentage),
+    );
+  }
+
+  void _replaceCurrentBrushTip(BrushTip newBrushTip) {
+    brushTips.removeAt(_selectedBrushTipIndex);
+    brushTips.insert(_selectedBrushTipIndex, newBrushTip);
+  }
 
   // ========================
   // Shared preferences keys:
@@ -122,6 +133,17 @@ class BrushTip {
         _opacityKey: opacity,
         _blurKey: blur,
       };
+
+  BrushTip copyWith({
+    double strokeWidth,
+    double opacity,
+    double blur,
+  }) =>
+      BrushTip(
+        strokeWidth: strokeWidth ?? this.strokeWidth,
+        opacity: opacity ?? this.opacity,
+        blur: blur ?? this.blur,
+      );
 
   static const String _strokeWidthKey = 'stroke_width';
   static const String _opacityKey = 'opacity';

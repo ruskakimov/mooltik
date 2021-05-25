@@ -63,7 +63,7 @@ class _ToolButtonState extends State<ToolButton> {
   }
 }
 
-class BrushPopup extends StatelessWidget {
+class BrushPopup extends StatefulWidget {
   const BrushPopup({
     Key key,
     @required this.brush,
@@ -74,6 +74,11 @@ class BrushPopup extends StatelessWidget {
   final VoidCallback onDone;
 
   @override
+  _BrushPopupState createState() => _BrushPopupState();
+}
+
+class _BrushPopupState extends State<BrushPopup> {
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 180,
@@ -81,33 +86,35 @@ class BrushPopup extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizePicker(
-            selectedValue: brush.paint.strokeWidth,
+            selectedValue: widget.brush.paint.strokeWidth,
             valueOptions:
-                brush.brushTips.map((tip) => tip.strokeWidth).toList(),
-            minValue: brush.minStrokeWidth,
-            maxValue: brush.maxStrokeWidth,
+                widget.brush.brushTips.map((tip) => tip.strokeWidth).toList(),
+            minValue: widget.brush.minStrokeWidth,
+            maxValue: widget.brush.maxStrokeWidth,
             onSelected: (int index) {
-              brush.selectedBrushTipIndex = index;
-              onDone?.call();
+              widget.brush.selectedBrushTipIndex = index;
+              widget.onDone?.call();
             },
           ),
           AppSlider(
-            value: brush.lineWidthPercentage,
+            value: widget.brush.lineWidthPercentage,
             icon: Icons.line_weight_rounded,
             onChanged: (double value) {
               // toolbox.changeToolOpacity(value);
             },
           ),
           AppSlider(
-            value: brush.opacityPercentage,
+            value: widget.brush.opacityPercentage,
             icon: Icons.invert_colors_on_rounded,
             negativeIcon: Icons.invert_colors_off_rounded,
             onChanged: (double value) {
-              // toolbox.changeToolOpacity(value);
+              setState(() {
+                widget.brush.setOpacityPercentage(value);
+              });
             },
           ),
           AppSlider(
-            value: brush.blurPercentage,
+            value: widget.brush.blurPercentage,
             icon: Icons.blur_on_rounded,
             negativeIcon: Icons.blur_off_rounded,
             onChanged: (double value) {
