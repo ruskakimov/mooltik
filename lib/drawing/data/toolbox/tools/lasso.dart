@@ -11,4 +11,16 @@ class Lasso extends Tool {
 
   @override
   String get name => 'lasso';
+
+  void startSelection(Offset framePoint) {
+    print(framePoint);
+  }
+
+  void updateSelection(Offset framePoint) {
+    print(framePoint);
+  }
+
+  void finishSelection() {
+    print('finish');
+  }
 }

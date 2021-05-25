@@ -205,27 +205,37 @@ class EaselModel extends ChangeNotifier {
     if (_selectedTool is Brush) {
       final stroke = Stroke(framePoint, (_selectedTool as Brush).paint);
       unrasterizedStrokes.add(stroke);
+    } else if (_selectedTool is Lasso) {
+      (_selectedTool as Lasso).startSelection(framePoint);
     }
+
     notifyListeners();
   }
 
   void onStrokeUpdate(DragUpdateDetails details) {
-    if (unrasterizedStrokes.isEmpty) return;
-
     final framePoint = _toFramePoint(details.localPosition);
-    unrasterizedStrokes.last.extend(framePoint);
+
+    if (_selectedTool is Brush) {
+      if (unrasterizedStrokes.isEmpty) return;
+      unrasterizedStrokes.last.extend(framePoint);
+    } else if (_selectedTool is Lasso) {
+      (_selectedTool as Lasso).updateSelection(framePoint);
+    }
     notifyListeners();
   }
 
   void onStrokeEnd() {
-    if (unrasterizedStrokes.isEmpty) return;
+    if (_selectedTool is Brush) {
+      if (unrasterizedStrokes.isEmpty) return;
+      unrasterizedStrokes.last.finish();
 
-    unrasterizedStrokes.last.finish();
-
-    if (unrasterizedStrokes.last.boundingRect.overlaps(_frameArea)) {
-      _applyStrokes();
-    } else {
-      unrasterizedStrokes.removeLast();
+      if (unrasterizedStrokes.last.boundingRect.overlaps(_frameArea)) {
+        _applyStrokes();
+      } else {
+        unrasterizedStrokes.removeLast();
+      }
+    } else if (_selectedTool is Lasso) {
+      (_selectedTool as Lasso).finishSelection();
     }
 
     notifyListeners();
