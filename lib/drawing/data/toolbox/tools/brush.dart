@@ -35,13 +35,15 @@ abstract class Brush extends Tool {
 
   List<BrushTip> get defaultBrushTips;
 
+  BrushTip get selectedBrushTip => brushTips[_selectedBrushTipIndex];
+
   final List<BrushTip> brushTips = [];
 
   double get minStrokeWidth;
   double get maxStrokeWidth;
 
   Paint get paint {
-    final tipPaintStyle = brushTips[_selectedBrushTipIndex].paint;
+    final tipPaintStyle = selectedBrushTip.paint;
     return tipPaintStyle
       ..color = _color.withOpacity(tipPaintStyle.color.opacity)
       ..blendMode = blendMode;
@@ -63,6 +65,19 @@ abstract class Brush extends Tool {
     _color = color;
     sharedPreferences.setInt(_colorKey, _color.value);
   }
+
+  // ===============
+  // Display values:
+  // ===============
+
+  double get lineWidthPercentage =>
+      (selectedBrushTip.strokeWidth - minStrokeWidth) /
+      (maxStrokeWidth - minStrokeWidth);
+
+  double get opacityPercentage => selectedBrushTip.opacity;
+
+  // TODO: Add min and max
+  double get blurPercentage => selectedBrushTip.blur;
 
   // ========================
   // Shared preferences keys:

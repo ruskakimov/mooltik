@@ -91,29 +91,29 @@ class BrushPopup extends StatelessWidget {
               onDone?.call();
             },
           ),
-          // AppSlider(
-          //   value: brush.opacity,
-          //   icon: Icons.line_weight_rounded,
-          //   onChanged: (double value) {
-          //     // toolbox.changeToolOpacity(value);
-          //   },
-          // ),
-          // AppSlider(
-          //   value: brush.opacity,
-          //   icon: Icons.invert_colors_on_rounded,
-          //   negativeIcon: Icons.invert_colors_off_rounded,
-          //   onChanged: (double value) {
-          //     // toolbox.changeToolOpacity(value);
-          //   },
-          // ),
-          // AppSlider(
-          //   value: brush.opacity,
-          //   icon: Icons.blur_on_rounded,
-          //   negativeIcon: Icons.blur_off_rounded,
-          //   onChanged: (double value) {
-          //     // toolbox.changeToolOpacity(value);
-          //   },
-          // ),
+          AppSlider(
+            value: brush.lineWidthPercentage,
+            icon: Icons.line_weight_rounded,
+            onChanged: (double value) {
+              // toolbox.changeToolOpacity(value);
+            },
+          ),
+          AppSlider(
+            value: brush.opacityPercentage,
+            icon: Icons.invert_colors_on_rounded,
+            negativeIcon: Icons.invert_colors_off_rounded,
+            onChanged: (double value) {
+              // toolbox.changeToolOpacity(value);
+            },
+          ),
+          AppSlider(
+            value: brush.blurPercentage,
+            icon: Icons.blur_on_rounded,
+            negativeIcon: Icons.blur_off_rounded,
+            onChanged: (double value) {
+              // toolbox.changeToolOpacity(value);
+            },
+          ),
           SizedBox(height: 4),
         ],
       ),
