@@ -19,7 +19,7 @@ class PaintBrush extends Brush {
   double get minStrokeWidth => 5;
 
   @override
-  double get maxStrokeWidth => 50;
+  double get maxStrokeWidth => 100;
 
   @override
   List<BrushTip> get defaultBrushTips => [
