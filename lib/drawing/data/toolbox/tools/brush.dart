@@ -5,18 +5,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'tool.dart';
 
+BrushTip _retrieveBrushTip(SharedPreferences sharedPreferences, String tipKey) {
+  try {
+    final encodedTip = sharedPreferences.getString(tipKey);
+    final tipJson = jsonDecode(encodedTip);
+    return BrushTip.fromJson(tipJson);
+  } catch (e) {
+    return null;
+  }
+}
+
 abstract class Brush extends Tool {
   Brush(SharedPreferences sharedPreferences) : super(sharedPreferences) {
     // Restore brush tips state.
     for (var i = 0; i < defaultBrushTips.length; i++) {
       final tipKey = _getBrushTipKey(i);
-      if (sharedPreferences.containsKey(tipKey)) {
-        final encodedTip = sharedPreferences.getString(tipKey);
-        final tipJson = jsonDecode(encodedTip);
-        brushTips.add(BrushTip.fromJson(tipJson));
-      } else {
-        brushTips.add(defaultBrushTips[i]);
-      }
+      brushTips.add(
+        _retrieveBrushTip(sharedPreferences, tipKey) ?? defaultBrushTips[i],
+      );
     }
 
     // Restore selected brush tip.
@@ -96,6 +102,10 @@ abstract class Brush extends Tool {
   void _replaceCurrentBrushTip(BrushTip newBrushTip) {
     brushTips.removeAt(_selectedBrushTipIndex);
     brushTips.insert(_selectedBrushTipIndex, newBrushTip);
+    sharedPreferences.setString(
+      _getBrushTipKey(selectedBrushTipIndex),
+      jsonEncode(selectedBrushTip.toJson()),
+    );
   }
 
   // ========================
