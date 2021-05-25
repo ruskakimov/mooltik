@@ -27,6 +27,7 @@ class BrushTipButton extends StatelessWidget {
 
     return InkWell(
       borderRadius: borderRadius,
+      splashColor: Colors.transparent,
       onTap: onTap,
       child: Container(
         width: size,
