@@ -48,6 +48,8 @@ class SelectionPainter extends CustomPainter {
       selection,
       Paint()
         ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round
         ..color = Colors.red
         ..isAntiAlias = true
         ..strokeWidth = 5 / scale,
