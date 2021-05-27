@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
+import 'package:path_drawing/path_drawing.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 
@@ -44,15 +45,28 @@ class SelectionPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.scale(scale);
 
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round
+      ..color = Colors.red
+      ..isAntiAlias = true
+      ..strokeWidth = 1 / scale;
+
     canvas.drawPath(
       selection,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeCap = StrokeCap.round
-        ..strokeJoin = StrokeJoin.round
-        ..color = Colors.red
-        ..isAntiAlias = true
-        ..strokeWidth = 5 / scale,
+      paint..color = Colors.white,
+    );
+
+    canvas.drawPath(
+      dashPath(
+        selection,
+        dashArray: CircularIntervalList<double>(<double>[
+          5.0 / scale,
+          6.0 / scale,
+        ]),
+      ),
+      paint..color = Colors.black,
     );
   }
 

@@ -33,6 +33,7 @@ dependencies:
   flutter_portal: ^0.3.0
   flutter_slidable: ^0.5.7
   material_design_icons_flutter: 4.0.5955
+  path_drawing: ^0.5.1
 
   # App permissions:
   permission_handler: ^7.0.0
