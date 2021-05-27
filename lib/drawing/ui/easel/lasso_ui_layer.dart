@@ -17,16 +17,19 @@ class LassoUiLayer extends StatelessWidget {
     }
 
     final offset = lasso.selectionStroke.boundingRect.topLeft;
-    final boundaries = lasso.selectionStroke.boundingRect;
+
+    final pathTransform = Matrix4.identity()
+      ..scale(easel.scale)
+      ..translate(-offset.dx, -offset.dy);
+
+    final transformedPath =
+        lasso.selectionStroke.path.transform(pathTransform.storage);
 
     return Transform.translate(
       offset: offset * easel.scale,
       child: CustomPaint(
-        size: boundaries.size * easel.scale,
-        painter: SelectionPainter(
-          selection: lasso.selectionStroke.path.shift(-offset),
-          scale: easel.scale,
-        ),
+        size: transformedPath.getBounds().size,
+        painter: SelectionPainter(selection: transformedPath),
       ),
     );
   }
@@ -35,23 +38,19 @@ class LassoUiLayer extends StatelessWidget {
 class SelectionPainter extends CustomPainter {
   SelectionPainter({
     @required this.selection,
-    @required this.scale,
   });
 
   final Path selection;
-  final double scale;
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.scale(scale);
-
     final paint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
       ..color = Colors.red
       ..isAntiAlias = true
-      ..strokeWidth = 1 / scale;
+      ..strokeWidth = 1;
 
     canvas.drawPath(
       selection,
@@ -62,8 +61,8 @@ class SelectionPainter extends CustomPainter {
       dashPath(
         selection,
         dashArray: CircularIntervalList<double>(<double>[
-          5.0 / scale,
-          6.0 / scale,
+          5.0,
+          6.0,
         ]),
       ),
       paint..color = Colors.black,
