@@ -82,7 +82,7 @@ class SelectionPainter extends CustomPainter {
           5.0,
           6.0,
         ]),
-        dashOffset: DashOffset.absolute(11 * -animationProgress),
+        dashOffset: DashOffset.absolute(-11 * animationProgress),
       ),
       paint..color = Colors.black,
     );
