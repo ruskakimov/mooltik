@@ -12,14 +12,18 @@ class LassoUiLayer extends StatelessWidget {
     final easel = context.watch<EaselModel>();
     final lasso = context.watch<Lasso>();
 
+    if (lasso.selectionStroke == null) {
+      return SizedBox.shrink();
+    }
+
     return Transform.translate(
-      offset: Offset.zero,
-      child: lasso.selectionStroke != null
-          ? CustomPaint(
-              size: lasso.selectionStroke.boundingRect.size * easel.scale,
-              painter: SelectionPainter(lasso.selectionStroke),
-            )
-          : null,
+      offset: lasso.selectionStroke.boundingRect.topLeft * easel.scale,
+      child: ClipRect(
+        child: CustomPaint(
+          size: lasso.selectionStroke.boundingRect.size * easel.scale,
+          painter: SelectionPainter(lasso.selectionStroke),
+        ),
+      ),
     );
   }
 }
@@ -32,6 +36,11 @@ class SelectionPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.scale(size.width / selectionStroke.boundingRect.width);
+
+    canvas.translate(
+      -selectionStroke.boundingRect.left,
+      -selectionStroke.boundingRect.top,
+    );
 
     selectionStroke.paintOn(canvas);
     print(size);
