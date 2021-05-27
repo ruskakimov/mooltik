@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
-import 'package:path_drawing/path_drawing.dart';
+import 'package:mooltik/drawing/ui/easel/animated_selection.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 
@@ -27,51 +27,7 @@ class LassoUiLayer extends StatelessWidget {
 
     return Transform.translate(
       offset: offset * easel.scale,
-      child: CustomPaint(
-        size: transformedPath.getBounds().size,
-        painter: SelectionPainter(selection: transformedPath),
-      ),
+      child: AnimatedSelection(selection: transformedPath),
     );
   }
-}
-
-class SelectionPainter extends CustomPainter {
-  SelectionPainter({
-    @required this.selection,
-  });
-
-  final Path selection;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round
-      ..color = Colors.red
-      ..isAntiAlias = true
-      ..strokeWidth = 1;
-
-    canvas.drawPath(
-      selection,
-      paint..color = Colors.white,
-    );
-
-    canvas.drawPath(
-      dashPath(
-        selection,
-        dashArray: CircularIntervalList<double>(<double>[
-          5.0,
-          6.0,
-        ]),
-      ),
-      paint..color = Colors.black,
-    );
-  }
-
-  @override
-  bool shouldRepaint(SelectionPainter oldDelegate) => false;
-
-  @override
-  bool shouldRebuildSemantics(SelectionPainter oldDelegate) => false;
 }
