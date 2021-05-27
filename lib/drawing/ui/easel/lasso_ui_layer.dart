@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
@@ -16,12 +15,16 @@ class LassoUiLayer extends StatelessWidget {
       return SizedBox.shrink();
     }
 
+    final offset = lasso.selectionStroke.boundingRect.topLeft;
+    final boundaries = lasso.selectionStroke.boundingRect;
+
     return Transform.translate(
-      offset: lasso.selectionStroke.boundingRect.topLeft * easel.scale,
-      child: ClipRect(
-        child: CustomPaint(
-          size: lasso.selectionStroke.boundingRect.size * easel.scale,
-          painter: SelectionPainter(lasso.selectionStroke),
+      offset: offset * easel.scale,
+      child: CustomPaint(
+        size: boundaries.size * easel.scale,
+        painter: SelectionPainter(
+          selection: lasso.selectionStroke.path.shift(-offset),
+          scale: easel.scale,
         ),
       ),
     );
@@ -29,21 +32,26 @@ class LassoUiLayer extends StatelessWidget {
 }
 
 class SelectionPainter extends CustomPainter {
-  SelectionPainter(this.selectionStroke);
+  SelectionPainter({
+    @required this.selection,
+    @required this.scale,
+  });
 
-  final Stroke selectionStroke;
+  final Path selection;
+  final double scale;
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.scale(size.width / selectionStroke.boundingRect.width);
+    canvas.scale(scale);
 
-    canvas.translate(
-      -selectionStroke.boundingRect.left,
-      -selectionStroke.boundingRect.top,
+    canvas.drawPath(
+      selection,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..color = Colors.red
+        ..isAntiAlias = true
+        ..strokeWidth = 5 / scale,
     );
-
-    selectionStroke.paintOn(canvas);
-    print(size);
   }
 
   @override
