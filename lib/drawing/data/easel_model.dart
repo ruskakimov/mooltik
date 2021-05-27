@@ -237,7 +237,10 @@ class EaselModel extends ChangeNotifier {
         unrasterizedStrokes.removeLast();
       }
     } else if (_selectedTool is Lasso) {
-      (_selectedTool as Lasso).finishSelection();
+      final lasso = _selectedTool as Lasso;
+      lasso.finishSelection();
+      unrasterizedStrokes.add(lasso.selectionStroke);
+      _applyStrokes();
     }
 
     notifyListeners();
