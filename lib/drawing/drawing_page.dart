@@ -44,6 +44,9 @@ class DrawingPage extends StatelessWidget {
       builder: (context, child) {
         final reelStack = context.watch<ReelStackModel>();
 
+        final twoRowHeader = MediaQuery.of(context).size.width < (9 * 52);
+        final headerHeight = twoRowHeader ? 88.0 : 44.0;
+
         return WillPopScope(
           // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
           onWillPop: () async => true,
@@ -81,16 +84,17 @@ class DrawingPage extends StatelessWidget {
                 child: Stack(
                   children: [
                     Positioned.fill(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 44.0),
-                        child: Easel(),
-                      ),
+                      top: headerHeight,
+                      child: Easel(),
                     ),
                     Positioned(
                       top: 0,
                       left: 0,
                       right: 0,
-                      child: DrawingActionbar(),
+                      child: DrawingActionbar(
+                        twoRow: twoRowHeader,
+                        height: headerHeight,
+                      ),
                     ),
                     if (reelStack.showFrameReel)
                       Positioned(
@@ -105,13 +109,9 @@ class DrawingPage extends StatelessWidget {
                       child: LayerButton(),
                     ),
                     if (true)
-                      Positioned(
-                        top: 60,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: LassoMenu(),
-                        ),
+                      Positioned.fill(
+                        top: headerHeight,
+                        child: LassoMenu(),
                       ),
                   ],
                 ),

@@ -7,15 +7,23 @@ import 'package:mooltik/drawing/ui/toolbar.dart';
 import 'package:provider/provider.dart';
 
 class DrawingActionbar extends StatelessWidget {
+  const DrawingActionbar({
+    Key key,
+    @required this.twoRow,
+    @required this.height,
+  }) : super(key: key);
+
+  final bool twoRow;
+  final double height;
+
   @override
   Widget build(BuildContext context) {
     final easel = context.watch<EaselModel>();
-    final twoRow = MediaQuery.of(context).size.width < (9 * 52);
 
     return Material(
       elevation: 10,
       child: SizedBox(
-        height: twoRow ? 88 : 44,
+        height: height,
         child: Column(
           children: [
             Row(

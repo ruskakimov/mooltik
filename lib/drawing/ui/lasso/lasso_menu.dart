@@ -9,43 +9,56 @@ class LassoMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Theme.of(context).colorScheme.primary,
-      borderRadius: BorderRadiusDirectional.circular(8),
-      clipBehavior: Clip.antiAlias,
-      elevation: 10,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          LabeledIconButton(
-            icon: MdiIcons.vectorSquare,
-            label: 'Transform',
-            color: Theme.of(context).colorScheme.onPrimary,
-            onTap: () {},
+    return OrientationBuilder(builder: (context, orientation) {
+      final isPortrait = orientation == Orientation.portrait;
+
+      return Align(
+        alignment: isPortrait ? Alignment.topCenter : Alignment.centerLeft,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Material(
+            color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadiusDirectional.circular(8),
+            clipBehavior: Clip.antiAlias,
+            elevation: 10,
+            child: Flex(
+              direction: isPortrait ? Axis.horizontal : Axis.vertical,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(width: 8, height: 8),
+                LabeledIconButton(
+                  icon: MdiIcons.vectorSquare,
+                  label: 'Transform',
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  onTap: () {},
+                ),
+                LabeledIconButton(
+                  icon: MdiIcons.vectorCombine,
+                  label: 'Duplicate',
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  onTap: () {},
+                ),
+                LabeledIconButton(
+                  icon: MdiIcons.formatColorFill,
+                  iconTransform: Matrix4.identity()
+                    ..scale(1.3)
+                    ..translate(-2.0),
+                  label: 'Fill',
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  onTap: () {},
+                ),
+                LabeledIconButton(
+                  icon: MdiIcons.eraser,
+                  label: 'Erase',
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  onTap: () {},
+                ),
+                const SizedBox(width: 8, height: 8),
+              ],
+            ),
           ),
-          LabeledIconButton(
-            icon: MdiIcons.vectorCombine,
-            label: 'Duplicate',
-            color: Theme.of(context).colorScheme.onPrimary,
-            onTap: () {},
-          ),
-          LabeledIconButton(
-            icon: MdiIcons.formatColorFill,
-            iconTransform: Matrix4.identity()
-              ..scale(1.3)
-              ..translate(-2.0),
-            label: 'Fill',
-            color: Theme.of(context).colorScheme.onPrimary,
-            onTap: () {},
-          ),
-          LabeledIconButton(
-            icon: MdiIcons.eraser,
-            label: 'Erase',
-            color: Theme.of(context).colorScheme.onPrimary,
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
+        ),
+      );
+    });
   }
 }
