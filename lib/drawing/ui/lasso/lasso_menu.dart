@@ -24,7 +24,7 @@ class LassoMenu extends StatelessWidget {
             onTap: () {},
           ),
           LabeledIconButton(
-            icon: MdiIcons.vectorArrangeAbove,
+            icon: MdiIcons.vectorCombine,
             label: 'Duplicate',
             color: Theme.of(context).colorScheme.onPrimary,
             onTap: () {},
