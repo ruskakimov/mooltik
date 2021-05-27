@@ -6,6 +6,7 @@ import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
 import 'package:mooltik/drawing/ui/drawing_actionbar.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
+import 'package:mooltik/drawing/ui/lasso/lasso_menu.dart';
 import 'package:mooltik/drawing/ui/reel/frame_reel.dart';
 import 'package:mooltik/drawing/ui/layers/layer_button.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
@@ -103,6 +104,15 @@ class DrawingPage extends StatelessWidget {
                       right: 4,
                       child: LayerButton(),
                     ),
+                    if (true)
+                      Positioned(
+                        top: 60,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: LassoMenu(),
+                        ),
+                      ),
                   ],
                 ),
               ),

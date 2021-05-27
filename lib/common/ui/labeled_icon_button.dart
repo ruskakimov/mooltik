@@ -4,12 +4,14 @@ class LabeledIconButton extends StatelessWidget {
   const LabeledIconButton({
     Key key,
     @required this.icon,
+    this.iconTransform,
     @required this.label,
     @required this.color,
     this.onTap,
   }) : super(key: key);
 
   final IconData icon;
+  final Matrix4 iconTransform;
   final String label;
   final Color color;
   final VoidCallback onTap;
@@ -30,10 +32,13 @@ class LabeledIconButton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Icon(
-                  icon,
-                  size: 18,
-                  color: color,
+                Transform(
+                  transform: iconTransform ?? Matrix4.identity(),
+                  child: Icon(
+                    icon,
+                    size: 18,
+                    color: color,
+                  ),
                 ),
                 SizedBox(height: 6),
                 Text(
