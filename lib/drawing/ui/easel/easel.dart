@@ -3,7 +3,10 @@ import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
+import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
+import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/easel/cursor_painter.dart';
+import 'package:mooltik/drawing/ui/easel/lasso_ui_layer.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +26,7 @@ class _EaselState extends State<Easel> {
     final easel = context.watch<EaselModel>();
     final onion = context.watch<OnionModel>();
     final reelStack = context.watch<ReelStackModel>();
+    final selectedTool = context.watch<ToolboxModel>().selectedTool;
 
     return LayoutBuilder(builder: (context, constraints) {
       easel.updateSize(constraints.biggest);
@@ -60,6 +64,19 @@ class _EaselState extends State<Easel> {
                 ),
               ),
             ),
+            if (selectedTool is Lasso)
+              Positioned(
+                top: easel.canvasTopOffset,
+                left: easel.canvasLeftOffset,
+                child: Transform.rotate(
+                  alignment: Alignment.topLeft,
+                  angle: easel.canvasRotation,
+                  child: ChangeNotifierProvider.value(
+                    value: selectedTool,
+                    child: LassoUiLayer(),
+                  ),
+                ),
+              ),
           ],
         ),
       );

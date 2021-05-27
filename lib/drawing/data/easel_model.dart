@@ -55,6 +55,8 @@ class EaselModel extends ChangeNotifier {
   double _rotation = 0;
   double _prevRotation = 0;
 
+  /// Current zoom level.
+  double get scale => _scale;
   double _scale = 1;
   double _prevScale;
 
