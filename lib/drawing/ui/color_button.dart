@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
-import 'package:mooltik/drawing/data/toolbox/tools/brush.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/color_picker.dart';
 import 'package:provider/provider.dart';
