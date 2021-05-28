@@ -11,4 +11,7 @@ class Lasso extends Tool {
 
   @override
   String get name => 'lasso';
+
+  /// Selection fill color.
+  Color get color => Colors.black;
 }

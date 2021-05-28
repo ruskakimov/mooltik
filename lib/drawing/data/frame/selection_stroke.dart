@@ -4,13 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 
 class SelectionStroke extends Stroke {
-  SelectionStroke(Offset startingPoint)
-      : super(
-          startingPoint,
-          Paint()
-            ..style = PaintingStyle.fill
-            ..blendMode = BlendMode.dstOut,
-        );
+  SelectionStroke(Offset startingPoint) : super(startingPoint, Paint());
 
   /// Whether the path has been closed.
   bool get finished => _finished;
@@ -30,5 +24,18 @@ class SelectionStroke extends Stroke {
   void finish() {
     path.close();
     _finished = true;
+  }
+
+  void setColorPaint(Color color) {
+    paint
+      ..style = PaintingStyle.fill
+      ..color = color
+      ..blendMode = BlendMode.srcOver;
+  }
+
+  void setErasingPaint() {
+    paint
+      ..style = PaintingStyle.fill
+      ..blendMode = BlendMode.dstOut;
   }
 }
