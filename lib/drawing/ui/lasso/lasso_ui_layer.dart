@@ -17,6 +17,13 @@ class LassoUiLayer extends StatelessWidget {
       return SizedBox.shrink();
     }
 
+    if (lassoModel.isTransformMode) {
+      return Transform.translate(
+        offset: lassoModel.transformBoxOffset,
+        child: TransformBox(size: lassoModel.transformBoxSize),
+      );
+    }
+
     final offset = easel.selectionStroke.boundingRect.topLeft;
 
     final pathTransform = Matrix4.identity()
@@ -25,13 +32,6 @@ class LassoUiLayer extends StatelessWidget {
 
     final transformedPath =
         easel.selectionStroke.path.transform(pathTransform.storage);
-
-    return Transform.translate(
-      offset: offset * easel.scale,
-      child: TransformBox(
-        size: easel.selectionStroke.boundingRect.size * easel.scale,
-      ),
-    );
 
     return Transform.translate(
       offset: offset * easel.scale,

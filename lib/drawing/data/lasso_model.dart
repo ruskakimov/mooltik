@@ -21,6 +21,15 @@ class LassoModel extends ChangeNotifier {
 
   bool get finishedSelection => selectionStroke?.finished ?? false;
 
+  bool get isTransformMode => _isTransformMode;
+  bool _isTransformMode = false;
+
+  Offset get transformBoxOffset =>
+      _easel.selectionStroke.boundingRect.topLeft * _easel.scale;
+
+  Size get transformBoxSize =>
+      _easel.selectionStroke.boundingRect.size * _easel.scale;
+
   // ===================
   // Lasso menu methods:
   // ===================
