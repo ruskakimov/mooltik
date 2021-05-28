@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/data/lasso_model.dart';
 import 'package:mooltik/drawing/ui/easel/animated_selection.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
@@ -9,6 +10,7 @@ class LassoUiLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final easel = context.watch<EaselModel>();
+    final lassoModel = context.watch<LassoModel>();
 
     if (easel.selectionStroke == null) {
       return SizedBox.shrink();
@@ -23,9 +25,12 @@ class LassoUiLayer extends StatelessWidget {
     final transformedPath =
         easel.selectionStroke.path.transform(pathTransform.storage);
 
+    final boundingRectPath =
+        easel.selectionStroke.boundingRectPath.transform(pathTransform.storage);
+
     return Transform.translate(
       offset: offset * easel.scale,
-      child: AnimatedSelection(selection: transformedPath),
+      child: AnimatedSelection(selection: boundingRectPath),
     );
   }
 }
