@@ -54,7 +54,7 @@ class TransformBox extends StatelessWidget {
             ),
             Align(
               alignment: Alignment.topCenter,
-              child: Knob(),
+              child: Knob(color: Color(0xFF00FF00)),
             ),
             Positioned.fill(
               top: _rotationHandleLength,
@@ -113,7 +113,7 @@ class RotationHandle extends StatelessWidget {
     return Container(
       width: 1,
       height: _rotationHandleLength,
-      color: Theme.of(context).colorScheme.primary,
+      color: Color(0xFF00FF00),
     );
   }
 }
@@ -121,7 +121,10 @@ class RotationHandle extends StatelessWidget {
 class Knob extends StatelessWidget {
   const Knob({
     Key key,
+    this.color,
   }) : super(key: key);
+
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +140,7 @@ class Knob extends StatelessWidget {
               width: 2,
               color: Colors.white,
             ),
-            color: Theme.of(context).colorScheme.primary,
+            color: color ?? Theme.of(context).colorScheme.primary,
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
