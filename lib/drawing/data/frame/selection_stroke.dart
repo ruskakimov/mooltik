@@ -13,18 +13,6 @@ class SelectionStroke extends Stroke {
   @override
   Rect get boundingRect => path.getBounds();
 
-  Path get boundingRectPath {
-    final bounds = boundingRect;
-    return Path()
-      ..moveTo(bounds.left, bounds.top)
-      ..addPolygon([
-        bounds.topLeft,
-        bounds.topRight,
-        bounds.bottomRight,
-        bounds.bottomLeft,
-      ], true);
-  }
-
   double get area {
     final bounds = boundingRect;
     return bounds.width * bounds.height;

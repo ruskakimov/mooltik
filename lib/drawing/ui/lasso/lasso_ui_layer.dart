@@ -25,12 +25,41 @@ class LassoUiLayer extends StatelessWidget {
     final transformedPath =
         easel.selectionStroke.path.transform(pathTransform.storage);
 
-    final boundingRectPath =
-        easel.selectionStroke.boundingRectPath.transform(pathTransform.storage);
+    return Transform.translate(
+      offset: offset * easel.scale,
+      child: TransformBox(
+        size: easel.selectionStroke.boundingRect.size * easel.scale,
+      ),
+    );
 
     return Transform.translate(
       offset: offset * easel.scale,
-      child: AnimatedSelection(selection: boundingRectPath),
+      child: AnimatedSelection(selection: transformedPath),
+    );
+  }
+}
+
+class TransformBox extends StatelessWidget {
+  const TransformBox({
+    Key key,
+    @required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    final area = Rect.fromLTWH(0, 0, size.width, size.height);
+    final circumference = Path()
+      ..addPolygon([
+        area.topLeft,
+        area.topRight,
+        area.bottomRight,
+        area.bottomLeft,
+      ], true);
+
+    return AnimatedSelection(
+      selection: circumference,
     );
   }
 }
