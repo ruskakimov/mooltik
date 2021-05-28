@@ -19,6 +19,13 @@ class SelectionStroke extends Stroke {
   @override
   Rect get boundingRect => path.getBounds();
 
+  double get area {
+    final bounds = boundingRect;
+    return bounds.width * bounds.height;
+  }
+
+  bool get isEmpty => area == 0;
+
   @override
   void finish() {
     path.close();

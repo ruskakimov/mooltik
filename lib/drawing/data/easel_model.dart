@@ -226,7 +226,7 @@ class EaselModel extends ChangeNotifier {
       if (unrasterizedStrokes.isEmpty) return;
       unrasterizedStrokes.last.extend(framePoint);
     } else if (_selectedTool is Lasso) {
-      selectionStroke?.extend(framePoint);
+      _selectionStroke?.extend(framePoint);
     }
     notifyListeners();
   }
@@ -242,7 +242,8 @@ class EaselModel extends ChangeNotifier {
         unrasterizedStrokes.removeLast();
       }
     } else if (_selectedTool is Lasso) {
-      selectionStroke?.finish();
+      _selectionStroke?.finish();
+      if (_selectionStroke.isEmpty) removeSelection();
     }
 
     notifyListeners();
@@ -273,6 +274,11 @@ class EaselModel extends ChangeNotifier {
   void pushSnapshot(ui.Image snapshot) {
     _historyStack.push(snapshot);
     _updateFrame();
+    notifyListeners();
+  }
+
+  void removeSelection() {
+    _selectionStroke = null;
     notifyListeners();
   }
 
