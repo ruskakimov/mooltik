@@ -41,33 +41,22 @@ class LassoModel extends ChangeNotifier {
 
   void fillSelection() {
     if (!finishedSelection) return;
-    _pushFilledSelectionSnapshot();
+    final fillColor = (_easel.selectedTool as Lasso).color;
+    selectionStroke.setColorPaint(fillColor);
+    _applySelectionToFrame();
     _easel.removeSelection();
     notifyListeners();
   }
 
   void eraseSelection() {
     if (!finishedSelection) return;
-    _pushErasedSelectionSnapshot();
+    selectionStroke.setErasingPaint();
+    _applySelectionToFrame();
     _easel.removeSelection();
     notifyListeners();
   }
 
-  void _pushFilledSelectionSnapshot() async {
-    final fillColor = (_easel.selectedTool as Lasso).color;
-    selectionStroke.setColorPaint(fillColor);
-
-    final snapshot = await generateImage(
-      FramePainter(frame: _easel.frame, strokes: [selectionStroke]),
-      _easel.frame.width.toInt(),
-      _easel.frame.height.toInt(),
-    );
-    _easel.pushSnapshot(snapshot);
-  }
-
-  void _pushErasedSelectionSnapshot() async {
-    selectionStroke.setErasingPaint();
-
+  void _applySelectionToFrame() async {
     final snapshot = await generateImage(
       FramePainter(frame: _easel.frame, strokes: [selectionStroke]),
       _easel.frame.width.toInt(),
