@@ -27,12 +27,17 @@ class _AnimatedSelectionState extends State<AnimatedSelection>
     controller
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
-          print('restart animation');
           controller.reset();
           controller.forward();
         }
       });
     controller.forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
