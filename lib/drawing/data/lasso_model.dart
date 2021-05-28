@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
+import 'package:mooltik/drawing/ui/frame_painter.dart';
 
 class LassoModel extends ChangeNotifier {
   LassoModel(EaselModel easel) : _easel = easel;
@@ -15,4 +17,45 @@ class LassoModel extends ChangeNotifier {
   bool get showLassoMenu => _easel.selectedTool is Lasso && finishedSelection;
 
   bool get finishedSelection => _easel.selectionStroke?.finished ?? false;
+
+  // ===================
+  // Lasso menu methods:
+  // ===================
+
+  void transformSelection() {
+    if (!finishedSelection) return;
+    // TODO: Implement
+    _easel.removeSelection();
+    notifyListeners();
+  }
+
+  void duplicateSelection() {
+    if (!finishedSelection) return;
+    // TODO: Implement
+    _easel.removeSelection();
+    notifyListeners();
+  }
+
+  void fillSelection() {
+    if (!finishedSelection) return;
+    // TODO: Implement
+    _easel.removeSelection();
+    notifyListeners();
+  }
+
+  void eraseSelection() {
+    if (!finishedSelection) return;
+    _pushErasedSelectionSnapshot();
+    _easel.removeSelection();
+    notifyListeners();
+  }
+
+  void _pushErasedSelectionSnapshot() async {
+    final snapshot = await generateImage(
+      FramePainter(frame: _easel.frame, strokes: [_easel.selectionStroke]),
+      _easel.frame.width.toInt(),
+      _easel.frame.height.toInt(),
+    );
+    _easel.pushSnapshot(snapshot);
+  }
 }
