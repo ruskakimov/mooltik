@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/lasso_model.dart';
 import 'package:mooltik/drawing/ui/easel/animated_selection.dart';
+import 'package:mooltik/drawing/ui/lasso/transform_box.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 
@@ -35,31 +36,6 @@ class LassoUiLayer extends StatelessWidget {
     return Transform.translate(
       offset: offset * easel.scale,
       child: AnimatedSelection(selection: transformedPath),
-    );
-  }
-}
-
-class TransformBox extends StatelessWidget {
-  const TransformBox({
-    Key key,
-    @required this.size,
-  }) : super(key: key);
-
-  final Size size;
-
-  @override
-  Widget build(BuildContext context) {
-    final area = Rect.fromLTWH(0, 0, size.width, size.height);
-    final circumference = Path()
-      ..addPolygon([
-        area.topLeft,
-        area.topRight,
-        area.bottomRight,
-        area.bottomLeft,
-      ], true);
-
-    return AnimatedSelection(
-      selection: circumference,
     );
   }
 }
