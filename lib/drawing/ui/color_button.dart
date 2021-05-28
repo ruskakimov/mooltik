@@ -21,7 +21,7 @@ class _ColorButtonState extends State<ColorButton> {
     final toolbox = context.watch<ToolboxModel>();
     final selectedTool = toolbox.selectedTool;
     final selectedColor =
-        selectedTool is Brush ? selectedTool.color : Colors.black;
+        selectedTool is ToolWithColor ? selectedTool.color : Colors.black;
 
     return PopupWithArrowEntry(
       visible: _pickerOpen,
@@ -43,7 +43,7 @@ class _ColorButtonState extends State<ColorButton> {
         child: InkWell(
           splashColor: Colors.transparent,
           onTap: () {
-            if (selectedTool is Brush && selectedTool is! Eraser) {
+            if (selectedTool is ToolWithColor && selectedTool is! Eraser) {
               _openPicker();
             }
           },

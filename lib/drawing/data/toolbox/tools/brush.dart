@@ -15,7 +15,7 @@ BrushTip _retrieveBrushTip(SharedPreferences sharedPreferences, String tipKey) {
   }
 }
 
-abstract class Brush extends Tool {
+abstract class Brush extends ToolWithColor {
   Brush(SharedPreferences sharedPreferences) : super(sharedPreferences) {
     // Restore brush tips state.
     for (var i = 0; i < defaultBrushTips.length; i++) {
@@ -29,11 +29,6 @@ abstract class Brush extends Tool {
     if (sharedPreferences.containsKey(_selectedBrushTipIndexKey)) {
       _selectedBrushTipIndex =
           sharedPreferences.getInt(_selectedBrushTipIndexKey);
-    }
-
-    // Restore selected color.
-    if (sharedPreferences.containsKey(_colorKey)) {
-      _color = Color(sharedPreferences.getInt(_colorKey));
     }
   }
 
@@ -51,7 +46,7 @@ abstract class Brush extends Tool {
   Paint get paint {
     final tipPaintStyle = selectedBrushTip.paint;
     return tipPaintStyle
-      ..color = _color.withOpacity(tipPaintStyle.color.opacity)
+      ..color = color.withOpacity(tipPaintStyle.color.opacity)
       ..blendMode = blendMode;
   }
 
@@ -62,14 +57,6 @@ abstract class Brush extends Tool {
     assert(index >= 0 && index < brushTips.length);
     _selectedBrushTipIndex = index;
     sharedPreferences.setInt(_selectedBrushTipIndexKey, index);
-  }
-
-  /// Brush color.
-  Color get color => _color;
-  Color _color = Colors.black;
-  set color(Color color) {
-    _color = color;
-    sharedPreferences.setInt(_colorKey, _color.value);
   }
 
   // ===========
@@ -118,7 +105,6 @@ abstract class Brush extends Tool {
   // ========================
 
   String get _selectedBrushTipIndexKey => name + '_selected_brush_tip_index';
-  String get _colorKey => name + '_color';
 
   String _getBrushTipKey(int brushTipIndex) =>
       name + '_brush_tip_$brushTipIndex';

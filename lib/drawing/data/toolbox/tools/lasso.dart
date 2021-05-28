@@ -3,7 +3,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:shared_preferences/shared_preferences.dart';
 import 'tool.dart';
 
-class Lasso extends Tool {
+class Lasso extends ToolWithColor {
   Lasso(SharedPreferences sharedPreferences) : super(sharedPreferences);
 
   @override
@@ -11,7 +11,4 @@ class Lasso extends Tool {
 
   @override
   String get name => 'lasso';
-
-  /// Selection fill color.
-  Color get color => Colors.black;
 }

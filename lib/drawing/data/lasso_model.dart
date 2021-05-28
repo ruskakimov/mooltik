@@ -54,8 +54,8 @@ class LassoModel extends ChangeNotifier {
   }
 
   void _pushFilledSelectionSnapshot() async {
-    // TODO: pass selected color.
-    selectionStroke.setColorPaint(Colors.black);
+    final fillColor = (_easel.selectedTool as Lasso).color;
+    selectionStroke.setColorPaint(fillColor);
 
     final snapshot = await generateImage(
       FramePainter(frame: _easel.frame, strokes: [selectionStroke]),

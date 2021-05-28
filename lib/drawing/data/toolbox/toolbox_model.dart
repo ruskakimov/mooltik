@@ -26,8 +26,8 @@ class ToolboxModel extends ChangeNotifier {
   }
 
   void changeToolColor(Color color) {
-    if (selectedTool is Brush) {
-      (selectedTool as Brush).color = color;
+    if (selectedTool is ToolWithColor) {
+      (selectedTool as ToolWithColor).color = color;
       notifyListeners();
     }
   }
