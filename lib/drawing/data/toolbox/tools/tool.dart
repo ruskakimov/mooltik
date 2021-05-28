@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-abstract class Tool extends ChangeNotifier {
+abstract class Tool {
   Tool(this.sharedPreferences) : assert(sharedPreferences != null);
 
   /// Icon diplayed on the tool's button.

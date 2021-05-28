@@ -3,6 +3,7 @@ import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
+import 'package:mooltik/drawing/data/lasso_model.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
 import 'package:mooltik/drawing/ui/drawing_actionbar.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
@@ -78,6 +79,10 @@ class DrawingPage extends StatelessWidget {
                   update: (_, reel, toolbox, easel) => easel
                     ..updateFrame(reel.currentFrame)
                     ..updateSelectedTool(toolbox.selectedTool),
+                ),
+                ChangeNotifierProxyProvider<EaselModel, LassoModel>(
+                  create: (context) => LassoModel(context.read<EaselModel>()),
+                  update: (_, easel, lasso) => lasso..updateEasel(easel),
                 ),
               ],
               child: SafeArea(

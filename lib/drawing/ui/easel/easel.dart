@@ -6,7 +6,7 @@ import 'package:mooltik/drawing/data/reel_stack_model.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/easel/cursor_painter.dart';
-import 'package:mooltik/drawing/ui/easel/lasso_ui_layer.dart';
+import 'package:mooltik/drawing/ui/lasso/lasso_ui_layer.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 import 'package:provider/provider.dart';
@@ -71,10 +71,7 @@ class _EaselState extends State<Easel> {
                 child: Transform.rotate(
                   alignment: Alignment.topLeft,
                   angle: easel.canvasRotation,
-                  child: ChangeNotifierProvider.value(
-                    value: selectedTool,
-                    child: LassoUiLayer(),
-                  ),
+                  child: LassoUiLayer(),
                 ),
               ),
           ],

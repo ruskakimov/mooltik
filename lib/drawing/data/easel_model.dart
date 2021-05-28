@@ -6,6 +6,7 @@ import 'package:mooltik/common/data/debouncer.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
+import 'package:mooltik/drawing/data/frame/selection_stroke.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/brush.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
@@ -64,6 +65,10 @@ class EaselModel extends ChangeNotifier {
 
   /// Current strokes that are not yet rasterized and added to the frame.
   final List<Stroke> unrasterizedStrokes = [];
+
+  /// Lasso selected area.
+  SelectionStroke get selectionStroke => _selectionStroke;
+  SelectionStroke _selectionStroke;
 
   ImageHistoryStack _historyStack;
 
@@ -208,7 +213,7 @@ class EaselModel extends ChangeNotifier {
       final stroke = Stroke(framePoint, (_selectedTool as Brush).paint);
       unrasterizedStrokes.add(stroke);
     } else if (_selectedTool is Lasso) {
-      (_selectedTool as Lasso).startSelection(framePoint);
+      _selectionStroke = SelectionStroke(framePoint);
     }
 
     notifyListeners();
@@ -221,7 +226,7 @@ class EaselModel extends ChangeNotifier {
       if (unrasterizedStrokes.isEmpty) return;
       unrasterizedStrokes.last.extend(framePoint);
     } else if (_selectedTool is Lasso) {
-      (_selectedTool as Lasso).updateSelection(framePoint);
+      selectionStroke?.extend(framePoint);
     }
     notifyListeners();
   }
@@ -237,10 +242,7 @@ class EaselModel extends ChangeNotifier {
         unrasterizedStrokes.removeLast();
       }
     } else if (_selectedTool is Lasso) {
-      final lasso = _selectedTool as Lasso;
-      lasso.finishSelection();
-      unrasterizedStrokes.add(lasso.selectionStroke);
-      _applyStrokes();
+      selectionStroke?.finish();
     }
 
     notifyListeners();
