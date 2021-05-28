@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/ui/easel/animated_selection.dart';
 
-const _knobSize = 32.0;
+const _knobTargetSize = 32.0;
 
 class TransformBox extends StatelessWidget {
   const TransformBox({
@@ -23,15 +23,15 @@ class TransformBox extends StatelessWidget {
       ], true);
 
     return Transform.translate(
-      offset: const Offset(-_knobSize, -_knobSize),
+      offset: const Offset(-_knobTargetSize, -_knobTargetSize),
       child: SizedBox(
-        width: size.width + _knobSize,
-        height: size.height + _knobSize,
+        width: size.width + _knobTargetSize,
+        height: size.height + _knobTargetSize,
         child: Stack(
           fit: StackFit.expand,
           children: [
             Padding(
-              padding: const EdgeInsets.all(_knobSize / 2),
+              padding: const EdgeInsets.all(_knobTargetSize / 2),
               child: AnimatedSelection(
                 selection: circumference,
               ),
@@ -82,10 +82,29 @@ class Knob extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: _knobSize,
-      height: _knobSize,
-      color: Colors.red,
+    return SizedBox(
+      width: _knobTargetSize,
+      height: _knobTargetSize,
+      child: Center(
+        child: Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 2,
+              color: Colors.white,
+            ),
+            color: Theme.of(context).colorScheme.primary,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 2,
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
