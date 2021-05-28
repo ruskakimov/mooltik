@@ -250,6 +250,8 @@ class EaselModel extends ChangeNotifier {
   }
 
   void onStrokeCancel() {
+    if (_selectedTool is Lasso) removeSelection();
+
     if (unrasterizedStrokes.isEmpty) return;
 
     unrasterizedStrokes.removeLast();
