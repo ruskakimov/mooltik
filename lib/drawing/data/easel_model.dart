@@ -43,6 +43,7 @@ class EaselModel extends ChangeNotifier {
   Frame get frame => _frame;
   Frame _frame;
 
+  Tool get selectedTool => _selectedTool;
   Tool _selectedTool;
 
   final ValueChanged<Frame> onChanged;
