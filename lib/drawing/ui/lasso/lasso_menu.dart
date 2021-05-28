@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
+import 'package:mooltik/drawing/data/lasso_model.dart';
 
 class LassoMenu extends StatelessWidget {
   const LassoMenu({
@@ -9,6 +11,12 @@ class LassoMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lassoModel = context.watch<LassoModel>();
+
+    if (!lassoModel.showLassoMenu) {
+      return SizedBox.shrink();
+    }
+
     return OrientationBuilder(builder: (context, orientation) {
       final isPortrait = orientation == Orientation.portrait;
 

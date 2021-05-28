@@ -10,4 +10,6 @@ class LassoModel extends ChangeNotifier {
     _easel = easel;
     notifyListeners();
   }
+
+  bool get showLassoMenu => _easel.selectionStroke?.finished ?? false;
 }

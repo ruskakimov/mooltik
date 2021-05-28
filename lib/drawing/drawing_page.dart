@@ -113,11 +113,10 @@ class DrawingPage extends StatelessWidget {
                       right: 4,
                       child: LayerButton(),
                     ),
-                    if (true)
-                      Positioned.fill(
-                        top: headerHeight,
-                        child: LassoMenu(),
-                      ),
+                    Positioned.fill(
+                      top: headerHeight,
+                      child: LassoMenu(),
+                    ),
                   ],
                 ),
               ),

@@ -12,11 +12,16 @@ class SelectionStroke extends Stroke {
             ..blendMode = BlendMode.dstOut,
         );
 
+  /// Whether the path has been closed.
+  bool get finished => _finished;
+  bool _finished = false;
+
   @override
   Rect get boundingRect => path.getBounds();
 
   @override
   void finish() {
     path.close();
+    _finished = true;
   }
 }
