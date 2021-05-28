@@ -2,6 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/ui/easel/animated_selection.dart';
 
 const _knobTargetSize = 32.0;
+const _rotationHandleLength = 40.0;
+
+const _padding = EdgeInsets.only(
+  top: _knobTargetSize / 2 + _rotationHandleLength,
+  left: _knobTargetSize / 2,
+  right: _knobTargetSize / 2,
+  bottom: _knobTargetSize / 2,
+);
 
 class TransformBox extends StatelessWidget {
   const TransformBox({
@@ -23,54 +31,89 @@ class TransformBox extends StatelessWidget {
       ], true);
 
     return Transform.translate(
-      offset: const Offset(-_knobTargetSize, -_knobTargetSize),
+      // Undo the padding push.
+      offset: Offset(-_padding.left, -_padding.top),
       child: SizedBox(
-        width: size.width + _knobTargetSize,
-        height: size.height + _knobTargetSize,
+        width: size.width + _padding.horizontal,
+        height: size.height + _padding.vertical,
         child: Stack(
           fit: StackFit.expand,
           children: [
             Padding(
-              padding: const EdgeInsets.all(_knobTargetSize / 2),
+              padding: _padding,
               child: AnimatedSelection(
                 selection: circumference,
               ),
             ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Knob(),
+            Positioned.fill(
+              top: _knobTargetSize / 2,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: RotationHandle(),
+              ),
             ),
             Align(
               alignment: Alignment.topCenter,
               child: Knob(),
             ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Knob(),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Knob(),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Knob(),
-            ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Knob(),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Knob(),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Knob(),
+            Positioned.fill(
+              top: _rotationHandleLength,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Knob(),
+                  ),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Knob(),
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Knob(),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Knob(),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Knob(),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Knob(),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Knob(),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Knob(),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class RotationHandle extends StatelessWidget {
+  const RotationHandle({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 1,
+      height: _rotationHandleLength,
+      color: Theme.of(context).colorScheme.primary,
     );
   }
 }
