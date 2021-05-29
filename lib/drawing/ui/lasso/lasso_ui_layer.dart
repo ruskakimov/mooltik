@@ -19,7 +19,7 @@ class LassoUiLayer extends StatelessWidget {
 
     if (lassoModel.isTransformMode) {
       return Transform.translate(
-        offset: lassoModel.transformBoxOffset,
+        offset: lassoModel.transformBoxCenterOffset,
         child: TransformBox(size: lassoModel.transformBoxSize),
       );
     }

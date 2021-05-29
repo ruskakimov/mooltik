@@ -31,8 +31,11 @@ class TransformBox extends StatelessWidget {
       ], true);
 
     return Transform.translate(
-      // Undo the padding push.
-      offset: Offset(-_padding.left, -_padding.top),
+      // Center box around top-left corner.
+      offset: Offset(
+        -size.width / 2 - _padding.left,
+        -size.height / 2 - _padding.top,
+      ),
       child: SizedBox(
         width: size.width + _padding.horizontal,
         height: size.height + _padding.vertical,

@@ -24,8 +24,8 @@ class LassoModel extends ChangeNotifier {
   bool get isTransformMode => _isTransformMode;
   bool _isTransformMode = false;
 
-  Offset get transformBoxOffset =>
-      _easel.selectionStroke.boundingRect.topLeft * _easel.scale;
+  Offset get transformBoxCenterOffset =>
+      _easel.selectionStroke.boundingRect.center * _easel.scale;
 
   Size get transformBoxSize =>
       _easel.selectionStroke.boundingRect.size * _easel.scale;
@@ -37,7 +37,8 @@ class LassoModel extends ChangeNotifier {
   void transformSelection() {
     if (!finishedSelection) return;
     // TODO: Implement
-    _easel.removeSelection();
+    _isTransformMode = true;
+    // _easel.removeSelection();
     notifyListeners();
   }
 
