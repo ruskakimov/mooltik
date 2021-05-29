@@ -22,6 +22,19 @@ class LassoModel extends ChangeNotifier {
 
   SelectionStroke get selectionStroke => _easel.selectionStroke;
 
+  Offset get selectionOffset =>
+      selectionStroke.boundingRect.topLeft * _easel.scale;
+
+  Matrix4 get _selectionPathTransform => Matrix4.identity()
+    ..scale(_easel.scale)
+    ..translate(
+      -selectionStroke.boundingRect.left,
+      -selectionStroke.boundingRect.top,
+    );
+
+  Path get selectionPath =>
+      selectionStroke.path.transform(_selectionPathTransform.storage);
+
   bool get showLassoMenu =>
       _easel.selectedTool is Lasso && finishedSelection && !isTransformMode;
 
