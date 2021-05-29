@@ -112,6 +112,14 @@ class LassoModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void onRightKnobDrag(DragUpdateDetails details) {
+    _transformBoxSize = Size(
+      _transformBoxSize.width + details.delta.dx * 2 / _easel.scale,
+      _transformBoxSize.height,
+    );
+    notifyListeners();
+  }
+
   // ==============
   // Paint methods:
   // ==============
