@@ -31,51 +31,56 @@ class _EaselState extends State<Easel> {
     return LayoutBuilder(builder: (context, constraints) {
       easel.updateSize(constraints.biggest);
 
-      return EaselGestureDetector(
-        onStrokeStart: easel.onStrokeStart,
-        onStrokeUpdate: easel.onStrokeUpdate,
-        onStrokeEnd: easel.onStrokeEnd,
-        onStrokeCancel: easel.onStrokeCancel,
-        onScaleStart: easel.onScaleStart,
-        onScaleUpdate: easel.onScaleUpdate,
-        allowDrawingWithFinger: easel.allowDrawingWithFinger,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          EaselGestureDetector(
+            onStrokeStart: easel.onStrokeStart,
+            onStrokeUpdate: easel.onStrokeUpdate,
+            onStrokeEnd: easel.onStrokeEnd,
+            onStrokeCancel: easel.onStrokeCancel,
+            onScaleStart: easel.onScaleStart,
+            onScaleUpdate: easel.onScaleUpdate,
+            allowDrawingWithFinger: easel.allowDrawingWithFinger,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Positioned(
+                  top: easel.canvasTopOffset,
+                  left: easel.canvasLeftOffset,
+                  width: easel.canvasWidth,
+                  height: easel.canvasHeight,
+                  child: Transform.rotate(
+                    alignment: Alignment.topLeft,
+                    angle: easel.canvasRotation,
+                    child: EaselCanvas(
+                      size: easel.frameSize,
+                      frames: reelStack.visibleReels
+                          .map((reel) => reel.currentFrame)
+                          .toList()
+                          .reversed
+                          .toList(),
+                      activeFrame: easel.frame,
+                      beforeActiveFrame: onion.frameBefore,
+                      afterActiveFrame: onion.frameAfter,
+                      strokes: easel.unrasterizedStrokes,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (selectedTool is Lasso)
             Positioned(
               top: easel.canvasTopOffset,
               left: easel.canvasLeftOffset,
-              width: easel.canvasWidth,
-              height: easel.canvasHeight,
               child: Transform.rotate(
                 alignment: Alignment.topLeft,
                 angle: easel.canvasRotation,
-                child: EaselCanvas(
-                  size: easel.frameSize,
-                  frames: reelStack.visibleReels
-                      .map((reel) => reel.currentFrame)
-                      .toList()
-                      .reversed
-                      .toList(),
-                  activeFrame: easel.frame,
-                  beforeActiveFrame: onion.frameBefore,
-                  afterActiveFrame: onion.frameAfter,
-                  strokes: easel.unrasterizedStrokes,
-                ),
+                child: LassoUiLayer(),
               ),
             ),
-            if (selectedTool is Lasso)
-              Positioned(
-                top: easel.canvasTopOffset,
-                left: easel.canvasLeftOffset,
-                child: Transform.rotate(
-                  alignment: Alignment.topLeft,
-                  angle: easel.canvasRotation,
-                  child: LassoUiLayer(),
-                ),
-              ),
-          ],
-        ),
+        ],
       );
     });
   }

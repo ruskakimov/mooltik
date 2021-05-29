@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/data/lasso_model.dart';
+import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/ui/easel/animated_selection.dart';
 
 const _knobTargetSize = 32.0;
@@ -21,6 +23,8 @@ class TransformBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lassoModel = context.watch<LassoModel>();
+
     final area = Rect.fromLTWH(0, 0, size.width, size.height);
     final circumference = Path()
       ..addPolygon([
@@ -36,70 +40,74 @@ class TransformBox extends StatelessWidget {
         -size.width / 2 - _padding.left,
         -size.height / 2 - _padding.top,
       ),
-      child: SizedBox(
-        width: size.width + _padding.horizontal,
-        height: size.height + _padding.vertical,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Padding(
-              padding: _padding,
-              child: AnimatedSelection(
-                selection: circumference,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onPanUpdate: lassoModel.onTransformBoxPanUpdate,
+        child: SizedBox(
+          width: size.width + _padding.horizontal,
+          height: size.height + _padding.vertical,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Padding(
+                padding: _padding,
+                child: AnimatedSelection(
+                  selection: circumference,
+                ),
               ),
-            ),
-            Positioned.fill(
-              top: _knobTargetSize / 2,
-              child: Align(
+              Positioned.fill(
+                top: _knobTargetSize / 2,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: RotationHandle(),
+                ),
+              ),
+              Align(
                 alignment: Alignment.topCenter,
-                child: RotationHandle(),
+                child: Knob(color: Color(0xFF00FF00)),
               ),
-            ),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Knob(color: Color(0xFF00FF00)),
-            ),
-            Positioned.fill(
-              top: _rotationHandleLength,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Knob(),
-                  ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Knob(),
-                  ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Knob(),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Knob(),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Knob(),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Knob(),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Knob(),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Knob(),
-                  ),
-                ],
+              Positioned.fill(
+                top: _rotationHandleLength,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Knob(),
+                    ),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Knob(),
+                    ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Knob(),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Knob(),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Knob(),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Knob(),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Knob(),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Knob(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

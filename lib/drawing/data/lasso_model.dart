@@ -107,6 +107,11 @@ class LassoModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void onTransformBoxPanUpdate(DragUpdateDetails details) {
+    _transformBoxCenterOffset += details.delta / _easel.scale;
+    notifyListeners();
+  }
+
   // ==============
   // Paint methods:
   // ==============
