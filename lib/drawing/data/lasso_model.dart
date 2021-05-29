@@ -65,8 +65,8 @@ class LassoModel extends ChangeNotifier {
 
   void _launchTransformMode() {
     _isTransformMode = true;
-    _transformBoxCenterOffset = _easel.selectionStroke.boundingRect.center;
-    _transformBoxSize = _easel.selectionStroke.boundingRect.size;
+    _transformBoxCenterOffset = selectionStroke.boundingRect.center;
+    _transformBoxSize = selectionStroke.boundingRect.size;
     // TODO: Store masked image
   }
 
