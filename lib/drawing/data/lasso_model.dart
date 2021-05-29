@@ -6,7 +6,12 @@ import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 
 class LassoModel extends ChangeNotifier {
-  LassoModel(EaselModel easel) : _easel = easel;
+  LassoModel(EaselModel easel) : _easel = easel {
+    _easel.addListener(() {
+      if (_easel.selectedTool is! Lasso) _finishTransformMode();
+      notifyListeners();
+    });
+  }
 
   EaselModel _easel;
 
@@ -49,6 +54,14 @@ class LassoModel extends ChangeNotifier {
     _transformBoxCenterOffset = _easel.selectionStroke.boundingRect.center;
     _transformBoxSize = _easel.selectionStroke.boundingRect.size;
     // TODO: Store masked image
+  }
+
+  void _finishTransformMode() {
+    _isTransformMode = false;
+    // TODO: Paste positioned masked image
+    // TODO: Remove snapshot with erased selection
+    _transformBoxCenterOffset = null;
+    _transformBoxSize = null;
   }
 
   void duplicateSelection() {
