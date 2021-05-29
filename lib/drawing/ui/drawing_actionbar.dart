@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
+import 'package:mooltik/drawing/data/lasso_model.dart';
 import 'package:mooltik/drawing/ui/menu_button.dart';
 import 'package:mooltik/drawing/ui/toolbar.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ class DrawingActionbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final easel = context.watch<EaselModel>();
+    final lassoModel = context.watch<LassoModel>();
 
     return Material(
       elevation: 10,
@@ -40,11 +42,15 @@ class DrawingActionbar extends StatelessWidget {
                 Spacer(),
                 AppIconButton(
                   icon: FontAwesomeIcons.undo,
-                  onTap: easel.undoAvailable ? easel.undo : null,
+                  onTap: easel.undoAvailable && !lassoModel.isTransformMode
+                      ? easel.undo
+                      : null,
                 ),
                 AppIconButton(
                   icon: FontAwesomeIcons.redo,
-                  onTap: easel.redoAvailable ? easel.redo : null,
+                  onTap: easel.redoAvailable && !lassoModel.isTransformMode
+                      ? easel.redo
+                      : null,
                 ),
               ],
             ),
