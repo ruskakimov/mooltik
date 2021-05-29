@@ -13,6 +13,17 @@ const _padding = EdgeInsets.only(
   bottom: _knobTargetSize / 2,
 );
 
+const _knobPositions = [
+  Alignment.topLeft,
+  Alignment.topCenter,
+  Alignment.topRight,
+  Alignment.centerLeft,
+  Alignment.centerRight,
+  Alignment.bottomLeft,
+  Alignment.bottomCenter,
+  Alignment.bottomRight,
+];
+
 class TransformBox extends StatelessWidget {
   const TransformBox({
     Key key,
@@ -67,54 +78,20 @@ class TransformBox extends StatelessWidget {
               alignment: Alignment.topCenter,
               child: Knob(color: Color(0xFF00FF00)),
             ),
-            Positioned.fill(
-              top: _rotationHandleLength,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
+            for (var knobPosition in _knobPositions)
+              Positioned.fill(
+                top: _rotationHandleLength,
+                child: Align(
+                  alignment: knobPosition,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onPanUpdate: (details) {
+                      lassoModel.onKnobDrag(knobPosition, details);
+                    },
                     child: Knob(),
                   ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Knob(),
-                  ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Knob(),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onPanUpdate: lassoModel.onLeftKnobDrag,
-                      child: Knob(),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onPanUpdate: lassoModel.onRightKnobDrag,
-                      child: Knob(),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Knob(),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Knob(),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Knob(),
-                  ),
-                ],
+                ),
               ),
-            ),
           ],
         ),
       ),
