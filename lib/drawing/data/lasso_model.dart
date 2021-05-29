@@ -25,15 +25,15 @@ class LassoModel extends ChangeNotifier {
   Offset get selectionOffset =>
       selectionStroke.boundingRect.topLeft * _easel.scale;
 
+  Path get selectionPath =>
+      selectionStroke.path.transform(_selectionPathTransform.storage);
+
   Matrix4 get _selectionPathTransform => Matrix4.identity()
     ..scale(_easel.scale)
     ..translate(
       -selectionStroke.boundingRect.left,
       -selectionStroke.boundingRect.top,
     );
-
-  Path get selectionPath =>
-      selectionStroke.path.transform(_selectionPathTransform.storage);
 
   bool get finishedSelection => selectionStroke?.finished ?? false;
 
