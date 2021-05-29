@@ -41,6 +41,7 @@ class LassoModel extends ChangeNotifier {
   // Lasso menu methods:
   // ===================
 
+  /// Erases original image and transforms a copy.
   void transformSelection() {
     if (!finishedSelection) return;
     _launchTransformMode();
@@ -64,6 +65,7 @@ class LassoModel extends ChangeNotifier {
     _transformBoxSize = null;
   }
 
+  /// Keeps original image and transforms a copy.
   void duplicateSelection() {
     if (!finishedSelection) return;
     _launchTransformMode();
@@ -71,6 +73,7 @@ class LassoModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Fills selection with selected color.
   void fillSelection() {
     if (!finishedSelection) return;
     _fillSelection();
@@ -84,6 +87,7 @@ class LassoModel extends ChangeNotifier {
     _applySelectionStrokeToFrame();
   }
 
+  /// Erases all paint within selection.
   void eraseSelection() {
     if (!finishedSelection) return;
     _eraseSelection();
