@@ -38,35 +38,49 @@ class LassoModel extends ChangeNotifier {
 
   void transformSelection() {
     if (!finishedSelection) return;
+    _launchTransformMode();
+    _eraseSelection();
+    _easel.removeSelection();
+    notifyListeners();
+  }
+
+  void _launchTransformMode() {
     _isTransformMode = true;
     _transformBoxCenterOffset = _easel.selectionStroke.boundingRect.center;
     _transformBoxSize = _easel.selectionStroke.boundingRect.size;
-    // _easel.removeSelection();
-    notifyListeners();
+    // TODO: Store masked image
   }
 
   void duplicateSelection() {
     if (!finishedSelection) return;
-    // TODO: Implement
+    _launchTransformMode();
     _easel.removeSelection();
     notifyListeners();
   }
 
   void fillSelection() {
     if (!finishedSelection) return;
-    final fillColor = (_easel.selectedTool as Lasso).color;
-    selectionStroke.setColorPaint(fillColor);
-    _applySelectionStrokeToFrame();
+    _fillSelection();
     _easel.removeSelection();
     notifyListeners();
   }
 
+  void _fillSelection() {
+    final fillColor = (_easel.selectedTool as Lasso).color;
+    selectionStroke.setColorPaint(fillColor);
+    _applySelectionStrokeToFrame();
+  }
+
   void eraseSelection() {
     if (!finishedSelection) return;
-    selectionStroke.setErasingPaint();
-    _applySelectionStrokeToFrame();
+    _eraseSelection();
     _easel.removeSelection();
     notifyListeners();
+  }
+
+  void _eraseSelection() {
+    selectionStroke.setErasingPaint();
+    _applySelectionStrokeToFrame();
   }
 
   void _applySelectionStrokeToFrame() async {
