@@ -86,7 +86,11 @@ class TransformBox extends StatelessWidget {
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Knob(),
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onPanUpdate: lassoModel.onLeftKnobDrag,
+                      child: Knob(),
+                    ),
                   ),
                   Align(
                     alignment: Alignment.centerRight,
