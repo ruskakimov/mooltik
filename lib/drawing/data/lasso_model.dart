@@ -52,7 +52,7 @@ class LassoModel extends ChangeNotifier {
     if (!finishedSelection) return;
     final fillColor = (_easel.selectedTool as Lasso).color;
     selectionStroke.setColorPaint(fillColor);
-    _applySelectionToFrame();
+    _applySelectionStrokeToFrame();
     _easel.removeSelection();
     notifyListeners();
   }
@@ -60,12 +60,12 @@ class LassoModel extends ChangeNotifier {
   void eraseSelection() {
     if (!finishedSelection) return;
     selectionStroke.setErasingPaint();
-    _applySelectionToFrame();
+    _applySelectionStrokeToFrame();
     _easel.removeSelection();
     notifyListeners();
   }
 
-  void _applySelectionToFrame() async {
+  void _applySelectionStrokeToFrame() async {
     final snapshot = await generateImage(
       FramePainter(frame: _easel.frame, strokes: [selectionStroke]),
       _easel.frame.width.toInt(),
