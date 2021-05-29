@@ -17,7 +17,8 @@ class LassoModel extends ChangeNotifier {
 
   SelectionStroke get selectionStroke => _easel.selectionStroke;
 
-  bool get showLassoMenu => _easel.selectedTool is Lasso && finishedSelection;
+  bool get showLassoMenu =>
+      _easel.selectedTool is Lasso && finishedSelection && !isTransformMode;
 
   bool get finishedSelection => selectionStroke?.finished ?? false;
 
@@ -25,10 +26,11 @@ class LassoModel extends ChangeNotifier {
   bool _isTransformMode = false;
 
   Offset get transformBoxCenterOffset =>
-      _easel.selectionStroke.boundingRect.center * _easel.scale;
+      _transformBoxCenterOffset * _easel.scale;
+  Offset _transformBoxCenterOffset;
 
-  Size get transformBoxSize =>
-      _easel.selectionStroke.boundingRect.size * _easel.scale;
+  Size get transformBoxSize => _transformBoxSize * _easel.scale;
+  Size _transformBoxSize;
 
   // ===================
   // Lasso menu methods:
@@ -36,8 +38,9 @@ class LassoModel extends ChangeNotifier {
 
   void transformSelection() {
     if (!finishedSelection) return;
-    // TODO: Implement
     _isTransformMode = true;
+    _transformBoxCenterOffset = _easel.selectionStroke.boundingRect.center;
+    _transformBoxSize = _easel.selectionStroke.boundingRect.size;
     // _easel.removeSelection();
     notifyListeners();
   }

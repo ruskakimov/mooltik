@@ -13,15 +13,15 @@ class LassoUiLayer extends StatelessWidget {
     final easel = context.watch<EaselModel>();
     final lassoModel = context.watch<LassoModel>();
 
-    if (easel.selectionStroke == null) {
-      return SizedBox.shrink();
-    }
-
     if (lassoModel.isTransformMode) {
       return Transform.translate(
         offset: lassoModel.transformBoxCenterOffset,
         child: TransformBox(size: lassoModel.transformBoxSize),
       );
+    }
+
+    if (easel.selectionStroke == null) {
+      return SizedBox.shrink();
     }
 
     final offset = easel.selectionStroke.boundingRect.topLeft;
