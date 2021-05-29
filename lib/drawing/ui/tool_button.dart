@@ -13,10 +13,12 @@ class ToolButton extends StatefulWidget {
     Key key,
     @required this.tool,
     this.selected = false,
+    this.onTap,
   }) : super(key: key);
 
   final Tool tool;
   final bool selected;
+  final VoidCallback onTap;
 
   @override
   _ToolButtonState createState() => _ToolButtonState();
@@ -50,6 +52,7 @@ class _ToolButtonState extends State<ToolButton> {
             } else {
               toolbox.selectTool(widget.tool);
             }
+            widget.onTap?.call();
           },
         ),
       );
@@ -62,6 +65,7 @@ class _ToolButtonState extends State<ToolButton> {
       onTap: () {
         final toolbox = context.read<ToolboxModel>();
         toolbox.selectTool(widget.tool);
+        widget.onTap?.call();
       },
     );
   }
