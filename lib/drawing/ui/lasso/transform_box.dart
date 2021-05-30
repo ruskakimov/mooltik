@@ -59,11 +59,11 @@ class TransformBox extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onPanUpdate: lassoModel.onTransformBoxPanUpdate,
-              child: Padding(
-                padding: padding,
+            Padding(
+              padding: padding,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onPanUpdate: lassoModel.onTransformBoxPanUpdate,
                 child: AnimatedSelection(
                   selection: circumference,
                 ),
@@ -79,7 +79,11 @@ class TransformBox extends StatelessWidget {
             ),
             Align(
               alignment: rotationHandlePosition,
-              child: Knob(color: Color(0xFF00FF00)),
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onPanUpdate: lassoModel.onRotationKnobDrag,
+                child: Knob(color: Color(0xFF00FF00)),
+              ),
             ),
             for (var knobPosition in _knobPositions)
               Positioned.fill(

@@ -9,7 +9,11 @@ import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 
 class LassoModel extends ChangeNotifier {
-  LassoModel(EaselModel easel) : _easel = easel {
+  LassoModel({
+    @required EaselModel easel,
+    @required double headerHeight,
+  })  : _easel = easel,
+        _headerHeight = headerHeight {
     _easel.addListener(() {
       if (_easel.selectedTool is! Lasso) endTransformMode();
       notifyListeners();
@@ -18,8 +22,16 @@ class LassoModel extends ChangeNotifier {
 
   EaselModel _easel;
 
+  /// For global point -> easel point conversion.
+  double _headerHeight;
+
   void updateEasel(EaselModel easel) {
     _easel = easel;
+    notifyListeners();
+  }
+
+  void updateHeaderHeight(double height) {
+    _headerHeight = height;
     notifyListeners();
   }
 
@@ -89,7 +101,7 @@ class LassoModel extends ChangeNotifier {
 
   Offset get transformBoxCenterOffset =>
       _transformBoxCenterOffset * _easel.scale;
-  Offset _transformBoxCenterOffset;
+  Offset _transformBoxCenterOffset; // frame point
 
   Size get transformBoxDisplaySize =>
       Size(
@@ -163,6 +175,18 @@ class LassoModel extends ChangeNotifier {
   void onKnobEnd(Alignment knobPosition) {
     _xDragDirection = null;
     _yDragDirection = null;
+  }
+
+  void onRotationKnobDrag(DragUpdateDetails details) {
+    final fingerEaselPoint = _toEaselPoint(details.globalPosition);
+    final fingerFramePoint = _easel.toFramePoint(fingerEaselPoint);
+
+    // Calculate angle between vertical axis and line between these two points.
+    print('center $_transformBoxCenterOffset finger $fingerFramePoint');
+  }
+
+  Offset _toEaselPoint(Offset globalPoint) {
+    return globalPoint - Offset(0, _headerHeight);
   }
 
   // ==============

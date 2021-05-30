@@ -81,8 +81,13 @@ class DrawingPage extends StatelessWidget {
                     ..updateSelectedTool(toolbox.selectedTool),
                 ),
                 ChangeNotifierProxyProvider<EaselModel, LassoModel>(
-                  create: (context) => LassoModel(context.read<EaselModel>()),
-                  update: (_, easel, lasso) => lasso..updateEasel(easel),
+                  create: (context) => LassoModel(
+                    easel: context.read<EaselModel>(),
+                    headerHeight: headerHeight,
+                  ),
+                  update: (_, easel, lasso) => lasso
+                    ..updateEasel(easel)
+                    ..updateHeaderHeight(headerHeight),
                 ),
               ],
               child: SafeArea(

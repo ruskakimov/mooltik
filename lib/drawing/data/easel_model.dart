@@ -168,8 +168,8 @@ class EaselModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Offset _toFramePoint(Offset point) {
-    final p = (point - _offset) / _scale;
+  Offset toFramePoint(Offset easelPoint) {
+    final p = (easelPoint - _offset) / _scale;
     return Offset(
       p.dx * cos(_rotation) + p.dy * sin(_rotation),
       -p.dx * sin(_rotation) + p.dy * cos(_rotation),
@@ -198,7 +198,7 @@ class EaselModel extends ChangeNotifier {
   void onScaleStart(ScaleStartDetails details) {
     _prevScale = _scale;
     _prevRotation = _rotation;
-    _fixedFramePoint = _toFramePoint(details.localFocalPoint);
+    _fixedFramePoint = toFramePoint(details.localFocalPoint);
     notifyListeners();
   }
 
@@ -211,7 +211,7 @@ class EaselModel extends ChangeNotifier {
   }
 
   void onStrokeStart(DragStartDetails details) {
-    final framePoint = _toFramePoint(details.localPosition);
+    final framePoint = toFramePoint(details.localPosition);
 
     if (_selectedTool is Brush) {
       final stroke = Stroke(framePoint, (_selectedTool as Brush).paint);
@@ -224,7 +224,7 @@ class EaselModel extends ChangeNotifier {
   }
 
   void onStrokeUpdate(DragUpdateDetails details) {
-    final framePoint = _toFramePoint(details.localPosition);
+    final framePoint = toFramePoint(details.localPosition);
 
     if (_selectedTool is Brush) {
       if (unrasterizedStrokes.isEmpty) return;
