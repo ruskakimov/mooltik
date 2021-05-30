@@ -1,7 +1,10 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/selection_stroke.dart';
+import 'package:mooltik/drawing/data/lasso/masked_image_painter.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 
@@ -88,7 +91,7 @@ class LassoModel extends ChangeNotifier {
       _transformBoxCenterOffset * _easel.scale;
   Offset _transformBoxCenterOffset;
 
-  Size get transformBoxSize =>
+  Size get transformBoxDisplaySize =>
       Size(
         _transformBoxSize.width.abs(),
         _transformBoxSize.height.abs(),
@@ -100,11 +103,20 @@ class LassoModel extends ChangeNotifier {
 
   bool get isFlippedHorizontally => _transformBoxSize.width < 0;
 
-  void _launchTransformMode() {
+  ui.Image _maskedImage;
+
+  void _launchTransformMode() async {
     _isTransformMode = true;
     _transformBoxCenterOffset = selectionStroke.boundingRect.center;
     _transformBoxSize = selectionStroke.boundingRect.size;
-    // TODO: Store masked image
+    _maskedImage = await generateImage(
+      MaskedImagePainter(
+        original: _easel.frame.snapshot,
+        mask: selectionStroke.path,
+      ),
+      _transformBoxSize.width.toInt(),
+      _transformBoxSize.height.toInt(),
+    );
   }
 
   void endTransformMode() {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/drawing/data/lasso_model.dart';
+import 'package:mooltik/drawing/data/lasso/lasso_model.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/color_button.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
-import 'package:mooltik/drawing/data/lasso_model.dart';
+import 'package:mooltik/drawing/data/lasso/lasso_model.dart';
 
 class LassoMenu extends StatelessWidget {
   const LassoMenu({

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/drawing/data/lasso_model.dart';
+import 'package:mooltik/drawing/data/lasso/lasso_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/ui/easel/animated_selection.dart';
 
