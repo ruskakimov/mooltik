@@ -25,6 +25,16 @@ class TransformBox extends StatelessWidget {
 
   final Size size;
 
+  Alignment calcSelectionCenter(EdgeInsets padding) {
+    final totalHeight = size.height + padding.vertical;
+    final totalWidth = size.width + padding.horizontal;
+
+    return Alignment(
+      (padding.left + size.width / 2) / (totalWidth / 2) - 1,
+      (padding.top + size.height / 2) / (totalHeight / 2) - 1,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final lassoModel = context.watch<LassoModel>();
@@ -53,60 +63,64 @@ class TransformBox extends StatelessWidget {
         -size.width / 2 - padding.left,
         -size.height / 2 - padding.top,
       ),
-      child: SizedBox(
-        width: size.width + padding.horizontal,
-        height: size.height + padding.vertical,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Padding(
-              padding: padding,
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onPanUpdate: lassoModel.onTransformBoxPanUpdate,
-                child: AnimatedSelection(
-                  selection: circumference,
-                ),
-              ),
-            ),
-            Positioned.fill(
-              top: _knobTargetSize / 2,
-              bottom: _knobTargetSize / 2,
-              child: Align(
-                alignment: rotationHandlePosition,
-                child: RotationHandle(),
-              ),
-            ),
-            Align(
-              alignment: rotationHandlePosition,
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onPanUpdate: lassoModel.onRotationKnobDrag,
-                child: Knob(color: Color(0xFF00FF00)),
-              ),
-            ),
-            for (var knobPosition in _knobPositions)
-              Positioned.fill(
-                top: rotationHandlePadding.top,
-                bottom: rotationHandlePadding.bottom,
-                child: Align(
-                  alignment: knobPosition,
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onPanStart: (details) {
-                      lassoModel.onKnobStart(knobPosition);
-                    },
-                    onPanUpdate: (details) {
-                      lassoModel.onKnobDrag(knobPosition, details);
-                    },
-                    onPanEnd: (details) {
-                      lassoModel.onKnobEnd(knobPosition);
-                    },
-                    child: Knob(),
+      child: Transform.rotate(
+        alignment: calcSelectionCenter(padding),
+        angle: lassoModel.transformBoxRotation,
+        child: SizedBox(
+          width: size.width + padding.horizontal,
+          height: size.height + padding.vertical,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Padding(
+                padding: padding,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onPanUpdate: lassoModel.onTransformBoxPanUpdate,
+                  child: AnimatedSelection(
+                    selection: circumference,
                   ),
                 ),
               ),
-          ],
+              Positioned.fill(
+                top: _knobTargetSize / 2,
+                bottom: _knobTargetSize / 2,
+                child: Align(
+                  alignment: rotationHandlePosition,
+                  child: RotationHandle(),
+                ),
+              ),
+              Align(
+                alignment: rotationHandlePosition,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onPanUpdate: lassoModel.onRotationKnobDrag,
+                  child: Knob(color: Color(0xFF00FF00)),
+                ),
+              ),
+              for (var knobPosition in _knobPositions)
+                Positioned.fill(
+                  top: rotationHandlePadding.top,
+                  bottom: rotationHandlePadding.bottom,
+                  child: Align(
+                    alignment: knobPosition,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onPanStart: (details) {
+                        lassoModel.onKnobStart(knobPosition);
+                      },
+                      onPanUpdate: (details) {
+                        lassoModel.onKnobDrag(knobPosition, details);
+                      },
+                      onPanEnd: (details) {
+                        lassoModel.onKnobEnd(knobPosition);
+                      },
+                      child: Knob(),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

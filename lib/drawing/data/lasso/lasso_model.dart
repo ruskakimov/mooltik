@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -103,6 +104,10 @@ class LassoModel extends ChangeNotifier {
       _transformBoxCenterOffset * _easel.scale;
   Offset _transformBoxCenterOffset; // frame point
 
+  /// Box rotation value in radians.
+  double get transformBoxRotation => _transformBoxRotation;
+  double _transformBoxRotation;
+
   Size get transformBoxDisplaySize =>
       Size(
         _transformBoxSize.width.abs(),
@@ -127,6 +132,7 @@ class LassoModel extends ChangeNotifier {
     _isTransformMode = true;
     _transformBoxCenterOffset = selectionStroke.boundingRect.center;
     _transformBoxSize = selectionStroke.boundingRect.size;
+    _transformBoxRotation = 0;
     _transformImage = await generateImage(
       MaskedImagePainter(
         original: _easel.frame.snapshot,
@@ -144,6 +150,7 @@ class LassoModel extends ChangeNotifier {
     // TODO: Remove snapshot with erased selection
     _transformBoxCenterOffset = null;
     _transformBoxSize = null;
+    _transformBoxRotation = null;
     _transformImage = null;
     notifyListeners();
   }
@@ -183,6 +190,13 @@ class LassoModel extends ChangeNotifier {
 
     // Calculate angle between vertical axis and line between these two points.
     print('center $_transformBoxCenterOffset finger $fingerFramePoint');
+
+    final tan = ui.Tangent(
+      _transformBoxCenterOffset,
+      fingerFramePoint - _transformBoxCenterOffset,
+    );
+    _transformBoxRotation = -tan.angle + math.pi / 2;
+    notifyListeners();
   }
 
   Offset _toEaselPoint(Offset globalPoint) {
