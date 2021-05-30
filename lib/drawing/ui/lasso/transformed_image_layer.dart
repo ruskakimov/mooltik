@@ -17,27 +17,17 @@ class TransformedImageLayer extends StatelessWidget {
       return SizedBox.shrink();
     }
 
-    final centeringOffset =
-        -lassoModel.transformBoxDisplaySize.center(Offset.zero);
-    final transform = Matrix4.identity();
-
-    if (lassoModel.isFlippedHorizontally) {
-      transform.rotateY(math.pi);
-    }
-
-    if (lassoModel.isFlippedVertically) {
-      transform.rotateX(math.pi);
-    }
-
-    transform.translate(centeringOffset.dx, centeringOffset.dy);
-
     return Positioned(
       top: lassoModel.transformBoxCenterOffset.dy,
       left: lassoModel.transformBoxCenterOffset.dx,
       width: lassoModel.transformBoxDisplaySize.width,
       height: lassoModel.transformBoxDisplaySize.height,
       child: Transform(
-        transform: transform,
+        transform: _getTransform(
+          lassoModel.transformBoxDisplaySize,
+          lassoModel.isFlippedHorizontally,
+          lassoModel.isFlippedVertically,
+        ),
         child: FittedBox(
           fit: BoxFit.fill,
           child: CustomPaint(
@@ -47,6 +37,22 @@ class TransformedImageLayer extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Matrix4 _getTransform(
+    Size boxSize,
+    bool flipHorizontally,
+    bool flipVertically,
+  ) {
+    final transform = Matrix4.identity();
+
+    if (flipHorizontally) transform.rotateY(math.pi);
+    if (flipVertically) transform.rotateX(math.pi);
+
+    final centeringOffset = -boxSize.center(Offset.zero);
+    transform.translate(centeringOffset.dx, centeringOffset.dy);
+
+    return transform;
   }
 }
 
