@@ -202,7 +202,9 @@ class LassoModel extends ChangeNotifier {
       _transformBoxCenterOffset,
       fingerFramePoint - _transformBoxCenterOffset,
     );
-    _transformBoxRotation = -tan.angle + math.pi / 2;
+    _transformBoxRotation = isFlippedVertically
+        ? -tan.angle - math.pi / 2
+        : -tan.angle + math.pi / 2;
     notifyListeners();
   }
 
