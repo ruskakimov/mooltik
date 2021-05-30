@@ -103,13 +103,19 @@ class LassoModel extends ChangeNotifier {
 
   bool get isFlippedHorizontally => _transformBoxSize.width < 0;
 
-  ui.Image _maskedImage;
+  ui.Image get transformImage => _transformImage;
+  ui.Image _transformImage;
+
+  Size get transformImageOriginalSize => Size(
+        _transformImage.width.toDouble(),
+        _transformImage.height.toDouble(),
+      );
 
   void _launchTransformMode() async {
     _isTransformMode = true;
     _transformBoxCenterOffset = selectionStroke.boundingRect.center;
     _transformBoxSize = selectionStroke.boundingRect.size;
-    _maskedImage = await generateImage(
+    _transformImage = await generateImage(
       MaskedImagePainter(
         original: _easel.frame.snapshot,
         mask: selectionStroke.path,
@@ -117,6 +123,7 @@ class LassoModel extends ChangeNotifier {
       _transformBoxSize.width.toInt(),
       _transformBoxSize.height.toInt(),
     );
+    notifyListeners();
   }
 
   void endTransformMode() {
@@ -125,6 +132,7 @@ class LassoModel extends ChangeNotifier {
     // TODO: Remove snapshot with erased selection
     _transformBoxCenterOffset = null;
     _transformBoxSize = null;
+    _transformImage = null;
     notifyListeners();
   }
 

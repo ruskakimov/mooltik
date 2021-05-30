@@ -9,6 +9,7 @@ import 'package:mooltik/drawing/ui/easel/cursor_painter.dart';
 import 'package:mooltik/drawing/ui/lasso/lasso_ui_layer.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
+import 'package:mooltik/drawing/ui/lasso/transformed_image_layer.dart';
 import 'package:provider/provider.dart';
 
 import 'easel_gesture_detector.dart';
@@ -191,6 +192,7 @@ class EaselCanvas extends StatelessWidget {
         size: frame.size,
         foregroundPainter: FramePainter(frame: frame, strokes: strokes),
       ),
+      TransformedImageLayer(),
     ];
   }
 
