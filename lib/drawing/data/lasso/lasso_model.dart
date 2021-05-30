@@ -195,9 +195,6 @@ class LassoModel extends ChangeNotifier {
     final fingerEaselPoint = _toEaselPoint(details.globalPosition);
     final fingerFramePoint = _easel.toFramePoint(fingerEaselPoint);
 
-    // Calculate angle between vertical axis and line between these two points.
-    print('center $_transformBoxCenterOffset finger $fingerFramePoint');
-
     final tan = ui.Tangent(
       _transformBoxCenterOffset,
       fingerFramePoint - _transformBoxCenterOffset,
