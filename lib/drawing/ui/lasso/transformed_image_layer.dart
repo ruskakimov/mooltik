@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/lasso/lasso_model.dart';
@@ -16,13 +17,27 @@ class TransformedImageLayer extends StatelessWidget {
       return SizedBox.shrink();
     }
 
+    final centeringOffset =
+        -lassoModel.transformBoxDisplaySize.center(Offset.zero);
+    final transform = Matrix4.identity();
+
+    if (lassoModel.isFlippedHorizontally) {
+      transform.rotateY(math.pi);
+    }
+
+    if (lassoModel.isFlippedVertically) {
+      transform.rotateX(math.pi);
+    }
+
+    transform.translate(centeringOffset.dx, centeringOffset.dy);
+
     return Positioned(
       top: lassoModel.transformBoxCenterOffset.dy,
       left: lassoModel.transformBoxCenterOffset.dx,
       width: lassoModel.transformBoxDisplaySize.width,
       height: lassoModel.transformBoxDisplaySize.height,
-      child: Transform.translate(
-        offset: -lassoModel.transformBoxDisplaySize.center(Offset.zero),
+      child: Transform(
+        transform: transform,
         child: FittedBox(
           fit: BoxFit.fill,
           child: CustomPaint(
