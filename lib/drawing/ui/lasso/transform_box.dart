@@ -6,13 +6,6 @@ import 'package:mooltik/drawing/ui/easel/animated_selection.dart';
 const _knobTargetSize = 32.0;
 const _rotationHandleLength = 40.0;
 
-const _padding = EdgeInsets.only(
-  top: _knobTargetSize / 2 + _rotationHandleLength,
-  left: _knobTargetSize / 2,
-  right: _knobTargetSize / 2,
-  bottom: _knobTargetSize / 2,
-);
-
 const _knobPositions = [
   Alignment.topLeft,
   Alignment.topCenter,
@@ -45,15 +38,24 @@ class TransformBox extends StatelessWidget {
         area.bottomLeft,
       ], true);
 
+    final rotationHandlePosition = lassoModel.isFlippedVertically
+        ? Alignment.bottomCenter
+        : Alignment.topCenter;
+    final rotationHandlePadding = lassoModel.isFlippedVertically
+        ? EdgeInsets.only(bottom: _rotationHandleLength)
+        : EdgeInsets.only(top: _rotationHandleLength);
+
+    final padding = EdgeInsets.all(_knobTargetSize / 2) + rotationHandlePadding;
+
     return Transform.translate(
       // Center box around top-left corner.
       offset: Offset(
-        -size.width / 2 - _padding.left,
-        -size.height / 2 - _padding.top,
+        -size.width / 2 - padding.left,
+        -size.height / 2 - padding.top,
       ),
       child: SizedBox(
-        width: size.width + _padding.horizontal,
-        height: size.height + _padding.vertical,
+        width: size.width + padding.horizontal,
+        height: size.height + padding.vertical,
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -61,7 +63,7 @@ class TransformBox extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               onPanUpdate: lassoModel.onTransformBoxPanUpdate,
               child: Padding(
-                padding: _padding,
+                padding: padding,
                 child: AnimatedSelection(
                   selection: circumference,
                 ),
@@ -69,18 +71,20 @@ class TransformBox extends StatelessWidget {
             ),
             Positioned.fill(
               top: _knobTargetSize / 2,
+              bottom: _knobTargetSize / 2,
               child: Align(
-                alignment: Alignment.topCenter,
+                alignment: rotationHandlePosition,
                 child: RotationHandle(),
               ),
             ),
             Align(
-              alignment: Alignment.topCenter,
+              alignment: rotationHandlePosition,
               child: Knob(color: Color(0xFF00FF00)),
             ),
             for (var knobPosition in _knobPositions)
               Positioned.fill(
-                top: _rotationHandleLength,
+                top: rotationHandlePadding.top,
+                bottom: rotationHandlePadding.bottom,
                 child: Align(
                   alignment: knobPosition,
                   child: GestureDetector(
