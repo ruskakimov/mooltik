@@ -155,8 +155,15 @@ class LassoModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onTransformBoxPanUpdate(DragUpdateDetails details) {
-    _transformBoxCenterOffset += details.delta / _easel.scale;
+  void onTransformBoxDrag(DragUpdateDetails details) {
+    final d = details.delta;
+    final cos = math.cos(_transformBoxRotation);
+    final sin = math.sin(_transformBoxRotation);
+    final rotatedDelta = Offset(
+      d.dx * cos - d.dy * sin,
+      d.dx * sin + d.dy * cos,
+    );
+    _transformBoxCenterOffset += rotatedDelta / _easel.scale;
     notifyListeners();
   }
 

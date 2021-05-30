@@ -76,7 +76,7 @@ class TransformBox extends StatelessWidget {
                 padding: padding,
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onPanUpdate: lassoModel.onTransformBoxPanUpdate,
+                  onPanUpdate: lassoModel.onTransformBoxDrag,
                   child: AnimatedSelection(
                     selection: circumference,
                   ),
