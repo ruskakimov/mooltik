@@ -121,15 +121,28 @@ class LassoModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  double _xDragDirection;
+  double _yDragDirection;
+
+  void onKnobStart(Alignment knobPosition) {
+    _xDragDirection = _transformBoxSize.width.sign;
+    _yDragDirection = _transformBoxSize.height.sign;
+  }
+
   void onKnobDrag(Alignment knobPosition, DragUpdateDetails details) {
     final dx = knobPosition.x * details.delta.dx * 2 / _easel.scale;
     final dy = knobPosition.y * details.delta.dy * 2 / _easel.scale;
 
     _transformBoxSize = Size(
-      _transformBoxSize.width + dx,
-      _transformBoxSize.height + dy,
+      _transformBoxSize.width + dx * _xDragDirection,
+      _transformBoxSize.height + dy * _yDragDirection,
     );
     notifyListeners();
+  }
+
+  void onKnobEnd(Alignment knobPosition) {
+    _xDragDirection = null;
+    _yDragDirection = null;
   }
 
   // ==============
