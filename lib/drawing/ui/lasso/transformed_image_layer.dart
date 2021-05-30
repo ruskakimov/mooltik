@@ -1,6 +1,6 @@
-import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:mooltik/drawing/data/lasso/lasso_model.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +27,7 @@ class TransformedImageLayer extends StatelessWidget {
           lassoModel.transformBoxDisplaySize,
           lassoModel.isFlippedHorizontally,
           lassoModel.isFlippedVertically,
+          lassoModel.transformBoxRotation,
         ),
         child: FittedBox(
           fit: BoxFit.fill,
@@ -43,16 +44,18 @@ class TransformedImageLayer extends StatelessWidget {
     Size boxSize,
     bool flipHorizontally,
     bool flipVertically,
+    double angle,
   ) {
-    final transform = Matrix4.identity();
+    var t = Matrix4Transform();
+    final halfSize = boxSize.center(Offset.zero);
 
-    if (flipHorizontally) transform.rotateY(math.pi);
-    if (flipVertically) transform.rotateX(math.pi);
+    t = t.translateOffset(-halfSize);
+    t = t.rotateByCenter(angle, boxSize);
 
-    final centeringOffset = -boxSize.center(Offset.zero);
-    transform.translate(centeringOffset.dx, centeringOffset.dy);
+    if (flipHorizontally) t = t.flipHorizontally(origin: halfSize);
+    if (flipVertically) t = t.flipVertically(origin: halfSize);
 
-    return transform;
+    return t.matrix4;
   }
 }
 
