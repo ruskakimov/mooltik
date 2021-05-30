@@ -88,8 +88,17 @@ class LassoModel extends ChangeNotifier {
       _transformBoxCenterOffset * _easel.scale;
   Offset _transformBoxCenterOffset;
 
-  Size get transformBoxSize => _transformBoxSize * _easel.scale;
+  Size get transformBoxSize =>
+      Size(
+        _transformBoxSize.width.abs(),
+        _transformBoxSize.height.abs(),
+      ) *
+      _easel.scale;
   Size _transformBoxSize;
+
+  bool get isFlippedVertically => _transformBoxSize.height < 0;
+
+  bool get isFlippedHorizontally => _transformBoxSize.width < 0;
 
   void _launchTransformMode() {
     _isTransformMode = true;
