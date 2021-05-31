@@ -21,34 +21,21 @@ class TransformedImageLayer extends StatelessWidget {
       return SizedBox.shrink();
     }
 
-    // return CustomPaint(
-    //   size: size,
-    //   painter: TransformedImagePainter(
-    //     transform: _getTransform(
-    //       lassoModel.transformBoxDisplaySize,
-    //       lassoModel.isFlippedHorizontally,
-    //       lassoModel.isFlippedVertically,
-    //       lassoModel.transformBoxRotation,
-    //     ),
-    //     transformedImage: lassoModel.transformImage,
-    //   ),
-    // );
-
-    return Transform(
-      transform: _getTransform(
-        lassoModel.transformBoxDisplaySize,
-        lassoModel.transformBoxCenterOffset,
-        lassoModel.isFlippedHorizontally,
-        lassoModel.isFlippedVertically,
-        lassoModel.transformBoxRotation,
-        lassoModel.transformBoxDisplaySize.width /
-            lassoModel.transformImageOriginalSize.width,
-        lassoModel.transformBoxDisplaySize.height /
-            lassoModel.transformImageOriginalSize.height,
-      ),
-      child: CustomPaint(
-        size: lassoModel.transformImageOriginalSize,
-        painter: ImagePainter(lassoModel.transformImage),
+    return CustomPaint(
+      size: size,
+      painter: TransformedImagePainter(
+        transform: _getTransform(
+          lassoModel.transformBoxDisplaySize,
+          lassoModel.transformBoxCenterOffset,
+          lassoModel.isFlippedHorizontally,
+          lassoModel.isFlippedVertically,
+          lassoModel.transformBoxRotation,
+          lassoModel.transformBoxDisplaySize.width /
+              lassoModel.transformImageOriginalSize.width,
+          lassoModel.transformBoxDisplaySize.height /
+              lassoModel.transformImageOriginalSize.height,
+        ),
+        transformedImage: lassoModel.transformImage,
       ),
     );
   }

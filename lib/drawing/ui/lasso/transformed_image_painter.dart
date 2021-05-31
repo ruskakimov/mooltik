@@ -15,6 +15,8 @@ class TransformedImagePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
 
+    canvas.transform(transform.storage);
+
     canvas.drawImage(
       transformedImage,
       Offset.zero,
@@ -25,7 +27,9 @@ class TransformedImagePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(TransformedImagePainter oldDelegate) => false;
+  bool shouldRepaint(TransformedImagePainter oldDelegate) =>
+      oldDelegate.transformedImage != transformedImage ||
+      oldDelegate.transform != transform;
 
   @override
   bool shouldRebuildSemantics(TransformedImagePainter oldDelegate) => false;
