@@ -193,7 +193,7 @@ class EaselCanvas extends StatelessWidget {
         foregroundPainter: FramePainter(frame: frame, strokes: strokes),
       ),
       TransformedImageLayer(
-        size: frame.size,
+        frameSize: frame.size,
       ),
     ];
   }

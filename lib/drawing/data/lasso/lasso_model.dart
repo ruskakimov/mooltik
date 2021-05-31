@@ -110,12 +110,13 @@ class LassoModel extends ChangeNotifier {
   double get transformBoxRotation => _transformBoxRotation;
   double _transformBoxRotation;
 
-  Size get transformBoxDisplaySize =>
-      Size(
+  Size get transformBoxDisplaySize => transformBoxAbsoluteSize * _easel.scale;
+
+  Size get transformBoxAbsoluteSize => Size(
         _transformBoxSize.width.abs(),
         _transformBoxSize.height.abs(),
-      ) *
-      _easel.scale;
+      );
+
   Size _transformBoxSize;
 
   bool get isFlippedVertically => _transformBoxSize.height < 0;
@@ -127,17 +128,17 @@ class LassoModel extends ChangeNotifier {
 
   Matrix4 get imageTransform {
     var t = Matrix4Transform();
-    final halfSize = transformBoxDisplaySize.center(Offset.zero);
+    final halfSize = transformBoxAbsoluteSize.center(Offset.zero);
 
-    t = t.translateOffset(transformBoxCenterOffset - halfSize);
-    t = t.rotateByCenter(transformBoxRotation, transformBoxDisplaySize);
+    t = t.translateOffset(_transformBoxCenterOffset - halfSize);
+    t = t.rotateByCenter(transformBoxRotation, transformBoxAbsoluteSize);
 
     if (isFlippedHorizontally) t = t.flipHorizontally(origin: halfSize);
     if (isFlippedVertically) t = t.flipVertically(origin: halfSize);
 
     t = t.scaleBy(
-      x: transformBoxDisplaySize.width / transformImage.width,
-      y: transformBoxDisplaySize.height / transformImage.height,
+      x: transformBoxAbsoluteSize.width / transformImage.width,
+      y: transformBoxAbsoluteSize.height / transformImage.height,
     );
 
     return t.matrix4;

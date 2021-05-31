@@ -6,10 +6,10 @@ import 'package:provider/provider.dart';
 class TransformedImageLayer extends StatelessWidget {
   const TransformedImageLayer({
     Key key,
-    @required this.size,
+    @required this.frameSize,
   }) : super(key: key);
 
-  final Size size;
+  final Size frameSize;
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +19,14 @@ class TransformedImageLayer extends StatelessWidget {
       return SizedBox.shrink();
     }
 
-    return CustomPaint(
-      size: size,
-      painter: TransformedImagePainter(
-        transform: lassoModel.imageTransform,
-        transformedImage: lassoModel.transformImage,
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: CustomPaint(
+        size: frameSize,
+        painter: TransformedImagePainter(
+          transform: lassoModel.imageTransform,
+          transformedImage: lassoModel.transformImage,
+        ),
       ),
     );
   }
