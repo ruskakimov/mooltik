@@ -169,10 +169,11 @@ class LassoModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void endTransformMode() {
+  void endTransformMode() async {
     _isTransformMode = false;
+    notifyListeners();
 
-    _pasteTransformedImage();
+    await _pasteTransformedImage();
     // TODO: Remove snapshot with erased selection
 
     // Remove box:
