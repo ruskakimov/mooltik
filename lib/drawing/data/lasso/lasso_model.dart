@@ -144,16 +144,16 @@ class LassoModel extends ChangeNotifier {
     return t.matrix4;
   }
 
-  void _launchTransformMode() {
+  void _launchTransformMode() async {
     _isTransformMode = true;
+    notifyListeners();
 
     // Position box:
     _transformBoxCenterOffset = selectionStroke.boundingRect.center;
     _transformBoxSize = selectionStroke.boundingRect.size;
     _transformBoxRotation = 0;
 
-    _setTransformImage();
-
+    await _setTransformImage();
     notifyListeners();
   }
 
@@ -166,7 +166,6 @@ class LassoModel extends ChangeNotifier {
       _transformBoxSize.width.toInt(),
       _transformBoxSize.height.toInt(),
     );
-    notifyListeners();
   }
 
   void endTransformMode() async {
