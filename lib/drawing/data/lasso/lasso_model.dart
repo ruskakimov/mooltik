@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/selection_stroke.dart';
@@ -123,10 +124,23 @@ class LassoModel extends ChangeNotifier {
   ui.Image get transformImage => _transformImage;
   ui.Image _transformImage;
 
-  Size get transformImageOriginalSize => Size(
-        _transformImage.width.toDouble(),
-        _transformImage.height.toDouble(),
-      );
+  Matrix4 get imageTransform {
+    var t = Matrix4Transform();
+    final halfSize = transformBoxDisplaySize.center(Offset.zero);
+
+    t = t.translateOffset(transformBoxCenterOffset - halfSize);
+    t = t.rotateByCenter(transformBoxRotation, transformBoxDisplaySize);
+
+    if (isFlippedHorizontally) t = t.flipHorizontally(origin: halfSize);
+    if (isFlippedVertically) t = t.flipVertically(origin: halfSize);
+
+    t = t.scaleBy(
+      x: transformBoxDisplaySize.width / transformImage.width,
+      y: transformBoxDisplaySize.height / transformImage.height,
+    );
+
+    return t.matrix4;
+  }
 
   void _launchTransformMode() async {
     _isTransformMode = true;
