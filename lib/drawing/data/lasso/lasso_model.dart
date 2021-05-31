@@ -65,8 +65,7 @@ class LassoModel extends ChangeNotifier {
   /// Erases original image and transforms a copy.
   void transformSelection() {
     if (!finishedSelection) return;
-    _launchTransformMode();
-    _eraseSelection();
+    _launchTransformMode(true);
     _easel.removeSelection();
     notifyListeners();
   }
@@ -74,7 +73,7 @@ class LassoModel extends ChangeNotifier {
   /// Keeps original image and transforms a copy.
   void duplicateSelection() {
     if (!finishedSelection) return;
-    _launchTransformMode();
+    _launchTransformMode(false);
     _easel.removeSelection();
     notifyListeners();
   }
@@ -144,11 +143,20 @@ class LassoModel extends ChangeNotifier {
     return t.matrix4;
   }
 
-  void _launchTransformMode() async {
+  bool _erasedOriginal = false;
+
+  Future<void> _launchTransformMode(bool eraseOriginal) async {
     if (isTransformMode) return;
 
     _isTransformMode = true;
     notifyListeners();
+
+    if (eraseOriginal) {
+      _eraseSelection();
+      _erasedOriginal = true;
+    } else {
+      _erasedOriginal = false;
+    }
 
     // Position box:
     _transformBoxCenterOffset = selectionStroke.boundingRect.center;
@@ -170,7 +178,7 @@ class LassoModel extends ChangeNotifier {
     );
   }
 
-  void endTransformMode() async {
+  Future<void> endTransformMode() async {
     if (!isTransformMode) return;
 
     _isTransformMode = false;
@@ -198,6 +206,12 @@ class LassoModel extends ChangeNotifier {
       _easel.frame.width.toInt(),
       _easel.frame.height.toInt(),
     );
+
+    // Remove snapshot with erased original used during transform.
+    if (_erasedOriginal && _easel.undoAvailable) {
+      _easel.undo();
+    }
+
     _easel.pushSnapshot(snapshot);
   }
 
