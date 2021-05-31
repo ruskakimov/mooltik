@@ -2,12 +2,16 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:mooltik/drawing/data/lasso/lasso_model.dart';
+import 'package:mooltik/drawing/ui/lasso/transformed_image_painter.dart';
 import 'package:provider/provider.dart';
 
 class TransformedImageLayer extends StatelessWidget {
   const TransformedImageLayer({
     Key key,
+    @required this.size,
   }) : super(key: key);
+
+  final Size size;
 
   @override
   Widget build(BuildContext context) {
@@ -17,43 +21,57 @@ class TransformedImageLayer extends StatelessWidget {
       return SizedBox.shrink();
     }
 
-    return Positioned(
-      top: lassoModel.transformBoxCenterOffset.dy,
-      left: lassoModel.transformBoxCenterOffset.dx,
-      width: lassoModel.transformBoxDisplaySize.width,
-      height: lassoModel.transformBoxDisplaySize.height,
-      child: Transform(
-        transform: _getTransform(
-          lassoModel.transformBoxDisplaySize,
-          lassoModel.isFlippedHorizontally,
-          lassoModel.isFlippedVertically,
-          lassoModel.transformBoxRotation,
-        ),
-        child: FittedBox(
-          fit: BoxFit.fill,
-          child: CustomPaint(
-            size: lassoModel.transformImageOriginalSize,
-            painter: ImagePainter(lassoModel.transformImage),
-          ),
-        ),
+    // return CustomPaint(
+    //   size: size,
+    //   painter: TransformedImagePainter(
+    //     transform: _getTransform(
+    //       lassoModel.transformBoxDisplaySize,
+    //       lassoModel.isFlippedHorizontally,
+    //       lassoModel.isFlippedVertically,
+    //       lassoModel.transformBoxRotation,
+    //     ),
+    //     transformedImage: lassoModel.transformImage,
+    //   ),
+    // );
+
+    return Transform(
+      transform: _getTransform(
+        lassoModel.transformBoxDisplaySize,
+        lassoModel.transformBoxCenterOffset,
+        lassoModel.isFlippedHorizontally,
+        lassoModel.isFlippedVertically,
+        lassoModel.transformBoxRotation,
+        lassoModel.transformBoxDisplaySize.width /
+            lassoModel.transformImageOriginalSize.width,
+        lassoModel.transformBoxDisplaySize.height /
+            lassoModel.transformImageOriginalSize.height,
+      ),
+      child: CustomPaint(
+        size: lassoModel.transformImageOriginalSize,
+        painter: ImagePainter(lassoModel.transformImage),
       ),
     );
   }
 
   Matrix4 _getTransform(
     Size boxSize,
+    Offset centerOffset,
     bool flipHorizontally,
     bool flipVertically,
     double angle,
+    double xScale,
+    double yScale,
   ) {
     var t = Matrix4Transform();
     final halfSize = boxSize.center(Offset.zero);
 
-    t = t.translateOffset(-halfSize);
+    t = t.translateOffset(centerOffset - halfSize);
     t = t.rotateByCenter(angle, boxSize);
 
     if (flipHorizontally) t = t.flipHorizontally(origin: halfSize);
     if (flipVertically) t = t.flipVertically(origin: halfSize);
+
+    t = t.scaleBy(x: xScale, y: yScale);
 
     return t.matrix4;
   }
