@@ -6,14 +6,26 @@ class TransformedImagePainter extends CustomPainter {
   TransformedImagePainter({
     @required this.transformedImage,
     @required this.transform,
+    this.background,
   });
 
   final ui.Image transformedImage;
   final Matrix4 transform;
+  final ui.Image background;
 
   @override
   void paint(Canvas canvas, Size size) {
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
+
+    if (background != null) {
+      canvas.drawImage(
+        background,
+        Offset.zero,
+        Paint()
+          ..isAntiAlias = true
+          ..filterQuality = FilterQuality.high,
+      );
+    }
 
     canvas.transform(transform.storage);
 

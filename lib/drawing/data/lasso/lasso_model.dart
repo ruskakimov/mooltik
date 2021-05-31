@@ -9,6 +9,7 @@ import 'package:mooltik/drawing/data/frame/selection_stroke.dart';
 import 'package:mooltik/drawing/data/lasso/masked_image_painter.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
+import 'package:mooltik/drawing/ui/lasso/transformed_image_painter.dart';
 
 class LassoModel extends ChangeNotifier {
   LassoModel({
@@ -142,11 +143,20 @@ class LassoModel extends ChangeNotifier {
     return t.matrix4;
   }
 
-  void _launchTransformMode() async {
+  void _launchTransformMode() {
     _isTransformMode = true;
+
+    // Position box:
     _transformBoxCenterOffset = selectionStroke.boundingRect.center;
     _transformBoxSize = selectionStroke.boundingRect.size;
     _transformBoxRotation = 0;
+
+    _setTransformImage();
+
+    notifyListeners();
+  }
+
+  Future<void> _setTransformImage() async {
     _transformImage = await generateImage(
       MaskedImagePainter(
         original: _easel.frame.snapshot,
@@ -155,18 +165,34 @@ class LassoModel extends ChangeNotifier {
       _transformBoxSize.width.toInt(),
       _transformBoxSize.height.toInt(),
     );
-    notifyListeners();
   }
 
   void endTransformMode() {
     _isTransformMode = false;
-    // TODO: Paste positioned masked image
+
+    _pasteTransformedImage();
     // TODO: Remove snapshot with erased selection
+
+    // Remove box:
     _transformBoxCenterOffset = null;
     _transformBoxSize = null;
     _transformBoxRotation = null;
+
     _transformImage = null;
     notifyListeners();
+  }
+
+  Future<void> _pasteTransformedImage() async {
+    final snapshot = await generateImage(
+      TransformedImagePainter(
+        transformedImage: transformImage,
+        transform: imageTransform,
+        background: _easel.frame.snapshot,
+      ),
+      _easel.frame.width.toInt(),
+      _easel.frame.height.toInt(),
+    );
+    _easel.pushSnapshot(snapshot);
   }
 
   void onTransformBoxDrag(DragUpdateDetails details) {
@@ -238,7 +264,7 @@ class LassoModel extends ChangeNotifier {
     _applySelectionStrokeToFrame();
   }
 
-  void _applySelectionStrokeToFrame() async {
+  Future<void> _applySelectionStrokeToFrame() async {
     final snapshot = await generateImage(
       FramePainter(frame: _easel.frame, strokes: [selectionStroke]),
       _easel.frame.width.toInt(),
