@@ -2,7 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-/// Fills the whole canvas with masked original.
+/// Clips selection mask.
 class MaskedImagePainter extends CustomPainter {
   MaskedImagePainter({
     @required this.original,
