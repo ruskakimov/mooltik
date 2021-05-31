@@ -145,6 +145,8 @@ class LassoModel extends ChangeNotifier {
   }
 
   void _launchTransformMode() async {
+    if (isTransformMode) return;
+
     _isTransformMode = true;
     notifyListeners();
 
@@ -169,6 +171,8 @@ class LassoModel extends ChangeNotifier {
   }
 
   void endTransformMode() async {
+    if (!isTransformMode) return;
+
     _isTransformMode = false;
     notifyListeners();
 
