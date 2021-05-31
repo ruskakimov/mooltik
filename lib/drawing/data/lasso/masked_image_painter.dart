@@ -17,10 +17,6 @@ class MaskedImagePainter extends CustomPainter {
     final maskBounds = mask.getBounds();
 
     canvas.translate(-maskBounds.left, -maskBounds.top);
-    canvas.scale(
-      size.width / maskBounds.width,
-      size.height / maskBounds.height,
-    );
 
     canvas.clipPath(mask);
     canvas.drawImage(
