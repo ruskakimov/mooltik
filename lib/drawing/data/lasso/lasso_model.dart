@@ -143,7 +143,7 @@ class LassoModel extends ChangeNotifier {
     return t.matrix4;
   }
 
-  bool _erasedOriginal = false;
+  String _framePathWithErasedOriginal;
 
   Future<void> _launchTransformMode(bool eraseOriginal) async {
     if (isTransformMode) return;
@@ -153,9 +153,7 @@ class LassoModel extends ChangeNotifier {
 
     if (eraseOriginal) {
       _eraseSelection();
-      _erasedOriginal = true;
-    } else {
-      _erasedOriginal = false;
+      _framePathWithErasedOriginal = _easel.frame.file.path;
     }
 
     // Position box:
@@ -185,7 +183,6 @@ class LassoModel extends ChangeNotifier {
     notifyListeners();
 
     await _pasteTransformedImage();
-    // TODO: Remove snapshot with erased selection
 
     // Remove box:
     _transformBoxCenterOffset = null;
@@ -208,8 +205,10 @@ class LassoModel extends ChangeNotifier {
     );
 
     // Remove snapshot with erased original used during transform.
-    if (_erasedOriginal && _easel.undoAvailable) {
+    if (_framePathWithErasedOriginal == _easel.frame.file.path &&
+        _easel.undoAvailable) {
       _easel.undo();
+      _framePathWithErasedOriginal = null;
     }
 
     _easel.pushSnapshot(snapshot);
