@@ -166,6 +166,7 @@ class LassoModel extends ChangeNotifier {
       _transformBoxSize.width.toInt(),
       _transformBoxSize.height.toInt(),
     );
+    notifyListeners();
   }
 
   void endTransformMode() {
