@@ -26,6 +26,17 @@ class SelectionStroke extends Stroke {
     _finished = true;
   }
 
+  void clipToFrame(Rect frameArea) {
+    final frameCircumference = Path()
+      ..addPolygon([
+        frameArea.topLeft,
+        frameArea.topRight,
+        frameArea.bottomRight,
+        frameArea.bottomLeft,
+      ], true);
+    path = Path.combine(PathOperation.intersect, path, frameCircumference);
+  }
+
   void setColorPaint(Color color) {
     paint
       ..style = PaintingStyle.fill

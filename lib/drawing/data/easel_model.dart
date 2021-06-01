@@ -247,6 +247,7 @@ class EaselModel extends ChangeNotifier {
       }
     } else if (_selectedTool is Lasso) {
       _selectionStroke?.finish();
+      _selectionStroke?.clipToFrame(_frameArea);
       if (_selectionStroke.isEmpty) removeSelection();
     }
 

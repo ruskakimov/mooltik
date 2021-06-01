@@ -9,7 +9,7 @@ class Stroke {
         _lastPoint = startingPoint;
 
   final Paint paint;
-  final Path path;
+  Path path;
 
   Rect get boundingRect => path.getBounds().inflate(paint.strokeWidth);
 
