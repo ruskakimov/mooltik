@@ -18,7 +18,7 @@ class SelectionStroke extends Stroke {
     return bounds.width * bounds.height;
   }
 
-  bool get isEmpty => area == 0;
+  bool get isTooSmall => area < 100;
 
   @override
   void finish() {
