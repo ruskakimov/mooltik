@@ -6,37 +6,33 @@ import 'tools/tools.dart';
 class ToolboxModel extends ChangeNotifier {
   ToolboxModel(SharedPreferences sharedPreferences)
       : assert(sharedPreferences != null),
-        tools = [
-          FillPen(sharedPreferences),
-          AirBrush(sharedPreferences),
-          Pen(sharedPreferences),
-          Eraser(sharedPreferences),
-        ],
-        _selectedToolId = 2;
-
-  final List<Tool> tools;
-  int _selectedToolId;
-
-  Tool get selectedTool => tools[_selectedToolId];
-
-  void selectTool(Tool tool) {
-    assert(tools.contains(tool));
-    _selectedToolId = tools.indexOf(tool);
-    notifyListeners();
+        _paintBrush = PaintBrush(sharedPreferences),
+        _eraser = Eraser(sharedPreferences),
+        _lasso = Lasso(sharedPreferences) {
+    _selectedTool = _paintBrush;
   }
 
-  void changeToolStrokeWidth(double strokeWidth) {
-    selectedTool.strokeWidth = strokeWidth;
+  PaintBrush get paintBrush => _paintBrush;
+  final PaintBrush _paintBrush;
+
+  Eraser get eraser => _eraser;
+  final Eraser _eraser;
+
+  Lasso get lasso => _lasso;
+  final Lasso _lasso;
+
+  Tool get selectedTool => _selectedTool;
+  Tool _selectedTool;
+
+  void selectTool(Tool tool) {
+    _selectedTool = tool;
     notifyListeners();
   }
 
   void changeToolColor(Color color) {
-    selectedTool.color = color;
-    notifyListeners();
-  }
-
-  void changeToolOpacity(double opacity) {
-    selectedTool.opacity = opacity;
-    notifyListeners();
+    if (selectedTool is ToolWithColor) {
+      (selectedTool as ToolWithColor).color = color;
+      notifyListeners();
+    }
   }
 }

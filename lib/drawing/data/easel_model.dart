@@ -6,7 +6,9 @@ import 'package:mooltik/common/data/debouncer.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
+import 'package:mooltik/drawing/data/frame/selection_stroke.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
+import 'package:mooltik/drawing/data/toolbox/tools/brush.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,6 +43,7 @@ class EaselModel extends ChangeNotifier {
   Frame get frame => _frame;
   Frame _frame;
 
+  Tool get selectedTool => _selectedTool;
   Tool _selectedTool;
 
   final ValueChanged<Frame> onChanged;
@@ -54,6 +57,8 @@ class EaselModel extends ChangeNotifier {
   double _rotation = 0;
   double _prevRotation = 0;
 
+  /// Current zoom level.
+  double get scale => _scale;
   double _scale = 1;
   double _prevScale;
 
@@ -61,6 +66,10 @@ class EaselModel extends ChangeNotifier {
 
   /// Current strokes that are not yet rasterized and added to the frame.
   final List<Stroke> unrasterizedStrokes = [];
+
+  /// Lasso selected area.
+  SelectionStroke get selectionStroke => _selectionStroke;
+  SelectionStroke _selectionStroke;
 
   ImageHistoryStack _historyStack;
 
@@ -86,6 +95,7 @@ class EaselModel extends ChangeNotifier {
   /// Used by provider to update dependency.
   void updateSelectedTool(Tool tool) {
     _selectedTool = tool;
+    removeSelection();
     notifyListeners();
   }
 
@@ -97,6 +107,8 @@ class EaselModel extends ChangeNotifier {
       _diskWriteDebouncer.cancel();
       _frame.saveSnapshot();
     }
+
+    removeSelection();
 
     _frame = frame;
     _historyStack = ImageHistoryStack(
@@ -156,8 +168,8 @@ class EaselModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Offset _toFramePoint(Offset point) {
-    final p = (point - _offset) / _scale;
+  Offset toFramePoint(Offset easelPoint) {
+    final p = (easelPoint - _offset) / _scale;
     return Offset(
       p.dx * cos(_rotation) + p.dy * sin(_rotation),
       -p.dx * sin(_rotation) + p.dy * cos(_rotation),
@@ -186,7 +198,7 @@ class EaselModel extends ChangeNotifier {
   void onScaleStart(ScaleStartDetails details) {
     _prevScale = _scale;
     _prevRotation = _rotation;
-    _fixedFramePoint = _toFramePoint(details.localFocalPoint);
+    _fixedFramePoint = toFramePoint(details.localFocalPoint);
     notifyListeners();
   }
 
@@ -199,36 +211,52 @@ class EaselModel extends ChangeNotifier {
   }
 
   void onStrokeStart(DragStartDetails details) {
-    final framePoint = _toFramePoint(details.localPosition);
-    unrasterizedStrokes.add(
-      _selectedTool.makeStroke(framePoint),
-    );
+    final framePoint = toFramePoint(details.localPosition);
+
+    if (_selectedTool is Brush) {
+      final stroke = Stroke(framePoint, (_selectedTool as Brush).paint);
+      unrasterizedStrokes.add(stroke);
+    } else if (_selectedTool is Lasso) {
+      _selectionStroke = SelectionStroke(framePoint);
+    }
+
     notifyListeners();
   }
 
   void onStrokeUpdate(DragUpdateDetails details) {
-    if (unrasterizedStrokes.isEmpty) return;
+    final framePoint = toFramePoint(details.localPosition);
 
-    final framePoint = _toFramePoint(details.localPosition);
-    unrasterizedStrokes.last.extend(framePoint);
+    if (_selectedTool is Brush) {
+      if (unrasterizedStrokes.isEmpty) return;
+      unrasterizedStrokes.last.extend(framePoint);
+    } else if (_selectedTool is Lasso) {
+      _selectionStroke?.extend(framePoint);
+    }
     notifyListeners();
   }
 
   void onStrokeEnd() {
-    if (unrasterizedStrokes.isEmpty) return;
+    if (_selectedTool is Brush) {
+      if (unrasterizedStrokes.isEmpty) return;
+      unrasterizedStrokes.last.finish();
 
-    unrasterizedStrokes.last.finish();
-
-    if (unrasterizedStrokes.last.boundingRect.overlaps(_frameArea)) {
-      _applyStrokes();
-    } else {
-      unrasterizedStrokes.removeLast();
+      if (unrasterizedStrokes.last.boundingRect.overlaps(_frameArea)) {
+        _applyStrokes();
+      } else {
+        unrasterizedStrokes.removeLast();
+      }
+    } else if (_selectedTool is Lasso) {
+      _selectionStroke?.finish();
+      _selectionStroke?.clipToFrame(_frameArea);
+      if (_selectionStroke.isTooSmall) removeSelection();
     }
 
     notifyListeners();
   }
 
   void onStrokeCancel() {
+    if (_selectedTool is Lasso) removeSelection();
+
     if (unrasterizedStrokes.isEmpty) return;
 
     unrasterizedStrokes.removeLast();
@@ -253,6 +281,11 @@ class EaselModel extends ChangeNotifier {
   void pushSnapshot(ui.Image snapshot) {
     _historyStack.push(snapshot);
     _updateFrame();
+    notifyListeners();
+  }
+
+  void removeSelection() {
+    _selectionStroke = null;
     notifyListeners();
   }
 

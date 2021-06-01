@@ -3,9 +3,13 @@ import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
+import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
+import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/easel/cursor_painter.dart';
+import 'package:mooltik/drawing/ui/lasso/lasso_ui_layer.dart';
 import 'package:mooltik/drawing/ui/frame_painter.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
+import 'package:mooltik/drawing/ui/lasso/transformed_image_layer.dart';
 import 'package:provider/provider.dart';
 
 import 'easel_gesture_detector.dart';
@@ -23,45 +27,61 @@ class _EaselState extends State<Easel> {
     final easel = context.watch<EaselModel>();
     final onion = context.watch<OnionModel>();
     final reelStack = context.watch<ReelStackModel>();
+    final selectedTool = context.watch<ToolboxModel>().selectedTool;
 
     return LayoutBuilder(builder: (context, constraints) {
       easel.updateSize(constraints.biggest);
 
-      return EaselGestureDetector(
-        onStrokeStart: easel.onStrokeStart,
-        onStrokeUpdate: easel.onStrokeUpdate,
-        onStrokeEnd: easel.onStrokeEnd,
-        onStrokeCancel: easel.onStrokeCancel,
-        onScaleStart: easel.onScaleStart,
-        onScaleUpdate: easel.onScaleUpdate,
-        allowDrawingWithFinger: easel.allowDrawingWithFinger,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          EaselGestureDetector(
+            onStrokeStart: easel.onStrokeStart,
+            onStrokeUpdate: easel.onStrokeUpdate,
+            onStrokeEnd: easel.onStrokeEnd,
+            onStrokeCancel: easel.onStrokeCancel,
+            onScaleStart: easel.onScaleStart,
+            onScaleUpdate: easel.onScaleUpdate,
+            allowDrawingWithFinger: easel.allowDrawingWithFinger,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Positioned(
+                  top: easel.canvasTopOffset,
+                  left: easel.canvasLeftOffset,
+                  width: easel.canvasWidth,
+                  height: easel.canvasHeight,
+                  child: Transform.rotate(
+                    alignment: Alignment.topLeft,
+                    angle: easel.canvasRotation,
+                    child: EaselCanvas(
+                      size: easel.frameSize,
+                      frames: reelStack.visibleReels
+                          .map((reel) => reel.currentFrame)
+                          .toList()
+                          .reversed
+                          .toList(),
+                      activeFrame: easel.frame,
+                      beforeActiveFrame: onion.frameBefore,
+                      afterActiveFrame: onion.frameAfter,
+                      strokes: easel.unrasterizedStrokes,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (selectedTool is Lasso)
             Positioned(
               top: easel.canvasTopOffset,
               left: easel.canvasLeftOffset,
-              width: easel.canvasWidth,
-              height: easel.canvasHeight,
               child: Transform.rotate(
                 alignment: Alignment.topLeft,
                 angle: easel.canvasRotation,
-                child: EaselCanvas(
-                  size: easel.frameSize,
-                  frames: reelStack.visibleReels
-                      .map((reel) => reel.currentFrame)
-                      .toList()
-                      .reversed
-                      .toList(),
-                  activeFrame: easel.frame,
-                  beforeActiveFrame: onion.frameBefore,
-                  afterActiveFrame: onion.frameAfter,
-                  strokes: easel.unrasterizedStrokes,
-                ),
+                child: LassoUiLayer(),
               ),
             ),
-          ],
-        ),
+        ],
       );
     });
   }
@@ -171,6 +191,9 @@ class EaselCanvas extends StatelessWidget {
         isComplex: true,
         size: frame.size,
         foregroundPainter: FramePainter(frame: frame, strokes: strokes),
+      ),
+      TransformedImageLayer(
+        frameSize: frame.size,
       ),
     ];
   }
