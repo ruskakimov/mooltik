@@ -40,6 +40,7 @@ void main() async {
   }, FirebaseCrashlytics.instance.recordError);
 
   // Catch errors that happen outside of the Flutter context.
+  // Source: https://firebase.flutter.dev/docs/crashlytics/usage#errors-outside-of-flutter
   Isolate.current.addErrorListener(RawReceivePort((pair) async {
     final List<dynamic> errorAndStacktrace = pair;
     await FirebaseCrashlytics.instance.recordError(
