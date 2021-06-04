@@ -3,10 +3,10 @@ import 'package:mooltik/common/data/project/sound_clip.dart';
 
 class ProjectSaveData {
   ProjectSaveData({
-    this.width,
-    this.height,
-    this.scenes,
-    this.sounds,
+    required this.width,
+    required this.height,
+    required this.scenes,
+    required this.sounds,
   });
 
   ProjectSaveData.fromJson(
@@ -28,7 +28,7 @@ class ProjectSaveData {
         widthKey: width,
         heightKey: height,
         scenesKey: scenes.map((d) => d.toJson()).toList(),
-        soundsKey: sounds?.map((d) => d.toJson())?.toList() ?? [],
+        soundsKey: sounds.map((d) => d.toJson()).toList(),
       };
 
   final double width;
