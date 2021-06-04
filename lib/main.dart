@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:isolate';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -18,14 +21,32 @@ void main() async {
 
   await Firebase.initializeApp();
 
-  // Disable crashlytics in debug mode.
-  if (kDebugMode) {
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
-  }
+  runZonedGuarded(() async {
+    // Enable Crashlytics in non-debug mode.
+    await FirebaseCrashlytics.instance
+        .setCrashlyticsCollectionEnabled(!kDebugMode);
 
-  runApp(App(
-    sharedPreferences: await SharedPreferences.getInstance(),
-  ));
+    // Pass all uncaught errors to Crashlytics.
+    Function originalOnError = FlutterError.onError;
+    FlutterError.onError = (FlutterErrorDetails errorDetails) async {
+      await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+      // Forward to original handler.
+      originalOnError(errorDetails);
+    };
+
+    runApp(App(
+      sharedPreferences: await SharedPreferences.getInstance(),
+    ));
+  }, FirebaseCrashlytics.instance.recordError);
+
+  // Catch errors that happen outside of the Flutter context.
+  Isolate.current.addErrorListener(RawReceivePort((pair) async {
+    final List<dynamic> errorAndStacktrace = pair;
+    await FirebaseCrashlytics.instance.recordError(
+      errorAndStacktrace.first,
+      errorAndStacktrace.last,
+    );
+  }).sendPort);
 }
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
