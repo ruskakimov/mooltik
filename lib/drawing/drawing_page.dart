@@ -56,8 +56,8 @@ class DrawingPage extends StatelessWidget {
             body: MultiProvider(
               providers: [
                 ChangeNotifierProvider.value(value: reelStack.activeReel),
-                ChangeNotifierProxyProvider<FrameReelModel, OnionModel>(
-                  update: (context, reel, model) => model
+                ChangeNotifierProxyProvider<FrameReelModel, OnionModel?>(
+                  update: (context, reel, model) => model!
                     ..updateFrames(reel.frameSeq)
                     ..updateSelectedIndex(reel.currentIndex),
                   create: (context) => OnionModel(
@@ -67,7 +67,7 @@ class DrawingPage extends StatelessWidget {
                   ),
                 ),
                 ChangeNotifierProxyProvider2<FrameReelModel, ToolboxModel,
-                    EaselModel>(
+                    EaselModel?>(
                   create: (context) => EaselModel(
                     frame: context.read<FrameReelModel>().currentFrame,
                     selectedTool: context.read<ToolboxModel>().selectedTool,
@@ -76,16 +76,16 @@ class DrawingPage extends StatelessWidget {
                     },
                     sharedPreferences: context.read<SharedPreferences>(),
                   ),
-                  update: (_, reel, toolbox, easel) => easel
+                  update: (_, reel, toolbox, easel) => easel!
                     ..updateFrame(reel.currentFrame)
                     ..updateSelectedTool(toolbox.selectedTool),
                 ),
-                ChangeNotifierProxyProvider<EaselModel, LassoModel>(
+                ChangeNotifierProxyProvider<EaselModel, LassoModel?>(
                   create: (context) => LassoModel(
                     easel: context.read<EaselModel>(),
                     headerHeight: headerHeight,
                   ),
-                  update: (_, easel, lasso) => lasso
+                  update: (_, easel, lasso) => lasso!
                     ..updateEasel(easel)
                     ..updateHeaderHeight(headerHeight),
                 ),
