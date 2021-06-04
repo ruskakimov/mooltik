@@ -27,11 +27,11 @@ void main() async {
         .setCrashlyticsCollectionEnabled(!kDebugMode);
 
     // Pass all uncaught errors to Crashlytics.
-    Function originalOnError = FlutterError.onError;
+    Function? originalOnError = FlutterError.onError;
     FlutterError.onError = (FlutterErrorDetails errorDetails) async {
       await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
       // Forward to original handler.
-      originalOnError(errorDetails);
+      originalOnError?.call(errorDetails);
     };
 
     runApp(App(
@@ -53,7 +53,10 @@ void main() async {
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 class App extends StatelessWidget {
-  const App({Key key, this.sharedPreferences}) : super(key: key);
+  const App({
+    Key? key,
+    required this.sharedPreferences,
+  }) : super(key: key);
 
   final SharedPreferences sharedPreferences;
 
@@ -81,18 +84,18 @@ class App extends StatelessWidget {
               brightness: Brightness.dark,
               // Primary
               primary: Colors.amber,
-              onPrimary: Colors.grey[900],
+              onPrimary: Colors.grey[900]!,
               primaryVariant: Colors.amberAccent,
               // Secondary
-              secondary: Colors.grey[600],
+              secondary: Colors.grey[600]!,
               onSecondary: Colors.white,
-              secondaryVariant: Colors.grey[800],
+              secondaryVariant: Colors.grey[800]!,
               // Surface
-              surface: Colors.grey[850],
-              onSurface: Colors.grey[100],
+              surface: Colors.grey[850]!,
+              onSurface: Colors.grey[100]!,
               // Background
-              background: Colors.grey[900],
-              onBackground: Colors.grey[100],
+              background: Colors.grey[900]!,
+              onBackground: Colors.grey[100]!,
               // Error
               error: Colors.redAccent,
               onError: Colors.white,

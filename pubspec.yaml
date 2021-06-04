@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.7.0
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -61,6 +61,8 @@ dependencies:
   firebase_core: ^1.2.1
   firebase_analytics: ^8.1.1
   firebase_crashlytics: ^2.0.5
+
+  collection: ^1.15.0-nullsafety.4 # Added by null-safety migration tool. Temp direct import of transitive dependency.
 
 dev_dependencies:
   flutter_test:

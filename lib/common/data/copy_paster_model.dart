@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 
 class CopyPasterModel extends ChangeNotifier {
-  ui.Image get copiedImage => _copiedImage;
-  ui.Image _copiedImage;
+  ui.Image? get copiedImage => _copiedImage;
+  ui.Image? _copiedImage;
 
-  void copyImage(ui.Image image) {
+  void copyImage(ui.Image? image) {
     _copiedImage = image;
     notifyListeners();
   }
@@ -16,7 +16,7 @@ class CopyPasterModel extends ChangeNotifier {
 
   Future<ui.Image> pasteOn(ui.Image destination) async {
     return generateImage(
-      PastePainter(source: _copiedImage, destination: destination),
+      PastePainter(source: _copiedImage!, destination: destination),
       destination.width,
       destination.height,
     );
@@ -25,8 +25,8 @@ class CopyPasterModel extends ChangeNotifier {
 
 class PastePainter extends CustomPainter {
   PastePainter({
-    @required this.source,
-    @required this.destination,
+    required this.source,
+    required this.destination,
   });
 
   final ui.Image source;
