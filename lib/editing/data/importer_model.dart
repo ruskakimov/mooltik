@@ -30,7 +30,7 @@ class ImporterModel extends ChangeNotifier {
     }
   }
 
-  Future<File> _pickSoundFile() async {
+  Future<File?> _pickSoundFile() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: [
@@ -41,6 +41,6 @@ class ImporterModel extends ChangeNotifier {
         'wav',
       ],
     );
-    return result != null ? File(result.files.single.path) : null;
+    return result != null ? File(result.files.single.path!) : null;
   }
 }

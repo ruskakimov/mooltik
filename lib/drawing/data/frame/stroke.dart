@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 
 class Stroke {
   Stroke(Offset startingPoint, this.paint)
-      : assert(startingPoint != null),
-        path = Path()..moveTo(startingPoint.dx, startingPoint.dy),
+      : path = Path()..moveTo(startingPoint.dx, startingPoint.dy),
         _lastPoint = startingPoint;
 
   final Paint paint;

@@ -17,7 +17,7 @@ const _itemPadding = const EdgeInsets.only(
 const _bottomPadding = 8.0;
 
 class FrameReel extends StatelessWidget {
-  const FrameReel({Key key}) : super(key: key);
+  const FrameReel({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +36,9 @@ class FrameReel extends StatelessWidget {
 
 class _FrameReelItemList extends StatefulWidget {
   const _FrameReelItemList({
-    Key key,
-    @required this.width,
-    @required this.itemWidth,
+    Key? key,
+    required this.width,
+    required this.itemWidth,
   }) : super(key: key);
 
   final double width;
@@ -49,7 +49,7 @@ class _FrameReelItemList extends StatefulWidget {
 }
 
 class __FrameReelItemListState extends State<_FrameReelItemList> {
-  ScrollController _controller;
+  ScrollController? _controller;
   bool _showFramePopup = false;
 
   @override
@@ -60,19 +60,19 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
     _controller = ScrollController(
       initialScrollOffset: frameOffset(reel.currentIndex),
     );
-    _controller.addListener(() {
+    _controller!.addListener(() {
       if (centeredFrameIndex != reel.currentIndex) {
         reel.setCurrent(centeredFrameIndex);
       }
     });
   }
 
-  int get centeredFrameIndex => (_controller.offset / widget.itemWidth).round();
+  int get centeredFrameIndex => (_controller!.offset / widget.itemWidth).round();
 
   double frameOffset(int frameIndex) => widget.itemWidth * frameIndex;
 
   bool get snapped =>
-      (_controller.offset - frameOffset(centeredFrameIndex)).abs() < 0.1;
+      (_controller!.offset - frameOffset(centeredFrameIndex)).abs() < 0.1;
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +163,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
 
   void scrollTo(int frameIndex) {
     Future.delayed(Duration.zero, () {
-      _controller.animateTo(
+      _controller!.animateTo(
         frameOffset(frameIndex),
         duration: Duration(milliseconds: 100),
         curve: Curves.easeInOut,
@@ -173,20 +173,20 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
 
   void jumpTo(int frameIndex) {
     final offset = frameOffset(frameIndex);
-    _controller.jumpTo(offset);
+    _controller!.jumpTo(offset);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
     super.dispose();
   }
 }
 
 class _FrameReelItem extends StatelessWidget {
   const _FrameReelItem({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.selected = false,
     this.number,
     this.onTap,
@@ -194,8 +194,8 @@ class _FrameReelItem extends StatelessWidget {
 
   final Widget child;
   final bool selected;
-  final int number;
-  final VoidCallback onTap;
+  final int? number;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

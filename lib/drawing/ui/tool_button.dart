@@ -10,15 +10,15 @@ import 'package:mooltik/drawing/ui/brush_tip_picker.dart';
 
 class ToolButton extends StatefulWidget {
   const ToolButton({
-    Key key,
-    @required this.tool,
+    Key? key,
+    required this.tool,
     this.selected = false,
     this.onTap,
   }) : super(key: key);
 
   final Tool tool;
   final bool selected;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   _ToolButtonState createState() => _ToolButtonState();
@@ -36,7 +36,7 @@ class _ToolButtonState extends State<ToolButton> {
         arrowAnchor: const Alignment(0, 0.8),
         arrowSidePosition: ArrowSidePosition.middle,
         popupBody: BrushPopup(
-          brush: widget.tool,
+          brush: widget.tool as Brush,
           onDone: _closePicker,
         ),
         onTapOutside: _closePicker,
@@ -81,13 +81,13 @@ class _ToolButtonState extends State<ToolButton> {
 
 class BrushPopup extends StatefulWidget {
   const BrushPopup({
-    Key key,
-    @required this.brush,
+    Key? key,
+    required this.brush,
     this.onDone,
   }) : super(key: key);
 
   final Brush brush;
-  final VoidCallback onDone;
+  final VoidCallback? onDone;
 
   @override
   _BrushPopupState createState() => _BrushPopupState();

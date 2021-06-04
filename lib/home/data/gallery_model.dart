@@ -4,7 +4,7 @@ import 'package:mooltik/common/data/project/project.dart';
 import 'package:path/path.dart' as p;
 
 class GalleryModel extends ChangeNotifier {
-  Directory _directory;
+  late Directory _directory;
   List<Project> _projects = [];
 
   List<Project> get projects =>
@@ -32,8 +32,6 @@ class GalleryModel extends ChangeNotifier {
   }
 
   Future<Project> addProject() async {
-    if (_projects == null) throw Exception('Read projects first.');
-
     final project = Project.createIn(_directory);
     _projects.insert(0, project);
 

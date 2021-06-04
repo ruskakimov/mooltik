@@ -8,9 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Manages a stack of frame reels.
 class ReelStackModel extends ChangeNotifier {
   ReelStackModel({
-    @required Scene scene,
-    @required SharedPreferences sharedPreferences,
-    @required CreateNewFrame createNewFrame,
+    required Scene scene,
+    required SharedPreferences sharedPreferences,
+    required CreateNewFrame createNewFrame,
   })  : _scene = scene,
         _sharedPreferences = sharedPreferences,
         _createNewFrame = createNewFrame,
@@ -26,12 +26,12 @@ class ReelStackModel extends ChangeNotifier {
   SharedPreferences _sharedPreferences;
   final CreateNewFrame _createNewFrame;
 
-  final List<FrameReelModel> reels;
+  final List<FrameReelModel?> reels;
 
-  Iterable<FrameReelModel> get visibleReels => reels
+  Iterable<FrameReelModel?> get visibleReels => reels
       .where((reel) => isVisible(reels.indexOf(reel)) || reel == activeReel);
 
-  FrameReelModel get activeReel => reels[_activeReelIndex];
+  FrameReelModel? get activeReel => reels[_activeReelIndex];
   int _activeReelIndex = 0;
 
   void changeActiveReel(FrameReelModel reel) {

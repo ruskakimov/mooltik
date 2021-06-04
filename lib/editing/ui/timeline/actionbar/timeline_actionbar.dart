@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 class TimelineActionbar extends StatelessWidget {
   const TimelineActionbar({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

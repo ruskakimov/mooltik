@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 
 class PlayModeButton extends StatelessWidget {
   const PlayModeButton({
-    Key key,
-    @required this.layerIndex,
+    Key? key,
+    required this.layerIndex,
   }) : super(key: key);
 
   final int layerIndex;
@@ -33,7 +33,7 @@ class PlayModeButton extends StatelessWidget {
     );
   }
 
-  IconData _getIcon(PlayMode playMode) {
+  IconData? _getIcon(PlayMode playMode) {
     switch (playMode) {
       case PlayMode.extendLast:
         return Icons.trending_flat_rounded;
@@ -42,6 +42,5 @@ class PlayModeButton extends StatelessWidget {
       case PlayMode.pingPong:
         return Icons.sync_alt_rounded;
     }
-    return null;
   }
 }

@@ -8,10 +8,10 @@ import 'package:provider/provider.dart';
 
 class FrameMenu extends StatelessWidget {
   const FrameMenu({
-    Key key,
-    @required this.scrollTo,
-    @required this.jumpTo,
-    @required this.closePopup,
+    Key? key,
+    required this.scrollTo,
+    required this.jumpTo,
+    required this.closePopup,
   }) : super(key: key);
 
   final Function(int) scrollTo;
@@ -84,7 +84,7 @@ class FrameMenu extends StatelessWidget {
                   closePopup();
                   final easel = context.read<EaselModel>();
                   final newSnapshot = await copyPaster.pasteOn(
-                    easel.frame.snapshot,
+                    easel.frame.snapshot!,
                   );
                   easel.pushSnapshot(newSnapshot);
                 }

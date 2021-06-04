@@ -6,7 +6,7 @@ import 'package:mooltik/drawing/data/lasso/lasso_model.dart';
 
 class LassoMenu extends StatelessWidget {
   const LassoMenu({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

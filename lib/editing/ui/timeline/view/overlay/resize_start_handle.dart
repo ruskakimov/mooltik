@@ -5,8 +5,8 @@ import 'package:mooltik/editing/ui/timeline/view/overlay/timeline_positioned.dar
 
 class ResizeStartHandle extends StatelessWidget {
   const ResizeStartHandle({
-    Key key,
-    @required this.timelineView,
+    Key? key,
+    required this.timelineView,
   }) : super(key: key);
 
   final TimelineViewModel timelineView;

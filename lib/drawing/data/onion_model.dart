@@ -7,13 +7,10 @@ const _enabledKey = 'onion_enabled';
 
 class OnionModel extends ChangeNotifier {
   OnionModel({
-    @required Sequence<Frame> frames,
-    @required int selectedIndex,
-    @required SharedPreferences sharedPreferences,
-  })  : assert(frames != null),
-        assert(selectedIndex != null),
-        assert(selectedIndex < frames.length),
-        assert(sharedPreferences != null),
+    required Sequence<Frame> frames,
+    required int selectedIndex,
+    required SharedPreferences sharedPreferences,
+  })   : assert(selectedIndex < frames.length),
         _frames = frames,
         _selectedIndex = selectedIndex,
         _preferences = sharedPreferences,
@@ -44,10 +41,10 @@ class OnionModel extends ChangeNotifier {
     await _preferences.setBool(_enabledKey, _enabled);
   }
 
-  Frame get frameBefore =>
+  Frame? get frameBefore =>
       _enabled && _selectedIndex > 0 ? _frames[_selectedIndex - 1] : null;
 
-  Frame get frameAfter => _enabled && _selectedIndex < _frames.length - 1
+  Frame? get frameAfter => _enabled && _selectedIndex < _frames.length - 1
       ? _frames[_selectedIndex + 1]
       : null;
 }

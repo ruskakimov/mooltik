@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppSlider extends StatefulWidget {
   const AppSlider({
-    Key key,
+    Key? key,
     this.height = 44,
     this.value = 0.5,
     this.innerPadding = 3,
@@ -14,21 +14,21 @@ class AppSlider extends StatefulWidget {
   final double height;
   final double innerPadding;
 
-  final IconData icon;
-  final IconData negativeIcon;
+  final IconData? icon;
+  final IconData? negativeIcon;
 
   /// Slider value between 0 and 1.
-  final double value;
+  final double? value;
 
-  final ValueChanged<double> onChanged;
+  final ValueChanged<double>? onChanged;
 
   @override
   _AppSliderState createState() => _AppSliderState();
 }
 
 class _AppSliderState extends State<AppSlider> {
-  double _valueAtDragStart;
-  double _draggedBy;
+  double? _valueAtDragStart;
+  late double _draggedBy;
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +40,11 @@ class _AppSliderState extends State<AppSlider> {
           _draggedBy = 0;
         },
         onHorizontalDragUpdate: (DragUpdateDetails details) {
-          _draggedBy += details.primaryDelta;
+          _draggedBy += details.primaryDelta!;
           final maxWidth = constraints.maxWidth - widget.innerPadding * 2;
-          final newValue =
-              (_valueAtDragStart + _draggedBy / maxWidth).clamp(0.0, 1.0);
-          widget.onChanged?.call(newValue);
+          final num newValue =
+              (_valueAtDragStart! + _draggedBy / maxWidth).clamp(0.0, 1.0);
+          widget.onChanged?.call(newValue as double);
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -63,7 +63,7 @@ class _AppSliderState extends State<AppSlider> {
                     Align(
                       alignment: Alignment(-0.82, 0.0),
                       child: Icon(
-                        widget.value > 0
+                        widget.value! > 0
                             ? widget.icon
                             : widget.negativeIcon ?? widget.icon,
                         color: Colors.grey,
@@ -89,7 +89,7 @@ class _AppSliderState extends State<AppSlider> {
         alignment: Alignment.centerLeft,
         child: LayoutBuilder(
           builder: (context, constraints) => Container(
-            width: constraints.maxWidth * widget.value,
+            width: constraints.maxWidth * widget.value!,
             color: Colors.white,
           ),
         ),

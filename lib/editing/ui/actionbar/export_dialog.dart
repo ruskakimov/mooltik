@@ -5,7 +5,7 @@ import 'package:mooltik/editing/data/exporter_model.dart';
 
 class ExportDialog extends StatelessWidget {
   const ExportDialog({
-    Key key,
+    Key? key,
     this.sideWidth = 280,
     this.loadingStrokeWidth = 20,
   })  : assert(
@@ -59,9 +59,9 @@ class ExportDialog extends StatelessWidget {
 
 class _LoadingIndicator extends StatelessWidget {
   const _LoadingIndicator({
-    Key key,
-    @required this.value,
-    @required this.strokeWidth,
+    Key? key,
+    required this.value,
+    required this.strokeWidth,
   }) : super(key: key);
 
   final double value;
@@ -96,7 +96,7 @@ class _LoadingIndicator extends StatelessWidget {
 }
 
 class _LargeText extends StatelessWidget {
-  const _LargeText(this.text, {Key key}) : super(key: key);
+  const _LargeText(this.text, {Key? key}) : super(key: key);
 
   final String text;
 
@@ -115,13 +115,13 @@ class _LargeText extends StatelessWidget {
 
 class _ExportButton extends StatelessWidget {
   const _ExportButton({
-    Key key,
-    @required this.diameter,
+    Key? key,
+    required this.diameter,
     this.onTap,
   }) : super(key: key);
 
   final double diameter;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

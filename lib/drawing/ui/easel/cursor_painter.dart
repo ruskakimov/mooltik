@@ -3,8 +3,8 @@ import 'package:mooltik/drawing/data/frame/stroke.dart';
 
 class CursorPainter extends CustomPainter {
   CursorPainter({
-    @required this.frameSize,
-    @required this.lastStroke,
+    required this.frameSize,
+    required this.lastStroke,
   });
 
   final Size frameSize;

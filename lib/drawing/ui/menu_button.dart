@@ -6,7 +6,7 @@ import 'package:mooltik/drawing/ui/drawing_menu.dart';
 
 class MenuButton extends StatefulWidget {
   const MenuButton({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

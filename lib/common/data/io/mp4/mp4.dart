@@ -15,7 +15,7 @@ Future<void> mp4Write(
   Directory tempDir,
   ProgressCallback progressCallback,
 ) async {
-  assert(slides != null && slides.isNotEmpty);
+  assert(slides.isNotEmpty);
 
   final concatFile = File(p.join(tempDir.path, 'concat.txt'));
   await concatFile.writeAsString(ffmpegSlideshowConcatDemuxer(slides));
@@ -31,7 +31,7 @@ Future<void> mp4Write(
   config.enableStatisticsCallback((Statistics stats) {
     // print(
     // "Statistics: executionId: ${stats.executionId}, time: ${stats.time}, size: ${stats.size}, bitrate: ${stats.bitrate}, speed: ${stats.speed}, videoFrameNumber: ${stats.videoFrameNumber}, videoQuality: ${stats.videoQuality}, videoFps: ${stats.videoFps}");
-    progressCallback?.call(stats.time / videoDuration.inMilliseconds);
+    progressCallback.call(stats.time / videoDuration.inMilliseconds);
   });
 
   await FlutterFFmpeg().execute(ffmpegCommand(

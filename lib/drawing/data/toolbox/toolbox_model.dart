@@ -5,8 +5,7 @@ import 'tools/tools.dart';
 
 class ToolboxModel extends ChangeNotifier {
   ToolboxModel(SharedPreferences sharedPreferences)
-      : assert(sharedPreferences != null),
-        _paintBrush = PaintBrush(sharedPreferences),
+      : _paintBrush = PaintBrush(sharedPreferences),
         _eraser = Eraser(sharedPreferences),
         _lasso = Lasso(sharedPreferences) {
     _selectedTool = _paintBrush;
@@ -21,8 +20,8 @@ class ToolboxModel extends ChangeNotifier {
   Lasso get lasso => _lasso;
   final Lasso _lasso;
 
-  Tool get selectedTool => _selectedTool;
-  Tool _selectedTool;
+  Tool? get selectedTool => _selectedTool;
+  Tool? _selectedTool;
 
   void selectTool(Tool tool) {
     _selectedTool = tool;

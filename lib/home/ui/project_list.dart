@@ -9,7 +9,7 @@ import '../data/gallery_model.dart';
 
 class ProjectList extends StatefulWidget {
   const ProjectList({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

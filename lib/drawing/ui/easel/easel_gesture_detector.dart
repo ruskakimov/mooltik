@@ -8,7 +8,7 @@ const veryQuickStrokeMaxDuration = Duration(milliseconds: 500);
 
 class EaselGestureDetector extends StatefulWidget {
   EaselGestureDetector({
-    Key key,
+    Key? key,
     this.child,
     this.onStrokeStart,
     this.onStrokeUpdate,
@@ -19,14 +19,14 @@ class EaselGestureDetector extends StatefulWidget {
     this.allowDrawingWithFinger,
   }) : super(key: key);
 
-  final Widget child;
-  final GestureDragStartCallback onStrokeStart;
-  final GestureDragUpdateCallback onStrokeUpdate;
-  final VoidCallback onStrokeEnd;
-  final VoidCallback onStrokeCancel;
-  final GestureScaleStartCallback onScaleStart;
-  final GestureScaleUpdateCallback onScaleUpdate;
-  final bool allowDrawingWithFinger;
+  final Widget? child;
+  final GestureDragStartCallback? onStrokeStart;
+  final GestureDragUpdateCallback? onStrokeUpdate;
+  final VoidCallback? onStrokeEnd;
+  final VoidCallback? onStrokeCancel;
+  final GestureScaleStartCallback? onScaleStart;
+  final GestureScaleUpdateCallback? onScaleUpdate;
+  final bool? allowDrawingWithFinger;
 
   @override
   _EaselGestureDetectorState createState() => _EaselGestureDetectorState();
@@ -35,10 +35,10 @@ class EaselGestureDetector extends StatefulWidget {
 class _EaselGestureDetectorState extends State<EaselGestureDetector> {
   int _prevPointersOnScreen = 0;
   int _pointersOnScreen = 0;
-  Offset _lastContactPoint;
+  late Offset _lastContactPoint;
   bool _startedStroke = false;
   bool _veryQuickStroke = false;
-  PointerDeviceKind _firstPointerKind;
+  PointerDeviceKind? _firstPointerKind;
 
   bool get _firstPointerDown =>
       _prevPointersOnScreen == 0 && _pointersOnScreen == 1;
@@ -105,7 +105,7 @@ class _EaselGestureDetectorState extends State<EaselGestureDetector> {
   }
 
   bool get _blockDrawing =>
-      !widget.allowDrawingWithFinger &&
+      !widget.allowDrawingWithFinger! &&
       _firstPointerKind == PointerDeviceKind.touch;
 
   void _onSinglePointerStart(ScaleStartDetails details) {

@@ -8,7 +8,7 @@ import '../data/gallery_model.dart';
 
 class AddProjectButton extends StatelessWidget {
   const AddProjectButton({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

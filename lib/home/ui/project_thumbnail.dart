@@ -10,13 +10,13 @@ import '../data/gallery_model.dart';
 
 class ProjectThumbnail extends StatefulWidget {
   const ProjectThumbnail({
-    Key key,
-    @required this.thumbnail,
+    Key? key,
+    required this.thumbnail,
     this.onTap,
   }) : super(key: key);
 
   final File thumbnail;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   _ProjectThumbnailState createState() => _ProjectThumbnailState();

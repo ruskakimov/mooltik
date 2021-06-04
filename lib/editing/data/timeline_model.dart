@@ -6,9 +6,9 @@ import 'package:mooltik/common/data/sequence/sequence.dart';
 
 class TimelineModel extends ChangeNotifier {
   TimelineModel({
-    @required this.sceneSeq,
-    @required TickerProvider vsync,
-  })  : assert(sceneSeq != null && sceneSeq.length > 0),
+    required this.sceneSeq,
+    required TickerProvider vsync,
+  })   : assert(sceneSeq.length > 0),
         _playheadController = AnimationController(
           vsync: vsync,
           duration: sceneSeq.totalDuration,

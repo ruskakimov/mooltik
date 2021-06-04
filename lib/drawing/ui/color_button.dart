@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 
 class ColorButton extends StatefulWidget {
-  const ColorButton({Key key}) : super(key: key);
+  const ColorButton({Key? key}) : super(key: key);
 
   @override
   _ColorButtonState createState() => _ColorButtonState();
@@ -65,8 +65,8 @@ class _ColorButtonState extends State<ColorButton> {
 
 class _ColorIndicator extends StatelessWidget {
   const _ColorIndicator({
-    Key key,
-    @required this.color,
+    Key? key,
+    required this.color,
   }) : super(key: key);
 
   final Color color;

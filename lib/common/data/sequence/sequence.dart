@@ -25,9 +25,6 @@ class Sequence<T extends TimeSpan> extends ChangeNotifier {
 
   void operator []=(int index, T span) {
     _validateIndex(index);
-    if (span == null) {
-      throw Exception('Cannot replace span with `null`.');
-    }
     final diff = -_spans[index].duration + span.duration;
     _spans[index] = span;
     _totalDuration += diff;
@@ -177,7 +174,7 @@ class Sequence<T extends TimeSpan> extends ChangeNotifier {
 
   void changeSpanDurationAt(int index, Duration newDuration) {
     _validateIndex(index);
-    this[index] = _spans[index].copyWith(duration: newDuration);
+    this[index] = _spans[index].copyWith(duration: newDuration) as T;
     notifyListeners();
   }
 
