@@ -55,8 +55,10 @@ class DrawingPage extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.background,
             body: MultiProvider(
               providers: [
-                ChangeNotifierProvider.value(value: reelStack.activeReel),
-                ChangeNotifierProxyProvider<FrameReelModel, OnionModel?>(
+                ChangeNotifierProvider<FrameReelModel>.value(
+                  value: reelStack.activeReel!,
+                ),
+                ChangeNotifierProxyProvider<FrameReelModel, OnionModel>(
                   update: (context, reel, model) => model!
                     ..updateFrames(reel.frameSeq)
                     ..updateSelectedIndex(reel.currentIndex),
@@ -67,7 +69,7 @@ class DrawingPage extends StatelessWidget {
                   ),
                 ),
                 ChangeNotifierProxyProvider2<FrameReelModel, ToolboxModel,
-                    EaselModel?>(
+                    EaselModel>(
                   create: (context) => EaselModel(
                     frame: context.read<FrameReelModel>().currentFrame,
                     selectedTool: context.read<ToolboxModel>().selectedTool,
@@ -80,7 +82,7 @@ class DrawingPage extends StatelessWidget {
                     ..updateFrame(reel.currentFrame)
                     ..updateSelectedTool(toolbox.selectedTool),
                 ),
-                ChangeNotifierProxyProvider<EaselModel, LassoModel?>(
+                ChangeNotifierProxyProvider<EaselModel, LassoModel>(
                   create: (context) => LassoModel(
                     easel: context.read<EaselModel>(),
                     headerHeight: headerHeight,
