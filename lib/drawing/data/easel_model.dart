@@ -29,7 +29,7 @@ class EaselModel extends ChangeNotifier {
     required Tool? selectedTool,
     required this.onChanged,
     required SharedPreferences sharedPreferences,
-  })   : _frame = frame,
+  })  : _frame = frame,
         _historyStack = ImageHistoryStack(
           maxCount: maxUndos + 1,
           initialSnapshot: frame.snapshot,
@@ -153,6 +153,9 @@ class EaselModel extends ChangeNotifier {
     onChanged(_frame);
   }
 
+  bool get isFittedToScreen => _fittedToScreen;
+  bool _fittedToScreen = false;
+
   void fitToScreen() {
     if (_easelSize == null) return;
     _scale = min(
@@ -164,6 +167,7 @@ class EaselModel extends ChangeNotifier {
       (_easelSize!.height - frameSize.height * _scale) / 2,
     );
     _rotation = 0;
+    _fittedToScreen = true;
     notifyListeners();
   }
 
@@ -195,6 +199,7 @@ class EaselModel extends ChangeNotifier {
   }
 
   void onScaleStart(ScaleStartDetails details) {
+    _fittedToScreen = false;
     _prevScale = _scale;
     _prevRotation = _rotation;
     _fixedFramePoint = toFramePoint(details.localFocalPoint);

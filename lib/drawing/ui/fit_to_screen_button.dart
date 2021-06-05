@@ -10,17 +10,24 @@ class FitToScreenButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isFittedToScreen = context.select<EaselModel, bool>(
+      (easel) => easel.isFittedToScreen,
+    );
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {
-        context.read<EaselModel>().fitToScreen();
-      },
+      onTap: isFittedToScreen
+          ? null
+          : () => context.read<EaselModel>().fitToScreen(),
       child: SizedBox(
         width: 52,
         height: 44,
-        child: SvgPicture.asset(
-          'assets/fa-solid_expand.svg',
-          fit: BoxFit.none,
+        child: Opacity(
+          opacity: isFittedToScreen ? 0.5 : 1,
+          child: SvgPicture.asset(
+            'assets/fa-solid_expand.svg',
+            fit: BoxFit.none,
+          ),
         ),
       ),
     );
