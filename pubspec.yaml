@@ -61,6 +61,7 @@ dependencies:
   firebase_core: ^1.2.1
   firebase_analytics: ^8.1.1
   firebase_crashlytics: ^2.0.5
+  firebase_messaging: ^10.0.1
 
   collection: ^1.15.0-nullsafety.4 # Added by null-safety migration tool. Temp direct import of transitive dependency.
 
