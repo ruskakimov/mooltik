@@ -20,16 +20,16 @@ enum ExporterState {
 
 class ExporterModel extends ChangeNotifier {
   ExporterModel({
-    @required this.frames,
-    @required this.soundClips,
-    @required this.tempDir,
+    required this.frames,
+    required this.soundClips,
+    required this.tempDir,
   });
 
   /// For output video.
   final Iterable<CompositeFrame> frames;
 
   /// For output audio.
-  final List<SoundClip> soundClips;
+  final List<SoundClip>? soundClips;
 
   /// Temporary directory to store intermediate results.
   final Directory tempDir;
@@ -45,7 +45,7 @@ class ExporterModel extends ChangeNotifier {
   ExporterState get state => _state;
   ExporterState _state = ExporterState.initial;
 
-  String _outputFilePath;
+  String? _outputFilePath;
 
   Future<void> start() async {
     _state = ExporterState.exporting;
@@ -59,7 +59,7 @@ class ExporterModel extends ChangeNotifier {
     await mp4Write(
       videoFile,
       slides,
-      soundClips,
+      soundClips!,
       tempDir,
       (double progress) {
         _progress = progress;

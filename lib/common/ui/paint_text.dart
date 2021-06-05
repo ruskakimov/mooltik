@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 /// Paints text on the canvas.
 void paintText(
   Canvas canvas, {
-  @required String text,
-  @required Offset anchorCoordinate,
+  required String text,
+  required Offset anchorCoordinate,
   Alignment anchorAlignment = Alignment.center,
-  TextStyle style,
+  TextStyle? style,
 }) {
   final TextPainter painter = makeTextPainter(text, style);
   paintWithTextPainter(
@@ -35,7 +35,7 @@ void paintText(
 ///   anchorAlignment: Alignment.centerRight,
 /// );
 /// ```
-TextPainter makeTextPainter(String text, TextStyle style) {
+TextPainter makeTextPainter(String text, TextStyle? style) {
   final TextSpan span = TextSpan(
     text: text,
     style: style,
@@ -49,8 +49,8 @@ TextPainter makeTextPainter(String text, TextStyle style) {
 /// Paints on the canvas with the given text painter.
 void paintWithTextPainter(
   Canvas canvas, {
-  @required TextPainter painter,
-  @required Offset anchorCoordinate,
+  required TextPainter painter,
+  required Offset anchorCoordinate,
   Alignment anchorAlignment = Alignment.center,
 }) {
   painter.paint(

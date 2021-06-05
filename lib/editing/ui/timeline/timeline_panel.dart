@@ -5,7 +5,7 @@ import 'package:mooltik/editing/ui/timeline/view/overlay/playhead.dart';
 
 class TimelinePanel extends StatelessWidget {
   const TimelinePanel({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

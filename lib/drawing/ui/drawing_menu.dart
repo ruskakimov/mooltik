@@ -7,13 +7,13 @@ import 'package:mooltik/drawing/data/onion_model.dart';
 
 class DrawingMenu extends StatelessWidget {
   const DrawingMenu({
-    Key key,
+    Key? key,
     this.width = 320,
     this.onDone,
   }) : super(key: key);
 
   final double width;
-  final VoidCallback onDone;
+  final VoidCallback? onDone;
 
   @override
   Widget build(BuildContext context) {
@@ -88,17 +88,17 @@ class DrawingMenu extends StatelessWidget {
 
 class _MenuTile extends StatelessWidget {
   const _MenuTile({
-    Key key,
-    @required this.icon,
-    @required this.title,
+    Key? key,
+    required this.icon,
+    required this.title,
     this.trailing,
     this.onTap,
   }) : super(key: key);
 
   final IconData icon;
   final String title;
-  final Widget trailing;
-  final VoidCallback onTap;
+  final Widget? trailing;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

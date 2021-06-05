@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/scene.dart';
@@ -19,10 +20,10 @@ const _msPerPxKey = 'timeline_view_ms_per_px';
 
 class TimelineViewModel extends ChangeNotifier {
   TimelineViewModel({
-    @required TimelineModel timeline,
-    @required List<SoundClip> soundClips,
-    @required SharedPreferences sharedPreferences,
-    @required this.createNewFrame,
+    required TimelineModel timeline,
+    required List<SoundClip>? soundClips,
+    required SharedPreferences? sharedPreferences,
+    required this.createNewFrame,
   })  : _timeline = timeline,
         _soundClips = soundClips ?? [],
         _preferences = sharedPreferences,
@@ -31,19 +32,19 @@ class TimelineViewModel extends ChangeNotifier {
     timeline.addListener(notifyListeners);
   }
 
-  SharedPreferences _preferences;
+  SharedPreferences? _preferences;
   final TimelineModel _timeline;
   final List<SoundClip> _soundClips;
-  final CreateNewFrame createNewFrame;
+  final CreateNewFrame? createNewFrame;
 
   bool get isEditingScene => _sceneEdit;
   bool _sceneEdit = false;
 
   double get msPerPx => _msPerPx;
   double _msPerPx;
-  double _prevMsPerPx;
-  double _scaleOffset;
-  Offset _prevFocalPoint;
+  late double _prevMsPerPx;
+  double? _scaleOffset;
+  late Offset _prevFocalPoint;
 
   double get timelineWidth => durationToPx(_timeline.totalDuration, _msPerPx);
 
@@ -54,7 +55,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   void onScaleUpdate(ScaleUpdateDetails details) {
     _scaleOffset ??= 1 - details.scale;
-    _setScale(_prevMsPerPx / (details.scale + _scaleOffset));
+    _setScale(_prevMsPerPx / (details.scale + _scaleOffset!));
 
     final diff = (details.localFocalPoint - _prevFocalPoint);
     var timeDiff = pxToDuration(-diff.dx, _msPerPx);
@@ -69,7 +70,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   void _setScale(double newMsPerPx) {
     _msPerPx = newMsPerPx.clamp(1.0, 100.0);
-    _preferences.setDouble(_msPerPxKey, _msPerPx);
+    _preferences!.setDouble(_msPerPxKey, _msPerPx);
   }
 
   void onScaleEnd(ScaleEndDetails details) {
@@ -81,7 +82,7 @@ class TimelineViewModel extends ChangeNotifier {
     selectSliver(sliver?.id);
   }
 
-  Sliver _getSliverUnderPosition(Offset position) {
+  Sliver? _getSliverUnderPosition(Offset position) {
     bool withinRow(double rowTop, double rowBottom) =>
         position.dy >= rowTop && position.dy <= rowBottom;
 
@@ -90,9 +91,8 @@ class TimelineViewModel extends ChangeNotifier {
       final rowBottom = row.first.area.bottom;
 
       if (withinRow(rowTop, rowBottom)) {
-        return row.firstWhere(
+        return row.firstWhereOrNull(
           (sliver) => sliver.area.contains(position),
-          orElse: () => null,
         );
       }
     }
@@ -142,7 +142,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   Duration get sceneEnd => _timeline.currentSceneEnd;
 
-  List<List<Sliver>> _renderedSliverRows;
+  late List<List<Sliver>> _renderedSliverRows;
 
   List<List<Sliver>> getSliverRows() {
     final rows = <List<Sliver>>[];
@@ -199,10 +199,10 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   Iterable<ImageSliver> frameSliverRow({
-    @required Iterable<Rect> areas,
-    @required Iterable<Frame> frames,
-    @required int numberOfRealFrames,
-    @required int rowIndex,
+    required Iterable<Rect> areas,
+    required Iterable<Frame> frames,
+    required int numberOfRealFrames,
+    required int rowIndex,
   }) sync* {
     int frameIndex = 0;
     final areaIt = areas.iterator;
@@ -225,9 +225,9 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   Iterable<VideoSliver> sceneSliverRow({
-    @required Iterable<Rect> areas,
-    @required Iterable<Scene> scenes,
-    @required int rowIndex,
+    required Iterable<Rect> areas,
+    required Iterable<Scene> scenes,
+    required int rowIndex,
   }) sync* {
     int sceneIndex = 0;
     final areaIt = areas.iterator;
@@ -251,8 +251,8 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   Iterable<SoundSliver> soundSliverRow({
-    @required double rowTop,
-    @required double rowBottom,
+    required double rowTop,
+    required double rowBottom,
   }) {
     return _soundClips.map((soundClip) => SoundSliver(
           area: Rect.fromLTRB(
@@ -265,9 +265,9 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   Iterable<Rect> timeSpanAreas({
-    @required Iterable<TimeSpan> timeSpans,
-    @required double top,
-    @required double bottom,
+    required Iterable<TimeSpan> timeSpans,
+    required double top,
+    required double bottom,
     Duration start = Duration.zero,
   }) sync* {
     for (final timeSpan in timeSpans) {
@@ -285,14 +285,14 @@ class TimelineViewModel extends ChangeNotifier {
   // Selected sliver operations:
   // ===========================
 
-  SliverId get selectedSliverId => _selectedSliverId;
-  SliverId _selectedSliverId;
+  SliverId? get selectedSliverId => _selectedSliverId;
+  SliverId? _selectedSliverId;
 
-  Sequence<TimeSpan> get selectedSliverSequence => _selectedSliverId != null
-      ? sequenceRows[_selectedSliverId.rowIndex]
+  Sequence<TimeSpan>? get selectedSliverSequence => _selectedSliverId != null
+      ? sequenceRows[_selectedSliverId!.rowIndex]
       : null;
 
-  void selectSliver(SliverId sliverId) {
+  void selectSliver(SliverId? sliverId) {
     if (_timeline.isPlaying) _timeline.pause();
     _selectedSliverId = sliverId;
     notifyListeners();
@@ -302,15 +302,15 @@ class TimelineViewModel extends ChangeNotifier {
 
   bool get showSliverMenu => _selectedSliverId != null;
 
-  double get selectedSliverMidY => rowMiddle(_selectedSliverId.rowIndex);
+  double get selectedSliverMidY => rowMiddle(_selectedSliverId!.rowIndex);
 
   bool get showResizeStartHandle =>
-      showSliverMenu && _selectedSliverId.spanIndex != 0;
+      showSliverMenu && _selectedSliverId!.spanIndex != 0;
 
   bool get showResizeEndHandle => showSliverMenu;
 
   TimeSpan get selectedSpan =>
-      selectedSliverSequence[_selectedSliverId.spanIndex];
+      selectedSliverSequence![_selectedSliverId!.spanIndex];
   Frame get selectedFrame => selectedSpan as Frame;
   Scene get selectedScene => selectedSpan as Scene;
 
@@ -321,7 +321,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   void editScene() {
     if (isEditingScene) return;
-    _timeline.sceneSeq.currentIndex = _selectedSliverId.spanIndex;
+    _timeline.sceneSeq.currentIndex = _selectedSliverId!.spanIndex;
     _sceneEdit = true;
     _timeline.isSceneBound = true;
     removeSliverSelection();
@@ -349,13 +349,13 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   bool get canDeleteSelected => selectedSliverSequence != null
-      ? selectedSliverSequence.length > 1
+      ? selectedSliverSequence!.length > 1
       : false;
 
   void deleteSelected() {
     if (_selectedSliverId == null) return;
     if (!canDeleteSelected) return;
-    selectedSliverSequence.removeAt(_selectedSliverId.spanIndex);
+    selectedSliverSequence!.removeAt(_selectedSliverId!.spanIndex);
     removeSliverSelection();
     notifyListeners();
   }
@@ -365,13 +365,13 @@ class TimelineViewModel extends ChangeNotifier {
     final duplicate = isEditingScene
         ? await _duplicateFrame(selectedFrame)
         : await _duplicateScene(selectedScene);
-    selectedSliverSequence.insert(_selectedSliverId.spanIndex + 1, duplicate);
+    selectedSliverSequence!.insert(_selectedSliverId!.spanIndex + 1, duplicate);
     removeSliverSelection();
     notifyListeners();
   }
 
   Future<Frame> _duplicateFrame(Frame frame) async {
-    final newFrame = await createNewFrame();
+    final newFrame = await createNewFrame!();
     return frame.copyWith(file: newFrame.file)..saveSnapshot();
   }
 
@@ -390,8 +390,8 @@ class TimelineViewModel extends ChangeNotifier {
 
   Duration get selectedSliverStartTime => isEditingScene
       ? sceneStart +
-          selectedSliverSequence.startTimeOf(_selectedSliverId.spanIndex)
-      : selectedSliverSequence.startTimeOf(_selectedSliverId.spanIndex);
+          selectedSliverSequence!.startTimeOf(_selectedSliverId!.spanIndex)
+      : selectedSliverSequence!.startTimeOf(_selectedSliverId!.spanIndex);
 
   /// Handle start time drag handle's new [updatedTimestamp].
   void onStartTimeHandleDragUpdate(Duration updatedTimestamp) {
@@ -403,21 +403,21 @@ class TimelineViewModel extends ChangeNotifier {
     final newSelectedDuration = selectedSliverEndTime - updatedTimestamp;
     final diff = newSelectedDuration - _selectedSliverDuration;
     final newPrevDuration =
-        selectedSliverSequence[_selectedSliverId.spanIndex - 1].duration - diff;
+        selectedSliverSequence![_selectedSliverId!.spanIndex - 1].duration - diff;
 
     if (newPrevDuration < TimeSpan.singleFrameDuration) return;
 
-    selectedSliverSequence.changeSpanDurationAt(
-        _selectedSliverId.spanIndex - 1, newPrevDuration);
-    selectedSliverSequence.changeSpanDurationAt(
-        _selectedSliverId.spanIndex, newSelectedDuration);
+    selectedSliverSequence!.changeSpanDurationAt(
+        _selectedSliverId!.spanIndex - 1, newPrevDuration);
+    selectedSliverSequence!.changeSpanDurationAt(
+        _selectedSliverId!.spanIndex, newSelectedDuration);
     notifyListeners();
   }
 
   Duration get selectedSliverEndTime => isEditingScene
       ? sceneStart +
-          selectedSliverSequence.endTimeOf(_selectedSliverId.spanIndex)
-      : selectedSliverSequence.endTimeOf(_selectedSliverId.spanIndex);
+          selectedSliverSequence!.endTimeOf(_selectedSliverId!.spanIndex)
+      : selectedSliverSequence!.endTimeOf(_selectedSliverId!.spanIndex);
 
   /// Handle end time drag handle's new [updatedTimestamp].
   void onEndTimeHandleDragUpdate(Duration updatedTimestamp) {
@@ -427,8 +427,8 @@ class TimelineViewModel extends ChangeNotifier {
     updatedTimestamp = TimeSpan.roundDurationToFrames(updatedTimestamp);
     final newDuration = updatedTimestamp - selectedSliverStartTime;
 
-    selectedSliverSequence.changeSpanDurationAt(
-        _selectedSliverId.spanIndex, newDuration);
+    selectedSliverSequence!.changeSpanDurationAt(
+        _selectedSliverId!.spanIndex, newDuration);
     notifyListeners();
   }
 

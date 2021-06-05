@@ -5,7 +5,7 @@ import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:provider/provider.dart';
 
 class TimeLabel extends StatelessWidget {
-  const TimeLabel({Key key}) : super(key: key);
+  const TimeLabel({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +29,8 @@ class TimeLabel extends StatelessWidget {
 
 class _PlayheadTimeLabel extends StatelessWidget {
   const _PlayheadTimeLabel({
-    Key key,
-    @required this.style,
+    Key? key,
+    required this.style,
   }) : super(key: key);
 
   final TextStyle style;
@@ -48,8 +48,8 @@ class _PlayheadTimeLabel extends StatelessWidget {
 
 class _TotalTimeLabel extends StatelessWidget {
   const _TotalTimeLabel({
-    Key key,
-    @required this.style,
+    Key? key,
+    required this.style,
   }) : super(key: key);
 
   final TextStyle style;

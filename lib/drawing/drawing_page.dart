@@ -55,9 +55,11 @@ class DrawingPage extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.background,
             body: MultiProvider(
               providers: [
-                ChangeNotifierProvider.value(value: reelStack.activeReel),
+                ChangeNotifierProvider<FrameReelModel>.value(
+                  value: reelStack.activeReel!,
+                ),
                 ChangeNotifierProxyProvider<FrameReelModel, OnionModel>(
-                  update: (context, reel, model) => model
+                  update: (context, reel, model) => model!
                     ..updateFrames(reel.frameSeq)
                     ..updateSelectedIndex(reel.currentIndex),
                   create: (context) => OnionModel(
@@ -76,7 +78,7 @@ class DrawingPage extends StatelessWidget {
                     },
                     sharedPreferences: context.read<SharedPreferences>(),
                   ),
-                  update: (_, reel, toolbox, easel) => easel
+                  update: (_, reel, toolbox, easel) => easel!
                     ..updateFrame(reel.currentFrame)
                     ..updateSelectedTool(toolbox.selectedTool),
                 ),
@@ -85,7 +87,7 @@ class DrawingPage extends StatelessWidget {
                     easel: context.read<EaselModel>(),
                     headerHeight: headerHeight,
                   ),
-                  update: (_, easel, lasso) => lasso
+                  update: (_, easel, lasso) => lasso!
                     ..updateEasel(easel)
                     ..updateHeaderHeight(headerHeight),
                 ),

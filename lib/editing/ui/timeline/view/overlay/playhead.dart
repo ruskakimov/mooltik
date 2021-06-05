@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Playhead extends StatelessWidget {
   const Playhead({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

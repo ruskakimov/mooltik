@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-
 /// A limited stack of historical snapshots for one frame.
 class ImageHistoryStack {
   /// Creates a stack with [maxCount] maximum number of images.
@@ -10,21 +8,21 @@ class ImageHistoryStack {
   ///
   /// Maximum number of consecutive undos would be `[maxCount] - 1`.
   ImageHistoryStack({
-    @required this.maxCount,
-    Image initialSnapshot,
+    required this.maxCount,
+    Image? initialSnapshot,
   }) : _snapshots = [initialSnapshot];
 
   /// Maximum number of historical snapshots in the stack.
   final int maxCount;
 
   /// List with historical snapshots.
-  final List<Image> _snapshots;
+  final List<Image?> _snapshots;
 
   int _currentSnapshotIndex = 0;
 
   /// Snapshot visible to the user.
   /// `null` represents an empty snapshot.
-  Image get currentSnapshot => _snapshots[_currentSnapshotIndex];
+  Image? get currentSnapshot => _snapshots[_currentSnapshotIndex];
 
   /// Push a new [snapshot] in place of [currentSnapshot].
   void push(Image snapshot) {

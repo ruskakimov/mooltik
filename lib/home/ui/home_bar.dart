@@ -4,7 +4,7 @@ import 'bin_button.dart';
 
 class HomeBar extends StatelessWidget {
   const HomeBar({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -25,7 +25,7 @@ class HomeBar extends StatelessWidget {
 
 class _Logo extends StatelessWidget {
   const _Logo({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

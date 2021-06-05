@@ -18,54 +18,56 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.7.0
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   
   # State management:
-  provider: ^4.3.2+2
-  equatable: ^2.0.0
+  provider: ^5.0.0
+  equatable: ^2.0.2
 
   # UI:
-  font_awesome_flutter: ^8.8.1
-  flutter_portal: ^0.3.0
-  flutter_slidable: ^0.5.7
-  material_design_icons_flutter: 4.0.5955
+  font_awesome_flutter: ^9.0.0
+  flutter_portal: ^0.4.0
+  flutter_slidable: ^0.6.0
+  material_design_icons_flutter: ^5.0.5955-rc.1
   path_drawing: ^0.5.1
   matrix4_transform: ^2.0.0
 
   # App permissions:
-  permission_handler: ^7.0.0
+  permission_handler: ^8.0.1
 
   # Save user data:
-  path_provider: ^2.0.0
-  shared_preferences: ^2.0.5
+  path_provider: ^2.0.2
+  shared_preferences: ^2.0.6
 
   # Audio playback:
-  just_audio: ^0.7.4
+  just_audio: ^0.7.5
 
   # Import assets:
-  file_picker: ^3.0.1
+  file_picker: ^3.0.2+2
 
   # Open links:
-  url_launcher: ^6.0.3
+  url_launcher: ^6.0.6
 
   # Export video:
-  flutter_ffmpeg: ^0.3.0
-  image_gallery_saver: ^1.5.0
-  open_file: ^3.0.3
+  flutter_ffmpeg: ^0.4.0
+  image_gallery_saver: ^1.6.9
+  open_file: ^3.2.1
 
   # Analytics:
-  firebase_core: ^1.0.4
-  firebase_analytics: ^7.0.1
-  firebase_crashlytics: ^2.0.1
+  firebase_core: ^1.2.1
+  firebase_analytics: ^8.1.1
+  firebase_crashlytics: ^2.0.5
+
+  collection: ^1.15.0-nullsafety.4 # Added by null-safety migration tool. Temp direct import of transitive dependency.
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  quiver: ^2.1.0
+  quiver: ^3.0.1
   flutter_launcher_icons: ^0.9.0
 
 flutter_icons:

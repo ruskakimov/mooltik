@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 class TransformedImageLayer extends StatelessWidget {
   const TransformedImageLayer({
-    Key key,
-    @required this.frameSize,
+    Key? key,
+    required this.frameSize,
   }) : super(key: key);
 
   final Size frameSize;

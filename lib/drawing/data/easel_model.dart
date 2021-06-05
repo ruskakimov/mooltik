@@ -25,12 +25,11 @@ const _allowDrawingWithFingerKey = 'allow_drawing_with_finger';
 
 class EaselModel extends ChangeNotifier {
   EaselModel({
-    @required Frame frame,
-    @required Tool selectedTool,
-    @required this.onChanged,
-    @required SharedPreferences sharedPreferences,
-  })  : assert(sharedPreferences != null),
-        _frame = frame,
+    required Frame frame,
+    required Tool? selectedTool,
+    required this.onChanged,
+    required SharedPreferences sharedPreferences,
+  })   : _frame = frame,
         _historyStack = ImageHistoryStack(
           maxCount: maxUndos + 1,
           initialSnapshot: frame.snapshot,
@@ -43,14 +42,14 @@ class EaselModel extends ChangeNotifier {
   Frame get frame => _frame;
   Frame _frame;
 
-  Tool get selectedTool => _selectedTool;
-  Tool _selectedTool;
+  Tool? get selectedTool => _selectedTool;
+  Tool? _selectedTool;
 
   final ValueChanged<Frame> onChanged;
 
   Size get frameSize => _frame.size;
 
-  Size _easelSize;
+  Size? _easelSize;
 
   Offset _offset = Offset.zero;
 
@@ -60,16 +59,16 @@ class EaselModel extends ChangeNotifier {
   /// Current zoom level.
   double get scale => _scale;
   double _scale = 1;
-  double _prevScale;
+  late double _prevScale;
 
-  Offset _fixedFramePoint;
+  late Offset _fixedFramePoint;
 
   /// Current strokes that are not yet rasterized and added to the frame.
   final List<Stroke> unrasterizedStrokes = [];
 
   /// Lasso selected area.
-  SelectionStroke get selectionStroke => _selectionStroke;
-  SelectionStroke _selectionStroke;
+  SelectionStroke? get selectionStroke => _selectionStroke;
+  SelectionStroke? _selectionStroke;
 
   ImageHistoryStack _historyStack;
 
@@ -93,7 +92,7 @@ class EaselModel extends ChangeNotifier {
   Rect get _frameArea => Rect.fromLTWH(0, 0, frameSize.width, frameSize.height);
 
   /// Used by provider to update dependency.
-  void updateSelectedTool(Tool tool) {
+  void updateSelectedTool(Tool? tool) {
     _selectedTool = tool;
     removeSelection();
     notifyListeners();
@@ -124,7 +123,7 @@ class EaselModel extends ChangeNotifier {
 
     if (_easelSize != size) {
       _easelSize = size;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
         fitToScreen();
       });
     } else {
@@ -157,12 +156,12 @@ class EaselModel extends ChangeNotifier {
   void fitToScreen() {
     if (_easelSize == null) return;
     _scale = min(
-      _easelSize.height / frameSize.height,
-      _easelSize.width / frameSize.width,
+      _easelSize!.height / frameSize.height,
+      _easelSize!.width / frameSize.width,
     );
     _offset = Offset(
-      (_easelSize.width - frameSize.width * _scale) / 2,
-      (_easelSize.height - frameSize.height * _scale) / 2,
+      (_easelSize!.width - frameSize.width * _scale) / 2,
+      (_easelSize!.height - frameSize.height * _scale) / 2,
     );
     _rotation = 0;
     notifyListeners();
@@ -248,7 +247,7 @@ class EaselModel extends ChangeNotifier {
     } else if (_selectedTool is Lasso) {
       _selectionStroke?.finish();
       _selectionStroke?.clipToFrame(_frameArea);
-      if (_selectionStroke.isTooSmall) removeSelection();
+      if (_selectionStroke!.isTooSmall) removeSelection();
     }
 
     notifyListeners();
@@ -272,8 +271,8 @@ class EaselModel extends ChangeNotifier {
   Future<ui.Image> _generateLastSnapshot() async {
     final snapshot = await generateImage(
       FramePainter(frame: _frame, strokes: unrasterizedStrokes),
-      _frame.width.toInt(),
-      _frame.height.toInt(),
+      _frame.width!.toInt(),
+      _frame.height!.toInt(),
     );
     return snapshot;
   }
@@ -295,7 +294,7 @@ class EaselModel extends ChangeNotifier {
 
   SharedPreferences _preferences;
 
-  bool get allowDrawingWithFinger => _allowDrawingWithFinger ?? true;
+  bool get allowDrawingWithFinger => _allowDrawingWithFinger;
   bool _allowDrawingWithFinger;
 
   Future<void> toggleDrawingWithFinger() async {

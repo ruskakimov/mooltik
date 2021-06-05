@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart' show CustomPainter;
 
 Future<Image> generateImage(
-  CustomPainter painter,
+  CustomPainter? painter,
   int width,
   int height,
 ) async {

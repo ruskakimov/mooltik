@@ -7,7 +7,7 @@ class Debouncer {
   Debouncer(this.timeout);
 
   final Duration timeout;
-  Timer _timer;
+  Timer? _timer;
 
   bool get isActive => _timer?.isActive ?? false;
 

@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 
 class LabeledIconButton extends StatelessWidget {
   const LabeledIconButton({
-    Key key,
-    @required this.icon,
+    Key? key,
+    required this.icon,
     this.iconTransform,
-    @required this.label,
-    @required this.color,
+    required this.label,
+    required this.color,
     this.onTap,
   }) : super(key: key);
 
   final IconData icon;
-  final Matrix4 iconTransform;
+  final Matrix4? iconTransform;
   final String label;
   final Color color;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

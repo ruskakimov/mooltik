@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 class VisibilityButton extends StatelessWidget {
   const VisibilityButton({
-    Key key,
-    @required this.layerIndex,
+    Key? key,
+    required this.layerIndex,
   }) : super(key: key);
 
   final int layerIndex;

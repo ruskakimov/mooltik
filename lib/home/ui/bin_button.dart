@@ -7,7 +7,7 @@ import 'bin_contents.dart';
 
 class BinButton extends StatefulWidget {
   const BinButton({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

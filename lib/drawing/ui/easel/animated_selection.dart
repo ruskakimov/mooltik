@@ -3,8 +3,8 @@ import 'package:path_drawing/path_drawing.dart';
 
 class AnimatedSelection extends StatefulWidget {
   const AnimatedSelection({
-    Key key,
-    @required this.selection,
+    Key? key,
+    required this.selection,
   }) : super(key: key);
 
   final Path selection;
@@ -15,7 +15,7 @@ class AnimatedSelection extends StatefulWidget {
 
 class _AnimatedSelectionState extends State<AnimatedSelection>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
+  late AnimationController controller;
 
   @override
   void initState() {
@@ -23,15 +23,14 @@ class _AnimatedSelectionState extends State<AnimatedSelection>
     controller = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
-    );
-    controller
+    )
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           controller.reset();
           controller.forward();
         }
-      });
-    controller.forward();
+      })
+      ..forward();
   }
 
   @override
@@ -59,8 +58,8 @@ class _AnimatedSelectionState extends State<AnimatedSelection>
 
 class SelectionPainter extends CustomPainter {
   SelectionPainter({
-    @required this.selection,
-    @required this.animationProgress,
+    required this.selection,
+    required this.animationProgress,
   });
 
   final Path selection;

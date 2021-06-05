@@ -24,7 +24,7 @@ class SaveDataTranscoder {
     final frames = json['frames'] as List;
     final totalDuration = frames.fold(
       Duration.zero,
-      (d, frame) => d + (frame['duration'] as String).parseDuration(),
+      (dynamic d, frame) => d + (frame['duration'] as String).parseDuration(),
     );
 
     return {

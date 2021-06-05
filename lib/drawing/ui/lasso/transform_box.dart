@@ -19,8 +19,8 @@ const _knobPositions = [
 
 class TransformBox extends StatelessWidget {
   const TransformBox({
-    Key key,
-    @required this.size,
+    Key? key,
+    required this.size,
   }) : super(key: key);
 
   final Size size;
@@ -129,7 +129,7 @@ class TransformBox extends StatelessWidget {
 
 class RotationHandle extends StatelessWidget {
   const RotationHandle({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -144,11 +144,11 @@ class RotationHandle extends StatelessWidget {
 
 class Knob extends StatelessWidget {
   const Knob({
-    Key key,
+    Key? key,
     this.color,
   }) : super(key: key);
 
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {

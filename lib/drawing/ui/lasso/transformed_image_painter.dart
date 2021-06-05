@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 /// Paints transformed image over the frame. Must be the size of the frame.
 class TransformedImagePainter extends CustomPainter {
   TransformedImagePainter({
-    @required this.transformedImage,
-    @required this.transform,
+    required this.transformedImage,
+    required this.transform,
     this.background,
   });
 
-  final ui.Image transformedImage;
+  final ui.Image? transformedImage;
   final Matrix4 transform;
-  final ui.Image background;
+  final ui.Image? background;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -19,7 +19,7 @@ class TransformedImagePainter extends CustomPainter {
 
     if (background != null) {
       canvas.drawImage(
-        background,
+        background!,
         Offset.zero,
         Paint()
           ..isAntiAlias = true
@@ -30,7 +30,7 @@ class TransformedImagePainter extends CustomPainter {
     canvas.transform(transform.storage);
 
     canvas.drawImage(
-      transformedImage,
+      transformedImage!,
       Offset.zero,
       Paint()
         ..isAntiAlias = true

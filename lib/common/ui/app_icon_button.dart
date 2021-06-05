@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 class AppIconButton extends StatelessWidget {
   const AppIconButton({
-    Key key,
+    Key? key,
     this.icon,
     this.iconSize = 20,
     this.selected = false,
     this.onTap,
   }) : super(key: key);
 
-  final IconData icon;
+  final IconData? icon;
   final double iconSize;
   final bool selected;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

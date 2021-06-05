@@ -13,9 +13,9 @@ import 'package:mooltik/drawing/ui/lasso/transformed_image_painter.dart';
 
 class LassoModel extends ChangeNotifier {
   LassoModel({
-    @required EaselModel easel,
-    @required double headerHeight,
-  })  : _easel = easel,
+    required EaselModel easel,
+    required double headerHeight,
+  })   : _easel = easel,
         _headerHeight = headerHeight {
     _easel.addListener(() {
       if (_easel.selectedTool is! Lasso) endTransformMode();
@@ -38,19 +38,19 @@ class LassoModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  SelectionStroke get selectionStroke => _easel.selectionStroke;
+  SelectionStroke? get selectionStroke => _easel.selectionStroke;
 
   Offset get selectionOffset =>
-      selectionStroke.boundingRect.topLeft * _easel.scale;
+      selectionStroke!.boundingRect.topLeft * _easel.scale;
 
   Path get selectionPath =>
-      selectionStroke.path.transform(_selectionPathTransform.storage);
+      selectionStroke!.path.transform(_selectionPathTransform.storage);
 
   Matrix4 get _selectionPathTransform => Matrix4.identity()
     ..scale(_easel.scale)
     ..translate(
-      -selectionStroke.boundingRect.left,
-      -selectionStroke.boundingRect.top,
+      -selectionStroke!.boundingRect.left,
+      -selectionStroke!.boundingRect.top,
     );
 
   bool get finishedSelection => selectionStroke?.finished ?? false;
@@ -103,11 +103,11 @@ class LassoModel extends ChangeNotifier {
 
   Offset get transformBoxCenterOffset =>
       _transformBoxCenterOffset * _easel.scale;
-  Offset _transformBoxCenterOffset; // frame point
+  Offset _transformBoxCenterOffset = Offset.zero; // frame point
 
   /// Box rotation value in radians.
   double get transformBoxRotation => _transformBoxRotation;
-  double _transformBoxRotation;
+  double _transformBoxRotation = 0;
 
   Size get transformBoxDisplaySize => transformBoxAbsoluteSize * _easel.scale;
 
@@ -116,14 +116,14 @@ class LassoModel extends ChangeNotifier {
         _transformBoxSize.height.abs(),
       );
 
-  Size _transformBoxSize;
+  Size _transformBoxSize = Size.zero;
 
   bool get isFlippedVertically => _transformBoxSize.height < 0;
 
   bool get isFlippedHorizontally => _transformBoxSize.width < 0;
 
-  ui.Image get transformImage => _transformImage;
-  ui.Image _transformImage;
+  ui.Image? get transformImage => _transformImage;
+  ui.Image? _transformImage;
 
   Matrix4 get imageTransform {
     var t = Matrix4Transform();
@@ -136,14 +136,14 @@ class LassoModel extends ChangeNotifier {
     if (isFlippedVertically) t = t.flipVertically(origin: halfSize);
 
     t = t.scaleBy(
-      x: transformBoxAbsoluteSize.width / transformImage.width,
-      y: transformBoxAbsoluteSize.height / transformImage.height,
+      x: transformBoxAbsoluteSize.width / transformImage!.width,
+      y: transformBoxAbsoluteSize.height / transformImage!.height,
     );
 
     return t.matrix4;
   }
 
-  String _framePathWithErasedOriginal;
+  String? _framePathWithErasedOriginal;
 
   Future<void> _launchTransformMode(bool eraseOriginal) async {
     if (isTransformMode) return;
@@ -157,8 +157,8 @@ class LassoModel extends ChangeNotifier {
     }
 
     // Position box:
-    _transformBoxCenterOffset = selectionStroke.boundingRect.center;
-    _transformBoxSize = selectionStroke.boundingRect.size;
+    _transformBoxCenterOffset = selectionStroke!.boundingRect.center;
+    _transformBoxSize = selectionStroke!.boundingRect.size;
     _transformBoxRotation = 0;
 
     await _setTransformImage();
@@ -169,7 +169,7 @@ class LassoModel extends ChangeNotifier {
     _transformImage = await generateImage(
       MaskedImagePainter(
         original: _easel.frame.snapshot,
-        mask: selectionStroke.path,
+        mask: selectionStroke!.path,
       ),
       _transformBoxSize.width.toInt(),
       _transformBoxSize.height.toInt(),
@@ -185,9 +185,9 @@ class LassoModel extends ChangeNotifier {
     await _pasteTransformedImage();
 
     // Remove box:
-    _transformBoxCenterOffset = null;
-    _transformBoxSize = null;
-    _transformBoxRotation = null;
+    _transformBoxCenterOffset = Offset.zero;
+    _transformBoxSize = Size.zero;
+    _transformBoxRotation = 0;
 
     _transformImage = null;
     notifyListeners();
@@ -200,8 +200,8 @@ class LassoModel extends ChangeNotifier {
         transform: imageTransform,
         background: _easel.frame.snapshot,
       ),
-      _easel.frame.width.toInt(),
-      _easel.frame.height.toInt(),
+      _easel.frame.width!.toInt(),
+      _easel.frame.height!.toInt(),
     );
 
     // Remove snapshot with erased original used during transform.
@@ -226,8 +226,8 @@ class LassoModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  double _xDragDirection;
-  double _yDragDirection;
+  double _xDragDirection = 1;
+  double _yDragDirection = 1;
 
   void onKnobStart(Alignment knobPosition) {
     _xDragDirection = _transformBoxSize.width.sign;
@@ -246,8 +246,8 @@ class LassoModel extends ChangeNotifier {
   }
 
   void onKnobEnd(Alignment knobPosition) {
-    _xDragDirection = null;
-    _yDragDirection = null;
+    _xDragDirection = 1;
+    _yDragDirection = 1;
   }
 
   void onRotationKnobDrag(DragUpdateDetails details) {
@@ -274,20 +274,20 @@ class LassoModel extends ChangeNotifier {
 
   void _fillSelection() {
     final fillColor = (_easel.selectedTool as Lasso).color;
-    selectionStroke.setColorPaint(fillColor);
+    selectionStroke!.setColorPaint(fillColor);
     _applySelectionStrokeToFrame();
   }
 
   void _eraseSelection() {
-    selectionStroke.setErasingPaint();
+    selectionStroke!.setErasingPaint();
     _applySelectionStrokeToFrame();
   }
 
   Future<void> _applySelectionStrokeToFrame() async {
     final snapshot = await generateImage(
       FramePainter(frame: _easel.frame, strokes: [selectionStroke]),
-      _easel.frame.width.toInt(),
-      _easel.frame.height.toInt(),
+      _easel.frame.width!.toInt(),
+      _easel.frame.height!.toInt(),
     );
     _easel.pushSnapshot(snapshot);
   }

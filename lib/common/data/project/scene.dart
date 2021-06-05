@@ -10,28 +10,28 @@ import 'package:mooltik/drawing/data/frame/frame.dart';
 
 class Scene extends TimeSpan {
   Scene({
-    @required this.layers,
+    required this.layers,
     Duration duration = const Duration(seconds: 5),
     this.description,
   }) : super(duration);
 
   final List<SceneLayer> layers;
-  final String description;
+  final String? description;
 
   Iterable<SceneLayer> get visibleLayers =>
       layers.where((layer) => layer.visible);
 
-  int get frameWidth => layers.first.frameSeq.current.width;
-  int get frameHeight => layers.first.frameSeq.current.height;
+  int? get frameWidth => layers.first.frameSeq.current.width;
+  int? get frameHeight => layers.first.frameSeq.current.height;
 
   /// Visible image at a given playhead position.
   CompositeImage imageAt(Duration playhead) {
     playhead = playhead.clamp(Duration.zero, duration);
     return CompositeImage(
-      width: frameWidth,
-      height: frameHeight,
+      width: frameWidth!,
+      height: frameHeight!,
       layers: visibleLayers
-          .map((layer) => layer.frameAt(playhead).snapshot)
+          .map((layer) => layer.frameAt(playhead).snapshot!)
           .toList(),
     );
   }
@@ -64,9 +64,9 @@ class Scene extends TimeSpan {
 
     while (elapsed < duration) {
       final compositeImage = CompositeImage(
-        width: frameWidth,
-        height: frameHeight,
-        layers: rowIterators.map((it) => it.current.snapshot).toList(),
+        width: frameWidth!,
+        height: frameHeight!,
+        layers: rowIterators.map((it) => it.current.snapshot!).toList(),
       );
 
       var smallestJump = duration;
@@ -106,7 +106,7 @@ class Scene extends TimeSpan {
             .map((d) => SceneLayer.fromJson(d, frameDirPath))
             .toList(),
         duration: (json[_durationKey] as String).parseDuration(),
-        description: json[_descriptionKey] as String,
+        description: json[_descriptionKey] as String?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -116,9 +116,9 @@ class Scene extends TimeSpan {
       };
 
   Scene copyWith({
-    List<SceneLayer> layers,
-    Duration duration,
-    String description,
+    List<SceneLayer>? layers,
+    Duration? duration,
+    String? description,
   }) =>
       Scene(
         layers: layers ?? this.layers,

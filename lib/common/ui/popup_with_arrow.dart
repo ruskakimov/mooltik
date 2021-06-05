@@ -28,8 +28,8 @@ enum ArrowSidePosition {
 
 class PopupWithArrow extends StatelessWidget {
   const PopupWithArrow({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.arrowSide = ArrowSide.top,
     this.arrowPosition = ArrowSidePosition.middle,
     this.color,
@@ -38,7 +38,7 @@ class PopupWithArrow extends StatelessWidget {
   final Widget child;
   final ArrowSide arrowSide;
   final ArrowSidePosition arrowPosition;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -88,11 +88,11 @@ class PopupWithArrow extends StatelessWidget {
 
 class _Arrow extends StatelessWidget {
   const _Arrow({
-    Key key,
+    Key? key,
     this.color,
   }) : super(key: key);
 
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -172,10 +172,10 @@ Offset _arrowOffset(
 
 class PopupWithArrowEntry extends StatefulWidget {
   const PopupWithArrowEntry({
-    Key key,
-    @required this.visible,
-    @required this.popupBody,
-    @required this.child,
+    Key? key,
+    required this.visible,
+    required this.popupBody,
+    required this.child,
     this.arrowSide = ArrowSide.top,
     this.arrowSidePosition = ArrowSidePosition.middle,
     this.arrowAnchor = const Alignment(0, 0.6),
@@ -190,16 +190,16 @@ class PopupWithArrowEntry extends StatefulWidget {
   final ArrowSide arrowSide;
   final ArrowSidePosition arrowSidePosition;
   final Alignment arrowAnchor;
-  final Color popupColor;
-  final VoidCallback onTapOutside;
-  final VoidCallback onDragOutside;
+  final Color? popupColor;
+  final VoidCallback? onTapOutside;
+  final VoidCallback? onDragOutside;
 
   @override
   _PopupWithArrowEntryState createState() => _PopupWithArrowEntryState();
 }
 
 class _PopupWithArrowEntryState extends State<PopupWithArrowEntry> {
-  Size _popupSize;
+  Size? _popupSize;
 
   @override
   Widget build(BuildContext context) {
@@ -218,9 +218,9 @@ class _PopupWithArrowEntryState extends State<PopupWithArrowEntry> {
     // Previously a transform was used, but transform doesn't move tappable area.
     if (_popupSize != null) {
       arrowAlignment = arrowAlignment.add(Alignment(
-        -arrowOffset.dx / _popupSize.width * 2,
-        -arrowOffset.dy / _popupSize.height * 2,
-      ));
+        -arrowOffset.dx / _popupSize!.width * 2,
+        -arrowOffset.dy / _popupSize!.height * 2,
+      )) as Alignment;
     }
 
     return PopupEntry(

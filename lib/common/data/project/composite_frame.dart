@@ -12,7 +12,7 @@ class CompositeFrame extends TimeSpan {
   int get height => compositeImage.height;
 
   @override
-  TimeSpan copyWith({Duration duration}) => CompositeFrame(
+  TimeSpan copyWith({Duration? duration}) => CompositeFrame(
         this.compositeImage,
         duration ?? this.duration,
       );

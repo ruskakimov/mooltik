@@ -5,7 +5,7 @@ import 'package:mooltik/drawing/ui/lasso/transform_box.dart';
 import 'package:provider/provider.dart';
 
 class LassoUiLayer extends StatelessWidget {
-  const LassoUiLayer({Key key}) : super(key: key);
+  const LassoUiLayer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

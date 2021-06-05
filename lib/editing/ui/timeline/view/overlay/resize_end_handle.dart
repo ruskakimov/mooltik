@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 
 class ResizeEndHandle extends StatelessWidget {
   const ResizeEndHandle({
-    Key key,
-    @required this.timelineView,
+    Key? key,
+    required this.timelineView,
   }) : super(key: key);
 
   final TimelineViewModel timelineView;

@@ -5,10 +5,10 @@ const _popupAnimationDuration = Duration(milliseconds: 150);
 
 class PopupEntry extends StatelessWidget {
   const PopupEntry({
-    Key key,
-    @required this.visible,
-    @required this.popup,
-    @required this.child,
+    Key? key,
+    required this.visible,
+    required this.popup,
+    required this.child,
     this.popupAnchor = Alignment.topCenter,
     this.childAnchor = const Alignment(0, 1.2),
     this.onTapOutside,
@@ -20,8 +20,8 @@ class PopupEntry extends StatelessWidget {
   final Widget child;
   final Alignment popupAnchor;
   final Alignment childAnchor;
-  final VoidCallback onTapOutside;
-  final VoidCallback onDragOutside;
+  final VoidCallback? onTapOutside;
+  final VoidCallback? onDragOutside;
 
   @override
   Widget build(BuildContext context) {

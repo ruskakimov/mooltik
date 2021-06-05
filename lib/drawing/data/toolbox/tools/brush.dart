@@ -5,9 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'tool.dart';
 
-BrushTip _retrieveBrushTip(SharedPreferences sharedPreferences, String tipKey) {
+BrushTip? _retrieveBrushTip(
+    SharedPreferences sharedPreferences, String tipKey) {
   try {
-    final encodedTip = sharedPreferences.getString(tipKey);
+    final encodedTip = sharedPreferences.getString(tipKey)!;
     final tipJson = jsonDecode(encodedTip);
     return BrushTip.fromJson(tipJson);
   } catch (e) {
@@ -36,7 +37,7 @@ abstract class Brush extends ToolWithColor {
 
   List<BrushTip> get defaultBrushTips;
 
-  BrushTip get selectedBrushTip => brushTips[_selectedBrushTipIndex];
+  BrushTip get selectedBrushTip => brushTips[_selectedBrushTipIndex!];
 
   final List<BrushTip> brushTips = [];
 
@@ -51,8 +52,8 @@ abstract class Brush extends ToolWithColor {
   }
 
   /// Index of a selected brush tip option.
-  int get selectedBrushTipIndex => _selectedBrushTipIndex;
-  int _selectedBrushTipIndex = 0;
+  int get selectedBrushTipIndex => _selectedBrushTipIndex!;
+  int? _selectedBrushTipIndex = 0;
   set selectedBrushTipIndex(int index) {
     assert(index >= 0 && index < brushTips.length);
     _selectedBrushTipIndex = index;
@@ -75,7 +76,7 @@ abstract class Brush extends ToolWithColor {
     );
   }
 
-  double get opacityPercentage => selectedBrushTip.opacity;
+  double? get opacityPercentage => selectedBrushTip.opacity;
 
   void setOpacityPercentage(double percentage) {
     _replaceCurrentBrushTip(
@@ -83,7 +84,7 @@ abstract class Brush extends ToolWithColor {
     );
   }
 
-  double get blurPercentage => selectedBrushTip.blur;
+  double? get blurPercentage => selectedBrushTip.blur;
 
   void setBlurPercentage(double percentage) {
     _replaceCurrentBrushTip(
@@ -92,8 +93,8 @@ abstract class Brush extends ToolWithColor {
   }
 
   void _replaceCurrentBrushTip(BrushTip newBrushTip) {
-    brushTips.removeAt(_selectedBrushTipIndex);
-    brushTips.insert(_selectedBrushTipIndex, newBrushTip);
+    brushTips.removeAt(_selectedBrushTipIndex!);
+    brushTips.insert(_selectedBrushTipIndex!, newBrushTip);
     sharedPreferences.setString(
       _getBrushTipKey(selectedBrushTipIndex),
       jsonEncode(selectedBrushTip.toJson()),
@@ -112,12 +113,11 @@ abstract class Brush extends ToolWithColor {
 
 class BrushTip {
   BrushTip({
-    @required this.strokeWidth,
-    @required this.opacity,
-    @required this.blur,
-  })  : assert(strokeWidth != null),
-        assert(opacity != null && opacity >= 0 && opacity <= 1),
-        assert(blur != null && blur >= 0 && blur <= 1);
+    required this.strokeWidth,
+    required this.opacity,
+    required this.blur,
+  })   : assert(opacity >= 0 && opacity <= 1),
+        assert(blur >= 0 && blur <= 1);
 
   final double strokeWidth;
   final double opacity;
@@ -144,9 +144,9 @@ class BrushTip {
       };
 
   BrushTip copyWith({
-    double strokeWidth,
-    double opacity,
-    double blur,
+    double? strokeWidth,
+    double? opacity,
+    double? blur,
   }) =>
       BrushTip(
         strokeWidth: strokeWidth ?? this.strokeWidth,

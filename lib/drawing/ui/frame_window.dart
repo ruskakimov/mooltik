@@ -6,8 +6,8 @@ const frostedGlassColor = Color(0x88A09F9F);
 
 class FrameWindow extends StatelessWidget {
   const FrameWindow({
-    Key key,
-    @required this.frame,
+    Key? key,
+    required this.frame,
   }) : super(key: key);
 
   final Frame frame;
@@ -16,7 +16,7 @@ class FrameWindow extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: AspectRatio(
-        aspectRatio: frame.width / frame.height,
+        aspectRatio: frame.width! / frame.height!,
         child: ColoredBox(
           color: frostedGlassColor,
           child: CustomPaint(

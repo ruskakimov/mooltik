@@ -12,7 +12,7 @@ abstract class Sliver {
 
   final RRect rrect;
 
-  final SliverId id;
+  final SliverId? id;
 
   void paint(Canvas canvas);
 }

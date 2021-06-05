@@ -1,17 +1,12 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-
 /// Stack of images of the same size.
 class CompositeImage {
   CompositeImage({
-    @required this.width,
-    @required this.height,
-    @required this.layers,
-  })  : assert(width != null),
-        assert(height != null),
-        assert(layers != null),
-        assert(layers
+    required this.width,
+    required this.height,
+    required this.layers,
+  }) : assert(layers
             .every((image) => image.height == height && image.width == width));
 
   final int width;

@@ -18,9 +18,8 @@ class SceneLayer {
   SceneLayer(
     this.frameSeq, [
     PlayMode playMode = PlayMode.extendLast,
-    bool visible = true,
-  ])  : assert(playMode != null),
-        _playMode = playMode,
+    bool? visible = true,
+  ])  : _playMode = playMode,
         _visible = visible ?? true;
 
   final Sequence<Frame> frameSeq;
@@ -107,8 +106,8 @@ class SceneLayer {
         Sequence<Frame>((json[_framesKey] as List<dynamic>)
             .map((d) => Frame.fromJson(d, frameDirPath))
             .toList()),
-        PlayMode.values[json[_playModeKey] as int ?? 0],
-        json[_visibilityKey] as bool,
+        PlayMode.values[json[_playModeKey] as int? ?? 0],
+        json[_visibilityKey] as bool?,
       );
 
   Map<String, dynamic> toJson() => {

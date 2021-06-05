@@ -25,7 +25,7 @@ class _EditingPageState extends State<EditingPage>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    context.read<RouteObserver>().subscribe(this, ModalRoute.of(context));
+    context.read<RouteObserver>().subscribe(this, ModalRoute.of(context)!);
   }
 
   @override
@@ -47,7 +47,7 @@ class _EditingPageState extends State<EditingPage>
         ),
         ChangeNotifierProvider(
           create: (context) => TimelineModel(
-            sceneSeq: context.read<Project>().scenes,
+            sceneSeq: context.read<Project>().scenes!,
             vsync: this,
           ),
         ),
@@ -91,7 +91,7 @@ class _EditingPageState extends State<EditingPage>
 }
 
 class EditingTopPanel extends StatelessWidget {
-  const EditingTopPanel({Key key}) : super(key: key);
+  const EditingTopPanel({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

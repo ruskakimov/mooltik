@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 import 'easel_gesture_detector.dart';
 
 class Easel extends StatefulWidget {
-  Easel({Key key}) : super(key: key);
+  Easel({Key? key}) : super(key: key);
 
   @override
   _EaselState createState() => _EaselState();
@@ -57,7 +57,7 @@ class _EaselState extends State<Easel> {
                     child: EaselCanvas(
                       size: easel.frameSize,
                       frames: reelStack.visibleReels
-                          .map((reel) => reel.currentFrame)
+                          .map((reel) => reel!.currentFrame)
                           .toList()
                           .reversed
                           .toList(),
@@ -89,20 +89,20 @@ class _EaselState extends State<Easel> {
 
 class EaselCanvas extends StatelessWidget {
   const EaselCanvas({
-    Key key,
-    @required this.size,
-    @required this.frames,
-    @required this.activeFrame,
-    @required this.beforeActiveFrame,
-    @required this.afterActiveFrame,
-    @required this.strokes,
+    Key? key,
+    required this.size,
+    required this.frames,
+    required this.activeFrame,
+    required this.beforeActiveFrame,
+    required this.afterActiveFrame,
+    required this.strokes,
   }) : super(key: key);
 
   final Size size;
   final List<Frame> frames;
   final Frame activeFrame;
-  final Frame beforeActiveFrame;
-  final Frame afterActiveFrame;
+  final Frame? beforeActiveFrame;
+  final Frame? afterActiveFrame;
   final List<Stroke> strokes;
 
   @override
@@ -157,10 +157,10 @@ class EaselCanvas extends StatelessWidget {
   }
 
   List<Widget> _activeLayer({
-    Frame frame,
-    Frame before,
-    Frame after,
-    List<Stroke> strokes,
+    required Frame frame,
+    Frame? before,
+    Frame? after,
+    List<Stroke>? strokes,
   }) {
     return [
       if (before != null)

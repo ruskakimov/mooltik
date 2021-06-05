@@ -4,11 +4,11 @@ import 'package:mooltik/drawing/ui/brush_tip_button.dart';
 
 class BrushTipPicker extends StatelessWidget {
   const BrushTipPicker({
-    Key key,
-    @required this.selectedIndex,
-    @required this.brushTips,
-    @required this.minStrokeWidth,
-    @required this.maxStrokeWidth,
+    Key? key,
+    required this.selectedIndex,
+    required this.brushTips,
+    required this.minStrokeWidth,
+    required this.maxStrokeWidth,
     this.onSelected,
   }) : super(key: key);
 
@@ -18,7 +18,7 @@ class BrushTipPicker extends StatelessWidget {
   final double minStrokeWidth;
   final double maxStrokeWidth;
 
-  final void Function(int) onSelected;
+  final void Function(int)? onSelected;
 
   @override
   Widget build(BuildContext context) {

@@ -39,13 +39,13 @@ const _shades = [100, 300, 400, 500, 700, 900];
 
 class ColorPicker extends StatelessWidget {
   const ColorPicker({
-    Key key,
-    @required this.selectedColor,
+    Key? key,
+    required this.selectedColor,
     this.onSelected,
   }) : super(key: key);
 
   final Color selectedColor;
-  final void Function(Color) onSelected;
+  final void Function(Color)? onSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -70,16 +70,16 @@ class ColorPicker extends StatelessWidget {
               for (var color in _materialColors)
                 for (var shade in _shades)
                   _ColorOption(
-                    color: color[shade],
-                    selected: color[shade].value == selectedColor.value,
+                    color: color[shade]!,
+                    selected: color[shade]!.value == selectedColor.value,
                     onSelected: onSelected,
                   ),
             if (orientation == Orientation.landscape)
               for (var shade in _shades)
                 for (var color in _materialColors.reversed)
                   _ColorOption(
-                    color: color[shade],
-                    selected: color[shade].value == selectedColor.value,
+                    color: color[shade]!,
+                    selected: color[shade]!.value == selectedColor.value,
                     onSelected: onSelected,
                   ),
           ],
@@ -91,15 +91,15 @@ class ColorPicker extends StatelessWidget {
 
 class _ColorOption extends StatelessWidget {
   const _ColorOption({
-    Key key,
-    @required this.color,
-    @required this.selected,
-    @required this.onSelected,
+    Key? key,
+    required this.color,
+    required this.selected,
+    required this.onSelected,
   }) : super(key: key);
 
   final Color color;
   final bool selected;
-  final void Function(Color) onSelected;
+  final void Function(Color)? onSelected;
 
   @override
   Widget build(BuildContext context) {

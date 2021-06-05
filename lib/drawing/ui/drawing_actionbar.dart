@@ -9,9 +9,9 @@ import 'package:provider/provider.dart';
 
 class DrawingActionbar extends StatelessWidget {
   const DrawingActionbar({
-    Key key,
-    @required this.twoRow,
-    @required this.height,
+    Key? key,
+    required this.twoRow,
+    required this.height,
   }) : super(key: key);
 
   final bool twoRow;

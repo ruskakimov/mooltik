@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/ui/tool_button.dart';
 
 class Toolbar extends StatelessWidget {
-  const Toolbar({Key key}) : super(key: key);
+  const Toolbar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

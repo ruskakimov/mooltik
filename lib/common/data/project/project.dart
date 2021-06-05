@@ -57,7 +57,7 @@ class Project extends ChangeNotifier {
   }
 
   static int parseCreationEpochFromDirectoryName(String dirName) {
-    final match = RegExp(r'[0-9]+').stringMatch(dirName);
+    final match = RegExp(r'[0-9]+').stringMatch(dirName)!;
     return int.parse(match);
   }
 
@@ -89,27 +89,27 @@ class Project extends ChangeNotifier {
 
   final File _dataFile;
 
-  Sequence<Scene> get scenes => _scenes;
-  Sequence<Scene> _scenes;
+  Sequence<Scene>? get scenes => _scenes;
+  Sequence<Scene>? _scenes;
 
-  Iterable<Frame> get allFrames => _scenes.iterable
+  Iterable<Frame> get allFrames => _scenes!.iterable
       .map((scene) => scene.allFrames)
       .expand((iterable) => iterable);
 
-  Iterable<CompositeFrame> get exportFrames => _scenes.iterable
+  Iterable<CompositeFrame> get exportFrames => _scenes!.iterable
       .map((scene) => scene.exportFrames)
       .expand((iterable) => iterable);
 
   List<SoundClip> get soundClips => _soundClips;
-  List<SoundClip> _soundClips;
+  List<SoundClip> _soundClips = [];
 
   Size get frameSize => _frameSize;
-  Size _frameSize;
+  late Size _frameSize;
 
-  bool _shouldClose;
+  late bool _shouldClose;
 
-  String _saveDataOnDisk;
-  Timer _autosaveTimer;
+  String? _saveDataOnDisk;
+  Timer? _autosaveTimer;
 
   /// Loads project files into memory.
   Future<void> open() async {
@@ -123,7 +123,7 @@ class Project extends ChangeNotifier {
     if (await _dataFile.exists()) {
       // Existing project.
       _saveDataOnDisk = await _dataFile.readAsString();
-      final json = jsonDecode(_saveDataOnDisk);
+      final json = jsonDecode(_saveDataOnDisk!);
       final transcodedJson = SaveDataTranscoder().transcodeToLatest(json);
 
       final data = ProjectSaveData.fromJson(
@@ -165,7 +165,7 @@ class Project extends ChangeNotifier {
 
   void _freeMemory() {
     _scenes = null;
-    _soundClips = null;
+    _soundClips = [];
   }
 
   Future<void> save() async {
@@ -198,7 +198,7 @@ class Project extends ChangeNotifier {
     final data = ProjectSaveData(
       width: _frameSize.width,
       height: _frameSize.height,
-      scenes: _scenes.iterable.toList(),
+      scenes: _scenes!.iterable.toList(),
       sounds: _soundClips,
     );
     return jsonEncode(data);

@@ -6,12 +6,12 @@ typedef TimelinePositionedDragUpdate(Duration updatedTimestamp);
 
 class TimelinePositioned extends StatefulWidget {
   const TimelinePositioned({
-    Key key,
-    @required this.timestamp,
-    @required this.y,
-    @required this.width,
-    @required this.height,
-    @required this.child,
+    Key? key,
+    required this.timestamp,
+    required this.y,
+    required this.width,
+    required this.height,
+    required this.child,
     this.offset,
     this.onDragUpdate,
     this.onDragEnd,
@@ -31,17 +31,17 @@ class TimelinePositioned extends StatefulWidget {
 
   final Widget child;
 
-  final Offset offset;
+  final Offset? offset;
 
-  final TimelinePositionedDragUpdate onDragUpdate;
-  final GestureDragEndCallback onDragEnd;
+  final TimelinePositionedDragUpdate? onDragUpdate;
+  final GestureDragEndCallback? onDragEnd;
 
   @override
   _TimelinePositionedState createState() => _TimelinePositionedState();
 }
 
 class _TimelinePositionedState extends State<TimelinePositioned> {
-  Offset _dragStartOffset;
+  late Offset _dragStartOffset;
 
   Offset get _visualOffset => widget.offset ?? Offset.zero;
 
@@ -71,7 +71,7 @@ class _TimelinePositionedState extends State<TimelinePositioned> {
                     details.localPosition + _dragStartOffset;
                 final updatedTimestamp =
                     timelineView.timeFromX(timelinePosition.dx);
-                widget.onDragUpdate(updatedTimestamp);
+                widget.onDragUpdate!(updatedTimestamp);
               }
             : null,
         onHorizontalDragEnd: widget.onDragEnd,

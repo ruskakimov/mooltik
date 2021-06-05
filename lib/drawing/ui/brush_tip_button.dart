@@ -5,10 +5,10 @@ import 'package:mooltik/drawing/data/toolbox/tools/brush.dart';
 
 class BrushTipButton extends StatelessWidget {
   const BrushTipButton({
-    Key key,
+    Key? key,
     this.size = 52,
-    @required this.canvasSize,
-    @required this.brushTip,
+    required this.canvasSize,
+    required this.brushTip,
     this.selected = false,
     this.onTap,
   }) : super(key: key);
@@ -19,7 +19,7 @@ class BrushTipButton extends StatelessWidget {
   final BrushTip brushTip;
 
   final bool selected;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

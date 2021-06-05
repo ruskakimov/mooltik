@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 /// Clips selection mask.
 class MaskedImagePainter extends CustomPainter {
   MaskedImagePainter({
-    @required this.original,
-    @required this.mask,
+    required this.original,
+    required this.mask,
   });
 
-  final ui.Image original;
+  final ui.Image? original;
   final Path mask;
 
   @override
@@ -20,7 +20,7 @@ class MaskedImagePainter extends CustomPainter {
 
     canvas.clipPath(mask);
     canvas.drawImage(
-      original,
+      original!,
       Offset.zero,
       Paint()
         ..isAntiAlias = true

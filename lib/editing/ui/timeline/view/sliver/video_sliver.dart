@@ -6,9 +6,9 @@ typedef ThumbnailAt = CompositeImage Function(double x);
 
 class VideoSliver extends Sliver {
   VideoSliver({
-    @required Rect area,
-    @required this.thumbnailAt,
-    @required SliverId id,
+    required Rect area,
+    required this.thumbnailAt,
+    required SliverId id,
   }) : super(area, id);
 
   /// Image at a given X coordinate.

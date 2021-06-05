@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
 
 class LayerSheet extends StatelessWidget {
-  const LayerSheet({Key key}) : super(key: key);
+  const LayerSheet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class LayerSheet extends StatelessWidget {
               onReorder: reelStack.onLayerReorder,
               children: [
                 for (final reel in reelStack.reels)
-                  _buildInteractiveLayerRow(reel, reelStack),
+                  _buildInteractiveLayerRow(reel!, reelStack),
               ],
             ),
           ),
@@ -92,7 +92,7 @@ class LayerSheet extends StatelessWidget {
 
 class AddLayerButton extends StatelessWidget {
   const AddLayerButton({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -111,24 +111,24 @@ class AddLayerButton extends StatelessWidget {
 
 class LayerRow extends StatelessWidget {
   const LayerRow({
-    Key key,
+    Key? key,
     this.selected,
     this.visible,
     this.reel,
     this.onTap,
   }) : super(key: key);
 
-  final bool selected;
-  final bool visible;
-  final FrameReelModel reel;
-  final VoidCallback onTap;
+  final bool? selected;
+  final bool? visible;
+  final FrameReelModel? reel;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 80,
       child: Material(
-        color: selected ? Colors.white24 : Colors.transparent,
+        color: selected! ? Colors.white24 : Colors.transparent,
         child: InkWell(
           onTap: onTap,
           child: Row(
@@ -164,13 +164,13 @@ class LayerRow extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          FrameWindow(frame: reel.currentFrame),
+          FrameWindow(frame: reel!.currentFrame),
           Positioned(
             top: 4,
             left: 4,
             child: FrameNumberBox(
               selected: true,
-              number: reel.currentIndex + 1,
+              number: reel!.currentIndex + 1,
             ),
           ),
         ],
@@ -179,7 +179,7 @@ class LayerRow extends StatelessWidget {
   }
 
   Widget _buildLabel(BuildContext context) {
-    final count = reel.frameSeq.length;
+    final count = reel!.frameSeq.length;
     final appendix = count > 1 ? 'frames' : 'frame';
     return Text('$count $appendix');
   }

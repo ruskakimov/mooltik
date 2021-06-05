@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DiscordSliver extends StatelessWidget {
-  const DiscordSliver({Key key}) : super(key: key);
+  const DiscordSliver({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

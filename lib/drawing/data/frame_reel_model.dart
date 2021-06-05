@@ -5,8 +5,8 @@ import 'package:mooltik/drawing/data/frame/frame.dart';
 
 class FrameReelModel extends ChangeNotifier {
   FrameReelModel({
-    @required this.frameSeq,
-    @required CreateNewFrame createNewFrame,
+    required this.frameSeq,
+    required CreateNewFrame createNewFrame,
   })  : _currentIndex = frameSeq.currentIndex,
         _createNewFrame = createNewFrame;
 

@@ -10,7 +10,7 @@ import 'package:mooltik/editing/ui/timeline/view/timeline_painter.dart';
 import 'package:provider/provider.dart';
 
 class TimelineView extends StatelessWidget {
-  const TimelineView({Key key}) : super(key: key);
+  const TimelineView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -5,16 +5,16 @@ import '../data/frame/frame.dart';
 
 class FramePainter extends CustomPainter {
   FramePainter({
-    @required this.frame,
+    required this.frame,
     this.strokes,
     this.filter,
   });
 
   final Frame frame;
-  final List<Stroke> strokes;
-  final ColorFilter filter;
+  final List<Stroke?>? strokes;
+  final ColorFilter? filter;
 
-  bool get hasStrokes => strokes != null && strokes.isNotEmpty;
+  bool get hasStrokes => strokes != null && strokes!.isNotEmpty;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -22,7 +22,7 @@ class FramePainter extends CustomPainter {
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
 
     // Scale image to fit the given size.
-    canvas.scale(size.width / frame.width, size.height / frame.height);
+    canvas.scale(size.width / frame.width!, size.height / frame.height!);
 
     if (hasStrokes) {
       // Save layer to erase paintings on it with `BlendMode.clear`.
@@ -34,7 +34,7 @@ class FramePainter extends CustomPainter {
 
     if (frame.snapshot != null) {
       canvas.drawImage(
-        frame.snapshot,
+        frame.snapshot!,
         Offset.zero,
         Paint()
           ..colorFilter = filter
@@ -43,7 +43,7 @@ class FramePainter extends CustomPainter {
       );
     }
 
-    strokes?.forEach((stroke) => stroke.paintOn(canvas));
+    strokes?.forEach((stroke) => stroke!.paintOn(canvas));
 
     if (hasStrokes) {
       // Flatten layer. Combine drawing lines with erasing lines.

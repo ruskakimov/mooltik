@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../data/gallery_model.dart';
 
 class BinContents extends StatelessWidget {
-  const BinContents({Key key}) : super(key: key);
+  const BinContents({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +41,8 @@ class BinContents extends StatelessWidget {
 
 class _BinItem extends StatelessWidget {
   const _BinItem({
-    Key key,
-    @required this.project,
+    Key? key,
+    required this.project,
   }) : super(key: key);
 
   final Project project;
@@ -91,17 +91,17 @@ class _BinItem extends StatelessWidget {
 
 class _BinSlideAction extends StatelessWidget {
   const _BinSlideAction({
-    Key key,
-    @required this.icon,
-    @required this.label,
+    Key? key,
+    required this.icon,
+    required this.label,
     this.color,
     this.onTap,
   }) : super(key: key);
 
   final IconData icon;
   final String label;
-  final Color color;
-  final VoidCallback onTap;
+  final Color? color;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

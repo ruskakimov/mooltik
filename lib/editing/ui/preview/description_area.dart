@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class DescriptionArea extends StatelessWidget {
   const DescriptionArea({
-    Key key,
+    Key? key,
     this.description,
     this.onDone,
     this.textAlign = TextAlign.left,
   }) : super(key: key);
 
-  final String description;
-  final ValueChanged<String> onDone;
+  final String? description;
+  final ValueChanged<String>? onDone;
   final TextAlign textAlign;
 
   bool get emptyDescription => description == null || description == '';
@@ -26,7 +26,7 @@ class DescriptionArea extends StatelessWidget {
             child: emptyDescription
                 ? _buildPlaceholder(context)
                 : Text(
-                    description,
+                    description!,
                     style: TextStyle(
                       fontSize: 14,
                       height: 1.2,

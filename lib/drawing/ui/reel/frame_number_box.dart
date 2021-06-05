@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 
 class FrameNumberBox extends StatelessWidget {
   const FrameNumberBox({
-    Key key,
-    @required this.selected,
-    @required this.number,
+    Key? key,
+    required this.selected,
+    required this.number,
   }) : super(key: key);
 
   final bool selected;
-  final int number;
+  final int? number;
 
   @override
   Widget build(BuildContext context) {

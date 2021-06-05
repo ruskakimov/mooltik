@@ -11,29 +11,29 @@ import 'package:path/path.dart' as p;
 /// Single image with duration.
 class Frame extends TimeSpan with EquatableMixin {
   Frame({
-    @required this.file,
+    required this.file,
     Duration duration = const Duration(seconds: 1),
-    ui.Image snapshot,
+    ui.Image? snapshot,
   })  : _snapshot = snapshot,
         super(duration);
 
   final File file;
 
-  Size get size => Size(width.toDouble(), height.toDouble());
+  Size get size => Size(width!.toDouble(), height!.toDouble());
 
-  int get width => _snapshot?.width;
+  int? get width => _snapshot?.width;
 
-  int get height => _snapshot?.height;
+  int? get height => _snapshot?.height;
 
-  ui.Image get snapshot => _snapshot;
-  ui.Image _snapshot;
+  ui.Image? get snapshot => _snapshot;
+  ui.Image? _snapshot;
 
   Future<void> loadSnapshot() async {
     _snapshot = await pngRead(file);
   }
 
   Future<void> saveSnapshot() async {
-    await pngWrite(file, _snapshot);
+    await pngWrite(file, _snapshot!);
   }
 
   factory Frame.fromJson(Map<String, dynamic> json, String frameDirPath) =>
@@ -49,9 +49,9 @@ class Frame extends TimeSpan with EquatableMixin {
 
   @override
   Frame copyWith({
-    File file,
-    Duration duration,
-    ui.Image snapshot,
+    File? file,
+    Duration? duration,
+    ui.Image? snapshot,
   }) =>
       Frame(
         file: file ?? this.file,
