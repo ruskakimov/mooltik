@@ -111,7 +111,7 @@ class DrawingPage extends StatelessWidget {
                     ),
                     Positioned(
                       top: headerHeight,
-                      left: 0,
+                      right: 0,
                       child: FitToScreenButton(),
                     ),
                     if (reelStack.showFrameReel)
