@@ -26,7 +26,6 @@ class DrawingMenu extends StatelessWidget {
           _buildOnionToggle(context),
           _buildFrameReelToggle(context),
           _buildFingerDrawToggle(context),
-          _buildFitToScreen(context),
         ],
       ),
     );
@@ -71,17 +70,6 @@ class DrawingMenu extends StatelessWidget {
         onChanged: (_) => easel.toggleDrawingWithFinger(),
       ),
       onTap: () => easel.toggleDrawingWithFinger(),
-    );
-  }
-
-  _MenuTile _buildFitToScreen(BuildContext context) {
-    return _MenuTile(
-      icon: FontAwesomeIcons.expand,
-      title: 'Fit canvas to screen',
-      onTap: () {
-        context.read<EaselModel>().fitToScreen();
-        onDone?.call();
-      },
     );
   }
 }
