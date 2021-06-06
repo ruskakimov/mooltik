@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final GalleryModel manager = GalleryModel();
+  final GalleryModel gallery = GalleryModel();
 
   @override
   void initState() {
@@ -29,14 +29,14 @@ class _HomePageState extends State<HomePage> {
   Future<void> _initProjectsManager() async {
     if (await Permission.storage.request().isGranted) {
       final Directory dir = await getApplicationDocumentsDirectory();
-      await manager.init(dir);
+      await gallery.init(dir);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<GalleryModel>.value(
-      value: manager,
+      value: gallery,
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Stack(
