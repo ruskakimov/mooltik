@@ -116,6 +116,15 @@ class _BinItem extends StatelessWidget {
             _buildThumbnail(),
             _buildLabel(context),
             // Text('${project.allFrames.length}'), <- Project data isn't loaded :/
+            Spacer(),
+            LabeledIconButton(
+              icon: FontAwesomeIcons.reply,
+              label: 'Restore',
+              color: Theme.of(context).colorScheme.onSurface,
+              onTap: () {
+                context.read<GalleryModel>().restoreProject(project);
+              },
+            ),
           ],
         ),
       ),
@@ -147,38 +156,6 @@ class _BinItem extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _BinSlideAction extends StatelessWidget {
-  const _BinSlideAction({
-    Key? key,
-    required this.icon,
-    required this.label,
-    this.color,
-    this.onTap,
-  }) : super(key: key);
-
-  final IconData icon;
-  final String label;
-  final Color? color;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return SlideAction(
-      child: Material(
-        color: color,
-        borderRadius: BorderRadius.circular(8),
-        clipBehavior: Clip.antiAlias,
-        child: LabeledIconButton(
-          icon: icon,
-          label: label,
-          color: Colors.white,
-          onTap: onTap,
-        ),
-      ),
     );
   }
 }
