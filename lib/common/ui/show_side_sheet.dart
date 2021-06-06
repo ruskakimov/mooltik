@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 showSideSheet({
   required BuildContext context,
-  Widget Function(BuildContext)? builder,
+  required Widget Function(BuildContext) builder,
   bool rightSide = true,
 }) {
   showGeneralDialog(
@@ -21,7 +21,7 @@ showSideSheet({
           width: sheetWidth,
           child: Material(
             color: Theme.of(context).colorScheme.surface,
-            child: builder!(context),
+            child: builder(context),
           ),
         ),
       );
