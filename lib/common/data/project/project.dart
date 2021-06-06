@@ -310,8 +310,16 @@ class Project extends ChangeNotifier {
 
   /// Estimation of project size.
   /// TODO: Include sound file size.
-  String get projectSizeLabel =>
-      _sizeInBytes != null ? '$_sizeInBytes bytes' : '-';
+  String get projectSizeLabel {
+    final size = _sizeInBytes;
+    if (size == null) return '-';
+    if (size < 1000000) {
+      final kb = size / 1000;
+      return '${kb.toStringAsFixed(1)} KB';
+    }
+    final mb = size / 1000000;
+    return '${mb.toStringAsFixed(1)} MB';
+  }
 
   int? _imageCount;
   int? _sizeInBytes;
