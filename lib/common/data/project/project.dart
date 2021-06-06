@@ -334,7 +334,7 @@ class Project extends ChangeNotifier {
     _fileCount = files.length;
 
     final fileStats = await Future.wait(files.map((file) => file.stat()));
-    _sizeInBytes = fileStats.fold(0, (sum, stat) => sum! + stat.size);
+    _sizeInBytes = fileStats.fold<int>(0, (sum, stat) => sum + stat.size);
 
     notifyListeners();
   }
