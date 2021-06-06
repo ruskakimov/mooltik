@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:provider/provider.dart';
@@ -42,13 +43,16 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(FontAwesomeIcons.toiletPaperSlash),
-        SizedBox(height: 12),
-        Text('Nothing here...'),
-      ],
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(MdiIcons.bee),
+          SizedBox(height: 12),
+          Text('Nothing here...'),
+          SizedBox(height: 52),
+        ],
+      ),
     );
   }
 }
