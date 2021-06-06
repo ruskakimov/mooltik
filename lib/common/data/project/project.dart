@@ -301,38 +301,40 @@ class Project extends ChangeNotifier {
   // Metadata:
   // =========
 
-  /// Number of images in project folder.
-  String get imageCountLabel {
-    if (_imageCount == null) return '-';
-    if (_imageCount == 1) return '1 image';
-    return '$_imageCount images';
+  /// Number of files in project folder.
+  String get fileCountLabel {
+    final count = _fileCount;
+    if (count == null) return '-';
+    if (count == 1) return '1 file';
+    return '$count files';
   }
 
-  /// Estimation of project size.
-  /// TODO: Include sound file size.
+  /// Total size of project folder.
   String get projectSizeLabel {
     final size = _sizeInBytes;
     if (size == null) return '-';
+
     if (size < 1000000) {
       final kb = size / 1000;
       return '${kb.toStringAsFixed(1)} KB';
     }
+
     final mb = size / 1000000;
     return '${mb.toStringAsFixed(1)} MB';
   }
 
-  int? _imageCount;
+  int? _fileCount;
   int? _sizeInBytes;
 
   Future<void> readMetadata() async {
-    final images = await directory
-        .list()
-        .where((entity) => p.extension(entity.path) == '.png')
+    final files = await directory
+        .list(recursive: true)
+        .where((entity) => entity is File)
         .toList();
-    _imageCount = images.length;
+    _fileCount = files.length;
 
-    final imageStats = await Future.wait(images.map((image) => image.stat()));
-    _sizeInBytes = imageStats.fold(0, (sum, stat) => sum! + stat.size);
+    final fileStats = await Future.wait(files.map((file) => file.stat()));
+    _sizeInBytes = fileStats.fold(0, (sum, stat) => sum! + stat.size);
 
     notifyListeners();
   }

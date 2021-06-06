@@ -155,7 +155,7 @@ class _BinItem extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(project.imageCountLabel),
+        Text(project.fileCountLabel),
         SizedBox(height: 4),
         Text(
           project.projectSizeLabel,
