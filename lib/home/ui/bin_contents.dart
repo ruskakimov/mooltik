@@ -16,22 +16,24 @@ class BinContents extends StatelessWidget {
     final gallery = context.watch<GalleryModel>();
     final binnedProjects = gallery.binnedProjects;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            'Bin',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    return ClipRect(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              'Bin',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
           ),
-        ),
-        Expanded(
-          child: binnedProjects.isEmpty
-              ? _EmptyState()
-              : _BinItemList(binnedProjects: binnedProjects),
-        ),
-      ],
+          Expanded(
+            child: binnedProjects.isEmpty
+                ? _EmptyState()
+                : _BinItemList(binnedProjects: binnedProjects),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -90,13 +92,31 @@ class _BinItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 80,
-      child: Row(
-        children: [
-          _buildThumbnail(),
-          // Text('${project.allFrames.length}'), <- Project data isn't loaded :/
-        ],
+    return Slidable(
+      actionPane: SlidableDrawerActionPane(),
+      closeOnScroll: true,
+      secondaryActions: [
+        SlideAction(
+          color: Colors.red,
+          closeOnTap: true,
+          child: LabeledIconButton(
+            icon: FontAwesomeIcons.burn,
+            label: 'Destroy',
+            color: Colors.white,
+            onTap: () {
+              context.read<GalleryModel>().deleteProject(project);
+            },
+          ),
+        ),
+      ],
+      child: SizedBox(
+        height: 80,
+        child: Row(
+          children: [
+            _buildThumbnail(),
+            // Text('${project.allFrames.length}'), <- Project data isn't loaded :/
+          ],
+        ),
       ),
     );
   }
