@@ -90,42 +90,25 @@ class _BinItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      actionPane: SlidableDrawerActionPane(),
-      actionExtentRatio: 0.5,
-      actions: [
-        _BinSlideAction(
-          color: Colors.red,
-          icon: FontAwesomeIcons.fireAlt,
-          label: 'Destroy',
-          onTap: () {
-            context.read<GalleryModel>().deleteProject(project);
-          },
-        ),
-      ],
-      secondaryActions: [
-        _BinSlideAction(
-          icon: FontAwesomeIcons.reply,
-          label: 'Restore',
-          onTap: () {
-            context.read<GalleryModel>().restoreProject(project);
-          },
-        ),
-      ],
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12.0,
-          vertical: 6.0,
-        ),
-        child: Container(
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            color: Colors.white, // in case thumbnail is missing background
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Image.file(project.thumbnail),
-        ),
+    return SizedBox(
+      height: 80,
+      child: Row(
+        children: [
+          _buildThumbnail(),
+          // Text('${project.allFrames.length}'), <- Project data isn't loaded :/
+        ],
       ),
+    );
+  }
+
+  Widget _buildThumbnail() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Image.file(project.thumbnail),
     );
   }
 }
