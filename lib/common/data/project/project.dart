@@ -296,4 +296,23 @@ class Project extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  // =========
+  // Metadata:
+  // =========
+  int? _imageCount;
+  int? _sizeInBytes;
+
+  Future<void> readMetadata() async {
+    final images = await directory
+        .list()
+        .where((entity) => p.extension(entity.path) == '.png')
+        .toList();
+    _imageCount = images.length;
+
+    final imageStats = await Future.wait(images.map((image) => image.stat()));
+    _sizeInBytes = imageStats.fold(0, (sum, stat) => sum! + stat.size);
+
+    notifyListeners();
+  }
 }
