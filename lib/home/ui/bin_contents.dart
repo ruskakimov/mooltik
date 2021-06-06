@@ -114,6 +114,7 @@ class _BinItem extends StatelessWidget {
         child: Row(
           children: [
             _buildThumbnail(),
+            _buildLabel(context),
             // Text('${project.allFrames.length}'), <- Project data isn't loaded :/
           ],
         ),
@@ -129,6 +130,23 @@ class _BinItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Image.file(project.thumbnail),
+    );
+  }
+
+  Widget _buildLabel(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('12 images'),
+        SizedBox(height: 4),
+        Text(
+          '23 MB',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+        ),
+      ],
     );
   }
 }
