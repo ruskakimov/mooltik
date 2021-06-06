@@ -59,7 +59,7 @@ class _EmptyState extends StatelessWidget {
   }
 }
 
-class _BinItemList extends StatelessWidget {
+class _BinItemList extends StatefulWidget {
   const _BinItemList({
     Key? key,
     required this.binnedProjects,
@@ -68,14 +68,27 @@ class _BinItemList extends StatelessWidget {
   final List<Project> binnedProjects;
 
   @override
+  __BinItemListState createState() => __BinItemListState();
+}
+
+class __BinItemListState extends State<_BinItemList> {
+  @override
+  void initState() {
+    super.initState();
+    widget.binnedProjects.forEach((project) => project.readMetadata());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       children: [
-        for (final project in binnedProjects)
-          _BinItem(
-            key: Key('${project.creationEpoch}'),
-            project: project,
+        for (final project in widget.binnedProjects)
+          ChangeNotifierProvider.value(
+            value: project,
+            child: _BinItem(
+              key: Key('${project.creationEpoch}'),
+            ),
           )
       ],
     );
@@ -83,15 +96,12 @@ class _BinItemList extends StatelessWidget {
 }
 
 class _BinItem extends StatelessWidget {
-  const _BinItem({
-    Key? key,
-    required this.project,
-  }) : super(key: key);
-
-  final Project project;
+  const _BinItem({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final project = context.watch<Project>();
+
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       closeOnScroll: true,
@@ -113,9 +123,8 @@ class _BinItem extends StatelessWidget {
         height: 80,
         child: Row(
           children: [
-            _buildThumbnail(),
-            _buildLabel(context),
-            // Text('${project.allFrames.length}'), <- Project data isn't loaded :/
+            _buildThumbnail(project),
+            _buildLabel(context, project),
             Spacer(),
             LabeledIconButton(
               icon: FontAwesomeIcons.reply,
@@ -131,7 +140,7 @@ class _BinItem extends StatelessWidget {
     );
   }
 
-  Widget _buildThumbnail() {
+  Widget _buildThumbnail(Project project) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
       clipBehavior: Clip.antiAlias,
@@ -142,15 +151,15 @@ class _BinItem extends StatelessWidget {
     );
   }
 
-  Widget _buildLabel(BuildContext context) {
+  Widget _buildLabel(BuildContext context, Project project) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('12 images'),
+        Text(project.imageCountLabel),
         SizedBox(height: 4),
         Text(
-          '23 MB',
+          project.projectSizeLabel,
           style: TextStyle(
             color: Theme.of(context).colorScheme.secondary,
           ),

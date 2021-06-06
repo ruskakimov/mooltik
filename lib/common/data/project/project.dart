@@ -300,6 +300,19 @@ class Project extends ChangeNotifier {
   // =========
   // Metadata:
   // =========
+
+  /// Number of images in project folder.
+  String get imageCountLabel {
+    if (_imageCount == null) return '-';
+    if (_imageCount == 1) return '1 image';
+    return '$_imageCount images';
+  }
+
+  /// Estimation of project size.
+  /// TODO: Include sound file size.
+  String get projectSizeLabel =>
+      _sizeInBytes != null ? '$_sizeInBytes bytes' : '-';
+
   int? _imageCount;
   int? _sizeInBytes;
 
