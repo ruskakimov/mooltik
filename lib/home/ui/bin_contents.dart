@@ -15,17 +15,54 @@ class BinContents extends StatelessWidget {
     final gallery = context.watch<GalleryModel>();
     final binnedProjects = gallery.binnedProjects;
 
-    if (binnedProjects.isEmpty) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(FontAwesomeIcons.toiletPaperSlash),
-          SizedBox(height: 12),
-          Text('Nothing here...'),
-        ],
-      );
-    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            'Bin',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Expanded(
+          child: binnedProjects.isEmpty
+              ? _EmptyState()
+              : _BinItemList(binnedProjects: binnedProjects),
+        ),
+      ],
+    );
+  }
+}
 
+class _EmptyState extends StatelessWidget {
+  const _EmptyState({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(FontAwesomeIcons.toiletPaperSlash),
+        SizedBox(height: 12),
+        Text('Nothing here...'),
+      ],
+    );
+  }
+}
+
+class _BinItemList extends StatelessWidget {
+  const _BinItemList({
+    Key? key,
+    required this.binnedProjects,
+  }) : super(key: key);
+
+  final List<Project> binnedProjects;
+
+  @override
+  Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       children: [
