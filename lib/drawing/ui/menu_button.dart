@@ -28,7 +28,7 @@ class _MenuButtonState extends State<MenuButton> {
         },
       ),
       child: AppIconButton(
-        icon: FontAwesomeIcons.ellipsisV,
+        icon: FontAwesomeIcons.cog,
         onTap: () {
           setState(() => _menuOpen = true);
         },

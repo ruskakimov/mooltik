@@ -7,6 +7,7 @@ import 'package:mooltik/drawing/data/lasso/lasso_model.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
 import 'package:mooltik/drawing/ui/drawing_actionbar.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
+import 'package:mooltik/drawing/ui/fit_to_screen_button.dart';
 import 'package:mooltik/drawing/ui/lasso/lasso_menu.dart';
 import 'package:mooltik/drawing/ui/reel/frame_reel.dart';
 import 'package:mooltik/drawing/ui/layers/layer_button.dart';
@@ -107,6 +108,11 @@ class DrawingPage extends StatelessWidget {
                         twoRow: twoRowHeader,
                         height: headerHeight,
                       ),
+                    ),
+                    Positioned(
+                      top: headerHeight,
+                      right: 0,
+                      child: FitToScreenButton(),
                     ),
                     if (reelStack.showFrameReel)
                       Positioned(
