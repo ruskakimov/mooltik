@@ -26,7 +26,7 @@ class ProjectThumbnail extends StatefulWidget {
 class _ProjectThumbnailState extends State<ProjectThumbnail> {
   bool _menuOpen = false;
   late final FileImage image;
-  late DateTime lastModified;
+  DateTime? lastModified;
 
   @override
   void initState() {
@@ -51,6 +51,7 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
     if (updatedLastModified != lastModified) {
       await image.evict(cache: imageCache);
       lastModified = updatedLastModified;
+      setState(() {});
     }
   }
 
@@ -70,7 +71,10 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
         arrowAnchor: Alignment(0, -0.8),
         popupColor: Theme.of(context).colorScheme.primary,
         popupBody: _buildProjectMenu(),
-        child: _buildThumbnail(),
+        child: _Thumbnail(
+          key: Key('$lastModified'),
+          image: image,
+        ),
         onTapOutside: () {
           setState(() => _menuOpen = false);
         },
@@ -93,8 +97,18 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
       ),
     );
   }
+}
 
-  Widget _buildThumbnail() {
+class _Thumbnail extends StatelessWidget {
+  const _Thumbnail({
+    Key? key,
+    required this.image,
+  }) : super(key: key);
+
+  final FileImage image;
+
+  @override
+  Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 16 / 9,
       child: Container(
