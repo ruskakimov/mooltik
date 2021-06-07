@@ -26,11 +26,32 @@ class ProjectThumbnail extends StatefulWidget {
 class _ProjectThumbnailState extends State<ProjectThumbnail> {
   bool _menuOpen = false;
   late final FileImage image;
+  late DateTime lastModified;
 
   @override
   void initState() {
     super.initState();
     image = FileImage(widget.thumbnail);
+    _initLastModified();
+  }
+
+  Future<void> _initLastModified() async {
+    lastModified = await widget.thumbnail.lastModified();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _updateImageIfNecessary();
+  }
+
+  Future<void> _updateImageIfNecessary() async {
+    final updatedLastModified = await widget.thumbnail.lastModified();
+
+    if (updatedLastModified != lastModified) {
+      await image.evict(cache: imageCache);
+      lastModified = updatedLastModified;
+    }
   }
 
   @override
@@ -74,9 +95,6 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
   }
 
   Widget _buildThumbnail() {
-    // TODO: Call this when thumbnail file updates
-    // image.evict(cache: imageCache);
-
     return AspectRatio(
       aspectRatio: 16 / 9,
       child: Container(
