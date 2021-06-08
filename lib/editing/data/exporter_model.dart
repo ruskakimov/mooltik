@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
@@ -69,11 +70,16 @@ class ExporterModel extends ChangeNotifier {
 
     if (Platform.isAndroid) {
       // Save to gallery on Android.
-      final result = await ImageGallerySaver.saveFile(videoFile.path);
       try {
-        _outputFilePath = result['filePath'];
-      } catch (e) {
-        print(e);
+        final galleryResult = await ImageGallerySaver.saveFile(videoFile.path);
+        final galleryFilePath = galleryResult['filePath'];
+        _outputFilePath = galleryFilePath ?? videoFile.path;
+
+        if (galleryFilePath == null) {
+          throw Exception('Failed when tried uploading video to the gallery.');
+        }
+      } catch (e, stack) {
+        FirebaseCrashlytics.instance.recordError(e, stack);
       }
     } else if (Platform.isIOS) {
       // iOS is more restrictive here. Usually apps show share dialog.
