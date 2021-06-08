@@ -25,31 +25,38 @@ class ProjectThumbnail extends StatefulWidget {
 
 class _ProjectThumbnailState extends State<ProjectThumbnail> {
   bool _menuOpen = false;
-  late final FileImage image;
+  FileImage? image;
   DateTime? lastModified;
 
   @override
   void initState() {
     super.initState();
-    image = FileImage(widget.thumbnail);
-    _initLastModified();
+    _init();
   }
 
-  Future<void> _initLastModified() async {
-    lastModified = await widget.thumbnail.lastModified();
+  Future<void> _init() async {
+    if (widget.thumbnail.existsSync()) {
+      image = FileImage(widget.thumbnail);
+      lastModified = await widget.thumbnail.lastModified();
+    }
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _updateImageIfNecessary();
+    if (widget.thumbnail.existsSync() && image != null) {
+      _refreshImageIfModified();
+    } else {
+      _init();
+    }
   }
 
-  Future<void> _updateImageIfNecessary() async {
+  Future<void> _refreshImageIfModified() async {
     final updatedLastModified = await widget.thumbnail.lastModified();
 
     if (updatedLastModified != lastModified) {
-      await image.evict(cache: imageCache);
+      await image?.evict(cache: imageCache);
+      print('evicted');
       lastModified = updatedLastModified;
       setState(() {});
     }
@@ -105,10 +112,12 @@ class _Thumbnail extends StatelessWidget {
     required this.image,
   }) : super(key: key);
 
-  final FileImage image;
+  final FileImage? image;
 
   @override
   Widget build(BuildContext context) {
+    final _image = image;
+
     return AspectRatio(
       aspectRatio: 16 / 9,
       child: Container(
@@ -117,26 +126,28 @@ class _Thumbnail extends StatelessWidget {
           color: frostedGlassColor,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Image(
-          image: image,
-          fit: BoxFit.cover,
-          frameBuilder: (
-            BuildContext context,
-            Widget child,
-            int? frame,
-            bool wasSynchronouslyLoaded,
-          ) {
-            if (wasSynchronouslyLoaded) {
-              return child;
-            }
-            return AnimatedOpacity(
-              child: child,
-              opacity: frame == null ? 0 : 1,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeOut,
-            );
-          },
-        ),
+        child: _image != null
+            ? Image(
+                image: _image,
+                fit: BoxFit.cover,
+                frameBuilder: (
+                  BuildContext context,
+                  Widget child,
+                  int? frame,
+                  bool wasSynchronouslyLoaded,
+                ) {
+                  if (wasSynchronouslyLoaded) {
+                    return child;
+                  }
+                  return AnimatedOpacity(
+                    child: child,
+                    opacity: frame == null ? 0 : 1,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeOut,
+                  );
+                },
+              )
+            : ColoredBox(color: Colors.white),
       ),
     );
   }
