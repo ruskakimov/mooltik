@@ -30,15 +30,7 @@ class EditingActionbar extends StatelessWidget {
       children: [
         AppIconButton(
           icon: FontAwesomeIcons.arrowLeft,
-          onTap: playing
-              ? null
-              : () async {
-                  final project = context.read<Project>();
-                  Navigator.pop(context);
-                  WidgetsBinding.instance!.addPostFrameCallback((_) {
-                    project.saveAndClose();
-                  });
-                },
+          onTap: playing ? null : () => Navigator.maybePop(context),
         ),
         Spacer(),
         title!,

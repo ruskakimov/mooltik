@@ -67,8 +67,15 @@ class _EditingPageState extends State<EditingPage>
         ),
       ],
       child: WillPopScope(
-        // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
-        onWillPop: () async => true,
+        onWillPop: () async {
+          final project = context.read<Project>();
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
+            project.saveAndClose();
+          });
+
+          // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
+          return true;
+        },
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Theme.of(context).colorScheme.background,

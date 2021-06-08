@@ -56,7 +56,6 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
 
     if (updatedLastModified != lastModified) {
       await image?.evict(cache: imageCache);
-      print('evicted');
       lastModified = updatedLastModified;
       setState(() {});
     }
