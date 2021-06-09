@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:mooltik/common/data/copy_paster_model.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
@@ -56,6 +57,7 @@ class FrameMenu extends StatelessWidget {
       children: [
         LabeledIconButton(
           icon: Icons.copy_rounded,
+          iconTransform: Matrix4Transform().scale(1.1, origin: Offset(9, 0)).m,
           label: 'Copy',
           color: Theme.of(context).colorScheme.onPrimary,
           onTap: () {
@@ -65,6 +67,7 @@ class FrameMenu extends StatelessWidget {
         ),
         LabeledIconButton(
           icon: Icons.paste_rounded,
+          iconTransform: Matrix4Transform().scale(1.1, origin: Offset(9, 0)).m,
           label: 'Paste',
           color: Theme.of(context).colorScheme.onPrimary,
           onTap: copyPaster.canPaste
