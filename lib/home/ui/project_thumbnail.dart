@@ -106,12 +106,11 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
               context
                   .read<GalleryModel>()
                   .duplicateProject(context.read<Project>());
-              // final scrollController = PrimaryScrollController.of(context);
-              // scrollController?.animateTo(
-              //   0,
-              //   duration: Duration(milliseconds: 300),
-              //   curve: Curves.easeOut,
-              // );
+              context.read<ScrollController>().animateTo(
+                    0,
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeOut,
+                  );
               _closeMenu();
             },
           ),
