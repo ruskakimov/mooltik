@@ -4,7 +4,9 @@ import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:mooltik/common/data/copy_paster_model.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
+import 'package:mooltik/drawing/ui/frame_window.dart';
 import 'package:provider/provider.dart';
 
 class FrameMenu extends StatelessWidget {
@@ -86,13 +88,48 @@ class FrameMenu extends StatelessWidget {
           label: 'Delete',
           color: Theme.of(context).colorScheme.onPrimary,
           onTap: reel.canDeleteCurrent
-              ? () {
-                  reel.deleteCurrent();
+              ? () async {
                   closePopup();
+                  final deleteConfirmed = await _openDeleteConfirmationDialog(
+                    context,
+                    reel.currentFrame,
+                  );
+                  if (deleteConfirmed == true) {
+                    reel.deleteCurrent();
+                  }
                 }
               : null,
         ),
       ],
+    );
+  }
+
+  Future<bool?> _openDeleteConfirmationDialog(
+    BuildContext context,
+    Frame frameToBeDeleted,
+  ) async {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Delete this cel?'),
+        content: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: FrameWindow(frame: frameToBeDeleted),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('CANCEL'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('DELETE FOREVER'),
+          ),
+        ],
+      ),
     );
   }
 
