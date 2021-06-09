@@ -67,9 +67,7 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
 
     return GestureDetector(
       onTap: widget.onTap,
-      onLongPress: () {
-        setState(() => _menuOpen = true);
-      },
+      onLongPress: _openMenu,
       child: PopupWithArrowEntry(
         visible: _menuOpen,
         arrowSide: ArrowSide.bottom,
@@ -81,11 +79,17 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
           key: Key('$lastModified'),
           image: image,
         ),
-        onTapOutside: () {
-          setState(() => _menuOpen = false);
-        },
+        onTapOutside: _closeMenu,
       ),
     );
+  }
+
+  void _openMenu() {
+    setState(() => _menuOpen = true);
+  }
+
+  void _closeMenu() {
+    setState(() => _menuOpen = false);
   }
 
   Widget _buildProjectMenu() {
@@ -102,6 +106,7 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
               context
                   .read<GalleryModel>()
                   .duplicateProject(context.read<Project>());
+              _closeMenu();
             },
           ),
           LabeledIconButton(
