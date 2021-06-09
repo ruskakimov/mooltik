@@ -53,8 +53,9 @@ class GalleryModel extends ChangeNotifier {
   }
 
   Future<Project> duplicateProject(Project project) async {
-    if (!_projects.contains(project))
+    if (!_projects.contains(project)) {
       throw Exception('Project instance not found.');
+    }
 
     final duplicate = Project.createIn(_directory);
     await copyPath(project.directory.path, duplicate.directory.path);
