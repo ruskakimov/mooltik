@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:io/io.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:path/path.dart' as p;
@@ -49,6 +50,18 @@ class GalleryModel extends ChangeNotifier {
 
     _projects[i] = Project(project.directory.renameSync(newProjectPath));
     notifyListeners();
+  }
+
+  Future<Project> duplicateProject(Project project) async {
+    if (!_projects.contains(project))
+      throw Exception('Project instance not found.');
+
+    final duplicate = Project.createIn(_directory);
+    await copyPath(project.directory.path, duplicate.directory.path);
+    _projects.insert(0, duplicate);
+
+    notifyListeners();
+    return duplicate;
   }
 
   Future<void> deleteProject(Project project) async {

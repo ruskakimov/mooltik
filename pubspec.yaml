@@ -40,9 +40,10 @@ dependencies:
   # App permissions:
   permission_handler: ^8.0.1
 
-  # Save user data:
+  # Manage user data:
   path_provider: ^2.0.2
   shared_preferences: ^2.0.6
+  io: ^1.0.0
 
   # Audio playback:
   just_audio: ^0.7.5

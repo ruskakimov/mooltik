@@ -91,15 +91,30 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
   Widget _buildProjectMenu() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: LabeledIconButton(
-        icon: FontAwesomeIcons.trashAlt,
-        label: 'Move to Bin',
-        color: Theme.of(context).colorScheme.onPrimary,
-        onTap: () {
-          context
-              .read<GalleryModel>()
-              .moveProjectToBin(context.read<Project>());
-        },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          LabeledIconButton(
+            icon: FontAwesomeIcons.copy,
+            label: 'Duplicate',
+            color: Theme.of(context).colorScheme.onPrimary,
+            onTap: () {
+              context
+                  .read<GalleryModel>()
+                  .duplicateProject(context.read<Project>());
+            },
+          ),
+          LabeledIconButton(
+            icon: FontAwesomeIcons.trashAlt,
+            label: 'Move to Bin',
+            color: Theme.of(context).colorScheme.onPrimary,
+            onTap: () {
+              context
+                  .read<GalleryModel>()
+                  .moveProjectToBin(context.read<Project>());
+            },
+          ),
+        ],
       ),
     );
   }
