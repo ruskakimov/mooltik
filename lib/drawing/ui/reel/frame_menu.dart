@@ -113,6 +113,7 @@ class FrameMenu extends StatelessWidget {
       builder: (context) => AlertDialog(
         title: Text('Delete this cel?'),
         content: Container(
+          width: 200,
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
