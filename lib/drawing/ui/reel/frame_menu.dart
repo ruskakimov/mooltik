@@ -64,18 +64,6 @@ class FrameMenu extends StatelessWidget {
           },
         ),
         LabeledIconButton(
-          icon: Icons.cut_rounded,
-          label: 'Cut',
-          color: Theme.of(context).colorScheme.onPrimary,
-          onTap: reel.canDeleteCurrent
-              ? () {
-                  copyPaster.copyImage(reel.currentFrame.snapshot);
-                  reel.deleteCurrent();
-                  closePopup();
-                }
-              : null,
-        ),
-        LabeledIconButton(
           icon: Icons.paste_rounded,
           label: 'Paste',
           color: Theme.of(context).colorScheme.onPrimary,
@@ -87,6 +75,17 @@ class FrameMenu extends StatelessWidget {
                     easel.frame.snapshot!,
                   );
                   easel.pushSnapshot(newSnapshot);
+                }
+              : null,
+        ),
+        LabeledIconButton(
+          icon: FontAwesomeIcons.trashAlt,
+          label: 'Delete',
+          color: Theme.of(context).colorScheme.onPrimary,
+          onTap: reel.canDeleteCurrent
+              ? () {
+                  reel.deleteCurrent();
+                  closePopup();
                 }
               : null,
         ),
