@@ -102,31 +102,31 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
             icon: FontAwesomeIcons.copy,
             label: 'Duplicate',
             color: Theme.of(context).colorScheme.onPrimary,
-            onTap: () {
-              context
-                  .read<GalleryModel>()
-                  .duplicateProject(context.read<Project>());
-              context.read<ScrollController>().animateTo(
-                    0,
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeOut,
-                  );
-              _closeMenu();
-            },
+            onTap: _duplicate,
           ),
           LabeledIconButton(
             icon: FontAwesomeIcons.trashAlt,
             label: 'Move to Bin',
             color: Theme.of(context).colorScheme.onPrimary,
-            onTap: () {
-              context
-                  .read<GalleryModel>()
-                  .moveProjectToBin(context.read<Project>());
-            },
+            onTap: _moveToBin,
           ),
         ],
       ),
     );
+  }
+
+  void _duplicate() {
+    context.read<GalleryModel>().duplicateProject(context.read<Project>());
+    context.read<ScrollController>().animateTo(
+          0,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+    _closeMenu();
+  }
+
+  void _moveToBin() {
+    context.read<GalleryModel>().moveProjectToBin(context.read<Project>());
   }
 }
 
