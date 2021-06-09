@@ -41,8 +41,9 @@ class GalleryModel extends ChangeNotifier {
   }
 
   Future<void> moveProjectToBin(Project project) async {
-    if (!_projects.contains(project))
+    if (!_projects.contains(project)) {
       throw Exception('Project instance not found.');
+    }
 
     final i = _projects.indexOf(project);
     final newDirName = Project.directoryName(project.creationEpoch, true);
