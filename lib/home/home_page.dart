@@ -18,7 +18,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final GalleryModel gallery = GalleryModel();
+  final gallery = GalleryModel();
+  final controller = ScrollController();
 
   @override
   void initState() {
@@ -35,8 +36,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<GalleryModel>.value(
-      value: gallery,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<GalleryModel>.value(value: gallery),
+        ChangeNotifierProvider<ScrollController>.value(value: controller),
+      ],
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Stack(
@@ -44,6 +48,7 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.only(top: 56),
               child: CustomScrollView(
+                controller: controller,
                 slivers: [
                   DiscordSliver(),
                   ProjectList(),

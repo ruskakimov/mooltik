@@ -67,9 +67,7 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
 
     return GestureDetector(
       onTap: widget.onTap,
-      onLongPress: () {
-        setState(() => _menuOpen = true);
-      },
+      onLongPress: _openMenu,
       child: PopupWithArrowEntry(
         visible: _menuOpen,
         arrowSide: ArrowSide.bottom,
@@ -81,27 +79,54 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
           key: Key('$lastModified'),
           image: image,
         ),
-        onTapOutside: () {
-          setState(() => _menuOpen = false);
-        },
+        onTapOutside: _closeMenu,
       ),
     );
+  }
+
+  void _openMenu() {
+    setState(() => _menuOpen = true);
+  }
+
+  void _closeMenu() {
+    setState(() => _menuOpen = false);
   }
 
   Widget _buildProjectMenu() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: LabeledIconButton(
-        icon: FontAwesomeIcons.trashAlt,
-        label: 'Move to Bin',
-        color: Theme.of(context).colorScheme.onPrimary,
-        onTap: () {
-          context
-              .read<GalleryModel>()
-              .moveProjectToBin(context.read<Project>());
-        },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          LabeledIconButton(
+            icon: FontAwesomeIcons.copy,
+            label: 'Duplicate',
+            color: Theme.of(context).colorScheme.onPrimary,
+            onTap: _duplicate,
+          ),
+          LabeledIconButton(
+            icon: FontAwesomeIcons.trashAlt,
+            label: 'Move to Bin',
+            color: Theme.of(context).colorScheme.onPrimary,
+            onTap: _moveToBin,
+          ),
+        ],
       ),
     );
+  }
+
+  void _duplicate() {
+    context.read<GalleryModel>().duplicateProject(context.read<Project>());
+    context.read<ScrollController>().animateTo(
+          0,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+    _closeMenu();
+  }
+
+  void _moveToBin() {
+    context.read<GalleryModel>().moveProjectToBin(context.read<Project>());
   }
 }
 
