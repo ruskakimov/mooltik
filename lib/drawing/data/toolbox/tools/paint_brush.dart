@@ -23,8 +23,8 @@ class PaintBrush extends Brush {
 
   @override
   List<BrushTip> get defaultBrushTips => [
-        BrushTip(strokeWidth: 5, opacity: 1, blur: 0.5),
-        BrushTip(strokeWidth: 10, opacity: 1, blur: 0.5),
-        BrushTip(strokeWidth: 20, opacity: 1, blur: 0.5),
+        BrushTip(strokeWidth: 5, opacity: 1, blur: 0),
+        BrushTip(strokeWidth: 10, opacity: 1, blur: 0),
+        BrushTip(strokeWidth: 20, opacity: 1, blur: 0),
       ];
 }
