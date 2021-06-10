@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-showSideSheet({
+openSideSheet({
   required BuildContext context,
   required Widget Function(BuildContext) builder,
   bool rightSide = true,

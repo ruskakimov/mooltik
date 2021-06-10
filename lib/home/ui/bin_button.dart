@@ -3,7 +3,7 @@ import 'package:mooltik/home/data/gallery_model.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
-import 'package:mooltik/common/ui/show_side_sheet.dart';
+import 'package:mooltik/common/ui/open_side_sheet.dart';
 
 import 'bin_contents.dart';
 
@@ -20,7 +20,7 @@ class BinButton extends StatelessWidget {
       onTap: () {
         final gallery = context.read<GalleryModel>();
 
-        showSideSheet(
+        openSideSheet(
           context: context,
           builder: (context) => ChangeNotifierProvider.value(
             value: gallery,

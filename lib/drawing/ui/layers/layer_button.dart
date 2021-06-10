@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
 import 'package:mooltik/drawing/ui/layers/layer_sheet.dart';
-import 'package:mooltik/common/ui/show_side_sheet.dart';
+import 'package:mooltik/common/ui/open_side_sheet.dart';
 
 class LayerButton extends StatelessWidget {
   const LayerButton({
@@ -25,7 +25,7 @@ class LayerButton extends StatelessWidget {
     final reelStack = context.read<ReelStackModel>();
     final project = context.read<Project>();
 
-    showSideSheet(
+    openSideSheet(
       context: context,
       builder: (context) => MultiProvider(
         providers: [
