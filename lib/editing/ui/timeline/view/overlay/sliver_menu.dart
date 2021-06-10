@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
+import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
+import 'package:mooltik/drawing/ui/frame_window.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -41,12 +45,34 @@ class SliverMenu extends StatelessWidget {
               label: 'Delete',
               color: Theme.of(context).colorScheme.onPrimary,
               onTap: timelineView.canDeleteSelected
-                  ? timelineView.deleteSelected
+                  ? () => _handleDelete(context)
                   : null,
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _handleDelete(BuildContext context) async {
+    final timelineView = context.read<TimelineViewModel>();
+
+    final selected = timelineView.selectedSpan;
+    final selectedSliverId = timelineView.selectedSliverId;
+
+    timelineView.removeSliverSelection();
+
+    final deleteConfirmed = await openDeleteConfirmationDialog(
+      context: context,
+      name: selected is Scene ? 'scene' : 'cel',
+      preview: selected is Scene
+          ? SizedBox.shrink()
+          : FrameWindow(frame: selected as Frame),
+    );
+
+    if (deleteConfirmed == true) {
+      timelineView.selectSliver(selectedSliverId);
+      timelineView.deleteSelected();
+    }
   }
 }
