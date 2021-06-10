@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:mooltik/common/data/copy_paster_model.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
+import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
@@ -90,9 +91,10 @@ class FrameMenu extends StatelessWidget {
           onTap: reel.canDeleteCurrent
               ? () async {
                   closePopup();
-                  final deleteConfirmed = await _openDeleteConfirmationDialog(
-                    context,
-                    reel.currentFrame,
+                  final deleteConfirmed = await openDeleteConfirmationDialog(
+                    context: context,
+                    name: 'cel',
+                    preview: FrameWindow(frame: reel.currentFrame),
                   );
                   if (deleteConfirmed == true) {
                     reel.deleteCurrent();
@@ -101,36 +103,6 @@ class FrameMenu extends StatelessWidget {
               : null,
         ),
       ],
-    );
-  }
-
-  Future<bool?> _openDeleteConfirmationDialog(
-    BuildContext context,
-    Frame frameToBeDeleted,
-  ) async {
-    return showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Delete this cel?'),
-        content: Container(
-          width: 200,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: FrameWindow(frame: frameToBeDeleted),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('CANCEL'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('DELETE FOREVER'),
-          ),
-        ],
-      ),
     );
   }
 
