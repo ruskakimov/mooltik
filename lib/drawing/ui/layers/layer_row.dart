@@ -25,7 +25,6 @@ class LayerRow extends StatelessWidget {
     final visible = reelStack.isVisible(reelStack.reels.indexOf(reel));
 
     return Slidable(
-      key: Key(reel.currentFrame.file.path),
       actionPane: SlidableDrawerActionPane(),
       closeOnScroll: true,
       secondaryActions: [DeleteLayerSlideAction(reelToDelete: reel)],

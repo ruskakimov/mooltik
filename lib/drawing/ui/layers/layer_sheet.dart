@@ -23,7 +23,11 @@ class LayerSheet extends StatelessWidget {
               onReorder: reelStack.onLayerReorder,
               children: [
                 // TODO: Why is it nullable
-                for (final reel in reelStack.reels) LayerRow(reel: reel!),
+                for (final reel in reelStack.reels)
+                  LayerRow(
+                    key: Key(reel!.currentFrame.file.path),
+                    reel: reel!,
+                  ),
               ],
             ),
           ),
