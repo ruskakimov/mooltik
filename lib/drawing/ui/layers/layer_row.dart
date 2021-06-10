@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/ui/frame_window.dart';
 import 'package:mooltik/drawing/ui/reel/frame_number_box.dart';
 import 'package:provider/provider.dart';
@@ -75,10 +78,14 @@ class LayerRow extends StatelessWidget {
   }
 
   Future<void> _handleDelete(BuildContext context) async {
+    final isAnimatedLayer = reel.frameSeq.length > 1;
+
     final deleteConfirmed = await openDeleteConfirmationDialog(
       context: context,
-      name: 'layer',
-      preview: FrameWindow(frame: reel.currentFrame),
+      name: isAnimatedLayer ? 'animated layer' : 'layer',
+      preview: isAnimatedLayer
+          ? AnimatedLayerPreview(frames: reel.frameSeq.iterable.toList())
+          : FrameWindow(frame: reel.currentFrame),
     );
 
     if (deleteConfirmed == true) {
@@ -125,5 +132,46 @@ class CurrentCel extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class AnimatedLayerPreview extends StatefulWidget {
+  AnimatedLayerPreview({
+    Key? key,
+    required this.frames,
+  }) : super(key: key);
+
+  final List<Frame> frames;
+
+  @override
+  AnimatedLayerPreviewState createState() => AnimatedLayerPreviewState();
+}
+
+class AnimatedLayerPreviewState extends State<AnimatedLayerPreview> {
+  int _frameIndex = 0;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(
+      Duration(milliseconds: 200),
+      (_) {
+        setState(() {
+          _frameIndex = (_frameIndex + 1) % widget.frames.length;
+        });
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FrameWindow(frame: widget.frames[_frameIndex]);
   }
 }
