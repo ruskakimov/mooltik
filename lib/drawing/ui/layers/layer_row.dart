@@ -155,7 +155,7 @@ class AnimatedLayerPreviewState extends State<AnimatedLayerPreview> {
   void initState() {
     super.initState();
     _timer = Timer.periodic(
-      Duration(milliseconds: 200),
+      const Duration(milliseconds: 150),
       (_) {
         setState(() {
           _frameIndex = (_frameIndex + 1) % widget.frames.length;
