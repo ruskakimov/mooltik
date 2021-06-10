@@ -24,7 +24,7 @@ Future<bool?> openDeleteConfirmationDialog({
         ),
         TextButton(
           onPressed: () => Navigator.pop(context, true),
-          child: const Text('DELETE FOREVER'),
+          child: const Text('DELETE'),
         ),
       ],
     ),
