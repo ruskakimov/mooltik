@@ -56,7 +56,20 @@ class LayerRow extends StatelessWidget {
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       closeOnScroll: true,
-      secondaryActions: [DeleteLayerSlideAction(reelToDelete: reel)],
+      secondaryActions: [
+        SlideAction(
+          color: Colors.red,
+          closeOnTap: true,
+          child: LabeledIconButton(
+            icon: FontAwesomeIcons.trashAlt,
+            label: 'Delete',
+            color: Colors.white,
+            onTap: reelStack.canDeleteLayer
+                ? () => reelStack.deleteLayer(reelStack.reels.indexOf(reel))
+                : null,
+          ),
+        ),
+      ],
       child: content,
     );
   }
@@ -96,33 +109,6 @@ class Preview extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class DeleteLayerSlideAction extends StatelessWidget {
-  const DeleteLayerSlideAction({
-    Key? key,
-    required this.reelToDelete,
-  }) : super(key: key);
-
-  final FrameReelModel reelToDelete;
-
-  @override
-  Widget build(BuildContext context) {
-    final reelStack = context.watch<ReelStackModel>();
-
-    return SlideAction(
-      color: Colors.red,
-      closeOnTap: true,
-      child: LabeledIconButton(
-        icon: FontAwesomeIcons.trashAlt,
-        label: 'Delete',
-        color: Colors.white,
-        onTap: reelStack.canDeleteLayer
-            ? () => reelStack.deleteLayer(reelStack.reels.indexOf(reelToDelete))
-            : null,
       ),
     );
   }
