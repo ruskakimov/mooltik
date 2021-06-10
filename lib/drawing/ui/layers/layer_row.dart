@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
+import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/drawing/ui/frame_window.dart';
 import 'package:mooltik/drawing/ui/reel/frame_number_box.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +34,7 @@ class LayerRow extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Preview(reel: reel),
+              CurrentCel(reel: reel),
               SizedBox(width: 4),
               _buildLabel(context),
               Spacer(),
@@ -64,14 +65,27 @@ class LayerRow extends StatelessWidget {
             icon: FontAwesomeIcons.trashAlt,
             label: 'Delete',
             color: Colors.white,
-            onTap: reelStack.canDeleteLayer
-                ? () => reelStack.deleteLayer(reelStack.reels.indexOf(reel))
-                : null,
+            onTap:
+                reelStack.canDeleteLayer ? () => _handleDelete(context) : null,
           ),
         ),
       ],
       child: content,
     );
+  }
+
+  Future<void> _handleDelete(BuildContext context) async {
+    final deleteConfirmed = await openDeleteConfirmationDialog(
+      context: context,
+      name: 'layer',
+      preview: FrameWindow(frame: reel.currentFrame),
+    );
+
+    if (deleteConfirmed == true) {
+      final reelStack = context.read<ReelStackModel>();
+      final reelIndex = reelStack.reels.indexOf(reel);
+      reelStack.deleteLayer(reelIndex);
+    }
   }
 
   Widget _buildLabel(BuildContext context) {
@@ -81,8 +95,8 @@ class LayerRow extends StatelessWidget {
   }
 }
 
-class Preview extends StatelessWidget {
-  const Preview({
+class CurrentCel extends StatelessWidget {
+  const CurrentCel({
     Key? key,
     required this.reel,
   }) : super(key: key);
