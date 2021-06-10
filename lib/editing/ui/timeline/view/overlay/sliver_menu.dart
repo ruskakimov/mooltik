@@ -5,6 +5,7 @@ import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/ui/frame_window.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/animated_scene_preview.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -66,7 +67,7 @@ class SliverMenu extends StatelessWidget {
       context: context,
       name: selected is Scene ? 'scene' : 'cel',
       preview: selected is Scene
-          ? SizedBox.shrink()
+          ? AnimatedScenePreview(scene: selected)
           : FrameWindow(frame: selected as Frame),
     );
 
