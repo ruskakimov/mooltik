@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/drawing/ui/frame_window.dart';
 import 'package:mooltik/drawing/ui/reel/frame_number_box.dart';
 import 'package:provider/provider.dart';
@@ -9,43 +12,48 @@ import 'package:mooltik/drawing/ui/layers/visibility_switch.dart';
 class LayerRow extends StatelessWidget {
   const LayerRow({
     Key? key,
-    required this.selected,
-    this.visible,
-    this.reel,
-    this.onTap,
+    required this.reel,
   }) : super(key: key);
 
-  final bool selected;
-  final bool? visible;
-  final FrameReelModel? reel;
-  final VoidCallback? onTap;
+  final FrameReelModel reel;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 80,
-      child: Material(
-        color: selected ? Colors.white24 : Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _buildCell(),
-              SizedBox(width: 4),
-              _buildLabel(context),
-              Spacer(),
-              VisibilitySwitch(
-                value: visible,
-                onChanged: (value) {
-                  final reelStack = context.read<ReelStackModel>();
-                  reelStack.setLayerVisibility(
-                    reelStack.reels.indexOf(reel),
-                    value,
-                  );
-                },
-              ),
-            ],
+    final reelStack = context.watch<ReelStackModel>();
+
+    final selected = reel == reelStack.activeReel;
+    final visible = reelStack.isVisible(reelStack.reels.indexOf(reel));
+
+    return Slidable(
+      key: Key(reel.currentFrame.file.path),
+      actionPane: SlidableDrawerActionPane(),
+      closeOnScroll: true,
+      secondaryActions: [DeleteLayerSlideAction(reelToDelete: reel)],
+      child: SizedBox(
+        height: 80,
+        child: Material(
+          color: selected ? Colors.white24 : Colors.transparent,
+          child: InkWell(
+            onTap: () => reelStack.changeActiveReel(reel),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _buildCell(),
+                SizedBox(width: 4),
+                _buildLabel(context),
+                Spacer(),
+                VisibilitySwitch(
+                  value: visible,
+                  onChanged: (value) {
+                    final reelStack = context.read<ReelStackModel>();
+                    reelStack.setLayerVisibility(
+                      reelStack.reels.indexOf(reel),
+                      value,
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -61,13 +69,13 @@ class LayerRow extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          FrameWindow(frame: reel!.currentFrame),
+          FrameWindow(frame: reel.currentFrame),
           Positioned(
             top: 4,
             left: 4,
             child: FrameNumberBox(
               selected: true,
-              number: reel!.currentIndex + 1,
+              number: reel.currentIndex + 1,
             ),
           ),
         ],
@@ -76,8 +84,35 @@ class LayerRow extends StatelessWidget {
   }
 
   Widget _buildLabel(BuildContext context) {
-    final count = reel!.frameSeq.length;
+    final count = reel.frameSeq.length;
     final appendix = count > 1 ? 'frames' : 'frame';
     return Text('$count $appendix');
+  }
+}
+
+class DeleteLayerSlideAction extends StatelessWidget {
+  const DeleteLayerSlideAction({
+    Key? key,
+    required this.reelToDelete,
+  }) : super(key: key);
+
+  final FrameReelModel reelToDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    final reelStack = context.watch<ReelStackModel>();
+
+    return SlideAction(
+      color: Colors.red,
+      closeOnTap: true,
+      child: LabeledIconButton(
+        icon: FontAwesomeIcons.trashAlt,
+        label: 'Delete',
+        color: Colors.white,
+        onTap: reelStack.canDeleteLayer
+            ? () => reelStack.deleteLayer(reelStack.reels.indexOf(reelToDelete))
+            : null,
+      ),
+    );
   }
 }

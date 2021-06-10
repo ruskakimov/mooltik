@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
-import 'package:mooltik/common/ui/labeled_icon_button.dart';
-import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/layers/layer_row.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
@@ -25,8 +22,8 @@ class LayerSheet extends StatelessWidget {
             child: ReorderableListView(
               onReorder: reelStack.onLayerReorder,
               children: [
-                for (final reel in reelStack.reels)
-                  _buildInteractiveLayerRow(reel!, reelStack),
+                // TODO: Why is it nullable
+                for (final reel in reelStack.reels) LayerRow(reel: reel!),
               ],
             ),
           ),
@@ -52,37 +49,6 @@ class LayerSheet extends StatelessWidget {
       child: Text(
         'Layers',
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Slidable _buildInteractiveLayerRow(
-    FrameReelModel reel,
-    ReelStackModel reelStack,
-  ) {
-    return Slidable(
-      key: Key(reel.currentFrame.file.path),
-      actionPane: SlidableDrawerActionPane(),
-      closeOnScroll: true,
-      secondaryActions: [
-        SlideAction(
-          color: Colors.red,
-          closeOnTap: true,
-          child: LabeledIconButton(
-            icon: FontAwesomeIcons.trashAlt,
-            label: 'Delete',
-            color: Colors.white,
-            onTap: reelStack.canDeleteLayer
-                ? () => reelStack.deleteLayer(reelStack.reels.indexOf(reel))
-                : null,
-          ),
-        ),
-      ],
-      child: LayerRow(
-        selected: reel == reelStack.activeReel,
-        visible: reelStack.isVisible(reelStack.reels.indexOf(reel)),
-        reel: reel,
-        onTap: () => reelStack.changeActiveReel(reel),
       ),
     );
   }
