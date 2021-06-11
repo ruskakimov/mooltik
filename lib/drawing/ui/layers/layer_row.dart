@@ -97,7 +97,7 @@ class LayerRow extends StatelessWidget {
 
   Widget _buildLabel(BuildContext context) {
     final count = reel.frameSeq.length;
-    final appendix = count > 1 ? 'frames' : 'frame';
+    final appendix = count > 1 ? 'cels' : 'cel';
     return Text('$count $appendix');
   }
 }
