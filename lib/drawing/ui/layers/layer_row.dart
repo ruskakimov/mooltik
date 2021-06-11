@@ -13,7 +13,7 @@ import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
 import 'package:mooltik/drawing/ui/layers/visibility_switch.dart';
 
-class LayerRow extends StatelessWidget {
+class LayerRow extends StatefulWidget {
   const LayerRow({
     Key? key,
     required this.reel,
@@ -28,32 +28,28 @@ class LayerRow extends StatelessWidget {
   final bool canDelete;
 
   @override
+  _LayerRowState createState() => _LayerRowState();
+}
+
+class _LayerRowState extends State<LayerRow> {
+  @override
   Widget build(BuildContext context) {
     final content = SizedBox(
       height: 80,
       child: Material(
-        color: selected ? Colors.white24 : Colors.transparent,
+        color: widget.selected ? Colors.white24 : Colors.transparent,
         child: InkWell(
-          onTap: () {
-            final reelStack = context.read<ReelStackModel>();
-            reelStack.changeActiveReel(reel);
-          },
+          onTap: _handleSelect,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CurrentCel(reel: reel),
+              CurrentCel(reel: widget.reel),
               SizedBox(width: 4),
-              _buildLabel(context),
+              _buildLabel(),
               Spacer(),
               VisibilitySwitch(
-                value: visible,
-                onChanged: (value) {
-                  final reelStack = context.read<ReelStackModel>();
-                  reelStack.setLayerVisibility(
-                    reelStack.reels.indexOf(reel),
-                    value,
-                  );
-                },
+                value: widget.visible,
+                onChanged: _handleVisibilitySwitch,
               ),
             ],
           ),
@@ -72,7 +68,7 @@ class LayerRow extends StatelessWidget {
             icon: FontAwesomeIcons.trashAlt,
             label: 'Delete',
             color: Colors.white,
-            onTap: canDelete ? () => _handleDelete(context) : null,
+            onTap: widget.canDelete ? _handleDelete : null,
           ),
         ),
       ],
@@ -80,26 +76,39 @@ class LayerRow extends StatelessWidget {
     );
   }
 
-  Future<void> _handleDelete(BuildContext context) async {
-    final isAnimatedLayer = reel.frameSeq.length > 1;
+  void _handleSelect() {
+    final reelStack = context.read<ReelStackModel>();
+    reelStack.changeActiveReel(widget.reel);
+  }
+
+  void _handleVisibilitySwitch(bool value) {
+    final reelStack = context.read<ReelStackModel>();
+    reelStack.setLayerVisibility(
+      reelStack.reels.indexOf(widget.reel),
+      value,
+    );
+  }
+
+  Future<void> _handleDelete() async {
+    final isAnimatedLayer = widget.reel.frameSeq.length > 1;
 
     final deleteConfirmed = await openDeleteConfirmationDialog(
       context: context,
       name: isAnimatedLayer ? 'animated layer' : 'layer',
       preview: isAnimatedLayer
-          ? AnimatedLayerPreview(frames: reel.frameSeq.iterable.toList())
-          : FrameWindow(frame: reel.currentFrame),
+          ? AnimatedLayerPreview(frames: widget.reel.frameSeq.iterable.toList())
+          : FrameWindow(frame: widget.reel.currentFrame),
     );
 
     if (deleteConfirmed == true) {
       final reelStack = context.read<ReelStackModel>();
-      final reelIndex = reelStack.reels.indexOf(reel);
+      final reelIndex = reelStack.reels.indexOf(widget.reel);
       reelStack.deleteLayer(reelIndex);
     }
   }
 
-  Widget _buildLabel(BuildContext context) {
-    final count = reel.frameSeq.length;
+  Widget _buildLabel() {
+    final count = widget.reel.frameSeq.length;
     final appendix = count > 1 ? 'cels' : 'cel';
     return Text('$count $appendix');
   }
