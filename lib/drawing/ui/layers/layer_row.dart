@@ -17,23 +17,27 @@ class LayerRow extends StatelessWidget {
   const LayerRow({
     Key? key,
     required this.reel,
+    required this.selected,
+    required this.visible,
+    required this.canDelete,
   }) : super(key: key);
 
   final FrameReelModel reel;
+  final bool selected;
+  final bool visible;
+  final bool canDelete;
 
   @override
   Widget build(BuildContext context) {
-    final reelStack = context.watch<ReelStackModel>();
-
-    final selected = reel == reelStack.activeReel;
-    final visible = reelStack.isVisible(reelStack.reels.indexOf(reel));
-
     final content = SizedBox(
       height: 80,
       child: Material(
         color: selected ? Colors.white24 : Colors.transparent,
         child: InkWell(
-          onTap: () => reelStack.changeActiveReel(reel),
+          onTap: () {
+            final reelStack = context.read<ReelStackModel>();
+            reelStack.changeActiveReel(reel);
+          },
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -68,8 +72,7 @@ class LayerRow extends StatelessWidget {
             icon: FontAwesomeIcons.trashAlt,
             label: 'Delete',
             color: Colors.white,
-            onTap:
-                reelStack.canDeleteLayer ? () => _handleDelete(context) : null,
+            onTap: canDelete ? () => _handleDelete(context) : null,
           ),
         ),
       ],

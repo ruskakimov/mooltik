@@ -26,7 +26,10 @@ class LayerSheet extends StatelessWidget {
                 for (final reel in reelStack.reels)
                   LayerRow(
                     key: Key(reel!.currentFrame.file.path),
-                    reel: reel!,
+                    reel: reel,
+                    selected: reel == reelStack.activeReel,
+                    visible: reelStack.isVisible(reelStack.reels.indexOf(reel)),
+                    canDelete: reelStack.canDeleteLayer,
                   ),
               ],
             ),
