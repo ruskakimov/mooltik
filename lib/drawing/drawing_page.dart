@@ -57,7 +57,7 @@ class DrawingPage extends StatelessWidget {
             body: MultiProvider(
               providers: [
                 ChangeNotifierProvider<FrameReelModel>.value(
-                  value: reelStack.activeReel!,
+                  value: reelStack.activeReel,
                 ),
                 ChangeNotifierProxyProvider<FrameReelModel, OnionModel>(
                   update: (context, reel, model) => model!

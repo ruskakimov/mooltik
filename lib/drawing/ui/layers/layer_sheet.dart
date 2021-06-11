@@ -22,10 +22,9 @@ class LayerSheet extends StatelessWidget {
             child: ReorderableListView(
               onReorder: reelStack.onLayerReorder,
               children: [
-                // TODO: Why is it nullable
                 for (final reel in reelStack.reels)
                   LayerRow(
-                    key: Key(reel!.currentFrame.file.path),
+                    key: Key(reel.currentFrame.file.path),
                     reel: reel,
                     selected: reel == reelStack.activeReel,
                     visible: reelStack.isVisible(reelStack.reels.indexOf(reel)),
