@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:mooltik/common/data/copy_paster_model.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
+import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
+import 'package:mooltik/drawing/ui/frame_window.dart';
 import 'package:provider/provider.dart';
 
 class FrameMenu extends StatelessWidget {
@@ -56,6 +60,7 @@ class FrameMenu extends StatelessWidget {
       children: [
         LabeledIconButton(
           icon: Icons.copy_rounded,
+          iconTransform: Matrix4Transform().scale(1.1, origin: Offset(9, 0)).m,
           label: 'Copy',
           color: Theme.of(context).colorScheme.onPrimary,
           onTap: () {
@@ -64,19 +69,8 @@ class FrameMenu extends StatelessWidget {
           },
         ),
         LabeledIconButton(
-          icon: Icons.cut_rounded,
-          label: 'Cut',
-          color: Theme.of(context).colorScheme.onPrimary,
-          onTap: reel.canDeleteCurrent
-              ? () {
-                  copyPaster.copyImage(reel.currentFrame.snapshot);
-                  reel.deleteCurrent();
-                  closePopup();
-                }
-              : null,
-        ),
-        LabeledIconButton(
           icon: Icons.paste_rounded,
+          iconTransform: Matrix4Transform().scale(1.1, origin: Offset(9, 0)).m,
           label: 'Paste',
           color: Theme.of(context).colorScheme.onPrimary,
           onTap: copyPaster.canPaste
@@ -87,6 +81,24 @@ class FrameMenu extends StatelessWidget {
                     easel.frame.snapshot!,
                   );
                   easel.pushSnapshot(newSnapshot);
+                }
+              : null,
+        ),
+        LabeledIconButton(
+          icon: FontAwesomeIcons.trashAlt,
+          label: 'Delete',
+          color: Theme.of(context).colorScheme.onPrimary,
+          onTap: reel.canDeleteCurrent
+              ? () async {
+                  closePopup();
+                  final deleteConfirmed = await openDeleteConfirmationDialog(
+                    context: context,
+                    name: 'cel',
+                    preview: FrameWindow(frame: reel.currentFrame),
+                  );
+                  if (deleteConfirmed == true) {
+                    reel.deleteCurrent();
+                  }
                 }
               : null,
         ),

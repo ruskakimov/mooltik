@@ -57,7 +57,7 @@ class _EaselState extends State<Easel> {
                     child: EaselCanvas(
                       size: easel.frameSize,
                       frames: reelStack.visibleReels
-                          .map((reel) => reel!.currentFrame)
+                          .map((reel) => reel.currentFrame)
                           .toList()
                           .reversed
                           .toList(),
