@@ -47,6 +47,7 @@ class Board extends StatelessWidget {
       width: 120,
       padding: const EdgeInsets.all(8.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             clipBehavior: Clip.antiAlias,
