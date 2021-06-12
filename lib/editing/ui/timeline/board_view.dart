@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/ui/composite_image_painter.dart';
@@ -67,32 +68,50 @@ class Board extends StatelessWidget {
         direction: horizontal ? Axis.horizontal : Axis.vertical,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: CustomPaint(
-                size: image.size,
-                painter: CompositeImagePainter(image),
-              ),
-            ),
-          ),
-          SizedBox(width: 8, height: 8),
-          Expanded(
-            child: Text(
-              scene.description ?? '',
-              overflow: TextOverflow.fade,
-              style: TextStyle(
-                fontSize: 12,
-                height: 1.2,
-                color: selected ? Colors.grey[100] : Colors.grey[500],
-              ),
-            ),
-          ),
+          _Thumbnail(image: image),
+          const SizedBox(width: 8, height: 8),
+          _buildDescription(),
         ],
+      ),
+    );
+  }
+
+  Expanded _buildDescription() {
+    return Expanded(
+      child: Text(
+        scene.description ?? '',
+        overflow: TextOverflow.fade,
+        style: TextStyle(
+          fontSize: 12,
+          height: 1.2,
+          color: selected ? Colors.grey[100] : Colors.grey[500],
+        ),
+      ),
+    );
+  }
+}
+
+class _Thumbnail extends StatelessWidget {
+  const _Thumbnail({
+    Key? key,
+    required this.image,
+  }) : super(key: key);
+
+  final CompositeImage image;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: CustomPaint(
+          size: image.size,
+          painter: CompositeImagePainter(image),
+        ),
       ),
     );
   }
