@@ -76,6 +76,7 @@ class Board extends StatelessWidget {
           Expanded(
             child: _Info(
               sceneNumber: sceneNumber,
+              sceneDuration: scene.duration,
               sceneDescription: scene.description,
               selected: selected,
             ),
@@ -116,11 +117,13 @@ class _Info extends StatelessWidget {
   const _Info({
     Key? key,
     required this.sceneNumber,
+    required this.sceneDuration,
     required this.sceneDescription,
     required this.selected,
   }) : super(key: key);
 
   final int sceneNumber;
+  final Duration sceneDuration;
   final String? sceneDescription;
   final bool selected;
 
@@ -135,9 +138,18 @@ class _Info extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Scene $sceneNumber',
-          style: textStyle,
+        Row(
+          children: [
+            Text(
+              'Scene $sceneNumber',
+              style: textStyle,
+            ),
+            // Spacer(),
+            Text(
+              _getDurationLabel(),
+              style: textStyle,
+            ),
+          ],
         ),
         SizedBox(height: 4),
         Expanded(
@@ -149,5 +161,10 @@ class _Info extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String _getDurationLabel() {
+    final seconds = sceneDuration.inMilliseconds / 1000;
+    return ' (' + seconds.toStringAsFixed(1).replaceFirst('.0', '') + 's)';
   }
 }
