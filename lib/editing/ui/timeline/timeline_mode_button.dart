@@ -4,7 +4,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class TimelineModeButton extends StatelessWidget {
   const TimelineModeButton({
     Key? key,
+    required this.showTimelineIcon,
+    this.onTap,
   }) : super(key: key);
+
+  final bool showTimelineIcon;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -13,15 +18,17 @@ class TimelineModeButton extends StatelessWidget {
       mini: true,
       elevation: 2,
       child: _buildIcon(),
-      onPressed: () {},
+      onPressed: onTap,
     );
   }
 
-  Widget _buildIcon() {
-    return RotatedBox(
-      quarterTurns: 2,
-      child: Icon(FontAwesomeIcons.windowMaximize, size: 20),
-    );
-    return Icon(FontAwesomeIcons.stream, size: 20);
-  }
+  Widget _buildIcon() => showTimelineIcon
+      ? Icon(
+          FontAwesomeIcons.stream,
+          size: 20,
+        )
+      : RotatedBox(
+          quarterTurns: 2,
+          child: Icon(FontAwesomeIcons.windowMaximize, size: 20),
+        );
 }
