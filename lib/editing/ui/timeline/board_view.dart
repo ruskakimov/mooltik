@@ -10,18 +10,21 @@ class BoardView extends StatelessWidget {
   Widget build(BuildContext context) {
     final timeline = context.watch<TimelineModel>();
 
-    final scenes = timeline.sceneSeq.iterable;
+    final scenes = timeline.sceneSeq.iterable.toList();
 
-    return ReorderableListView(
+    return ReorderableListView.builder(
       scrollDirection: Axis.horizontal,
-      onReorder: (i, j) {},
-      children: [
-        for (final scene in scenes)
-          Board(
-            key: Key(scene.allFrames.first.file.path),
-            scene: scene,
-          ),
-      ],
+      onReorder: (i, j) {
+        print('');
+      },
+      itemCount: scenes.length,
+      itemBuilder: (context, i) {
+        final scene = scenes[i];
+        return Board(
+          key: Key(scene.allFrames.first.file.path),
+          scene: scene,
+        );
+      },
     );
   }
 }
