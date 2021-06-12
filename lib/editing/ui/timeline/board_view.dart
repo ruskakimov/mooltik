@@ -10,12 +10,13 @@ class BoardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timeline = context.watch<TimelineModel>();
-
     final scenes = timeline.sceneSeq.iterable.toList();
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
 
     return ReorderableListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      scrollDirection: Axis.horizontal,
+      scrollDirection: isPortrait ? Axis.vertical : Axis.horizontal,
       onReorder: (i, j) {
         print('');
       },
@@ -28,6 +29,7 @@ class BoardView extends StatelessWidget {
           child: Board(
             scene: scene,
             selected: scene == timeline.currentScene,
+            horizontal: isPortrait,
           ),
         );
       },
@@ -40,17 +42,20 @@ class Board extends StatelessWidget {
     Key? key,
     required this.scene,
     required this.selected,
+    this.horizontal = false,
   }) : super(key: key);
 
   final Scene scene;
   final bool selected;
+  final bool horizontal;
 
   @override
   Widget build(BuildContext context) {
     final image = scene.imageAt(Duration.zero);
 
     return Container(
-      width: 120,
+      width: horizontal ? null : 120,
+      height: horizontal ? 80 : null,
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(8.0),
       clipBehavior: Clip.antiAlias,
@@ -58,7 +63,8 @@ class Board extends StatelessWidget {
         color: selected ? Colors.white24 : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Column(
+      child: Flex(
+        direction: horizontal ? Axis.horizontal : Axis.vertical,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
@@ -74,7 +80,7 @@ class Board extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 8),
+          SizedBox(width: 8, height: 8),
           Expanded(
             child: Text(
               scene.description ?? '',
