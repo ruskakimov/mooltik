@@ -25,6 +25,7 @@ class BoardView extends StatelessWidget {
         return Board(
           key: Key(scene.allFrames.first.file.path),
           scene: scene,
+          selected: scene == timeline.currentScene,
         );
       },
     );
@@ -35,9 +36,11 @@ class Board extends StatelessWidget {
   const Board({
     Key? key,
     required this.scene,
+    required this.selected,
   }) : super(key: key);
 
   final Scene scene;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +48,20 @@ class Board extends StatelessWidget {
 
     return Container(
       width: 120,
+      margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(8.0),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: selected ? Colors.white24 : Colors.transparent,
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(4),
             ),
             child: FittedBox(
               fit: BoxFit.contain,
@@ -70,7 +79,7 @@ class Board extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 height: 1.2,
-                color: Colors.grey[500],
+                color: selected ? Colors.grey[100] : Colors.grey[500],
               ),
             ),
           ),
