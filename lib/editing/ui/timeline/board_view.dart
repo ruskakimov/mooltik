@@ -144,7 +144,6 @@ class _Info extends StatelessWidget {
               'Scene $sceneNumber',
               style: textStyle,
             ),
-            // Spacer(),
             Text(
               _getDurationLabel(),
               style: textStyle,
