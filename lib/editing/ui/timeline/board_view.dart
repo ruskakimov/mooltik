@@ -29,6 +29,7 @@ class BoardView extends StatelessWidget {
           onTap: () => timeline.jumpToSceneStart(i),
           child: Board(
             scene: scene,
+            sceneNumber: i + 1,
             selected: scene == timeline.currentScene,
             horizontal: isPortrait,
           ),
@@ -42,11 +43,13 @@ class Board extends StatelessWidget {
   const Board({
     Key? key,
     required this.scene,
+    required this.sceneNumber,
     required this.selected,
     this.horizontal = false,
   }) : super(key: key);
 
   final Scene scene;
+  final int sceneNumber;
   final bool selected;
   final bool horizontal;
 
@@ -70,22 +73,14 @@ class Board extends StatelessWidget {
         children: [
           _Thumbnail(image: image),
           const SizedBox(width: 8, height: 8),
-          _buildDescription(),
+          Expanded(
+            child: _Info(
+              sceneNumber: sceneNumber,
+              sceneDescription: scene.description,
+              selected: selected,
+            ),
+          ),
         ],
-      ),
-    );
-  }
-
-  Expanded _buildDescription() {
-    return Expanded(
-      child: Text(
-        scene.description ?? '',
-        overflow: TextOverflow.fade,
-        style: TextStyle(
-          fontSize: 12,
-          height: 1.2,
-          color: selected ? Colors.grey[100] : Colors.grey[500],
-        ),
       ),
     );
   }
@@ -113,6 +108,46 @@ class _Thumbnail extends StatelessWidget {
           painter: CompositeImagePainter(image),
         ),
       ),
+    );
+  }
+}
+
+class _Info extends StatelessWidget {
+  const _Info({
+    Key? key,
+    required this.sceneNumber,
+    required this.sceneDescription,
+    required this.selected,
+  }) : super(key: key);
+
+  final int sceneNumber;
+  final String? sceneDescription;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyle = TextStyle(
+      fontSize: 12,
+      height: 1.2,
+      color: selected ? Colors.grey[100] : Colors.grey[500],
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Scene $sceneNumber',
+          style: textStyle,
+        ),
+        SizedBox(height: 4),
+        Expanded(
+          child: Text(
+            sceneDescription ?? '',
+            overflow: TextOverflow.fade,
+            style: textStyle,
+          ),
+        ),
+      ],
     );
   }
 }
