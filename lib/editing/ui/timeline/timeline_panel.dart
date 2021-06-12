@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/timeline_mode_button.dart';
 import 'package:mooltik/editing/ui/timeline/view/timeline_view.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/timeline_actionbar.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/playhead.dart';
@@ -22,6 +23,11 @@ class TimelinePanel extends StatelessWidget {
               children: [
                 TimelineView(),
                 Playhead(),
+                Positioned(
+                  bottom: 8,
+                  left: 4,
+                  child: TimelineModeButton(),
+                ),
               ],
             ),
           ),
