@@ -22,10 +22,13 @@ class BoardView extends StatelessWidget {
       itemCount: scenes.length,
       itemBuilder: (context, i) {
         final scene = scenes[i];
-        return Board(
+        return GestureDetector(
           key: Key(scene.allFrames.first.file.path),
-          scene: scene,
-          selected: scene == timeline.currentScene,
+          onTap: () => timeline.jumpToSceneStart(i),
+          child: Board(
+            scene: scene,
+            selected: scene == timeline.currentScene,
+          ),
         );
       },
     );

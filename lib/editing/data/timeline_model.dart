@@ -8,7 +8,7 @@ class TimelineModel extends ChangeNotifier {
   TimelineModel({
     required this.sceneSeq,
     required TickerProvider vsync,
-  })   : assert(sceneSeq.length > 0),
+  })  : assert(sceneSeq.length > 0),
         _playheadController = AnimationController(
           vsync: vsync,
           duration: sceneSeq.totalDuration,
@@ -68,6 +68,12 @@ class TimelineModel extends ChangeNotifier {
   /// Jumps to a new playhead position.
   void jumpTo(Duration playheadPosition) {
     _setPlayhead(playheadPosition);
+    notifyListeners();
+  }
+
+  void jumpToSceneStart(int sceneIndex) {
+    _playheadController.stop();
+    _setPlayhead(sceneSeq.startTimeOf(sceneIndex));
     notifyListeners();
   }
 
