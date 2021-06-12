@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class TimelineModeButton extends StatelessWidget {
-  const TimelineModeButton({
+class TimelineViewButton extends StatelessWidget {
+  const TimelineViewButton({
     Key? key,
     required this.showTimelineIcon,
     this.onTap,
