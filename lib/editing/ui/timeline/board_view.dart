@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/ui/composite_image_painter.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
-import 'package:provider/provider.dart';
 
 class BoardView extends StatelessWidget {
   const BoardView({Key? key}) : super(key: key);
@@ -14,6 +14,7 @@ class BoardView extends StatelessWidget {
     final scenes = timeline.sceneSeq.iterable.toList();
 
     return ReorderableListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       scrollDirection: Axis.horizontal,
       onReorder: (i, j) {
         print('');
@@ -43,12 +44,11 @@ class Board extends StatelessWidget {
     final image = scene.imageAt(Duration.zero);
 
     return Container(
-      width: 160,
-      // color: Colors.red,
+      width: 120,
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
           Container(
-            margin: const EdgeInsets.all(8.0),
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
@@ -61,7 +61,18 @@ class Board extends StatelessWidget {
               ),
             ),
           ),
-          Text(scene.description ?? ''),
+          SizedBox(height: 8),
+          Expanded(
+            child: Text(
+              scene.description ?? '',
+              overflow: TextOverflow.fade,
+              style: TextStyle(
+                fontSize: 12,
+                height: 1.2,
+                color: Colors.grey[500],
+              ),
+            ),
+          ),
         ],
       ),
     );
