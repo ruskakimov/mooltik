@@ -18,9 +18,7 @@ class BoardView extends StatelessWidget {
     return ReorderableListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       scrollDirection: isPortrait ? Axis.vertical : Axis.horizontal,
-      onReorder: (i, j) {
-        print('');
-      },
+      onReorder: timeline.onSceneReorder,
       itemCount: scenes.length,
       itemBuilder: (context, i) {
         final scene = scenes[i];

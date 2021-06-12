@@ -403,7 +403,8 @@ class TimelineViewModel extends ChangeNotifier {
     final newSelectedDuration = selectedSliverEndTime - updatedTimestamp;
     final diff = newSelectedDuration - _selectedSliverDuration;
     final newPrevDuration =
-        selectedSliverSequence![_selectedSliverId!.spanIndex - 1].duration - diff;
+        selectedSliverSequence![_selectedSliverId!.spanIndex - 1].duration -
+            diff;
 
     if (newPrevDuration < TimeSpan.singleFrameDuration) return;
 
@@ -427,8 +428,8 @@ class TimelineViewModel extends ChangeNotifier {
     updatedTimestamp = TimeSpan.roundDurationToFrames(updatedTimestamp);
     final newDuration = updatedTimestamp - selectedSliverStartTime;
 
-    selectedSliverSequence!.changeSpanDurationAt(
-        _selectedSliverId!.spanIndex, newDuration);
+    selectedSliverSequence!
+        .changeSpanDurationAt(_selectedSliverId!.spanIndex, newDuration);
     notifyListeners();
   }
 

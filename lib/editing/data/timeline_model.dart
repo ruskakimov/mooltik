@@ -121,4 +121,23 @@ class TimelineModel extends ChangeNotifier {
 
   Duration _fractionAsPlayhead(double fraction) =>
       Duration(microseconds: (totalDuration * fraction).inMicroseconds);
+
+  // ===========
+  // Board view:
+  // ===========
+
+  void onSceneReorder(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) newIndex -= 1;
+    final currentSceneBefore = currentScene;
+
+    final scene = sceneSeq[oldIndex];
+    sceneSeq.removeAt(oldIndex);
+    sceneSeq.insert(newIndex, scene);
+
+    final currentSceneIndex =
+        sceneSeq.iterable.toList().indexOf(currentSceneBefore);
+    _setPlayhead(sceneSeq.startTimeOf(currentSceneIndex));
+
+    notifyListeners();
+  }
 }
