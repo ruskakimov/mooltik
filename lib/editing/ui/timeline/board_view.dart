@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/scene.dart';
+import 'package:mooltik/common/ui/composite_image_painter.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:provider/provider.dart';
 
@@ -39,9 +40,30 @@ class Board extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final image = scene.imageAt(Duration.zero);
+
     return Container(
       width: 160,
-      color: Colors.red,
+      // color: Colors.red,
+      child: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.all(8.0),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: CustomPaint(
+                size: image.size,
+                painter: CompositeImagePainter(image),
+              ),
+            ),
+          ),
+          Text(scene.description ?? ''),
+        ],
+      ),
     );
   }
 }
