@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
+import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/ui/composite_image_painter.dart';
@@ -43,13 +44,23 @@ class _BoardViewState extends State<BoardView> {
         itemCount: scenes.length,
         itemBuilder: (context, i) {
           final scene = scenes[i];
+          final selected = scene == timeline.currentScene;
+
           return GestureDetector(
             key: Key(scene.allFrames.first.file.path),
-            onTap: () => timeline.jumpToSceneStart(i),
+            onTap: () {
+              if (selected) {
+                // Open menu.
+                final timelineView = context.read<TimelineViewModel>();
+                timelineView.selectScene(i);
+              } else {
+                timeline.jumpToSceneStart(i);
+              }
+            },
             child: Board(
               scene: scene,
               sceneNumber: i + 1,
-              selected: scene == timeline.currentScene,
+              selected: selected,
             ),
           );
         },

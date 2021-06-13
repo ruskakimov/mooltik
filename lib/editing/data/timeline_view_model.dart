@@ -298,6 +298,11 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void selectScene(int sceneIndex) {
+    if (isEditingScene) return;
+    selectSliver(SliverId(0, sceneIndex));
+  }
+
   void removeSliverSelection() => selectSliver(null);
 
   bool get showSliverMenu => _selectedSliverId != null;

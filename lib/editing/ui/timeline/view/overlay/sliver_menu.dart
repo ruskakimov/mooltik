@@ -4,6 +4,7 @@ import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/ui/frame_window.dart';
+import 'package:mooltik/editing/data/editor_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/animated_scene_preview.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ class SliverMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timelineView = context.watch<TimelineViewModel>();
+    final editor = context.watch<EditorModel>();
 
     return Material(
       clipBehavior: Clip.antiAlias,
@@ -28,7 +30,7 @@ class SliverMenu extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (!timelineView.isEditingScene)
+            if (!timelineView.isEditingScene && editor.isTimelineView)
               LabeledIconButton(
                 icon: FontAwesomeIcons.film,
                 label: 'Edit scene',
