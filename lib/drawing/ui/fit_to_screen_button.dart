@@ -25,7 +25,7 @@ class FitToScreenButton extends StatelessWidget {
         child: Opacity(
           opacity: isFittedToScreen ? 0.5 : 1,
           child: SvgPicture.asset(
-            'assets/fa-solid_expand.svg',
+            'assets/icons/fa-solid_expand.svg',
             fit: BoxFit.none,
           ),
         ),
