@@ -5,35 +5,56 @@ import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/ui/composite_image_painter.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 
-class BoardView extends StatelessWidget {
+const double _columnWidth = 120;
+
+class BoardView extends StatefulWidget {
   const BoardView({Key? key}) : super(key: key);
+
+  @override
+  _BoardViewState createState() => _BoardViewState();
+}
+
+class _BoardViewState extends State<BoardView> {
+  late final ScrollController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    final currentSceneNumber = context.read<TimelineModel>().currentSceneNumber;
+    controller = ScrollController(
+      initialScrollOffset: _columnWidth * (currentSceneNumber - 1),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final timeline = context.watch<TimelineModel>();
     final scenes = timeline.sceneSeq.iterable.toList();
-    final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
 
-    return ReorderableListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      scrollDirection: isPortrait ? Axis.vertical : Axis.horizontal,
-      onReorder: timeline.onSceneReorder,
-      itemCount: scenes.length,
-      itemBuilder: (context, i) {
-        final scene = scenes[i];
-        return GestureDetector(
-          key: Key(scene.allFrames.first.file.path),
-          onTap: () => timeline.jumpToSceneStart(i),
-          child: Board(
-            scene: scene,
-            sceneNumber: i + 1,
-            selected: scene == timeline.currentScene,
-            horizontal: isPortrait,
-          ),
-        );
-      },
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      final horizontalPadding = (constraints.maxWidth - _columnWidth) / 2;
+
+      return ReorderableListView.builder(
+        scrollController: controller,
+        header: SizedBox(width: horizontalPadding),
+        padding: EdgeInsets.only(right: horizontalPadding),
+        scrollDirection: Axis.horizontal,
+        onReorder: timeline.onSceneReorder,
+        itemCount: scenes.length,
+        itemBuilder: (context, i) {
+          final scene = scenes[i];
+          return GestureDetector(
+            key: Key(scene.allFrames.first.file.path),
+            onTap: () => timeline.jumpToSceneStart(i),
+            child: Board(
+              scene: scene,
+              sceneNumber: i + 1,
+              selected: scene == timeline.currentScene,
+            ),
+          );
+        },
+      );
+    });
   }
 }
 
@@ -43,21 +64,18 @@ class Board extends StatelessWidget {
     required this.scene,
     required this.sceneNumber,
     required this.selected,
-    this.horizontal = false,
   }) : super(key: key);
 
   final Scene scene;
   final int sceneNumber;
   final bool selected;
-  final bool horizontal;
 
   @override
   Widget build(BuildContext context) {
     final image = scene.imageAt(Duration.zero);
 
     return Container(
-      width: horizontal ? null : 120,
-      height: horizontal ? 80 : null,
+      width: _columnWidth,
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(8.0),
       clipBehavior: Clip.antiAlias,
@@ -65,8 +83,7 @@ class Board extends StatelessWidget {
         color: selected ? Colors.white24 : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Flex(
-        direction: horizontal ? Axis.horizontal : Axis.vertical,
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _Thumbnail(image: image),
