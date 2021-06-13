@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_svg/svg.dart';
 
 class TimelineViewButton extends StatelessWidget {
   const TimelineViewButton({
@@ -23,12 +23,14 @@ class TimelineViewButton extends StatelessWidget {
   }
 
   Widget _buildIcon() => showTimelineIcon
-      ? Icon(
-          FontAwesomeIcons.stream,
-          size: 20,
+      ? SvgPicture.asset(
+          'assets/icons/timeline.svg',
+          fit: BoxFit.none,
+          color: Colors.white,
         )
-      : RotatedBox(
-          quarterTurns: 2,
-          child: Icon(FontAwesomeIcons.windowMaximize, size: 20),
+      : SvgPicture.asset(
+          'assets/icons/board.svg',
+          fit: BoxFit.none,
+          color: Colors.white,
         );
 }
