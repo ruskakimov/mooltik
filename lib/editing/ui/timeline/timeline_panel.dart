@@ -26,11 +26,10 @@ class TimelinePanel extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                if (editor.isTimelineView) ...[
-                  TimelineView(),
-                  Playhead(),
-                ] else
-                  BoardView(),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 200),
+                  child: editor.isTimelineView ? TimelineView() : BoardView(),
+                ),
                 Positioned(
                   bottom: 8,
                   left: 4,
