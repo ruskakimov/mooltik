@@ -30,6 +30,12 @@ class _BoardViewState extends State<BoardView> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final timeline = context.watch<TimelineModel>();
     final scenes = timeline.sceneSeq.iterable.toList();
