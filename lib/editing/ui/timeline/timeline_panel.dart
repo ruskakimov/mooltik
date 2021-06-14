@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editing/data/editor_model.dart';
 import 'package:mooltik/editing/ui/timeline/board_view.dart';
@@ -30,14 +31,15 @@ class TimelinePanel extends StatelessWidget {
                   duration: const Duration(milliseconds: 200),
                   child: editor.isTimelineView ? TimelineView() : BoardView(),
                 ),
-                Positioned(
-                  bottom: 8,
-                  left: 4,
-                  child: TimelineViewButton(
-                    showTimelineIcon: !editor.isTimelineView,
-                    onTap: editor.switchView,
+                if (!context.watch<TimelineViewModel>().isEditingScene)
+                  Positioned(
+                    bottom: 8,
+                    left: 4,
+                    child: TimelineViewButton(
+                      showTimelineIcon: !editor.isTimelineView,
+                      onTap: editor.switchView,
+                    ),
                   ),
-                ),
               ],
             ),
           ),
