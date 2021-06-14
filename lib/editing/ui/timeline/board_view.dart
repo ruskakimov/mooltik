@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
@@ -37,6 +39,7 @@ class _BoardViewState extends State<BoardView> {
 
       return ReorderableListView.builder(
         scrollController: controller,
+        proxyDecorator: _proxyDecorator,
         header: SizedBox(width: horizontalPadding),
         padding: EdgeInsets.only(right: horizontalPadding),
         scrollDirection: Axis.horizontal,
@@ -66,6 +69,25 @@ class _BoardViewState extends State<BoardView> {
         },
       );
     });
+  }
+
+  Widget _proxyDecorator(Widget child, int index, Animation<double> animation) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (BuildContext context, Widget? child) {
+        final double animValue = Curves.easeInOut.transform(animation.value);
+        final double scale = lerpDouble(1, 1.05, animValue)!;
+        final double elevation = lerpDouble(0, 10, animValue)!;
+        return Transform.scale(
+          scale: scale,
+          child: Material(
+            child: child,
+            elevation: elevation,
+          ),
+        );
+      },
+      child: child,
+    );
   }
 }
 
