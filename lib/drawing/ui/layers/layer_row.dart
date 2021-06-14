@@ -39,6 +39,7 @@ class _LayerRowState extends State<LayerRow> {
       child: Material(
         color: widget.selected ? Colors.white24 : Colors.transparent,
         child: InkWell(
+          splashColor: Colors.transparent,
           onTap: _handleSelect,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
