@@ -6,7 +6,6 @@ import 'package:mooltik/editing/ui/timeline/board_view.dart';
 import 'package:mooltik/editing/ui/timeline/timeline_view_button.dart';
 import 'package:mooltik/editing/ui/timeline/view/timeline_view.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/timeline_actionbar.dart';
-import 'package:mooltik/editing/ui/timeline/view/overlay/playhead.dart';
 
 class TimelinePanel extends StatelessWidget {
   const TimelinePanel({
