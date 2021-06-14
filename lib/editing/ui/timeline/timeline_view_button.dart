@@ -22,15 +22,11 @@ class TimelineViewButton extends StatelessWidget {
     );
   }
 
-  Widget _buildIcon() => showTimelineIcon
-      ? SvgPicture.asset(
-          'assets/icons/timeline.svg',
-          fit: BoxFit.none,
-          color: Colors.white,
-        )
-      : SvgPicture.asset(
-          'assets/icons/board.svg',
-          fit: BoxFit.none,
-          color: Colors.white,
-        );
+  Widget _buildIcon() => SvgPicture.asset(
+        showTimelineIcon
+            ? 'assets/icons/timeline.svg'
+            : 'assets/icons/board.svg',
+        fit: BoxFit.none,
+        color: Colors.white,
+      );
 }
