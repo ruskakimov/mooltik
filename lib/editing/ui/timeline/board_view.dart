@@ -189,20 +189,14 @@ class _Info extends StatelessWidget {
       color: selected ? Colors.grey[100] : Colors.grey[500],
     );
 
+    final durationLabel = _getDurationLabel();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              'Scene $sceneNumber',
-              style: textStyle,
-            ),
-            Text(
-              _getDurationLabel(),
-              style: textStyle,
-            ),
-          ],
+        Text(
+          'Scene $sceneNumber ($durationLabel)',
+          style: textStyle,
         ),
         SizedBox(height: 4),
         Expanded(
@@ -218,6 +212,6 @@ class _Info extends StatelessWidget {
 
   String _getDurationLabel() {
     final seconds = sceneDuration.inMilliseconds / 1000;
-    return ' (' + seconds.toStringAsFixed(1).replaceFirst('.0', '') + 's)';
+    return seconds.toStringAsFixed(1).replaceFirst('.0', '') + 's';
   }
 }
