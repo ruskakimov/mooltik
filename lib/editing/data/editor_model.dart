@@ -20,4 +20,13 @@ class EditorModel extends ChangeNotifier {
     notifyListeners();
     writeToDisk?.call();
   }
+
+  /// Whether the bottom part shows timeline or board view.
+  bool get isTimelineView => _isTimelineView;
+  bool _isTimelineView = true;
+
+  void switchView() {
+    _isTimelineView = !_isTimelineView;
+    notifyListeners();
+  }
 }

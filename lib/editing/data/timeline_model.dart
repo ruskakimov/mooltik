@@ -8,7 +8,7 @@ class TimelineModel extends ChangeNotifier {
   TimelineModel({
     required this.sceneSeq,
     required TickerProvider vsync,
-  })   : assert(sceneSeq.length > 0),
+  })  : assert(sceneSeq.length > 0),
         _playheadController = AnimationController(
           vsync: vsync,
           duration: sceneSeq.totalDuration,
@@ -71,6 +71,12 @@ class TimelineModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void jumpToSceneStart(int sceneIndex) {
+    _playheadController.stop();
+    _setPlayhead(sceneSeq.startTimeOf(sceneIndex));
+    notifyListeners();
+  }
+
   /// Animates to a new playhead position.
   void animateTo(Duration newPlayheadPosition) {
     _preparePlayheadController();
@@ -115,4 +121,23 @@ class TimelineModel extends ChangeNotifier {
 
   Duration _fractionAsPlayhead(double fraction) =>
       Duration(microseconds: (totalDuration * fraction).inMicroseconds);
+
+  // ===========
+  // Board view:
+  // ===========
+
+  void onSceneReorder(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) newIndex -= 1;
+    final currentSceneBefore = currentScene;
+
+    final scene = sceneSeq[oldIndex];
+    sceneSeq.removeAt(oldIndex);
+    sceneSeq.insert(newIndex, scene);
+
+    final currentSceneIndex =
+        sceneSeq.iterable.toList().indexOf(currentSceneBefore);
+    _setPlayhead(sceneSeq.startTimeOf(currentSceneIndex));
+
+    notifyListeners();
+  }
 }

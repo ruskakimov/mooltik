@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
@@ -20,6 +22,7 @@ class LayerSheet extends StatelessWidget {
           _buildHeader(),
           Expanded(
             child: ReorderableListView(
+              proxyDecorator: _proxyDecorator,
               onReorder: reelStack.onLayerReorder,
               children: [
                 for (final reel in reelStack.reels)
@@ -56,6 +59,25 @@ class LayerSheet extends StatelessWidget {
         'Layers',
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
       ),
+    );
+  }
+
+  Widget _proxyDecorator(Widget child, int index, Animation<double> animation) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (BuildContext context, Widget? child) {
+        final double animValue = Curves.easeInOut.transform(animation.value);
+        final double scale = lerpDouble(1, 1.05, animValue)!;
+        final double elevation = lerpDouble(0, 10, animValue)!;
+        return Transform.scale(
+          scale: scale,
+          child: Material(
+            child: child,
+            elevation: elevation,
+          ),
+        );
+      },
+      child: child,
     );
   }
 }

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:provider/provider.dart';
+import 'package:mooltik/editing/data/editor_model.dart';
+import 'package:mooltik/editing/ui/timeline/board_view.dart';
+import 'package:mooltik/editing/ui/timeline/timeline_view_button.dart';
 import 'package:mooltik/editing/ui/timeline/view/timeline_view.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/timeline_actionbar.dart';
-import 'package:mooltik/editing/ui/timeline/view/overlay/playhead.dart';
 
 class TimelinePanel extends StatelessWidget {
   const TimelinePanel({
@@ -10,6 +14,8 @@ class TimelinePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final editor = context.watch<EditorModel>();
+
     return Material(
       elevation: 0,
       color: Theme.of(context).colorScheme.surface,
@@ -20,8 +26,19 @@ class TimelinePanel extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                TimelineView(),
-                Playhead(),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 200),
+                  child: editor.isTimelineView ? TimelineView() : BoardView(),
+                ),
+                if (!context.watch<TimelineViewModel>().isEditingScene)
+                  Positioned(
+                    bottom: 8,
+                    left: 4,
+                    child: TimelineViewButton(
+                      showTimelineIcon: !editor.isTimelineView,
+                      onTap: editor.switchView,
+                    ),
+                  ),
               ],
             ),
           ),

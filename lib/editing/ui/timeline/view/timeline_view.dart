@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/play_mode_button.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/playhead.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_end_handle.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_start_handle.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/scene_end_handle.dart';
@@ -45,6 +46,7 @@ class TimelineView extends StatelessWidget {
                 ResizeStartHandle(timelineView: timelineView),
               if (timelineView.showResizeEndHandle)
                 ResizeEndHandle(timelineView: timelineView),
+              Playhead(),
             ],
           ),
         ),

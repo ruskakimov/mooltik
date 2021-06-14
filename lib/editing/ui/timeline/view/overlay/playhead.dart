@@ -14,6 +14,7 @@ class Playhead extends StatelessWidget {
           height: double.infinity,
           child: Material(
             color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(2)),
             elevation: 4,
           ),
         ),
