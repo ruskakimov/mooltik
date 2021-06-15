@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/io/mp4/mp4.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
@@ -52,7 +52,8 @@ class ExporterModel extends ChangeNotifier {
     _state = ExporterState.exporting;
     notifyListeners();
 
-    final videoFile = _tempFile('mooltik_video.mp4');
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final videoFile = _tempFile('mooltik_video_$timestamp.mp4');
     final slides = await Future.wait(
       frames.map((frame) => _slideFromFrame(frame)),
     );
@@ -68,29 +69,24 @@ class ExporterModel extends ChangeNotifier {
       },
     );
 
-    if (Platform.isAndroid) {
-      // Save to gallery on Android.
-      try {
-        final galleryResult = await ImageGallerySaver.saveFile(videoFile.path);
-        final galleryFilePath = galleryResult['filePath'];
-        _outputFilePath = galleryFilePath ?? videoFile.path;
+    await _saveToGallery(videoFile.path);
 
-        if (galleryFilePath == null) {
-          throw Exception(
-              'Failed when tried uploading video to the gallery. $galleryResult');
-        }
-      } catch (e, stack) {
-        FirebaseCrashlytics.instance.recordError(e, stack);
-      }
-    } else if (Platform.isIOS) {
-      // iOS is more restrictive here. Usually apps show share dialog.
-      // Default native player will have a share button.
-      _outputFilePath = videoFile.path;
-    }
-
+    _outputFilePath = videoFile.path;
     _progress = 1; // in case ffmpeg statistics callback didn't finish on 100%
     _state = ExporterState.done;
     notifyListeners();
+  }
+
+  Future<void> _saveToGallery(String path) async {
+    try {
+      final success = await GallerySaver.saveVideo(path);
+
+      if (success == false) {
+        throw Exception('Failed when tried uploading video to the gallery.');
+      }
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack);
+    }
   }
 
   Future<void> openOutputFile() async {
