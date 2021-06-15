@@ -76,7 +76,8 @@ class ExporterModel extends ChangeNotifier {
         _outputFilePath = galleryFilePath ?? videoFile.path;
 
         if (galleryFilePath == null) {
-          throw Exception('Failed when tried uploading video to the gallery.');
+          throw Exception(
+              'Failed when tried uploading video to the gallery. $galleryResult');
         }
       } catch (e, stack) {
         FirebaseCrashlytics.instance.recordError(e, stack);
