@@ -28,10 +28,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _initProjectsManager() async {
-    if (await Permission.storage.request().isGranted) {
-      final Directory dir = await getApplicationDocumentsDirectory();
-      await gallery.init(dir);
-    }
+    final Directory dir = await getApplicationDocumentsDirectory();
+    await gallery.init(dir);
   }
 
   @override
