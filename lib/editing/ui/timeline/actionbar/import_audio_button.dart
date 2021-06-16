@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
@@ -43,8 +44,9 @@ class ImportAudioButton extends StatelessWidget {
                   try {
                     final project = context.read<Project>();
                     await importer.importAudioTo(project);
-                  } catch (e) {
+                  } catch (e, stack) {
                     _showFailedImportError(context);
+                    FirebaseCrashlytics.instance.recordError(e, stack);
                   }
                 },
         );
