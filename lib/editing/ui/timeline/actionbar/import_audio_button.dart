@@ -39,6 +39,7 @@ class ImportAudioButton extends StatelessWidget {
           onTap: playing
               ? null
               : () async {
+                  // TODO: Handle permanently denied storage permission
                   try {
                     final project = context.read<Project>();
                     await importer.importAudioTo(project);

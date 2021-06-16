@@ -44,6 +44,7 @@ class EditingActionbar extends StatelessWidget {
   }
 
   Future<void> _openExportDialog(BuildContext context) async {
+    // TODO: Handle permanently denied storage permission
     if (await Permission.storage.request().isGranted) {
       final tempDir = await getTemporaryDirectory();
       final project = context.read<Project>();
