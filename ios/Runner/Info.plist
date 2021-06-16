@@ -33,9 +33,9 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Unused dependency code.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Save generated video.</string>
+	<string>This allows saving generated video to your gallery.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Unused dependency code.</string>
+	<string>This allows saving generated video to your gallery.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
