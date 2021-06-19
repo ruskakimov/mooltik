@@ -79,10 +79,12 @@ class ExporterModel extends ChangeNotifier {
 
   Future<void> _saveToGallery(String path) async {
     try {
-      final success = await GallerySaver.saveVideo(path);
+      final success =
+          await GallerySaver.saveVideo(path).timeout(Duration(seconds: 5));
 
-      if (success == false) {
-        throw Exception('Failed when tried uploading video to the gallery.');
+      if (success != true) {
+        throw Exception(
+            'Failed when tried uploading video to the gallery. Return value: $success');
       }
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
