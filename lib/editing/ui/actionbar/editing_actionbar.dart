@@ -37,14 +37,23 @@ class EditingActionbar extends StatelessWidget {
         Spacer(),
         AppIconButton(
           icon: FontAwesomeIcons.solidFileVideo,
-          onTap: playing ? null : () => _openExportDialog(context),
+          onTap: playing ? null : () => _handleExportTap(context),
         ),
       ],
     );
   }
 
+  Future<void> _handleExportTap(BuildContext context) async {
+    final storageStatus = await Permission.storage.status;
+
+    if (storageStatus.isPermanentlyDenied) {
+      // TODO: Handle permanently denied storage permission
+    } else {
+      _openExportDialog(context);
+    }
+  }
+
   Future<void> _openExportDialog(BuildContext context) async {
-    // TODO: Handle permanently denied storage permission
     if (await Permission.storage.request().isGranted) {
       final tempDir = await getTemporaryDirectory();
       final project = context.read<Project>();
