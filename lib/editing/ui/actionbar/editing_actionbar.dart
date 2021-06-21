@@ -45,31 +45,29 @@ class EditingActionbar extends StatelessWidget {
   }
 
   Future<void> _handleExportTap(BuildContext context) async {
-    final storageStatus = await Permission.storage.status;
+    final storageStatus = await Permission.storage.request();
 
-    if (storageStatus.isPermanentlyDenied) {
-      openAllowAccessDialog(context: context, name: 'Storage');
-    } else {
+    if (storageStatus.isGranted) {
       _openExportDialog(context);
+    } else if (storageStatus.isPermanentlyDenied) {
+      openAllowAccessDialog(context: context, name: 'Storage');
     }
   }
 
   Future<void> _openExportDialog(BuildContext context) async {
-    if (await Permission.storage.request().isGranted) {
-      final tempDir = await getTemporaryDirectory();
-      final project = context.read<Project>();
+    final tempDir = await getTemporaryDirectory();
+    final project = context.read<Project>();
 
-      return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) => ChangeNotifierProvider(
-          create: (context) => ExporterModel(
-            frames: project.exportFrames,
-            soundClips: project.soundClips,
-            tempDir: tempDir,
-          ),
-          child: ExportDialog(),
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) => ChangeNotifierProvider(
+        create: (context) => ExporterModel(
+          frames: project.exportFrames,
+          soundClips: project.soundClips,
+          tempDir: tempDir,
         ),
-      );
-    }
+        child: ExportDialog(),
+      ),
+    );
   }
 }

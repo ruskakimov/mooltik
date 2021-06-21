@@ -38,7 +38,7 @@ dependencies:
   flutter_svg: ^0.22.0
 
   # App permissions:
-  permission_handler: ^8.0.1
+  permission_handler: ^8.1.1
 
   # Manage user data:
   path_provider: ^2.0.2
