@@ -52,6 +52,16 @@ class ExporterModel extends ChangeNotifier {
     _state = ExporterState.exporting;
     notifyListeners();
 
+    final videoFile = await _generateVideo();
+    await _saveToGallery(videoFile.path);
+
+    _outputFilePath = videoFile.path;
+    _progress = 1; // in case ffmpeg statistics callback didn't finish on 100%
+    _state = ExporterState.done;
+    notifyListeners();
+  }
+
+  Future<File> _generateVideo() async {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final videoFile = _tempFile('mooltik_video_$timestamp.mp4');
     final slides = await Future.wait(
@@ -69,12 +79,7 @@ class ExporterModel extends ChangeNotifier {
       },
     );
 
-    await _saveToGallery(videoFile.path);
-
-    _outputFilePath = videoFile.path;
-    _progress = 1; // in case ffmpeg statistics callback didn't finish on 100%
-    _state = ExporterState.done;
-    notifyListeners();
+    return videoFile;
   }
 
   Future<void> _saveToGallery(String path) async {
