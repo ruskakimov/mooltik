@@ -8,8 +8,8 @@ Future<void> openAllowAccessDialog({
   showDialog<void>(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text('Allow access to $name'),
-      content: Text('Tap Settings and enable $name'),
+      title: Text('$name permission required'),
+      content: Text('Tap Settings and allow $name permission.'),
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context),
