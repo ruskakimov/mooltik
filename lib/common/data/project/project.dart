@@ -106,44 +106,25 @@ class Project extends ChangeNotifier {
   Size get frameSize => _frameSize;
   late Size _frameSize;
 
-  late bool _shouldClose;
+  late bool _shouldFreeMemory;
 
   String? _saveDataOnDisk;
   Timer? _autosaveTimer;
 
+  bool get isOpen => _scenes != null;
+
   /// Loads project files into memory.
   Future<void> open() async {
-    // Check if already open.
-    if (_scenes != null) {
+    if (isOpen) {
       // Prevent freeing memory after closing and quickly opening the project again.
-      _shouldClose = false;
+      _shouldFreeMemory = false;
       return;
     }
 
     if (await _dataFile.exists()) {
-      // Existing project.
-      _saveDataOnDisk = await _dataFile.readAsString();
-      final json = jsonDecode(_saveDataOnDisk!);
-      final transcodedJson = SaveDataTranscoder().transcodeToLatest(json);
-
-      final data = ProjectSaveData.fromJson(
-        transcodedJson,
-        directory.path,
-        _getSoundDirectoryPath(),
-      );
-      _frameSize = Size(data.width, data.height);
-      _scenes = Sequence<Scene>(data.scenes);
-
-      // TODO: Loading all frames into memory doesn't scale.
-      await Future.wait(allFrames.map((frame) => frame.loadSnapshot()));
-
-      _soundClips =
-          data.sounds.where((sound) => sound.file.existsSync()).toList();
+      await _openProjectFromDisk();
     } else {
-      // New project.
-      _frameSize = const Size(1280, 720);
-      _scenes = Sequence<Scene>([await createNewScene()]);
-      _soundClips = [];
+      await _openNewProject();
     }
 
     _autosaveTimer = Timer.periodic(
@@ -152,13 +133,39 @@ class Project extends ChangeNotifier {
     );
   }
 
+  Future<void> _openProjectFromDisk() async {
+    _saveDataOnDisk = await _dataFile.readAsString();
+    final json = jsonDecode(_saveDataOnDisk!);
+    final transcodedJson = SaveDataTranscoder().transcodeToLatest(json);
+
+    final data = ProjectSaveData.fromJson(
+      transcodedJson,
+      directory.path,
+      _getSoundDirectoryPath(),
+    );
+    _frameSize = Size(data.width, data.height);
+    _scenes = Sequence<Scene>(data.scenes);
+
+    // TODO: Loading all frames into memory doesn't scale.
+    await Future.wait(allFrames.map((frame) => frame.loadSnapshot()));
+
+    _soundClips =
+        data.sounds.where((sound) => sound.file.existsSync()).toList();
+  }
+
+  Future<void> _openNewProject() async {
+    _frameSize = const Size(1280, 720);
+    _scenes = Sequence<Scene>([await createNewScene()]);
+    _soundClips = [];
+  }
+
   Future<void> saveAndClose() async {
-    _shouldClose = true;
+    _shouldFreeMemory = true;
     _autosaveTimer?.cancel();
     await save();
 
     // User might have opened the project again while it was writing to disk.
-    if (_shouldClose) {
+    if (_shouldFreeMemory) {
       _freeMemory();
     }
   }
