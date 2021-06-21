@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/ui/open_allow_access_dialog.dart';
 import 'package:mooltik/editing/data/exporter_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/actionbar/export_dialog.dart';
@@ -47,7 +48,7 @@ class EditingActionbar extends StatelessWidget {
     final storageStatus = await Permission.storage.status;
 
     if (storageStatus.isPermanentlyDenied) {
-      // TODO: Handle permanently denied storage permission
+      openAllowAccessDialog(context: context, name: 'Storage');
     } else {
       _openExportDialog(context);
     }
