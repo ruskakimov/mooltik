@@ -46,12 +46,12 @@ class ImportAudioButton extends StatelessWidget {
   }
 
   Future<void> _handleImportAudioTap(BuildContext context) async {
-    final storageStatus = await Permission.storage.status;
+    final storageStatus = await Permission.storage.request();
 
-    if (storageStatus.isPermanentlyDenied) {
-      openAllowAccessDialog(context: context, name: 'Storage');
-    } else {
+    if (storageStatus.isGranted) {
       _importAudio(context);
+    } else if (storageStatus.isPermanentlyDenied) {
+      openAllowAccessDialog(context: context, name: 'Storage');
     }
   }
 
