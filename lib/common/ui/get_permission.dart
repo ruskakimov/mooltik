@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-final permissionStrings = {
+final _permissionStrings = {
   Permission.storage: 'Storage',
 };
 
@@ -12,7 +12,7 @@ Future<void> getPermission({
   required VoidCallback onGranted,
 }) async {
   assert(
-    permissionStrings.containsKey(permission),
+    _permissionStrings.containsKey(permission),
     'Permission string must be defined.',
   );
 
@@ -23,7 +23,7 @@ Future<void> getPermission({
   } else if (storageStatus.isPermanentlyDenied) {
     _openAllowAccessDialog(
       context: context,
-      name: permissionStrings[permission]!,
+      name: _permissionStrings[permission]!,
     );
   }
 }
@@ -43,7 +43,10 @@ Future<void> _openAllowAccessDialog({
           child: const Text('CANCEL'),
         ),
         TextButton(
-          onPressed: () => openAppSettings(),
+          onPressed: () {
+            openAppSettings();
+            Navigator.pop(context);
+          },
           child: const Text('SETTINGS'),
         ),
       ],
