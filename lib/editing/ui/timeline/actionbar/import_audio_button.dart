@@ -1,7 +1,9 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
+import 'package:mooltik/common/ui/get_permission.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
@@ -39,22 +41,29 @@ class ImportAudioButton extends StatelessWidget {
           icon: FontAwesomeIcons.music,
           onTap: playing
               ? null
-              : () async {
-                  // TODO: Handle permanently denied storage permission
-                  try {
-                    final project = context.read<Project>();
-                    await importer.importAudioTo(project);
-                  } catch (e, stack) {
-                    _showFailedImportError(context);
-                    FirebaseCrashlytics.instance.recordError(e, stack);
-                  }
-                },
+              : () => getPermission(
+                    context: context,
+                    permission: Permission.storage,
+                    onGranted: () => _importAudio(context),
+                  ),
         );
       },
     );
   }
 
-  void _showFailedImportError(BuildContext context) {
+  Future<void> _importAudio(BuildContext context) async {
+    final importer = context.read<ImporterModel>();
+    final project = context.read<Project>();
+
+    try {
+      await importer.importAudioTo(project);
+    } catch (e, stack) {
+      _showFailedAudioImportSnack(context);
+      FirebaseCrashlytics.instance.recordError(e, stack);
+    }
+  }
+
+  void _showFailedAudioImportSnack(BuildContext context) {
     final snack = SnackBar(
       content: Text(
         'Failed to load audio.',

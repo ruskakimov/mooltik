@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/ui/get_permission.dart';
 import 'package:mooltik/editing/data/exporter_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/actionbar/export_dialog.dart';
@@ -37,29 +38,32 @@ class EditingActionbar extends StatelessWidget {
         Spacer(),
         AppIconButton(
           icon: FontAwesomeIcons.solidFileVideo,
-          onTap: playing ? null : () => _openExportDialog(context),
+          onTap: playing
+              ? null
+              : () => getPermission(
+                    context: context,
+                    permission: Permission.storage,
+                    onGranted: () => _openExportDialog(context),
+                  ),
         ),
       ],
     );
   }
 
   Future<void> _openExportDialog(BuildContext context) async {
-    // TODO: Handle permanently denied storage permission
-    if (await Permission.storage.request().isGranted) {
-      final tempDir = await getTemporaryDirectory();
-      final project = context.read<Project>();
+    final tempDir = await getTemporaryDirectory();
+    final project = context.read<Project>();
 
-      return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) => ChangeNotifierProvider(
-          create: (context) => ExporterModel(
-            frames: project.exportFrames,
-            soundClips: project.soundClips,
-            tempDir: tempDir,
-          ),
-          child: ExportDialog(),
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) => ChangeNotifierProvider(
+        create: (context) => ExporterModel(
+          frames: project.exportFrames,
+          soundClips: project.soundClips,
+          tempDir: tempDir,
         ),
-      );
-    }
+        child: ExportDialog(),
+      ),
+    );
   }
 }
