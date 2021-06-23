@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/ui/open_allow_access_dialog.dart';
+import 'package:mooltik/common/ui/get_permission.dart';
 import 'package:mooltik/editing/data/exporter_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/actionbar/export_dialog.dart';
@@ -38,20 +38,16 @@ class EditingActionbar extends StatelessWidget {
         Spacer(),
         AppIconButton(
           icon: FontAwesomeIcons.solidFileVideo,
-          onTap: playing ? null : () => _handleExportTap(context),
+          onTap: playing
+              ? null
+              : () => getPermission(
+                    context: context,
+                    permission: Permission.storage,
+                    onGranted: () => _openExportDialog(context),
+                  ),
         ),
       ],
     );
-  }
-
-  Future<void> _handleExportTap(BuildContext context) async {
-    final storageStatus = await Permission.storage.request();
-
-    if (storageStatus.isGranted) {
-      _openExportDialog(context);
-    } else if (storageStatus.isPermanentlyDenied) {
-      openAllowAccessDialog(context: context, name: 'Storage');
-    }
   }
 
   Future<void> _openExportDialog(BuildContext context) async {

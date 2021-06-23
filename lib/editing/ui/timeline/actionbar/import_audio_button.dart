@@ -1,7 +1,7 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
-import 'package:mooltik/common/ui/open_allow_access_dialog.dart';
+import 'package:mooltik/common/ui/get_permission.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -39,20 +39,16 @@ class ImportAudioButton extends StatelessWidget {
 
         return AppIconButton(
           icon: FontAwesomeIcons.music,
-          onTap: playing ? null : () => _handleImportAudioTap(context),
+          onTap: playing
+              ? null
+              : () => getPermission(
+                    context: context,
+                    permission: Permission.storage,
+                    onGranted: () => _importAudio(context),
+                  ),
         );
       },
     );
-  }
-
-  Future<void> _handleImportAudioTap(BuildContext context) async {
-    final storageStatus = await Permission.storage.request();
-
-    if (storageStatus.isGranted) {
-      _importAudio(context);
-    } else if (storageStatus.isPermanentlyDenied) {
-      openAllowAccessDialog(context: context, name: 'Storage');
-    }
   }
 
   Future<void> _importAudio(BuildContext context) async {
