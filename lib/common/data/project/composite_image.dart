@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:equatable/equatable.dart';
+
 /// Stack of images of the same size.
-class CompositeImage {
+class CompositeImage with EquatableMixin {
   CompositeImage({
     required this.width,
     required this.height,
@@ -16,6 +18,9 @@ class CompositeImage {
   final List<Image> layers;
 
   Size get size => Size(width.toDouble(), height.toDouble());
+
+  @override
+  List<Object?> get props => [width, height, layers];
 }
 
 extension CompositeImageDrawing on Canvas {
