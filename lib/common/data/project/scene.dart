@@ -71,9 +71,8 @@ class Scene extends TimeSpan {
 
       for (var i = 0; i < trackIterators.length; i++) {
         if (iteratorEndTimes[i] == closestFrameEnd) {
-          final it = trackIterators[i];
-          iteratorStartTimes[i] += it.current.duration;
-          it.moveNext();
+          iteratorStartTimes[i] = iteratorEndTimes[i];
+          trackIterators[i].moveNext();
         }
       }
 
