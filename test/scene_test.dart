@@ -39,6 +39,7 @@ void main() async {
                 Frame(
                   file: File('bg'),
                   snapshot: imageC,
+                  duration: Duration(seconds: 3),
                 ),
               ]),
               PlayMode.extendLast,
