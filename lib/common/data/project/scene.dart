@@ -50,6 +50,11 @@ class Scene extends TimeSpan {
 
     final iteratorStartTimes = List.filled(rows.length, Duration.zero);
 
+    List<Duration> getIteratorEndTimes() => [
+          for (var i = 0; i < iteratorStartTimes.length; i++)
+            iteratorStartTimes[i] + rowIterators[i].current.duration
+        ];
+
     var elapsed = Duration.zero;
 
     while (elapsed < duration) {
@@ -59,34 +64,21 @@ class Scene extends TimeSpan {
         layers: rowIterators.map((it) => it.current.snapshot!).toList(),
       );
 
-      var smallestJump = duration;
-      var progressingIndices = <int>[];
+      final iteratorEndTimes = getIteratorEndTimes();
+      final closestFrameEnd = iteratorEndTimes.reduce(minDuration);
+      final frameDuration = closestFrameEnd - elapsed;
 
       for (var i = 0; i < rowIterators.length; i++) {
-        final frame = rowIterators[i].current;
-
-        final frameStartTime = iteratorStartTimes[i];
-        final frameEndTime = frameStartTime + frame.duration;
-
-        final jump = frameEndTime - elapsed;
-
-        if (jump < smallestJump) {
-          progressingIndices = [i];
-          smallestJump = jump;
-        } else if (jump == smallestJump) {
-          progressingIndices.add(i);
+        if (iteratorEndTimes[i] == closestFrameEnd) {
+          final it = rowIterators[i];
+          iteratorStartTimes[i] += it.current.duration;
+          it.moveNext();
         }
       }
 
-      yield CompositeFrame(compositeImage, smallestJump);
+      yield CompositeFrame(compositeImage, frameDuration);
 
-      progressingIndices.forEach((i) {
-        final it = rowIterators[i];
-        iteratorStartTimes[i] += it.current.duration;
-        it.moveNext();
-      });
-
-      elapsed += smallestJump;
+      elapsed += frameDuration;
     }
   }
 
