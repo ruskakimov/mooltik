@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
