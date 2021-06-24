@@ -36,13 +36,6 @@ class Scene extends TimeSpan {
     );
   }
 
-  /// Files instead of a composite image for testing purposes.
-  @visibleForTesting
-  List<File> imageFilesAt(Duration playhead) {
-    playhead = playhead.clamp(Duration.zero, duration);
-    return layers.map((layer) => layer.frameAt(playhead).file).toList();
-  }
-
   /// All unique frames in this scene.
   Iterable<Frame> get allFrames sync* {
     for (var layer in layers) {

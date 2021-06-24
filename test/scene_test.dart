@@ -18,19 +18,27 @@ void main() async {
         layers: [
           SceneLayer(
             Sequence<Frame>([
-              Frame(file: File('1.png'), duration: Duration(seconds: 2)),
-              Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+              Frame(
+                file: File('1.png'),
+                snapshot: imageA,
+                duration: Duration(seconds: 2),
+              ),
+              Frame(
+                file: File('2.png'),
+                snapshot: imageB,
+                duration: Duration(seconds: 2),
+              ),
             ]),
             PlayMode.extendLast,
           ),
         ],
         duration: Duration(seconds: 20),
       );
-      // expect(scene.imageAt(Duration(seconds: 1)).layers, '1.png');
-      expect(scene.imageFilesAt(Duration(seconds: 4)).first.path, '2.png');
-      expect(scene.imageFilesAt(Duration(seconds: 5)).first.path, '2.png');
-      expect(scene.imageFilesAt(Duration(seconds: 10)).first.path, '2.png');
-      expect(scene.imageFilesAt(Duration(seconds: 20)).first.path, '2.png');
+      expect(scene.imageAt(Duration(seconds: 1)).layers, [imageA]);
+      expect(scene.imageAt(Duration(seconds: 4)).layers, [imageB]);
+      expect(scene.imageAt(Duration(seconds: 5)).layers, [imageB]);
+      expect(scene.imageAt(Duration(seconds: 10)).layers, [imageB]);
+      expect(scene.imageAt(Duration(seconds: 20)).layers, [imageB]);
     });
 
     test('handles loop mode', () {
@@ -38,24 +46,32 @@ void main() async {
         layers: [
           SceneLayer(
             Sequence<Frame>([
-              Frame(file: File('1.png'), duration: Duration(seconds: 2)),
-              Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+              Frame(
+                file: File('1.png'),
+                snapshot: imageA,
+                duration: Duration(seconds: 2),
+              ),
+              Frame(
+                file: File('2.png'),
+                snapshot: imageB,
+                duration: Duration(seconds: 2),
+              ),
             ]),
             PlayMode.loop,
           ),
         ],
         duration: Duration(seconds: 20),
       );
-      expect(scene.imageFilesAt(Duration(seconds: 1)).first.path, '1.png');
-      expect(scene.imageFilesAt(Duration(seconds: 2)).first.path, '2.png');
-      expect(scene.imageFilesAt(Duration(seconds: 3)).first.path, '2.png');
-      expect(scene.imageFilesAt(Duration(seconds: 4)).first.path, '1.png');
-      expect(scene.imageFilesAt(Duration(seconds: 5)).first.path, '1.png');
-      expect(scene.imageFilesAt(Duration(seconds: 6)).first.path, '2.png');
-      expect(scene.imageFilesAt(Duration(seconds: 7)).first.path, '2.png');
-      expect(scene.imageFilesAt(Duration(seconds: 8)).first.path, '1.png');
-      expect(scene.imageFilesAt(Duration(seconds: 10)).first.path, '2.png');
-      expect(scene.imageFilesAt(Duration(seconds: 20)).first.path, '1.png');
+      expect(scene.imageAt(Duration(seconds: 1)).layers, [imageA]);
+      expect(scene.imageAt(Duration(seconds: 2)).layers, [imageB]);
+      expect(scene.imageAt(Duration(seconds: 3)).layers, [imageB]);
+      expect(scene.imageAt(Duration(seconds: 4)).layers, [imageA]);
+      expect(scene.imageAt(Duration(seconds: 5)).layers, [imageA]);
+      expect(scene.imageAt(Duration(seconds: 6)).layers, [imageB]);
+      expect(scene.imageAt(Duration(seconds: 7)).layers, [imageB]);
+      expect(scene.imageAt(Duration(seconds: 8)).layers, [imageA]);
+      expect(scene.imageAt(Duration(seconds: 10)).layers, [imageB]);
+      expect(scene.imageAt(Duration(seconds: 20)).layers, [imageA]);
     });
 
     test('handles ping-pong mode', () {
@@ -63,32 +79,45 @@ void main() async {
         layers: [
           SceneLayer(
             Sequence<Frame>([
-              Frame(file: File('1.png'), duration: Duration(seconds: 1)),
-              Frame(file: File('2.png'), duration: Duration(seconds: 1)),
-              Frame(file: File('3.png'), duration: Duration(seconds: 1)),
+              Frame(
+                file: File('1.png'),
+                snapshot: imageA,
+                duration: Duration(seconds: 1),
+              ),
+              Frame(
+                file: File('2.png'),
+                snapshot: imageB,
+                duration: Duration(seconds: 1),
+              ),
+              Frame(
+                file: File('3.png'),
+                snapshot: imageC,
+                duration: Duration(seconds: 1),
+              ),
             ]),
             PlayMode.pingPong,
           ),
         ],
         duration: Duration(seconds: 16),
       );
-      expect(scene.imageFilesAt(Duration(seconds: 0)).first.path, '1.png');
-      expect(scene.imageFilesAt(Duration(seconds: 1)).first.path, '2.png');
-      expect(scene.imageFilesAt(Duration(seconds: 2)).first.path, '3.png');
-      expect(scene.imageFilesAt(Duration(seconds: 3)).first.path, '3.png');
-      expect(scene.imageFilesAt(Duration(seconds: 4)).first.path, '2.png');
-      expect(scene.imageFilesAt(Duration(seconds: 5)).first.path, '1.png');
-      expect(scene.imageFilesAt(Duration(seconds: 6)).first.path, '1.png');
-      expect(scene.imageFilesAt(Duration(seconds: 7)).first.path, '2.png');
-      expect(scene.imageFilesAt(Duration(seconds: 8)).first.path, '3.png');
-      expect(scene.imageFilesAt(Duration(seconds: 9)).first.path, '3.png');
-      expect(scene.imageFilesAt(Duration(seconds: 10)).first.path, '2.png');
-      expect(scene.imageFilesAt(Duration(seconds: 11)).first.path, '1.png');
-      expect(scene.imageFilesAt(Duration(seconds: 12)).first.path, '1.png');
-      expect(scene.imageFilesAt(Duration(seconds: 13)).first.path, '2.png');
-      expect(scene.imageFilesAt(Duration(seconds: 14)).first.path, '3.png');
-      expect(scene.imageFilesAt(Duration(seconds: 15)).first.path, '3.png');
-      expect(scene.imageFilesAt(Duration(seconds: 16)).first.path, '2.png');
+
+      expect(scene.imageAt(Duration(seconds: 0)).layers, [imageA]);
+      expect(scene.imageAt(Duration(seconds: 1)).layers, [imageB]);
+      expect(scene.imageAt(Duration(seconds: 2)).layers, [imageC]);
+      expect(scene.imageAt(Duration(seconds: 3)).layers, [imageC]);
+      expect(scene.imageAt(Duration(seconds: 4)).layers, [imageB]);
+      expect(scene.imageAt(Duration(seconds: 5)).layers, [imageA]);
+      expect(scene.imageAt(Duration(seconds: 6)).layers, [imageA]);
+      expect(scene.imageAt(Duration(seconds: 7)).layers, [imageB]);
+      expect(scene.imageAt(Duration(seconds: 8)).layers, [imageC]);
+      expect(scene.imageAt(Duration(seconds: 9)).layers, [imageC]);
+      expect(scene.imageAt(Duration(seconds: 10)).layers, [imageB]);
+      expect(scene.imageAt(Duration(seconds: 11)).layers, [imageA]);
+      expect(scene.imageAt(Duration(seconds: 12)).layers, [imageA]);
+      expect(scene.imageAt(Duration(seconds: 13)).layers, [imageB]);
+      expect(scene.imageAt(Duration(seconds: 14)).layers, [imageC]);
+      expect(scene.imageAt(Duration(seconds: 15)).layers, [imageC]);
+      expect(scene.imageAt(Duration(seconds: 16)).layers, [imageB]);
     });
   });
 }
