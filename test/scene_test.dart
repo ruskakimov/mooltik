@@ -1,12 +1,17 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 
-void main() {
+void main() async {
+  final imageA = await pngRead(File('./test/test_images/rabbit_black.png'));
+  final imageB = await pngRead(File('./test/test_images/rabbit_pink.png'));
+  final imageC = await pngRead(File('./test/test_images/rabbit_yellow.png'));
+
   group('Scene', () {
     test('handles extend last mode', () {
       final scene = Scene(
@@ -21,7 +26,7 @@ void main() {
         ],
         duration: Duration(seconds: 20),
       );
-      expect(scene.imageFilesAt(Duration(seconds: 1)).first.path, '1.png');
+      // expect(scene.imageAt(Duration(seconds: 1)).layers, '1.png');
       expect(scene.imageFilesAt(Duration(seconds: 4)).first.path, '2.png');
       expect(scene.imageFilesAt(Duration(seconds: 5)).first.path, '2.png');
       expect(scene.imageFilesAt(Duration(seconds: 10)).first.path, '2.png');
