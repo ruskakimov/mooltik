@@ -1,3 +1,4 @@
+import 'package:collection/iterable_zip.dart';
 import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
@@ -42,17 +43,17 @@ class Scene extends TimeSpan {
 
   /// Frames for export video.
   Iterable<CompositeFrame> get exportFrames sync* {
-    final rows =
+    final tracks =
         visibleLayers.map((layer) => layer.getExportFrames(duration)).toList();
 
-    final rowIterators =
-        rows.map((frames) => frames.iterator..moveNext()).toList();
+    final trackIterators =
+        tracks.map((frames) => frames.iterator..moveNext()).toList();
 
-    final iteratorStartTimes = List.filled(rows.length, Duration.zero);
+    final iteratorStartTimes = List.filled(tracks.length, Duration.zero);
 
     List<Duration> getIteratorEndTimes() => [
-          for (var i = 0; i < iteratorStartTimes.length; i++)
-            iteratorStartTimes[i] + rowIterators[i].current.duration
+          for (var i = 0; i < trackIterators.length; i++)
+            iteratorStartTimes[i] + trackIterators[i].current.duration
         ];
 
     var elapsed = Duration.zero;
@@ -61,16 +62,16 @@ class Scene extends TimeSpan {
       final compositeImage = CompositeImage(
         width: frameWidth!,
         height: frameHeight!,
-        layers: rowIterators.map((it) => it.current.snapshot!).toList(),
+        layers: trackIterators.map((it) => it.current.snapshot!).toList(),
       );
 
       final iteratorEndTimes = getIteratorEndTimes();
       final closestFrameEnd = iteratorEndTimes.reduce(minDuration);
       final frameDuration = closestFrameEnd - elapsed;
 
-      for (var i = 0; i < rowIterators.length; i++) {
+      for (var i = 0; i < trackIterators.length; i++) {
         if (iteratorEndTimes[i] == closestFrameEnd) {
-          final it = rowIterators[i];
+          final it = trackIterators[i];
           iteratorStartTimes[i] += it.current.duration;
           it.moveNext();
         }
