@@ -24,12 +24,12 @@ void main() async {
                 Frame(
                   file: File('a'),
                   snapshot: imageA,
-                  duration: Duration(milliseconds: 250),
+                  duration: Duration(milliseconds: 240),
                 ),
                 Frame(
                   file: File('b'),
                   snapshot: imageB,
-                  duration: Duration(milliseconds: 250),
+                  duration: Duration(milliseconds: 240),
                 ),
               ]),
               PlayMode.loop,
@@ -53,7 +53,7 @@ void main() async {
             height: imageA.height,
             layers: [imageA, imageC],
           ),
-          Duration(milliseconds: 250),
+          Duration(milliseconds: 240),
         );
 
         final b = CompositeFrame(
@@ -62,12 +62,26 @@ void main() async {
             height: imageB.height,
             layers: [imageB, imageC],
           ),
-          Duration(milliseconds: 250),
+          Duration(milliseconds: 240),
         );
 
         expect(
           scene.exportFrames.toList(),
-          [a, b, a, b, a, b, a, b, a, b, a, b],
+          [
+            a,
+            b,
+            a,
+            b,
+            a,
+            b,
+            a,
+            b,
+            a,
+            b,
+            a,
+            b,
+            a.copyWith(duration: Duration(milliseconds: 120)),
+          ],
         );
       });
     });
