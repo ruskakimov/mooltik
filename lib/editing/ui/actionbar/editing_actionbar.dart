@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mooltik/common/ui/get_permission.dart';
 import 'package:mooltik/editing/data/exporter_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
@@ -36,16 +38,24 @@ class EditingActionbar extends StatelessWidget {
         Spacer(),
         title!,
         Spacer(),
-        AppIconButton(
-          icon: FontAwesomeIcons.solidFileVideo,
-          onTap: playing
-              ? null
-              : () => getPermission(
-                    context: context,
-                    permission: Permission.storage,
-                    onGranted: () => _openExportDialog(context),
-                  ),
+        SizedBox(
+          width: 52,
+          child: SvgPicture.asset(
+            'assets/icons/export.svg',
+            fit: BoxFit.none,
+            color: Colors.white,
+          ),
         ),
+        // AppIconButton(
+        //   icon: MdiIcons.exportVariant,
+        //   onTap: playing
+        //       ? null
+        //       : () => getPermission(
+        //             context: context,
+        //             permission: Permission.storage,
+        //             onGranted: () => _openExportDialog(context),
+        //           ),
+        // ),
       ],
     );
   }
