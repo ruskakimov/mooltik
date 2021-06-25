@@ -12,6 +12,8 @@ extension DurationMethods on Duration {
       Duration(microseconds: (this.inMicroseconds * scalar).round());
 }
 
+Duration minDuration(Duration a, Duration b) => a <= b ? a : b;
+
 extension DurationParsing on String {
   Duration parseDuration() {
     final re = RegExp(r'^(\d+):(\d{2}):(\d{2})\.(\d{6})$');

@@ -1,8 +1,9 @@
+import 'package:equatable/equatable.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 
 /// Composite image with duration.
-class CompositeFrame extends TimeSpan {
+class CompositeFrame extends TimeSpan with EquatableMixin {
   CompositeFrame(this.compositeImage, Duration duration) : super(duration);
 
   final CompositeImage compositeImage;
@@ -16,4 +17,7 @@ class CompositeFrame extends TimeSpan {
         this.compositeImage,
         duration ?? this.duration,
       );
+
+  @override
+  List<Object?> get props => [width, height, compositeImage, duration];
 }
