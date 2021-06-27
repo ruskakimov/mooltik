@@ -100,6 +100,11 @@ class App extends StatelessWidget {
               error: Colors.redAccent,
               onError: Colors.white,
             ),
+            dialogTheme: DialogTheme(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
           ),
           navigatorObservers: [routeObserver],
           routes: {
