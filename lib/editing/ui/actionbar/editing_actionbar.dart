@@ -92,30 +92,40 @@ class _ExportDialogState extends State<ExportDialog> {
       title: Text('Export as'),
       contentPadding: const EdgeInsets.all(16),
       children: [
-        CupertinoSlidingSegmentedControl<ExportOption>(
-          backgroundColor: Colors.black.withOpacity(0.25),
-          groupValue: _selectedOption,
-          children: {
-            ExportOption.video: Text('Video'),
-            ExportOption.images: Text('Images'),
-          },
-          onValueChanged: (option) {
-            if (option == null) return;
-            setState(() {
-              _selectedOption = option;
-            });
-          },
-        ),
-        EditableField(
-          label: 'File name',
-          text: '123123.mp4',
-          onTap: () {},
-        ),
+        _buildOptionMenu(),
+        _selectedOption == ExportOption.video
+            ? EditableField(
+                label: 'File name',
+                text: '123123.mp4',
+                onTap: () {},
+              )
+            : EditableField(
+                label: 'Selected frames',
+                text: '148',
+                onTap: () {},
+              ),
         ElevatedButton(
-          onPressed: () {},
           child: Text('Export'),
+          onPressed: () {},
         ),
       ],
+    );
+  }
+
+  Widget _buildOptionMenu() {
+    return CupertinoSlidingSegmentedControl<ExportOption>(
+      backgroundColor: Colors.black.withOpacity(0.25),
+      groupValue: _selectedOption,
+      children: {
+        ExportOption.video: Text('Video'),
+        ExportOption.images: Text('Images'),
+      },
+      onValueChanged: (option) {
+        if (option == null) return;
+        setState(() {
+          _selectedOption = option;
+        });
+      },
     );
   }
 }
