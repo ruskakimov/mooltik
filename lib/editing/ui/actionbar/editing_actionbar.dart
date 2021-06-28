@@ -109,22 +109,53 @@ class _ExportDialogState extends State<ExportDialog> {
             });
           },
         ),
-        SizedBox(height: 8),
-        TextField(
-          decoration: InputDecoration(
-            labelText: 'File name',
-          ),
-          controller: TextEditingController.fromValue(
-            TextEditingValue(text: '123123.mp4'),
-          ),
-          maxLines: 1,
+        EditableField(
+          label: 'File name',
+          text: '123123.mp4',
         ),
-        SizedBox(height: 16),
         ElevatedButton(
           onPressed: () {},
           child: Text('Export'),
         ),
       ],
+    );
+  }
+}
+
+class EditableField extends StatelessWidget {
+  const EditableField({
+    Key? key,
+    required this.label,
+    required this.text,
+  }) : super(key: key);
+
+  final String label;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+          ),
+          SizedBox(height: 4),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
