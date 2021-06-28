@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/ui/editable_field.dart';
 import 'package:mooltik/common/ui/get_permission.dart';
 import 'package:mooltik/editing/data/exporter_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
@@ -66,67 +65,6 @@ class EditingActionbar extends StatelessWidget {
         ),
         child: ExportDialog(),
       ),
-    );
-  }
-}
-
-enum ExportOption {
-  video,
-  images,
-}
-
-class ExportDialog extends StatefulWidget {
-  const ExportDialog({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  _ExportDialogState createState() => _ExportDialogState();
-}
-
-class _ExportDialogState extends State<ExportDialog> {
-  ExportOption _selectedOption = ExportOption.video;
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialog(
-      title: Text('Export as'),
-      contentPadding: const EdgeInsets.all(16),
-      children: [
-        _buildOptionMenu(),
-        _selectedOption == ExportOption.video
-            ? EditableField(
-                label: 'File name',
-                text: '123123.mp4',
-                onTap: () {},
-              )
-            : EditableField(
-                label: 'Selected frames',
-                text: '148',
-                onTap: () {},
-              ),
-        ElevatedButton(
-          child: Text('Export'),
-          onPressed: () {},
-        ),
-      ],
-    );
-  }
-
-  Widget _buildOptionMenu() {
-    return CupertinoSlidingSegmentedControl<ExportOption>(
-      backgroundColor: Colors.black.withOpacity(0.25),
-      groupValue: _selectedOption,
-      children: {
-        ExportOption.video: Text('Video'),
-        ExportOption.images: Text('Images'),
-      },
-      onValueChanged: (option) {
-        if (option == null) return;
-        setState(() {
-          _selectedOption = option;
-        });
-      },
     );
   }
 }
