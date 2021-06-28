@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mooltik/common/ui/get_permission.dart';
 import 'package:mooltik/editing/data/exporter_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
@@ -95,9 +94,6 @@ class _ExportDialogState extends State<ExportDialog> {
       children: [
         CupertinoSlidingSegmentedControl<ExportOption>(
           backgroundColor: Colors.black.withOpacity(0.25),
-          // backgroundColor: Theme.of(context).colorScheme.secondary,
-          // thumbColor: Theme.of(context).colorScheme.primary,
-          // padding: const EdgeInsets.all(4),
           groupValue: _selectedOption,
           children: {
             ExportOption.video: Text('Video'),
@@ -113,6 +109,7 @@ class _ExportDialogState extends State<ExportDialog> {
         EditableField(
           label: 'File name',
           text: '123123.mp4',
+          onTap: () {},
         ),
         ElevatedButton(
           onPressed: () {},
@@ -128,27 +125,38 @@ class EditableField extends StatelessWidget {
     Key? key,
     required this.label,
     required this.text,
+    this.onTap,
   }) : super(key: key);
 
   final String label;
   final String text;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        children: [
-          Expanded(
-            child: _buildContent(context),
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: InkWell(
+        onTap: onTap,
+        splashColor: Colors.transparent,
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: _buildContent(context),
+              ),
+              Icon(
+                Icons.edit,
+                size: 20,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              // SizedBox(width: 8),
+            ],
           ),
-          Icon(
-            Icons.edit,
-            size: 20,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          SizedBox(width: 8),
-        ],
+        ),
       ),
     );
   }
