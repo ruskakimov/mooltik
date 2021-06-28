@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mooltik/common/ui/get_permission.dart';
 import 'package:mooltik/editing/data/exporter_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
@@ -136,26 +137,42 @@ class EditableField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: Row(
         children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
+          Expanded(
+            child: _buildContent(context),
           ),
-          SizedBox(height: 4),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+          Icon(
+            Icons.edit,
+            size: 20,
+            color: Theme.of(context).colorScheme.secondary,
           ),
+          SizedBox(width: 8),
         ],
       ),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+        ),
+        SizedBox(height: 4),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 16,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
+      ],
     );
   }
 }
