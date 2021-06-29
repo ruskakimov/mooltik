@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 const double _rimWidth = 4;
 
-class PieProgressIndicator extends StatelessWidget {
+class PieProgressIndicator extends StatefulWidget {
   const PieProgressIndicator({
     Key? key,
     required this.progress,
@@ -15,10 +15,40 @@ class PieProgressIndicator extends StatelessWidget {
   final Color color;
 
   @override
+  _PieProgressIndicatorState createState() => _PieProgressIndicatorState();
+}
+
+class _PieProgressIndicatorState extends State<PieProgressIndicator>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this);
+  }
+
+  @override
+  void didUpdateWidget(covariant PieProgressIndicator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.progress != _controller.value) {
+      _controller.animateTo(
+        widget.progress,
+        duration: Duration(milliseconds: 200),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      size: Size.square(64),
-      painter: _PieLoadingPainter(progress, color),
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return CustomPaint(
+          size: Size.square(64),
+          painter: _PieLoadingPainter(_controller.value, widget.color),
+        );
+      },
     );
   }
 }
