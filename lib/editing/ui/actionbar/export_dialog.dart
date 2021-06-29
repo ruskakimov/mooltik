@@ -32,17 +32,22 @@ class _ExportDialogState extends State<ExportDialog> {
         contentPadding: const EdgeInsets.all(16),
         children: [
           _buildOptionMenu(),
-          _selectedOption == ExportOption.video
-              ? EditableField(
-                  label: 'File name',
-                  text: '123123.mp4',
-                  onTap: () {},
-                )
-              : EditableField(
-                  label: 'Selected frames',
-                  text: '148',
-                  onTap: () {},
-                ),
+          AnimatedCrossFade(
+            duration: Duration(milliseconds: 300),
+            crossFadeState: _selectedOption == ExportOption.video
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
+            firstChild: EditableField(
+              label: 'File name',
+              text: '123123.mp4',
+              onTap: () {},
+            ),
+            secondChild: EditableField(
+              label: 'Selected frames',
+              text: '148',
+              onTap: () {},
+            ),
+          ),
           if (exporter.isInitial)
             _buildExportButton()
           else if (exporter.isExporting)
