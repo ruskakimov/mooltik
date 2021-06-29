@@ -105,6 +105,16 @@ class App extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
+            outlinedButtonTheme: OutlinedButtonThemeData(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    // side: BorderSide(color: Colors.red),
+                  ),
+                ),
+              ),
+            ),
             elevatedButtonTheme: ElevatedButtonThemeData(
               style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mooltik/editing/data/exporter_model.dart';
+import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/editable_field.dart';
 
 enum ExportOption {
@@ -21,27 +23,34 @@ class _ExportDialogState extends State<ExportDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(
-      title: Text('Export as'),
-      contentPadding: const EdgeInsets.all(16),
-      children: [
-        _buildOptionMenu(),
-        _selectedOption == ExportOption.video
-            ? EditableField(
-                label: 'File name',
-                text: '123123.mp4',
-                onTap: () {},
-              )
-            : EditableField(
-                label: 'Selected frames',
-                text: '148',
-                onTap: () {},
-              ),
-        ElevatedButton(
-          child: Text('Export'),
-          onPressed: () {},
-        ),
-      ],
+    final exporter = context.watch<ExporterModel>();
+
+    return WillPopScope(
+      onWillPop: () async => exporter.isInitial,
+      child: SimpleDialog(
+        title: Text('Export as'),
+        contentPadding: const EdgeInsets.all(16),
+        children: [
+          _buildOptionMenu(),
+          _selectedOption == ExportOption.video
+              ? EditableField(
+                  label: 'File name',
+                  text: '123123.mp4',
+                  onTap: () {},
+                )
+              : EditableField(
+                  label: 'Selected frames',
+                  text: '148',
+                  onTap: () {},
+                ),
+          if (exporter.isInitial)
+            _buildExportButton()
+          else if (exporter.isExporting)
+            _buildButtonsForProgress()
+          else
+            _buildButtonsForDone()
+        ],
+      ),
     );
   }
 
@@ -59,6 +68,53 @@ class _ExportDialogState extends State<ExportDialog> {
           _selectedOption = option;
         });
       },
+    );
+  }
+
+  Widget _buildExportButton() {
+    return ElevatedButton(
+      child: Text('Export'),
+      onPressed: () {},
+    );
+  }
+
+  Widget _buildButtonsForProgress() {
+    return Row(
+      children: [
+        Expanded(
+          child: OutlinedButton(
+            child: Text('Cancel'),
+            onPressed: () {},
+          ),
+        ),
+        SizedBox(width: 8),
+        Expanded(
+          child: ElevatedButton(
+            child: Text('Share'),
+            onPressed: null,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildButtonsForDone() {
+    return Row(
+      children: [
+        Expanded(
+          child: OutlinedButton(
+            child: Text('Done'),
+            onPressed: () {},
+          ),
+        ),
+        SizedBox(width: 8),
+        Expanded(
+          child: ElevatedButton(
+            child: Text('Share'),
+            onPressed: () {},
+          ),
+        ),
+      ],
     );
   }
 }
