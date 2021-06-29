@@ -13,6 +13,11 @@ import 'package:mooltik/common/data/io/mp4/slide.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 
+enum ExportOption {
+  video,
+  images,
+}
+
 enum ExporterState {
   initial,
   exporting,
@@ -34,6 +39,16 @@ class ExporterModel extends ChangeNotifier {
 
   /// Temporary directory to store intermediate results.
   final Directory tempDir;
+
+  /// User selected export output option.
+  ExportOption get selectedOption => _selectedOption;
+  ExportOption _selectedOption = ExportOption.video;
+
+  void onExportOptionChanged(ExportOption? option) {
+    if (option == null) return;
+    _selectedOption = option;
+    notifyListeners();
+  }
 
   /// Value between 0 and 1 that indicates video export progress.
   double get progress => _progress;

@@ -4,11 +4,6 @@ import 'package:mooltik/editing/data/exporter_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/editable_field.dart';
 
-enum ExportOption {
-  video,
-  images,
-}
-
 class ExportDialog extends StatefulWidget {
   const ExportDialog({
     Key? key,
@@ -19,8 +14,6 @@ class ExportDialog extends StatefulWidget {
 }
 
 class _ExportDialogState extends State<ExportDialog> {
-  ExportOption _selectedOption = ExportOption.video;
-
   @override
   Widget build(BuildContext context) {
     final exporter = context.watch<ExporterModel>();
@@ -31,20 +24,13 @@ class _ExportDialogState extends State<ExportDialog> {
         contentPadding: const EdgeInsets.all(16),
         children: [
           ExporterForm(
-            selectedOption: _selectedOption,
-            onValueChanged: _onExportOptionChanged,
+            selectedOption: exporter.selectedOption,
+            onValueChanged: exporter.onExportOptionChanged,
           ),
           _buildButtons(),
         ],
       ),
     );
-  }
-
-  void _onExportOptionChanged(option) {
-    if (option == null) return;
-    setState(() {
-      _selectedOption = option;
-    });
   }
 
   Widget _buildButtons() {
