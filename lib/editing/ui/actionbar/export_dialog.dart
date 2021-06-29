@@ -32,28 +32,8 @@ class _ExportDialogState extends State<ExportDialog> {
         contentPadding: const EdgeInsets.all(16),
         children: [
           _buildOptionMenu(),
-          AnimatedCrossFade(
-            duration: Duration(milliseconds: 300),
-            crossFadeState: _selectedOption == ExportOption.video
-                ? CrossFadeState.showFirst
-                : CrossFadeState.showSecond,
-            firstChild: EditableField(
-              label: 'File name',
-              text: '123123.mp4',
-              onTap: () {},
-            ),
-            secondChild: EditableField(
-              label: 'Selected frames',
-              text: '148',
-              onTap: () {},
-            ),
-          ),
-          if (exporter.isInitial)
-            _buildExportButton()
-          else if (exporter.isExporting)
-            _buildButtonsForProgress()
-          else
-            _buildButtonsForDone()
+          _buildForm(),
+          _buildButtons(),
         ],
       ),
     );
@@ -74,6 +54,36 @@ class _ExportDialogState extends State<ExportDialog> {
         });
       },
     );
+  }
+
+  Widget _buildForm() {
+    return AnimatedCrossFade(
+      duration: Duration(milliseconds: 300),
+      crossFadeState: _selectedOption == ExportOption.video
+          ? CrossFadeState.showFirst
+          : CrossFadeState.showSecond,
+      firstChild: EditableField(
+        label: 'File name',
+        text: '123123.mp4',
+        onTap: () {},
+      ),
+      secondChild: EditableField(
+        label: 'Selected frames',
+        text: '148',
+        onTap: () {},
+      ),
+    );
+  }
+
+  Widget _buildButtons() {
+    final exporter = context.watch<ExporterModel>();
+
+    if (exporter.isInitial)
+      return _buildExportButton();
+    else if (exporter.isExporting)
+      return _buildButtonsForProgress();
+    else
+      return _buildButtonsForDone();
   }
 
   Widget _buildExportButton() {
