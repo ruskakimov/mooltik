@@ -52,6 +52,9 @@ class ExporterModel extends ChangeNotifier {
     _state = ExporterState.exporting;
     notifyListeners();
 
+    // Wait for new frame.
+    await Future.delayed(Duration(milliseconds: 20));
+
     final videoFile = await _generateVideo();
     await _saveToGallery(videoFile.path);
 
