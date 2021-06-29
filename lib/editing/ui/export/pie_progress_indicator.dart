@@ -8,23 +8,26 @@ class PieProgressIndicator extends StatelessWidget {
   const PieProgressIndicator({
     Key? key,
     required this.progress,
+    this.color = Colors.white,
   }) : super(key: key);
 
   final double progress;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       size: Size.square(64),
-      painter: _PieLoadingPainter(progress),
+      painter: _PieLoadingPainter(progress, color),
     );
   }
 }
 
 class _PieLoadingPainter extends CustomPainter {
-  _PieLoadingPainter(this.progress);
+  _PieLoadingPainter(this.progress, this.color);
 
   final double progress;
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -36,7 +39,7 @@ class _PieLoadingPainter extends CustomPainter {
       area.center,
       radius - _rimWidth / 2,
       Paint()
-        ..color = Colors.white
+        ..color = color
         ..style = PaintingStyle.stroke
         ..strokeWidth = _rimWidth,
     );
@@ -47,7 +50,7 @@ class _PieLoadingPainter extends CustomPainter {
       -pi / 2,
       2 * pi * progress,
       true,
-      Paint()..color = Colors.white,
+      Paint()..color = color,
     );
   }
 
