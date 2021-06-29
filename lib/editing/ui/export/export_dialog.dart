@@ -23,9 +23,23 @@ class _ExportDialogState extends State<ExportDialog> {
       child: SimpleDialog(
         contentPadding: const EdgeInsets.all(16),
         children: [
-          ExporterForm(
-            selectedOption: exporter.selectedOption,
-            onValueChanged: exporter.onExportOptionChanged,
+          AnimatedCrossFade(
+            duration: Duration(milliseconds: 200),
+            crossFadeState: exporter.isInitial
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
+            firstChild: ExporterForm(
+              selectedOption: exporter.selectedOption,
+              onValueChanged: exporter.onExportOptionChanged,
+            ),
+            secondChild: Container(
+              height: 150,
+              margin: const EdgeInsets.only(bottom: 8),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
           ),
           _buildButtons(),
         ],
