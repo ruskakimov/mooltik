@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/exporter_model.dart';
 import 'package:mooltik/editing/ui/export/exporter_form.dart';
+import 'package:mooltik/editing/ui/export/pie_progress_indicator.dart';
 import 'package:provider/provider.dart';
 
 class ExportDialog extends StatefulWidget {
@@ -38,6 +39,9 @@ class _ExportDialogState extends State<ExportDialog> {
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(8),
+              ),
+              child: Center(
+                child: PieProgressIndicator(progress: exporter.progress),
               ),
             ),
           ),
