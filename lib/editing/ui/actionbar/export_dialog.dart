@@ -74,7 +74,10 @@ class _ExportDialogState extends State<ExportDialog> {
   Widget _buildExportButton() {
     return ElevatedButton(
       child: Text('Export'),
-      onPressed: () {},
+      onPressed: () {
+        final exporter = context.read<ExporterModel>();
+        exporter.start();
+      },
     );
   }
 
@@ -104,7 +107,9 @@ class _ExportDialogState extends State<ExportDialog> {
         Expanded(
           child: OutlinedButton(
             child: Text('Done'),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
           ),
         ),
         SizedBox(width: 8),
