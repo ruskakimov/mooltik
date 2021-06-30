@@ -1,3 +1,4 @@
+import 'dart:ui' as ui;
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -58,11 +59,15 @@ class ExporterModel extends ChangeNotifier {
   ExporterState get state => _state;
   ExporterState _state = ExporterState.initial;
 
+  ui.Image? previewThumbnail;
+
   late File outputFile;
 
   Future<void> start() async {
     _state = ExporterState.exporting;
     notifyListeners();
+
+    _generatePreviewThumbnail();
 
     // Wait for animation.
     await Future.delayed(Duration(milliseconds: 250));
@@ -81,6 +86,11 @@ class ExporterModel extends ChangeNotifier {
 
     _progress = 1; // in case ffmpeg statistics callback didn't finish on 100%
     _state = ExporterState.done;
+    notifyListeners();
+  }
+
+  void _generatePreviewThumbnail() async {
+    previewThumbnail = await frames.first.toImage();
     notifyListeners();
   }
 
