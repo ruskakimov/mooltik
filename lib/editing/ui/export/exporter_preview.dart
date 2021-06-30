@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/composite_image.dart';
+import 'package:mooltik/common/ui/composite_image_painter.dart';
 import 'package:mooltik/editing/data/export/exporter_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editing/ui/export/pie_progress_indicator.dart';
@@ -16,8 +18,9 @@ class ExporterPreview extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
+            _Thumbnail(thumbnail: exporter.frames.first.compositeImage),
             PieProgressIndicator(progress: exporter.progress),
-            _PlayIcon(visible: exporter.isDone),
+            _FadeInPlayIcon(visible: exporter.isDone),
           ],
         ),
       ),
@@ -48,8 +51,29 @@ class _PreviewBox extends StatelessWidget {
   }
 }
 
-class _PlayIcon extends StatelessWidget {
-  const _PlayIcon({
+class _Thumbnail extends StatelessWidget {
+  const _Thumbnail({
+    Key? key,
+    required this.thumbnail,
+  }) : super(key: key);
+
+  final CompositeImage thumbnail;
+
+  @override
+  Widget build(BuildContext context) {
+    return FittedBox(
+      fit: BoxFit.contain,
+      child: CustomPaint(
+        size: thumbnail.size,
+        painter: CompositeImagePainter(thumbnail),
+        isComplex: true,
+      ),
+    );
+  }
+}
+
+class _FadeInPlayIcon extends StatelessWidget {
+  const _FadeInPlayIcon({
     Key? key,
     required this.visible,
   }) : super(key: key);
