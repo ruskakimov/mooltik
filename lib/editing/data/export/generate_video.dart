@@ -2,13 +2,11 @@ import 'dart:io';
 
 import 'package:mooltik/common/data/iterable_methods.dart';
 import 'package:path/path.dart' as p;
-import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/io/mp4/mp4.dart';
 import 'package:mooltik/common/data/io/mp4/slide.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
-import 'package:mooltik/common/ui/composite_image_painter.dart';
 
 Future<File> generateVideo({
   required String fileName,
@@ -36,21 +34,15 @@ Future<List<Slide>> _slidesFromFrames(
   Directory tempDir,
 ) async {
   return await Future.wait(
-    frames.mapIndexed((frame, i) {
-      final png = _tempFile('$i.png', tempDir);
-      return _slideFromFrame(frame, png);
+    frames.mapIndexed((frame, i) async {
+      final file = _tempFile('$i.png', tempDir);
+      final image = await frame.toImage();
+
+      await pngWrite(file, image);
+
+      return Slide(file, frame.duration);
     }),
   );
-}
-
-Future<Slide> _slideFromFrame(CompositeFrame frame, File pngFile) async {
-  final image = await generateImage(
-    CompositeImagePainter(frame.compositeImage),
-    frame.width,
-    frame.height,
-  );
-  await pngWrite(pngFile, image);
-  return Slide(pngFile, frame.duration);
 }
 
 File _tempFile(String fileName, Directory directory) =>
