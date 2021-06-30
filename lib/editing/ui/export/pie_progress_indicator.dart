@@ -51,6 +51,12 @@ class _PieProgressIndicatorState extends State<PieProgressIndicator>
       },
     );
   }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 }
 
 class _PieLoadingPainter extends CustomPainter {
