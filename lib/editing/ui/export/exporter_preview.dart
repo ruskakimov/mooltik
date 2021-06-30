@@ -14,13 +14,26 @@ class ExporterPreview extends StatelessWidget {
       onTap: exporter.isDone ? exporter.openOutputFile : null,
       child: Container(
         height: 150,
+        width: double.infinity,
         margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: Colors.white10,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Center(
-          child: PieProgressIndicator(progress: exporter.progress),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            PieProgressIndicator(progress: exporter.progress),
+            AnimatedOpacity(
+              opacity: exporter.isDone ? 1 : 0,
+              duration: Duration(milliseconds: 300),
+              child: Icon(
+                Icons.play_arrow_rounded,
+                color: Colors.black,
+                size: 48,
+              ),
+            ),
+          ],
         ),
       ),
     );
