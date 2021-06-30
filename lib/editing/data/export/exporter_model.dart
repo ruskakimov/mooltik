@@ -1,15 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/io/generate_image.dart';
-import 'package:mooltik/common/data/io/mp4/mp4.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
-import 'package:mooltik/common/ui/composite_image_painter.dart';
+import 'package:mooltik/editing/data/export/generate_video.dart';
 import 'package:mooltik/editing/data/export/save_video_to_gallery.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as p;
-import 'package:mooltik/common/data/io/mp4/slide.dart';
-import 'package:mooltik/common/data/io/png.dart';
+
 import 'package:mooltik/common/data/project/sound_clip.dart';
 
 enum ExportOption {
@@ -69,7 +66,16 @@ class ExporterModel extends ChangeNotifier {
     // Wait for animation.
     await Future.delayed(Duration(milliseconds: 250));
 
-    final videoFile = await _generateVideo();
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+
+    final videoFile = await generateVideo(
+      fileName: 'mooltik_video_$timestamp',
+      tempDir: tempDir,
+      frames: frames,
+      soundClips: soundClips,
+      progressCallback: _onProgressUpdate,
+    );
+
     await saveVideoToGallery(videoFile.path);
 
     _outputFilePath = videoFile.path;
@@ -78,44 +84,13 @@ class ExporterModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<File> _generateVideo() async {
-    final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final videoFile = _tempFile('mooltik_video_$timestamp.mp4');
-    final slides = await Future.wait(
-      frames.map((frame) => _slideFromFrame(frame)),
-    );
-
-    await mp4Write(
-      videoFile,
-      slides,
-      soundClips!,
-      tempDir,
-      (double progress) {
-        _progress = progress;
-        notifyListeners();
-      },
-    );
-
-    return videoFile;
+  void _onProgressUpdate(double progress) {
+    _progress = progress;
+    notifyListeners();
   }
 
   Future<void> openOutputFile() async {
     if (_outputFilePath == null) return;
     OpenFile.open(p.fromUri(_outputFilePath));
   }
-
-  int _slideCount = 0;
-
-  Future<Slide> _slideFromFrame(CompositeFrame frame) async {
-    final image = await generateImage(
-      CompositeImagePainter(frame.compositeImage),
-      frame.width,
-      frame.height,
-    );
-    final pngFile = _tempFile('${_slideCount++}.png');
-    await pngWrite(pngFile, image);
-    return Slide(pngFile, frame.duration);
-  }
-
-  File _tempFile(String fileName) => File(p.join(tempDir.path, fileName));
 }
