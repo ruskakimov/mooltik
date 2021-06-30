@@ -1,12 +1,11 @@
 import 'dart:io';
 
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/io/mp4/mp4.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/ui/composite_image_painter.dart';
+import 'package:mooltik/editing/data/export/save_video_to_gallery.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as p;
 import 'package:mooltik/common/data/io/mp4/slide.dart';
@@ -71,7 +70,7 @@ class ExporterModel extends ChangeNotifier {
     await Future.delayed(Duration(milliseconds: 250));
 
     final videoFile = await _generateVideo();
-    await _saveToGallery(videoFile.path);
+    await saveVideoToGallery(videoFile.path);
 
     _outputFilePath = videoFile.path;
     _progress = 1; // in case ffmpeg statistics callback didn't finish on 100%
@@ -98,20 +97,6 @@ class ExporterModel extends ChangeNotifier {
     );
 
     return videoFile;
-  }
-
-  Future<void> _saveToGallery(String path) async {
-    try {
-      final success =
-          await GallerySaver.saveVideo(path).timeout(Duration(seconds: 5));
-
-      if (success != true) {
-        throw Exception(
-            'Failed when tried uploading video to the gallery. Return value: $success');
-      }
-    } catch (e, stack) {
-      FirebaseCrashlytics.instance.recordError(e, stack);
-    }
   }
 
   Future<void> openOutputFile() async {

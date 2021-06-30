@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/get_permission.dart';
-import 'package:mooltik/editing/data/exporter_model.dart';
+import 'package:mooltik/editing/data/export/exporter_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/ui/export/export_dialog.dart';
 import 'package:mooltik/common/data/project/project.dart';
