@@ -97,7 +97,10 @@ class _ExportDialogState extends State<ExportDialog> {
         Expanded(
           child: ElevatedButton(
             child: Text('Share'),
-            onPressed: () {},
+            onPressed: () {
+              final exporter = context.read<ExporterModel>();
+              exporter.shareOutputFile();
+            },
           ),
         ),
       ],

@@ -8,6 +8,7 @@ import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:mooltik/common/data/project/sound_clip.dart';
+import 'package:share_plus/share_plus.dart';
 
 enum ExportOption {
   video,
@@ -89,6 +90,10 @@ class ExporterModel extends ChangeNotifier {
   }
 
   Future<void> openOutputFile() async {
-    OpenFile.open(p.fromUri(outputFile.path));
+    await OpenFile.open(p.fromUri(outputFile.path));
+  }
+
+  Future<void> shareOutputFile() async {
+    await Share.shareFiles([outputFile.path]);
   }
 }

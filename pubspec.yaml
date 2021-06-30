@@ -54,10 +54,11 @@ dependencies:
   # Open links:
   url_launcher: ^6.0.6
 
-  # Export video:
+  # Export:
   flutter_ffmpeg: ^0.4.0
   gallery_saver: ^2.1.0
   open_file: ^3.2.1
+  share_plus: ^2.1.4
 
   # Analytics:
   firebase_core: ^1.2.1
