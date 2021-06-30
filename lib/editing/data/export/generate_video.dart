@@ -37,7 +37,7 @@ Future<List<Slide>> _slidesFromFrames(
 ) async {
   return await Future.wait(
     frames.mapIndexed((frame, i) {
-      final png = File(p.join(tempDir.path, '$i.png'));
+      final png = _tempFile('$i.png', tempDir);
       return _slideFromFrame(frame, png);
     }),
   );
