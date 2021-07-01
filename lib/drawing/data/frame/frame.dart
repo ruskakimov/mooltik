@@ -1,9 +1,7 @@
 import 'dart:io';
-import 'dart:ui' as ui;
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/io/png.dart';
+import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:path/path.dart' as p;
@@ -11,57 +9,38 @@ import 'package:path/path.dart' as p;
 /// Single image with duration.
 class Frame extends TimeSpan with EquatableMixin {
   Frame({
-    required this.file,
+    required this.image,
     Duration duration = const Duration(seconds: 1),
-    ui.Image? snapshot,
-  })  : _snapshot = snapshot,
-        super(duration);
+  }) : super(duration);
 
-  final File file;
-
-  Size get size => Size(width!.toDouble(), height!.toDouble());
-
-  int? get width => _snapshot?.width;
-
-  int? get height => _snapshot?.height;
-
-  ui.Image? get snapshot => _snapshot;
-  ui.Image? _snapshot;
-
-  Future<void> loadSnapshot() async {
-    _snapshot = await pngRead(file);
-  }
-
-  Future<void> saveSnapshot() async {
-    await pngWrite(file, _snapshot!);
-  }
+  final DiskImage image;
 
   factory Frame.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       Frame(
-        file: File(p.join(frameDirPath, json[_fileNameKey])),
+        image: DiskImage(
+          file: File(p.join(frameDirPath, json[_fileNameKey])),
+        ),
         duration: (json[_durationKey] as String).parseDuration(),
       );
 
   Map<String, dynamic> toJson() => {
-        _fileNameKey: p.basename(file.path),
+        _fileNameKey: p.basename(image.file.path),
         _durationKey: duration.toString(),
       };
 
   @override
   Frame copyWith({
-    File? file,
+    DiskImage? image,
     Duration? duration,
-    ui.Image? snapshot,
   }) =>
       Frame(
-        file: file ?? this.file,
+        image: image ?? this.image,
         duration: duration ?? this.duration,
-        snapshot: snapshot ?? this._snapshot,
       );
 
   @override
-  List<Object> get props => [file.path, duration];
-}
+  List<Object> get props => [image.file.path, duration];
 
-const String _fileNameKey = 'file_name';
-const String _durationKey = 'duration';
+  static const String _fileNameKey = 'file_name';
+  static const String _durationKey = 'duration';
+}

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/delete_files_where.dart';
+import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/sava_data_transcoder.dart';
@@ -147,7 +148,7 @@ class Project extends ChangeNotifier {
     _scenes = Sequence<Scene>(data.scenes);
 
     // TODO: Loading all frames into memory doesn't scale.
-    await Future.wait(allFrames.map((frame) => frame.loadSnapshot()));
+    await Future.wait(allFrames.map((frame) => frame.image.loadSnapshot()));
 
     _soundClips =
         data.sounds.where((sound) => sound.file.existsSync()).toList();
@@ -219,7 +220,7 @@ class Project extends ChangeNotifier {
 
   Future<void> _deleteUnusedFrameImages() async {
     final Set<String> usedFrameImages =
-        allFrames.map((frame) => frame.file.path).toSet();
+        allFrames.map((frame) => frame.image.file.path).toSet();
 
     bool _isUnusedFrameImage(String path) =>
         p.extension(path) == '.png' &&
@@ -250,7 +251,9 @@ class Project extends ChangeNotifier {
     );
     final file = _getFrameFile(DateTime.now().millisecondsSinceEpoch);
     await pngWrite(file, image);
-    return Frame(file: file, snapshot: image);
+    return Frame(
+      image: DiskImage(file: file, snapshot: image),
+    );
   }
 
   Future<Scene> createNewScene() async {

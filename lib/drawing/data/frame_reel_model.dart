@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
@@ -41,10 +42,13 @@ class FrameReelModel extends ChangeNotifier {
   }
 
   Future<void> duplicateCurrent() async {
-    final newFrame = await _createNewFrame();
+    final duplicateDiskImage = (await _createNewFrame()).image;
+    duplicateDiskImage.changeSnapshot(currentFrame.image.snapshot);
+    duplicateDiskImage.saveSnapshot();
+
     frameSeq.insert(
       _currentIndex + 1,
-      currentFrame.copyWith(file: newFrame.file)..saveSnapshot(),
+      currentFrame.copyWith(image: duplicateDiskImage),
     );
     notifyListeners();
   }

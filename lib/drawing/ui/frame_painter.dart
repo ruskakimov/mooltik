@@ -22,19 +22,20 @@ class FramePainter extends CustomPainter {
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
 
     // Scale image to fit the given size.
-    canvas.scale(size.width / frame.width!, size.height / frame.height!);
+    canvas.scale(
+        size.width / frame.image.width!, size.height / frame.image.height!);
 
     if (hasStrokes) {
       // Save layer to erase paintings on it with `BlendMode.clear`.
       canvas.saveLayer(
-        Rect.fromLTWH(0, 0, frame.size.width, frame.size.height),
+        Rect.fromLTWH(0, 0, frame.image.size.width, frame.image.size.height),
         Paint(),
       );
     }
 
-    if (frame.snapshot != null) {
+    if (frame.image.snapshot != null) {
       canvas.drawImage(
-        frame.snapshot!,
+        frame.image.snapshot!,
         Offset.zero,
         Paint()
           ..colorFilter = filter
@@ -53,7 +54,7 @@ class FramePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(FramePainter oldDelegate) =>
-      oldDelegate.frame.snapshot != frame.snapshot ||
+      oldDelegate.frame.image.snapshot != frame.image.snapshot ||
       oldDelegate.strokes != strokes ||
       oldDelegate.filter != filter;
 
