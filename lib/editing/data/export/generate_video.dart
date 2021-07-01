@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:mooltik/common/data/iterable_methods.dart';
 import 'package:path/path.dart' as p;
 import 'package:mooltik/common/data/io/mp4/mp4.dart';
@@ -8,7 +9,7 @@ import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 
-Future<File> generateVideo({
+Future<File?> generateVideo({
   required String fileName,
   required Directory tempDir,
   required Iterable<CompositeFrame> frames,
@@ -18,7 +19,7 @@ Future<File> generateVideo({
   final videoFile = _tempFile('$fileName.mp4', tempDir);
   final slides = await _slidesFromFrames(frames, tempDir);
 
-  await mp4Write(
+  final success = await mp4Write(
     videoFile,
     slides,
     soundClips!,
@@ -26,7 +27,11 @@ Future<File> generateVideo({
     progressCallback,
   );
 
-  return videoFile;
+  return success ? videoFile : null;
+}
+
+Future<void> cancelGenerateVideo() async {
+  await FlutterFFmpeg().cancel();
 }
 
 Future<List<Slide>> _slidesFromFrames(

@@ -68,7 +68,10 @@ class _ExportDialogState extends State<ExportDialog> {
         Expanded(
           child: OutlinedButton(
             child: Text('Cancel'),
-            onPressed: () {},
+            onPressed: () {
+              final exporter = context.read<ExporterModel>();
+              exporter.cancel();
+            },
           ),
         ),
         SizedBox(width: 8),

@@ -8,7 +8,8 @@ import 'package:mooltik/common/data/io/mp4/ffmpeg_helpers.dart';
 
 typedef void ProgressCallback(double progress);
 
-Future<void> mp4Write(
+/// Constructs mp4 from slides and returns `true` if it was successful.
+Future<bool> mp4Write(
   File mp4File,
   List<Slide> slides,
   List<SoundClip> soundClips,
@@ -34,11 +35,13 @@ Future<void> mp4Write(
     progressCallback.call(stats.time / videoDuration.inMilliseconds);
   });
 
-  await FlutterFFmpeg().execute(ffmpegCommand(
+  final code = await FlutterFFmpeg().execute(ffmpegCommand(
     concatDemuxerPath: concatFile.path,
     soundClipPath: soundClips.isNotEmpty ? soundClips.first.file.path : null,
     soundClipOffset: soundClips.isNotEmpty ? soundClips.first.startTime : null,
     outputPath: mp4File.path,
     videoDuration: videoDuration,
   ));
+
+  return code == 0;
 }

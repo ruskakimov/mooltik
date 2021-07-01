@@ -58,7 +58,7 @@ class ExporterModel extends ChangeNotifier {
   ExporterState get state => _state;
   ExporterState _state = ExporterState.initial;
 
-  late File outputFile;
+  File? outputFile;
 
   Future<void> start() async {
     _state = ExporterState.exporting;
@@ -77,10 +77,13 @@ class ExporterModel extends ChangeNotifier {
       progressCallback: _onProgressUpdate,
     );
 
-    await saveVideoToGallery(outputFile.path);
+    if (outputFile != null) {
+      await saveVideoToGallery(outputFile!.path);
+      _finish();
+    } else {
+      _reset();
+    }
 
-    _progress = 1; // in case ffmpeg statistics callback didn't finish on 100%
-    _state = ExporterState.done;
     notifyListeners();
   }
 
@@ -89,11 +92,27 @@ class ExporterModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void _reset() {
+    _progress = 0;
+    _state = ExporterState.initial;
+  }
+
+  void _finish() {
+    _progress = 1; // in case ffmpeg statistics callback didn't finish on 100%
+    _state = ExporterState.done;
+  }
+
+  void cancel() {
+    cancelGenerateVideo();
+  }
+
   Future<void> openOutputFile() async {
-    await OpenFile.open(p.fromUri(outputFile.path));
+    if (outputFile == null) return;
+    await OpenFile.open(p.fromUri(outputFile!.path));
   }
 
   Future<void> shareOutputFile() async {
-    await Share.shareFiles([outputFile.path]);
+    if (outputFile == null) return;
+    await Share.shareFiles([outputFile!.path]);
   }
 }
