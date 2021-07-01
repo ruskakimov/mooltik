@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
@@ -25,13 +26,17 @@ void main() async {
             SceneLayer(
               Sequence([
                 Frame(
-                  file: File('a'),
-                  snapshot: imageA,
+                  image: DiskImage(
+                    file: File('a'),
+                    snapshot: imageA,
+                  ),
                   duration: Duration(milliseconds: 240),
                 ),
                 Frame(
-                  file: File('b'),
-                  snapshot: imageB,
+                  image: DiskImage(
+                    file: File('b'),
+                    snapshot: imageB,
+                  ),
                   duration: Duration(milliseconds: 240),
                 ),
               ]),
@@ -40,8 +45,10 @@ void main() async {
             SceneLayer(
               Sequence([
                 Frame(
-                  file: File('bg'),
-                  snapshot: bgGreen,
+                  image: DiskImage(
+                    file: File('bg'),
+                    snapshot: bgGreen,
+                  ),
                   duration: Duration(seconds: 3),
                 ),
               ]),
@@ -95,18 +102,24 @@ void main() async {
             SceneLayer(
               Sequence([
                 Frame(
-                  file: File('a'),
-                  snapshot: imageA,
+                  image: DiskImage(
+                    file: File('a'),
+                    snapshot: imageA,
+                  ),
                   duration: Duration(milliseconds: 600),
                 ),
                 Frame(
-                  file: File('b'),
-                  snapshot: imageB,
+                  image: DiskImage(
+                    file: File('b'),
+                    snapshot: imageB,
+                  ),
                   duration: Duration(milliseconds: 400),
                 ),
                 Frame(
-                  file: File('c'),
-                  snapshot: imageC,
+                  image: DiskImage(
+                    file: File('c'),
+                    snapshot: imageC,
+                  ),
                   duration: Duration(milliseconds: 200),
                 ),
               ]),
@@ -115,13 +128,17 @@ void main() async {
             SceneLayer(
               Sequence([
                 Frame(
-                  file: File('bg-red'),
-                  snapshot: bgRed,
+                  image: DiskImage(
+                    file: File('bg-red'),
+                    snapshot: bgRed,
+                  ),
                   duration: Duration(seconds: 1),
                 ),
                 Frame(
-                  file: File('bg-green'),
-                  snapshot: bgGreen,
+                  image: DiskImage(
+                    file: File('bg-green'),
+                    snapshot: bgGreen,
+                  ),
                   duration: Duration(seconds: 1),
                 ),
               ]),
