@@ -18,9 +18,16 @@ class ExporterPreview extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            _Thumbnail(thumbnail: exporter.frames.first.compositeImage),
-            PieProgressIndicator(progress: exporter.progress),
-            _FadeInPlayIcon(visible: exporter.isDone),
+            _FadeInThumbnail(
+              thumbnail: exporter.frames.first.compositeImage,
+              fullyVisible: exporter.isDone,
+            ),
+            PieProgressIndicator(
+              progress: exporter.progress,
+            ),
+            _FadeInPlayIcon(
+              visible: exporter.isDone,
+            ),
           ],
         ),
       ),
@@ -53,22 +60,28 @@ class _PreviewBox extends StatelessWidget {
   }
 }
 
-class _Thumbnail extends StatelessWidget {
-  const _Thumbnail({
+class _FadeInThumbnail extends StatelessWidget {
+  const _FadeInThumbnail({
     Key? key,
     required this.thumbnail,
+    required this.fullyVisible,
   }) : super(key: key);
 
   final CompositeImage thumbnail;
+  final bool fullyVisible;
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.contain,
-      child: CustomPaint(
-        size: thumbnail.size,
-        painter: CompositeImagePainter(thumbnail),
-        isComplex: true,
+    return AnimatedOpacity(
+      opacity: fullyVisible ? 1 : 0.2,
+      duration: Duration(milliseconds: 300),
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: CustomPaint(
+          size: thumbnail.size,
+          painter: CompositeImagePainter(thumbnail),
+          isComplex: true,
+        ),
       ),
     );
   }
