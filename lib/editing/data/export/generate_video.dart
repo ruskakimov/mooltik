@@ -37,8 +37,8 @@ Future<void> cancelGenerateVideo() async {
 Future<List<Slide>> _slidesFromFrames(
   Iterable<CompositeFrame> frames,
   Directory tempDir,
-) async {
-  return await Future.wait(
+) {
+  return Future.wait(
     frames.mapIndexed((frame, i) async {
       final file = _tempFile('$i.png', tempDir);
       final image = await frame.toImage();
