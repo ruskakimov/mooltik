@@ -39,14 +39,16 @@ class _PreviewBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 150,
-      width: double.infinity,
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: Colors.white10,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: child,
+      clipBehavior: Clip.antiAlias,
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: child,
+      ),
     );
   }
 }
