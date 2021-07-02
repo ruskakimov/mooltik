@@ -27,9 +27,8 @@ class Scene extends TimeSpan {
     return CompositeImage(
       width: frameWidth!,
       height: frameHeight!,
-      layers: visibleLayers
-          .map((layer) => layer.frameAt(playhead).image.snapshot!)
-          .toList(),
+      layers:
+          visibleLayers.map((layer) => layer.frameAt(playhead).image).toList(),
     );
   }
 
@@ -61,7 +60,7 @@ class Scene extends TimeSpan {
       final compositeImage = CompositeImage(
         width: frameWidth!,
         height: frameHeight!,
-        layers: trackIterators.map((it) => it.current.image.snapshot!).toList(),
+        layers: trackIterators.map((it) => it.current.image).toList(),
       );
 
       final iteratorEndTimes = getIteratorEndTimes();

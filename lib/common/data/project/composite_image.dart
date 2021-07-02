@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
+import 'package:mooltik/common/data/io/disk_image.dart';
 
 /// Stack of images of the same size.
 class CompositeImage with EquatableMixin {
@@ -15,7 +16,7 @@ class CompositeImage with EquatableMixin {
   final int height;
 
   /// Image layers from top to bottom.
-  final List<Image> layers;
+  final List<DiskImage> layers;
 
   Size get size => Size(width.toDouble(), height.toDouble());
 
@@ -26,7 +27,7 @@ class CompositeImage with EquatableMixin {
 extension CompositeImageDrawing on Canvas {
   void drawCompositeImage(CompositeImage image, Offset offset, Paint paint) {
     for (final layer in image.layers.reversed) {
-      drawImage(layer, offset, paint);
+      drawImage(layer.snapshot!, offset, paint);
     }
   }
 }
