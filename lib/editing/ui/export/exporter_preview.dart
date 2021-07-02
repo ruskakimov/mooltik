@@ -52,10 +52,7 @@ class _PreviewBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       clipBehavior: Clip.antiAlias,
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: child,
-      ),
+      child: child,
     );
   }
 }

@@ -24,16 +24,19 @@ class _ExportDialogState extends State<ExportDialog> {
       child: SimpleDialog(
         contentPadding: const EdgeInsets.all(16),
         children: [
-          AnimatedCrossFade(
-            duration: Duration(milliseconds: 200),
-            crossFadeState: exporter.isInitial
-                ? CrossFadeState.showFirst
-                : CrossFadeState.showSecond,
-            firstChild: ExporterForm(
-              selectedOption: exporter.selectedOption,
-              onValueChanged: exporter.onExportOptionChanged,
+          SizedBox(
+            width: 248, // 280 - 16 * 2 (280 is a min dialog width)
+            child: AnimatedCrossFade(
+              duration: Duration(milliseconds: 200),
+              crossFadeState: exporter.isInitial
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
+              firstChild: ExporterForm(
+                selectedOption: exporter.selectedOption,
+                onValueChanged: exporter.onExportOptionChanged,
+              ),
+              secondChild: ExporterPreview(),
             ),
-            secondChild: ExporterPreview(),
           ),
           _buildButtons(),
         ],
