@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/editable_field.dart';
-import 'package:mooltik/common/ui/edit_text_dialog.dart';
 import 'package:mooltik/editing/data/export/exporter_model.dart';
+import 'package:mooltik/editing/ui/export/export_video_form.dart';
 
 class ExportForm extends StatelessWidget {
   const ExportForm({
@@ -59,64 +58,12 @@ class ExportForm extends StatelessWidget {
       crossFadeState: selectedOption == ExportOption.video
           ? CrossFadeState.showFirst
           : CrossFadeState.showSecond,
-      firstChild: _VideoForm(),
+      firstChild: ExportVideoForm(),
       secondChild: EditableField(
         label: 'Selected frames',
         text: '148',
         onTap: () {},
       ),
     );
-  }
-}
-
-class _VideoForm extends StatelessWidget {
-  const _VideoForm({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final fileName = context.select<ExporterModel, String>(
-      (exporter) => exporter.videoFileName,
-    );
-
-    return EditableField(
-      label: 'File name',
-      text: '$fileName.mp4',
-      onTap: () => _openEditFileNameDialog(context),
-    );
-  }
-
-  void _openEditFileNameDialog(BuildContext context) {
-    final exporter = context.read<ExporterModel>();
-
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        fullscreenDialog: true,
-        builder: (context) => EditTextDialog(
-          title: 'File name',
-          initialValue: exporter.videoFileName,
-          onSubmit: (newName) {
-            exporter.videoFileName = newName;
-          },
-          maxLength: 30,
-          validator: _fileNameValidator,
-        ),
-      ),
-    );
-  }
-
-  String? _fileNameValidator(value) {
-    if (value == null || value.isEmpty) {
-      return 'Cannot be empty';
-    }
-
-    final reg = RegExp(r'^[A-Za-z0-9_-]+$');
-
-    if (!reg.hasMatch(value)) {
-      return 'Invalid character used';
-    }
-
-    return null;
   }
 }
