@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/editable_field.dart';
+import 'package:mooltik/common/ui/open_edit_dialog.dart';
 import 'package:mooltik/editing/data/export/exporter_model.dart';
 
 class ExporterForm extends StatelessWidget {
@@ -57,15 +59,52 @@ class ExporterForm extends StatelessWidget {
       crossFadeState: selectedOption == ExportOption.video
           ? CrossFadeState.showFirst
           : CrossFadeState.showSecond,
-      firstChild: EditableField(
-        label: 'File name',
-        text: '123123.mp4',
-        onTap: () {},
-      ),
+      firstChild: _VideoForm(),
       secondChild: EditableField(
         label: 'Selected frames',
         text: '148',
         onTap: () {},
+      ),
+    );
+  }
+}
+
+class _VideoForm extends StatelessWidget {
+  const _VideoForm({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final fileName = context.select<ExporterModel, String>(
+      (exporter) => exporter.videoFileName,
+    );
+
+    return EditableField(
+      label: 'File name',
+      text: '$fileName.mp4',
+      onTap: () => _openEditFileNameDialog(context, fileName),
+    );
+  }
+
+  void _openEditFileNameDialog(BuildContext context, String initial) {
+    final controller = TextEditingController.fromValue(
+      TextEditingValue(text: initial),
+    );
+
+    openEditDialog(
+      context: context,
+      title: 'File name',
+      onDone: () {
+        final exporter = context.read<ExporterModel>();
+        exporter.videoFileName = controller.text;
+      },
+      body: TextField(
+        controller: controller,
+        autofocus: true,
+        minLines: 1,
+        maxLines: 1,
+        maxLength: 80,
       ),
     );
   }

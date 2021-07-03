@@ -60,6 +60,14 @@ class ExporterModel extends ChangeNotifier {
 
   File? outputFile;
 
+  String get videoFileName => _videoFileName;
+  String _videoFileName = '${DateTime.now().millisecondsSinceEpoch}';
+  set videoFileName(String name) {
+    if (name.isEmpty) throw ArgumentError.value(name);
+    _videoFileName = name;
+    notifyListeners();
+  }
+
   Future<void> start() async {
     _state = ExporterState.exporting;
     notifyListeners();
@@ -67,10 +75,8 @@ class ExporterModel extends ChangeNotifier {
     // Wait for animation.
     await Future.delayed(Duration(milliseconds: 250));
 
-    final timestamp = DateTime.now().millisecondsSinceEpoch;
-
     outputFile = await generateVideo(
-      fileName: 'mooltik_video_$timestamp',
+      fileName: _videoFileName,
       tempDir: tempDir,
       frames: frames,
       soundClips: soundClips,
