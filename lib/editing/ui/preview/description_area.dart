@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/ui/open_edit_dialog.dart';
 
 class DescriptionArea extends StatelessWidget {
   const DescriptionArea({
@@ -46,34 +47,16 @@ class DescriptionArea extends StatelessWidget {
       text: description ?? '',
     ));
 
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        fullscreenDialog: true,
-        builder: (context) => Scaffold(
-          appBar: AppBar(
-            title: Text('Scene description'),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.done),
-                onPressed: () {
-                  onDone?.call(controller.text);
-                  Navigator.of(context).pop();
-                },
-                tooltip: 'Done',
-              )
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: controller,
-              autofocus: true,
-              minLines: 1,
-              maxLines: 5,
-              maxLength: 500,
-            ),
-          ),
-        ),
+    openEditDialog(
+      context: context,
+      title: 'Scene description',
+      onDone: () => onDone?.call(controller.text),
+      body: TextField(
+        controller: controller,
+        autofocus: true,
+        minLines: 1,
+        maxLines: 5,
+        maxLength: 500,
       ),
     );
   }
