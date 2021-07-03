@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/export/exporter_model.dart';
-import 'package:mooltik/editing/ui/export/exporter_form.dart';
-import 'package:mooltik/editing/ui/export/exporter_preview.dart';
+import 'package:mooltik/editing/ui/export/export_form.dart';
+import 'package:mooltik/editing/ui/export/export_preview.dart';
 import 'package:provider/provider.dart';
 
 class ExportDialog extends StatefulWidget {
@@ -31,11 +31,11 @@ class _ExportDialogState extends State<ExportDialog> {
               crossFadeState: exporter.isInitial
                   ? CrossFadeState.showFirst
                   : CrossFadeState.showSecond,
-              firstChild: ExporterForm(
+              firstChild: ExportForm(
                 selectedOption: exporter.selectedOption,
                 onValueChanged: exporter.onExportOptionChanged,
               ),
-              secondChild: ExporterPreview(),
+              secondChild: ExportPreview(),
             ),
           ),
           _buildButtons(),

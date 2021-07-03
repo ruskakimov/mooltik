@@ -5,8 +5,8 @@ import 'package:mooltik/editing/data/export/exporter_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editing/ui/export/pie_progress_indicator.dart';
 
-class ExporterPreview extends StatelessWidget {
-  const ExporterPreview({Key? key}) : super(key: key);
+class ExportPreview extends StatelessWidget {
+  const ExportPreview({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

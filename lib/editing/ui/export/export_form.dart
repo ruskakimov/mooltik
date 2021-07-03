@@ -5,8 +5,8 @@ import 'package:mooltik/common/ui/editable_field.dart';
 import 'package:mooltik/common/ui/edit_text_dialog.dart';
 import 'package:mooltik/editing/data/export/exporter_model.dart';
 
-class ExporterForm extends StatelessWidget {
-  const ExporterForm({
+class ExportForm extends StatelessWidget {
+  const ExportForm({
     Key? key,
     required this.selectedOption,
     required this.onValueChanged,
