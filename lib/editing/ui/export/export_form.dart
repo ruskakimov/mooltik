@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/ui/editable_field.dart';
 import 'package:mooltik/editing/data/export/exporter_model.dart';
+import 'package:mooltik/editing/ui/export/export_images_form.dart';
 import 'package:mooltik/editing/ui/export/export_video_form.dart';
 
 class ExportForm extends StatelessWidget {
@@ -59,11 +59,7 @@ class ExportForm extends StatelessWidget {
           ? CrossFadeState.showFirst
           : CrossFadeState.showSecond,
       firstChild: ExportVideoForm(),
-      secondChild: EditableField(
-        label: 'Selected frames',
-        text: '148',
-        onTap: () {},
-      ),
+      secondChild: ExportImagesForm(),
     );
   }
 }
