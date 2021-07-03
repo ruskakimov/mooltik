@@ -55,6 +55,7 @@ class EditableField extends StatelessWidget {
         SizedBox(height: 4),
         Text(
           text,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontSize: 16,
             color: Theme.of(context).colorScheme.onSurface,

@@ -67,7 +67,7 @@ class _EditFileNameDialogState extends State<EditFileNameDialog> {
             autofocus: true,
             minLines: 1,
             maxLines: 1,
-            maxLength: 80,
+            maxLength: 30,
             validator: _fileNameValidator,
           ),
         ),
