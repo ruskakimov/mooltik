@@ -79,6 +79,13 @@ class _EditFileNameDialogState extends State<EditFileNameDialog> {
     if (value == null || value.isEmpty) {
       return 'Cannot be empty';
     }
+
+    final reg = RegExp(r'^[A-Za-z0-9_-]+$');
+
+    if (!reg.hasMatch(value)) {
+      return 'Invalid character used';
+    }
+
     return null;
   }
 }
