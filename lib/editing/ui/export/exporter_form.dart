@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/editable_field.dart';
-import 'package:mooltik/editing/ui/export/edit_file_name_dialog.dart';
+import 'package:mooltik/common/ui/edit_text_dialog.dart';
 import 'package:mooltik/editing/data/export/exporter_model.dart';
 
 class ExporterForm extends StatelessWidget {
@@ -93,13 +93,30 @@ class _VideoForm extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         fullscreenDialog: true,
-        builder: (context) => EditFileNameDialog(
+        builder: (context) => EditTextDialog(
+          title: 'File name',
           initialValue: exporter.videoFileName,
           onSubmit: (newName) {
             exporter.videoFileName = newName;
           },
+          maxLength: 30,
+          validator: _fileNameValidator,
         ),
       ),
     );
+  }
+
+  String? _fileNameValidator(value) {
+    if (value == null || value.isEmpty) {
+      return 'Cannot be empty';
+    }
+
+    final reg = RegExp(r'^[A-Za-z0-9_-]+$');
+
+    if (!reg.hasMatch(value)) {
+      return 'Invalid character used';
+    }
+
+    return null;
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/ui/open_edit_dialog.dart';
+import 'package:mooltik/common/ui/edit_text_dialog.dart';
 
 class DescriptionArea extends StatelessWidget {
   const DescriptionArea({
@@ -43,20 +43,18 @@ class DescriptionArea extends StatelessWidget {
   }
 
   void _openEditDialog(BuildContext context) {
-    final controller = TextEditingController.fromValue(TextEditingValue(
-      text: description ?? '',
-    ));
-
-    openEditDialog(
-      context: context,
-      title: 'Scene description',
-      onDone: () => onDone?.call(controller.text),
-      body: TextField(
-        controller: controller,
-        autofocus: true,
-        minLines: 1,
-        maxLines: 5,
-        maxLength: 500,
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => EditTextDialog(
+          title: 'Scene description',
+          initialValue: description ?? '',
+          onSubmit: (value) {
+            onDone?.call(value);
+          },
+          maxLines: 5,
+          maxLength: 300,
+        ),
       ),
     );
   }

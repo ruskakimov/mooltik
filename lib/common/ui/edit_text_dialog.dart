@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 
-class EditFileNameDialog extends StatefulWidget {
-  const EditFileNameDialog({
+class EditTextDialog extends StatefulWidget {
+  const EditTextDialog({
     Key? key,
+    required this.title,
     required this.initialValue,
     required this.onSubmit,
+    this.maxLines = 1,
+    this.maxLength,
+    this.validator,
   }) : super(key: key);
 
+  final String title;
   final String initialValue;
   final ValueChanged<String> onSubmit;
 
+  final int maxLines;
+  final int? maxLength;
+  final FormFieldValidator<String>? validator;
+
   @override
-  _EditFileNameDialogState createState() => _EditFileNameDialogState();
+  _EditTextDialogState createState() => _EditTextDialogState();
 }
 
-class _EditFileNameDialogState extends State<EditFileNameDialog> {
+class _EditTextDialogState extends State<EditTextDialog> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController controller;
 
@@ -38,7 +47,7 @@ class _EditFileNameDialogState extends State<EditFileNameDialog> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('File name'),
+        title: Text(widget.title),
         actions: [
           IconButton(
             icon: Icon(Icons.done),
@@ -66,26 +75,12 @@ class _EditFileNameDialogState extends State<EditFileNameDialog> {
             controller: controller,
             autofocus: true,
             minLines: 1,
-            maxLines: 1,
-            maxLength: 30,
-            validator: _fileNameValidator,
+            maxLines: widget.maxLines,
+            maxLength: widget.maxLength,
+            validator: widget.validator,
           ),
         ),
       ),
     );
-  }
-
-  String? _fileNameValidator(value) {
-    if (value == null || value.isEmpty) {
-      return 'Cannot be empty';
-    }
-
-    final reg = RegExp(r'^[A-Za-z0-9_-]+$');
-
-    if (!reg.hasMatch(value)) {
-      return 'Invalid character used';
-    }
-
-    return null;
   }
 }
