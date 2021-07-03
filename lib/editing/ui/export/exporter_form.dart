@@ -89,7 +89,10 @@ class _VideoForm extends StatelessWidget {
 
   void _openEditFileNameDialog(BuildContext context, String initial) {
     final controller = TextEditingController.fromValue(
-      TextEditingValue(text: initial),
+      TextEditingValue(
+        text: initial,
+        selection: TextSelection(baseOffset: 0, extentOffset: initial.length),
+      ),
     );
 
     openEditDialog(
