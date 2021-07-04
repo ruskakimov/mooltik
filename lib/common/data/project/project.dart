@@ -298,21 +298,24 @@ class Project extends ChangeNotifier {
 
   Future<File> _addSoundFileToProjectDir(File source) async {
     final sourceExtension = p.extension(source.path);
-    final isAAC = sourceExtension == '.aac';
+    final copiedFile = File(p.join(
+      _getSoundDirectoryPath(),
+      '${DateTime.now().millisecondsSinceEpoch}$sourceExtension',
+    ));
+    await copiedFile.create(recursive: true);
+    await source.copy(copiedFile.path);
 
-    final outputExtension = isAAC ? '.m4a' : sourceExtension;
+    var output = copiedFile;
 
-    final fileName = '${DateTime.now().millisecondsSinceEpoch}$outputExtension';
-    final outputFile = File(p.join(_getSoundDirectoryPath(), fileName));
-    await outputFile.create(recursive: true);
-
-    if (isAAC) {
-      await aacToM4a(source, outputFile);
-    } else {
-      await source.copy(outputFile.path);
+    if (sourceExtension == '.aac') {
+      output = File(p.join(
+        _getSoundDirectoryPath(),
+        '${DateTime.now().millisecondsSinceEpoch}.m4a',
+      ));
+      await aacToM4a(copiedFile, output);
     }
 
-    return outputFile;
+    return output;
   }
 
   // =========
