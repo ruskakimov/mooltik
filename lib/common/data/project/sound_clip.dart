@@ -7,7 +7,7 @@ class SoundClip {
   SoundClip({
     required this.file,
     required Duration startTime,
-    Duration? duration,
+    required Duration duration,
   })  : _startTime = startTime,
         _duration = duration;
 
@@ -17,10 +17,10 @@ class SoundClip {
   Duration get startTime => _startTime;
   Duration _startTime;
 
-  Duration get endTime => _startTime + _duration!;
+  Duration get endTime => _startTime + _duration;
 
-  Duration? get duration => _duration;
-  Duration? _duration;
+  Duration get duration => _duration;
+  Duration _duration;
 
   factory SoundClip.fromJson(Map<String, dynamic> json, String soundDirPath) =>
       SoundClip(
