@@ -313,6 +313,7 @@ class Project extends ChangeNotifier {
         '${DateTime.now().millisecondsSinceEpoch}.m4a',
       ));
       await aacToM4a(copiedFile, output);
+      await copiedFile.delete();
     }
 
     return output;
