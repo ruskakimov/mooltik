@@ -307,6 +307,7 @@ class Project extends ChangeNotifier {
 
     var output = copiedFile;
 
+    // Raw AAC cannot be seeked, source: https://github.com/ryanheise/just_audio/issues/333#issuecomment-792867877
     if (sourceExtension == '.aac') {
       output = File(p.join(
         _getSoundDirectoryPath(),
