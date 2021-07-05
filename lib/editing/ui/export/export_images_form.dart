@@ -117,19 +117,42 @@ class SceneFramesPicker extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: _listPadding,
             itemCount: 20,
-            itemBuilder: (context, i) {
-              return Container(
-                width: _thumbnailSize.width,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              );
-            },
+            itemBuilder: (context, i) => _SceneFrameThumbnail(
+              width: _thumbnailSize.width,
+              selected: true,
+            ),
             separatorBuilder: (context, i) => SizedBox(width: 16),
           ),
         ),
+      ],
+    );
+  }
+}
+
+class _SceneFrameThumbnail extends StatelessWidget {
+  const _SceneFrameThumbnail({
+    Key? key,
+    required this.width,
+    required this.selected,
+  }) : super(key: key);
+
+  final double width;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomLeft,
+      children: [
+        Container(
+          width: width,
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        if (selected) AppCheckbox(value: true),
       ],
     );
   }
