@@ -98,9 +98,9 @@ class Project extends ChangeNotifier {
       .map((scene) => scene.allFrames)
       .expand((iterable) => iterable);
 
-  Iterable<CompositeFrame> get exportFrames => _scenes!.iterable
-      .map((scene) => scene.exportFrames)
-      .expand((iterable) => iterable);
+  /// Export frames scene by scene.
+  Iterable<Iterable<CompositeFrame>> get exportFrames =>
+      _scenes!.iterable.map((scene) => scene.exportFrames);
 
   List<SoundClip> get soundClips => _soundClips;
   List<SoundClip> _soundClips = [];
@@ -182,7 +182,7 @@ class Project extends ChangeNotifier {
 
     // Write thumbnail.
     final image = await generateImage(
-      CompositeImagePainter(exportFrames.first.compositeImage),
+      CompositeImagePainter(exportFrames.first.first.compositeImage),
       _frameSize.width.toInt(),
       _frameSize.height.toInt(),
     );

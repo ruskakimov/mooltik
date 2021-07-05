@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
+import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/editing/data/export/generate_video.dart';
 import 'package:mooltik/editing/data/export/save_video_to_gallery.dart';
 import 'package:open_file/open_file.dart';
@@ -23,15 +24,13 @@ enum ExporterState {
 
 class ExporterModel extends ChangeNotifier {
   ExporterModel({
-    required this.frames,
+    required this.framesSceneByScene,
     required this.soundClips,
     required this.tempDir,
   });
 
-  /// For output video.
-  final Iterable<CompositeFrame> frames;
+  final List<List<CompositeFrame>> framesSceneByScene;
 
-  /// For output audio.
   final List<SoundClip>? soundClips;
 
   /// Temporary directory to store intermediate results.
@@ -46,6 +45,9 @@ class ExporterModel extends ChangeNotifier {
     _selectedOption = option;
     notifyListeners();
   }
+
+  CompositeImage get videoPreviewImage =>
+      framesSceneByScene.first.first.compositeImage;
 
   /// Value between 0 and 1 that indicates video export progress.
   double get progress => _progress;
@@ -78,7 +80,7 @@ class ExporterModel extends ChangeNotifier {
     outputFile = await generateVideo(
       fileName: _fileName,
       tempDir: tempDir,
-      frames: frames,
+      frames: framesSceneByScene.expand((list) => list),
       soundClips: soundClips,
       progressCallback: _onProgressUpdate,
     );

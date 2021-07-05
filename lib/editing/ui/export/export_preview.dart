@@ -19,7 +19,7 @@ class ExportPreview extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             _FadeInThumbnail(
-              thumbnail: exporter.frames.first.compositeImage,
+              thumbnail: exporter.videoPreviewImage,
               fullyVisible: exporter.isDone,
             ),
             PieProgressIndicator(
