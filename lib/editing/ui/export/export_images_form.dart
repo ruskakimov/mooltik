@@ -48,9 +48,15 @@ class EditSelectedFramesDialog extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
+      body: ListView.separated(
         padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-        child: LabeledCheckbox(label: 'All frames'),
+        itemBuilder: (context, i) => [
+          LabeledCheckbox(label: 'All frames'),
+          LabeledCheckbox(label: 'Scene 1'),
+          LabeledCheckbox(label: 'Scene 2'),
+        ][i],
+        separatorBuilder: (context, i) => Divider(),
+        itemCount: 3,
       ),
     );
   }
