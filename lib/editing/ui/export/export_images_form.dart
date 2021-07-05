@@ -24,14 +24,14 @@ class ExportImagesForm extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         fullscreenDialog: true,
-        builder: (context) => SelectedFramesPicker(),
+        builder: (context) => FramesPicker(),
       ),
     );
   }
 }
 
-class SelectedFramesPicker extends StatelessWidget {
-  const SelectedFramesPicker({Key? key}) : super(key: key);
+class FramesPicker extends StatelessWidget {
+  const FramesPicker({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +49,13 @@ class SelectedFramesPicker extends StatelessWidget {
         ],
       ),
       body: ListView.separated(
-        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-        itemBuilder: (context, i) => [
-          LabeledCheckbox(label: 'All frames'),
-          LabeledCheckbox(label: 'Scene 1'),
-          LabeledCheckbox(label: 'Scene 2'),
-        ][i],
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        itemCount: 20,
+        itemBuilder: (context, i) {
+          if (i == 0) return LabeledCheckbox(label: 'All frames');
+          return SceneFramesPicker(sceneNumber: i);
+        },
         separatorBuilder: (context, i) => Divider(),
-        itemCount: 3,
       ),
     );
   }
@@ -74,6 +73,7 @@ class LabeledCheckbox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        SizedBox(width: 8),
         AppCheckbox(value: true),
         SizedBox(width: 8),
         Text(
@@ -81,6 +81,45 @@ class LabeledCheckbox extends StatelessWidget {
           style: TextStyle(
             fontSize: 16,
             color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SceneFramesPicker extends StatelessWidget {
+  const SceneFramesPicker({
+    Key? key,
+    required this.sceneNumber,
+  }) : super(key: key);
+
+  final int sceneNumber;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        LabeledCheckbox(label: 'Scene $sceneNumber'),
+        SizedBox(
+          height: 120,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.only(
+              top: 8,
+              left: 16,
+              right: 16,
+              bottom: 16,
+            ),
+            itemCount: 20,
+            itemBuilder: (context, i) {
+              return Container(
+                width: 150,
+                color: Colors.grey,
+              );
+            },
+            separatorBuilder: (context, i) => SizedBox(width: 16),
           ),
         ),
       ],
