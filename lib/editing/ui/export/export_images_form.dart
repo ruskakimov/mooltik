@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/ui/app_checkbox.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editing/data/export/exporter_model.dart';
 import 'package:mooltik/common/ui/editable_field.dart';
@@ -48,8 +49,20 @@ class EditSelectedFramesDialog extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Container(),
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+        child: Row(
+          children: [
+            AppCheckbox(value: true),
+            SizedBox(width: 8),
+            Text(
+              'All frames',
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
