@@ -55,7 +55,10 @@ class FramesPicker extends StatelessWidget {
           if (i == 0) return LabeledCheckbox(label: 'All frames');
           return SceneFramesPicker(sceneNumber: i);
         },
-        separatorBuilder: (context, i) => Divider(),
+        separatorBuilder: (context, i) => Divider(
+          height: 24,
+          color: Colors.black,
+        ),
       ),
     );
   }
