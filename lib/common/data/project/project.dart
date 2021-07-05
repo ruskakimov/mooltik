@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/io/aac_to_m4a.dart';
 import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
@@ -273,38 +274,53 @@ class Project extends ChangeNotifier {
 
   String _getFrameFilePath(int id) => p.join(directory.path, 'frame$id.png');
 
-  File _getSoundClipFile(int id) => File(_getSoundClipFilePath(id));
-
   String _getSoundDirectoryPath() => p.join(directory.path, 'sounds');
-
-  String _getSoundClipFilePath(int id) =>
-      p.join(_getSoundDirectoryPath(), '$id.aac');
-
-  Future<File> getNewSoundClipFile() async =>
-      await _getSoundClipFile(DateTime.now().millisecondsSinceEpoch)
-          .create(recursive: true);
 
   Future<void> loadSoundClipFromFile(File source) async {
     if (_soundClips.isNotEmpty) {
       _soundClips.clear();
     }
 
-    final sourceExtension = p.extension(source.path);
-    final fileName = '${DateTime.now().millisecondsSinceEpoch}$sourceExtension';
+    final soundFile = await _addSoundFileToProjectDir(source);
 
-    final soundFile = File(p.join(_getSoundDirectoryPath(), fileName));
-    await soundFile.create(recursive: true);
-    await source.copy(soundFile.path);
+    final duration = await getSoundFileDuration(soundFile);
+    if (duration == null) {
+      throw Exception('Could not read duration from file.');
+    }
 
     final soundClip = SoundClip(
       file: soundFile,
       startTime: Duration.zero,
-      duration: await getSoundFileDuration(soundFile),
+      duration: duration,
     );
 
     _soundClips.add(soundClip);
 
     notifyListeners();
+  }
+
+  Future<File> _addSoundFileToProjectDir(File source) async {
+    final sourceExtension = p.extension(source.path);
+    final copiedFile = File(p.join(
+      _getSoundDirectoryPath(),
+      '${DateTime.now().millisecondsSinceEpoch}$sourceExtension',
+    ));
+    await copiedFile.create(recursive: true);
+    await source.copy(copiedFile.path);
+
+    var output = copiedFile;
+
+    // Raw AAC cannot be seeked, source: https://github.com/ryanheise/just_audio/issues/333#issuecomment-792867877
+    if (sourceExtension == '.aac') {
+      output = File(p.join(
+        _getSoundDirectoryPath(),
+        '${DateTime.now().millisecondsSinceEpoch}.m4a',
+      ));
+      await aacToM4a(copiedFile, output);
+      await copiedFile.delete();
+    }
+
+    return output;
   }
 
   // =========
