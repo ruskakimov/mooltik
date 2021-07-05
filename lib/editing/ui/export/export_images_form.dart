@@ -24,14 +24,14 @@ class ExportImagesForm extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         fullscreenDialog: true,
-        builder: (context) => EditSelectedFramesDialog(),
+        builder: (context) => SelectedFramesPicker(),
       ),
     );
   }
 }
 
-class EditSelectedFramesDialog extends StatelessWidget {
-  const EditSelectedFramesDialog({Key? key}) : super(key: key);
+class SelectedFramesPicker extends StatelessWidget {
+  const SelectedFramesPicker({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
