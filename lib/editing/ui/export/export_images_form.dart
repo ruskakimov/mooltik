@@ -96,6 +96,15 @@ class SceneFramesPicker extends StatelessWidget {
 
   final int sceneNumber;
 
+  static const _listPadding = EdgeInsets.only(
+    top: 8,
+    left: 16,
+    right: 16,
+    bottom: 16,
+  );
+
+  static const _thumbnailSize = Size(160, 90);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -103,20 +112,19 @@ class SceneFramesPicker extends StatelessWidget {
       children: [
         LabeledCheckbox(label: 'Scene $sceneNumber'),
         SizedBox(
-          height: 120,
+          height: _thumbnailSize.height + _listPadding.vertical,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.only(
-              top: 8,
-              left: 16,
-              right: 16,
-              bottom: 16,
-            ),
+            padding: _listPadding,
             itemCount: 20,
             itemBuilder: (context, i) {
               return Container(
-                width: 150,
-                color: Colors.grey,
+                width: _thumbnailSize.width,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(8),
+                ),
               );
             },
             separatorBuilder: (context, i) => SizedBox(width: 16),
