@@ -12,7 +12,7 @@ class ExportVideoForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fileName = context.select<ExporterModel, String>(
-      (exporter) => exporter.videoFileName,
+      (exporter) => exporter.fileName,
     );
 
     return EditableField(
@@ -30,9 +30,9 @@ class ExportVideoForm extends StatelessWidget {
         fullscreenDialog: true,
         builder: (context) => EditTextDialog(
           title: 'File name',
-          initialValue: exporter.videoFileName,
+          initialValue: exporter.fileName,
           onSubmit: (newName) {
-            exporter.videoFileName = newName;
+            exporter.fileName = newName;
           },
           maxLength: 30,
           validator: _fileNameValidator,

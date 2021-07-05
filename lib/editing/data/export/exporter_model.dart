@@ -60,11 +60,11 @@ class ExporterModel extends ChangeNotifier {
 
   File? outputFile;
 
-  String get videoFileName => _videoFileName;
-  String _videoFileName = '${DateTime.now().millisecondsSinceEpoch}';
-  set videoFileName(String name) {
+  String get fileName => _fileName;
+  String _fileName = '${DateTime.now().millisecondsSinceEpoch}';
+  set fileName(String name) {
     if (name.isEmpty) throw ArgumentError.value(name);
-    _videoFileName = name;
+    _fileName = name;
     notifyListeners();
   }
 
@@ -76,7 +76,7 @@ class ExporterModel extends ChangeNotifier {
     await Future.delayed(Duration(milliseconds: 250));
 
     outputFile = await generateVideo(
-      fileName: _videoFileName,
+      fileName: _fileName,
       tempDir: tempDir,
       frames: frames,
       soundClips: soundClips,
