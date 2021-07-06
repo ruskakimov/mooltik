@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/composite_frame.dart';
+import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/common/ui/app_checkbox.dart';
+import 'package:mooltik/common/ui/composite_image_painter.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/editing/data/export/exporter_model.dart';
 import 'package:mooltik/common/ui/editable_field.dart';
@@ -24,14 +27,29 @@ class ExportImagesForm extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         fullscreenDialog: true,
-        builder: (context) => FramesPicker(),
+        builder: (context) => FramesPicker(
+          framesSceneByScene: exporter.framesSceneByScene,
+          initialSelectedFrames: exporter.selectedFrames,
+          onSubmit: (selected) {
+            exporter.selectedFrames = selected;
+          },
+        ),
       ),
     );
   }
 }
 
 class FramesPicker extends StatelessWidget {
-  const FramesPicker({Key? key}) : super(key: key);
+  const FramesPicker({
+    Key? key,
+    required this.framesSceneByScene,
+    required this.initialSelectedFrames,
+    required this.onSubmit,
+  }) : super(key: key);
+
+  final List<List<CompositeFrame>> framesSceneByScene;
+  final Set<CompositeFrame> initialSelectedFrames;
+  final ValueChanged<Set<CompositeFrame>> onSubmit;
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +68,13 @@ class FramesPicker extends StatelessWidget {
       ),
       body: ListView.separated(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
-        itemCount: 20,
+        itemCount: framesSceneByScene.length + 1,
         itemBuilder: (context, i) {
           if (i == 0) return LabeledCheckbox(label: 'All frames');
-          return SceneFramesPicker(sceneNumber: i);
+          return SceneFramesPicker(
+            sceneNumber: i,
+            sceneFrames: framesSceneByScene[i - 1],
+          );
         },
         separatorBuilder: (context, i) => Divider(
           height: 24,
@@ -95,7 +116,10 @@ class SceneFramesPicker extends StatelessWidget {
   const SceneFramesPicker({
     Key? key,
     required this.sceneNumber,
+    required this.sceneFrames,
   }) : super(key: key);
+
+  final List<CompositeFrame> sceneFrames;
 
   final int sceneNumber;
 
@@ -119,9 +143,10 @@ class SceneFramesPicker extends StatelessWidget {
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: _listPadding,
-            itemCount: 20,
+            itemCount: sceneFrames.length,
             itemBuilder: (context, i) => _SceneFrameThumbnail(
               width: _thumbnailSize.width,
+              thumbnail: sceneFrames[i].compositeImage,
               selected: true,
             ),
             separatorBuilder: (context, i) => SizedBox(width: 16),
@@ -136,10 +161,12 @@ class _SceneFrameThumbnail extends StatelessWidget {
   const _SceneFrameThumbnail({
     Key? key,
     required this.width,
+    required this.thumbnail,
     required this.selected,
   }) : super(key: key);
 
   final double width;
+  final CompositeImage thumbnail;
   final bool selected;
 
   @override
@@ -153,6 +180,14 @@ class _SceneFrameThumbnail extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(8),
+          ),
+          child: FittedBox(
+            fit: BoxFit.fill,
+            child: CustomPaint(
+              size: thumbnail.size,
+              painter: CompositeImagePainter(thumbnail),
+              isComplex: true,
+            ),
           ),
         ),
         if (selected) AppCheckbox(value: true),

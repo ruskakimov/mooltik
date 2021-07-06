@@ -27,9 +27,14 @@ class ExporterModel extends ChangeNotifier {
     required this.framesSceneByScene,
     required this.soundClips,
     required this.tempDir,
-  });
+  }) {
+    _selectedFrames.addAll(allFrames);
+  }
 
   final List<List<CompositeFrame>> framesSceneByScene;
+
+  List<CompositeFrame> get allFrames =>
+      framesSceneByScene.expand((list) => list).toList();
 
   final List<SoundClip>? soundClips;
 
@@ -62,14 +67,6 @@ class ExporterModel extends ChangeNotifier {
 
   File? outputFile;
 
-  String get fileName => _fileName;
-  String _fileName = '${DateTime.now().millisecondsSinceEpoch}';
-  set fileName(String name) {
-    if (name.isEmpty) throw ArgumentError.value(name);
-    _fileName = name;
-    notifyListeners();
-  }
-
   Future<void> start() async {
     _state = ExporterState.exporting;
     notifyListeners();
@@ -80,7 +77,7 @@ class ExporterModel extends ChangeNotifier {
     outputFile = await generateVideo(
       fileName: _fileName,
       tempDir: tempDir,
-      frames: framesSceneByScene.expand((list) => list),
+      frames: allFrames,
       soundClips: soundClips,
       progressCallback: _onProgressUpdate,
     );
@@ -122,5 +119,32 @@ class ExporterModel extends ChangeNotifier {
   Future<void> shareOutputFile() async {
     if (outputFile == null) return;
     await Share.shareFiles([outputFile!.path]);
+  }
+
+  // ==========
+  // Form data:
+  // ==========
+
+  /// Output file name.
+  String get fileName => _fileName;
+  String _fileName = '${DateTime.now().millisecondsSinceEpoch}';
+
+  set fileName(String name) {
+    if (name.isEmpty) throw ArgumentError.value(name);
+
+    _fileName = name;
+    notifyListeners();
+  }
+
+  /// Frames selected for images export.
+  Set<CompositeFrame> get selectedFrames => _selectedFrames;
+  Set<CompositeFrame> _selectedFrames = Set();
+
+  set selectedFrames(Set<CompositeFrame> selected) {
+    if (selected.isEmpty)
+      throw ArgumentError('Selected frames must not be empty.');
+
+    _selectedFrames = selected;
+    notifyListeners();
   }
 }
