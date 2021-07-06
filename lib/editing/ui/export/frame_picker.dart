@@ -47,6 +47,14 @@ class _FramesPickerState extends State<FramesPicker> {
 
   bool get allFramesSelected => selectedFrames.length == totalFrameCount;
 
+  void handleAllFramesTap() {
+    if (allFramesSelected) {
+      setState(() => selectedFrames.clear());
+    } else {
+      setState(() => selectedFrames.addAll(widget.initialSelectedFrames));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +81,7 @@ class _FramesPickerState extends State<FramesPicker> {
             return LabeledCheckbox(
               label: 'All frames',
               selected: allFramesSelected,
-              onTap: () {},
+              onTap: handleAllFramesTap,
             );
           return SceneFramesPicker(
             sceneNumber: i,
@@ -106,19 +114,22 @@ class LabeledCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(width: 8),
-        AppCheckbox(value: selected),
-        SizedBox(width: 8),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).colorScheme.onSurface,
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        children: [
+          SizedBox(width: 8),
+          AppCheckbox(value: selected),
+          SizedBox(width: 8),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
