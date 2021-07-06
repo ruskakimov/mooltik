@@ -229,19 +229,22 @@ class _SceneFrameThumbnail extends StatelessWidget {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          Container(
-            width: width,
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: FittedBox(
-              fit: BoxFit.fill,
-              child: CustomPaint(
-                size: thumbnail.size,
-                painter: CompositeImagePainter(thumbnail),
-                isComplex: true,
+          Opacity(
+            opacity: selected ? 1 : 0.5,
+            child: Container(
+              width: width,
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: FittedBox(
+                fit: BoxFit.fill,
+                child: CustomPaint(
+                  size: thumbnail.size,
+                  painter: CompositeImagePainter(thumbnail),
+                  isComplex: true,
+                ),
               ),
             ),
           ),
