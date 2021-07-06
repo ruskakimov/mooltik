@@ -21,12 +21,14 @@ class FramesPicker extends StatefulWidget {
 }
 
 class _FramesPickerState extends State<FramesPicker> {
+  late final int totalFrameCount;
   final Set<CompositeFrame> selectedFrames = Set();
 
   @override
   void initState() {
     super.initState();
     selectedFrames.addAll(widget.initialSelectedFrames);
+    totalFrameCount = widget.framesSceneByScene.expand((list) => list).length;
   }
 
   bool isSelected(CompositeFrame frame) => selectedFrames.contains(frame);
@@ -42,6 +44,8 @@ class _FramesPickerState extends State<FramesPicker> {
       selectedFrames.remove(frame);
     });
   }
+
+  bool get allFramesSelected => selectedFrames.length == totalFrameCount;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +69,12 @@ class _FramesPickerState extends State<FramesPicker> {
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         itemCount: widget.framesSceneByScene.length + 1,
         itemBuilder: (context, i) {
-          if (i == 0) return LabeledCheckbox(label: 'All frames');
+          if (i == 0)
+            return LabeledCheckbox(
+              label: 'All frames',
+              selected: allFramesSelected,
+              onTap: () {},
+            );
           return SceneFramesPicker(
             sceneNumber: i,
             sceneFrames: widget.framesSceneByScene[i - 1],
@@ -87,16 +96,20 @@ class LabeledCheckbox extends StatelessWidget {
   const LabeledCheckbox({
     Key? key,
     required this.label,
+    required this.selected,
+    required this.onTap,
   }) : super(key: key);
 
   final String label;
+  final bool selected;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         SizedBox(width: 8),
-        AppCheckbox(value: true),
+        AppCheckbox(value: selected),
         SizedBox(width: 8),
         Text(
           label,
@@ -142,7 +155,11 @@ class SceneFramesPicker extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        LabeledCheckbox(label: 'Scene $sceneNumber'),
+        LabeledCheckbox(
+          label: 'Scene $sceneNumber',
+          selected: true,
+          onTap: () {},
+        ),
         SizedBox(
           height: _thumbnailSize.height + _listPadding.vertical,
           child: ListView.separated(
