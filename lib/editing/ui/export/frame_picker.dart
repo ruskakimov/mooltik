@@ -116,6 +116,7 @@ class LabeledCheckbox extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: Row(
         children: [
           SizedBox(width: 8),
@@ -161,6 +162,17 @@ class SceneFramesPicker extends StatelessWidget {
 
   static const _thumbnailSize = Size(160, 90);
 
+  bool get allSceneFramesSelected =>
+      sceneFrames.every((frame) => isSelected(frame));
+
+  void handleSceneLabelTap() {
+    if (allSceneFramesSelected) {
+      sceneFrames.forEach((frame) => deselect(frame));
+    } else {
+      sceneFrames.forEach((frame) => select(frame));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -168,8 +180,8 @@ class SceneFramesPicker extends StatelessWidget {
       children: [
         LabeledCheckbox(
           label: 'Scene $sceneNumber',
-          selected: true,
-          onTap: () {},
+          selected: allSceneFramesSelected,
+          onTap: handleSceneLabelTap,
         ),
         SizedBox(
           height: _thumbnailSize.height + _listPadding.vertical,
