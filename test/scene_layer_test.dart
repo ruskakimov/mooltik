@@ -98,9 +98,23 @@ void main() async {
       expect(sceneLayer.frameAt(Duration(seconds: 16)).image.snapshot, imageB);
     });
 
-    test('returns correct export frames for extend last mode', () {
-      final sceneLayer = SceneLayer(
-        Sequence<Frame>([
+    group('returns correct export frames', () {
+      test('for extend last mode', () {
+        final sceneLayer = SceneLayer(
+          Sequence<Frame>([
+            Frame(
+              image: DiskImage(file: File('1.png')),
+              duration: Duration(seconds: 1),
+            ),
+            Frame(
+              image: DiskImage(file: File('2.png')),
+              duration: Duration(seconds: 2),
+            ),
+          ]),
+          PlayMode.extendLast,
+        );
+        final duration = Duration(seconds: 10);
+        expect(sceneLayer.getExportFrames(duration).toList(), [
           Frame(
             image: DiskImage(file: File('1.png')),
             duration: Duration(seconds: 1),
@@ -109,29 +123,29 @@ void main() async {
             image: DiskImage(file: File('2.png')),
             duration: Duration(seconds: 2),
           ),
-        ]),
-        PlayMode.extendLast,
-      );
-      final duration = Duration(seconds: 10);
-      expect(sceneLayer.getExportFrames(duration).toList(), [
-        Frame(
-          image: DiskImage(file: File('1.png')),
-          duration: Duration(seconds: 1),
-        ),
-        Frame(
-          image: DiskImage(file: File('2.png')),
-          duration: Duration(seconds: 2),
-        ),
-        Frame(
-          image: DiskImage(file: File('2.png')),
-          duration: Duration(seconds: 7),
-        ),
-      ]);
-    });
+          Frame(
+            image: DiskImage(file: File('2.png')),
+            duration: Duration(seconds: 7),
+          ),
+        ]);
+      });
 
-    test('returns correct export frames for loop mode', () {
-      final sceneLayer = SceneLayer(
-        Sequence<Frame>([
+      test('for loop mode', () {
+        final sceneLayer = SceneLayer(
+          Sequence<Frame>([
+            Frame(
+              image: DiskImage(file: File('1.png')),
+              duration: Duration(seconds: 1),
+            ),
+            Frame(
+              image: DiskImage(file: File('2.png')),
+              duration: Duration(seconds: 2),
+            ),
+          ]),
+          PlayMode.loop,
+        );
+        final duration = Duration(seconds: 10);
+        expect(sceneLayer.getExportFrames(duration).toList(), [
           Frame(
             image: DiskImage(file: File('1.png')),
             duration: Duration(seconds: 1),
@@ -140,45 +154,49 @@ void main() async {
             image: DiskImage(file: File('2.png')),
             duration: Duration(seconds: 2),
           ),
-        ]),
-        PlayMode.loop,
-      );
-      final duration = Duration(seconds: 10);
-      expect(sceneLayer.getExportFrames(duration).toList(), [
-        Frame(
-          image: DiskImage(file: File('1.png')),
-          duration: Duration(seconds: 1),
-        ),
-        Frame(
-          image: DiskImage(file: File('2.png')),
-          duration: Duration(seconds: 2),
-        ),
-        Frame(
-          image: DiskImage(file: File('1.png')),
-          duration: Duration(seconds: 1),
-        ),
-        Frame(
-          image: DiskImage(file: File('2.png')),
-          duration: Duration(seconds: 2),
-        ),
-        Frame(
-          image: DiskImage(file: File('1.png')),
-          duration: Duration(seconds: 1),
-        ),
-        Frame(
-          image: DiskImage(file: File('2.png')),
-          duration: Duration(seconds: 2),
-        ),
-        Frame(
-          image: DiskImage(file: File('1.png')),
-          duration: Duration(seconds: 1),
-        ),
-      ]);
-    });
+          Frame(
+            image: DiskImage(file: File('1.png')),
+            duration: Duration(seconds: 1),
+          ),
+          Frame(
+            image: DiskImage(file: File('2.png')),
+            duration: Duration(seconds: 2),
+          ),
+          Frame(
+            image: DiskImage(file: File('1.png')),
+            duration: Duration(seconds: 1),
+          ),
+          Frame(
+            image: DiskImage(file: File('2.png')),
+            duration: Duration(seconds: 2),
+          ),
+          Frame(
+            image: DiskImage(file: File('1.png')),
+            duration: Duration(seconds: 1),
+          ),
+        ]);
+      });
 
-    test('returns correct export frames for ping-pong mode', () {
-      final sceneLayer = SceneLayer(
-        Sequence<Frame>([
+      test('for ping-pong mode', () {
+        final sceneLayer = SceneLayer(
+          Sequence<Frame>([
+            Frame(
+              image: DiskImage(file: File('1.png')),
+              duration: Duration(seconds: 1),
+            ),
+            Frame(
+              image: DiskImage(file: File('2.png')),
+              duration: Duration(seconds: 2),
+            ),
+            Frame(
+              image: DiskImage(file: File('3.png')),
+              duration: Duration(seconds: 3),
+            ),
+          ]),
+          PlayMode.pingPong,
+        );
+        final duration = Duration(seconds: 24);
+        expect(sceneLayer.getExportFrames(duration).toList(), [
           Frame(
             image: DiskImage(file: File('1.png')),
             duration: Duration(seconds: 1),
@@ -191,60 +209,44 @@ void main() async {
             image: DiskImage(file: File('3.png')),
             duration: Duration(seconds: 3),
           ),
-        ]),
-        PlayMode.pingPong,
-      );
-      final duration = Duration(seconds: 24);
-      expect(sceneLayer.getExportFrames(duration).toList(), [
-        Frame(
-          image: DiskImage(file: File('1.png')),
-          duration: Duration(seconds: 1),
-        ),
-        Frame(
-          image: DiskImage(file: File('2.png')),
-          duration: Duration(seconds: 2),
-        ),
-        Frame(
-          image: DiskImage(file: File('3.png')),
-          duration: Duration(seconds: 3),
-        ),
-        Frame(
-          image: DiskImage(file: File('3.png')),
-          duration: Duration(seconds: 3),
-        ),
-        Frame(
-          image: DiskImage(file: File('2.png')),
-          duration: Duration(seconds: 2),
-        ),
-        Frame(
-          image: DiskImage(file: File('1.png')),
-          duration: Duration(seconds: 1),
-        ),
-        Frame(
-          image: DiskImage(file: File('1.png')),
-          duration: Duration(seconds: 1),
-        ),
-        Frame(
-          image: DiskImage(file: File('2.png')),
-          duration: Duration(seconds: 2),
-        ),
-        Frame(
-          image: DiskImage(file: File('3.png')),
-          duration: Duration(seconds: 3),
-        ),
-        Frame(
-          image: DiskImage(file: File('3.png')),
-          duration: Duration(seconds: 3),
-        ),
-        Frame(
-          image: DiskImage(file: File('2.png')),
-          duration: Duration(seconds: 2),
-        ),
-        Frame(
-          image: DiskImage(file: File('1.png')),
-          duration: Duration(seconds: 1),
-        ),
-      ]);
+          Frame(
+            image: DiskImage(file: File('3.png')),
+            duration: Duration(seconds: 3),
+          ),
+          Frame(
+            image: DiskImage(file: File('2.png')),
+            duration: Duration(seconds: 2),
+          ),
+          Frame(
+            image: DiskImage(file: File('1.png')),
+            duration: Duration(seconds: 1),
+          ),
+          Frame(
+            image: DiskImage(file: File('1.png')),
+            duration: Duration(seconds: 1),
+          ),
+          Frame(
+            image: DiskImage(file: File('2.png')),
+            duration: Duration(seconds: 2),
+          ),
+          Frame(
+            image: DiskImage(file: File('3.png')),
+            duration: Duration(seconds: 3),
+          ),
+          Frame(
+            image: DiskImage(file: File('3.png')),
+            duration: Duration(seconds: 3),
+          ),
+          Frame(
+            image: DiskImage(file: File('2.png')),
+            duration: Duration(seconds: 2),
+          ),
+          Frame(
+            image: DiskImage(file: File('1.png')),
+            duration: Duration(seconds: 1),
+          ),
+        ]);
+      });
     });
   });
 }
