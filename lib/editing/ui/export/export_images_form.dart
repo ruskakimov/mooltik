@@ -28,7 +28,7 @@ class ExportImagesForm extends StatelessWidget {
       MaterialPageRoute(
         fullscreenDialog: true,
         builder: (context) => FramesPicker(
-          framesSceneByScene: exporter.framesSceneByScene,
+          framesSceneByScene: exporter.imagesExportFrames,
           initialSelectedFrames: exporter.selectedFrames,
           onSubmit: (selected) {
             exporter.selectedFrames = selected;

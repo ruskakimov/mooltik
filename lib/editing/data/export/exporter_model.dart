@@ -24,17 +24,19 @@ enum ExporterState {
 
 class ExporterModel extends ChangeNotifier {
   ExporterModel({
-    required this.framesSceneByScene,
+    required this.videoExportFrames,
+    required this.imagesExportFrames,
     required this.soundClips,
     required this.tempDir,
   }) {
-    _selectedFrames.addAll(allFrames);
+    _selectedFrames.addAll(imagesExportFrames.expand((frames) => frames));
   }
 
-  final List<List<CompositeFrame>> framesSceneByScene;
+  /// Frames for video export option.
+  final Iterable<CompositeFrame> videoExportFrames;
 
-  List<CompositeFrame> get allFrames =>
-      framesSceneByScene.expand((list) => list).toList();
+  /// Frames for images export option. Frames are listed scene-by-scene.
+  final List<List<CompositeFrame>> imagesExportFrames;
 
   final List<SoundClip>? soundClips;
 
@@ -52,7 +54,7 @@ class ExporterModel extends ChangeNotifier {
   }
 
   CompositeImage get videoPreviewImage =>
-      framesSceneByScene.first.first.compositeImage;
+      videoExportFrames.first.compositeImage;
 
   /// Value between 0 and 1 that indicates video export progress.
   double get progress => _progress;
@@ -77,7 +79,7 @@ class ExporterModel extends ChangeNotifier {
     outputFile = await generateVideo(
       fileName: _fileName,
       tempDir: tempDir,
-      frames: allFrames,
+      frames: videoExportFrames,
       soundClips: soundClips,
       progressCallback: _onProgressUpdate,
     );

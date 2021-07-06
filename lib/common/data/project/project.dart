@@ -98,9 +98,14 @@ class Project extends ChangeNotifier {
       .map((scene) => scene.allFrames)
       .expand((iterable) => iterable);
 
-  /// Export frames scene by scene.
-  Iterable<Iterable<CompositeFrame>> get exportFrames =>
-      _scenes!.iterable.map((scene) => scene.exportFrames);
+  /// Export frames for video.
+  Iterable<CompositeFrame> get videoExportFrames => _scenes!.iterable
+      .map((scene) => scene.exportFrames)
+      .expand((iterable) => iterable);
+
+  /// Export frames for images archive. Frames are listed scene-by-scene.
+  List<List<CompositeFrame>> get imagesExportFrames =>
+      _scenes!.iterable.map((scene) => scene.exportFrames.toList()).toList();
 
   List<SoundClip> get soundClips => _soundClips;
   List<SoundClip> _soundClips = [];
@@ -182,7 +187,7 @@ class Project extends ChangeNotifier {
 
     // Write thumbnail.
     final image = await generateImage(
-      CompositeImagePainter(exportFrames.first.first.compositeImage),
+      CompositeImagePainter(videoExportFrames.first.compositeImage),
       _frameSize.width.toInt(),
       _frameSize.height.toInt(),
     );
