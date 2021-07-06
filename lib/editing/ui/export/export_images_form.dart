@@ -11,9 +11,13 @@ class ExportImagesForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final selectedFramesAmount = context.select<ExporterModel, int>(
+      (exporter) => exporter.selectedFrames.length,
+    );
+
     return EditableField(
       label: 'Selected frames',
-      text: '148',
+      text: '$selectedFramesAmount',
       onTap: () => _openSelectedFramesDialog(context),
     );
   }
