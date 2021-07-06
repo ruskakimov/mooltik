@@ -52,10 +52,12 @@ class _FramesPickerState extends State<FramesPicker> {
           IconButton(
             icon: Icon(Icons.done),
             tooltip: 'Done',
-            onPressed: () {
-              widget.onSubmit(selectedFrames);
-              Navigator.of(context).pop();
-            },
+            onPressed: selectedFrames.isEmpty
+                ? null
+                : () {
+                    widget.onSubmit(selectedFrames);
+                    Navigator.of(context).pop();
+                  },
           ),
         ],
       ),
