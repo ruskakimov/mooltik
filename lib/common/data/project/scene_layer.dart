@@ -64,8 +64,9 @@ class SceneLayer {
     while (elapsed < totalDuration) {
       var frame = _frameAt(i);
 
-      final isExtendedFrame =
-          playMode == PlayMode.extendLast && i == frameSeq.length;
+      final isExtendedFrame = withGhostFrames
+          ? playMode == PlayMode.extendLast && i == frameSeq.length
+          : i == frameSeq.length - 1;
       final isOverflowingFrame = elapsed + frame.duration > totalDuration;
 
       if (isExtendedFrame || isOverflowingFrame) {
