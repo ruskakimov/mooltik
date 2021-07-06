@@ -150,13 +150,11 @@ class SceneFramesPicker extends StatelessWidget {
               final frame = sceneFrames[i];
               final selected = isSelected(frame);
 
-              return GestureDetector(
+              return _SceneFrameThumbnail(
+                width: _thumbnailSize.width,
+                thumbnail: frame.compositeImage,
+                selected: selected,
                 onTap: selected ? () => deselect(frame) : () => select(frame),
-                child: _SceneFrameThumbnail(
-                  width: _thumbnailSize.width,
-                  thumbnail: frame.compositeImage,
-                  selected: selected,
-                ),
               );
             },
             separatorBuilder: (context, i) => SizedBox(width: 16),
@@ -173,35 +171,40 @@ class _SceneFrameThumbnail extends StatelessWidget {
     required this.width,
     required this.thumbnail,
     required this.selected,
+    required this.onTap,
   }) : super(key: key);
 
   final double width;
   final CompositeImage thumbnail;
   final bool selected;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomLeft,
-      children: [
-        Container(
-          width: width,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: FittedBox(
-            fit: BoxFit.fill,
-            child: CustomPaint(
-              size: thumbnail.size,
-              painter: CompositeImagePainter(thumbnail),
-              isComplex: true,
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
+        children: [
+          Container(
+            width: width,
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: FittedBox(
+              fit: BoxFit.fill,
+              child: CustomPaint(
+                size: thumbnail.size,
+                painter: CompositeImagePainter(thumbnail),
+                isComplex: true,
+              ),
             ),
           ),
-        ),
-        if (selected) AppCheckbox(value: true),
-      ],
+          if (selected) AppCheckbox(value: true),
+        ],
+      ),
     );
   }
 }
