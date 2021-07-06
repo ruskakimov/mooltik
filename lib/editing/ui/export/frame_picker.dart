@@ -28,7 +28,7 @@ class _FramesPickerState extends State<FramesPicker> {
   void initState() {
     super.initState();
     selectedFrames.addAll(widget.initialSelectedFrames);
-    totalFrameCount = widget.framesSceneByScene.expand((list) => list).length;
+    totalFrameCount = allFrames.length;
   }
 
   bool isSelected(CompositeFrame frame) => selectedFrames.contains(frame);
@@ -45,13 +45,16 @@ class _FramesPickerState extends State<FramesPicker> {
     });
   }
 
+  List<CompositeFrame> get allFrames =>
+      widget.framesSceneByScene.expand((list) => list).toList();
+
   bool get allFramesSelected => selectedFrames.length == totalFrameCount;
 
   void handleAllFramesTap() {
     if (allFramesSelected) {
       setState(() => selectedFrames.clear());
     } else {
-      setState(() => selectedFrames.addAll(widget.initialSelectedFrames));
+      setState(() => selectedFrames.addAll(allFrames));
     }
   }
 
