@@ -100,12 +100,13 @@ class Project extends ChangeNotifier {
 
   /// Export frames for video.
   Iterable<CompositeFrame> get videoExportFrames => _scenes!.iterable
-      .map((scene) => scene.exportFrames)
+      .map((scene) => scene.getExportFrames())
       .expand((iterable) => iterable);
 
   /// Export frames for images archive. Frames are listed scene-by-scene.
-  List<List<CompositeFrame>> get imagesExportFrames =>
-      _scenes!.iterable.map((scene) => scene.exportFrames.toList()).toList();
+  List<List<CompositeFrame>> get imagesExportFrames => _scenes!.iterable
+      .map((scene) => scene.getExportFrames(false).toList())
+      .toList();
 
   List<SoundClip> get soundClips => _soundClips;
   List<SoundClip> _soundClips = [];

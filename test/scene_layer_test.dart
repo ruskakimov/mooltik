@@ -130,6 +130,33 @@ void main() async {
         ]);
       });
 
+      test('for extend last mode without ghost frames', () {
+        final sceneLayer = SceneLayer(
+          Sequence<Frame>([
+            Frame(
+              image: DiskImage(file: File('1.png')),
+              duration: Duration(seconds: 1),
+            ),
+            Frame(
+              image: DiskImage(file: File('2.png')),
+              duration: Duration(seconds: 2),
+            ),
+          ]),
+          PlayMode.extendLast,
+        );
+        final duration = Duration(seconds: 10);
+        expect(sceneLayer.getExportFrames(duration, false).toList(), [
+          Frame(
+            image: DiskImage(file: File('1.png')),
+            duration: Duration(seconds: 1),
+          ),
+          Frame(
+            image: DiskImage(file: File('2.png')),
+            duration: Duration(seconds: 9),
+          ),
+        ]);
+      });
+
       test('for loop mode', () {
         final sceneLayer = SceneLayer(
           Sequence<Frame>([

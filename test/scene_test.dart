@@ -84,7 +84,7 @@ void main() async {
         );
 
         expect(
-          scene.exportFrames.toList(),
+          scene.getExportFrames().toList(),
           [
             aOnGreen,
             bOnGreen,
@@ -140,7 +140,7 @@ void main() async {
         // rrr rr g g gg g rr rrr gg g g g
 
         expect(
-          scene.exportFrames.toList(),
+          scene.getExportFrames().toList(),
           [
             composite(a, red, Duration(milliseconds: 600)),
             composite(b, red, Duration(milliseconds: 400)),

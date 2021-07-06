@@ -54,7 +54,10 @@ class SceneLayer {
   Iterable<Frame> getGhostFrames(Duration totalDuration) =>
       getExportFrames(totalDuration).skip(frameSeq.length);
 
-  Iterable<Frame> getExportFrames(Duration totalDuration) sync* {
+  Iterable<Frame> getExportFrames(
+    Duration totalDuration, [
+    bool withGhostFrames = true,
+  ]) sync* {
     var elapsed = Duration.zero;
     var i = 0;
 
