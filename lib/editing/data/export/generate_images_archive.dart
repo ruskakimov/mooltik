@@ -23,17 +23,20 @@ Future<File?> generateImagesArchive({
 }) async {
   final imagesDir = Directory(p.join(tempDir.path, archiveName))..createSync();
 
-  framesSceneByScene.forEachIndexed((sceneFrames, sceneIndex) async {
-    final sceneNumber = sceneIndex + 1;
-    final sceneDir = Directory(p.join(imagesDir.path, 'scene_$sceneNumber'))
-      ..createSync();
+  await Future.wait(
+    framesSceneByScene.mapIndexed((sceneFrames, sceneIndex) async {
+      final sceneNumber = sceneIndex + 1;
+      final sceneDir = Directory(p.join(imagesDir.path, 'scene_$sceneNumber'))
+        ..createSync();
 
-    await Future.wait(sceneFrames.mapIndexed((frame, frameIndex) async {
-      final frameNumber = frameIndex + 1;
-      final file = _tempFile('scene_${sceneNumber}_$frameNumber.png', sceneDir);
-      await pngWrite(file, await frame.toImage());
-    }));
-  });
+      await Future.wait(sceneFrames.mapIndexed((frame, frameIndex) async {
+        final frameNumber = frameIndex + 1;
+        final file =
+            _tempFile('scene_${sceneNumber}_$frameNumber.png', sceneDir);
+        await pngWrite(file, await frame.toImage());
+      }));
+    }),
+  );
 
   ZipFileEncoder().zipDirectory(imagesDir);
 
