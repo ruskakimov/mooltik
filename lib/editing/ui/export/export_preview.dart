@@ -18,10 +18,11 @@ class ExportPreview extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            _FadeInThumbnail(
-              thumbnail: exporter.videoPreviewImage,
-              fullyVisible: exporter.isDone,
-            ),
+            if (exporter.isVideoExport)
+              _FadeInThumbnail(
+                thumbnail: exporter.videoPreviewImage,
+                fullyVisible: exporter.isDone,
+              ),
             PieProgressIndicator(
               progress: exporter.progress,
             ),
@@ -52,7 +53,10 @@ class _PreviewBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       clipBehavior: Clip.antiAlias,
-      child: child,
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: child,
+      ),
     );
   }
 }
