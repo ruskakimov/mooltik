@@ -90,7 +90,11 @@ class ExporterModel extends ChangeNotifier {
           )
         : await generateImagesArchive(
             archiveName: _fileName,
-            framesSceneByScene: imagesExportFrames,
+            framesSceneByScene: imagesExportFrames
+                .map((sceneFrames) => sceneFrames
+                    .where((frame) => _selectedFrames.contains(frame))
+                    .toList())
+                .toList(),
             tempDir: tempDir,
           );
 
