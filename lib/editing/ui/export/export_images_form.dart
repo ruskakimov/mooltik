@@ -11,14 +11,22 @@ class ExportImagesForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final numberOfSelectedFrames = context.select<ExporterModel, int>(
-      (exporter) => exporter.selectedFrames.length,
-    );
+    final exporter = context.watch<ExporterModel>();
+    final numberOfSelectedFrames = exporter.selectedFrames.length;
 
-    return EditableField(
-      label: 'Selected frames',
-      text: '$numberOfSelectedFrames',
-      onTap: () => _openSelectedFramesDialog(context),
+    return Column(
+      children: [
+        EditableField(
+          label: 'File name',
+          text: '${exporter.fileName}.zip',
+          onTap: () {},
+        ),
+        EditableField(
+          label: 'Selected frames',
+          text: '$numberOfSelectedFrames',
+          onTap: () => _openSelectedFramesDialog(context),
+        ),
+      ],
     );
   }
 

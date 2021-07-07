@@ -14,28 +14,25 @@ class EditableField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: InkWell(
-        onTap: onTap,
-        splashColor: Colors.transparent,
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: _buildContent(context),
-              ),
-              Icon(
-                Icons.edit,
-                size: 20,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-              // SizedBox(width: 8),
-            ],
-          ),
+    return InkWell(
+      onTap: onTap,
+      splashColor: Colors.transparent,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: _buildContent(context),
+            ),
+            Icon(
+              Icons.edit,
+              size: 20,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            // SizedBox(width: 8),
+          ],
         ),
       ),
     );

@@ -22,7 +22,9 @@ class ExportForm extends StatelessWidget {
         _buildTitle(),
         SizedBox(height: 8),
         _buildOptionMenu(),
+        SizedBox(height: 8),
         _buildForm(),
+        SizedBox(height: 8),
       ],
     );
   }
