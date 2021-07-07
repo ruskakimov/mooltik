@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/common/ui/composite_image_painter.dart';
 import 'package:mooltik/editing/data/export/exporter_model.dart';
@@ -26,7 +27,18 @@ class ExportPreview extends StatelessWidget {
             PieProgressIndicator(
               progress: exporter.progress,
             ),
-            _FadeInPlayIcon(
+            _FadeInIcon(
+              icon: exporter.isVideoExport
+                  ? Icon(
+                      Icons.play_arrow_rounded,
+                      color: Colors.black,
+                      size: 48,
+                    )
+                  : Icon(
+                      MdiIcons.zipBox,
+                      color: Colors.black,
+                      size: 36,
+                    ),
               visible: exporter.isDone,
             ),
           ],
@@ -88,12 +100,14 @@ class _FadeInThumbnail extends StatelessWidget {
   }
 }
 
-class _FadeInPlayIcon extends StatelessWidget {
-  const _FadeInPlayIcon({
+class _FadeInIcon extends StatelessWidget {
+  const _FadeInIcon({
     Key? key,
+    required this.icon,
     required this.visible,
   }) : super(key: key);
 
+  final Icon icon;
   final bool visible;
 
   @override
@@ -101,11 +115,7 @@ class _FadeInPlayIcon extends StatelessWidget {
     return AnimatedOpacity(
       opacity: visible ? 1 : 0,
       duration: Duration(milliseconds: 300),
-      child: Icon(
-        Icons.play_arrow_rounded,
-        color: Colors.black,
-        size: 48,
-      ),
+      child: icon,
     );
   }
 }
