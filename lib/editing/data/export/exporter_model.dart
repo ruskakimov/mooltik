@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
+import 'package:mooltik/editing/data/export/generate_images_archive.dart';
 import 'package:mooltik/editing/data/export/generate_video.dart';
 import 'package:mooltik/editing/data/export/save_video_to_gallery.dart';
 import 'package:open_file/open_file.dart';
@@ -47,6 +48,9 @@ class ExporterModel extends ChangeNotifier {
   ExportOption get selectedOption => _selectedOption;
   ExportOption _selectedOption = ExportOption.video;
 
+  bool get isVideoExport => _selectedOption == ExportOption.video;
+  bool get isImagesExport => _selectedOption == ExportOption.images;
+
   void onExportOptionChanged(ExportOption? option) {
     if (option == null) return;
     _selectedOption = option;
@@ -76,16 +80,22 @@ class ExporterModel extends ChangeNotifier {
     // Wait for animation.
     await Future.delayed(Duration(milliseconds: 250));
 
-    outputFile = await generateVideo(
-      fileName: _fileName,
-      tempDir: tempDir,
-      frames: videoExportFrames,
-      soundClips: soundClips,
-      progressCallback: _onProgressUpdate,
-    );
+    outputFile = isVideoExport
+        ? await generateVideo(
+            fileName: _fileName,
+            tempDir: tempDir,
+            frames: videoExportFrames,
+            soundClips: soundClips,
+            progressCallback: _onProgressUpdate,
+          )
+        : await generateImagesArchive(
+            archiveName: _fileName,
+            framesSceneByScene: imagesExportFrames,
+            tempDir: tempDir,
+          );
 
     if (outputFile != null) {
-      await saveVideoToGallery(outputFile!.path);
+      if (isVideoExport) await saveVideoToGallery(outputFile!.path);
       _finish();
     } else {
       _reset();

@@ -59,6 +59,7 @@ dependencies:
   gallery_saver: ^2.1.0
   open_file: ^3.2.1
   share_plus: ^2.1.4
+  archive: ^3.1.2
 
   # Analytics:
   firebase_core: ^1.2.1
