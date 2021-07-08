@@ -25,6 +25,6 @@ abstract class Generator {
     _isCancelled = true;
   }
 
-  File makeTemporaryFile(String fileName) =>
-      File(p.join(temporaryDirectory.path, fileName));
+  File makeTemporaryFile(String fileName, [Directory? directory]) =>
+      File(p.join((directory ?? temporaryDirectory).path, fileName));
 }

@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
-import 'package:mooltik/editing/data/export/generator.dart';
+import 'package:mooltik/editing/data/export/generators/generator.dart';
+import 'package:mooltik/editing/data/export/generators/images_archive_generator.dart';
 import 'package:mooltik/editing/data/export/save_video_to_gallery.dart';
-import 'package:mooltik/editing/data/export/video_generator.dart';
+import 'package:mooltik/editing/data/export/generators/video_generator.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as p;
 
@@ -81,33 +82,25 @@ class ExporterModel extends ChangeNotifier {
     // HACK: Waits for UI animation.
     await Future.delayed(Duration(milliseconds: 250));
 
-    generator = VideoGenerator(
-      fileName: _fileName,
-      frames: videoExportFrames,
-      soundClips: soundClips!,
-      progressCallback: _onProgressUpdate,
-      temporaryDirectory: tempDir,
-    );
+    generator = isVideoExport
+        ? VideoGenerator(
+            videoName: _fileName,
+            frames: videoExportFrames,
+            soundClips: soundClips!,
+            progressCallback: _onProgressUpdate,
+            temporaryDirectory: tempDir,
+          )
+        : ImagesArchiveGenerator(
+            archiveName: _fileName,
+            framesSceneByScene: imagesExportFrames
+                .map((sceneFrames) => sceneFrames
+                    .where((frame) => _selectedFrames.contains(frame))
+                    .toList())
+                .toList(),
+            temporaryDirectory: tempDir,
+          );
 
     outputFile = await generator!.generate();
-
-    // outputFile = isVideoExport
-    //     ? await generateVideo(
-    //         fileName: _fileName,
-    //         tempDir: tempDir,
-    //         frames: videoExportFrames,
-    //         soundClips: soundClips,
-    //         progressCallback: _onProgressUpdate,
-    //       )
-    //     : await generateImagesArchive(
-    //         archiveName: _fileName,
-    //         framesSceneByScene: imagesExportFrames
-    //             .map((sceneFrames) => sceneFrames
-    //                 .where((frame) => _selectedFrames.contains(frame))
-    //                 .toList())
-    //             .toList(),
-    //         tempDir: tempDir,
-    //       );
 
     if (outputFile != null) {
       if (isVideoExport) await saveVideoToGallery(outputFile!.path);
