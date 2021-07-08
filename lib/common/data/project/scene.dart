@@ -40,12 +40,9 @@ class Scene extends TimeSpan {
   }
 
   /// Frames for export video.
-  Iterable<CompositeFrame> getExportFrames([
-    bool withGhostFrames = true,
-  ]) sync* {
-    final tracks = visibleLayers
-        .map((layer) => layer.getExportFrames(duration, withGhostFrames))
-        .toList();
+  Iterable<CompositeFrame> getExportFrames() sync* {
+    final tracks =
+        visibleLayers.map((layer) => layer.getExportFrames(duration)).toList();
 
     final trackIterators =
         tracks.map((frames) => frames.iterator..moveNext()).toList();

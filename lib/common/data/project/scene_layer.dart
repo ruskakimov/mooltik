@@ -54,19 +54,15 @@ class SceneLayer {
   Iterable<Frame> getGhostFrames(Duration totalDuration) =>
       getExportFrames(totalDuration).skip(frameSeq.length);
 
-  Iterable<Frame> getExportFrames(
-    Duration totalDuration, [
-    bool withGhostFrames = true,
-  ]) sync* {
+  Iterable<Frame> getExportFrames(Duration totalDuration) sync* {
     var elapsed = Duration.zero;
     var i = 0;
 
     while (elapsed < totalDuration) {
       var frame = _frameAt(i);
 
-      final isExtendedFrame = withGhostFrames
-          ? playMode == PlayMode.extendLast && i == frameSeq.length
-          : i == frameSeq.length - 1;
+      final isExtendedFrame =
+          playMode == PlayMode.extendLast && i == frameSeq.length;
       final isOverflowingFrame = elapsed + frame.duration > totalDuration;
 
       if (isExtendedFrame || isOverflowingFrame) {
