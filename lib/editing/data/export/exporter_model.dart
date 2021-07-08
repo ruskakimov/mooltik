@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
-import 'package:mooltik/editing/data/export/generate_images_archive.dart';
-import 'package:mooltik/editing/data/export/generate_video.dart';
+import 'package:mooltik/editing/data/export/generator.dart';
 import 'package:mooltik/editing/data/export/save_video_to_gallery.dart';
+import 'package:mooltik/editing/data/export/video_generator.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as p;
 
@@ -71,6 +71,7 @@ class ExporterModel extends ChangeNotifier {
   ExporterState get state => _state;
   ExporterState _state = ExporterState.initial;
 
+  Generator? generator;
   File? outputFile;
 
   Future<void> start() async {
@@ -80,29 +81,37 @@ class ExporterModel extends ChangeNotifier {
     // Wait for animation.
     await Future.delayed(Duration(milliseconds: 250));
 
-    outputFile = isVideoExport
-        ? await generateVideo(
-            fileName: _fileName,
-            tempDir: tempDir,
-            frames: videoExportFrames,
-            soundClips: soundClips,
-            progressCallback: _onProgressUpdate,
-          )
-        : await generateImagesArchive(
-            archiveName: _fileName,
-            framesSceneByScene: imagesExportFrames
-                .map((sceneFrames) => sceneFrames
-                    .where((frame) => _selectedFrames.contains(frame))
-                    .toList())
-                .toList(),
-            tempDir: tempDir,
-          );
+    generator = VideoGenerator(
+      fileName: _fileName,
+      frames: videoExportFrames,
+      soundClips: soundClips!,
+      progressCallback: _onProgressUpdate,
+      temporaryDirectory: tempDir,
+    );
+
+    outputFile = await generator!.generate();
+
+    // outputFile = isVideoExport
+    //     ? await generateVideo(
+    //         fileName: _fileName,
+    //         tempDir: tempDir,
+    //         frames: videoExportFrames,
+    //         soundClips: soundClips,
+    //         progressCallback: _onProgressUpdate,
+    //       )
+    //     : await generateImagesArchive(
+    //         archiveName: _fileName,
+    //         framesSceneByScene: imagesExportFrames
+    //             .map((sceneFrames) => sceneFrames
+    //                 .where((frame) => _selectedFrames.contains(frame))
+    //                 .toList())
+    //             .toList(),
+    //         tempDir: tempDir,
+    //       );
 
     if (outputFile != null) {
       if (isVideoExport) await saveVideoToGallery(outputFile!.path);
       _finish();
-    } else {
-      _reset();
     }
 
     notifyListeners();
@@ -124,7 +133,9 @@ class ExporterModel extends ChangeNotifier {
   }
 
   void cancel() {
-    cancelGenerateVideo();
+    generator?.cancel();
+    _reset();
+    notifyListeners();
   }
 
   Future<void> openOutputFile() async {
