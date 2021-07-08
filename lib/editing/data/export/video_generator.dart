@@ -23,13 +23,17 @@ class VideoGenerator extends Generator {
   final List<SoundClip> soundClips;
   final ProgressCallback progressCallback;
 
+  bool _isRunningFfmpeg = false;
+
   @override
   Future<File?> generate() async {
     final videoFile = makeTemporaryFile('$fileName.mp4');
-    final slides = await _slidesFromFrames(frames);
 
     if (isCancelled) return null;
+    final slides = await _slidesFromFrames(frames);
 
+    if (isCancelled || slides == null) return null;
+    _isRunningFfmpeg = true;
     final success = await mp4Write(
       videoFile,
       slides,
@@ -37,27 +41,45 @@ class VideoGenerator extends Generator {
       temporaryDirectory,
       progressCallback,
     );
+    _isRunningFfmpeg = false;
 
-    return success ? videoFile : null;
+    return success && !isCancelled ? videoFile : null;
   }
 
   @override
   Future<void> cancel() async {
     if (isCancelled) return;
     super.cancel();
-    await FlutterFFmpeg().cancel();
+    if (_isRunningFfmpeg) await FlutterFFmpeg().cancel();
   }
 
-  Future<List<Slide>> _slidesFromFrames(Iterable<CompositeFrame> frames) {
-    return Future.wait(
-      frames.mapIndexed((frame, i) async {
-        final file = makeTemporaryFile('$i.png');
-        final image = await frame.toImage();
+  Future<List<Slide>?> _slidesFromFrames(
+    Iterable<CompositeFrame> frames,
+  ) async {
+    List<Slide>? result;
 
-        await pngWrite(file, image);
+    try {
+      result = await Future.wait(
+        frames.mapIndexed((frame, i) async {
+          if (isCancelled) throw Exception('Cancelled.');
+          final file = makeTemporaryFile('$i.png');
 
-        return Slide(file, frame.duration);
-      }),
-    );
+          if (isCancelled) throw Exception('Cancelled.');
+          final image = await frame.toImage();
+
+          if (isCancelled) throw Exception('Cancelled.');
+          print('Schedule writing PNG to ${file.path}');
+          await pngWrite(file, image);
+          print('Finished writing PNG to ${file.path}');
+
+          return Slide(file, frame.duration);
+        }),
+        eagerError: true,
+      );
+    } catch (e) {
+      result = null;
+    }
+
+    return result;
   }
 }
