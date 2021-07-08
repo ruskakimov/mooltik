@@ -78,7 +78,7 @@ class ExporterModel extends ChangeNotifier {
     _state = ExporterState.exporting;
     notifyListeners();
 
-    // Wait for animation.
+    // HACK: Waits for UI animation.
     await Future.delayed(Duration(milliseconds: 250));
 
     generator = VideoGenerator(
