@@ -97,6 +97,7 @@ class ExporterModel extends ChangeNotifier {
                     .where((frame) => _selectedFrames.contains(frame))
                     .toList())
                 .toList(),
+            progressCallback: _onProgressUpdate,
             temporaryDirectory: tempDir,
           );
 
