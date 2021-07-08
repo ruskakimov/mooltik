@@ -1,10 +1,11 @@
 import 'dart:ui';
 import 'dart:io';
 
+import 'package:equatable/equatable.dart';
 import 'package:mooltik/common/data/io/png.dart';
 
 /// Manages a single image file.
-class DiskImage {
+class DiskImage with EquatableMixin {
   DiskImage({
     required this.file,
     Image? snapshot,
@@ -43,4 +44,7 @@ class DiskImage {
       };
 
   static const String _filePathKey = 'path';
+
+  @override
+  List<Object?> get props => [file.path];
 }

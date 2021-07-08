@@ -7,6 +7,7 @@ import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
+import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/common/data/project/sava_data_transcoder.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
@@ -104,9 +105,14 @@ class Project extends ChangeNotifier {
       .expand((iterable) => iterable);
 
   /// Export frames for images archive. Frames are listed scene-by-scene.
-  List<List<CompositeFrame>> get imagesExportFrames => _scenes!.iterable
-      .map((scene) => scene.getExportFrames(false).toList())
-      .toList();
+  List<List<CompositeFrame>> get imagesExportFrames =>
+      _scenes!.iterable.map((scene) {
+        final seenFrames = Set<CompositeImage>();
+        return scene.getExportFrames().where((frame) {
+          final notDuplicate = seenFrames.add(frame.compositeImage);
+          return notDuplicate;
+        }).toList();
+      }).toList();
 
   List<SoundClip> get soundClips => _soundClips;
   List<SoundClip> _soundClips = [];
