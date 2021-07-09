@@ -112,6 +112,7 @@ class ExporterModel extends ChangeNotifier {
   }
 
   void _onProgressUpdate(double progress) {
+    if (generator == null || generator!.isCancelled) return;
     _progress = progress;
     notifyListeners();
   }
