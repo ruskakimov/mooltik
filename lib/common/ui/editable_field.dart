@@ -31,7 +31,6 @@ class EditableField extends StatelessWidget {
               size: 20,
               color: Theme.of(context).colorScheme.secondary,
             ),
-            // SizedBox(width: 8),
           ],
         ),
       ),
