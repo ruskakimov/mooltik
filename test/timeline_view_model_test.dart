@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
@@ -17,8 +18,14 @@ void main() {
         layers: [
           SceneLayer(
             Sequence<Frame>([
-              Frame(file: File('1.png'), duration: Duration(seconds: 2)),
-              Frame(file: File('2.png'), duration: Duration(seconds: 2)),
+              Frame(
+                image: DiskImage(file: File('1.png')),
+                duration: Duration(seconds: 2),
+              ),
+              Frame(
+                image: DiskImage(file: File('2.png')),
+                duration: Duration(seconds: 2),
+              ),
             ]),
           ),
         ],
@@ -29,8 +36,14 @@ void main() {
         layers: [
           SceneLayer(
             Sequence<Frame>([
-              Frame(file: File('3.png'), duration: Duration(seconds: 1)),
-              Frame(file: File('4.png'), duration: Duration(seconds: 1)),
+              Frame(
+                image: DiskImage(file: File('3.png')),
+                duration: Duration(seconds: 1),
+              ),
+              Frame(
+                image: DiskImage(file: File('4.png')),
+                duration: Duration(seconds: 1),
+              ),
             ]),
           ),
         ],

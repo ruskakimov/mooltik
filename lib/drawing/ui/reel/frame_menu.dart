@@ -5,7 +5,6 @@ import 'package:mooltik/common/data/copy_paster_model.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
-import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/frame_window.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +63,7 @@ class FrameMenu extends StatelessWidget {
           label: 'Copy',
           color: Theme.of(context).colorScheme.onPrimary,
           onTap: () {
-            copyPaster.copyImage(reel.currentFrame.snapshot);
+            copyPaster.copyImage(reel.currentFrame.image.snapshot);
             closePopup();
           },
         ),
@@ -78,7 +77,7 @@ class FrameMenu extends StatelessWidget {
                   closePopup();
                   final easel = context.read<EaselModel>();
                   final newSnapshot = await copyPaster.pasteOn(
-                    easel.frame.snapshot!,
+                    easel.frame.image.snapshot!,
                   );
                   easel.pushSnapshot(newSnapshot);
                 }

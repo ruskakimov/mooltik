@@ -56,7 +56,7 @@ class _BoardViewState extends State<BoardView> {
           final selected = scene == timeline.currentScene;
 
           return GestureDetector(
-            key: Key(scene.allFrames.first.file.path),
+            key: Key(scene.allFrames.first.image.file.path),
             onTap: () {
               if (selected) {
                 // Open menu.

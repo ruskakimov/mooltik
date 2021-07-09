@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/aac_to_m4a.dart';
 import 'package:mooltik/common/data/io/delete_files_where.dart';
+import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
+import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/common/data/project/sava_data_transcoder.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
@@ -97,9 +99,20 @@ class Project extends ChangeNotifier {
       .map((scene) => scene.allFrames)
       .expand((iterable) => iterable);
 
-  Iterable<CompositeFrame> get exportFrames => _scenes!.iterable
-      .map((scene) => scene.exportFrames)
+  /// Export frames for video.
+  Iterable<CompositeFrame> get videoExportFrames => _scenes!.iterable
+      .map((scene) => scene.getExportFrames())
       .expand((iterable) => iterable);
+
+  /// Export frames for images archive. Frames are listed scene-by-scene.
+  List<List<CompositeFrame>> get imagesExportFrames =>
+      _scenes!.iterable.map((scene) {
+        final seenFrames = Set<CompositeImage>();
+        return scene.getExportFrames().where((frame) {
+          final notDuplicate = seenFrames.add(frame.compositeImage);
+          return notDuplicate;
+        }).toList();
+      }).toList();
 
   List<SoundClip> get soundClips => _soundClips;
   List<SoundClip> _soundClips = [];
@@ -148,7 +161,7 @@ class Project extends ChangeNotifier {
     _scenes = Sequence<Scene>(data.scenes);
 
     // TODO: Loading all frames into memory doesn't scale.
-    await Future.wait(allFrames.map((frame) => frame.loadSnapshot()));
+    await Future.wait(allFrames.map((frame) => frame.image.loadSnapshot()));
 
     _soundClips =
         data.sounds.where((sound) => sound.file.existsSync()).toList();
@@ -181,7 +194,7 @@ class Project extends ChangeNotifier {
 
     // Write thumbnail.
     final image = await generateImage(
-      CompositeImagePainter(exportFrames.first.compositeImage),
+      CompositeImagePainter(videoExportFrames.first.compositeImage),
       _frameSize.width.toInt(),
       _frameSize.height.toInt(),
     );
@@ -220,7 +233,7 @@ class Project extends ChangeNotifier {
 
   Future<void> _deleteUnusedFrameImages() async {
     final Set<String> usedFrameImages =
-        allFrames.map((frame) => frame.file.path).toSet();
+        allFrames.map((frame) => frame.image.file.path).toSet();
 
     bool _isUnusedFrameImage(String path) =>
         p.extension(path) == '.png' &&
@@ -251,7 +264,9 @@ class Project extends ChangeNotifier {
     );
     final file = _getFrameFile(DateTime.now().millisecondsSinceEpoch);
     await pngWrite(file, image);
-    return Frame(file: file, snapshot: image);
+    return Frame(
+      image: DiskImage(file: file, snapshot: image),
+    );
   }
 
   Future<Scene> createNewScene() async {

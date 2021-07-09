@@ -15,7 +15,7 @@ class LassoModel extends ChangeNotifier {
   LassoModel({
     required EaselModel easel,
     required double headerHeight,
-  })   : _easel = easel,
+  })  : _easel = easel,
         _headerHeight = headerHeight {
     _easel.addListener(() {
       if (_easel.selectedTool is! Lasso) endTransformMode();
@@ -153,7 +153,7 @@ class LassoModel extends ChangeNotifier {
 
     if (eraseOriginal) {
       _eraseSelection();
-      _framePathWithErasedOriginal = _easel.frame.file.path;
+      _framePathWithErasedOriginal = _easel.frame.image.file.path;
     }
 
     // Position box:
@@ -168,7 +168,7 @@ class LassoModel extends ChangeNotifier {
   Future<void> _setTransformImage() async {
     _transformImage = await generateImage(
       MaskedImagePainter(
-        original: _easel.frame.snapshot,
+        original: _easel.frame.image.snapshot,
         mask: selectionStroke!.path,
       ),
       _transformBoxSize.width.toInt(),
@@ -198,14 +198,14 @@ class LassoModel extends ChangeNotifier {
       TransformedImagePainter(
         transformedImage: transformImage,
         transform: imageTransform,
-        background: _easel.frame.snapshot,
+        background: _easel.frame.image.snapshot,
       ),
-      _easel.frame.width!.toInt(),
-      _easel.frame.height!.toInt(),
+      _easel.frame.image.width!.toInt(),
+      _easel.frame.image.height!.toInt(),
     );
 
     // Remove snapshot with erased original used during transform.
-    if (_framePathWithErasedOriginal == _easel.frame.file.path &&
+    if (_framePathWithErasedOriginal == _easel.frame.image.file.path &&
         _easel.undoAvailable) {
       _easel.undo();
       _framePathWithErasedOriginal = null;
@@ -286,8 +286,8 @@ class LassoModel extends ChangeNotifier {
   Future<void> _applySelectionStrokeToFrame() async {
     final snapshot = await generateImage(
       FramePainter(frame: _easel.frame, strokes: [selectionStroke]),
-      _easel.frame.width!.toInt(),
-      _easel.frame.height!.toInt(),
+      _easel.frame.image.width!.toInt(),
+      _easel.frame.image.height!.toInt(),
     );
     _easel.pushSnapshot(snapshot);
   }

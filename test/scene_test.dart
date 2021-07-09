@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
@@ -17,6 +18,31 @@ void main() async {
   final bgGreen = await pngRead(File('./test/test_images/bg_green.png'));
   final bgRed = await pngRead(File('./test/test_images/bg_red.png'));
 
+  final a = DiskImage(
+    file: File('a'),
+    snapshot: imageA,
+  );
+
+  final b = DiskImage(
+    file: File('b'),
+    snapshot: imageB,
+  );
+
+  final c = DiskImage(
+    file: File('c'),
+    snapshot: imageC,
+  );
+
+  final green = DiskImage(
+    file: File('bg-green'),
+    snapshot: bgGreen,
+  );
+
+  final red = DiskImage(
+    file: File('bg-red'),
+    snapshot: bgRed,
+  );
+
   group('Scene', () {
     group('returns correct export frames', () {
       test('for looping animation on static background', () {
@@ -24,26 +50,14 @@ void main() async {
           layers: [
             SceneLayer(
               Sequence([
-                Frame(
-                  file: File('a'),
-                  snapshot: imageA,
-                  duration: Duration(milliseconds: 240),
-                ),
-                Frame(
-                  file: File('b'),
-                  snapshot: imageB,
-                  duration: Duration(milliseconds: 240),
-                ),
+                Frame(image: a, duration: Duration(milliseconds: 240)),
+                Frame(image: b, duration: Duration(milliseconds: 240)),
               ]),
               PlayMode.loop,
             ),
             SceneLayer(
               Sequence([
-                Frame(
-                  file: File('bg'),
-                  snapshot: bgGreen,
-                  duration: Duration(seconds: 3),
-                ),
+                Frame(image: green, duration: Duration(seconds: 3)),
               ]),
               PlayMode.extendLast,
             ),
@@ -51,40 +65,40 @@ void main() async {
           duration: Duration(seconds: 3),
         );
 
-        final a = CompositeFrame(
+        final aOnGreen = CompositeFrame(
           CompositeImage(
             width: imageA.width,
             height: imageA.height,
-            layers: [imageA, bgGreen],
+            layers: [a, green],
           ),
           Duration(milliseconds: 240),
         );
 
-        final b = CompositeFrame(
+        final bOnGreen = CompositeFrame(
           CompositeImage(
             width: imageB.width,
             height: imageB.height,
-            layers: [imageB, bgGreen],
+            layers: [b, green],
           ),
           Duration(milliseconds: 240),
         );
 
         expect(
-          scene.exportFrames.toList(),
+          scene.getExportFrames().toList(),
           [
-            a,
-            b,
-            a,
-            b,
-            a,
-            b,
-            a,
-            b,
-            a,
-            b,
-            a,
-            b,
-            a.copyWith(duration: Duration(milliseconds: 120)),
+            aOnGreen,
+            bOnGreen,
+            aOnGreen,
+            bOnGreen,
+            aOnGreen,
+            bOnGreen,
+            aOnGreen,
+            bOnGreen,
+            aOnGreen,
+            bOnGreen,
+            aOnGreen,
+            bOnGreen,
+            aOnGreen.copyWith(duration: Duration(milliseconds: 120)),
           ],
         );
       });
@@ -94,36 +108,16 @@ void main() async {
           layers: [
             SceneLayer(
               Sequence([
-                Frame(
-                  file: File('a'),
-                  snapshot: imageA,
-                  duration: Duration(milliseconds: 600),
-                ),
-                Frame(
-                  file: File('b'),
-                  snapshot: imageB,
-                  duration: Duration(milliseconds: 400),
-                ),
-                Frame(
-                  file: File('c'),
-                  snapshot: imageC,
-                  duration: Duration(milliseconds: 200),
-                ),
+                Frame(image: a, duration: Duration(milliseconds: 600)),
+                Frame(image: b, duration: Duration(milliseconds: 400)),
+                Frame(image: c, duration: Duration(milliseconds: 200)),
               ]),
               PlayMode.pingPong,
             ),
             SceneLayer(
               Sequence([
-                Frame(
-                  file: File('bg-red'),
-                  snapshot: bgRed,
-                  duration: Duration(seconds: 1),
-                ),
-                Frame(
-                  file: File('bg-green'),
-                  snapshot: bgGreen,
-                  duration: Duration(seconds: 1),
-                ),
+                Frame(image: red, duration: Duration(seconds: 1)),
+                Frame(image: green, duration: Duration(seconds: 1)),
               ]),
               PlayMode.loop,
             ),
@@ -146,20 +140,20 @@ void main() async {
         // rrr rr g g gg g rr rrr gg g g g
 
         expect(
-          scene.exportFrames.toList(),
+          scene.getExportFrames().toList(),
           [
-            composite(imageA, bgRed, Duration(milliseconds: 600)),
-            composite(imageB, bgRed, Duration(milliseconds: 400)),
-            composite(imageC, bgGreen, Duration(milliseconds: 200)),
-            composite(imageC, bgGreen, Duration(milliseconds: 200)),
-            composite(imageB, bgGreen, Duration(milliseconds: 400)),
-            composite(imageA, bgGreen, Duration(milliseconds: 200)),
-            composite(imageA, bgRed, Duration(milliseconds: 400)),
-            composite(imageA, bgRed, Duration(milliseconds: 600)),
-            composite(imageB, bgGreen, Duration(milliseconds: 400)),
-            composite(imageC, bgGreen, Duration(milliseconds: 200)),
-            composite(imageC, bgGreen, Duration(milliseconds: 200)),
-            composite(imageB, bgGreen, Duration(milliseconds: 200)),
+            composite(a, red, Duration(milliseconds: 600)),
+            composite(b, red, Duration(milliseconds: 400)),
+            composite(c, green, Duration(milliseconds: 200)),
+            composite(c, green, Duration(milliseconds: 200)),
+            composite(b, green, Duration(milliseconds: 400)),
+            composite(a, green, Duration(milliseconds: 200)),
+            composite(a, red, Duration(milliseconds: 400)),
+            composite(a, red, Duration(milliseconds: 600)),
+            composite(b, green, Duration(milliseconds: 400)),
+            composite(c, green, Duration(milliseconds: 200)),
+            composite(c, green, Duration(milliseconds: 200)),
+            composite(b, green, Duration(milliseconds: 200)),
           ],
         );
       });

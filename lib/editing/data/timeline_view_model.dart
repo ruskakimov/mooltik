@@ -215,7 +215,7 @@ class TimelineViewModel extends ChangeNotifier {
 
       yield ImageSliver(
         area: area,
-        thumbnail: frame.snapshot,
+        thumbnail: frame.image.snapshot,
         id: isGhostFrame ? null : SliverId(rowIndex, frameIndex),
         opacity: isGhostFrame ? 0.3 : 1,
       );
@@ -376,8 +376,11 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   Future<Frame> _duplicateFrame(Frame frame) async {
-    final newFrame = await createNewFrame!();
-    return frame.copyWith(file: newFrame.file)..saveSnapshot();
+    final duplicateDiskImage = (await createNewFrame!()).image;
+    duplicateDiskImage.changeSnapshot(frame.image.snapshot);
+    duplicateDiskImage.saveSnapshot();
+
+    return frame.copyWith(image: duplicateDiskImage);
   }
 
   Future<Scene> _duplicateScene(Scene scene) async {

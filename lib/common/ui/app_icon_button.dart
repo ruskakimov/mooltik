@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AppIconButton extends StatelessWidget {
   const AppIconButton({
     Key? key,
-    this.icon,
+    required this.icon,
     this.iconSize = 20,
     this.selected = false,
     this.onTap,
-  }) : super(key: key);
+  })  : svgPath = null,
+        super(key: key);
+
+  const AppIconButton.svg({
+    Key? key,
+    required this.svgPath,
+    this.selected = false,
+    this.onTap,
+  })  : icon = null,
+        iconSize = null,
+        super(key: key);
 
   final IconData? icon;
-  final double iconSize;
+  final double? iconSize;
+
+  final String? svgPath;
+
   final bool selected;
   final VoidCallback? onTap;
 
@@ -24,11 +38,17 @@ class AppIconButton extends StatelessWidget {
         child: SizedBox(
           height: 44,
           width: 52,
-          child: Icon(
-            icon,
-            color: _getColor(context),
-            size: iconSize,
-          ),
+          child: svgPath != null
+              ? SvgPicture.asset(
+                  svgPath!,
+                  fit: BoxFit.none,
+                  color: _getColor(context),
+                )
+              : Icon(
+                  icon,
+                  size: iconSize,
+                  color: _getColor(context),
+                ),
         ),
       ),
     );

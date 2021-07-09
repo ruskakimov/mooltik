@@ -1,8 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/get_permission.dart';
-import 'package:mooltik/editing/data/exporter_model.dart';
+import 'package:mooltik/editing/data/export/exporter_model.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
-import 'package:mooltik/editing/ui/actionbar/export_dialog.dart';
+import 'package:mooltik/editing/ui/export/export_dialog.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -36,8 +37,8 @@ class EditingActionbar extends StatelessWidget {
         Spacer(),
         title!,
         Spacer(),
-        AppIconButton(
-          icon: FontAwesomeIcons.solidFileVideo,
+        AppIconButton.svg(
+          svgPath: 'assets/icons/export.svg',
           onTap: playing
               ? null
               : () => getPermission(
@@ -58,7 +59,8 @@ class EditingActionbar extends StatelessWidget {
       context: context,
       builder: (BuildContext context) => ChangeNotifierProvider(
         create: (context) => ExporterModel(
-          frames: project.exportFrames,
+          videoExportFrames: project.videoExportFrames,
+          imagesExportFrames: project.imagesExportFrames,
           soundClips: project.soundClips,
           tempDir: tempDir,
         ),

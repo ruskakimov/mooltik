@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/debouncer.dart';
+import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
@@ -32,7 +33,7 @@ class EaselModel extends ChangeNotifier {
   })  : _frame = frame,
         _historyStack = ImageHistoryStack(
           maxCount: maxUndos + 1,
-          initialSnapshot: frame.snapshot,
+          initialSnapshot: frame.image.snapshot,
         ),
         _selectedTool = selectedTool,
         _preferences = sharedPreferences,
@@ -47,7 +48,7 @@ class EaselModel extends ChangeNotifier {
 
   final ValueChanged<Frame> onChanged;
 
-  Size get frameSize => _frame.size;
+  Size get frameSize => _frame.image.size;
 
   Size? _easelSize;
 
@@ -100,11 +101,11 @@ class EaselModel extends ChangeNotifier {
 
   /// Used by provider to update dependency.
   void updateFrame(Frame frame) {
-    if (frame.file == _frame.file) return;
+    if (frame.image.file == _frame.image.file) return;
 
     if (_diskWriteDebouncer.isActive) {
       _diskWriteDebouncer.cancel();
-      _frame.saveSnapshot();
+      _frame.image.saveSnapshot();
     }
 
     removeSelection();
@@ -112,7 +113,7 @@ class EaselModel extends ChangeNotifier {
     _frame = frame;
     _historyStack = ImageHistoryStack(
       maxCount: maxUndos + 1,
-      initialSnapshot: frame.snapshot,
+      initialSnapshot: frame.image.snapshot,
     );
     notifyListeners();
   }
@@ -148,8 +149,13 @@ class EaselModel extends ChangeNotifier {
   }
 
   void _updateFrame() {
-    _frame = _frame.copyWith(snapshot: _historyStack.currentSnapshot);
-    _diskWriteDebouncer.debounce(() => _frame.saveSnapshot());
+    _frame = _frame.copyWith(
+      image: DiskImage(
+        file: _frame.image.file,
+        snapshot: _historyStack.currentSnapshot,
+      ),
+    );
+    _diskWriteDebouncer.debounce(() => _frame.image.saveSnapshot());
     onChanged(_frame);
   }
 
@@ -276,8 +282,8 @@ class EaselModel extends ChangeNotifier {
   Future<ui.Image> _generateLastSnapshot() async {
     final snapshot = await generateImage(
       FramePainter(frame: _frame, strokes: unrasterizedStrokes),
-      _frame.width!.toInt(),
-      _frame.height!.toInt(),
+      _frame.image.width!.toInt(),
+      _frame.image.height!.toInt(),
     );
     return snapshot;
   }

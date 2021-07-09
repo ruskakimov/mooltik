@@ -166,7 +166,7 @@ class EaselCanvas extends StatelessWidget {
       if (before != null)
         CustomPaint(
           isComplex: true,
-          size: before.size,
+          size: before.image.size,
           foregroundPainter: FramePainter(
             frame: before,
             filter: ColorFilter.mode(
@@ -178,7 +178,7 @@ class EaselCanvas extends StatelessWidget {
       if (after != null)
         CustomPaint(
           isComplex: true,
-          size: after.size,
+          size: after.image.size,
           foregroundPainter: FramePainter(
             frame: after,
             filter: ColorFilter.mode(
@@ -189,11 +189,11 @@ class EaselCanvas extends StatelessWidget {
         ),
       CustomPaint(
         isComplex: true,
-        size: frame.size,
+        size: frame.image.size,
         foregroundPainter: FramePainter(frame: frame, strokes: strokes),
       ),
       TransformedImageLayer(
-        frameSize: frame.size,
+        frameSize: frame.image.size,
       ),
     ];
   }
@@ -201,7 +201,7 @@ class EaselCanvas extends StatelessWidget {
   CustomPaint _inactiveLayer(Frame frame) {
     return CustomPaint(
       isComplex: true,
-      size: frame.size,
+      size: frame.image.size,
       foregroundPainter: FramePainter(frame: frame),
     );
   }

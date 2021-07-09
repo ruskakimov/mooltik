@@ -1,6 +1,11 @@
+import 'dart:ui' as ui;
+
 import 'package:equatable/equatable.dart';
+import 'package:mooltik/common/data/io/generate_image.dart';
+import 'package:mooltik/common/data/duration_methods.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
+import 'package:mooltik/common/ui/composite_image_painter.dart';
 
 /// Composite image with duration.
 class CompositeFrame extends TimeSpan with EquatableMixin {
@@ -18,6 +23,25 @@ class CompositeFrame extends TimeSpan with EquatableMixin {
         duration ?? this.duration,
       );
 
+  Future<ui.Image> toImage() => generateImage(
+        CompositeImagePainter(compositeImage),
+        width,
+        height,
+      );
+
   @override
   List<Object?> get props => [width, height, compositeImage, duration];
+
+  factory CompositeFrame.fromJson(Map<String, dynamic> json) => CompositeFrame(
+        CompositeImage.fromJson(json[_imageKey]),
+        (json[_durationKey] as String).parseDuration(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        _imageKey: compositeImage.toJson(),
+        _durationKey: duration.toString(),
+      };
+
+  static const String _imageKey = 'image';
+  static const String _durationKey = 'duration';
 }
