@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppCheckbox extends StatefulWidget {
+class AppCheckbox extends StatelessWidget {
   AppCheckbox({
     Key? key,
     required this.value,
@@ -8,11 +8,6 @@ class AppCheckbox extends StatefulWidget {
 
   final bool value;
 
-  @override
-  _AppCheckboxState createState() => _AppCheckboxState();
-}
-
-class _AppCheckboxState extends State<AppCheckbox> {
   @override
   Widget build(BuildContext context) {
     final checkedDecoration = BoxDecoration(
@@ -33,8 +28,8 @@ class _AppCheckboxState extends State<AppCheckbox> {
       width: 32,
       height: 32,
       margin: const EdgeInsets.all(8),
-      decoration: widget.value ? checkedDecoration : uncheckedDecoration,
-      child: widget.value ? Icon(Icons.done, color: Colors.black) : null,
+      decoration: value ? checkedDecoration : uncheckedDecoration,
+      child: value ? Icon(Icons.done, color: Colors.black) : null,
     );
   }
 }
