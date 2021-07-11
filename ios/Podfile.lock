@@ -121,6 +121,8 @@ PODS:
   - flutter_ffmpeg/full-gpl (0.4.0):
     - Flutter
     - mobile-ffmpeg-full-gpl (= 4.4)
+  - gallery_saver (0.0.1):
+    - Flutter
   - GoogleAppMeasurement (8.0.0):
     - GoogleAppMeasurement/AdIdSupport (= 8.0.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
@@ -157,8 +159,6 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.4.1):
     - GoogleUtilities/Logger
-  - image_gallery_saver (1.5.0):
-    - Flutter
   - just_audio (0.0.1):
     - Flutter
   - mobile-ffmpeg-full-gpl (4.4)
@@ -177,6 +177,8 @@ PODS:
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
   - SDWebImage/Core (5.11.1)
+  - share_plus (0.0.1):
+    - Flutter
   - shared_preferences (0.0.1):
     - Flutter
   - SwiftyGif (5.4.0)
@@ -192,11 +194,12 @@ DEPENDENCIES:
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
   - flutter_ffmpeg/full-gpl (from `.symlinks/plugins/flutter_ffmpeg/ios`)
-  - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
+  - gallery_saver (from `.symlinks/plugins/gallery_saver/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - open_file (from `.symlinks/plugins/open_file/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
 
@@ -237,8 +240,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_ffmpeg:
     :path: ".symlinks/plugins/flutter_ffmpeg/ios"
-  image_gallery_saver:
-    :path: ".symlinks/plugins/image_gallery_saver/ios"
+  gallery_saver:
+    :path: ".symlinks/plugins/gallery_saver/ios"
   just_audio:
     :path: ".symlinks/plugins/just_audio/ios"
   open_file:
@@ -247,6 +250,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
+  share_plus:
+    :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
   url_launcher:
@@ -270,10 +275,10 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 1a33b4af3c8042ed6ddacb6c031894af2064bfab
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_ffmpeg: bc8496ea20331e486cd29a03a3c6ff10d32db565
+  gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
   GoogleAppMeasurement: c6bbc9753d046b5456dd4f940057fbad2c28419e
   GoogleDataTransport: 04c3e9a480bbcaa2ec3f5d27f1cdeb6a92f20c8d
   GoogleUtilities: f8a43108b38a68eebe8b3540e1f4f2d28843ce20
-  image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   mobile-ffmpeg-full-gpl: 77de728206f08f30c70f530b18abb4e8f6413eb6
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
@@ -282,6 +287,7 @@ SPEC CHECKSUMS:
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
+  share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   SwiftyGif: 5d4af95df24caf1c570dbbcb32a3b8a0763bc6d7
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef

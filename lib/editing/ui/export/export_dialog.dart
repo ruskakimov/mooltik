@@ -15,6 +15,8 @@ class ExportDialog extends StatefulWidget {
 }
 
 class _ExportDialogState extends State<ExportDialog> {
+  GlobalKey shareButtonKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     final exporter = context.watch<ExporterModel>();
@@ -102,14 +104,24 @@ class _ExportDialogState extends State<ExportDialog> {
         SizedBox(width: 8),
         Expanded(
           child: ElevatedButton(
+            key: shareButtonKey,
             child: Text('Share'),
             onPressed: () {
               final exporter = context.read<ExporterModel>();
-              exporter.shareOutputFile();
+              exporter.shareOutputFile(_calcIPadSharePositionOrigin());
             },
           ),
         ),
       ],
     );
+  }
+
+  Rect _calcIPadSharePositionOrigin() {
+    final shareButtonBox =
+        shareButtonKey.currentContext?.findRenderObject() as RenderBox?;
+
+    return shareButtonBox != null
+        ? shareButtonBox.localToGlobal(Offset.zero) & shareButtonBox.size
+        : Offset.zero & Size.square(1);
   }
 }
