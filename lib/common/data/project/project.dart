@@ -297,7 +297,7 @@ class Project extends ChangeNotifier {
 
     final duration = await getSoundFileDuration(soundFile);
     if (duration == null) {
-      throw Exception('Could not read duration from file.');
+      throw Exception('Could not read duration from file ${soundFile.path}.');
     }
 
     final soundClip = SoundClip(
