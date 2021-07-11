@@ -138,9 +138,12 @@ class ExporterModel extends ChangeNotifier {
     await OpenFile.open(p.fromUri(outputFile!.path));
   }
 
-  Future<void> shareOutputFile() async {
+  Future<void> shareOutputFile(Rect iPadSharePositionOrigin) async {
     if (outputFile == null) return;
-    await Share.shareFiles([outputFile!.path]);
+    await Share.shareFiles(
+      [outputFile!.path],
+      sharePositionOrigin: iPadSharePositionOrigin,
+    );
   }
 
   // ==========

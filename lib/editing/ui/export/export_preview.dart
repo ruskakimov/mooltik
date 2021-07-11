@@ -27,7 +27,7 @@ class ExportPreview extends StatelessWidget {
             PieProgressIndicator(
               progress: exporter.progress,
             ),
-            _FadeInIcon(
+            _FadeInIconButton(
               icon: exporter.isVideoExport
                   ? Icon(
                       Icons.play_arrow_rounded,
@@ -100,8 +100,8 @@ class _FadeInThumbnail extends StatelessWidget {
   }
 }
 
-class _FadeInIcon extends StatelessWidget {
-  const _FadeInIcon({
+class _FadeInIconButton extends StatelessWidget {
+  const _FadeInIconButton({
     Key? key,
     required this.icon,
     required this.visible,
@@ -115,7 +115,16 @@ class _FadeInIcon extends StatelessWidget {
     return AnimatedOpacity(
       opacity: visible ? 1 : 0,
       duration: Duration(milliseconds: 300),
-      child: icon,
+      child: Container(
+        width: 64,
+        height: 64,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 16)],
+        ),
+        child: icon,
+      ),
     );
   }
 }
