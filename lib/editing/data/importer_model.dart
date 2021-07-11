@@ -15,6 +15,8 @@ class ImporterModel extends ChangeNotifier {
     if (_importing) return;
 
     final soundFile = await _pickSoundFile();
+
+    // User closed picker.
     if (soundFile == null) return;
 
     _importing = true;
@@ -31,16 +33,17 @@ class ImporterModel extends ChangeNotifier {
   }
 
   Future<File?> _pickSoundFile() async {
+    final iosAllowedExtensions = ['mp3', 'aac', 'flac', 'm4a', 'wav', 'ogg'];
+
     final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: [
-        'mp3',
-        'aac',
-        'flac',
-        'm4a',
-        'wav',
-      ],
+      // Audio type opens Apple Music on iOS, which doesn't allow you import downloaded sounds.
+      // Custom type opens Files app instead.
+      type: Platform.isIOS ? FileType.custom : FileType.audio,
+      allowedExtensions: Platform.isIOS ? iosAllowedExtensions : null,
     );
-    return result != null ? File(result.files.single.path!) : null;
+
+    if (result == null || result.files.isEmpty) return null;
+
+    return File(result.files.first.path!);
   }
 }

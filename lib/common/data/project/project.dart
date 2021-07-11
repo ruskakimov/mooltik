@@ -296,8 +296,17 @@ class Project extends ChangeNotifier {
     final soundFile = await _addSoundFileToProjectDir(source);
 
     final duration = await getSoundFileDuration(soundFile);
+
     if (duration == null) {
-      throw Exception('Could not read duration from file.');
+      final exists = soundFile.existsSync();
+      final fileStats = await soundFile.stat();
+      final sizeInBytes = exists ? fileStats.size : 0;
+
+      throw Exception('''Could not read duration from the imported sound file:
+        path: ${soundFile.path},
+        exists: $exists,
+        size in bytes: $sizeInBytes,
+      ''');
     }
 
     final soundClip = SoundClip(
