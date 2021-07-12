@@ -21,7 +21,10 @@ openSideSheet({
           width: sheetWidth,
           child: Material(
             color: Theme.of(context).colorScheme.surface,
-            child: builder(context),
+            child: SafeArea(
+              bottom: false,
+              child: builder(context),
+            ),
           ),
         ),
       );
