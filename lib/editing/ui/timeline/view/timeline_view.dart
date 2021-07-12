@@ -20,9 +20,14 @@ class TimelineView extends StatelessWidget {
     return LayoutBuilder(builder: (context, constraints) {
       timelineView.size = constraints.biggest;
 
+      final safePadding = MediaQuery.of(context).padding;
+
       return SingleChildScrollView(
         child: SizedBox(
-          height: max(timelineView.viewHeight, constraints.maxHeight),
+          height: max(
+            timelineView.viewHeight + safePadding.bottom,
+            constraints.maxHeight,
+          ),
           child: Stack(
             fit: StackFit.expand,
             children: [
