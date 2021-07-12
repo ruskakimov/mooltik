@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/ui/dialog_done_button.dart';
 
 class EditTextDialog extends StatefulWidget {
   const EditTextDialog({
@@ -49,9 +50,7 @@ class _EditTextDialogState extends State<EditTextDialog> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          IconButton(
-            icon: Icon(Icons.done),
-            tooltip: 'Done',
+          DialogDoneButton(
             onPressed: _allowSubmit
                 ? () {
                     widget.onSubmit(controller.text);

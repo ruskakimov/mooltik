@@ -3,6 +3,7 @@ import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/common/ui/app_checkbox.dart';
 import 'package:mooltik/common/ui/composite_image_painter.dart';
+import 'package:mooltik/common/ui/dialog_done_button.dart';
 
 class FramesPicker extends StatefulWidget {
   const FramesPicker({
@@ -64,9 +65,7 @@ class _FramesPickerState extends State<FramesPicker> {
       appBar: AppBar(
         title: Text('Selected frames'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.done),
-            tooltip: 'Done',
+          DialogDoneButton(
             onPressed: selectedFrames.isEmpty
                 ? null
                 : () {
