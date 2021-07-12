@@ -22,6 +22,9 @@ class LayerSheet extends StatelessWidget {
           _buildHeader(),
           Expanded(
             child: ReorderableListView(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom,
+              ),
               proxyDecorator: _proxyDecorator,
               onReorder: reelStack.onLayerReorder,
               children: [

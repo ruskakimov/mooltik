@@ -81,6 +81,9 @@ class __BinItemListState extends State<_BinItemList> {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).padding.bottom,
+      ),
       children: [
         for (final project in widget.binnedProjects)
           ChangeNotifierProvider.value(
