@@ -47,6 +47,7 @@ class _HomePageState extends State<HomePage> {
             SliverAppBar(
               leading: Logo(),
               title: Text('Mooltik'),
+              titleSpacing: 4,
               centerTitle: false,
               actions: [BinButton()],
               backgroundColor: Theme.of(context).colorScheme.surface,
