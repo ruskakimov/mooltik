@@ -54,8 +54,10 @@ class _HomePageState extends State<HomePage> {
               floating: true,
             ),
             DiscordSliver(),
-            ProjectList(),
-            SliverPadding(padding: const EdgeInsets.only(bottom: 16)),
+            SliverSafeArea(
+              top: false,
+              sliver: ProjectList(),
+            ),
           ],
         ),
       ),
