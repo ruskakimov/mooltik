@@ -41,23 +41,21 @@ class _HomePageState extends State<HomePage> {
       ],
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        appBar: AppBar(
-          leading: Logo(),
-          title: Text('Mooltik'),
-          centerTitle: false,
-          actions: [BinButton()],
-          backgroundColor: Theme.of(context).colorScheme.surface,
-        ),
-        body: SafeArea(
-          bottom: false,
-          child: CustomScrollView(
-            controller: controller,
-            slivers: [
-              DiscordSliver(),
-              ProjectList(),
-              SliverPadding(padding: const EdgeInsets.only(bottom: 16)),
-            ],
-          ),
+        body: CustomScrollView(
+          controller: controller,
+          slivers: [
+            SliverAppBar(
+              leading: Logo(),
+              title: Text('Mooltik'),
+              centerTitle: false,
+              actions: [BinButton()],
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              floating: true,
+            ),
+            DiscordSliver(),
+            ProjectList(),
+            SliverPadding(padding: const EdgeInsets.only(bottom: 16)),
+          ],
         ),
       ),
     );
