@@ -15,9 +15,12 @@ class BinButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BinContents();
-    return AppIconButton(
-      icon: FontAwesomeIcons.trashAlt,
-      onTap: () {
+    return IconButton(
+      icon: Icon(
+        FontAwesomeIcons.trashAlt,
+        size: 20,
+      ),
+      onPressed: () {
         final gallery = context.read<GalleryModel>();
 
         openSideSheet(
