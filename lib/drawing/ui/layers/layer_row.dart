@@ -60,22 +60,33 @@ class _LayerRowState extends State<LayerRow> {
       ),
     );
 
-    return Slidable(
-      actionPane: SlidableDrawerActionPane(),
-      closeOnScroll: true,
-      secondaryActions: [
-        SlideAction(
-          color: Colors.red,
-          closeOnTap: true,
-          child: LabeledIconButton(
-            icon: FontAwesomeIcons.trashAlt,
-            label: 'Delete',
-            color: Colors.white,
-            onTap: widget.canDelete ? _handleDelete : null,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2),
+      child: Slidable(
+        actionPane: SlidableDrawerActionPane(),
+        closeOnScroll: true,
+        secondaryActions: [
+          SlideAction(
+            closeOnTap: true,
+            child: Container(
+              margin: EdgeInsets.only(left: 8),
+              height: double.infinity,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: LabeledIconButton(
+                icon: FontAwesomeIcons.trashAlt,
+                label: 'Delete',
+                color: Colors.white,
+                onTap: widget.canDelete ? _handleDelete : null,
+              ),
+            ),
           ),
-        ),
-      ],
-      child: content,
+        ],
+        child: content,
+      ),
     );
   }
 
