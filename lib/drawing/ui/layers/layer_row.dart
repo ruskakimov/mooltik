@@ -38,8 +38,10 @@ class _LayerRowState extends State<LayerRow> {
       height: 80,
       child: Material(
         color: widget.selected ? Colors.white24 : Colors.transparent,
+        borderRadius: BorderRadius.circular(8),
         child: InkWell(
           splashColor: Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
           onTap: _handleSelect,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,

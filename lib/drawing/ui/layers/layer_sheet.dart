@@ -23,6 +23,8 @@ class LayerSheet extends StatelessWidget {
           Expanded(
             child: ReorderableListView(
               padding: EdgeInsets.only(
+                left: 8,
+                right: 8,
                 bottom: MediaQuery.of(context).padding.bottom,
               ),
               proxyDecorator: _proxyDecorator,
@@ -51,6 +53,7 @@ class LayerSheet extends StatelessWidget {
         _buildTitle(),
         Spacer(),
         AddLayerButton(),
+        SizedBox(width: 8),
       ],
     );
   }
