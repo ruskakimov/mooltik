@@ -129,6 +129,9 @@ class DrawingPage extends StatelessWidget {
                   ),
                   Positioned.fill(
                     top: headerHeight + safePadding.top,
+                    left: safePadding.left,
+                    right: safePadding.right,
+                    bottom: safePadding.bottom,
                     child: LassoMenu(),
                   ),
                 ],
