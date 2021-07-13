@@ -49,6 +49,8 @@ class DrawingPage extends StatelessWidget {
         final twoRowHeader = MediaQuery.of(context).size.width < (9 * 52);
         final headerHeight = twoRowHeader ? 88.0 : 44.0;
 
+        final safePadding = MediaQuery.of(context).padding;
+
         return WillPopScope(
           // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
           onWillPop: () async => true,
@@ -93,45 +95,43 @@ class DrawingPage extends StatelessWidget {
                     ..updateHeaderHeight(headerHeight),
                 ),
               ],
-              child: SafeArea(
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      top: headerHeight,
-                      child: Easel(),
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    top: headerHeight,
+                    child: Easel(),
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: DrawingActionbar(
+                      twoRow: twoRowHeader,
+                      height: headerHeight,
                     ),
+                  ),
+                  Positioned(
+                    top: headerHeight + safePadding.top,
+                    right: safePadding.right,
+                    child: FitToScreenButton(),
+                  ),
+                  if (reelStack.showFrameReel)
                     Positioned(
-                      top: 0,
+                      bottom: safePadding.bottom,
                       left: 0,
                       right: 0,
-                      child: DrawingActionbar(
-                        twoRow: twoRowHeader,
-                        height: headerHeight,
-                      ),
+                      child: FrameReel(),
                     ),
-                    Positioned(
-                      top: headerHeight,
-                      right: 0,
-                      child: FitToScreenButton(),
-                    ),
-                    if (reelStack.showFrameReel)
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: FrameReel(),
-                      ),
-                    Positioned(
-                      bottom: 60,
-                      right: 4,
-                      child: LayerButton(),
-                    ),
-                    Positioned.fill(
-                      top: headerHeight,
-                      child: LassoMenu(),
-                    ),
-                  ],
-                ),
+                  Positioned(
+                    bottom: 60 + safePadding.bottom,
+                    right: 4 + safePadding.right,
+                    child: LayerButton(),
+                  ),
+                  Positioned.fill(
+                    top: headerHeight + safePadding.top,
+                    child: LassoMenu(),
+                  ),
+                ],
               ),
             ),
           ),
