@@ -14,14 +14,19 @@ openSideSheet({
     pageBuilder: (context, animation1, animation2) {
       final sheetWidth = min(320.0, MediaQuery.of(context).size.width - 56);
 
+      final safePadding = MediaQuery.of(context).padding;
+      final safeSidePadding = rightSide ? safePadding.right : safePadding.left;
+
       return Align(
         alignment: (rightSide ? Alignment.centerRight : Alignment.centerLeft),
         child: SizedBox(
           height: double.infinity,
-          width: sheetWidth,
+          width: sheetWidth + safeSidePadding,
           child: Material(
             color: Theme.of(context).colorScheme.surface,
             child: SafeArea(
+              left: !rightSide,
+              right: rightSide,
               bottom: false,
               child: builder(context),
             ),
