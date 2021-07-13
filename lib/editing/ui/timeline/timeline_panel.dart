@@ -16,12 +16,18 @@ class TimelinePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final editor = context.watch<EditorModel>();
 
+    final safePadding = MediaQuery.of(context).padding;
+
     return Material(
       elevation: 0,
       color: Theme.of(context).colorScheme.surface,
       child: Column(
         children: [
-          TimelineActionbar(),
+          SafeArea(
+            top: false,
+            bottom: false,
+            child: TimelineActionbar(),
+          ),
           Expanded(
             child: Stack(
               fit: StackFit.expand,
@@ -32,8 +38,8 @@ class TimelinePanel extends StatelessWidget {
                 ),
                 if (!context.watch<TimelineViewModel>().isEditingScene)
                   Positioned(
-                    bottom: 8,
-                    left: 4,
+                    bottom: 8 + safePadding.bottom,
+                    left: 4 + safePadding.left,
                     child: TimelineViewButton(
                       showTimelineIcon: !editor.isTimelineView,
                       onTap: editor.switchView,

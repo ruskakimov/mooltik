@@ -11,7 +11,15 @@ class DiscordSliver extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 32),
-          Text('Share your thoughts and creations.'),
+          Text(
+            [
+              'Ask for more features.',
+              'Get technical support.',
+              'Look what others have created.',
+            ].join('\n'),
+            textAlign: TextAlign.center,
+            style: TextStyle(height: 1.4),
+          ),
           const SizedBox(height: 8),
           ElevatedButton.icon(
             icon: Icon(FontAwesomeIcons.discord),

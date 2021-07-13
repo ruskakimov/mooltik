@@ -47,7 +47,10 @@ class _BoardViewState extends State<BoardView> {
         scrollController: controller,
         proxyDecorator: _proxyDecorator,
         header: SizedBox(width: horizontalPadding),
-        padding: EdgeInsets.only(right: horizontalPadding),
+        padding: EdgeInsets.only(
+          right: horizontalPadding,
+          bottom: MediaQuery.of(context).padding.bottom,
+        ),
         scrollDirection: Axis.horizontal,
         onReorder: timeline.onSceneReorder,
         itemCount: scenes.length,

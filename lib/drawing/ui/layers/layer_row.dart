@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
+import 'package:mooltik/common/ui/slide_action_button.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/ui/frame_window.dart';
 import 'package:mooltik/drawing/ui/reel/frame_number_box.dart';
@@ -38,8 +38,10 @@ class _LayerRowState extends State<LayerRow> {
       height: 80,
       child: Material(
         color: widget.selected ? Colors.white24 : Colors.transparent,
+        borderRadius: BorderRadius.circular(8),
         child: InkWell(
           splashColor: Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
           onTap: _handleSelect,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,22 +60,21 @@ class _LayerRowState extends State<LayerRow> {
       ),
     );
 
-    return Slidable(
-      actionPane: SlidableDrawerActionPane(),
-      closeOnScroll: true,
-      secondaryActions: [
-        SlideAction(
-          color: Colors.red,
-          closeOnTap: true,
-          child: LabeledIconButton(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2),
+      child: Slidable(
+        actionPane: SlidableDrawerActionPane(),
+        closeOnScroll: true,
+        secondaryActions: [
+          SlideActionButton(
             icon: FontAwesomeIcons.trashAlt,
             label: 'Delete',
-            color: Colors.white,
+            color: Colors.red,
             onTap: widget.canDelete ? _handleDelete : null,
           ),
-        ),
-      ],
-      child: content,
+        ],
+        child: content,
+      ),
     );
   }
 

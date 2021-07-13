@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/home/ui/bin_button.dart';
 import 'package:mooltik/home/ui/discord_sliver.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-import 'ui/home_bar.dart';
+import 'ui/logo.dart';
 import 'ui/project_list.dart';
 import 'data/gallery_model.dart';
 
@@ -41,19 +41,23 @@ class _HomePageState extends State<HomePage> {
       ],
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 56),
-              child: CustomScrollView(
-                controller: controller,
-                slivers: [
-                  DiscordSliver(),
-                  ProjectList(),
-                ],
-              ),
+        body: CustomScrollView(
+          controller: controller,
+          slivers: [
+            SliverAppBar(
+              leading: Logo(),
+              title: Text('Mooltik'),
+              titleSpacing: 4,
+              centerTitle: false,
+              actions: [BinButton()],
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              floating: true,
             ),
-            HomeBar(),
+            DiscordSliver(),
+            SliverSafeArea(
+              top: false,
+              sliver: ProjectList(),
+            ),
           ],
         ),
       ),

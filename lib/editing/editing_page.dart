@@ -82,10 +82,16 @@ class _EditingPageState extends State<EditingPage>
           resizeToAvoidBottomInset: false,
           backgroundColor: Theme.of(context).colorScheme.background,
           body: SafeArea(
+            left: false,
+            right: false,
+            bottom: false,
             child: Column(
               children: <Widget>[
                 Expanded(
-                  child: EditingTopPanel(),
+                  child: SafeArea(
+                    bottom: false,
+                    child: EditingTopPanel(),
+                  ),
                 ),
                 Expanded(
                   child: TimelinePanel(),

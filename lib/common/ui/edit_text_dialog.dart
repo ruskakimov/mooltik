@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/ui/dialog_done_button.dart';
 
 class EditTextDialog extends StatefulWidget {
   const EditTextDialog({
@@ -49,9 +50,7 @@ class _EditTextDialogState extends State<EditTextDialog> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          IconButton(
-            icon: Icon(Icons.done),
-            tooltip: 'Done',
+          DialogDoneButton(
             onPressed: _allowSubmit
                 ? () {
                     widget.onSubmit(controller.text);
@@ -61,23 +60,25 @@ class _EditTextDialogState extends State<EditTextDialog> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          autovalidateMode: AutovalidateMode.always,
-          onChanged: () {
-            setState(() {
-              _allowSubmit = _formKey.currentState!.validate();
-            });
-          },
-          child: TextFormField(
-            controller: controller,
-            autofocus: true,
-            minLines: 1,
-            maxLines: widget.maxLines,
-            maxLength: widget.maxLength,
-            validator: widget.validator,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.always,
+            onChanged: () {
+              setState(() {
+                _allowSubmit = _formKey.currentState!.validate();
+              });
+            },
+            child: TextFormField(
+              controller: controller,
+              autofocus: true,
+              minLines: 1,
+              maxLines: widget.maxLines,
+              maxLength: widget.maxLength,
+              validator: widget.validator,
+            ),
           ),
         ),
       ),

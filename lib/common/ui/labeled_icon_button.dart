@@ -21,7 +21,7 @@ class LabeledIconButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: InkResponse(
-        radius: 56,
+        radius: 28,
         onTap: onTap,
         child: Opacity(
           opacity: onTap == null ? 0.5 : 1,

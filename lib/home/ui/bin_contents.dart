@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
+import 'package:mooltik/common/ui/slide_action_button.dart';
 import 'package:provider/provider.dart';
 
 import '../data/gallery_model.dart';
@@ -81,6 +82,11 @@ class __BinItemListState extends State<_BinItemList> {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      padding: EdgeInsets.only(
+        right: 8,
+        left: 8,
+        bottom: MediaQuery.of(context).padding.bottom,
+      ),
       children: [
         for (final project in widget.binnedProjects)
           ChangeNotifierProvider.value(
@@ -101,39 +107,39 @@ class _BinItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final project = context.watch<Project>();
 
-    return Slidable(
-      actionPane: SlidableDrawerActionPane(),
-      closeOnScroll: true,
-      secondaryActions: [
-        SlideAction(
-          color: Colors.red,
-          closeOnTap: true,
-          child: LabeledIconButton(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2),
+      child: Slidable(
+        actionPane: SlidableDrawerActionPane(),
+        closeOnScroll: true,
+        secondaryActions: [
+          SlideActionButton(
             icon: FontAwesomeIcons.burn,
             label: 'Destroy',
-            color: Colors.white,
+            color: Colors.red,
             onTap: () {
               context.read<GalleryModel>().deleteProject(project);
             },
           ),
-        ),
-      ],
-      child: SizedBox(
-        height: 80,
-        child: Row(
-          children: [
-            _buildThumbnail(project),
-            _buildLabel(context, project),
-            Spacer(),
-            LabeledIconButton(
-              icon: FontAwesomeIcons.reply,
-              label: 'Restore',
-              color: Theme.of(context).colorScheme.onSurface,
-              onTap: () {
-                context.read<GalleryModel>().restoreProject(project);
-              },
-            ),
-          ],
+        ],
+        child: SizedBox(
+          height: 80,
+          child: Row(
+            children: [
+              _buildThumbnail(project),
+              SizedBox(width: 8),
+              _buildLabel(context, project),
+              Spacer(),
+              LabeledIconButton(
+                icon: FontAwesomeIcons.reply,
+                label: 'Restore',
+                color: Theme.of(context).colorScheme.onSurface,
+                onTap: () {
+                  context.read<GalleryModel>().restoreProject(project);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -141,7 +147,7 @@ class _BinItem extends StatelessWidget {
 
   Widget _buildThumbnail(Project project) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+      margin: const EdgeInsets.all(8),
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),

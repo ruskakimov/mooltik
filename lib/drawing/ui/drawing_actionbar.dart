@@ -24,39 +24,49 @@ class DrawingActionbar extends StatelessWidget {
 
     return Material(
       elevation: 10,
-      child: SizedBox(
-        height: height,
-        child: Column(
-          children: [
-            Row(
-              children: <Widget>[
-                AppIconButton(
-                  icon: FontAwesomeIcons.arrowLeft,
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
+      child: SafeArea(
+        bottom: false,
+        child: MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          removeLeft: true,
+          removeRight: true,
+          removeBottom: true,
+          child: SizedBox(
+            height: height,
+            child: Column(
+              children: [
+                Row(
+                  children: <Widget>[
+                    AppIconButton(
+                      icon: FontAwesomeIcons.arrowLeft,
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    MenuButton(),
+                    Spacer(),
+                    if (!twoRow) Toolbar(),
+                    Spacer(),
+                    AppIconButton(
+                      icon: FontAwesomeIcons.undo,
+                      onTap: easel.undoAvailable && !lassoModel.isTransformMode
+                          ? easel.undo
+                          : null,
+                    ),
+                    AppIconButton(
+                      icon: FontAwesomeIcons.redo,
+                      onTap: easel.redoAvailable && !lassoModel.isTransformMode
+                          ? easel.redo
+                          : null,
+                    ),
+                  ],
                 ),
-                MenuButton(),
-                Spacer(),
-                if (!twoRow) Toolbar(),
-                Spacer(),
-                AppIconButton(
-                  icon: FontAwesomeIcons.undo,
-                  onTap: easel.undoAvailable && !lassoModel.isTransformMode
-                      ? easel.undo
-                      : null,
-                ),
-                AppIconButton(
-                  icon: FontAwesomeIcons.redo,
-                  onTap: easel.redoAvailable && !lassoModel.isTransformMode
-                      ? easel.redo
-                      : null,
-                ),
+                if (twoRow) Divider(height: 0),
+                if (twoRow) Toolbar(),
               ],
             ),
-            if (twoRow) Divider(height: 0),
-            if (twoRow) Toolbar(),
-          ],
+          ),
         ),
       ),
     );
