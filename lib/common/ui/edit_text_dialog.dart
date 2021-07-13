@@ -60,23 +60,25 @@ class _EditTextDialogState extends State<EditTextDialog> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          autovalidateMode: AutovalidateMode.always,
-          onChanged: () {
-            setState(() {
-              _allowSubmit = _formKey.currentState!.validate();
-            });
-          },
-          child: TextFormField(
-            controller: controller,
-            autofocus: true,
-            minLines: 1,
-            maxLines: widget.maxLines,
-            maxLength: widget.maxLength,
-            validator: widget.validator,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.always,
+            onChanged: () {
+              setState(() {
+                _allowSubmit = _formKey.currentState!.validate();
+              });
+            },
+            child: TextFormField(
+              controller: controller,
+              autofocus: true,
+              minLines: 1,
+              maxLines: widget.maxLines,
+              maxLength: widget.maxLength,
+              validator: widget.validator,
+            ),
           ),
         ),
       ),
