@@ -61,6 +61,8 @@ class _FramesPickerState extends State<FramesPicker> {
 
   @override
   Widget build(BuildContext context) {
+    final safePadding = MediaQuery.of(context).padding;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Selected frames'),
@@ -76,7 +78,10 @@ class _FramesPickerState extends State<FramesPicker> {
         ],
       ),
       body: ListView.separated(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        padding: EdgeInsets.only(
+          top: 16,
+          bottom: 16 + safePadding.bottom,
+        ),
         itemCount: widget.framesSceneByScene.length + 1,
         itemBuilder: (context, i) {
           if (i == 0)
@@ -116,22 +121,26 @@ class LabeledCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Row(
-        children: [
-          SizedBox(width: 8),
-          AppCheckbox(value: selected),
-          SizedBox(width: 8),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.onSurface,
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Row(
+          children: [
+            SizedBox(width: 8),
+            AppCheckbox(value: selected),
+            SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -177,6 +186,12 @@ class SceneFramesPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final safePadding = MediaQuery.of(context).padding;
+    final safeSidePadding = EdgeInsets.only(
+      left: safePadding.left,
+      right: safePadding.right,
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -189,7 +204,7 @@ class SceneFramesPicker extends StatelessWidget {
           height: _thumbnailSize.height + _listPadding.vertical,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            padding: _listPadding,
+            padding: _listPadding + safeSidePadding,
             itemCount: sceneFrames.length,
             itemBuilder: (context, i) {
               final frame = sceneFrames[i];
