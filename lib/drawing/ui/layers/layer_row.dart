@@ -122,7 +122,7 @@ class _LayerRowState extends State<LayerRow> {
               value,
             );
           },
-          maxLines: 3,
+          maxLines: 1,
           maxLength: 30,
         ),
       ),
