@@ -34,6 +34,7 @@ class LayerSheet extends StatelessWidget {
                   LayerRow(
                     key: Key(reel.currentFrame.image.file.path),
                     reel: reel,
+                    name: reelStack.getLayerName(reelStack.reels.indexOf(reel)),
                     selected: reel == reelStack.activeReel,
                     visible: reelStack.isVisible(reelStack.reels.indexOf(reel)),
                     canDelete: reelStack.canDeleteLayer,

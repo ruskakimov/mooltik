@@ -4,6 +4,7 @@ class LabeledIconButton extends StatelessWidget {
   const LabeledIconButton({
     Key? key,
     required this.icon,
+    this.iconSize,
     this.iconTransform,
     required this.label,
     required this.color,
@@ -11,6 +12,7 @@ class LabeledIconButton extends StatelessWidget {
   }) : super(key: key);
 
   final IconData icon;
+  final double? iconSize;
   final Matrix4? iconTransform;
   final String label;
   final Color color;
@@ -21,7 +23,7 @@ class LabeledIconButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: InkResponse(
-        radius: 28,
+        radius: 56,
         onTap: onTap,
         child: Opacity(
           opacity: onTap == null ? 0.5 : 1,
@@ -36,7 +38,7 @@ class LabeledIconButton extends StatelessWidget {
                   transform: iconTransform ?? Matrix4.identity(),
                   child: Icon(
                     icon,
-                    size: 18,
+                    size: iconSize ?? 18,
                     color: color,
                   ),
                 ),

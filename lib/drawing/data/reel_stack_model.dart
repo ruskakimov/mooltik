@@ -103,6 +103,14 @@ class ReelStackModel extends ChangeNotifier {
     _scene.layers[layerIndex].setVisibility(value);
     notifyListeners();
   }
+
+  String getLayerName(int layerIndex) =>
+      _scene.layers[layerIndex].name ?? 'Untitled';
+
+  void setLayerName(int layerIndex, String value) {
+    _scene.layers[layerIndex].setName(value);
+    notifyListeners();
+  }
 }
 
 const _showFrameReelKey = 'frame_reel_visible';

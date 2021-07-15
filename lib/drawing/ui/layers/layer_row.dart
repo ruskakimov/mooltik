@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mooltik/common/ui/edit_text_dialog.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/common/ui/slide_action_button.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
@@ -17,12 +18,14 @@ class LayerRow extends StatefulWidget {
   const LayerRow({
     Key? key,
     required this.reel,
+    required this.name,
     required this.selected,
     required this.visible,
     required this.canDelete,
   }) : super(key: key);
 
   final FrameReelModel reel;
+  final String name;
   final bool selected;
   final bool visible;
   final bool canDelete;
@@ -42,14 +45,13 @@ class _LayerRowState extends State<LayerRow> {
         child: InkWell(
           splashColor: Colors.transparent,
           borderRadius: BorderRadius.circular(8),
-          onTap: _handleSelect,
+          onTap: _handleTap,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CurrentCel(reel: widget.reel),
               SizedBox(width: 4),
-              _buildLabel(),
-              Spacer(),
+              Expanded(child: _buildLabel()),
               VisibilitySwitch(
                 value: widget.visible,
                 onChanged: _handleVisibilitySwitch,
@@ -67,7 +69,13 @@ class _LayerRowState extends State<LayerRow> {
         closeOnScroll: true,
         secondaryActions: [
           SlideActionButton(
-            icon: FontAwesomeIcons.trashAlt,
+            icon: MdiIcons.formTextbox,
+            label: 'Rename',
+            color: Theme.of(context).colorScheme.secondary,
+            onTap: _handleRename,
+          ),
+          SlideActionButton(
+            icon: MdiIcons.trashCanOutline,
             label: 'Delete',
             color: Colors.red,
             onTap: widget.canDelete ? _handleDelete : null,
@@ -76,6 +84,14 @@ class _LayerRowState extends State<LayerRow> {
         child: content,
       ),
     );
+  }
+
+  void _handleTap() {
+    if (widget.selected) {
+      _handleRename();
+    } else {
+      _handleSelect();
+    }
   }
 
   void _handleSelect() {
@@ -88,6 +104,28 @@ class _LayerRowState extends State<LayerRow> {
     reelStack.setLayerVisibility(
       reelStack.reels.indexOf(widget.reel),
       value,
+    );
+  }
+
+  void _handleRename() {
+    final reelStack = context.read<ReelStackModel>();
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => EditTextDialog(
+          title: 'Layer name',
+          initialValue: widget.name,
+          onSubmit: (value) {
+            reelStack.setLayerName(
+              reelStack.reels.indexOf(widget.reel),
+              value,
+            );
+          },
+          maxLines: 1,
+          maxLength: 30,
+        ),
+      ),
     );
   }
 
@@ -110,9 +148,11 @@ class _LayerRowState extends State<LayerRow> {
   }
 
   Widget _buildLabel() {
-    final count = widget.reel.frameSeq.length;
-    final appendix = count > 1 ? 'cels' : 'cel';
-    return Text('$count $appendix');
+    return Text(
+      widget.name,
+      maxLines: 3,
+      overflow: TextOverflow.ellipsis,
+    );
   }
 }
 

@@ -46,18 +46,18 @@ class _EditTextDialogState extends State<EditTextDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final handleSubmit = _allowSubmit
+        ? () {
+            widget.onSubmit(controller.text);
+            Navigator.of(context).pop();
+          }
+        : null;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          DialogDoneButton(
-            onPressed: _allowSubmit
-                ? () {
-                    widget.onSubmit(controller.text);
-                    Navigator.of(context).pop();
-                  }
-                : null,
-          ),
+          DialogDoneButton(onPressed: handleSubmit),
         ],
       ),
       body: SafeArea(
@@ -72,6 +72,7 @@ class _EditTextDialogState extends State<EditTextDialog> {
               });
             },
             child: TextFormField(
+              onFieldSubmitted: (_) => handleSubmit?.call(),
               controller: controller,
               autofocus: true,
               minLines: 1,
