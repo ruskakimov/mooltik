@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mooltik/common/ui/edit_text_dialog.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/common/ui/slide_action_button.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
@@ -48,8 +49,7 @@ class _LayerRowState extends State<LayerRow> {
             children: [
               CurrentCel(reel: widget.reel),
               SizedBox(width: 4),
-              _buildLabel(),
-              Spacer(),
+              Expanded(child: _buildLabel()),
               VisibilitySwitch(
                 value: widget.visible,
                 onChanged: _handleVisibilitySwitch,
@@ -70,7 +70,7 @@ class _LayerRowState extends State<LayerRow> {
             icon: MdiIcons.formTextbox,
             label: 'Rename',
             color: Theme.of(context).colorScheme.secondary,
-            onTap: () {},
+            onTap: _handleRename,
           ),
           SlideActionButton(
             icon: MdiIcons.trashCanOutline,
@@ -97,6 +97,25 @@ class _LayerRowState extends State<LayerRow> {
     );
   }
 
+  void _handleRename() {
+    final reelStack = context.read<ReelStackModel>();
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => EditTextDialog(
+          title: 'Layer name',
+          initialValue: 'Layer 12',
+          onSubmit: (value) {
+            // onDone?.call(value);
+          },
+          maxLines: 3,
+          maxLength: 30,
+        ),
+      ),
+    );
+  }
+
   Future<void> _handleDelete() async {
     final isAnimatedLayer = widget.reel.frameSeq.length > 1;
 
@@ -116,6 +135,11 @@ class _LayerRowState extends State<LayerRow> {
   }
 
   Widget _buildLabel() {
+    return Text(
+      'M' * 30,
+      maxLines: 3,
+      overflow: TextOverflow.ellipsis,
+    );
     final count = widget.reel.frameSeq.length;
     final appendix = count > 1 ? 'cels' : 'cel';
     return Text('$count $appendix');
