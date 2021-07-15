@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
@@ -114,7 +113,7 @@ class _BinItem extends StatelessWidget {
         closeOnScroll: true,
         secondaryActions: [
           SlideActionButton(
-            icon: FontAwesomeIcons.burn,
+            icon: MdiIcons.fireAlert,
             label: 'Destroy',
             color: Colors.red,
             onTap: () {
@@ -131,7 +130,8 @@ class _BinItem extends StatelessWidget {
               _buildLabel(context, project),
               Spacer(),
               LabeledIconButton(
-                icon: FontAwesomeIcons.reply,
+                icon: MdiIcons.restore,
+                iconSize: 20,
                 label: 'Restore',
                 color: Theme.of(context).colorScheme.onSurface,
                 onTap: () {
