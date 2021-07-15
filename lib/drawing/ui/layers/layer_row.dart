@@ -45,7 +45,7 @@ class _LayerRowState extends State<LayerRow> {
         child: InkWell(
           splashColor: Colors.transparent,
           borderRadius: BorderRadius.circular(8),
-          onTap: _handleSelect,
+          onTap: _handleTap,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -84,6 +84,14 @@ class _LayerRowState extends State<LayerRow> {
         child: content,
       ),
     );
+  }
+
+  void _handleTap() {
+    if (widget.selected) {
+      _handleRename();
+    } else {
+      _handleSelect();
+    }
   }
 
   void _handleSelect() {
