@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:mooltik/common/ui/labeled_icon_button.dart';
 
 class SlideActionButton extends StatelessWidget {
   const SlideActionButton({
@@ -20,24 +19,53 @@ class SlideActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SlideAction(
-      closeOnTap: true,
-      child: Container(
-        margin: EdgeInsets.only(left: 8),
-        height: double.infinity,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: LabeledIconButton(
-          icon: icon,
-          iconSize: 20,
-          label: label,
-          color: Colors.white,
-          onTap: onTap,
+    return Theme(
+      data: ThemeData(
+        highlightColor: Colors.transparent, // Remove square splash.
+      ),
+      child: SlideAction(
+        closeOnTap: true,
+        onTap: onTap,
+        child: Container(
+          margin: EdgeInsets.only(left: 8),
+          height: double.infinity,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Opacity(
+            opacity: onTap == null ? 0.5 : 1,
+            child: _buildLabeledIcon(),
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLabeledIcon() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(
+          icon,
+          size: 20,
+          color: Colors.white,
+        ),
+        SizedBox(height: 6),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+          ),
+          textAlign: TextAlign.center,
+          softWrap: false,
+          overflow: TextOverflow.visible,
+        ),
+      ],
     );
   }
 }
