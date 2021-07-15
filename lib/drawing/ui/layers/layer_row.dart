@@ -18,12 +18,14 @@ class LayerRow extends StatefulWidget {
   const LayerRow({
     Key? key,
     required this.reel,
+    required this.name,
     required this.selected,
     required this.visible,
     required this.canDelete,
   }) : super(key: key);
 
   final FrameReelModel reel;
+  final String name;
   final bool selected;
   final bool visible;
   final bool canDelete;
@@ -105,9 +107,12 @@ class _LayerRowState extends State<LayerRow> {
         fullscreenDialog: true,
         builder: (context) => EditTextDialog(
           title: 'Layer name',
-          initialValue: 'Layer 12',
+          initialValue: widget.name,
           onSubmit: (value) {
-            // onDone?.call(value);
+            reelStack.setLayerName(
+              reelStack.reels.indexOf(widget.reel),
+              value,
+            );
           },
           maxLines: 3,
           maxLength: 30,
@@ -136,13 +141,10 @@ class _LayerRowState extends State<LayerRow> {
 
   Widget _buildLabel() {
     return Text(
-      'M' * 30,
+      widget.name,
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
     );
-    final count = widget.reel.frameSeq.length;
-    final appendix = count > 1 ? 'cels' : 'cel';
-    return Text('$count $appendix');
   }
 }
 

@@ -19,8 +19,10 @@ class SceneLayer {
     this.frameSeq, [
     PlayMode playMode = PlayMode.extendLast,
     bool? visible = true,
+    String? name,
   ])  : _playMode = playMode,
-        _visible = visible ?? true;
+        _visible = visible ?? true,
+        _name = name;
 
   final Sequence<Frame> frameSeq;
 
@@ -29,6 +31,9 @@ class SceneLayer {
 
   bool get visible => _visible;
   bool _visible;
+
+  String? get name => _name;
+  String? _name;
 
   /// Frame at a given playhead position.
   Frame frameAt(Duration playhead) {
@@ -101,6 +106,10 @@ class SceneLayer {
     _visible = value;
   }
 
+  void setName(String value) {
+    _name = value;
+  }
+
   factory SceneLayer.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       SceneLayer(
         Sequence<Frame>((json[_framesKey] as List<dynamic>)
@@ -108,12 +117,14 @@ class SceneLayer {
             .toList()),
         PlayMode.values[json[_playModeKey] as int? ?? 0],
         json[_visibilityKey] as bool?,
+        json[_nameKey] as String?,
       );
 
   Map<String, dynamic> toJson() => {
         _framesKey: frameSeq.iterable.map((d) => d.toJson()).toList(),
         _playModeKey: playMode.index,
         _visibilityKey: visible,
+        _nameKey: name,
       };
 
   @override
@@ -126,3 +137,4 @@ class SceneLayer {
 const String _framesKey = 'frames';
 const String _playModeKey = 'play_mode';
 const String _visibilityKey = 'visible';
+const String _nameKey = 'name';
