@@ -11,7 +11,9 @@ class SlideActionButton extends StatelessWidget {
     this.onTap,
   }) : super(key: key);
 
+  /// Must be an icon from the material design icons font.
   final IconData icon;
+
   final String label;
   final Color color;
   final VoidCallback? onTap;
