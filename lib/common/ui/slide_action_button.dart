@@ -30,6 +30,7 @@ class SlideActionButton extends StatelessWidget {
         ),
         child: LabeledIconButton(
           icon: icon,
+          iconSize: 20,
           label: label,
           color: Colors.white,
           onTap: onTap,

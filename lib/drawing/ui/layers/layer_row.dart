@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/common/ui/slide_action_button.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
@@ -67,7 +68,13 @@ class _LayerRowState extends State<LayerRow> {
         closeOnScroll: true,
         secondaryActions: [
           SlideActionButton(
-            icon: FontAwesomeIcons.trashAlt,
+            icon: MdiIcons.formTextbox,
+            label: 'Rename',
+            color: Theme.of(context).colorScheme.secondary,
+            onTap: () {},
+          ),
+          SlideActionButton(
+            icon: MdiIcons.trashCanOutline,
             label: 'Delete',
             color: Colors.red,
             onTap: widget.canDelete ? _handleDelete : null,
