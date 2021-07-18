@@ -21,29 +21,52 @@ File expectedOutputFile(int i) =>
 File actualOutputFile(int i) =>
     File('./test/test_images/flood_test/test_$i/actual_output.png');
 
+Future<void> runTest({
+  required int testId,
+  required int fillColor,
+  required int startX,
+  required int startY,
+}) async {
+  final input = await pngRead(inputFile(testId));
+  final inputBytes = await input.toByteData() as ByteData;
+
+  final result = floodFill(
+    inputBytes,
+    input.width,
+    input.height,
+    startX,
+    startY,
+    fillColor,
+  );
+
+  await pngWrite(
+    actualOutputFile(testId),
+    await imageFromBytes(result, input.width, input.height),
+  );
+
+  expect(
+    await pngRawBytes(actualOutputFile(testId)),
+    await pngRawBytes(expectedOutputFile(testId)),
+  );
+}
+
 void main() {
   group('floodFill', () {
     test('fills transparent image with color', () async {
-      final input = await pngRead(inputFile(1));
-      final inputBytes = await input.toByteData() as ByteData;
-
-      final result = floodFill(
-        inputBytes,
-        input.width,
-        input.height,
-        0,
-        0,
-        0xFFC107FF,
+      await runTest(
+        testId: 1,
+        fillColor: 0xFFC107FF,
+        startX: 0,
+        startY: 0,
       );
+    });
 
-      await pngWrite(
-        actualOutputFile(1),
-        await imageFromBytes(result, input.width, input.height),
-      );
-
-      expect(
-        await pngRawBytes(actualOutputFile(1)),
-        await pngRawBytes(expectedOutputFile(1)),
+    test('fills perfect rectangle', () async {
+      await runTest(
+        testId: 2,
+        fillColor: 0xB358FFFF,
+        startX: 10,
+        startY: 10,
       );
     });
   });
