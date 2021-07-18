@@ -15,14 +15,27 @@ ByteData floodFill(
 
   final originalColor = image.getPixel(startX, startY);
 
-  for (int x = 0; x < imageWidth; x++) {
-    for (int y = 0; y < imageHeight; y++) {
-      if (image.getPixel(x, y) == originalColor) {
-        image.setPixel(x, y, color);
-      }
-    }
+  _fill(image, originalColor, color, startX, startY);
+
+  return image.bytes;
+}
+
+void _fill(
+  _Image image,
+  int originalColor,
+  int replacementColor,
+  int x,
+  int y,
+) {
+  if (!image.withinBounds(x, y)) return;
+
+  if (image.getPixel(x, y) == originalColor) {
+    image.setPixel(x, y, replacementColor);
+    _fill(image, originalColor, replacementColor, x - 1, y);
+    _fill(image, originalColor, replacementColor, x + 1, y);
+    _fill(image, originalColor, replacementColor, x, y - 1);
+    _fill(image, originalColor, replacementColor, x, y + 1);
   }
-  return imageBytes;
 }
 
 class _Image {
