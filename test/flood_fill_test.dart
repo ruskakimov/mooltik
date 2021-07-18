@@ -69,5 +69,14 @@ void main() {
         startY: 10,
       );
     });
+
+    test('fills surrounded perfect rectangle', () async {
+      await runTest(
+        testId: 3,
+        fillColor: 0x277DDCFF,
+        startX: 50,
+        startY: 50,
+      );
+    });
   });
 }
