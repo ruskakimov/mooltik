@@ -78,5 +78,14 @@ void main() {
         startY: 50,
       );
     });
+
+    test('fills rounded rectangle', () async {
+      await runTest(
+        testId: 4,
+        fillColor: 0xD22D2DFF,
+        startX: 50,
+        startY: 50,
+      );
+    });
   });
 }
