@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mooltik/common/data/flood_fill.dart';
-import 'package:mooltik/common/data/io/image.dart';
 import 'package:mooltik/common/data/io/png.dart';
+import 'package:image/image.dart' as duncan;
 
 void main() {
   group('floodFill', () {
@@ -46,12 +46,6 @@ void main() {
   });
 }
 
-Future<Uint8List> pngRawBytes(File png) async {
-  final image = await pngRead(png);
-  final byteData = await image.toByteData();
-  return byteData!.buffer.asUint8List();
-}
-
 File inputFile(int i) =>
     File('./test/test_images/flood_test/test_$i/input.png');
 
@@ -67,10 +61,11 @@ Future<void> runTest({
   required int startX,
   required int startY,
 }) async {
-  _printColorMap(testId);
-
   final input = await pngRead(inputFile(testId));
-  final inputBytes = await input.toByteData() as ByteData;
+  final inputBytes = (await pngRawBytes(inputFile(testId))).buffer.asByteData();
+
+  print('Input:');
+  _printColors(inputBytes, input.width, input.height);
 
   final result = floodFill(
     inputBytes,
@@ -81,10 +76,35 @@ Future<void> runTest({
     fillColor,
   );
 
-  await pngWrite(
-    actualOutputFile(testId),
-    await imageFromBytes(result, input.width, input.height),
+  print('\nFlood result:');
+  _printColors(result, input.width, input.height);
+
+  // await pngWrite(
+  //   actualOutputFile(testId),
+  //   await imageFromBytes(result, input.width, input.height),
+  // );
+
+  final pngBytes = duncan.encodePng(
+    duncan.Image.fromBytes(
+      input.width,
+      input.height,
+      result.buffer.asUint8List(),
+    ),
+    level: 0,
   );
+  actualOutputFile(testId).writeAsBytesSync(pngBytes, flush: true);
+
+  final outputBytes =
+      (await pngRawBytes(actualOutputFile(testId))).buffer.asByteData();
+
+  print('\nOutput:');
+  _printColors(outputBytes, input.width, input.height);
+
+  final expectedBytes =
+      (await pngRawBytes(expectedOutputFile(testId))).buffer.asByteData();
+
+  print('\nExpected:');
+  _printColors(expectedBytes, input.width, input.height);
 
   expect(
     await pngRawBytes(actualOutputFile(testId)),
@@ -92,30 +112,36 @@ Future<void> runTest({
   );
 }
 
-void _printColorMap(int testId) async {
-  final input = await pngRead(inputFile(testId));
-  final inputBytes = await input.toByteData() as ByteData;
+Future<Uint8List> pngRawBytes(File png) async {
+  // final image = await pngRead(png);
+  // final byteData = await image.toByteData();
+  // return byteData!.buffer.asUint8List();
 
-  final output = await pngRead(expectedOutputFile(testId));
-  final outputBytes = await output.toByteData() as ByteData;
+  final bytes = png.readAsBytesSync();
+  return duncan.decodePng(bytes)!.getBytes();
+}
 
+void _printColors(ByteData rawImage, int width, int height) {
   final map = <int, int>{};
 
-  for (int y = 0; y < input.height; y++) {
-    for (int x = 0; x < input.width; x++) {
-      final offset = (y * input.width + x) * 4;
-      final inputColor = inputBytes.getUint32(offset);
-      final outputColor = outputBytes.getUint32(offset);
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      final offset = (y * width + x) * 4;
+      final inputColor = rawImage.getUint32(offset);
 
-      if (map.containsKey(inputColor) && map[inputColor] != outputColor) {
-        print('No 1 to 1 relationship.');
-      } else {
-        map[inputColor] = outputColor;
-      }
+      map[inputColor] = (map[inputColor] ?? 0) + 1;
     }
   }
 
   for (int color in map.keys) {
-    print('${color.toRadixString(16)} -> ${map[color]!.toRadixString(16)}');
+    print('${_intToRgbaList(color)} - ${map[color]}');
   }
+}
+
+List<num> _intToRgbaList(int rgba) {
+  final r = (rgba >> 24) & 0xFF;
+  final g = (rgba >> 16) & 0xFF;
+  final b = (rgba >> 8) & 0xFF;
+  final a = rgba & 0xFF;
+  return [r, g, b, a];
 }
