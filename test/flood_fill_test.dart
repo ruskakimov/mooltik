@@ -43,6 +43,15 @@ void main() {
         startY: 50,
       );
     });
+
+    test('fills outlined blob', () async {
+      await runTest(
+        testId: 5,
+        fillColor: 0xFF0000FF,
+        startX: 50,
+        startY: 50,
+      );
+    });
   });
 }
 

@@ -15,24 +15,7 @@ ByteData floodFill(
 
   final originalColor = image.getPixel(startX, startY);
 
-  // _fill(image, originalColor, color, startX, startY);
-
-  for (int x = 0; x < imageWidth; x++) {
-    for (int y = 0; y < imageHeight; y++) {
-      final pixel = image.getPixel(x, y);
-      if (pixel != 0x00000000) {
-        // image.setPixel(x, y, 0xFFFFFFFF);
-        final originalAlpha = pixel & 0x000000FF;
-        final rgb = color & 0xFFFFFF00;
-
-        // if (originalAlpha != 0xFF) {
-        //   print('$x $y');
-        //   print((originalAlpha | rgb).toRadixString(16).padRight(8, '0'));
-        // }
-        image.setPixel(x, y, originalAlpha | rgb);
-      }
-    }
-  }
+  _fill(image, originalColor, color, startX, startY);
 
   return image.bytes;
 }
