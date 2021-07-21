@@ -142,7 +142,10 @@ void _printColors(ByteData rawImage, int width, int height) {
     }
   }
 
-  for (int color in map.keys) {
+  final sortedKeys = map.keys.toList(growable: false)
+    ..sort((a, b) => map[b]!.compareTo(map[a]!));
+
+  for (int color in sortedKeys) {
     print('${_intToRgbaList(color)} - ${map[color]}');
   }
 }
