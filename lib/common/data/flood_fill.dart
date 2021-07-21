@@ -29,13 +29,17 @@ void _fill(
 ) {
   if (!image.withinBounds(x, y)) return;
 
-  if (image.getPixel(x, y) == originalColor) {
+  if (_closeEnough(originalColor, image.getPixel(x, y))) {
     image.setPixel(x, y, replacementColor);
     _fill(image, originalColor, replacementColor, x - 1, y);
     _fill(image, originalColor, replacementColor, x + 1, y);
     _fill(image, originalColor, replacementColor, x, y - 1);
     _fill(image, originalColor, replacementColor, x, y + 1);
   }
+}
+
+bool _closeEnough(int originalColor, int pixelColor) {
+  return (originalColor - pixelColor).abs() < 5;
 }
 
 class _Image {

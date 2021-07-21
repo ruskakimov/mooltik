@@ -52,6 +52,15 @@ void main() {
         startY: 50,
       );
     });
+
+    test('fills blurry apple blob', () async {
+      await runTest(
+        testId: 6,
+        fillColor: 0xFF0000FF,
+        startX: 50,
+        startY: 50,
+      );
+    });
   });
 }
 
@@ -71,10 +80,10 @@ Future<void> runTest({
   required int startY,
 }) async {
   final input = await pngRead(inputFile(testId));
-  final inputBytes = (await pngRawBytes(inputFile(testId))).buffer.asByteData();
+  final inputBytes = await pngRawRgba(inputFile(testId));
 
-  print('Input:');
-  _printColors(inputBytes, input.width, input.height);
+  // print('Input:');
+  // _printColors(inputBytes, input.width, input.height);
 
   final result = floodFill(
     inputBytes,
@@ -85,8 +94,8 @@ Future<void> runTest({
     fillColor,
   );
 
-  print('\nFlood result:');
-  _printColors(result, input.width, input.height);
+  // print('\nFlood result:');
+  // _printColors(result, input.width, input.height);
 
   // await pngWrite(
   //   actualOutputFile(testId),
@@ -103,32 +112,29 @@ Future<void> runTest({
   );
   actualOutputFile(testId).writeAsBytesSync(pngBytes, flush: true);
 
-  final outputBytes =
-      (await pngRawBytes(actualOutputFile(testId))).buffer.asByteData();
+  final actualBytes = await pngRawRgba(actualOutputFile(testId));
+  final expectedBytes = await pngRawRgba(expectedOutputFile(testId));
 
-  print('\nOutput:');
-  _printColors(outputBytes, input.width, input.height);
-
-  final expectedBytes =
-      (await pngRawBytes(expectedOutputFile(testId))).buffer.asByteData();
-
-  print('\nExpected:');
-  _printColors(expectedBytes, input.width, input.height);
+  _printDiff(actualBytes, expectedBytes);
 
   expect(
-    await pngRawBytes(actualOutputFile(testId)),
-    await pngRawBytes(expectedOutputFile(testId)),
+    actualBytes.buffer.asUint32List(),
+    expectedBytes.buffer.asUint32List(),
   );
 }
 
-Future<Uint8List> pngRawBytes(File png) async {
+Future<ByteData> pngRawRgba(File png) async {
   // final image = await pngRead(png);
   // final byteData = await image.toByteData();
   // return byteData!.buffer.asUint8List();
 
   final bytes = png.readAsBytesSync();
-  return duncan.decodePng(bytes)!.getBytes();
+  return duncan.decodePng(bytes)!.getBytes().buffer.asByteData();
 }
+
+// ==================
+// Debugging helpers:
+// ==================
 
 void _printColors(ByteData rawImage, int width, int height) {
   final map = <int, int>{};
@@ -147,6 +153,19 @@ void _printColors(ByteData rawImage, int width, int height) {
 
   for (int color in sortedKeys) {
     print('${_intToRgbaList(color)} - ${map[color]}');
+  }
+}
+
+void _printDiff(ByteData actual, ByteData expected) {
+  final actualColors = actual.buffer.asUint32List();
+  final expectedColors = expected.buffer.asUint32List();
+
+  for (int i = 0; i < actualColors.length; i++) {
+    if (actualColors[i] != expectedColors[i]) {
+      print(
+        '${_intToRgbaList(actualColors[i])} is not ${_intToRgbaList(expectedColors[i])}',
+      );
+    }
   }
 }
 
