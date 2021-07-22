@@ -6,6 +6,7 @@ class AppIconButton extends StatelessWidget {
     Key? key,
     required this.icon,
     this.iconSize = 20,
+    this.iconTransform,
     this.selected = false,
     this.onTap,
   })  : svgPath = null,
@@ -18,10 +19,12 @@ class AppIconButton extends StatelessWidget {
     this.onTap,
   })  : icon = null,
         iconSize = null,
+        iconTransform = null,
         super(key: key);
 
   final IconData? icon;
   final double? iconSize;
+  final Matrix4? iconTransform;
 
   final String? svgPath;
 
@@ -44,10 +47,13 @@ class AppIconButton extends StatelessWidget {
                   fit: BoxFit.none,
                   color: _getColor(context),
                 )
-              : Icon(
-                  icon,
-                  size: iconSize,
-                  color: _getColor(context),
+              : Transform(
+                  transform: iconTransform ?? Matrix4.identity(),
+                  child: Icon(
+                    icon,
+                    size: iconSize,
+                    color: _getColor(context),
+                  ),
                 ),
         ),
       ),
