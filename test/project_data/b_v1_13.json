@@ -1,0 +1,125 @@
+{
+    "width": 1280.0,
+    "height": 720.0,
+    "scenes": [
+        {
+            "layers": [
+                {
+                    "frames": [
+                        {
+                            "file_name": "frame1620719884248.png",
+                            "duration": "0:00:01.000000"
+                        }
+                    ],
+                    "play_mode": 0,
+                    "visible": true,
+                    "name": "top layer"
+                },
+                {
+                    "frames": [
+                        {
+                            "file_name": "frame1620719994150.png",
+                            "duration": "0:00:00.100000"
+                        },
+                        {
+                            "file_name": "frame1620720004265.png",
+                            "duration": "0:00:00.120000"
+                        }
+                    ],
+                    "play_mode": 1,
+                    "visible": true,
+                    "name": "middle layer"
+                },
+                {
+                    "frames": [
+                        {
+                            "file_name": "frame1620722450872.png",
+                            "duration": "0:00:01.000000"
+                        }
+                    ],
+                    "play_mode": 0,
+                    "visible": true,
+                    "name": "background"
+                }
+            ],
+            "duration": "0:00:01.540000",
+            "description": "Hello"
+        },
+        {
+            "layers": [
+                {
+                    "frames": [
+                        {
+                            "file_name": "frame1620727959131.png",
+                            "duration": "0:00:01.000000"
+                        }
+                    ],
+                    "play_mode": 0,
+                    "visible": true,
+                    "name": "layer A"
+                },
+                {
+                    "frames": [
+                        {
+                            "file_name": "frame1620727959144.png",
+                            "duration": "0:00:00.100000"
+                        },
+                        {
+                            "file_name": "frame1620727959153.png",
+                            "duration": "0:00:00.120000"
+                        }
+                    ],
+                    "play_mode": 1,
+                    "visible": false,
+                    "name": "layer B"
+                },
+                {
+                    "frames": [
+                        {
+                            "file_name": "frame1620727959161.png",
+                            "duration": "0:00:01.000000"
+                        }
+                    ],
+                    "play_mode": 0,
+                    "visible": true,
+                    "name": null
+                }
+            ],
+            "duration": "0:00:01.600000",
+            "description": "World"
+        },
+        {
+            "layers": [
+                {
+                    "frames": [
+                        {
+                            "file_name": "frame1620728099764.png",
+                            "duration": "0:00:00.140000"
+                        },
+                        {
+                            "file_name": "frame1620728186420.png",
+                            "duration": "0:00:00.160000"
+                        }
+                    ],
+                    "play_mode": 1,
+                    "visible": true,
+                    "name": ""
+                },
+                {
+                    "frames": [
+                        {
+                            "file_name": "frame1620728082242.png",
+                            "duration": "0:00:01.000000"
+                        }
+                    ],
+                    "play_mode": 0,
+                    "visible": true,
+                    "name": "😭"
+                }
+            ],
+            "duration": "0:00:01.600000",
+            "description": "And friends"
+        }
+    ],
+    "sounds": []
+}
