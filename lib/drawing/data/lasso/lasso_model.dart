@@ -8,7 +8,7 @@ import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/selection_stroke.dart';
 import 'package:mooltik/drawing/data/lasso/masked_image_painter.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
-import 'package:mooltik/drawing/ui/frame_painter.dart';
+import 'package:mooltik/drawing/ui/canvas_painter.dart';
 import 'package:mooltik/drawing/ui/lasso/transformed_image_painter.dart';
 
 class LassoModel extends ChangeNotifier {
@@ -285,7 +285,10 @@ class LassoModel extends ChangeNotifier {
 
   Future<void> _applySelectionStrokeToFrame() async {
     final snapshot = await generateImage(
-      FramePainter(frame: _easel.frame, strokes: [selectionStroke]),
+      CanvasPainter(
+        image: _easel.frame.image.snapshot,
+        strokes: [selectionStroke],
+      ),
       _easel.frame.image.width!.toInt(),
       _easel.frame.image.height!.toInt(),
     );

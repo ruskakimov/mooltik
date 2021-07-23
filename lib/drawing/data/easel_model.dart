@@ -13,7 +13,7 @@ import 'package:mooltik/drawing/data/frame/selection_stroke.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/brush.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
-import 'package:mooltik/drawing/ui/frame_painter.dart';
+import 'package:mooltik/drawing/ui/canvas_painter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Maximum number of consecutive undos.
@@ -228,10 +228,11 @@ class EaselModel extends ChangeNotifier {
   void onStrokeStart(DragStartDetails details) {
     final framePoint = toFramePoint(details.localPosition);
 
-    if (_selectedTool is Brush) {
-      final stroke = Stroke(framePoint, (_selectedTool as Brush).paint);
-      unrasterizedStrokes.add(stroke);
-    } else if (_selectedTool is Lasso) {
+    // if (_selectedTool is Brush) {
+    //   final stroke = Stroke(framePoint, (_selectedTool as Brush).paint);
+    //   unrasterizedStrokes.add(stroke);
+    // } else
+    if (_selectedTool is Lasso) {
       _selectionStroke = SelectionStroke(framePoint);
     } else {
       _selectedTool!.onStrokeStart(framePoint);
@@ -243,10 +244,11 @@ class EaselModel extends ChangeNotifier {
   void onStrokeUpdate(DragUpdateDetails details) {
     final framePoint = toFramePoint(details.localPosition);
 
-    if (_selectedTool is Brush) {
-      if (unrasterizedStrokes.isEmpty) return;
-      unrasterizedStrokes.last.extend(framePoint);
-    } else if (_selectedTool is Lasso) {
+    // if (_selectedTool is Brush) {
+    //   if (unrasterizedStrokes.isEmpty) return;
+    //   unrasterizedStrokes.last.extend(framePoint);
+    // } else
+    if (_selectedTool is Lasso) {
       _selectionStroke?.extend(framePoint);
     } else {
       _selectedTool!.onStrokeUpdate(framePoint);
@@ -256,16 +258,17 @@ class EaselModel extends ChangeNotifier {
   }
 
   void onStrokeEnd() {
-    if (_selectedTool is Brush) {
-      if (unrasterizedStrokes.isEmpty) return;
-      unrasterizedStrokes.last.finish();
+    // if (_selectedTool is Brush) {
+    //   if (unrasterizedStrokes.isEmpty) return;
+    //   unrasterizedStrokes.last.finish();
 
-      if (unrasterizedStrokes.last.boundingRect.overlaps(_frameArea)) {
-        _applyStrokes();
-      } else {
-        unrasterizedStrokes.removeLast();
-      }
-    } else if (_selectedTool is Lasso) {
+    //   if (unrasterizedStrokes.last.boundingRect.overlaps(_frameArea)) {
+    //     _applyStrokes();
+    //   } else {
+    //     unrasterizedStrokes.removeLast();
+    //   }
+    // } else
+    if (_selectedTool is Lasso) {
       _selectionStroke?.finish();
       _selectionStroke?.clipToFrame(_frameArea);
       if (_selectionStroke!.isTooSmall) removeSelection();
@@ -302,21 +305,6 @@ class EaselModel extends ChangeNotifier {
 
     unrasterizedStrokes.removeLast();
     notifyListeners();
-  }
-
-  Future<void> _applyStrokes() async {
-    final newSnapshot = await _generateLastSnapshot();
-    unrasterizedStrokes.clear();
-    pushSnapshot(newSnapshot);
-  }
-
-  Future<ui.Image> _generateLastSnapshot() async {
-    final snapshot = await generateImage(
-      FramePainter(frame: _frame, strokes: unrasterizedStrokes),
-      _frame.image.width!.toInt(),
-      _frame.image.height!.toInt(),
-    );
-    return snapshot;
   }
 
   void pushSnapshot(ui.Image snapshot) {

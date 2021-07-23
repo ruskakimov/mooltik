@@ -1,16 +1,16 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 
-import '../data/frame/frame.dart';
-
-class FramePainter extends CustomPainter {
-  FramePainter({
-    required this.frame,
+class CanvasPainter extends CustomPainter {
+  CanvasPainter({
+    required this.image,
     this.strokes,
     this.filter,
   });
 
-  final Frame frame;
+  final ui.Image? image;
   final List<Stroke?>? strokes;
   final ColorFilter? filter;
 
@@ -18,31 +18,33 @@ class FramePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final img = image; // For nullability analysis.
+    if (img == null) return;
+
+    final canvasArea = Rect.fromLTWH(0, 0, size.width, size.height);
+
     // Clip paint outside canvas.
-    canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
+    canvas.clipRect(canvasArea);
 
     // Scale image to fit the given size.
-    canvas.scale(
-        size.width / frame.image.width!, size.height / frame.image.height!);
+    canvas.scale(size.width / img.width, size.height / img.height);
 
     if (hasStrokes) {
       // Save layer to erase paintings on it with `BlendMode.clear`.
       canvas.saveLayer(
-        Rect.fromLTWH(0, 0, frame.image.size.width, frame.image.size.height),
+        Rect.fromLTWH(0, 0, canvasArea.width, canvasArea.height),
         Paint(),
       );
     }
 
-    if (frame.image.snapshot != null) {
-      canvas.drawImage(
-        frame.image.snapshot!,
-        Offset.zero,
-        Paint()
-          ..colorFilter = filter
-          ..isAntiAlias = true
-          ..filterQuality = FilterQuality.low,
-      );
-    }
+    canvas.drawImage(
+      img,
+      Offset.zero,
+      Paint()
+        ..colorFilter = filter
+        ..isAntiAlias = true
+        ..filterQuality = FilterQuality.low,
+    );
 
     strokes?.forEach((stroke) => stroke!.paintOn(canvas));
 
@@ -53,11 +55,11 @@ class FramePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(FramePainter oldDelegate) =>
-      oldDelegate.frame.image.snapshot != frame.image.snapshot ||
+  bool shouldRepaint(CanvasPainter oldDelegate) =>
+      oldDelegate.image != image ||
       oldDelegate.strokes != strokes ||
       oldDelegate.filter != filter;
 
   @override
-  bool shouldRebuildSemantics(FramePainter oldDelegate) => false;
+  bool shouldRebuildSemantics(CanvasPainter oldDelegate) => false;
 }
