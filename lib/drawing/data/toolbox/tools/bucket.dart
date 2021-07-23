@@ -1,3 +1,5 @@
+import 'dart:isolate';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:image/image.dart' as duncan;
 
@@ -58,14 +60,23 @@ class Bucket extends ToolWithColor {
     //   color.value,
     // );
 
-    final duncanSource = await _toDuncanImage(source);
+    var receivePort = ReceivePort();
 
-    final duncanResult = duncan.fillFlood(
-      duncanSource,
-      startX,
-      startY,
-      _toDuncanColor(color),
+    await Isolate.spawn(
+      decodeIsolate,
+      IsolateParam(
+        imageByteData: imageByteData!.buffer.asUint8List(),
+        width: source.width,
+        height: source.height,
+        fillColor: _toDuncanColor(color),
+        startX: startX,
+        startY: startY,
+        sendPort: receivePort.sendPort,
+      ),
     );
+
+    // Get the processed image from the isolate.
+    var duncanResult = await receivePort.first as duncan.Image;
 
     return _toUiImage(duncanResult);
 
@@ -99,4 +110,41 @@ class Bucket extends ToolWithColor {
     ];
     return bytes.reduce((a, b) => (a << 8) | b);
   }
+}
+
+class IsolateParam {
+  final int width;
+  final int height;
+  final int startX;
+  final int startY;
+  final int fillColor;
+  final Uint8List imageByteData;
+  final SendPort sendPort;
+
+  IsolateParam({
+    required this.width,
+    required this.height,
+    required this.startX,
+    required this.startY,
+    required this.fillColor,
+    required this.imageByteData,
+    required this.sendPort,
+  });
+}
+
+void decodeIsolate(IsolateParam param) {
+  final duncanSource = duncan.Image.fromBytes(
+    param.width,
+    param.height,
+    param.imageByteData.buffer.asUint8List(),
+  );
+
+  final duncanResult = duncan.fillFlood(
+    duncanSource,
+    param.startX,
+    param.startY,
+    param.fillColor,
+  );
+
+  param.sendPort.send(duncanResult);
 }
