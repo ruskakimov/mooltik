@@ -54,7 +54,7 @@ class Bucket extends ToolWithColor {
       duncanSource,
       startX,
       startY,
-      color.value,
+      _toDuncanColor(color),
     );
 
     return _toUiImage(duncanResult);
@@ -78,5 +78,15 @@ class Bucket extends ToolWithColor {
       image.width,
       image.height,
     );
+  }
+
+  int _toDuncanColor(ui.Color color) {
+    final bytes = [
+      color.alpha,
+      color.blue,
+      color.green,
+      color.red,
+    ];
+    return bytes.reduce((a, b) => (a << 8) | b);
   }
 }
