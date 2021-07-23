@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+import 'package:image/image.dart' as duncan;
 
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -38,15 +39,44 @@ class Bucket extends ToolWithColor {
   ) async {
     final imageByteData = await source.toByteData();
 
-    final resultByteData = floodFill(
-      imageByteData!,
-      source.width,
-      source.height,
+    // final resultByteData = floodFill(
+    //   imageByteData!,
+    //   source.width,
+    //   source.height,
+    //   startX,
+    //   startY,
+    //   color.value,
+    // );
+
+    final duncanSource = await _toDuncanImage(source);
+
+    final duncanResult = duncan.fillFlood(
+      duncanSource,
       startX,
       startY,
       color.value,
     );
 
-    return imageFromBytes(resultByteData, source.width, source.height);
+    return _toUiImage(duncanResult);
+
+    // return imageFromBytes(resultByteData, source.width, source.height);
+  }
+
+  Future<duncan.Image> _toDuncanImage(ui.Image image) async {
+    final imageByteData = await image.toByteData();
+    return duncan.Image.fromBytes(
+      image.width,
+      image.height,
+      imageByteData!.buffer.asUint8List(),
+    );
+  }
+
+  Future<ui.Image> _toUiImage(duncan.Image image) {
+    final imageByteData = image.getBytes();
+    return imageFromBytes(
+      imageByteData.buffer.asByteData(),
+      image.width,
+      image.height,
+    );
   }
 }
