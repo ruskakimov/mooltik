@@ -17,15 +17,25 @@ class Bucket extends ToolWithColor {
   @override
   String get name => 'bucket';
 
-  @override
-  void onStrokeStart(Offset canvasPoint) {}
+  Offset _lastPoint = Offset.zero;
 
   @override
-  void onStrokeUpdate(Offset canvasPoint) {}
+  void onStrokeStart(Offset canvasPoint) {
+    _lastPoint = canvasPoint;
+  }
+
+  @override
+  void onStrokeUpdate(Offset canvasPoint) {
+    _lastPoint = canvasPoint;
+  }
 
   @override
   Future<ui.Image?> onStrokeEnd(Rect canvasArea, ui.Image canvasImage) async {
-    return applyBucketAt(canvasImage, 0, 0);
+    return applyBucketAt(
+      canvasImage,
+      _lastPoint.dx.toInt(),
+      _lastPoint.dy.toInt(),
+    );
   }
 
   @override
