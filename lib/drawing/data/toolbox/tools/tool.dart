@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Tool {
@@ -15,13 +16,13 @@ abstract class Tool {
   final SharedPreferences sharedPreferences;
 
   // TODO: Make these abstract once every tool makes use of it.
-  void onStrokeStart(Offset canvasPoint) {}
+  Stroke? onStrokeStart(Offset canvasPoint) {}
 
   void onStrokeUpdate(Offset canvasPoint) {}
 
-  void onStrokeEnd() {}
+  Stroke? onStrokeEnd() {}
 
-  void onStrokeCancel() {}
+  Stroke? onStrokeCancel() {}
 
   Future<ui.Image?> rasterizeStroke(
     Rect canvasArea,

@@ -227,20 +227,12 @@ class EaselModel extends ChangeNotifier {
 
   void onStrokeStart(DragStartDetails details) {
     final framePoint = toFramePoint(details.localPosition);
-    final tool = _selectedTool;
 
-    // if (_selectedTool is Brush) {
-    //   final stroke = Stroke(framePoint, (_selectedTool as Brush).paint);
-    //   unrasterizedStrokes.add(stroke);
-    // } else
-    if (tool is Lasso) {
+    if (_selectedTool is Lasso) {
       _selectionStroke = SelectionStroke(framePoint);
     } else {
-      tool!.onStrokeStart(framePoint);
-
-      if (tool is Brush && tool.currentStroke != null) {
-        unrasterizedStrokes.add(tool.currentStroke!);
-      }
+      final stroke = _selectedTool?.onStrokeStart(framePoint);
+      if (stroke != null) unrasterizedStrokes.add(stroke);
     }
 
     notifyListeners();
@@ -249,30 +241,16 @@ class EaselModel extends ChangeNotifier {
   void onStrokeUpdate(DragUpdateDetails details) {
     final framePoint = toFramePoint(details.localPosition);
 
-    // if (_selectedTool is Brush) {
-    //   if (unrasterizedStrokes.isEmpty) return;
-    //   unrasterizedStrokes.last.extend(framePoint);
-    // } else
     if (_selectedTool is Lasso) {
       _selectionStroke?.extend(framePoint);
     } else {
-      _selectedTool!.onStrokeUpdate(framePoint);
+      _selectedTool?.onStrokeUpdate(framePoint);
     }
 
     notifyListeners();
   }
 
   void onStrokeEnd() {
-    // if (_selectedTool is Brush) {
-    //   if (unrasterizedStrokes.isEmpty) return;
-    //   unrasterizedStrokes.last.finish();
-
-    //   if (unrasterizedStrokes.last.boundingRect.overlaps(_frameArea)) {
-    //     _applyStrokes();
-    //   } else {
-    //     unrasterizedStrokes.removeLast();
-    //   }
-    // } else
     if (_selectedTool is Lasso) {
       _selectionStroke?.finish();
       _selectionStroke?.clipToFrame(_frameArea);
@@ -280,23 +258,15 @@ class EaselModel extends ChangeNotifier {
     } else {
       // TODO: Copy state
       final taskTool = selectedTool!;
-
-      taskTool.onStrokeEnd();
+      final finishedStroke = taskTool.onStrokeEnd();
 
       final paintingTask = () async {
-        final unrasterizedStroke =
-            taskTool is Brush ? taskTool.currentStroke : null;
-
         final newSnapshot = await taskTool.rasterizeStroke(
           _frameArea,
           _historyStack.currentSnapshot!,
         );
-
-        if (newSnapshot != null) {
-          pushSnapshot(newSnapshot);
-        }
-
-        unrasterizedStrokes.remove(unrasterizedStroke);
+        if (newSnapshot != null) pushSnapshot(newSnapshot);
+        unrasterizedStrokes.remove(finishedStroke);
       };
 
       _paintingQueue.add(paintingTask);
@@ -309,12 +279,10 @@ class EaselModel extends ChangeNotifier {
     if (_selectedTool is Lasso) {
       removeSelection();
     } else {
-      _selectedTool!.onStrokeCancel();
+      final cancelledStroke = _selectedTool?.onStrokeCancel();
+      unrasterizedStrokes.remove(cancelledStroke);
     }
 
-    if (unrasterizedStrokes.isEmpty) return;
-
-    unrasterizedStrokes.removeLast();
     notifyListeners();
   }
 

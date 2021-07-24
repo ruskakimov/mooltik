@@ -112,12 +112,12 @@ abstract class Brush extends ToolWithColor {
   // Stroke handlers:
   // ================
 
-  Stroke? get currentStroke => _currentStroke;
   Stroke? _currentStroke;
 
   @override
-  void onStrokeStart(Offset canvasPoint) {
+  Stroke? onStrokeStart(Offset canvasPoint) {
     _currentStroke = Stroke(canvasPoint, paint);
+    return _currentStroke;
   }
 
   @override
@@ -126,13 +126,16 @@ abstract class Brush extends ToolWithColor {
   }
 
   @override
-  void onStrokeEnd() {
+  Stroke? onStrokeEnd() {
     _currentStroke?.finish();
+    return _currentStroke;
   }
 
   @override
-  void onStrokeCancel() {
+  Stroke? onStrokeCancel() {
+    final cancelledStroke = _currentStroke;
     _currentStroke = null;
+    return cancelledStroke;
   }
 
   @override
