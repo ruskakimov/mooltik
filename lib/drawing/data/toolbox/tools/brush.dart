@@ -1,11 +1,8 @@
-import 'dart:io';
 import 'dart:ui' as ui;
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
-import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/ui/canvas_painter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
