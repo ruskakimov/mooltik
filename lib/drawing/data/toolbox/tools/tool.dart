@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+typedef PaintOn = Future<ui.Image> Function(ui.Image);
+
 abstract class Tool {
   Tool(this.sharedPreferences);
 
@@ -20,7 +22,7 @@ abstract class Tool {
   Stroke? onStrokeEnd();
   Stroke? onStrokeCancel();
 
-  Future<ui.Image?> rasterizeStroke(Rect canvasArea, ui.Image canvasImage);
+  PaintOn? makePaintOn(Rect canvasArea);
 }
 
 abstract class ToolWithColor extends Tool {

@@ -139,25 +139,19 @@ abstract class Brush extends ToolWithColor {
   }
 
   @override
-  Future<ui.Image?> rasterizeStroke(
-    Rect canvasArea,
-    ui.Image canvasImage,
-  ) async {
-    final stroke = _currentStroke;
-    if (stroke == null) return null;
+  PaintOn? makePaintOn(Rect canvasArea) {
+    final frozenStroke = _currentStroke;
 
-    ui.Image? result;
+    if (frozenStroke == null) return null;
+    if (!frozenStroke.boundingRect.overlaps(canvasArea)) return null;
 
-    if (stroke.boundingRect.overlaps(canvasArea)) {
-      result = await generateImage(
-        CanvasPainter(image: canvasImage, strokes: [_currentStroke]),
+    return (ui.Image canvasImage) {
+      return generateImage(
+        CanvasPainter(image: canvasImage, strokes: [frozenStroke]),
         canvasImage.width,
         canvasImage.height,
       );
-    }
-
-    _currentStroke = null;
-    return result;
+    };
   }
 
   // ========================

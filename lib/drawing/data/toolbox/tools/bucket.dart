@@ -38,15 +38,20 @@ class Bucket extends ToolWithColor {
   @override
   Stroke? onStrokeCancel() {}
 
-  Future<ui.Image?> rasterizeStroke(
-    Rect canvasArea,
-    ui.Image canvasImage,
-  ) async {
-    return applyBucketAt(
-      canvasImage,
-      _lastPoint.dx.toInt(),
-      _lastPoint.dy.toInt(),
-    );
+  @override
+  PaintOn? makePaintOn(ui.Rect canvasArea) {
+    final frozenColor = color;
+    final frozenX = _lastPoint.dx.toInt();
+    final frozenY = _lastPoint.dy.toInt();
+
+    return (ui.Image canvasImage) {
+      return applyBucketAt(
+        canvasImage,
+        frozenX,
+        frozenY,
+        frozenColor,
+      );
+    };
   }
 
   /// Returns [source] image with fill starting at [startX] and [startY].
@@ -54,6 +59,7 @@ class Bucket extends ToolWithColor {
     ui.Image source,
     int startX,
     int startY,
+    Color color,
   ) async {
     final imageByteData = await source.toByteData();
 

@@ -253,16 +253,14 @@ class EaselModel extends ChangeNotifier {
       _selectionStroke?.clipToFrame(_frameArea);
       if (_selectionStroke!.isTooSmall) removeSelection();
     } else {
-      // TODO: Copy state
-      final taskTool = selectedTool!;
-      final finishedStroke = taskTool.onStrokeEnd();
+      final finishedStroke = selectedTool?.onStrokeEnd();
+      final paintOn = _selectedTool?.makePaintOn(_frameArea);
+
+      if (paintOn == null) return;
 
       final paintingTask = () async {
-        final newSnapshot = await taskTool.rasterizeStroke(
-          _frameArea,
-          _historyStack.currentSnapshot!,
-        );
-        if (newSnapshot != null) pushSnapshot(newSnapshot);
+        final newSnapshot = await paintOn(_historyStack.currentSnapshot!);
+        pushSnapshot(newSnapshot);
         unrasterizedStrokes.remove(finishedStroke);
       };
 

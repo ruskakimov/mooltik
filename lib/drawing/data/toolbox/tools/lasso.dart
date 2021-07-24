@@ -39,8 +39,5 @@ class Lasso extends ToolWithColor {
   }
 
   @override
-  Future<ui.Image?> rasterizeStroke(Rect canvasArea, ui.Image canvasImage) {
-    // TODO: implement rasterizeStroke
-    throw UnimplementedError();
-  }
+  PaintOn? makePaintOn(ui.Rect canvasArea) {}
 }
