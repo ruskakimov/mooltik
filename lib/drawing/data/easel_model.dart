@@ -284,6 +284,9 @@ class EaselModel extends ChangeNotifier {
       taskTool.onStrokeEnd();
 
       final paintingTask = () async {
+        final unrasterizedStroke =
+            taskTool is Brush ? taskTool.currentStroke : null;
+
         final newSnapshot = await taskTool.rasterizeStroke(
           _frameArea,
           _historyStack.currentSnapshot!,
@@ -293,9 +296,7 @@ class EaselModel extends ChangeNotifier {
           pushSnapshot(newSnapshot);
         }
 
-        if (taskTool is Brush && taskTool.currentStroke != null) {
-          unrasterizedStrokes.remove(taskTool.currentStroke!);
-        }
+        unrasterizedStrokes.remove(unrasterizedStroke);
       };
 
       _paintingQueue.add(paintingTask);
