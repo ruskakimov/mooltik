@@ -238,15 +238,16 @@ class EaselModel extends ChangeNotifier {
     final finishedStroke = selectedTool?.onStrokeEnd();
     final paintOn = _selectedTool?.makePaintOn(_frameArea);
 
-    if (paintOn == null) return;
+    if (paintOn != null) {
+      final paintingTask = () async {
+        final newSnapshot = await paintOn(_historyStack.currentSnapshot!);
+        pushSnapshot(newSnapshot);
+        unrasterizedStrokes.remove(finishedStroke);
+      };
 
-    final paintingTask = () async {
-      final newSnapshot = await paintOn(_historyStack.currentSnapshot!);
-      pushSnapshot(newSnapshot);
-      unrasterizedStrokes.remove(finishedStroke);
-    };
+      _paintingQueue.add(paintingTask);
+    }
 
-    _paintingQueue.add(paintingTask);
     notifyListeners();
   }
 
