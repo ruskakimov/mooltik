@@ -13,9 +13,11 @@ import 'package:mooltik/drawing/ui/lasso/transformed_image_painter.dart';
 
 class LassoModel extends ChangeNotifier {
   LassoModel({
+    required Lasso lasso,
     required EaselModel easel,
     required double headerHeight,
-  })  : _easel = easel,
+  })  : _lasso = lasso,
+        _easel = easel,
         _headerHeight = headerHeight {
     _easel.addListener(() {
       if (_easel.selectedTool is! Lasso) endTransformMode();
@@ -23,6 +25,7 @@ class LassoModel extends ChangeNotifier {
     });
   }
 
+  Lasso _lasso;
   EaselModel _easel;
 
   /// For global point -> easel point conversion.
@@ -38,7 +41,7 @@ class LassoModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  SelectionStroke? get selectionStroke => _easel.selectionStroke;
+  SelectionStroke? get selectionStroke => _lasso.selectionStroke;
 
   Offset get selectionOffset =>
       selectionStroke!.boundingRect.topLeft * _easel.scale;
@@ -66,7 +69,7 @@ class LassoModel extends ChangeNotifier {
   void transformSelection() {
     if (!finishedSelection) return;
     _launchTransformMode(true);
-    _easel.removeSelection();
+    _lasso.removeSelection();
     notifyListeners();
   }
 
@@ -74,7 +77,7 @@ class LassoModel extends ChangeNotifier {
   void duplicateSelection() {
     if (!finishedSelection) return;
     _launchTransformMode(false);
-    _easel.removeSelection();
+    _lasso.removeSelection();
     notifyListeners();
   }
 
@@ -82,7 +85,7 @@ class LassoModel extends ChangeNotifier {
   void fillSelection() {
     if (!finishedSelection) return;
     _fillSelection();
-    _easel.removeSelection();
+    _lasso.removeSelection();
     notifyListeners();
   }
 
@@ -90,7 +93,7 @@ class LassoModel extends ChangeNotifier {
   void eraseSelection() {
     if (!finishedSelection) return;
     _eraseSelection();
-    _easel.removeSelection();
+    _lasso.removeSelection();
     notifyListeners();
   }
 

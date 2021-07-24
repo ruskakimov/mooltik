@@ -87,6 +87,7 @@ class DrawingPage extends StatelessWidget {
                 ),
                 ChangeNotifierProxyProvider<EaselModel, LassoModel>(
                   create: (context) => LassoModel(
+                    lasso: context.read<ToolboxModel>().lasso,
                     easel: context.read<EaselModel>(),
                     headerHeight: headerHeight,
                   ),

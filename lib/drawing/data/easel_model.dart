@@ -8,7 +8,6 @@ import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/task_queue.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
-import 'package:mooltik/drawing/data/frame/selection_stroke.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -67,10 +66,6 @@ class EaselModel extends ChangeNotifier {
   /// Current strokes that are not yet rasterized and added to the frame.
   final List<Stroke> unrasterizedStrokes = [];
 
-  /// Lasso selected area.
-  SelectionStroke? get selectionStroke => _selectionStroke;
-  SelectionStroke? _selectionStroke;
-
   ImageHistoryStack _historyStack;
 
   TaskQueue _paintingQueue;
@@ -97,7 +92,10 @@ class EaselModel extends ChangeNotifier {
   /// Used by provider to update dependency.
   void updateSelectedTool(Tool? tool) {
     _selectedTool = tool;
-    removeSelection();
+
+    // TODO: Replace behaviour
+    // removeSelection();
+
     notifyListeners();
   }
 
@@ -110,7 +108,8 @@ class EaselModel extends ChangeNotifier {
       _frame.image.saveSnapshot();
     }
 
-    removeSelection();
+    // TODO: Replace behaviour
+    // removeSelection();
 
     _frame = frame;
     _historyStack = ImageHistoryStack(
@@ -224,71 +223,42 @@ class EaselModel extends ChangeNotifier {
 
   void onStrokeStart(DragStartDetails details) {
     final framePoint = toFramePoint(details.localPosition);
-
-    if (_selectedTool is Lasso) {
-      _selectionStroke = SelectionStroke(framePoint);
-    } else {
-      final stroke = _selectedTool?.onStrokeStart(framePoint);
-      if (stroke != null) unrasterizedStrokes.add(stroke);
-    }
-
+    final stroke = _selectedTool?.onStrokeStart(framePoint);
+    if (stroke != null) unrasterizedStrokes.add(stroke);
     notifyListeners();
   }
 
   void onStrokeUpdate(DragUpdateDetails details) {
     final framePoint = toFramePoint(details.localPosition);
-
-    if (_selectedTool is Lasso) {
-      _selectionStroke?.extend(framePoint);
-    } else {
-      _selectedTool?.onStrokeUpdate(framePoint);
-    }
-
+    _selectedTool?.onStrokeUpdate(framePoint);
     notifyListeners();
   }
 
   void onStrokeEnd() {
-    if (_selectedTool is Lasso) {
-      _selectionStroke?.finish();
-      _selectionStroke?.clipToFrame(_frameArea);
-      if (_selectionStroke!.isTooSmall) removeSelection();
-    } else {
-      final finishedStroke = selectedTool?.onStrokeEnd();
-      final paintOn = _selectedTool?.makePaintOn(_frameArea);
+    final finishedStroke = selectedTool?.onStrokeEnd();
+    final paintOn = _selectedTool?.makePaintOn(_frameArea);
 
-      if (paintOn == null) return;
+    if (paintOn == null) return;
 
-      final paintingTask = () async {
-        final newSnapshot = await paintOn(_historyStack.currentSnapshot!);
-        pushSnapshot(newSnapshot);
-        unrasterizedStrokes.remove(finishedStroke);
-      };
+    final paintingTask = () async {
+      final newSnapshot = await paintOn(_historyStack.currentSnapshot!);
+      pushSnapshot(newSnapshot);
+      unrasterizedStrokes.remove(finishedStroke);
+    };
 
-      _paintingQueue.add(paintingTask);
-    }
-
+    _paintingQueue.add(paintingTask);
     notifyListeners();
   }
 
   void onStrokeCancel() {
-    if (_selectedTool is Lasso) {
-      removeSelection();
-    } else {
-      final cancelledStroke = _selectedTool?.onStrokeCancel();
-      unrasterizedStrokes.remove(cancelledStroke);
-    }
-
+    final cancelledStroke = _selectedTool?.onStrokeCancel();
+    unrasterizedStrokes.remove(cancelledStroke);
     notifyListeners();
   }
 
   void pushSnapshot(ui.Image snapshot) {
     _historyStack.push(snapshot);
     _updateFrame();
-    notifyListeners();
-  }
-
-  void removeSelection() {
-    _selectionStroke = null;
     notifyListeners();
   }
 
