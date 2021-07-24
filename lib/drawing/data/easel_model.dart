@@ -5,15 +5,12 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/debouncer.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
-import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/task_queue.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
 import 'package:mooltik/drawing/data/frame/selection_stroke.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
-import 'package:mooltik/drawing/data/toolbox/tools/brush.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
-import 'package:mooltik/drawing/ui/canvas_painter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Maximum number of consecutive undos.
