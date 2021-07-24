@@ -32,7 +32,7 @@ class CanvasPainter extends CustomPainter {
     if (hasStrokes) {
       // Save layer to erase paintings on it with `BlendMode.clear`.
       canvas.saveLayer(
-        Rect.fromLTWH(0, 0, canvasArea.width, canvasArea.height),
+        Rect.fromLTWH(0, 0, img.width.toDouble(), img.height.toDouble()),
         Paint(),
       );
     }
