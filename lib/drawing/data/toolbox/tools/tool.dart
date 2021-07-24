@@ -19,9 +19,14 @@ abstract class Tool {
 
   void onStrokeUpdate(Offset canvasPoint) {}
 
-  Future<ui.Image?> onStrokeEnd(Rect canvasArea, ui.Image canvasImage) async {}
+  void onStrokeEnd() {}
 
   void onStrokeCancel() {}
+
+  Future<ui.Image?> rasterizeStroke(
+    Rect canvasArea,
+    ui.Image canvasImage,
+  ) async {}
 }
 
 abstract class ToolWithColor extends Tool {

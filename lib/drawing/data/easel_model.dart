@@ -227,15 +227,20 @@ class EaselModel extends ChangeNotifier {
 
   void onStrokeStart(DragStartDetails details) {
     final framePoint = toFramePoint(details.localPosition);
+    final tool = _selectedTool;
 
     // if (_selectedTool is Brush) {
     //   final stroke = Stroke(framePoint, (_selectedTool as Brush).paint);
     //   unrasterizedStrokes.add(stroke);
     // } else
-    if (_selectedTool is Lasso) {
+    if (tool is Lasso) {
       _selectionStroke = SelectionStroke(framePoint);
     } else {
-      _selectedTool!.onStrokeStart(framePoint);
+      tool!.onStrokeStart(framePoint);
+
+      if (tool is Brush && tool.currentStroke != null) {
+        unrasterizedStrokes.add(tool.currentStroke!);
+      }
     }
 
     notifyListeners();
@@ -273,10 +278,13 @@ class EaselModel extends ChangeNotifier {
       _selectionStroke?.clipToFrame(_frameArea);
       if (_selectionStroke!.isTooSmall) removeSelection();
     } else {
+      // TODO: Copy state
       final taskTool = selectedTool!;
 
+      taskTool.onStrokeEnd();
+
       final paintingTask = () async {
-        final newSnapshot = await taskTool.onStrokeEnd(
+        final newSnapshot = await taskTool.rasterizeStroke(
           _frameArea,
           _historyStack.currentSnapshot!,
         );
@@ -285,7 +293,9 @@ class EaselModel extends ChangeNotifier {
           pushSnapshot(newSnapshot);
         }
 
-        // TODO: Remove unrasterized stroke of this task if exists.
+        if (taskTool is Brush && taskTool.currentStroke != null) {
+          unrasterizedStrokes.remove(taskTool.currentStroke!);
+        }
       };
 
       _paintingQueue.add(paintingTask);

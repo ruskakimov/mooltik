@@ -112,6 +112,7 @@ abstract class Brush extends ToolWithColor {
   // Stroke handlers:
   // ================
 
+  Stroke? get currentStroke => _currentStroke;
   Stroke? _currentStroke;
 
   @override
@@ -125,11 +126,23 @@ abstract class Brush extends ToolWithColor {
   }
 
   @override
-  Future<ui.Image?> onStrokeEnd(Rect canvasArea, ui.Image canvasImage) async {
+  void onStrokeEnd() {
+    _currentStroke?.finish();
+  }
+
+  @override
+  void onStrokeCancel() {
+    _currentStroke = null;
+  }
+
+  @override
+  Future<ui.Image?> rasterizeStroke(
+    Rect canvasArea,
+    ui.Image canvasImage,
+  ) async {
     final stroke = _currentStroke;
     if (stroke == null) return null;
 
-    stroke.finish();
     ui.Image? result;
 
     if (stroke.boundingRect.overlaps(canvasArea)) {
@@ -142,11 +155,6 @@ abstract class Brush extends ToolWithColor {
 
     _currentStroke = null;
     return result;
-  }
-
-  @override
-  void onStrokeCancel() {
-    _currentStroke = null;
   }
 
   // ========================

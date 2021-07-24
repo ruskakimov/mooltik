@@ -32,16 +32,21 @@ class Bucket extends ToolWithColor {
   }
 
   @override
-  Future<ui.Image?> onStrokeEnd(Rect canvasArea, ui.Image canvasImage) async {
+  void onStrokeEnd() {}
+
+  @override
+  void onStrokeCancel() {}
+
+  Future<ui.Image?> rasterizeStroke(
+    Rect canvasArea,
+    ui.Image canvasImage,
+  ) async {
     return applyBucketAt(
       canvasImage,
       _lastPoint.dx.toInt(),
       _lastPoint.dy.toInt(),
     );
   }
-
-  @override
-  void onStrokeCancel() {}
 
   /// Returns [source] image with fill starting at [startX] and [startY].
   Future<ui.Image> applyBucketAt(
