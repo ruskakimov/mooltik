@@ -92,10 +92,6 @@ class EaselModel extends ChangeNotifier {
   /// Used by provider to update dependency.
   void updateSelectedTool(Tool? tool) {
     _selectedTool = tool;
-
-    // TODO: Replace behaviour
-    // removeSelection();
-
     notifyListeners();
   }
 
@@ -107,9 +103,6 @@ class EaselModel extends ChangeNotifier {
       _diskWriteDebouncer.cancel();
       _frame.image.saveSnapshot();
     }
-
-    // TODO: Replace behaviour
-    // removeSelection();
 
     _frame = frame;
     _historyStack = ImageHistoryStack(
