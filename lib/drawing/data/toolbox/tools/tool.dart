@@ -15,19 +15,12 @@ abstract class Tool {
 
   final SharedPreferences sharedPreferences;
 
-  // TODO: Make these abstract once every tool makes use of it.
-  Stroke? onStrokeStart(Offset canvasPoint) {}
+  Stroke? onStrokeStart(Offset canvasPoint);
+  void onStrokeUpdate(Offset canvasPoint);
+  Stroke? onStrokeEnd();
+  Stroke? onStrokeCancel();
 
-  void onStrokeUpdate(Offset canvasPoint) {}
-
-  Stroke? onStrokeEnd() {}
-
-  Stroke? onStrokeCancel() {}
-
-  Future<ui.Image?> rasterizeStroke(
-    Rect canvasArea,
-    ui.Image canvasImage,
-  ) async {}
+  Future<ui.Image?> rasterizeStroke(Rect canvasArea, ui.Image canvasImage);
 }
 
 abstract class ToolWithColor extends Tool {
