@@ -41,5 +41,49 @@ void main() {
         s.stop();
       });
     });
+
+    test('runs five tasks consecutively', () {
+      fakeAsync((async) {
+        final q = TaskQueue();
+        final s = clock.stopwatch()..start();
+        final timestamps = [];
+
+        q.add(() async {
+          await Future.delayed(Duration(seconds: 5));
+          timestamps.add(s.elapsed);
+        });
+        q.add(() async {
+          await Future.delayed(Duration(seconds: 2));
+          timestamps.add(s.elapsed);
+        });
+        q.add(() async {
+          await Future.delayed(Duration(seconds: 3));
+          timestamps.add(s.elapsed);
+        });
+
+        async.elapse(Duration(seconds: 4));
+
+        q.add(() async {
+          await Future.delayed(Duration(seconds: 4));
+          timestamps.add(s.elapsed);
+        });
+        q.add(() async {
+          await Future.delayed(Duration(seconds: 6));
+          timestamps.add(s.elapsed);
+        });
+
+        async.elapse(Duration(seconds: 16));
+
+        expect(timestamps, [
+          Duration(seconds: 5),
+          Duration(seconds: 7),
+          Duration(seconds: 10),
+          Duration(seconds: 14),
+          Duration(seconds: 20),
+        ]);
+
+        s.stop();
+      });
+    });
   });
 }
