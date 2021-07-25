@@ -17,6 +17,9 @@ ByteData floodFill(
   final startCoord = _Coord(startX, startY);
   final startColor = image.getPixel(startCoord);
 
+  // Prevent infinite loop. Not neccessary when filled area is written to an empty image.
+  if (_closeEnough(startColor, color)) return imageBytes;
+
   final q = Queue<_Coord>();
   q.add(startCoord);
 
@@ -39,8 +42,8 @@ ByteData floodFill(
   return image.bytes;
 }
 
-bool _closeEnough(int originalColor, int pixelColor) {
-  return (originalColor - pixelColor).abs() < 5;
+bool _closeEnough(int colorA, int colorB) {
+  return (colorA - colorB).abs() < 5;
 }
 
 class _Coord {
