@@ -1,7 +1,6 @@
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:image/image.dart' as duncan;
 
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -45,7 +44,7 @@ class Bucket extends ToolWithColor {
     final frozenY = _lastPoint.dy.toInt();
 
     return (ui.Image canvasImage) {
-      return applyBucketAt(
+      return _applyBucketAt(
         canvasImage,
         frozenX,
         frozenY,
@@ -53,78 +52,47 @@ class Bucket extends ToolWithColor {
       );
     };
   }
-
-  /// Returns [source] image with fill starting at [startX] and [startY].
-  Future<ui.Image> applyBucketAt(
-    ui.Image source,
-    int startX,
-    int startY,
-    Color color,
-  ) async {
-    final imageByteData = await source.toByteData();
-
-    // final resultByteData = floodFill(
-    //   imageByteData!,
-    //   source.width,
-    //   source.height,
-    //   startX,
-    //   startY,
-    //   color.value,
-    // );
-
-    var receivePort = ReceivePort();
-
-    await Isolate.spawn(
-      decodeIsolate,
-      IsolateParam(
-        imageByteData: imageByteData!.buffer.asUint8List(),
-        width: source.width,
-        height: source.height,
-        fillColor: _toDuncanColor(color),
-        startX: startX,
-        startY: startY,
-        sendPort: receivePort.sendPort,
-      ),
-    );
-
-    // Get the processed image from the isolate.
-    var duncanResult = await receivePort.first as duncan.Image;
-
-    return _toUiImage(duncanResult);
-
-    // return imageFromBytes(resultByteData, source.width, source.height);
-  }
-
-  Future<duncan.Image> _toDuncanImage(ui.Image image) async {
-    final imageByteData = await image.toByteData();
-    return duncan.Image.fromBytes(
-      image.width,
-      image.height,
-      imageByteData!.buffer.asUint8List(),
-    );
-  }
-
-  Future<ui.Image> _toUiImage(duncan.Image image) {
-    final imageByteData = image.getBytes();
-    return imageFromBytes(
-      imageByteData.buffer.asByteData(),
-      image.width,
-      image.height,
-    );
-  }
-
-  int _toDuncanColor(ui.Color color) {
-    final bytes = [
-      color.alpha,
-      color.blue,
-      color.green,
-      color.red,
-    ];
-    return bytes.reduce((a, b) => (a << 8) | b);
-  }
 }
 
-class IsolateParam {
+/// Returns [source] image with fill starting at [startX] and [startY].
+Future<ui.Image> _applyBucketAt(
+  ui.Image source,
+  int startX,
+  int startY,
+  Color color,
+) async {
+  final imageByteData = await source.toByteData();
+  final receivePort = ReceivePort();
+
+  await Isolate.spawn(
+    _fillProcess,
+    _FillProcessParams(
+      imageByteData: imageByteData!.buffer.asUint8List(),
+      width: source.width,
+      height: source.height,
+      fillColor: _toRawRgba(color),
+      startX: startX,
+      startY: startY,
+      sendPort: receivePort.sendPort,
+    ),
+  );
+
+  final resultByteData = await receivePort.first as ByteData;
+
+  return imageFromBytes(resultByteData, source.width, source.height);
+}
+
+int _toRawRgba(ui.Color color) {
+  final bytes = [
+    color.red,
+    color.green,
+    color.blue,
+    color.alpha,
+  ];
+  return bytes.reduce((a, b) => (a << 8) | b);
+}
+
+class _FillProcessParams {
   final int width;
   final int height;
   final int startX;
@@ -133,7 +101,7 @@ class IsolateParam {
   final Uint8List imageByteData;
   final SendPort sendPort;
 
-  IsolateParam({
+  _FillProcessParams({
     required this.width,
     required this.height,
     required this.startX,
@@ -144,19 +112,15 @@ class IsolateParam {
   });
 }
 
-void decodeIsolate(IsolateParam param) {
-  final duncanSource = duncan.Image.fromBytes(
-    param.width,
-    param.height,
-    param.imageByteData.buffer.asUint8List(),
+void _fillProcess(_FillProcessParams params) {
+  final resultByteData = floodFill(
+    params.imageByteData.buffer.asByteData(),
+    params.width,
+    params.height,
+    params.startX,
+    params.startY,
+    params.fillColor,
   );
 
-  final duncanResult = duncan.fillFlood(
-    duncanSource,
-    param.startX,
-    param.startY,
-    param.fillColor,
-  );
-
-  param.sendPort.send(duncanResult);
+  params.sendPort.send(resultByteData);
 }
