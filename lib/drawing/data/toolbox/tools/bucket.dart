@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mooltik/common/data/extensions/color_methods.dart';
 import 'package:mooltik/common/data/flood_fill.dart';
 import 'package:mooltik/common/data/io/image.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
@@ -70,7 +71,7 @@ Future<ui.Image> _applyBucketAt(
       imageByteData: imageByteData!.buffer.asUint8List(),
       width: source.width,
       height: source.height,
-      fillColor: _toRawRgba(color),
+      fillColor: color.toRgba(),
       startX: startX,
       startY: startY,
       sendPort: receivePort.sendPort,
@@ -80,16 +81,6 @@ Future<ui.Image> _applyBucketAt(
   final resultByteData = await receivePort.first as ByteData;
 
   return imageFromBytes(resultByteData, source.width, source.height);
-}
-
-int _toRawRgba(ui.Color color) {
-  final bytes = [
-    color.red,
-    color.green,
-    color.blue,
-    color.alpha,
-  ];
-  return bytes.reduce((a, b) => (a << 8) | b);
 }
 
 class _FillProcessParams {
