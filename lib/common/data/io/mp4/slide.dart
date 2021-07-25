@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:mooltik/common/data/duration_methods.dart';
+import 'package:mooltik/common/data/extensions/duration_methods.dart';
 
 /// Data class for video export.
 class Slide {

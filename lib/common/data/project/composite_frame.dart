@@ -2,7 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:equatable/equatable.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
-import 'package:mooltik/common/data/duration_methods.dart';
+import 'package:mooltik/common/data/extensions/duration_methods.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/common/ui/composite_image_painter.dart';

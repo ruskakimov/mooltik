@@ -5,7 +5,7 @@ import 'package:path/path.dart' as p;
 import 'package:archive/archive_io.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
-import 'package:mooltik/common/data/iterable_methods.dart';
+import 'package:mooltik/common/data/extensions/iterable_methods.dart';
 import 'package:mooltik/editing/data/export/generators/generator.dart';
 
 /// Makes an archive from images with the following structure.
