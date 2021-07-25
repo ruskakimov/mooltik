@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:typed_data';
 
 /// Fills image represented by [imageBytes], [imageWidth], and [imageHeight]
@@ -13,33 +14,40 @@ ByteData floodFill(
 ) {
   final image = _Image(imageBytes, imageWidth, imageHeight);
 
-  final originalColor = image.getPixel(startX, startY);
+  final startCoord = _Coord(startX, startY);
+  final startColor = image.getPixel(startCoord);
 
-  _fill(image, originalColor, color, startX, startY);
+  final q = Queue<_Coord>();
+  q.add(startCoord);
+
+  while (q.isNotEmpty) {
+    final coord = q.removeFirst();
+
+    if (!image.withinBounds(coord)) continue;
+
+    final pixelColor = image.getPixel(coord);
+
+    if (_closeEnough(startColor, pixelColor)) {
+      image.setPixel(coord, color);
+      q.add(_Coord(coord.x + 1, coord.y));
+      q.add(_Coord(coord.x - 1, coord.y));
+      q.add(_Coord(coord.x, coord.y + 1));
+      q.add(_Coord(coord.x, coord.y - 1));
+    }
+  }
 
   return image.bytes;
 }
 
-void _fill(
-  _Image image,
-  int originalColor,
-  int replacementColor,
-  int x,
-  int y,
-) {
-  if (!image.withinBounds(x, y)) return;
-
-  if (_closeEnough(originalColor, image.getPixel(x, y))) {
-    image.setPixel(x, y, replacementColor);
-    _fill(image, originalColor, replacementColor, x - 1, y);
-    _fill(image, originalColor, replacementColor, x + 1, y);
-    _fill(image, originalColor, replacementColor, x, y - 1);
-    _fill(image, originalColor, replacementColor, x, y + 1);
-  }
-}
-
 bool _closeEnough(int originalColor, int pixelColor) {
   return (originalColor - pixelColor).abs() < 5;
+}
+
+class _Coord {
+  _Coord(this.x, this.y);
+
+  final int x;
+  final int y;
 }
 
 class _Image {
@@ -49,17 +57,17 @@ class _Image {
   final int width;
   final int height;
 
-  bool withinBounds(int x, int y) {
-    return x >= 0 && x < width && y >= 0 && y < height;
+  bool withinBounds(_Coord coord) {
+    return coord.x >= 0 && coord.x < width && coord.y >= 0 && coord.y < height;
   }
 
-  int _byteOffset(int x, int y) => (y * width + x) * 4;
+  int _byteOffset(_Coord coord) => (coord.y * width + coord.x) * 4;
 
-  int getPixel(int x, int y) {
-    return bytes.getUint32(_byteOffset(x, y));
+  int getPixel(_Coord coord) {
+    return bytes.getUint32(_byteOffset(coord));
   }
 
-  void setPixel(int x, int y, int color) {
-    return bytes.setUint32(_byteOffset(x, y), color);
+  void setPixel(_Coord coord, int color) {
+    return bytes.setUint32(_byteOffset(coord), color);
   }
 }
