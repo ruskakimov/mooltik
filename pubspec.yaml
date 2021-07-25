@@ -74,8 +74,14 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
+  # Generate app icons:
   flutter_launcher_icons: ^0.9.0
+  
+  # Async testing:
   fake_async: ^1.2.0
+  clock: ^1.1.0
+
   image: ^3.0.2 # Flutter has a bug where it reads wrong raw rgba values from images (it scales rgb using alpha channel!?). This is a temporary workaround.
 
 flutter_icons:
