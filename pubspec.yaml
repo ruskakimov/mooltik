@@ -74,8 +74,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  quiver: ^3.0.1
   flutter_launcher_icons: ^0.9.0
+  fake_async: ^1.2.0
   image: ^3.0.2 # Flutter has a bug where it reads wrong raw rgba values from images (it scales rgb using alpha channel!?). This is a temporary workaround.
 
 flutter_icons:
