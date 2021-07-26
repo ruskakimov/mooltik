@@ -14,28 +14,29 @@ ByteData floodFill(
 ) {
   final image = _Image(imageBytes, imageWidth, imageHeight);
 
-  final startCoord = _Coord(startX, startY);
-  final startColor = image.getPixel(startCoord);
+  final startColor = image.getPixel(startX, startY);
 
   // Prevent infinite loop. Not neccessary when filled area is written to an empty image.
   if (_closeEnough(startColor, color)) return imageBytes;
 
-  final q = Queue<_Coord>();
-  q.add(startCoord);
+  final q = Queue<List<int>>();
+  q.add([startX, startY]);
 
   while (q.isNotEmpty) {
     final coord = q.removeFirst();
+    final x = coord[0];
+    final y = coord[1];
 
-    if (!image.withinBounds(coord)) continue;
+    if (!image.withinBounds(x, y)) continue;
 
-    final pixelColor = image.getPixel(coord);
+    final pixelColor = image.getPixel(x, y);
 
     if (_closeEnough(startColor, pixelColor)) {
-      image.setPixel(coord, color);
-      q.add(_Coord(coord.x + 1, coord.y));
-      q.add(_Coord(coord.x - 1, coord.y));
-      q.add(_Coord(coord.x, coord.y + 1));
-      q.add(_Coord(coord.x, coord.y - 1));
+      image.setPixel(x, y, color);
+      q.add([x + 1, y]);
+      q.add([x - 1, y]);
+      q.add([x, y + 1]);
+      q.add([x, y - 1]);
     }
   }
 
@@ -46,13 +47,6 @@ bool _closeEnough(int colorA, int colorB) {
   return (colorA - colorB).abs() < 5;
 }
 
-class _Coord {
-  _Coord(this.x, this.y);
-
-  final int x;
-  final int y;
-}
-
 class _Image {
   _Image(this.bytes, this.width, this.height);
 
@@ -60,17 +54,17 @@ class _Image {
   final int width;
   final int height;
 
-  bool withinBounds(_Coord coord) {
-    return coord.x >= 0 && coord.x < width && coord.y >= 0 && coord.y < height;
+  bool withinBounds(int x, int y) {
+    return x >= 0 && x < width && y >= 0 && y < height;
   }
 
-  int _byteOffset(_Coord coord) => (coord.y * width + coord.x) * 4;
+  int _byteOffset(int x, int y) => (y * width + x) * 4;
 
-  int getPixel(_Coord coord) {
-    return bytes.getUint32(_byteOffset(coord));
+  int getPixel(int x, int y) {
+    return bytes.getUint32(_byteOffset(x, y));
   }
 
-  void setPixel(_Coord coord, int color) {
-    return bytes.setUint32(_byteOffset(coord), color);
+  void setPixel(int x, int y, int color) {
+    return bytes.setUint32(_byteOffset(x, y), color);
   }
 }
