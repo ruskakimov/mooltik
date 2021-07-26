@@ -16,8 +16,16 @@ ByteData floodFill(
 
   final startColor = image.getPixel(startX, startY);
 
+  // Whether the pixel is unfilled and inside the fill area. Returns false for filled pixels.
+  bool inside(int x, int y) =>
+      image.withinBounds(x, y) &&
+      _closeEnough(
+        image.getPixel(x, y),
+        startColor,
+      );
+
   // Prevent infinite loop. Not neccessary when filled area is written to an empty image.
-  if (_closeEnough(startColor, color)) return imageBytes;
+  if (!inside(startX, startY)) return imageBytes;
 
   final q = Queue<List<int>>();
   q.add([startX, startY]);
@@ -27,11 +35,7 @@ ByteData floodFill(
     final x = coord[0];
     final y = coord[1];
 
-    if (!image.withinBounds(x, y)) continue;
-
-    final pixelColor = image.getPixel(x, y);
-
-    if (_closeEnough(startColor, pixelColor)) {
+    if (inside(x, y)) {
       image.setPixel(x, y, color);
       q.add([x + 1, y]);
       q.add([x - 1, y]);
