@@ -12,20 +12,33 @@ ByteData floodFill(
   int startY,
   int color,
 ) {
-  final image = _Image(imageBytes, imageWidth, imageHeight);
+  final srcImage = _Image(imageBytes, imageWidth, imageHeight);
 
-  final startColor = image.getPixel(startX, startY);
+  /// Black image where filled area is marked by white pixels.
+  final fillMask = _Image(
+    ByteData(imageBytes.lengthInBytes),
+    imageWidth,
+    imageHeight,
+  );
 
-  // Whether the pixel is unfilled and inside the fill area. Returns false for filled pixels.
-  bool inside(int x, int y) =>
-      image.withinBounds(x, y) &&
+  final startColor = srcImage.getPixel(startX, startY);
+
+  bool isFilled(int x, int y) => fillMask.getPixel(x, y) != 0;
+
+  void fillPixel(int x, int y) {
+    fillMask.setPixel(x, y, 0xFFFFFFFF);
+    srcImage.setPixel(x, y, color);
+  }
+
+  bool shouldFill(int x, int y) =>
+      srcImage.withinBounds(x, y) &&
+      !isFilled(x, y) &&
       _closeEnough(
-        image.getPixel(x, y),
+        srcImage.getPixel(x, y),
         startColor,
       );
 
-  // Prevent infinite loop. Not neccessary when filled area is written to an empty image.
-  if (!inside(startX, startY)) return imageBytes;
+  if (!shouldFill(startX, startY)) return imageBytes;
 
   final q = Queue<List<int>>();
   q.add([startX, startY]);
@@ -35,8 +48,8 @@ ByteData floodFill(
     final x = coord[0];
     final y = coord[1];
 
-    if (inside(x, y)) {
-      image.setPixel(x, y, color);
+    if (shouldFill(x, y)) {
+      fillPixel(x, y);
       q.add([x + 1, y]);
       q.add([x - 1, y]);
       q.add([x, y + 1]);
@@ -44,7 +57,7 @@ ByteData floodFill(
     }
   }
 
-  return image.bytes;
+  return srcImage.bytes;
 }
 
 bool _closeEnough(int colorA, int colorB) {
