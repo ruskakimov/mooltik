@@ -2,6 +2,7 @@ import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mooltik/common/data/extensions/color_methods.dart';
@@ -64,10 +65,9 @@ Future<ui.Image> _applyBucketAt(
 ) async {
   final s = Stopwatch()..start();
   final imageByteData = await source.toByteData();
-  final receivePort = ReceivePort();
   print(s.elapsedMilliseconds);
 
-  await Isolate.spawn(
+  final resultByteData = await compute(
     _fillProcess,
     _FillProcessParams(
       imageByteData: imageByteData!.buffer.asUint8List(),
@@ -76,11 +76,8 @@ Future<ui.Image> _applyBucketAt(
       fillColor: color.toRgba(),
       startX: startX,
       startY: startY,
-      sendPort: receivePort.sendPort,
     ),
   );
-
-  final resultByteData = await receivePort.first as ByteData;
   print(s.elapsedMilliseconds);
 
   final result =
@@ -97,7 +94,6 @@ class _FillProcessParams {
   final int startY;
   final int fillColor;
   final Uint8List imageByteData;
-  final SendPort sendPort;
 
   _FillProcessParams({
     required this.width,
@@ -106,12 +102,11 @@ class _FillProcessParams {
     required this.startY,
     required this.fillColor,
     required this.imageByteData,
-    required this.sendPort,
   });
 }
 
-void _fillProcess(_FillProcessParams params) {
-  final resultByteData = floodFill(
+ByteData _fillProcess(_FillProcessParams params) {
+  return floodFill(
     params.imageByteData.buffer.asByteData(),
     params.width,
     params.height,
@@ -119,6 +114,4 @@ void _fillProcess(_FillProcessParams params) {
     params.startY,
     params.fillColor,
   );
-
-  params.sendPort.send(resultByteData);
 }
