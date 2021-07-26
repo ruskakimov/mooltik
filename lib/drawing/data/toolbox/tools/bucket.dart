@@ -62,8 +62,10 @@ Future<ui.Image> _applyBucketAt(
   int startY,
   Color color,
 ) async {
+  final s = Stopwatch()..start();
   final imageByteData = await source.toByteData();
   final receivePort = ReceivePort();
+  print(s.elapsedMilliseconds);
 
   await Isolate.spawn(
     _fillProcess,
@@ -79,8 +81,13 @@ Future<ui.Image> _applyBucketAt(
   );
 
   final resultByteData = await receivePort.first as ByteData;
+  print(s.elapsedMilliseconds);
 
-  return imageFromBytes(resultByteData, source.width, source.height);
+  final result =
+      await imageFromBytes(resultByteData, source.width, source.height);
+  print(s.elapsedMilliseconds);
+
+  return result;
 }
 
 class _FillProcessParams {
