@@ -63,10 +63,9 @@ Future<ui.Image> _applyBucketAt(
   int startY,
   Color color,
 ) async {
-  final s = Stopwatch()..start();
   final imageByteData = await source.toByteData();
-  print(s.elapsedMilliseconds);
 
+  final s = Stopwatch()..start();
   final resultByteData = await compute(
     _fillProcess,
     _FillProcessParams(
@@ -78,13 +77,10 @@ Future<ui.Image> _applyBucketAt(
       startY: startY,
     ),
   );
-  print(s.elapsedMilliseconds);
+  s.stop();
+  print('${s.elapsedMilliseconds},');
 
-  final result =
-      await imageFromBytes(resultByteData, source.width, source.height);
-  print(s.elapsedMilliseconds);
-
-  return result;
+  return imageFromBytes(resultByteData, source.width, source.height);
 }
 
 class _FillProcessParams {
