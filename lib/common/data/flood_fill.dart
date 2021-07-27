@@ -14,79 +14,47 @@ ByteData floodFill(
 ) {
   final image = _Image(imageBytes, imageWidth, imageHeight);
 
-  final ov = image.getPixel(startX, startY);
-
-  // Whether the pixel is unfilled and inside the fill area. Returns false for filled pixels.
-  bool inside(int x, int y) =>
-      image.withinBounds(x, y) &&
-      _closeEnough(
-        image.getPixel(x, y),
-        ov,
-      );
+  final oldColor = image.getPixel(startX, startY);
 
   // Prevent infinite loop. Not neccessary when filled area is written to an empty image.
-  if (!inside(startX, startY)) return imageBytes;
+  if (_closeEnough(oldColor, color)) return imageBytes;
 
-  final nv = color;
-  int x = startX;
-  int y = startY;
-  int l = 0, x1, x2, dy;
+  final q = Queue<List<int>>();
+  q.add([startX, startY]);
 
-  final s = Queue<List<int>>();
+  int x1;
+  bool spanAbove, spanBelow;
 
-  // Based on:
-  // https://github.com/erich666/GraphicsGems/blob/8ffc343ad959c134a36bbbcee46b5d82f676c92d/gems/SeedFill.c
-  // PUSH(y, x, x, 1); /* needed in some cases */
-  s.add([y, x, x, 1]);
-  // PUSH(y + 1, x, x, -1); /* seed segment (popped 1st) */
-  s.add([y + 1, x, x, -1]);
+  bool shouldFill(int x, int y) {
+    return _closeEnough(image.getPixel(x, y), oldColor);
+  }
 
-  while (s.isNotEmpty) {
-    // #define POP(Y, XL, XR, DY)	/* pop segment off stack */ \
-    // {sp--; Y = sp->y+(DY = sp->dy); XL = sp->xl; XR = sp->xr;}
-    // POP(y, x1, x2, dy);
-    final coord = s.removeLast();
-    dy = coord[3];
-    y = coord[0] + dy;
-    x1 = coord[1];
-    x2 = coord[2];
+  while (q.isNotEmpty) {
+    final coord = q.removeFirst();
+    final x = coord[0];
+    final y = coord[1];
 
-    // for (x=x1; x>=win->x0 && pixelread(x, y)==ov; x--)
-    //   pixelwrite(x, y, nv);
-    for (x = x1; x >= 0 && image.getPixel(x, y) == ov; x--)
-      image.setPixel(x, y, nv);
+    x1 = x;
+    while (x1 >= 0 && shouldFill(x1, y)) x1--;
+    x1++;
+    spanAbove = spanBelow = false;
+    while (x1 < image.width && shouldFill(x1, y)) {
+      image.setPixel(x1, y, color);
 
-    //   if (x>=x1) goto skip;
-    //   l = x+1;
-    //   if (l<x1) PUSH(y, l, x1-1, -dy);		/* leak on left? */
-    //   x = x1+1;
-    //   do {
-    //       for (; x<=win->x1 && pixelread(x, y)==ov; x++)
-    //         pixelwrite(x, y, nv);
-    //       PUSH(y, l, x-1, dy);
-    //       if (x>x2+1) PUSH(y, x2+1, x-1, -dy);	/* leak on right? */
-    // skip: for (x++; x<=x2 && pixelread(x, y)!=ov; x++);
-    //       l = x;
-    //   } while (x<=x2);
-
-    bool skip = x >= x1;
-    if (!skip) {
-      l = x + 1;
-      if (l < x1) s.add([y, l, x1 - 1, -dy]);
-      x = x1 + 1;
-    }
-
-    do {
-      if (!skip) {
-        for (; x < image.width && image.getPixel(x, y) == ov; x++)
-          image.setPixel(x, y, nv);
-        s.add([y, l, x - 1, dy]);
-        if (x > x2 + 1) s.add([y, x2 + 1, x - 1, -dy]);
-        skip = false;
+      if (!spanAbove && y > 0 && shouldFill(x1, y - 1)) {
+        q.add([x1, y - 1]);
+        spanAbove = true;
+      } else if (spanAbove && y > 0 && shouldFill(x1, y - 1)) {
+        spanAbove = false;
       }
-      for (x++; x <= x2 && image.getPixel(x, y) != ov; x++);
-      l = x;
-    } while (x <= x2);
+      if (!spanBelow && y < image.height - 1 && shouldFill(x1, y + 1)) {
+        q.add([x1, y + 1]);
+        spanBelow = true;
+      } else if (spanBelow && y < image.height - 1 && shouldFill(x1, y + 1)) {
+        spanBelow = false;
+      }
+      x1++;
+    }
   }
 
   return image.bytes;
