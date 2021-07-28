@@ -44,21 +44,44 @@ ByteData floodFill(
       if (!spanAbove && y > 0 && shouldFill(x1, y - 1)) {
         q.add([x1, y - 1]);
         spanAbove = true;
-      } else if (spanAbove && y > 0 && shouldFill(x1, y - 1)) {
+      } else if (spanAbove && y > 0 && !shouldFill(x1, y - 1)) {
         spanAbove = false;
       }
+
       if (!spanBelow && y < image.height - 1 && shouldFill(x1, y + 1)) {
         q.add([x1, y + 1]);
         spanBelow = true;
-      } else if (spanBelow && y < image.height - 1 && shouldFill(x1, y + 1)) {
+      } else if (spanBelow && y < image.height - 1 && !shouldFill(x1, y + 1)) {
         spanBelow = false;
       }
+
       x1++;
     }
   }
 
   return image.bytes;
 }
+
+// typedef ShouldFill = bool Function(int x, int y);
+
+// void _scanLine(
+//   int x1,
+//   int x2,
+//   int y,
+//   ShouldFill shouldFill,
+//   Queue<List<int>> q,
+// ) {
+//   bool streak = false;
+
+//   for (; x1 <= x2; x1++) {
+//     if (!streak && shouldFill(x1, y)) {
+//       q.add([x1, y]);
+//       streak = true;
+//     } else if (streak && !shouldFill(x1, y)) {
+//       streak = false;
+//     }
+//   }
+// }
 
 bool _closeEnough(int colorA, int colorB) {
   return (colorA - colorB).abs() < 5;
