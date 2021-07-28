@@ -35,14 +35,19 @@ ByteData floodFill(
 
     xl = xr = x;
 
+    // Find start of the line.
     while (xl - 1 >= 0 && shouldFill(xl - 1, y)) xl--;
 
+    // Fill the whole line.
     for (var x = xl; x < image.width && shouldFill(x, y); x++) {
       image.setPixel(x, y, color);
       xr = x;
     }
 
+    // Scan for new lines above.
     if (y > 0) _scanLine(xl, xr, y - 1, shouldFill, q);
+
+    // Scan for new lines below.
     if (y < image.height - 1) _scanLine(xl, xr, y + 1, shouldFill, q);
   }
 
