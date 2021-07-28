@@ -20,7 +20,7 @@ ByteData floodFill(
   if (_closeEnough(oldColor, color)) return imageBytes;
 
   final q = Queue<List<int>>();
-  q.add([startX, startY]);
+  q.add([startX, startY, 0, 0, 0]);
 
   int xl, xr;
 
@@ -32,6 +32,9 @@ ByteData floodFill(
     final coord = q.removeFirst();
     final x = coord[0];
     final y = coord[1];
+    final parentDy = coord[2];
+    final parentXl = coord[3];
+    final parentXr = coord[4];
 
     xl = xr = x;
 
@@ -45,10 +48,20 @@ ByteData floodFill(
     }
 
     // Scan for new lines above.
-    if (y > 0) _scanLine(xl, xr, y - 1, shouldFill, q);
+    if (parentDy == -1) {
+      if (xl < parentXl) _scanLine(xl, parentXl, y - 1, shouldFill, q, 1);
+      if (xr > parentXr) _scanLine(parentXr, xr, y - 1, shouldFill, q, 1);
+    } else if (y > 0) {
+      _scanLine(xl, xr, y - 1, shouldFill, q, 1);
+    }
 
     // Scan for new lines below.
-    if (y < image.height - 1) _scanLine(xl, xr, y + 1, shouldFill, q);
+    if (parentDy == 1) {
+      if (xl < parentXl) _scanLine(xl, parentXl, y + 1, shouldFill, q, -1);
+      if (xr > parentXr) _scanLine(parentXr, xr, y + 1, shouldFill, q, -1);
+    } else if (y < image.height - 1) {
+      _scanLine(xl, xr, y + 1, shouldFill, q, -1);
+    }
   }
 
   return image.bytes;
@@ -62,14 +75,15 @@ void _scanLine(
   int y,
   ShouldFill shouldFill,
   Queue<List<int>> q,
+  int parentDy,
 ) {
   bool streak = false;
 
-  for (; xl <= xr; xl++) {
-    if (!streak && shouldFill(xl, y)) {
-      q.add([xl, y]);
+  for (var x = xl; x <= xr; x++) {
+    if (!streak && shouldFill(x, y)) {
+      q.add([x, y, parentDy, xl, xr]);
       streak = true;
-    } else if (streak && !shouldFill(xl, y)) {
+    } else if (streak && !shouldFill(x, y)) {
       streak = false;
     }
   }
