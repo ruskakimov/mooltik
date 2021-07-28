@@ -22,8 +22,7 @@ ByteData floodFill(
   final q = Queue<List<int>>();
   q.add([startX, startY]);
 
-  int x1;
-  bool spanAbove, spanBelow;
+  int x1, x2;
 
   bool shouldFill(int x, int y) {
     return _closeEnough(image.getPixel(x, y), oldColor);
@@ -34,54 +33,42 @@ ByteData floodFill(
     final x = coord[0];
     final y = coord[1];
 
-    x1 = x;
-    while (x1 >= 0 && shouldFill(x1, y)) x1--;
-    x1++;
-    spanAbove = spanBelow = false;
-    while (x1 < image.width && shouldFill(x1, y)) {
-      image.setPixel(x1, y, color);
+    x1 = x2 = x;
 
-      if (!spanAbove && y > 0 && shouldFill(x1, y - 1)) {
-        q.add([x1, y - 1]);
-        spanAbove = true;
-      } else if (spanAbove && y > 0 && !shouldFill(x1, y - 1)) {
-        spanAbove = false;
-      }
+    while (x1 - 1 >= 0 && shouldFill(x1 - 1, y)) x1--;
 
-      if (!spanBelow && y < image.height - 1 && shouldFill(x1, y + 1)) {
-        q.add([x1, y + 1]);
-        spanBelow = true;
-      } else if (spanBelow && y < image.height - 1 && !shouldFill(x1, y + 1)) {
-        spanBelow = false;
-      }
-
-      x1++;
+    for (var x = x1; x < image.width && shouldFill(x, y); x++) {
+      image.setPixel(x, y, color);
+      x2 = x;
     }
+
+    if (y > 0) _scanLine(x1, x2, y - 1, shouldFill, q);
+    if (y < image.height - 1) _scanLine(x1, x2, y + 1, shouldFill, q);
   }
 
   return image.bytes;
 }
 
-// typedef ShouldFill = bool Function(int x, int y);
+typedef ShouldFill = bool Function(int x, int y);
 
-// void _scanLine(
-//   int x1,
-//   int x2,
-//   int y,
-//   ShouldFill shouldFill,
-//   Queue<List<int>> q,
-// ) {
-//   bool streak = false;
+void _scanLine(
+  int x1,
+  int x2,
+  int y,
+  ShouldFill shouldFill,
+  Queue<List<int>> q,
+) {
+  bool streak = false;
 
-//   for (; x1 <= x2; x1++) {
-//     if (!streak && shouldFill(x1, y)) {
-//       q.add([x1, y]);
-//       streak = true;
-//     } else if (streak && !shouldFill(x1, y)) {
-//       streak = false;
-//     }
-//   }
-// }
+  for (; x1 <= x2; x1++) {
+    if (!streak && shouldFill(x1, y)) {
+      q.add([x1, y]);
+      streak = true;
+    } else if (streak && !shouldFill(x1, y)) {
+      streak = false;
+    }
+  }
+}
 
 bool _closeEnough(int colorA, int colorB) {
   return (colorA - colorB).abs() < 5;
