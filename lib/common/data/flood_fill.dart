@@ -22,7 +22,7 @@ ByteData floodFill(
   final q = Queue<List<int>>();
   q.add([startX, startY]);
 
-  int x1, x2;
+  int xl, xr;
 
   bool shouldFill(int x, int y) {
     return _closeEnough(image.getPixel(x, y), oldColor);
@@ -33,17 +33,17 @@ ByteData floodFill(
     final x = coord[0];
     final y = coord[1];
 
-    x1 = x2 = x;
+    xl = xr = x;
 
-    while (x1 - 1 >= 0 && shouldFill(x1 - 1, y)) x1--;
+    while (xl - 1 >= 0 && shouldFill(xl - 1, y)) xl--;
 
-    for (var x = x1; x < image.width && shouldFill(x, y); x++) {
+    for (var x = xl; x < image.width && shouldFill(x, y); x++) {
       image.setPixel(x, y, color);
-      x2 = x;
+      xr = x;
     }
 
-    if (y > 0) _scanLine(x1, x2, y - 1, shouldFill, q);
-    if (y < image.height - 1) _scanLine(x1, x2, y + 1, shouldFill, q);
+    if (y > 0) _scanLine(xl, xr, y - 1, shouldFill, q);
+    if (y < image.height - 1) _scanLine(xl, xr, y + 1, shouldFill, q);
   }
 
   return image.bytes;
@@ -52,19 +52,19 @@ ByteData floodFill(
 typedef ShouldFill = bool Function(int x, int y);
 
 void _scanLine(
-  int x1,
-  int x2,
+  int xl,
+  int xr,
   int y,
   ShouldFill shouldFill,
   Queue<List<int>> q,
 ) {
   bool streak = false;
 
-  for (; x1 <= x2; x1++) {
-    if (!streak && shouldFill(x1, y)) {
-      q.add([x1, y]);
+  for (; xl <= xr; xl++) {
+    if (!streak && shouldFill(xl, y)) {
+      q.add([xl, y]);
       streak = true;
-    } else if (streak && !shouldFill(x1, y)) {
+    } else if (streak && !shouldFill(xl, y)) {
       streak = false;
     }
   }
