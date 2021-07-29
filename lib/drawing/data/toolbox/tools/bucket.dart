@@ -72,7 +72,7 @@ Future<ui.Image> _applyBucketAt(
       imageByteData: imageByteData!.buffer.asUint8List(),
       width: source.width,
       height: source.height,
-      fillColor: color.toRgba(),
+      fillColor: color.toABGR(),
       startX: startX,
       startY: startY,
     ),

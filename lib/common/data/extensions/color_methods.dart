@@ -1,13 +1,21 @@
 import 'dart:ui';
 
 extension ColorMethods on Color {
-  int toRgba() {
-    final bytes = [
+  int toRGBA() {
+    return [
       red,
       green,
       blue,
       alpha,
-    ];
-    return bytes.reduce((a, b) => (a << 8) | b);
+    ].reduce((color, channel) => (color << 8) | channel);
+  }
+
+  int toABGR() {
+    return [
+      alpha,
+      blue,
+      green,
+      red,
+    ].reduce((color, channel) => (color << 8) | channel);
   }
 }
