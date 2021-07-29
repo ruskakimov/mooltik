@@ -3,8 +3,23 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 
-typedef _NativeFloodFill = Void Function(Pointer<Uint32>, Int32, Int32);
-typedef _DartFloodFill = void Function(Pointer<Uint32>, int, int);
+typedef _NativeFloodFill = Void Function(
+  Pointer<Uint32> pixelsPointer,
+  Int32 width,
+  Int32 height,
+  Int32 x,
+  Int32 y,
+  Int32 fillColor,
+);
+
+typedef _DartFloodFill = void Function(
+  Pointer<Uint32> pixelsPointer,
+  int width,
+  int height,
+  int x,
+  int y,
+  int fillColor,
+);
 
 class FFIBridge {
   FFIBridge() {
@@ -18,15 +33,29 @@ class FFIBridge {
 
   late _DartFloodFill _floodFill;
 
-  void floodFill(Uint32List pixels, int fillColor) {
-    final startingPointer = malloc<Uint32>(pixels.length);
-    final pointerList = startingPointer.asTypedList(pixels.length);
+  void floodFill(
+    Uint32List pixels,
+    int width,
+    int height,
+    int x,
+    int y,
+    int fillColor,
+  ) {
+    final pixelsPointer = malloc<Uint32>(pixels.length);
+    final pointerList = pixelsPointer.asTypedList(pixels.length);
     pointerList.setAll(0, pixels);
 
-    _floodFill(startingPointer, pixels.length, fillColor);
+    _floodFill(
+      pixelsPointer,
+      width,
+      height,
+      x,
+      y,
+      fillColor,
+    );
 
     pixels.setAll(0, pointerList);
 
-    malloc.free(startingPointer);
+    malloc.free(pixelsPointer);
   }
 }

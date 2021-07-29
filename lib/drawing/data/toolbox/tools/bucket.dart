@@ -72,9 +72,9 @@ Future<ui.Image> _applyBucketAt(
       imageByteData: imageByteData!.buffer.asUint8List(),
       width: source.width,
       height: source.height,
-      fillColor: color.toABGR(),
       startX: startX,
       startY: startY,
+      fillColor: color.toABGR(),
     ),
   );
   s.stop();
@@ -84,20 +84,20 @@ Future<ui.Image> _applyBucketAt(
 }
 
 class _FillProcessParams {
+  final Uint8List imageByteData;
   final int width;
   final int height;
   final int startX;
   final int startY;
   final int fillColor;
-  final Uint8List imageByteData;
 
   _FillProcessParams({
+    required this.imageByteData,
     required this.width,
     required this.height,
     required this.startX,
     required this.startY,
     required this.fillColor,
-    required this.imageByteData,
   });
 }
 

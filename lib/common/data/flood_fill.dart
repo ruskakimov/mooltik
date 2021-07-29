@@ -15,6 +15,10 @@ ByteData floodFill(
 ) {
   FFIBridge().floodFill(
     imageBytes.buffer.asUint32List(),
+    imageWidth,
+    imageHeight,
+    startX,
+    startY,
     color,
   );
   return imageBytes;
