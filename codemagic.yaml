@@ -58,11 +58,11 @@ workflows:
         script: flutter test
         ignore_failure: false
       
-      - name: Build Android
+      - name: Build for Android
         script: |
           flutter build appbundle --release --build-number=$(($PROJECT_BUILD_NUMBER + 4))
 
-      - name: Build iOS
+      - name: Build for iOS
         script: |
           find . -name "Podfile" -execdir pod install \;
           keychain initialize
