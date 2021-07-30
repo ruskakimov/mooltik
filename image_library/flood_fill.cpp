@@ -22,6 +22,22 @@ public:
     }
 };
 
+struct LineFillTask {
+    int x;
+    int y;
+    int parentDy; // y + parentDy is the y coordinate of parent
+    int parentXl; // left x of parent's filled line
+    int parentXr; // right x of parent's filled line
+
+    LineFillTask(int x, int y, int parentDy, int parentXl, int parentXr) {
+        this->x = x;
+        this->y = y;
+        this->parentDy = parentDy;
+        this->parentXl = parentXl;
+        this->parentXr = parentXr;
+    }
+};
+
 PUBLIC
 void flood_fill(uint32_t* pixels_pointer, int width, int height, int x, int y, int fillColor) {
     auto image = Image(pixels_pointer, width, height);
@@ -30,43 +46,57 @@ void flood_fill(uint32_t* pixels_pointer, int width, int height, int x, int y, i
 
     if (oldColor == fillColor) return;
 
-    std::queue<std::pair<int, int> > q;
-    q.push({ x, y });
+    std::queue<LineFillTask> q;
+    q.push(LineFillTask(x, y, 0, 0, 0));
 
-    bool spanAbove, spanBelow;
+    auto scanLine = [&](int xl, int xr, int y, int parentDy) {
+        bool streak = false;
+        for (int x = xl; x <= xr; x++) {
+            if (!streak && *image.getPixel(x, y) == oldColor) {
+                q.push(LineFillTask(x, y, parentDy, xl, xr));
+                streak = true;
+            }
+            else if (streak && *image.getPixel(x, y) != oldColor) {
+                streak = false;
+            }
+        }
+    };
 
     while (!q.empty()) {
-        std::pair<int, int> p = q.front();
+        auto t = q.front();
         q.pop();
 
-        x = p.first;
-        y = p.second;
+        x = t.x;
+        y = t.y;
 
-        while (x >= 0 && *image.getPixel(x, y) == oldColor) x--;
-        x++;
+        int xl = x;
+        int xr = x;
 
-        spanAbove = spanBelow = false;
+        // Find start of the line.
+        while (xl - 1 >= 0 && *image.getPixel(xl - 1, y) == oldColor) xl--;
 
-        while (x < width && *image.getPixel(x, y) == oldColor) {
+        // Fill the whole line.
+        for (int x = xl; x < width && *image.getPixel(x, y) == oldColor; x++) {
             *image.getPixel(x, y) = fillColor;
+            xr = x;
+        }
 
-            if (!spanAbove && y > 0 && *image.getPixel(x, y - 1) == oldColor) {
-                q.push({ x, y - 1 });
-                spanAbove = true;
-            }
-            else if (spanAbove && y > 0 && *image.getPixel(x, y - 1) != oldColor) {
-                spanAbove = false;
-            }
+        // Scan for new lines above.
+        if (t.parentDy == -1) {
+            if (xl < t.parentXl) scanLine(xl, t.parentXl, y - 1, 1);
+            if (xr > t.parentXr) scanLine(t.parentXr, xr, y - 1, 1);
+        }
+        else if (y > 0) {
+            scanLine(xl, xr, y - 1, 1);
+        }
 
-            if (!spanBelow && y < height - 1 && *image.getPixel(x, y + 1) == oldColor) {
-                q.push({ x, y + 1 });
-                spanBelow = true;
-            }
-            else if (spanBelow && y < height - 1 && *image.getPixel(x, y + 1) != oldColor) {
-                spanBelow = false;
-            }
-
-            x++;
+        // Scan for new lines below.
+        if (t.parentDy == 1) {
+            if (xl < t.parentXl) scanLine(xl, t.parentXl, y + 1, -1);
+            if (xr > t.parentXr) scanLine(t.parentXr, xr, y + 1, -1);
+        }
+        else if (y < height - 1) {
+            scanLine(xl, xr, y + 1, -1);
         }
     }
 }
