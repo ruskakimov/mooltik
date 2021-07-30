@@ -23,8 +23,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  image: ^3.0.2 # temp, testing the bucket
   
   # State management:
   provider: ^5.0.0
