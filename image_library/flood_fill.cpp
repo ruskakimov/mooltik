@@ -54,7 +54,7 @@ void flood_fill(uint32_t* pixels_pointer, int width, int height, int x, int y, i
                 q.push({ x, y - 1 });
                 spanAbove = true;
             }
-            else if (spanAbove && y > 0 && *image.getPixel(x, y - 1) == oldColor) {
+            else if (spanAbove && y > 0 && *image.getPixel(x, y - 1) != oldColor) {
                 spanAbove = false;
             }
 
@@ -62,7 +62,7 @@ void flood_fill(uint32_t* pixels_pointer, int width, int height, int x, int y, i
                 q.push({ x, y + 1 });
                 spanBelow = true;
             }
-            else if (spanBelow && y < height - 1 && *image.getPixel(x, y + 1) == oldColor) {
+            else if (spanBelow && y < height - 1 && *image.getPixel(x, y + 1) != oldColor) {
                 spanBelow = false;
             }
 
