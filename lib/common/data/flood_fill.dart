@@ -1,5 +1,7 @@
 import 'dart:typed_data';
+import 'dart:ui';
 
+import 'package:mooltik/common/data/extensions/color_methods.dart';
 import 'package:mooltik/ffi_bridge.dart';
 
 /// Fills image represented by [imageBytes], [imageWidth], and [imageHeight]
@@ -11,7 +13,7 @@ ByteData floodFill(
   int imageHeight,
   int startX,
   int startY,
-  int color,
+  Color color,
 ) {
   FFIBridge().floodFill(
     imageBytes.buffer.asUint32List(),
@@ -19,7 +21,7 @@ ByteData floodFill(
     imageHeight,
     startX,
     startY,
-    color,
+    color.toABGR(),
   );
   return imageBytes;
 }

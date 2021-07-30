@@ -23,12 +23,19 @@ typedef _DartFloodFill = void Function(
 
 class FFIBridge {
   FFIBridge() {
-    final dl = Platform.isAndroid
-        ? DynamicLibrary.open('libimage.so')
-        : DynamicLibrary.process();
-
+    final dl = _getLibrary();
     _floodFill =
         dl.lookupFunction<_NativeFloodFill, _DartFloodFill>('flood_fill');
+  }
+
+  DynamicLibrary _getLibrary() {
+    if (Platform.environment.containsKey('FLUTTER_TEST')) {
+      return DynamicLibrary.open('build/test/libimage.dylib');
+    }
+    if (Platform.isAndroid) {
+      return DynamicLibrary.open('libimage.so');
+    }
+    return DynamicLibrary.process(); // iOS
   }
 
   late _DartFloodFill _floodFill;

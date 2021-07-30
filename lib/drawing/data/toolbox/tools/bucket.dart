@@ -1,11 +1,9 @@
-import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mooltik/common/data/extensions/color_methods.dart';
 import 'package:mooltik/common/data/flood_fill.dart';
 import 'package:mooltik/common/data/io/image.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
@@ -74,7 +72,7 @@ Future<ui.Image> _applyBucketAt(
       height: source.height,
       startX: startX,
       startY: startY,
-      fillColor: color.toABGR(),
+      fillColor: color,
     ),
   );
   s.stop();
@@ -89,7 +87,7 @@ class _FillProcessParams {
   final int height;
   final int startX;
   final int startY;
-  final int fillColor;
+  final Color fillColor;
 
   _FillProcessParams({
     required this.imageByteData,

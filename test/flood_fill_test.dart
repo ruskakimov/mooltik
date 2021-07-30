@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mooltik/common/data/flood_fill.dart';
@@ -11,7 +12,7 @@ void main() {
     test('fills transparent image with color', () async {
       await runTest(
         testId: 1,
-        fillColor: 0xFFC107FF,
+        fillColor: Color(0xFFFFC107),
         startX: 0,
         startY: 0,
       );
@@ -20,7 +21,7 @@ void main() {
     test('fills perfect rectangle', () async {
       await runTest(
         testId: 2,
-        fillColor: 0xB358FFFF,
+        fillColor: Color(0xFFB358FF),
         startX: 10,
         startY: 10,
       );
@@ -29,7 +30,7 @@ void main() {
     test('fills surrounded perfect rectangle', () async {
       await runTest(
         testId: 3,
-        fillColor: 0x277DDCFF,
+        fillColor: Color(0xFF277DDC),
         startX: 50,
         startY: 50,
       );
@@ -38,7 +39,7 @@ void main() {
     test('fills rounded rectangle', () async {
       await runTest(
         testId: 4,
-        fillColor: 0xD22D2DFF,
+        fillColor: Color(0xFFD22D2D),
         startX: 50,
         startY: 50,
       );
@@ -47,7 +48,7 @@ void main() {
     test('fills outlined blob', () async {
       await runTest(
         testId: 5,
-        fillColor: 0xFF0000FF,
+        fillColor: Color(0xFFFF0000),
         startX: 50,
         startY: 50,
       );
@@ -56,7 +57,7 @@ void main() {
     test('fills blurry apple blob', () async {
       await runTest(
         testId: 6,
-        fillColor: 0xFF0000FF,
+        fillColor: Color(0xFFFF0000),
         startX: 50,
         startY: 50,
       );
@@ -75,15 +76,12 @@ File actualOutputFile(int i) =>
 
 Future<void> runTest({
   required int testId,
-  required int fillColor,
+  required Color fillColor,
   required int startX,
   required int startY,
 }) async {
   final input = await pngRead(inputFile(testId));
   final inputBytes = await pngRawRgba(inputFile(testId));
-
-  // print('Input:');
-  // _printColors(inputBytes, input.width, input.height);
 
   final result = floodFill(
     inputBytes,
@@ -93,14 +91,6 @@ Future<void> runTest({
     startY,
     fillColor,
   );
-
-  // print('\nFlood result:');
-  // _printColors(result, input.width, input.height);
-
-  // await pngWrite(
-  //   actualOutputFile(testId),
-  //   await imageFromBytes(result, input.width, input.height),
-  // );
 
   final pngBytes = duncan.encodePng(
     duncan.Image.fromBytes(
@@ -115,7 +105,7 @@ Future<void> runTest({
   final actualBytes = await pngRawRgba(actualOutputFile(testId));
   final expectedBytes = await pngRawRgba(expectedOutputFile(testId));
 
-  _printDiff(actualBytes, expectedBytes);
+  // _printDiff(actualBytes, expectedBytes);
 
   expect(
     actualBytes.buffer.asUint32List(),
