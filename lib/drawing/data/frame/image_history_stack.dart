@@ -28,14 +28,20 @@ class ImageHistoryStack {
   void push(Image snapshot) {
     // Remove redo snapshots.
     if (isRedoAvailable) {
-      _snapshots.removeRange(_currentSnapshotIndex + 1, _snapshots.length);
+      final start = _currentSnapshotIndex + 1;
+      final end = _snapshots.length;
+      _snapshots.getRange(start, end).forEach((image) => image?.dispose());
+      _snapshots.removeRange(start, end);
     }
 
     _snapshots.add(snapshot);
 
     // Remove oldest snapshots if the stack overflows.
     if (_snapshots.length > maxCount) {
-      _snapshots.removeRange(0, _snapshots.length - maxCount);
+      final start = 0;
+      final end = _snapshots.length - maxCount;
+      _snapshots.getRange(start, end).forEach((image) => image?.dispose());
+      _snapshots.removeRange(start, end);
     }
 
     // Select pushed snapshot.
