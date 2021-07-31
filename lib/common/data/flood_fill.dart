@@ -15,7 +15,6 @@ Future<ui.Image?> floodFill(
 ) async {
   final imageByteData = await source.toByteData();
 
-  final s = Stopwatch()..start();
   final resultByteData = await compute(
     _fillIsolate,
     _FillIsolateParams(
@@ -27,8 +26,6 @@ Future<ui.Image?> floodFill(
       fillColor: color,
     ),
   );
-  s.stop();
-  print('${s.elapsedMilliseconds},');
 
   if (resultByteData != null)
     return imageFromBytes(resultByteData, source.width, source.height);
