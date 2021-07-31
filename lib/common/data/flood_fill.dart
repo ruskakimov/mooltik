@@ -30,7 +30,10 @@ Future<ui.Image?> floodFill(
   s.stop();
   print('${s.elapsedMilliseconds},');
 
-  return imageFromBytes(resultByteData, source.width, source.height);
+  if (resultByteData != null)
+    return imageFromBytes(resultByteData, source.width, source.height);
+  else
+    return null;
 }
 
 class _FillIsolateParams {
@@ -51,8 +54,8 @@ class _FillIsolateParams {
   });
 }
 
-ByteData _fillIsolate(_FillIsolateParams params) {
-  FFIBridge().floodFill(
+ByteData? _fillIsolate(_FillIsolateParams params) {
+  final exitCode = FFIBridge().floodFill(
     params.imageByteData.buffer.asUint32List(),
     params.width,
     params.height,
@@ -60,5 +63,8 @@ ByteData _fillIsolate(_FillIsolateParams params) {
     params.startY,
     params.fillColor.toABGR(),
   );
-  return params.imageByteData;
+  if (exitCode == 0)
+    return params.imageByteData;
+  else
+    return null;
 }
