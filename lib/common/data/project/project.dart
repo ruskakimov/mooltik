@@ -185,6 +185,8 @@ class Project extends ChangeNotifier {
   }
 
   void _freeMemory() {
+    allFrames.forEach((frame) => frame.image.dispose());
+    _scenes?.dispose();
     _scenes = null;
     _soundClips = [];
   }

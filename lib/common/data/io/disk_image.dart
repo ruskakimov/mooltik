@@ -47,4 +47,8 @@ class DiskImage with EquatableMixin {
 
   @override
   List<Object?> get props => [file.path];
+
+  void dispose() {
+    _snapshot?.dispose();
+  }
 }
