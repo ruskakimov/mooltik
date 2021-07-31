@@ -234,7 +234,7 @@ class EaselModel extends ChangeNotifier {
     if (paintOn != null) {
       final paintingTask = () async {
         final newSnapshot = await paintOn(_historyStack.currentSnapshot!);
-        pushSnapshot(newSnapshot);
+        if (newSnapshot != null) pushSnapshot(newSnapshot);
         unrasterizedStrokes.remove(finishedStroke);
       };
 

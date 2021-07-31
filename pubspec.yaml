@@ -80,8 +80,6 @@ dev_dependencies:
   fake_async: ^1.2.0
   clock: ^1.1.0
 
-  image: ^3.0.2 # Flutter has a bug where it reads wrong raw rgba values from images (it scales rgb using alpha channel!?). This is a temporary workaround.
-
 flutter_icons:
   android: false # TODO: add later
   ios: true

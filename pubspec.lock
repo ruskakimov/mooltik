@@ -276,7 +276,7 @@ packages:
     source: hosted
     version: "4.0.0"
   image:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: image
       url: "https://pub.dartlang.org"

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-typedef PaintOn = Future<ui.Image> Function(ui.Image);
+typedef PaintOn = Future<ui.Image?> Function(ui.Image);
 
 abstract class Tool {
   Tool(this.sharedPreferences);

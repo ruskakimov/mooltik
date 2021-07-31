@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mooltik/common/data/flood_fill.dart';
 import 'package:mooltik/common/data/io/png.dart';
-import 'package:image/image.dart' as duncan;
 
 void main() {
   group('floodFill', () {
@@ -81,26 +80,15 @@ Future<void> runTest({
   required int startY,
 }) async {
   final input = await pngRead(inputFile(testId));
-  final inputBytes = await pngRawRgba(inputFile(testId));
 
-  final result = floodFill(
-    inputBytes,
-    input.width,
-    input.height,
+  final resultImage = await floodFill(
+    input,
     startX,
     startY,
     fillColor,
   );
 
-  final pngBytes = duncan.encodePng(
-    duncan.Image.fromBytes(
-      input.width,
-      input.height,
-      result.buffer.asUint8List(),
-    ),
-    level: 0,
-  );
-  actualOutputFile(testId).writeAsBytesSync(pngBytes, flush: true);
+  await pngWrite(actualOutputFile(testId), resultImage!);
 
   final actualBytes = await pngRawRgba(actualOutputFile(testId));
   final expectedBytes = await pngRawRgba(expectedOutputFile(testId));
@@ -108,18 +96,15 @@ Future<void> runTest({
   // _printDiff(actualBytes, expectedBytes);
 
   expect(
-    actualBytes.buffer.asUint32List(),
-    expectedBytes.buffer.asUint32List(),
+    actualBytes.buffer.asUint8List(),
+    expectedBytes.buffer.asUint8List(),
   );
 }
 
 Future<ByteData> pngRawRgba(File png) async {
-  // final image = await pngRead(png);
-  // final byteData = await image.toByteData();
-  // return byteData!.buffer.asUint8List();
-
-  final bytes = png.readAsBytesSync();
-  return duncan.decodePng(bytes)!.getBytes().buffer.asByteData();
+  final image = await pngRead(png);
+  final byteData = await image.toByteData();
+  return byteData!;
 }
 
 // ==================
