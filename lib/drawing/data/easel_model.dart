@@ -105,6 +105,7 @@ class EaselModel extends ChangeNotifier {
     }
 
     _frame = frame;
+    _historyStack.dispose();
     _historyStack = ImageHistoryStack(
       maxCount: maxUndos + 1,
       initialSnapshot: frame.image.snapshot,

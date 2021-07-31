@@ -67,4 +67,9 @@ class ImageHistoryStack {
       _currentSnapshotIndex++;
     }
   }
+
+  void dispose() {
+    _snapshots.removeAt(_currentSnapshotIndex);
+    _snapshots.forEach((image) => image?.dispose());
+  }
 }
