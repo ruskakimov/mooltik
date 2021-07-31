@@ -41,7 +41,7 @@ struct LineFillTask {
 PUBLIC
 // Floods the 4-connected color area with another color.
 // Returns 0 if successful.
-// Returns -1 if no changes were done.
+// Returns -1 if cancelled.
 int flood_fill(uint32_t* pixels_pointer, int width, int height, int x, int y, int fillColor) {
     auto image = Image(pixels_pointer, width, height);
 
