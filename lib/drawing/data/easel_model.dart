@@ -275,4 +275,10 @@ class EaselModel extends ChangeNotifier {
       _allowDrawingWithFinger,
     );
   }
+
+  @override
+  void dispose() {
+    _historyStack.dispose();
+    super.dispose();
+  }
 }
