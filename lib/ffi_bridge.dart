@@ -42,7 +42,7 @@ class FFIBridge {
 
   /// Floods the 4-connected color area with another color.
   /// Returns 0 if successful.
-  /// Returns -1 if no changes were done.
+  /// Returns -1 if cancelled.
   int floodFill(
     Uint32List pixels,
     int width,
