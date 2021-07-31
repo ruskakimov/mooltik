@@ -39,12 +39,15 @@ struct LineFillTask {
 };
 
 PUBLIC
-void flood_fill(uint32_t* pixels_pointer, int width, int height, int x, int y, int fillColor) {
+// Floods the 4-connected color area with another color.
+// Returns 0 if successful.
+// Returns -1 if no changes were done.
+int flood_fill(uint32_t* pixels_pointer, int width, int height, int x, int y, int fillColor) {
     auto image = Image(pixels_pointer, width, height);
 
     uint32_t oldColor = *image.getPixel(x, y);
 
-    if (oldColor == fillColor) return;
+    if (oldColor == fillColor) return -1;
 
     std::queue<LineFillTask> q;
     q.push(LineFillTask(x, y, 0, 0, 0));
@@ -99,4 +102,6 @@ void flood_fill(uint32_t* pixels_pointer, int width, int height, int x, int y, i
             scanLine(xl, xr, y + 1, -1);
         }
     }
+
+    return 0;
 }

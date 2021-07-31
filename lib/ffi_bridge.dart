@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 
-typedef _NativeFloodFill = Void Function(
+typedef _NativeFloodFill = Int32 Function(
   Pointer<Uint32> pixelsPointer,
   Int32 width,
   Int32 height,
@@ -12,7 +12,7 @@ typedef _NativeFloodFill = Void Function(
   Int32 fillColor,
 );
 
-typedef _DartFloodFill = void Function(
+typedef _DartFloodFill = int Function(
   Pointer<Uint32> pixelsPointer,
   int width,
   int height,
@@ -40,7 +40,10 @@ class FFIBridge {
 
   late _DartFloodFill _floodFill;
 
-  void floodFill(
+  /// Floods the 4-connected color area with another color.
+  /// Returns 0 if successful.
+  /// Returns -1 if no changes were done.
+  int floodFill(
     Uint32List pixels,
     int width,
     int height,
@@ -52,7 +55,7 @@ class FFIBridge {
     final pointerList = pixelsPointer.asTypedList(pixels.length);
     pointerList.setAll(0, pixels);
 
-    _floodFill(
+    final exitCode = _floodFill(
       pixelsPointer,
       width,
       height,
@@ -61,8 +64,8 @@ class FFIBridge {
       fillColor,
     );
 
-    pixels.setAll(0, pointerList);
-
+    if (exitCode == 0) pixels.setAll(0, pointerList);
     malloc.free(pixelsPointer);
+    return exitCode;
   }
 }
