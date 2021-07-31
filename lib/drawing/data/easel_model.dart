@@ -13,7 +13,7 @@ import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Maximum number of consecutive undos.
-const int maxUndos = 50;
+const int maxUndos = 25;
 
 /// No changes for this time period would trigger write to disk.
 const Duration diskWriteTimeout = Duration(seconds: 2);
