@@ -240,6 +240,8 @@ class EaselModel extends ChangeNotifier {
       };
 
       _paintingQueue.add(paintingTask);
+    } else {
+      unrasterizedStrokes.remove(finishedStroke);
     }
 
     notifyListeners();
