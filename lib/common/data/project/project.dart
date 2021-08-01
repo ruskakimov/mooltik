@@ -201,6 +201,7 @@ class Project extends ChangeNotifier {
       _frameSize.height.toInt(),
     );
     await pngWrite(thumbnail, image);
+    image.dispose();
 
     await _deleteUnusedFiles();
 
