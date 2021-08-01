@@ -19,13 +19,21 @@ class LassoModel extends ChangeNotifier {
   })  : _lasso = lasso,
         _easel = easel,
         _headerHeight = headerHeight {
-    _easel.addListener(() {
-      if (_easel.selectedTool is! Lasso) {
-        _lasso.removeSelection();
-        endTransformMode();
-      }
-      notifyListeners();
-    });
+    _easel.addListener(_easelListener);
+  }
+
+  void _easelListener() {
+    if (_easel.selectedTool is! Lasso) {
+      _lasso.removeSelection();
+      endTransformMode();
+    }
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _easel.removeListener(_easelListener);
+    super.dispose();
   }
 
   Lasso _lasso;

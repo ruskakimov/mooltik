@@ -18,15 +18,24 @@ class PlayerModel extends ChangeNotifier {
     TimelineModel? timeline,
   })  : _player = AudioPlayer(),
         _timeline = timeline {
-    _timeline!.addListener(() {
-      if (_timeline!.isPlaying == _player.playing) return;
+    _timeline!.addListener(_timelineListener);
+  }
 
-      if (_timeline!.isPlaying) {
-        _player.play();
-      } else {
-        _player.stop();
-      }
-    });
+  void _timelineListener() {
+    if (_timeline!.isPlaying == _player.playing) return;
+
+    if (_timeline!.isPlaying) {
+      _player.play();
+    } else {
+      _player.stop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _timeline?.removeListener(_timelineListener);
+    _player.dispose();
+    super.dispose();
   }
 
   final AudioPlayer _player;
@@ -46,11 +55,5 @@ class PlayerModel extends ChangeNotifier {
       initialPosition: _timeline!.playheadPosition,
       preload: true,
     );
-  }
-
-  @override
-  Future<void> dispose() async {
-    _player.dispose();
-    super.dispose();
   }
 }
