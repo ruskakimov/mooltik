@@ -27,6 +27,12 @@ class _HomePageState extends State<HomePage> {
     _initProjectsManager();
   }
 
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   Future<void> _initProjectsManager() async {
     final Directory dir = await getApplicationDocumentsDirectory();
     await gallery.init(dir);
