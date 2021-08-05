@@ -27,10 +27,9 @@ Future<ui.Image?> floodFill(
     ),
   );
 
-  if (resultByteData != null)
-    return imageFromBytes(resultByteData, source.width, source.height);
-  else
-    return null;
+  if (resultByteData == null) return null;
+
+  return imageFromBytes(resultByteData, source.width, source.height);
 }
 
 class _FillIsolateParams {
@@ -60,8 +59,8 @@ ByteData? _fillIsolate(_FillIsolateParams params) {
     params.startY,
     params.fillColor.toABGR(),
   );
-  if (exitCode == 0)
-    return params.imageByteData;
-  else
-    return null;
+
+  if (exitCode == -1) return null;
+
+  return params.imageByteData;
 }
