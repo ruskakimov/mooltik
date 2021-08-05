@@ -48,6 +48,7 @@ workflows:
       
       - name: Flutter analyze
         script: flutter analyze
+        ignore_failure: true
 
       - name: Compile image dynamic library for testing
         script: |
