@@ -67,11 +67,10 @@ workflows:
         script: |
           find . -name "Podfile" -execdir pod install \;
           keychain initialize
-          app-store-connect fetch-signing-files "$(xcode-project detect-bundle-id)" --type IOS_APP_STORE --create
+          app-store-connect fetch-signing-files "com.kakimov.mooltik" --type IOS_APP_STORE --create
           keychain add-certificates
-          flutter build ios --release --build-number=$(($PROJECT_BUILD_NUMBER + 4)) --no-codesign
           xcode-project use-profiles
-          xcode-project build-ipa --workspace "ios/Runner.xcworkspace" --scheme "Runner"
+          flutter build ipa --export-options-plist=/Users/builder/export_options.plist --build-number=$(($PROJECT_BUILD_NUMBER + 4))
 
     artifacts:
       - build/**/outputs/apk/**/*.apk
