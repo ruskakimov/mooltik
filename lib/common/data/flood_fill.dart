@@ -1,7 +1,7 @@
+import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:flutter/foundation.dart';
 import 'package:mooltik/common/data/extensions/color_methods.dart';
 import 'package:mooltik/common/data/io/image.dart';
 import 'package:mooltik/ffi_bridge.dart';
@@ -15,7 +15,10 @@ Future<ui.Image?> floodFill(
 ) async {
   final imageByteData = await source.toByteData();
 
-  final resultByteData = await compute(
+  // Can be refactored with `compute` after this PR (https://github.com/flutter/flutter/pull/86591) lands in stable.
+  final receivePort = ReceivePort();
+
+  final isolate = await Isolate.spawn(
     _fillIsolate,
     _FillIsolateParams(
       imageByteData: imageByteData!,
@@ -24,8 +27,14 @@ Future<ui.Image?> floodFill(
       startX: startX,
       startY: startY,
       fillColor: color,
+      sendPort: receivePort.sendPort,
     ),
   );
+
+  final resultByteData = await receivePort.first as ByteData?;
+
+  receivePort.close();
+  isolate.kill();
 
   if (resultByteData == null) return null;
 
@@ -39,6 +48,7 @@ class _FillIsolateParams {
   final int startX;
   final int startY;
   final ui.Color fillColor;
+  final SendPort sendPort;
 
   _FillIsolateParams({
     required this.imageByteData,
@@ -47,10 +57,11 @@ class _FillIsolateParams {
     required this.startX,
     required this.startY,
     required this.fillColor,
+    required this.sendPort,
   });
 }
 
-ByteData? _fillIsolate(_FillIsolateParams params) {
+void _fillIsolate(_FillIsolateParams params) {
   final exitCode = FFIBridge().floodFill(
     params.imageByteData.buffer.asUint32List(),
     params.width,
@@ -60,7 +71,7 @@ ByteData? _fillIsolate(_FillIsolateParams params) {
     params.fillColor.toABGR(),
   );
 
-  if (exitCode == -1) return null;
+  final result = exitCode == 0 ? params.imageByteData : null;
 
-  return params.imageByteData;
+  params.sendPort.send(result);
 }
