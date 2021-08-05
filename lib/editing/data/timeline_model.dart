@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/duration_methods.dart';
+import 'package:mooltik/common/data/extensions/duration_methods.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
@@ -13,17 +13,27 @@ class TimelineModel extends ChangeNotifier {
           vsync: vsync,
           duration: sceneSeq.totalDuration,
         ) {
-    _playheadController.addListener(() {
-      final newPlayhead = _fractionAsPlayhead(_playheadController.value);
-      _setPlayhead(newPlayhead);
-
-      if (playheadPosition == playheadEndBound) {
-        _playheadController.stop();
-      }
-
-      notifyListeners();
-    });
+    _playheadController.addListener(_playheadListener);
     sceneSeq.addListener(notifyListeners);
+  }
+
+  @override
+  void dispose() {
+    _playheadController.removeListener(_playheadListener);
+    sceneSeq.removeListener(notifyListeners);
+    _playheadController.dispose();
+    super.dispose();
+  }
+
+  void _playheadListener() {
+    final newPlayhead = _fractionAsPlayhead(_playheadController.value);
+    _setPlayhead(newPlayhead);
+
+    if (playheadPosition == playheadEndBound) {
+      _playheadController.stop();
+    }
+
+    notifyListeners();
   }
 
   final Sequence<Scene> sceneSeq;

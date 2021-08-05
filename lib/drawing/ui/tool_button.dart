@@ -14,11 +14,13 @@ class ToolButton extends StatefulWidget {
     required this.tool,
     this.selected = false,
     this.onTap,
+    this.iconTransform,
   }) : super(key: key);
 
   final Tool tool;
   final bool selected;
   final VoidCallback? onTap;
+  final Matrix4? iconTransform;
 
   @override
   _ToolButtonState createState() => _ToolButtonState();
@@ -44,6 +46,7 @@ class _ToolButtonState extends State<ToolButton> {
         child: AppIconButton(
           icon: widget.tool.icon,
           iconSize: 26,
+          iconTransform: widget.iconTransform,
           selected: widget.selected,
           onTap: () {
             final toolbox = context.read<ToolboxModel>();
@@ -61,6 +64,7 @@ class _ToolButtonState extends State<ToolButton> {
     return AppIconButton(
       icon: widget.tool.icon,
       iconSize: 26,
+      iconTransform: widget.iconTransform,
       selected: widget.selected,
       onTap: () {
         final toolbox = context.read<ToolboxModel>();

@@ -29,6 +29,12 @@ class _PieProgressIndicatorState extends State<PieProgressIndicator>
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   void didUpdateWidget(covariant PieProgressIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.progress != _controller.value) {
@@ -50,12 +56,6 @@ class _PieProgressIndicatorState extends State<PieProgressIndicator>
         );
       },
     );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 }
 

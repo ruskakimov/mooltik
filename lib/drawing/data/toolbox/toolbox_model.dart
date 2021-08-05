@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/drawing/data/toolbox/tools/bucket.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'tools/tools.dart';
 
 class ToolboxModel extends ChangeNotifier {
   ToolboxModel(SharedPreferences sharedPreferences)
-      : _paintBrush = PaintBrush(sharedPreferences),
+      : _bucket = Bucket(sharedPreferences),
+        _paintBrush = PaintBrush(sharedPreferences),
         _eraser = Eraser(sharedPreferences),
         _lasso = Lasso(sharedPreferences) {
     _selectedTool = _paintBrush;
   }
+
+  Bucket get bucket => _bucket;
+  final Bucket _bucket;
 
   PaintBrush get paintBrush => _paintBrush;
   final PaintBrush _paintBrush;

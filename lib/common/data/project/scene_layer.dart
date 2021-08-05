@@ -1,4 +1,4 @@
-import 'package:mooltik/common/data/duration_methods.dart';
+import 'package:mooltik/common/data/extensions/duration_methods.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 

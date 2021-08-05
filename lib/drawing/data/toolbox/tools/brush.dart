@@ -1,6 +1,10 @@
+import 'dart:ui' as ui;
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/io/generate_image.dart';
+import 'package:mooltik/drawing/data/frame/stroke.dart';
+import 'package:mooltik/drawing/ui/canvas_painter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'tool.dart';
@@ -101,6 +105,52 @@ abstract class Brush extends ToolWithColor {
     );
   }
 
+  // ================
+  // Stroke handlers:
+  // ================
+
+  Stroke? _currentStroke;
+
+  @override
+  Stroke? onStrokeStart(Offset canvasPoint) {
+    _currentStroke = Stroke(canvasPoint, paint);
+    return _currentStroke;
+  }
+
+  @override
+  void onStrokeUpdate(Offset canvasPoint) {
+    _currentStroke?.extend(canvasPoint);
+  }
+
+  @override
+  Stroke? onStrokeEnd() {
+    _currentStroke?.finish();
+    return _currentStroke;
+  }
+
+  @override
+  Stroke? onStrokeCancel() {
+    final cancelledStroke = _currentStroke;
+    _currentStroke = null;
+    return cancelledStroke;
+  }
+
+  @override
+  PaintOn? makePaintOn(Rect canvasArea) {
+    final frozenStroke = _currentStroke;
+
+    if (frozenStroke == null) return null;
+    if (!frozenStroke.boundingRect.overlaps(canvasArea)) return null;
+
+    return (ui.Image canvasImage) {
+      return generateImage(
+        CanvasPainter(image: canvasImage, strokes: [frozenStroke]),
+        canvasImage.width,
+        canvasImage.height,
+      );
+    };
+  }
+
   // ========================
   // Shared preferences keys:
   // ========================
@@ -116,7 +166,7 @@ class BrushTip {
     required this.strokeWidth,
     required this.opacity,
     required this.blur,
-  })   : assert(opacity >= 0 && opacity <= 1),
+  })  : assert(opacity >= 0 && opacity <= 1),
         assert(blur >= 0 && blur <= 1);
 
   final double strokeWidth;

@@ -7,7 +7,7 @@ import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/easel/cursor_painter.dart';
 import 'package:mooltik/drawing/ui/lasso/lasso_ui_layer.dart';
-import 'package:mooltik/drawing/ui/frame_painter.dart';
+import 'package:mooltik/drawing/ui/canvas_painter.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 import 'package:mooltik/drawing/ui/lasso/transformed_image_layer.dart';
 import 'package:provider/provider.dart';
@@ -167,8 +167,8 @@ class EaselCanvas extends StatelessWidget {
         CustomPaint(
           isComplex: true,
           size: before.image.size,
-          foregroundPainter: FramePainter(
-            frame: before,
+          foregroundPainter: CanvasPainter(
+            image: before.image.snapshot,
             filter: ColorFilter.mode(
               Colors.red.withOpacity(0.2),
               BlendMode.srcIn,
@@ -179,8 +179,8 @@ class EaselCanvas extends StatelessWidget {
         CustomPaint(
           isComplex: true,
           size: after.image.size,
-          foregroundPainter: FramePainter(
-            frame: after,
+          foregroundPainter: CanvasPainter(
+            image: after.image.snapshot,
             filter: ColorFilter.mode(
               Colors.green.withOpacity(0.2),
               BlendMode.srcIn,
@@ -190,7 +190,8 @@ class EaselCanvas extends StatelessWidget {
       CustomPaint(
         isComplex: true,
         size: frame.image.size,
-        foregroundPainter: FramePainter(frame: frame, strokes: strokes),
+        foregroundPainter:
+            CanvasPainter(image: frame.image.snapshot, strokes: strokes),
       ),
       TransformedImageLayer(
         frameSize: frame.image.size,
@@ -202,7 +203,7 @@ class EaselCanvas extends StatelessWidget {
     return CustomPaint(
       isComplex: true,
       size: frame.image.size,
-      foregroundPainter: FramePainter(frame: frame),
+      foregroundPainter: CanvasPainter(image: frame.image.snapshot),
     );
   }
 }

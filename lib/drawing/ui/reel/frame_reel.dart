@@ -67,7 +67,14 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
     });
   }
 
-  int get centeredFrameIndex => (_controller!.offset / widget.itemWidth).round();
+  @override
+  void dispose() {
+    _controller!.dispose();
+    super.dispose();
+  }
+
+  int get centeredFrameIndex =>
+      (_controller!.offset / widget.itemWidth).round();
 
   double frameOffset(int frameIndex) => widget.itemWidth * frameIndex;
 
@@ -174,12 +181,6 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
   void jumpTo(int frameIndex) {
     final offset = frameOffset(frameIndex);
     _controller!.jumpTo(offset);
-  }
-
-  @override
-  void dispose() {
-    _controller!.dispose();
-    super.dispose();
   }
 }
 

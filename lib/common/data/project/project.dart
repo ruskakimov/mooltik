@@ -185,6 +185,8 @@ class Project extends ChangeNotifier {
   }
 
   void _freeMemory() {
+    allFrames.forEach((frame) => frame.image.dispose());
+    _scenes?.dispose();
     _scenes = null;
     _soundClips = [];
   }
@@ -199,6 +201,7 @@ class Project extends ChangeNotifier {
       _frameSize.height.toInt(),
     );
     await pngWrite(thumbnail, image);
+    image.dispose();
 
     await _deleteUnusedFiles();
 

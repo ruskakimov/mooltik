@@ -1,4 +1,4 @@
-import 'package:mooltik/common/data/duration_methods.dart';
+import 'package:mooltik/common/data/extensions/duration_methods.dart';
 
 class SaveDataTranscoder {
   /// Transcodes save data in old formats to the latest format.

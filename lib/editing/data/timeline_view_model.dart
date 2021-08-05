@@ -29,7 +29,13 @@ class TimelineViewModel extends ChangeNotifier {
         _preferences = sharedPreferences,
         _msPerPx = sharedPreferences?.getDouble(_msPerPxKey) ?? 10 {
     _prevMsPerPx = _msPerPx;
-    timeline.addListener(notifyListeners);
+    _timeline.addListener(notifyListeners);
+  }
+
+  @override
+  void dispose() {
+    _timeline.removeListener(notifyListeners);
+    super.dispose();
   }
 
   SharedPreferences? _preferences;

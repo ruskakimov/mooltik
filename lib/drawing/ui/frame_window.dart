@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
-import 'package:mooltik/drawing/ui/frame_painter.dart';
+import 'package:mooltik/drawing/ui/canvas_painter.dart';
 
 const frostedGlassColor = Color(0x88A09F9F);
 
@@ -21,7 +21,7 @@ class FrameWindow extends StatelessWidget {
           color: frostedGlassColor,
           child: CustomPaint(
             isComplex: true,
-            foregroundPainter: FramePainter(frame: frame),
+            foregroundPainter: CanvasPainter(image: frame.image.snapshot),
           ),
         ),
       ),

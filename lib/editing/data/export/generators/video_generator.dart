@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:mooltik/editing/data/export/generators/generator.dart';
-import 'package:mooltik/common/data/iterable_methods.dart';
+import 'package:mooltik/common/data/extensions/iterable_methods.dart';
 import 'package:mooltik/common/data/io/mp4/mp4.dart';
 import 'package:mooltik/common/data/io/mp4/slide.dart';
 import 'package:mooltik/common/data/io/png.dart';
