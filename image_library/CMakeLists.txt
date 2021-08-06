@@ -4,5 +4,5 @@ set (CMAKE_CXX_STANDARD 11)
 add_library( 
             image
             SHARED
-            flood_fill.cpp
+            ../ios/Classes/flood_fill.cpp
 )
