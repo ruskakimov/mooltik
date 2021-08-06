@@ -51,7 +51,7 @@ class FFIBridge {
     int y,
     int fillColor,
   ) {
-    final pixelsPointer = malloc<Uint32>(pixels.length);
+    final pixelsPointer = calloc<Uint32>(pixels.length);
     final pointerList = pixelsPointer.asTypedList(pixels.length);
     pointerList.setAll(0, pixels);
 
@@ -65,7 +65,7 @@ class FFIBridge {
     );
 
     if (exitCode == 0) pixels.setAll(0, pointerList);
-    malloc.free(pixelsPointer);
+    calloc.free(pixelsPointer);
     return exitCode;
   }
 }
