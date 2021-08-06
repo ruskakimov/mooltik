@@ -2,7 +2,7 @@
 
 workflows:
   default-workflow:
-    name: Default Workflow
+    name: Config Workflow
     instance_type: mac_mini
     max_build_duration: 60
     environment:
