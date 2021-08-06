@@ -88,7 +88,7 @@ workflows:
         track: internal
         in_app_update_priority: 0
       app_store_connect:
-        api_key: Encrypted(Z0FBQUFBQmhDOTl1OElLNWJRSng3bFBOclJVTzl5WUlyZ1l4T0JhRWhnQTZjS2I4clFycXNva2Y1MVpFMTNta20xc2dhS2NPLWh0VWttWjhhOVB6d1k3SVpCQzhDVjVJZGk0VUVxaGF4Z2w5YnZmR1pzVzFPNTZQMEdPTGp5N2xycEFHVTg2WEdwNExpN1ZpY19tUkVVWlcxajVycFJIVmNCc1N2VllSRjA4dXZoR0czNHFMd1ZpanUzRXZnWVZQMVN0bVNOQjk0aWVQclFRV1FGaExwRGxBWlhPaHM0bTJWc3pIVE1qXzZDRVpTVmRfWUpUTjlESlM1NERzN1F5RVBwa25GUzBGS3p0ZkpSc3dDYkRBSDhlZlkxbTIyNlVjTml6NERJQVhZNHI2RGkwOFRiWXZneTRfVDVEV1ZjcWJOeDVrZy1KZmlMRjRnbWNpbXhmekU3Wmt6c0lHa2t3dTFmd0UxSHV4TUJvNWE3N0EzdTlscFJTSkpDLWIzcnUyZllHU0NicUxhbEZjVHoyNzRhTHRlbndPc2pCbmZXdTBpeVZ2eTRqUGtrT3Z0V3JDRkVPVnZxbz0=)
-        key_id: 6Y2NW26LRJ
-        issuer_id: 567d8418-e243-4e28-a212-ef2023103d9b
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
         submit_to_testflight: true
