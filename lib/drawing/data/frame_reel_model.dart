@@ -57,6 +57,7 @@ class FrameReelModel extends ChangeNotifier {
   bool get canDeleteCurrent => frameSeq.length > 1;
 
   void deleteCurrent() {
+    currentFrame.image.snapshot?.dispose();
     frameSeq.removeAt(_currentIndex);
     _currentIndex = _currentIndex.clamp(0, frameSeq.length - 1);
     notifyListeners();
