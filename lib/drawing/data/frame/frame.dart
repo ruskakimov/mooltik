@@ -38,6 +38,10 @@ class Frame extends TimeSpan with EquatableMixin {
         duration: duration ?? this.duration,
       );
 
+  Future<Frame> duplicate() async {
+    return this.copyWith(image: await image.duplicate());
+  }
+
   @override
   void dispose() {
     image.dispose();

@@ -43,13 +43,9 @@ class FrameReelModel extends ChangeNotifier {
   Future<void> duplicateCurrent() async {
     if (currentFrame.image.snapshot == null) return;
 
-    final duplicateDiskImage = (await _createNewFrame()).image;
-    duplicateDiskImage.changeSnapshot(currentFrame.image.snapshot!.clone());
-    duplicateDiskImage.saveSnapshot();
-
     frameSeq.insert(
       _currentIndex + 1,
-      currentFrame.copyWith(image: duplicateDiskImage),
+      await currentFrame.duplicate(),
     );
     notifyListeners();
   }

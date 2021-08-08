@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:mooltik/common/data/io/make_duplicate_path.dart';
 import 'package:mooltik/common/data/io/png.dart';
 
 /// Manages a single image file.
@@ -22,10 +23,6 @@ class DiskImage with EquatableMixin {
 
   int? get height => _snapshot?.height;
 
-  void changeSnapshot(Image? newSnapshot) {
-    _snapshot = newSnapshot;
-  }
-
   Future<void> loadSnapshot() async {
     _snapshot = await pngRead(file);
   }
@@ -33,6 +30,16 @@ class DiskImage with EquatableMixin {
   Future<void> saveSnapshot() async {
     if (_snapshot == null) throw Exception('Snapshot is missing.');
     await pngWrite(file, _snapshot!);
+  }
+
+  Future<DiskImage> duplicate() async {
+    final duplicatePath = makeDuplicatePath(file.path);
+    final duplicateFile = await file.copy(duplicatePath);
+
+    return DiskImage(
+      file: duplicateFile,
+      snapshot: snapshot?.clone(),
+    );
   }
 
   factory DiskImage.fromJson(Map<String, dynamic> json) => DiskImage(

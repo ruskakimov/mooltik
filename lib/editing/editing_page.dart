@@ -62,7 +62,6 @@ class _EditingPageState extends State<EditingPage>
             timeline: context.read<TimelineModel>(),
             soundClips: context.read<Project>().soundClips,
             sharedPreferences: context.read<SharedPreferences>(),
-            createNewFrame: context.read<Project>().createNewFrame,
           ),
         ),
       ],

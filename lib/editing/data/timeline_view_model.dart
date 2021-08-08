@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
@@ -23,7 +22,6 @@ class TimelineViewModel extends ChangeNotifier {
     required TimelineModel timeline,
     required List<SoundClip>? soundClips,
     required SharedPreferences? sharedPreferences,
-    required this.createNewFrame,
   })  : _timeline = timeline,
         _soundClips = soundClips ?? [],
         _preferences = sharedPreferences,
@@ -41,7 +39,6 @@ class TimelineViewModel extends ChangeNotifier {
   SharedPreferences? _preferences;
   final TimelineModel _timeline;
   final List<SoundClip> _soundClips;
-  final CreateNewFrame? createNewFrame;
 
   bool get isEditingScene => _sceneEdit;
   bool _sceneEdit = false;
@@ -378,19 +375,11 @@ class TimelineViewModel extends ChangeNotifier {
   Future<void> duplicateSelected() async {
     if (_selectedSliverId == null) return;
     final duplicate = isEditingScene
-        ? await _duplicateFrame(selectedFrame)
+        ? await selectedFrame.duplicate()
         : await _duplicateScene(selectedScene);
     selectedSliverSequence!.insert(_selectedSliverId!.spanIndex + 1, duplicate);
     removeSliverSelection();
     notifyListeners();
-  }
-
-  Future<Frame> _duplicateFrame(Frame frame) async {
-    final duplicateDiskImage = (await createNewFrame!()).image;
-    duplicateDiskImage.changeSnapshot(frame.image.snapshot);
-    duplicateDiskImage.saveSnapshot();
-
-    return frame.copyWith(image: duplicateDiskImage);
   }
 
   Future<Scene> _duplicateScene(Scene scene) async {
@@ -401,7 +390,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   Future<SceneLayer> _duplicateLayer(SceneLayer sceneLayer) async {
     final duplicateFrames = await Future.wait(
-      sceneLayer.frameSeq.iterable.map((frame) => _duplicateFrame(frame)),
+      sceneLayer.frameSeq.iterable.map((frame) => frame.duplicate()),
     );
     return SceneLayer(Sequence(duplicateFrames), sceneLayer.playMode);
   }

@@ -59,7 +59,6 @@ void main() {
         timeline: timeline,
         soundClips: [],
         sharedPreferences: null,
-        createNewFrame: null,
       );
 
       timelineView.selectSliver(SliverId(0, 0));
