@@ -1,9 +1,32 @@
 import 'package:path/path.dart' as p;
 
-/// Returns new duplicate path of the given path.
+/// Returns a new path for a duplicate file.
+/// `example/path/image.png` -> `example/path/image_1.png`
+/// `example/path/image_1.png` -> `example/path/image_2.png`
 String makeDuplicatePath(String path) {
   final dir = p.dirname(path);
   final name = p.basenameWithoutExtension(path);
   final ext = p.extension(path);
-  return p.join(dir, name + '_1' + ext);
+
+  final newName =
+      _hasCounter(name) ? _incrementCounter(name) : _createCounter(name);
+
+  return p.join(dir, newName + ext);
+}
+
+bool _hasCounter(String name) {
+  return RegExp(r'_\d+$').hasMatch(name);
+}
+
+String _createCounter(String name) {
+  return name + '_1';
+}
+
+String _incrementCounter(String name) {
+  final parts = name.split('_');
+
+  final newCounterValue = int.parse(parts.last) + 1;
+  parts.last = newCounterValue.toString();
+
+  return parts.join('_');
 }
