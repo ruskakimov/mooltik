@@ -111,6 +111,11 @@ class Scene extends TimeSpan {
         '',
         (previousValue, layer) => previousValue + layer.toString(),
       );
+
+  @override
+  void dispose() {
+    layers.forEach((layer) => layer.dispose());
+  }
 }
 
 const String _layersKey = 'layers';

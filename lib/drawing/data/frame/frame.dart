@@ -39,6 +39,11 @@ class Frame extends TimeSpan with EquatableMixin {
       );
 
   @override
+  void dispose() {
+    image.dispose();
+  }
+
+  @override
   List<Object> get props => [image.file.path, duration];
 
   static const String _fileNameKey = 'file_name';

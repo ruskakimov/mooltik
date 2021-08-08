@@ -72,7 +72,8 @@ class ReelStackModel extends ChangeNotifier {
     final activeReelBefore = activeReel;
 
     reels.removeAt(layerIndex);
-    _scene.layers.removeAt(layerIndex);
+    final removedLayer = _scene.layers.removeAt(layerIndex);
+    removedLayer.dispose();
 
     if (layerIndex == _activeReelIndex) {
       _activeReelIndex = _activeReelIndex.clamp(0, reels.length - 1);

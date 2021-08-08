@@ -366,7 +366,11 @@ class TimelineViewModel extends ChangeNotifier {
   void deleteSelected() {
     if (_selectedSliverId == null) return;
     if (!canDeleteSelected) return;
-    selectedSliverSequence!.removeAt(_selectedSliverId!.spanIndex);
+
+    final removedSliver =
+        selectedSliverSequence!.removeAt(_selectedSliverId!.spanIndex);
+    removedSliver.dispose();
+
     removeSliverSelection();
     notifyListeners();
   }

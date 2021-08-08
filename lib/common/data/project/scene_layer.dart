@@ -132,6 +132,10 @@ class SceneLayer {
         '',
         (previousValue, frame) => previousValue + frame.toString(),
       );
+
+  void dispose() {
+    frameSeq.iterable.forEach((frame) => frame.dispose());
+  }
 }
 
 const String _framesKey = 'frames';
