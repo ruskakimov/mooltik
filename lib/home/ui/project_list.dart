@@ -2,22 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/home/ui/add_project_button.dart';
 import 'package:provider/provider.dart';
-import 'package:mooltik/editing/editing_page.dart';
 
 import 'project_thumbnail.dart';
 import '../data/gallery_model.dart';
 
-class ProjectList extends StatefulWidget {
+class ProjectList extends StatelessWidget {
   const ProjectList({
     Key? key,
   }) : super(key: key);
-
-  @override
-  _ProjectListState createState() => _ProjectListState();
-}
-
-class _ProjectListState extends State<ProjectList> {
-  bool _openingProject = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,34 +33,16 @@ class _ProjectListState extends State<ProjectList> {
                 thumbnail: project.thumbnail,
                 onTap: () async {
                   try {
-                    await _openProject(context, project);
+                    await context
+                        .read<GalleryModel>()
+                        .openProject(project, context);
                   } catch (e) {
                     _showErrorSnackbar(context, e);
-                  } finally {
-                    Future.delayed(
-                      Duration(milliseconds: 500),
-                      () => _openingProject = false,
-                    );
                   }
                 },
               ),
             )
         ],
-      ),
-    );
-  }
-
-  Future<void> _openProject(BuildContext context, Project project) async {
-    if (_openingProject) return;
-    _openingProject = true;
-
-    await project.open();
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider<Project>.value(
-          value: project,
-          child: EditingPage(),
-        ),
       ),
     );
   }

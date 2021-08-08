@@ -71,11 +71,6 @@ class _EditingPageState extends State<EditingPage>
         onWillPop: () async {
           final timeline = context.read<TimelineModel>();
           if (timeline.isPlaying) return false;
-
-          final project = context.read<Project>();
-          WidgetsBinding.instance!.addPostFrameCallback((_) {
-            project.saveAndClose();
-          });
           return true;
         },
         child: Scaffold(
