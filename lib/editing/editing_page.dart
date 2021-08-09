@@ -62,7 +62,6 @@ class _EditingPageState extends State<EditingPage>
             timeline: context.read<TimelineModel>(),
             soundClips: context.read<Project>().soundClips,
             sharedPreferences: context.read<SharedPreferences>(),
-            createNewFrame: context.read<Project>().createNewFrame,
           ),
         ),
       ],
@@ -71,11 +70,6 @@ class _EditingPageState extends State<EditingPage>
         onWillPop: () async {
           final timeline = context.read<TimelineModel>();
           if (timeline.isPlaying) return false;
-
-          final project = context.read<Project>();
-          WidgetsBinding.instance!.addPostFrameCallback((_) {
-            project.saveAndClose();
-          });
           return true;
         },
         child: Scaffold(

@@ -26,4 +26,6 @@ abstract class TimeSpan {
   final Duration _duration;
 
   TimeSpan copyWith({Duration? duration});
+
+  void dispose();
 }

@@ -15,6 +15,10 @@ class Frame extends TimeSpan with EquatableMixin {
 
   final DiskImage image;
 
+  Future<Frame> duplicate() async {
+    return this.copyWith(image: await image.duplicate());
+  }
+
   factory Frame.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       Frame(
         image: DiskImage(
@@ -37,6 +41,11 @@ class Frame extends TimeSpan with EquatableMixin {
         image: image ?? this.image,
         duration: duration ?? this.duration,
       );
+
+  @override
+  void dispose() {
+    image.dispose();
+  }
 
   @override
   List<Object> get props => [image.file.path, duration];

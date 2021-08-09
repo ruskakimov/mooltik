@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:io/io.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
+import 'package:mooltik/editing/editing_page.dart';
 import 'package:path/path.dart' as p;
+import 'package:provider/provider.dart';
 
 class GalleryModel extends ChangeNotifier {
   late Directory _directory;
@@ -38,6 +40,39 @@ class GalleryModel extends ChangeNotifier {
 
     notifyListeners();
     return project;
+  }
+
+  Project? _openedProject;
+
+  /// Opens one project at a time.
+  /// Returns a future when the current project has been closed and another project can be opened.
+  Future<void> openProject(Project project, BuildContext context) async {
+    if (_openedProject != null) return;
+
+    _openedProject = project;
+
+    try {
+      await project.open();
+
+      final route = MaterialPageRoute(
+        builder: (context) => ChangeNotifierProvider<Project>.value(
+          value: project,
+          child: EditingPage(),
+        ),
+      );
+
+      Navigator.of(context).push(route);
+
+      // Await for pop animation to finish.
+      await route.completed;
+
+      // Don't await for save to finish. Allow other projects to be opened immediately.
+      project.saveAndClose();
+    } catch (e) {
+      rethrow;
+    } finally {
+      _openedProject = null;
+    }
   }
 
   Future<void> moveProjectToBin(Project project) async {

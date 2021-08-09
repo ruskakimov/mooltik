@@ -140,14 +140,14 @@ class Sequence<T extends TimeSpan> extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeAt(int index) {
+  T removeAt(int index) {
     _validateIndex(index);
     if (_spans.length <= 1) {
       throw Exception('Cannot remove last span in sequence.');
     }
 
     final removedDuration = _spans[index].duration;
-    _spans.removeAt(index);
+    final removedSpan = _spans.removeAt(index);
 
     _totalDuration -= removedDuration;
 
@@ -164,6 +164,7 @@ class Sequence<T extends TimeSpan> extends ChangeNotifier {
       }
     }
     notifyListeners();
+    return removedSpan;
   }
 
   void swapSpanAt(int index, T newSpan) {

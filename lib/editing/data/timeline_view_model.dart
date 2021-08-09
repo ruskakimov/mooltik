@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/project.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
@@ -23,7 +23,6 @@ class TimelineViewModel extends ChangeNotifier {
     required TimelineModel timeline,
     required List<SoundClip>? soundClips,
     required SharedPreferences? sharedPreferences,
-    required this.createNewFrame,
   })  : _timeline = timeline,
         _soundClips = soundClips ?? [],
         _preferences = sharedPreferences,
@@ -41,7 +40,6 @@ class TimelineViewModel extends ChangeNotifier {
   SharedPreferences? _preferences;
   final TimelineModel _timeline;
   final List<SoundClip> _soundClips;
-  final CreateNewFrame? createNewFrame;
 
   bool get isEditingScene => _sceneEdit;
   bool _sceneEdit = false;
@@ -366,7 +364,15 @@ class TimelineViewModel extends ChangeNotifier {
   void deleteSelected() {
     if (_selectedSliverId == null) return;
     if (!canDeleteSelected) return;
-    selectedSliverSequence!.removeAt(_selectedSliverId!.spanIndex);
+
+    final removedSliver =
+        selectedSliverSequence!.removeAt(_selectedSliverId!.spanIndex);
+
+    SchedulerBinding.instance?.scheduleTask(
+      () => removedSliver.dispose(),
+      Priority.idle,
+    );
+
     removeSliverSelection();
     notifyListeners();
   }
@@ -374,32 +380,11 @@ class TimelineViewModel extends ChangeNotifier {
   Future<void> duplicateSelected() async {
     if (_selectedSliverId == null) return;
     final duplicate = isEditingScene
-        ? await _duplicateFrame(selectedFrame)
-        : await _duplicateScene(selectedScene);
+        ? await selectedFrame.duplicate()
+        : await selectedScene.duplicate();
     selectedSliverSequence!.insert(_selectedSliverId!.spanIndex + 1, duplicate);
     removeSliverSelection();
     notifyListeners();
-  }
-
-  Future<Frame> _duplicateFrame(Frame frame) async {
-    final duplicateDiskImage = (await createNewFrame!()).image;
-    duplicateDiskImage.changeSnapshot(frame.image.snapshot);
-    duplicateDiskImage.saveSnapshot();
-
-    return frame.copyWith(image: duplicateDiskImage);
-  }
-
-  Future<Scene> _duplicateScene(Scene scene) async {
-    final duplicateLayers =
-        await Future.wait(scene.layers.map((layer) => _duplicateLayer(layer)));
-    return scene.copyWith(layers: duplicateLayers);
-  }
-
-  Future<SceneLayer> _duplicateLayer(SceneLayer sceneLayer) async {
-    final duplicateFrames = await Future.wait(
-      sceneLayer.frameSeq.iterable.map((frame) => _duplicateFrame(frame)),
-    );
-    return SceneLayer(Sequence(duplicateFrames), sceneLayer.playMode);
   }
 
   Duration get selectedSliverStartTime => isEditingScene

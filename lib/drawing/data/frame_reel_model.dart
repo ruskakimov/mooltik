@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/io/disk_image.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
@@ -42,13 +42,11 @@ class FrameReelModel extends ChangeNotifier {
   }
 
   Future<void> duplicateCurrent() async {
-    final duplicateDiskImage = (await _createNewFrame()).image;
-    duplicateDiskImage.changeSnapshot(currentFrame.image.snapshot);
-    duplicateDiskImage.saveSnapshot();
+    if (currentFrame.image.snapshot == null) return;
 
     frameSeq.insert(
       _currentIndex + 1,
-      currentFrame.copyWith(image: duplicateDiskImage),
+      await currentFrame.duplicate(),
     );
     notifyListeners();
   }
@@ -56,7 +54,13 @@ class FrameReelModel extends ChangeNotifier {
   bool get canDeleteCurrent => frameSeq.length > 1;
 
   void deleteCurrent() {
-    frameSeq.removeAt(_currentIndex);
+    final removedFrame = frameSeq.removeAt(_currentIndex);
+
+    SchedulerBinding.instance?.scheduleTask(
+      () => removedFrame.dispose(),
+      Priority.idle,
+    );
+
     _currentIndex = _currentIndex.clamp(0, frameSeq.length - 1);
     notifyListeners();
   }

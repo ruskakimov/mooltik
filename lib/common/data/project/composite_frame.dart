@@ -42,6 +42,11 @@ class CompositeFrame extends TimeSpan with EquatableMixin {
         _durationKey: duration.toString(),
       };
 
+  @override
+  void dispose() {
+    compositeImage.layers.forEach((layerImage) => layerImage.dispose());
+  }
+
   static const String _imageKey = 'image';
   static const String _durationKey = 'duration';
 }

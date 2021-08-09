@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/editing/editing_page.dart';
-import 'package:mooltik/common/data/project/project.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -44,16 +42,7 @@ class AddProjectButton extends StatelessWidget {
 
   void _addProject(BuildContext context) async {
     final manager = context.read<GalleryModel>();
-
     final project = await manager.addProject();
-    await project.open();
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider<Project>.value(
-          value: project,
-          child: EditingPage(),
-        ),
-      ),
-    );
+    manager.openProject(project, context);
   }
 }
