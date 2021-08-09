@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
@@ -73,7 +74,11 @@ class ReelStackModel extends ChangeNotifier {
 
     reels.removeAt(layerIndex);
     final removedLayer = _scene.layers.removeAt(layerIndex);
-    removedLayer.dispose();
+
+    SchedulerBinding.instance?.scheduleTask(
+      () => removedLayer.dispose(),
+      Priority.idle,
+    );
 
     if (layerIndex == _activeReelIndex) {
       _activeReelIndex = _activeReelIndex.clamp(0, reels.length - 1);

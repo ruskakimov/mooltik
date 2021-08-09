@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
@@ -54,7 +55,12 @@ class FrameReelModel extends ChangeNotifier {
 
   void deleteCurrent() {
     final removedFrame = frameSeq.removeAt(_currentIndex);
-    removedFrame.dispose();
+
+    SchedulerBinding.instance?.scheduleTask(
+      () => removedFrame.dispose(),
+      Priority.idle,
+    );
+
     _currentIndex = _currentIndex.clamp(0, frameSeq.length - 1);
     notifyListeners();
   }
