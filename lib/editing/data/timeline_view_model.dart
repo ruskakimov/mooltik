@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
@@ -366,7 +367,11 @@ class TimelineViewModel extends ChangeNotifier {
 
     final removedSliver =
         selectedSliverSequence!.removeAt(_selectedSliverId!.spanIndex);
-    removedSliver.dispose();
+
+    SchedulerBinding.instance?.scheduleTask(
+      () => removedSliver.dispose(),
+      Priority.idle,
+    );
 
     removeSliverSelection();
     notifyListeners();
@@ -382,12 +387,14 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Can be extracted to Scene
   Future<Scene> _duplicateScene(Scene scene) async {
     final duplicateLayers =
         await Future.wait(scene.layers.map((layer) => _duplicateLayer(layer)));
     return scene.copyWith(layers: duplicateLayers);
   }
 
+  // Can be extracted to SceneLayer
   Future<SceneLayer> _duplicateLayer(SceneLayer sceneLayer) async {
     final duplicateFrames = await Future.wait(
       sceneLayer.frameSeq.iterable.map((frame) => frame.duplicate()),
