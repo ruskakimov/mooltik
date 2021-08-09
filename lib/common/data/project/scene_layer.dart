@@ -110,6 +110,13 @@ class SceneLayer {
     _name = value;
   }
 
+  Future<SceneLayer> duplicate() async {
+    final duplicateFrames = await Future.wait(
+      frameSeq.iterable.map((frame) => frame.duplicate()),
+    );
+    return SceneLayer(Sequence(duplicateFrames), playMode);
+  }
+
   factory SceneLayer.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       SceneLayer(
         Sequence<Frame>((json[_framesKey] as List<dynamic>)

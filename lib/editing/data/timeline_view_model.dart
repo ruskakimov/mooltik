@@ -381,25 +381,10 @@ class TimelineViewModel extends ChangeNotifier {
     if (_selectedSliverId == null) return;
     final duplicate = isEditingScene
         ? await selectedFrame.duplicate()
-        : await _duplicateScene(selectedScene);
+        : await selectedScene.duplicate();
     selectedSliverSequence!.insert(_selectedSliverId!.spanIndex + 1, duplicate);
     removeSliverSelection();
     notifyListeners();
-  }
-
-  // Can be extracted to Scene
-  Future<Scene> _duplicateScene(Scene scene) async {
-    final duplicateLayers =
-        await Future.wait(scene.layers.map((layer) => _duplicateLayer(layer)));
-    return scene.copyWith(layers: duplicateLayers);
-  }
-
-  // Can be extracted to SceneLayer
-  Future<SceneLayer> _duplicateLayer(SceneLayer sceneLayer) async {
-    final duplicateFrames = await Future.wait(
-      sceneLayer.frameSeq.iterable.map((frame) => frame.duplicate()),
-    );
-    return SceneLayer(Sequence(duplicateFrames), sceneLayer.playMode);
   }
 
   Duration get selectedSliverStartTime => isEditingScene

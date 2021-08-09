@@ -80,6 +80,12 @@ class Scene extends TimeSpan {
     }
   }
 
+  Future<Scene> duplicate() async {
+    final duplicateLayers =
+        await Future.wait(layers.map((layer) => layer.duplicate()));
+    return copyWith(layers: duplicateLayers);
+  }
+
   factory Scene.fromJson(Map<String, dynamic> json, String frameDirPath) =>
       Scene(
         layers: (json[_layersKey] as List<dynamic>)
