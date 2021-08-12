@@ -141,7 +141,10 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
     final project = context.read<Project>();
     final zipEncoder = ZipFileEncoder();
     zipEncoder.zipDirectory(project.directory);
-    await Share.shareFiles([zipEncoder.zip_path]);
+    await Share.shareFiles(
+      [zipEncoder.zip_path],
+      sharePositionOrigin: Offset.zero & Size.square(1),
+    );
   }
 }
 
