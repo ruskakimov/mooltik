@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:archive/archive_io.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
@@ -6,6 +7,7 @@ import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/drawing/ui/frame_window.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../data/gallery_model.dart';
 
@@ -110,6 +112,12 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
             color: Theme.of(context).colorScheme.onPrimary,
             onTap: _moveToBin,
           ),
+          LabeledIconButton(
+            icon: FontAwesomeIcons.fileArchive,
+            label: 'Backup',
+            color: Theme.of(context).colorScheme.onPrimary,
+            onTap: _exportBackup,
+          ),
         ],
       ),
     );
@@ -127,6 +135,13 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
 
   void _moveToBin() {
     context.read<GalleryModel>().moveProjectToBin(context.read<Project>());
+  }
+
+  void _exportBackup() async {
+    final project = context.read<Project>();
+    final zipEncoder = ZipFileEncoder();
+    zipEncoder.zipDirectory(project.directory);
+    await Share.shareFiles([zipEncoder.zip_path]);
   }
 }
 
