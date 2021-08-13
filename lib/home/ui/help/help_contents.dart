@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mooltik/common/ui/sheet_title.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class _TutorialData {
   final String title;
@@ -36,6 +37,7 @@ class HelpContents extends StatelessWidget {
               return _TutorialItem(
                 title: '${index + 1}. ${data.title}',
                 description: data.description,
+                videoUri: data.videoUri,
               );
             },
             separatorBuilder: (context, index) => const SizedBox(height: 32),
@@ -52,10 +54,12 @@ class _TutorialItem extends StatelessWidget {
     Key? key,
     required this.title,
     required this.description,
+    required this.videoUri,
   }) : super(key: key);
 
   final String title;
   final String description;
+  final String videoUri;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +90,7 @@ class _TutorialItem extends StatelessWidget {
             ),
           ),
           SizedBox(width: 8),
-          _Thumbnail(),
+          _Thumbnail(videoUri: videoUri),
         ],
       ),
     );
@@ -96,27 +100,39 @@ class _TutorialItem extends StatelessWidget {
 class _Thumbnail extends StatelessWidget {
   const _Thumbnail({
     Key? key,
+    required this.videoUri,
   }) : super(key: key);
+
+  final String videoUri;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Container(
-          height: 140,
-          width: 140,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
+    return GestureDetector(
+      onTap: () async {
+        if (await canLaunch(videoUri)) {
+          await launch(videoUri);
+        } else {
+          throw Exception('Failed to open tutorial video $videoUri.');
+        }
+      },
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 140,
+            width: 140,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
-        ),
-        Icon(
-          MdiIcons.youtube,
-          size: 64,
-          color: Colors.red,
-        ),
-      ],
+          Icon(
+            MdiIcons.youtube,
+            size: 64,
+            color: Colors.red,
+          ),
+        ],
+      ),
     );
   }
 }
