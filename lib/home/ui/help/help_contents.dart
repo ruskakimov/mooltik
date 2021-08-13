@@ -30,7 +30,10 @@ class HelpContents extends StatelessWidget {
         SheetTitle('Tutorials'),
         Expanded(
           child: ListView.separated(
-            padding: const EdgeInsets.only(bottom: 32),
+            padding: const EdgeInsets.only(
+              top: 8,
+              bottom: 32,
+            ),
             itemBuilder: (context, index) {
               final data = _tutorialData[index];
 
