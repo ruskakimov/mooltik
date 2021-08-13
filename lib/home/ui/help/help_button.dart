@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mooltik/common/ui/sheet_title.dart';
 import 'package:mooltik/home/data/gallery_model.dart';
+import 'package:mooltik/home/ui/help/help_contents.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/open_side_sheet.dart';
 
@@ -21,7 +21,7 @@ class HelpButton extends StatelessWidget {
           context: context,
           builder: (context) => ChangeNotifierProvider.value(
             value: gallery,
-            child: SheetTitle('Tutorials'),
+            child: HelpContents(),
           ),
         );
       },

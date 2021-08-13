@@ -7,7 +7,7 @@ import 'package:mooltik/common/ui/sheet_title.dart';
 import 'package:mooltik/common/ui/slide_action_button.dart';
 import 'package:provider/provider.dart';
 
-import '../data/gallery_model.dart';
+import '../../data/gallery_model.dart';
 
 class BinContents extends StatelessWidget {
   const BinContents({Key? key}) : super(key: key);
