@@ -3,6 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
+import 'package:mooltik/common/ui/sheet_title.dart';
 import 'package:mooltik/common/ui/slide_action_button.dart';
 import 'package:provider/provider.dart';
 
@@ -20,13 +21,7 @@ class BinContents extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              'Bin',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          ),
+          SheetTitle('Bin'),
           Expanded(
             child: binnedProjects.isEmpty
                 ? _EmptyState()

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
+import 'package:mooltik/common/ui/sheet_title.dart';
 import 'package:mooltik/drawing/ui/layers/layer_row.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
@@ -51,21 +52,11 @@ class LayerSheet extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _buildTitle(),
+        SheetTitle('Layers'),
         Spacer(),
         AddLayerButton(),
         SizedBox(width: 8),
       ],
-    );
-  }
-
-  Widget _buildTitle() {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Text(
-        'Layers',
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-      ),
     );
   }
 
