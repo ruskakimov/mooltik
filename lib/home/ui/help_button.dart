@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mooltik/common/ui/sheet_title.dart';
 import 'package:mooltik/home/data/gallery_model.dart';
 import 'package:provider/provider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/open_side_sheet.dart';
 
 class HelpButton extends StatelessWidget {
@@ -13,10 +13,7 @@ class HelpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(
-        FontAwesomeIcons.question,
-        size: 20,
-      ),
+      icon: Icon(MdiIcons.help),
       onPressed: () {
         final gallery = context.read<GalleryModel>();
 
