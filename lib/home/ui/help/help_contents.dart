@@ -8,7 +8,11 @@ class _TutorialData {
   final String description;
   final String videoUri;
 
-  const _TutorialData(this.title, this.description, this.videoUri);
+  const _TutorialData(
+    this.title,
+    this.description,
+    this.videoUri,
+  );
 }
 
 const _tutorialData = [
@@ -36,11 +40,13 @@ class HelpContents extends StatelessWidget {
             ),
             itemBuilder: (context, index) {
               final data = _tutorialData[index];
+              final id = index + 1;
 
               return _TutorialItem(
-                title: '${index + 1}. ${data.title}',
+                title: '$id. ${data.title}',
                 description: data.description,
                 videoUri: data.videoUri,
+                thumbnailPath: 'assets/tutorial_thumbnails/$id.png',
               );
             },
             separatorBuilder: (context, index) => const SizedBox(height: 32),
@@ -58,11 +64,13 @@ class _TutorialItem extends StatelessWidget {
     required this.title,
     required this.description,
     required this.videoUri,
+    required this.thumbnailPath,
   }) : super(key: key);
 
   final String title;
   final String description;
   final String videoUri;
+  final String thumbnailPath;
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +101,10 @@ class _TutorialItem extends StatelessWidget {
             ),
           ),
           SizedBox(width: 8),
-          _Thumbnail(videoUri: videoUri),
+          _Thumbnail(
+            videoUri: videoUri,
+            thumbnailPath: thumbnailPath,
+          ),
         ],
       ),
     );
@@ -104,9 +115,11 @@ class _Thumbnail extends StatelessWidget {
   const _Thumbnail({
     Key? key,
     required this.videoUri,
+    required this.thumbnailPath,
   }) : super(key: key);
 
   final String videoUri;
+  final String thumbnailPath;
 
   @override
   Widget build(BuildContext context) {
@@ -121,18 +134,18 @@ class _Thumbnail extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Container(
-            height: 140,
-            width: 140,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              height: 140,
+              width: 140,
+              foregroundDecoration: BoxDecoration(color: Colors.black54),
+              child: Image.asset(thumbnailPath),
             ),
           ),
           Icon(
             MdiIcons.youtube,
             size: 64,
-            color: Colors.red,
           ),
         ],
       ),
