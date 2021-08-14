@@ -19,7 +19,7 @@ const _tutorialData = [
   _TutorialData(
     'Basics',
     'Learn how to change frame duration, loop animation, and work with layers.',
-    'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    'https://youtu.be/MrD6UXaOCGI',
   ),
 ];
 
