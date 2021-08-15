@@ -36,6 +36,8 @@ class Bucket extends ToolWithColor {
 
   @override
   PaintOn? makePaintOn(ui.Rect canvasArea) {
+    if (!canvasArea.contains(_lastPoint)) return null;
+
     final frozenColor = color;
     final frozenX = _lastPoint.dx.toInt();
     final frozenY = _lastPoint.dy.toInt();
