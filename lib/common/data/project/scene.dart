@@ -18,8 +18,8 @@ class Scene extends TimeSpan {
   Iterable<SceneLayer> get visibleLayers =>
       layers.where((layer) => layer.visible);
 
-  int? get frameWidth => layers.first.frameSeq.current.image.width;
-  int? get frameHeight => layers.first.frameSeq.current.image.height;
+  int? get frameWidth => allFrames.first.image.width;
+  int? get frameHeight => allFrames.first.image.height;
 
   /// Visible image at a given playhead position.
   CompositeImage imageAt(Duration playhead) {
@@ -41,6 +41,14 @@ class Scene extends TimeSpan {
 
   /// Frames for export video.
   Iterable<CompositeFrame> getExportFrames() sync* {
+    if (visibleLayers.isEmpty) {
+      yield CompositeFrame(
+        CompositeImage.empty(width: frameWidth!, height: frameHeight!),
+        duration,
+      );
+      return;
+    }
+
     final tracks =
         visibleLayers.map((layer) => layer.getExportFrames(duration)).toList();
 

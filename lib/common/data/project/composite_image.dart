@@ -12,6 +12,11 @@ class CompositeImage with EquatableMixin {
   }) : assert(layers
             .every((image) => image.height == height && image.width == width));
 
+  CompositeImage.empty({
+    required this.width,
+    required this.height,
+  }) : layers = [];
+
   final int width;
   final int height;
 
