@@ -10,7 +10,7 @@ import 'package:path/path.dart' as p;
 class Frame extends TimeSpan with EquatableMixin {
   Frame({
     required this.image,
-    Duration duration = const Duration(seconds: 1),
+    Duration duration = const Duration(milliseconds: 80),
   }) : super(duration);
 
   final DiskImage image;
