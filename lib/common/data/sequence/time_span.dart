@@ -1,8 +1,8 @@
 abstract class TimeSpan {
   TimeSpan(Duration duration) : _duration = roundDurationToFrames(duration);
 
-  /// Output is set to 50fps, therefore 1 frame = 20 ms.
-  static const Duration singleFrameDuration = Duration(milliseconds: 20);
+  /// Output is set to 25fps, therefore 1 frame = 40 ms.
+  static const Duration singleFrameDuration = Duration(milliseconds: 40);
 
   /// Round duration so that it is a multiple of [singleFrameDuration].
   static Duration roundDurationToFrames(Duration duration) {

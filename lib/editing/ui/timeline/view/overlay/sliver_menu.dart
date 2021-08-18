@@ -30,6 +30,11 @@ class SliverMenu extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            SizedBox(width: 4),
+            SliverDurationLabel(
+              durationLabel: timelineView.selectedSliverDurationLabel,
+            ),
+            SizedBox(width: 8),
             if (!timelineView.isEditingScene && editor.isTimelineView)
               LabeledIconButton(
                 icon: FontAwesomeIcons.film,
@@ -77,5 +82,35 @@ class SliverMenu extends StatelessWidget {
       timelineView.selectSliver(selectedSliverId);
       timelineView.deleteSelected();
     }
+  }
+}
+
+class SliverDurationLabel extends StatelessWidget {
+  const SliverDurationLabel({
+    Key? key,
+    required this.durationLabel,
+  }) : super(key: key);
+
+  final String? durationLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 52,
+      padding: EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        color: Colors.black87,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        durationLabel ?? '',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 10,
+          height: 1.3,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
   }
 }

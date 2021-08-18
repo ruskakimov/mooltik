@@ -8,6 +8,9 @@ extension DurationMethods on Duration {
   Duration operator %(Duration other) =>
       Duration(microseconds: this.inMicroseconds % other.inMicroseconds);
 
+  double operator /(Duration other) =>
+      this.inMicroseconds / other.inMicroseconds;
+
   Duration operator *(double scalar) =>
       Duration(microseconds: (this.inMicroseconds * scalar).round());
 }

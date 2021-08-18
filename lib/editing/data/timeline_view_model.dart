@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:mooltik/common/data/extensions/duration_methods.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
@@ -9,7 +10,6 @@ import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/editing/data/convert.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
-import 'package:mooltik/editing/ui/timeline/actionbar/time_label.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/image_sliver.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sound_sliver.dart';
@@ -318,15 +318,31 @@ class TimelineViewModel extends ChangeNotifier {
 
   bool get showResizeEndHandle => showSliverMenu;
 
-  TimeSpan get selectedSpan =>
-      selectedSliverSequence![_selectedSliverId!.spanIndex];
-  Frame get selectedFrame => selectedSpan as Frame;
-  Scene get selectedScene => selectedSpan as Scene;
+  TimeSpan? get selectedSpan => _selectedSliverId != null
+      ? sequenceRows[_selectedSliverId!.rowIndex][_selectedSliverId!.spanIndex]
+      : null;
 
-  Duration get _selectedSliverDuration => selectedSpan.duration;
+  Frame? get selectedFrame => selectedSpan as Frame?;
+  Scene? get selectedScene => selectedSpan as Scene?;
 
-  String get selectedSliverDurationLabel =>
-      durationToLabel(_selectedSliverDuration);
+  Duration? get _selectedSliverDuration => selectedSpan?.duration;
+
+  String? get selectedSliverDurationLabel {
+    if (_selectedSliverDuration == null) return null;
+    final duration = _selectedSliverDuration!;
+
+    if (duration < Duration(seconds: 1)) {
+      final frameCount = (duration / TimeSpan.singleFrameDuration).floor();
+      return '$frameCount F';
+    } else if (duration < Duration(minutes: 1)) {
+      final seconds = duration / Duration(seconds: 1);
+      return '${seconds.toStringAsFixed(2)}s';
+    } else {
+      final minutes = duration.inMinutes;
+      final seconds = (duration % Duration(minutes: 1)) / Duration(seconds: 1);
+      return '${minutes}m ${seconds.toStringAsFixed(2)}s';
+    }
+  }
 
   void editScene() {
     if (isEditingScene) return;
@@ -380,8 +396,8 @@ class TimelineViewModel extends ChangeNotifier {
   Future<void> duplicateSelected() async {
     if (_selectedSliverId == null) return;
     final duplicate = isEditingScene
-        ? await selectedFrame.duplicate()
-        : await selectedScene.duplicate();
+        ? await selectedFrame!.duplicate()
+        : await selectedScene!.duplicate();
     selectedSliverSequence!.insert(_selectedSliverId!.spanIndex + 1, duplicate);
     removeSliverSelection();
     notifyListeners();
@@ -400,7 +416,7 @@ class TimelineViewModel extends ChangeNotifier {
     updatedTimestamp = TimeSpan.roundDurationToFrames(updatedTimestamp);
 
     final newSelectedDuration = selectedSliverEndTime - updatedTimestamp;
-    final diff = newSelectedDuration - _selectedSliverDuration;
+    final diff = newSelectedDuration - _selectedSliverDuration!;
     final newPrevDuration =
         selectedSliverSequence![_selectedSliverId!.spanIndex - 1].duration -
             diff;
