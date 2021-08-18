@@ -1,12 +1,12 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
-import 'package:mooltik/editing/ui/timeline/view/overlay/play_mode_button.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/sliver_action_buttons/play_mode_button.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/playhead.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_end_handle.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_start_handle.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/scene_end_handle.dart';
-import 'package:mooltik/editing/ui/timeline/view/overlay/visibility_button.dart';
+import 'package:mooltik/editing/ui/timeline/view/overlay/sliver_action_buttons/visibility_button.dart';
 import 'package:mooltik/editing/ui/timeline/view/timeline_painter.dart';
 import 'package:provider/provider.dart';
 
@@ -42,10 +42,7 @@ class TimelineView extends StatelessWidget {
               ),
               Playhead(),
               if (timelineView.isEditingScene) ...[
-                for (var i = 0; i < timelineView.sceneLayers.length; i++) ...[
-                  PlayModeButton(layerIndex: i),
-                  VisibilityButton(layerIndex: i),
-                ],
+                ..._buildLayerActionButtons(timelineView.sceneLayers.length),
                 SceneEndHandle(),
               ],
               if (timelineView.showResizeStartHandle)
@@ -57,5 +54,21 @@ class TimelineView extends StatelessWidget {
         ),
       );
     });
+  }
+
+  List<Widget> _buildLayerActionButtons(int layerCount) {
+    final buttons = <Widget>[];
+
+    Offset offsetFor(int col) => Offset(-32.0 - 48.0 * col, 0);
+
+    for (var i = 0; i < layerCount; i++) {
+      var j = 0;
+      buttons.addAll([
+        PlayModeButton(layerIndex: i, offset: offsetFor(j++)),
+        VisibilityButton(layerIndex: i, offset: offsetFor(j++)),
+      ]);
+    }
+
+    return buttons;
   }
 }

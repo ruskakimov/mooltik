@@ -1,46 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/timeline_positioned.dart';
 import 'package:provider/provider.dart';
 
-class PlayModeButton extends StatelessWidget {
-  const PlayModeButton({
+class VisibilityButton extends StatelessWidget {
+  const VisibilityButton({
     Key? key,
     required this.layerIndex,
+    required this.offset,
   }) : super(key: key);
 
   final int layerIndex;
+  final Offset offset;
 
   @override
   Widget build(BuildContext context) {
     final timelineView = context.watch<TimelineViewModel>();
-    final playMode = timelineView.sceneLayers[layerIndex].playMode;
+    final visible = timelineView.sceneLayers[layerIndex].visible;
 
     return TimelinePositioned(
       timestamp: timelineView.sceneStart,
       y: timelineView.rowMiddle(layerIndex),
       width: 48,
       height: 48,
-      offset: Offset(-32, 0),
+      offset: offset,
       child: IconButton(
         icon: Icon(
-          _getIcon(playMode),
+          visible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
           color: Theme.of(context).colorScheme.onBackground,
+          size: 20,
         ),
-        onPressed: () => timelineView.nextScenePlayModeForLayer(layerIndex),
+        onPressed: () => timelineView.toggleLayerVisibility(layerIndex),
       ),
     );
-  }
-
-  IconData? _getIcon(PlayMode playMode) {
-    switch (playMode) {
-      case PlayMode.extendLast:
-        return Icons.trending_flat_rounded;
-      case PlayMode.loop:
-        return Icons.autorenew_rounded;
-      case PlayMode.pingPong:
-        return Icons.sync_alt_rounded;
-    }
   }
 }
