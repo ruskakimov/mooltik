@@ -8,7 +8,7 @@ import 'package:mooltik/drawing/data/frame/frame.dart';
 class Scene extends TimeSpan {
   Scene({
     required this.layers,
-    Duration duration = const Duration(seconds: 2, milliseconds: 500),
+    Duration duration = const Duration(seconds: 5),
     this.description,
   }) : super(duration);
 
