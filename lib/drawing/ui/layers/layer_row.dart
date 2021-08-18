@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mooltik/drawing/ui/layers/animated_layer_preview.dart';
 import 'package:mooltik/common/ui/edit_text_dialog.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/common/ui/slide_action_button.dart';
-import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/ui/frame_window.dart';
 import 'package:mooltik/drawing/ui/reel/frame_number_box.dart';
 import 'package:provider/provider.dart';
@@ -186,46 +186,5 @@ class CurrentCel extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class AnimatedLayerPreview extends StatefulWidget {
-  AnimatedLayerPreview({
-    Key? key,
-    required this.frames,
-  }) : super(key: key);
-
-  final List<Frame> frames;
-
-  @override
-  AnimatedLayerPreviewState createState() => AnimatedLayerPreviewState();
-}
-
-class AnimatedLayerPreviewState extends State<AnimatedLayerPreview> {
-  int _frameIndex = 0;
-  late Timer _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _timer = Timer.periodic(
-      const Duration(milliseconds: 150),
-      (_) {
-        setState(() {
-          _frameIndex = (_frameIndex + 1) % widget.frames.length;
-        });
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FrameWindow(frame: widget.frames[_frameIndex]);
   }
 }
