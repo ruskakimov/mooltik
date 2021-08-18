@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 abstract class Sliver {
   Sliver(this.area, this.id)
       : rrect = RRect.fromRectAndRadius(
-          area.deflate(1),
+          area.width > 4 ? _deflateSides(area, 1) : area,
           Radius.circular(8),
         );
 
@@ -25,4 +25,13 @@ class SliverId extends Equatable {
 
   @override
   List<Object> get props => [rowIndex, spanIndex];
+}
+
+Rect _deflateSides(Rect rect, double delta) {
+  return Rect.fromLTRB(
+    rect.left + delta,
+    rect.top,
+    rect.right - delta,
+    rect.bottom,
+  );
 }
