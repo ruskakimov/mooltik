@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
+import 'package:mooltik/common/data/project/fps_config.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
-import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
@@ -64,18 +64,16 @@ void main() {
       timelineView.selectSliver(SliverId(0, 0));
       timelineView.editScene();
 
-      timeline.jumpTo(TimeSpan.singleFrameDuration * 50);
-      timelineView
-          .onSceneEndHandleDragUpdate(TimeSpan.singleFrameDuration * 40);
+      timeline.jumpTo(singleFrameDuration * 50);
+      timelineView.onSceneEndHandleDragUpdate(singleFrameDuration * 40);
       expect(timeline.currentScene.toString(), sceneA.toString());
-      expect(timeline.currentSceneEnd, TimeSpan.singleFrameDuration * 51);
+      expect(timeline.currentSceneEnd, singleFrameDuration * 51);
 
-      timeline.jumpTo(
-          TimeSpan.singleFrameDuration * 50 + Duration(milliseconds: 1));
+      timeline.jumpTo(singleFrameDuration * 50 + Duration(milliseconds: 1));
       timelineView.onSceneEndHandleDragUpdate(
           timeline.playheadPosition + Duration(milliseconds: 1));
       expect(timeline.currentScene.toString(), sceneA.toString());
-      expect(timeline.currentSceneEnd, TimeSpan.singleFrameDuration * 51);
+      expect(timeline.currentSceneEnd, singleFrameDuration * 51);
     });
   });
 }
