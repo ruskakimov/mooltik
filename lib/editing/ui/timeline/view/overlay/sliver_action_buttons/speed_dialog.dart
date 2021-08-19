@@ -40,38 +40,46 @@ class _SpeedDialogState extends State<SpeedDialog> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: AnimatedLayerPreview(
-                  frames: widget.frames,
-                  frameDuration: singleFrameDuration * animateOn,
-                ),
-              ),
+              _buildPreview(),
               SizedBox(height: 16),
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.remove),
-                    onPressed: () => setAnimateOn(animateOn + 1),
-                  ),
-                  Expanded(
-                    child: AppSlider(
-                      value: 1 - (animateOn - 1) / (fps - 1),
-                      onChanged: (value) {
-                        setAnimateOn(((1 - value) * (fps - 1) + 1).round());
-                      },
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () => setAnimateOn(animateOn - 1),
-                  ),
-                ],
-              ),
+              _buildSlider(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  ClipRRect _buildPreview() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: AnimatedLayerPreview(
+        frames: widget.frames,
+        frameDuration: singleFrameDuration * animateOn,
+      ),
+    );
+  }
+
+  Row _buildSlider() {
+    return Row(
+      children: [
+        IconButton(
+          icon: Icon(Icons.remove),
+          onPressed: () => setAnimateOn(animateOn + 1),
+        ),
+        Expanded(
+          child: AppSlider(
+            value: 1 - (animateOn - 1) / (fps - 1),
+            onChanged: (value) {
+              setAnimateOn(((1 - value) * (fps - 1) + 1).round());
+            },
+          ),
+        ),
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => setAnimateOn(animateOn - 1),
+        ),
+      ],
     );
   }
 }
