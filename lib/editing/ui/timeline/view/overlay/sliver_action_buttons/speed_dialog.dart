@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/extensions/duration_methods.dart';
 import 'package:mooltik/common/data/project/fps_config.dart';
 import 'package:mooltik/drawing/ui/layers/animated_layer_preview.dart';
 import 'package:mooltik/common/ui/app_slider.dart';
@@ -20,12 +21,19 @@ class SpeedDialog extends StatefulWidget {
 }
 
 class _SpeedDialogState extends State<SpeedDialog> {
-  int animateOn = 5;
+  late int animateOn;
 
   void setAnimateOn(int value) {
     setState(() {
       animateOn = value.clamp(1, fps);
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final firstDuration = widget.frames.first.duration;
+    setAnimateOn((firstDuration / singleFrameDuration).toInt());
   }
 
   @override
