@@ -59,23 +59,7 @@ class _SpeedDialogState extends State<SpeedDialog> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Stack(
-                children: [
-                  _buildPreview(),
-                  Positioned(
-                    left: 8,
-                    bottom: 8,
-                    child: _LabelBox('${animateOn}s'),
-                  ),
-                  Positioned(
-                    right: 8,
-                    bottom: 8,
-                    child: _LabelBox(
-                      '${(fps / animateOn).toStringAsFixed(2)} FPS',
-                    ),
-                  ),
-                ],
-              ),
+              _buildPreviewWithLabels(),
               SizedBox(height: 16),
               _buildSlider(),
             ],
@@ -85,7 +69,27 @@ class _SpeedDialogState extends State<SpeedDialog> {
     );
   }
 
-  ClipRRect _buildPreview() {
+  Widget _buildPreviewWithLabels() {
+    return Stack(
+      children: [
+        _buildPreview(),
+        Positioned(
+          left: 8,
+          bottom: 8,
+          child: _LabelBox('${animateOn}s'),
+        ),
+        Positioned(
+          right: 8,
+          bottom: 8,
+          child: _LabelBox(
+            '${(fps / animateOn).toStringAsFixed(2)} FPS',
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPreview() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: AnimatedLayerPreview(
@@ -95,7 +99,7 @@ class _SpeedDialogState extends State<SpeedDialog> {
     );
   }
 
-  Row _buildSlider() {
+  Widget _buildSlider() {
     return Row(
       children: [
         IconButton(
