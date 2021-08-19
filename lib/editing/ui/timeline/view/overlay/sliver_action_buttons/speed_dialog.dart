@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/fps_config.dart';
 import 'package:mooltik/drawing/ui/layers/animated_layer_preview.dart';
@@ -40,7 +42,23 @@ class _SpeedDialogState extends State<SpeedDialog> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              _buildPreview(),
+              Stack(
+                children: [
+                  _buildPreview(),
+                  Positioned(
+                    left: 8,
+                    bottom: 8,
+                    child: _LabelBox('${animateOn}s'),
+                  ),
+                  Positioned(
+                    right: 8,
+                    bottom: 8,
+                    child: _LabelBox(
+                      '${(fps / animateOn).toStringAsFixed(2)} FPS',
+                    ),
+                  ),
+                ],
+              ),
               SizedBox(height: 16),
               _buildSlider(),
             ],
@@ -80,6 +98,33 @@ class _SpeedDialogState extends State<SpeedDialog> {
           onPressed: () => setAnimateOn(animateOn - 1),
         ),
       ],
+    );
+  }
+}
+
+class _LabelBox extends StatelessWidget {
+  const _LabelBox(
+    this.text, {
+    Key? key,
+  }) : super(key: key);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: Colors.black54,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 12,
+          fontFeatures: [FontFeature.tabularFigures()],
+        ),
+      ),
     );
   }
 }
