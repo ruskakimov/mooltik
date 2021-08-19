@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/extensions/duration_methods.dart';
@@ -57,13 +58,25 @@ class _SpeedDialogState extends State<SpeedDialog> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              _buildPreviewWithLabels(),
-              SizedBox(height: 16),
-              _buildSlider(),
-            ],
-          ),
+          child: LayoutBuilder(builder: (context, constraints) {
+            return Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 400),
+                child: Column(
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: constraints.maxHeight - 60 - 16,
+                      ),
+                      child: _buildPreviewWithLabels(),
+                    ),
+                    SizedBox(height: 16),
+                    _buildSlider(),
+                  ],
+                ),
+              ),
+            );
+          }),
         ),
       ),
     );
