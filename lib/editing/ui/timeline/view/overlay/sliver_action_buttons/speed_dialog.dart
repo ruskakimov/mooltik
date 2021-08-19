@@ -12,9 +12,13 @@ class SpeedDialog extends StatefulWidget {
   const SpeedDialog({
     Key? key,
     required this.frames,
+    required this.onSubmit,
   }) : super(key: key);
 
   final List<Frame> frames;
+
+  /// Returns single cel duration.
+  final ValueChanged<Duration> onSubmit;
 
   @override
   _SpeedDialogState createState() => _SpeedDialogState();
@@ -42,7 +46,12 @@ class _SpeedDialogState extends State<SpeedDialog> {
       appBar: AppBar(
         title: Text('Animation speed'),
         actions: [
-          DialogDoneButton(onPressed: () {}),
+          DialogDoneButton(
+            onPressed: () {
+              widget.onSubmit(singleFrameDuration * animateOn);
+              Navigator.of(context).pop();
+            },
+          ),
         ],
       ),
       body: SafeArea(
