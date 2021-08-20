@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/fps_config.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/ui/frame_window.dart';
 
@@ -8,7 +9,7 @@ class AnimatedLayerPreview extends StatefulWidget {
   AnimatedLayerPreview({
     Key? key,
     required this.frames,
-    this.frameDuration = const Duration(milliseconds: 40 * 5),
+    this.frameDuration = const Duration(milliseconds: singleFrameMs * 5),
     this.pingPong = false,
   }) : super(key: key);
 

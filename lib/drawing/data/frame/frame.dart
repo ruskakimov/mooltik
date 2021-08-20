@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/extensions/duration_methods.dart';
+import 'package:mooltik/common/data/project/fps_config.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:path/path.dart' as p;
 
@@ -10,7 +11,7 @@ import 'package:path/path.dart' as p;
 class Frame extends TimeSpan with EquatableMixin {
   Frame({
     required this.image,
-    Duration duration = const Duration(milliseconds: 40 * 5),
+    Duration duration = const Duration(milliseconds: singleFrameMs * 5),
   }) : super(duration);
 
   final DiskImage image;
