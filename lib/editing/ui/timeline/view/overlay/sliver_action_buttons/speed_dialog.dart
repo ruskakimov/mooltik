@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/extensions/duration_methods.dart';
