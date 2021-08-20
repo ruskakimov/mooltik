@@ -34,6 +34,7 @@ class SpeedButton extends StatelessWidget {
         fullscreenDialog: true,
         builder: (context) => SpeedDialog(
           frames: frames,
+          playMode: layer.playMode,
           onSubmit: (celDuration) {
             for (var i = 0; i < frames.length; i++) {
               layer.frameSeq.changeSpanDurationAt(i, celDuration);

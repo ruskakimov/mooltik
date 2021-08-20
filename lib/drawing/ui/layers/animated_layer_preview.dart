@@ -9,10 +9,12 @@ class AnimatedLayerPreview extends StatefulWidget {
     Key? key,
     required this.frames,
     this.frameDuration = const Duration(milliseconds: 40 * 5),
+    this.pingPong = false,
   }) : super(key: key);
 
   final List<Frame> frames;
   final Duration frameDuration;
+  final bool pingPong;
 
   @override
   AnimatedLayerPreviewState createState() => AnimatedLayerPreviewState();
@@ -21,6 +23,7 @@ class AnimatedLayerPreview extends StatefulWidget {
 class AnimatedLayerPreviewState extends State<AnimatedLayerPreview> {
   int _frameIndex = 0;
   late Timer _timer;
+  bool _playForward = true; // Used to control ping-pong animation.
 
   @override
   void initState() {
@@ -30,10 +33,28 @@ class AnimatedLayerPreviewState extends State<AnimatedLayerPreview> {
 
   void _tick() {
     setState(() {
-      _frameIndex = (_frameIndex + 1) % widget.frames.length;
+      _frameIndex = widget.pingPong
+          ? _nextFrameIndexForPingPong()
+          : _nextFrameIndexForLoop();
     });
     _timer = Timer(widget.frameDuration, _tick);
   }
+
+  int _nextFrameIndexForLoop() => (_frameIndex + 1) % widget.frames.length;
+
+  int _nextFrameIndexForPingPong() {
+    final step = _playForward ? 1 : -1;
+
+    if (_isValidFrameIndex(_frameIndex + step)) {
+      return _frameIndex + step;
+    } else {
+      _playForward = !_playForward;
+      return _frameIndex;
+    }
+  }
+
+  bool _isValidFrameIndex(int index) =>
+      index >= 0 && index < widget.frames.length;
 
   @override
   void dispose() {

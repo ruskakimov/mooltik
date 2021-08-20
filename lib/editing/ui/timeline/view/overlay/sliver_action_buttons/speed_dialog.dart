@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/extensions/duration_methods.dart';
 import 'package:mooltik/common/data/project/fps_config.dart';
+import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/drawing/ui/layers/animated_layer_preview.dart';
 import 'package:mooltik/common/ui/app_slider.dart';
 import 'package:mooltik/common/ui/dialog_done_button.dart';
@@ -12,10 +13,12 @@ class SpeedDialog extends StatefulWidget {
   const SpeedDialog({
     Key? key,
     required this.frames,
+    required this.playMode,
     required this.onSubmit,
   }) : super(key: key);
 
   final List<Frame> frames;
+  final PlayMode playMode;
 
   /// Returns single cel duration.
   final ValueChanged<Duration> onSubmit;
@@ -107,6 +110,7 @@ class _SpeedDialogState extends State<SpeedDialog> {
       child: AnimatedLayerPreview(
         frames: widget.frames,
         frameDuration: singleFrameDuration * animateOn,
+        pingPong: widget.playMode == PlayMode.pingPong,
       ),
     );
   }
