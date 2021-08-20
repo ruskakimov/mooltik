@@ -19,7 +19,7 @@
                     "frames": [
                         {
                             "file_name": "frame1620719994150.png",
-                            "duration": "0:00:00.100000"
+                            "duration": "0:00:00.120000"
                         },
                         {
                             "file_name": "frame1620720004265.png",
@@ -42,7 +42,7 @@
                     "name": "background"
                 }
             ],
-            "duration": "0:00:01.540000",
+            "duration": "0:00:01.560000",
             "description": "Hello"
         },
         {
@@ -62,7 +62,7 @@
                     "frames": [
                         {
                             "file_name": "frame1620727959144.png",
-                            "duration": "0:00:00.100000"
+                            "duration": "0:00:00.120000"
                         },
                         {
                             "file_name": "frame1620727959153.png",
@@ -94,7 +94,7 @@
                     "frames": [
                         {
                             "file_name": "frame1620728099764.png",
-                            "duration": "0:00:00.140000"
+                            "duration": "0:00:00.160000"
                         },
                         {
                             "file_name": "frame1620728186420.png",
