@@ -1,4 +1,5 @@
 import 'package:mooltik/common/data/io/mp4/slide.dart';
+import 'package:mooltik/common/data/project/fps_config.dart';
 
 String ffmpegSlideshowConcatDemuxer(List<Slide> slides) {
   String concatDemuxer = '';
@@ -33,6 +34,6 @@ String ffmpegCommand({
       ? '-itsoffset ${ffmpegDurationLabel(soundClipOffset!)} -i $soundClipPath'
       : '';
   final output =
-      '-c:v libx264 -preset slow -crf 18 -vf fps=50 -pix_fmt yuv420p -t ${ffmpegDurationLabel(videoDuration)} $outputPath';
+      '-c:v libx264 -preset slow -crf 18 -vf fps=$fps -pix_fmt yuv420p -t ${ffmpegDurationLabel(videoDuration)} $outputPath';
   return '$globalOptions $videoInput $audioInput $output';
 }

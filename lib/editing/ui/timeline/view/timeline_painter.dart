@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/ui/paint_text.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 
 class TimelinePainter extends CustomPainter {
@@ -21,11 +20,7 @@ class TimelinePainter extends CustomPainter {
           sliver.paint(canvas);
 
           if (selectedSliverId != null && selectedSliverId == sliver.id) {
-            paintSelection(
-              canvas,
-              sliver.rrect,
-              timelineView.selectedSliverDurationLabel,
-            );
+            paintSelection(canvas, sliver.rrect);
           }
         }
       }
@@ -61,32 +56,13 @@ class TimelinePainter extends CustomPainter {
   bool shouldRebuildSemantics(TimelinePainter oldDelegate) => false;
 }
 
-void paintSelection(Canvas canvas, RRect rect, String label) {
+void paintSelection(Canvas canvas, RRect rect) {
   canvas.drawRRect(
     rect,
     Paint()
       ..color = Colors.black45
       ..style = PaintingStyle.fill,
   );
-
-  final labelPainter = makeTextPainter(
-    label,
-    const TextStyle(
-      color: Colors.white,
-      fontSize: 12,
-      fontWeight: FontWeight.bold,
-      shadows: [Shadow(blurRadius: 4, color: Colors.black)],
-      fontFeatures: [FontFeature.tabularFigures()],
-    ),
-  );
-
-  if (labelPainter.width + 24 < rect.width) {
-    paintWithTextPainter(
-      canvas,
-      painter: labelPainter,
-      anchorCoordinate: rect.center,
-    );
-  }
 
   canvas.drawRRect(
     rect.deflate(2),

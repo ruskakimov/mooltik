@@ -26,18 +26,30 @@ class FrameReelModel extends ChangeNotifier {
   }
 
   Future<void> appendFrame() async {
-    frameSeq.insert(frameSeq.length, await _createNewFrame());
+    final frame = await _createNewFrame();
+    frameSeq.insert(
+      frameSeq.length,
+      frame.copyWith(duration: frameSeq.last.duration),
+    );
     notifyListeners();
   }
 
   Future<void> addBeforeCurrent() async {
-    frameSeq.insert(_currentIndex, await _createNewFrame());
+    final frame = await _createNewFrame();
+    frameSeq.insert(
+      _currentIndex,
+      frame.copyWith(duration: frameSeq.current.duration),
+    );
     _currentIndex++;
     notifyListeners();
   }
 
   Future<void> addAfterCurrent() async {
-    frameSeq.insert(_currentIndex + 1, await _createNewFrame());
+    final frame = await _createNewFrame();
+    frameSeq.insert(
+      _currentIndex + 1,
+      frame.copyWith(duration: frameSeq.current.duration),
+    );
     notifyListeners();
   }
 

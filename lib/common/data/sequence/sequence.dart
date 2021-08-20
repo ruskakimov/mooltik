@@ -46,6 +46,8 @@ class Sequence<T extends TimeSpan> extends ChangeNotifier {
 
   T get current => _spans[_currentIndex];
 
+  T get last => _spans[length - 1];
+
   int get currentIndex => _currentIndex;
   int _currentIndex;
   set currentIndex(int index) {
