@@ -33,11 +33,11 @@ void main() {
         TestSpan(Duration(milliseconds: 240)),
         TestSpan(Duration(milliseconds: 760)),
         TestSpan(Duration(seconds: 12)),
-        TestSpan(Duration(milliseconds: 20)),
+        TestSpan(Duration(milliseconds: 40)),
       ]);
       expect(
         seq.totalDuration,
-        Duration(seconds: 13, milliseconds: 20),
+        Duration(seconds: 13, milliseconds: 40),
       );
     });
 
@@ -100,70 +100,70 @@ void main() {
     test('handles inserting at current index', () {
       final seq = Sequence([
         TestSpan(Duration(milliseconds: 120)),
-        TestSpan(Duration(milliseconds: 260)),
+        TestSpan(Duration(milliseconds: 240)),
       ]);
-      seq.playhead = Duration(milliseconds: 100);
+      seq.playhead = Duration(milliseconds: 80);
       expect(seq.currentIndex, 0);
-      seq.insert(0, TestSpan(Duration(milliseconds: 60)));
+      seq.insert(0, TestSpan(Duration(milliseconds: 40)));
       expect(seq.length, 3);
       expect(seq.currentIndex, 1);
-      expect(seq.playhead, Duration(milliseconds: 160));
+      expect(seq.playhead, Duration(milliseconds: 120));
     });
 
     test('handles removing current span', () {
       final seq = Sequence([
-        TestSpan(Duration(milliseconds: 100)),
-        TestSpan(Duration(milliseconds: 200)),
-        TestSpan(Duration(milliseconds: 300)),
+        TestSpan(Duration(milliseconds: 120)),
+        TestSpan(Duration(milliseconds: 240)),
+        TestSpan(Duration(milliseconds: 360)),
       ]);
-      seq.playhead = Duration(milliseconds: 150);
+      seq.playhead = Duration(milliseconds: 160);
       expect(seq.currentIndex, 1);
       seq.removeAt(1);
-      expect(seq.playhead, Duration(milliseconds: 100));
+      expect(seq.playhead, Duration(milliseconds: 120));
       expect(seq.currentIndex, 1);
       expect(seq.length, 2);
     });
 
     test('handles replacing current span with longer one', () {
       final seq = Sequence([
-        TestSpan(Duration(milliseconds: 100)),
-        TestSpan(Duration(milliseconds: 200)),
-        TestSpan(Duration(milliseconds: 300)),
+        TestSpan(Duration(milliseconds: 120)),
+        TestSpan(Duration(milliseconds: 240)),
+        TestSpan(Duration(milliseconds: 360)),
       ]);
-      seq.playhead = Duration(milliseconds: 150);
+      seq.playhead = Duration(milliseconds: 160);
       expect(seq.currentIndex, 1);
-      expect(seq.totalDuration, Duration(milliseconds: 600));
-      seq[1] = TestSpan(Duration(milliseconds: 500));
+      expect(seq.totalDuration, Duration(milliseconds: 720));
+      seq[1] = TestSpan(Duration(milliseconds: 400));
       expect(seq.currentIndex, 1);
-      expect(seq.playhead, Duration(milliseconds: 150));
-      expect(seq.totalDuration, Duration(milliseconds: 900));
+      expect(seq.playhead, Duration(milliseconds: 160));
+      expect(seq.totalDuration, Duration(milliseconds: 880));
     });
 
     test('handles replacing current span with shorter one', () {
       final seq = Sequence([
-        TestSpan(Duration(milliseconds: 100)),
-        TestSpan(Duration(milliseconds: 200)),
-        TestSpan(Duration(milliseconds: 300)),
+        TestSpan(Duration(milliseconds: 120)),
+        TestSpan(Duration(milliseconds: 240)),
+        TestSpan(Duration(milliseconds: 360)),
       ]);
-      seq.playhead = Duration(milliseconds: 150);
+      seq.playhead = Duration(milliseconds: 160);
       expect(seq.currentIndex, 1);
-      expect(seq.totalDuration, Duration(milliseconds: 600));
-      seq[1] = TestSpan(Duration(milliseconds: 20));
+      expect(seq.totalDuration, Duration(milliseconds: 720));
+      seq[1] = TestSpan(Duration(milliseconds: 40));
       expect(seq.currentIndex, 2);
-      expect(seq.playhead, Duration(milliseconds: 150));
-      expect(seq.totalDuration, Duration(milliseconds: 420));
+      expect(seq.playhead, Duration(milliseconds: 160));
+      expect(seq.totalDuration, Duration(milliseconds: 520));
     });
 
     test('handles replacing span before current with shorter one', () {
       final seq = Sequence([
-        TestSpan(Duration(milliseconds: 740)),
+        TestSpan(Duration(milliseconds: 800)),
         TestSpan(Duration(milliseconds: 160)),
-        TestSpan(Duration(milliseconds: 100)),
+        TestSpan(Duration(milliseconds: 80)),
       ]);
       seq.playhead = Duration(milliseconds: 800);
       expect(seq.currentIndex, 1);
-      expect(seq.totalDuration, Duration(milliseconds: 1000));
-      seq[0] = TestSpan(Duration(milliseconds: 20));
+      expect(seq.totalDuration, Duration(milliseconds: 1040));
+      seq[0] = TestSpan(Duration(milliseconds: 40));
       expect(seq.currentIndex, 2);
       expect(seq.playhead, Duration(milliseconds: 800));
       expect(seq.totalDuration, Duration(milliseconds: 280));
@@ -171,13 +171,13 @@ void main() {
 
     test('handles replacing span before current with longer one', () {
       final seq = Sequence([
-        TestSpan(Duration(milliseconds: 760)),
-        TestSpan(Duration(milliseconds: 140)),
-        TestSpan(Duration(milliseconds: 100)),
+        TestSpan(Duration(milliseconds: 800)),
+        TestSpan(Duration(milliseconds: 160)),
+        TestSpan(Duration(milliseconds: 80)),
       ]);
       seq.playhead = Duration(milliseconds: 800);
       expect(seq.currentIndex, 1);
-      expect(seq.totalDuration, Duration(milliseconds: 1000));
+      expect(seq.totalDuration, Duration(milliseconds: 1040));
       seq[0] = TestSpan(Duration(seconds: 5));
       expect(seq.currentIndex, 0);
       expect(seq.playhead, Duration(milliseconds: 800));
