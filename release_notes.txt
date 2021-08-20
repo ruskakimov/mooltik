@@ -1,0 +1,2 @@
+- Quickly adjust animation speed
+- Improve frame/scene duration label
