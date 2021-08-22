@@ -13,8 +13,8 @@ class ProjectSaveData {
     Map<String, dynamic> json,
     String frameDirPath,
     String soundDirPath,
-  )   : width = json[widthKey],
-        height = json[heightKey],
+  )   : width = (json[widthKey] as num).toInt(),
+        height = (json[heightKey] as num).toInt(),
         scenes = (json[scenesKey] as List<dynamic>)
             .map((d) => Scene.fromJson(d, frameDirPath))
             .toList(),
@@ -31,8 +31,8 @@ class ProjectSaveData {
         soundsKey: sounds.map((d) => d.toJson()).toList(),
       };
 
-  final double width;
-  final double height;
+  final int width;
+  final int height;
   final List<Scene> scenes;
   final List<SoundClip> sounds;
 
