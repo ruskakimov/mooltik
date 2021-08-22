@@ -120,20 +120,16 @@ class Project extends ChangeNotifier {
   late int width;
   late int height;
 
-  late bool _shouldFreeMemory;
-
   String? _saveDataOnDisk;
   Timer? _autosaveTimer;
 
-  bool get isOpen => _scenes != null;
+  bool get isOpen => _open;
+  bool _open = false;
 
   /// Loads project files into memory.
   Future<void> open() async {
-    if (isOpen) {
-      // Prevent freeing memory after closing and quickly opening the project again.
-      _shouldFreeMemory = false;
-      return;
-    }
+    if (_open) return;
+    _open = true;
 
     if (await _dataFile.exists()) {
       await _openProjectFromDisk();
@@ -176,13 +172,14 @@ class Project extends ChangeNotifier {
   }
 
   Future<void> saveAndClose() async {
-    _shouldFreeMemory = true;
-    _autosaveTimer?.cancel();
-    await save();
-
-    // User might have opened the project again while it was writing to disk.
-    if (_shouldFreeMemory) {
+    try {
+      _autosaveTimer?.cancel();
+      await save();
       _freeMemory();
+    } catch (_) {
+      rethrow;
+    } finally {
+      _open = false;
     }
   }
 
