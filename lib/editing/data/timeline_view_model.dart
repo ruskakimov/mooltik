@@ -385,9 +385,9 @@ class TimelineViewModel extends ChangeNotifier {
     final removedSliver =
         selectedSliverSequence!.removeAt(_selectedSliverId!.spanIndex);
 
-    SchedulerBinding.instance?.scheduleTask(
+    Future.delayed(
+      Duration(seconds: 1),
       () => removedSliver.dispose(),
-      Priority.idle,
     );
 
     removeSliverSelection();

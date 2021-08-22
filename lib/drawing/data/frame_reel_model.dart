@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:mooltik/common/data/project/project.dart';
@@ -68,9 +70,9 @@ class FrameReelModel extends ChangeNotifier {
   void deleteCurrent() {
     final removedFrame = frameSeq.removeAt(_currentIndex);
 
-    SchedulerBinding.instance?.scheduleTask(
+    Future.delayed(
+      Duration(seconds: 1),
       () => removedFrame.dispose(),
-      Priority.idle,
     );
 
     _currentIndex = _currentIndex.clamp(0, frameSeq.length - 1);

@@ -75,9 +75,9 @@ class ReelStackModel extends ChangeNotifier {
     reels.removeAt(layerIndex);
     final removedLayer = _scene.layers.removeAt(layerIndex);
 
-    SchedulerBinding.instance?.scheduleTask(
+    Future.delayed(
+      Duration(seconds: 1),
       () => removedLayer.dispose(),
-      Priority.idle,
     );
 
     if (layerIndex == _activeReelIndex) {
