@@ -117,23 +117,19 @@ class Project extends ChangeNotifier {
   List<SoundClip> get soundClips => _soundClips;
   List<SoundClip> _soundClips = [];
 
-  Size get frameSize => _frameSize;
-  late Size _frameSize;
-
-  late bool _shouldFreeMemory;
+  late int width;
+  late int height;
 
   String? _saveDataOnDisk;
   Timer? _autosaveTimer;
 
-  bool get isOpen => _scenes != null;
+  bool get isOpen => _open;
+  bool _open = false;
 
   /// Loads project files into memory.
   Future<void> open() async {
-    if (isOpen) {
-      // Prevent freeing memory after closing and quickly opening the project again.
-      _shouldFreeMemory = false;
-      return;
-    }
+    if (_open) return;
+    _open = true;
 
     if (await _dataFile.exists()) {
       await _openProjectFromDisk();
@@ -157,7 +153,8 @@ class Project extends ChangeNotifier {
       directory.path,
       _getSoundDirectoryPath(),
     );
-    _frameSize = Size(data.width, data.height);
+    width = data.width;
+    height = data.height;
     _scenes = Sequence<Scene>(data.scenes);
 
     // TODO: Loading all frames into memory doesn't scale.
@@ -168,19 +165,21 @@ class Project extends ChangeNotifier {
   }
 
   Future<void> _openNewProject() async {
-    _frameSize = const Size(1280, 720);
+    width = 1280;
+    height = 720;
     _scenes = Sequence<Scene>([await createNewScene()]);
     _soundClips = [];
   }
 
   Future<void> saveAndClose() async {
-    _shouldFreeMemory = true;
-    _autosaveTimer?.cancel();
-    await save();
-
-    // User might have opened the project again while it was writing to disk.
-    if (_shouldFreeMemory) {
+    try {
+      _autosaveTimer?.cancel();
+      await save();
       _freeMemory();
+    } catch (_) {
+      rethrow;
+    } finally {
+      _open = false;
     }
   }
 
@@ -197,8 +196,8 @@ class Project extends ChangeNotifier {
     // Write thumbnail.
     final image = await generateImage(
       CompositeImagePainter(videoExportFrames.first.compositeImage),
-      _frameSize.width.toInt(),
-      _frameSize.height.toInt(),
+      width,
+      height,
     );
     await pngWrite(thumbnail, image);
     image.dispose();
@@ -220,8 +219,8 @@ class Project extends ChangeNotifier {
 
   String _generateSaveData() {
     final data = ProjectSaveData(
-      width: _frameSize.width,
-      height: _frameSize.height,
+      width: width,
+      height: height,
       scenes: _scenes!.iterable.toList(),
       sounds: _soundClips,
     );
@@ -262,8 +261,8 @@ class Project extends ChangeNotifier {
   Future<Frame> createNewFrame() async {
     final image = await generateImage(
       null,
-      _frameSize.width.toInt(),
-      _frameSize.height.toInt(),
+      width,
+      height,
     );
     final file = _getFrameFile(DateTime.now().millisecondsSinceEpoch);
     await pngWrite(file, image);

@@ -48,6 +48,7 @@ class GalleryModel extends ChangeNotifier {
   /// Returns a future when the current project has been closed and another project can be opened.
   Future<void> openProject(Project project, BuildContext context) async {
     if (_openedProject != null) return;
+    if (project.isOpen) return;
 
     _openedProject = project;
 

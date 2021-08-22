@@ -16,7 +16,7 @@ class FrameWindow extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: AspectRatio(
-        aspectRatio: frame.image.width! / frame.image.height!,
+        aspectRatio: 16 / 9,
         child: ColoredBox(
           color: frostedGlassColor,
           child: CustomPaint(

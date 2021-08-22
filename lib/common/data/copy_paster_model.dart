@@ -8,7 +8,8 @@ class CopyPasterModel extends ChangeNotifier {
   ui.Image? _copiedImage;
 
   void copyImage(ui.Image? image) {
-    _copiedImage = image;
+    _copiedImage?.dispose();
+    _copiedImage = image?.clone();
     notifyListeners();
   }
 
