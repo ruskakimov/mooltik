@@ -14,37 +14,12 @@ class LayerSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reelStack = context.watch<ReelStackModel>();
-
-    return ClipRect(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHeader(),
-          Expanded(
-            child: ReorderableListView(
-              padding: EdgeInsets.only(
-                left: 8,
-                right: 8,
-                bottom: MediaQuery.of(context).padding.bottom,
-              ),
-              proxyDecorator: _proxyDecorator,
-              onReorder: reelStack.onLayerReorder,
-              children: [
-                for (final reel in reelStack.reels)
-                  LayerRow(
-                    key: Key(reel.currentFrame.image.file.path),
-                    reel: reel,
-                    name: reelStack.getLayerName(reelStack.reels.indexOf(reel)),
-                    selected: reel == reelStack.activeReel,
-                    visible: reelStack.isVisible(reelStack.reels.indexOf(reel)),
-                    canDelete: reelStack.canDeleteLayer,
-                  ),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildHeader(),
+        Expanded(child: LayerList()),
+      ],
     );
   }
 
@@ -57,6 +32,39 @@ class LayerSheet extends StatelessWidget {
         AddLayerButton(),
         SizedBox(width: 8),
       ],
+    );
+  }
+}
+
+class LayerList extends StatelessWidget {
+  const LayerList({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final reelStack = context.watch<ReelStackModel>();
+
+    return ClipRect(
+      child: ReorderableListView(
+        clipBehavior: Clip.none,
+        padding: EdgeInsets.only(
+          left: 8,
+          right: 8,
+          bottom: MediaQuery.of(context).padding.bottom,
+        ),
+        proxyDecorator: _proxyDecorator,
+        onReorder: reelStack.onLayerReorder,
+        children: [
+          for (final reel in reelStack.reels)
+            LayerRow(
+              key: Key(reel.currentFrame.image.file.path),
+              reel: reel,
+              name: reelStack.getLayerName(reelStack.reels.indexOf(reel)),
+              selected: reel == reelStack.activeReel,
+              visible: reelStack.isVisible(reelStack.reels.indexOf(reel)),
+              canDelete: reelStack.canDeleteLayer,
+            ),
+        ],
+      ),
     );
   }
 
