@@ -8,6 +8,7 @@ class SlideActionButton extends StatelessWidget {
     required this.label,
     required this.color,
     this.onTap,
+    this.rightSide = true,
   }) : super(key: key);
 
   /// Must be an icon from the material design icons font.
@@ -16,6 +17,7 @@ class SlideActionButton extends StatelessWidget {
   final String label;
   final Color color;
   final VoidCallback? onTap;
+  final bool rightSide;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,9 @@ class SlideActionButton extends StatelessWidget {
         closeOnTap: true,
         onTap: onTap,
         child: Container(
-          margin: EdgeInsets.only(left: 8),
+          margin: rightSide
+              ? const EdgeInsets.only(left: 8)
+              : const EdgeInsets.only(right: 8),
           height: double.infinity,
           width: double.infinity,
           decoration: BoxDecoration(

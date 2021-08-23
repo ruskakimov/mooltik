@@ -67,6 +67,29 @@ class _LayerRowState extends State<LayerRow> {
       child: Slidable(
         actionPane: SlidableDrawerActionPane(),
         closeOnScroll: true,
+        actions: [
+          SlideActionButton(
+            icon: MdiIcons.folderUpload,
+            label: 'Group',
+            color: Theme.of(context).colorScheme.secondary,
+            onTap: () {},
+            rightSide: false,
+          ),
+          SlideActionButton(
+            icon: MdiIcons.folderDownload,
+            label: 'Group',
+            color: Theme.of(context).colorScheme.secondary,
+            onTap: () {},
+            rightSide: false,
+          ),
+          // SlideActionButton(
+          //   icon: MdiIcons.folderRemove,
+          //   label: 'Ungroup',
+          //   color: Theme.of(context).colorScheme.secondary,
+          //   onTap: () {},
+          //   rightSide: false,
+          // ),
+        ],
         secondaryActions: [
           SlideActionButton(
             icon: MdiIcons.formTextbox,
