@@ -9,6 +9,8 @@ import 'package:mooltik/drawing/ui/layers/layer_row.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
 
+const double _rowHeight = 80;
+
 class LayerSheet extends StatelessWidget {
   const LayerSheet({Key? key}) : super(key: key);
 
@@ -18,7 +20,27 @@ class LayerSheet extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildHeader(),
-        Expanded(child: LayerList()),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Stack(
+              children: [
+                LayerList(),
+                Positioned(
+                  left: 16,
+                  bottom: _rowHeight * 3,
+                  height: _rowHeight * 3,
+                  width: 4,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -44,7 +66,9 @@ class LayerList extends StatelessWidget {
     final reelStack = context.watch<ReelStackModel>();
 
     return ClipRect(
-      child: ReorderableListView(
+      child: ReorderableListView.builder(
+        primary: false,
+        shrinkWrap: true,
         clipBehavior: Clip.none,
         padding: EdgeInsets.only(
           left: 8,
@@ -53,17 +77,44 @@ class LayerList extends StatelessWidget {
         ),
         proxyDecorator: _proxyDecorator,
         onReorder: reelStack.onLayerReorder,
-        children: [
-          for (final reel in reelStack.reels)
-            LayerRow(
-              key: Key(reel.currentFrame.image.file.path),
-              reel: reel,
-              name: reelStack.getLayerName(reelStack.reels.indexOf(reel)),
-              selected: reel == reelStack.activeReel,
-              visible: reelStack.isVisible(reelStack.reels.indexOf(reel)),
-              canDelete: reelStack.canDeleteLayer,
-            ),
-        ],
+        itemCount: reelStack.reels.length,
+        itemBuilder: (context, index) =>
+            _buildLayerRow(context, index, reelStack),
+      ),
+    );
+  }
+
+  Widget _buildLayerRow(
+    BuildContext context,
+    int index,
+    ReelStackModel reelStack,
+  ) {
+    final reel = reelStack.reels[index];
+    final name = reelStack.getLayerName(index);
+    final selected = reel == reelStack.activeReel;
+    final visible = reelStack.isVisible(index);
+
+    Widget rowContent = LayerRow(
+      reel: reel,
+      name: name,
+      selected: selected,
+      visible: visible,
+      canDelete: reelStack.canDeleteLayer,
+    );
+
+    if (!visible) {
+      rowContent = Padding(
+        padding: const EdgeInsets.only(left: 16.0),
+        child: rowContent,
+      );
+    }
+
+    return SizedBox(
+      key: Key(reel.currentFrame.image.file.path),
+      height: _rowHeight,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: rowContent,
       ),
     );
   }

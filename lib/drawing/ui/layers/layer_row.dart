@@ -37,75 +37,69 @@ class LayerRow extends StatefulWidget {
 class _LayerRowState extends State<LayerRow> {
   @override
   Widget build(BuildContext context) {
-    final content = SizedBox(
-      height: 80,
-      child: Material(
-        color: widget.selected ? Colors.white24 : Colors.transparent,
+    final content = Material(
+      color: widget.selected ? Colors.white24 : Colors.transparent,
+      borderRadius: BorderRadius.circular(8),
+      child: InkWell(
+        splashColor: Colors.transparent,
         borderRadius: BorderRadius.circular(8),
-        child: InkWell(
-          splashColor: Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-          onTap: _handleTap,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CurrentCel(reel: widget.reel),
-              SizedBox(width: 4),
-              Expanded(child: _buildLabel()),
-              VisibilitySwitch(
-                value: widget.visible,
-                onChanged: _handleVisibilitySwitch,
-              ),
-            ],
-          ),
+        onTap: _handleTap,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CurrentCel(reel: widget.reel),
+            SizedBox(width: 4),
+            Expanded(child: _buildLabel()),
+            VisibilitySwitch(
+              value: widget.visible,
+              onChanged: _handleVisibilitySwitch,
+            ),
+          ],
         ),
       ),
     );
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
-      child: Slidable(
-        actionPane: SlidableDrawerActionPane(),
-        closeOnScroll: true,
-        actions: [
-          SlideActionButton(
-            icon: MdiIcons.folderUpload,
-            label: 'Group',
-            color: Theme.of(context).colorScheme.secondary,
-            onTap: () {},
-            rightSide: false,
-          ),
-          SlideActionButton(
-            icon: MdiIcons.folderDownload,
-            label: 'Group',
-            color: Theme.of(context).colorScheme.secondary,
-            onTap: () {},
-            rightSide: false,
-          ),
-          // SlideActionButton(
-          //   icon: MdiIcons.folderRemove,
-          //   label: 'Ungroup',
-          //   color: Theme.of(context).colorScheme.secondary,
-          //   onTap: () {},
-          //   rightSide: false,
-          // ),
-        ],
-        secondaryActions: [
-          SlideActionButton(
-            icon: MdiIcons.formTextbox,
-            label: 'Rename',
-            color: Theme.of(context).colorScheme.secondary,
-            onTap: _handleRename,
-          ),
-          SlideActionButton(
-            icon: MdiIcons.trashCanOutline,
-            label: 'Delete',
-            color: Colors.red,
-            onTap: widget.canDelete ? _handleDelete : null,
-          ),
-        ],
-        child: content,
-      ),
+    return Slidable(
+      actionPane: SlidableDrawerActionPane(),
+      closeOnScroll: true,
+      actions: [
+        SlideActionButton(
+          icon: MdiIcons.folderUpload,
+          label: 'Group',
+          color: Theme.of(context).colorScheme.secondary,
+          onTap: () {},
+          rightSide: false,
+        ),
+        SlideActionButton(
+          icon: MdiIcons.folderDownload,
+          label: 'Group',
+          color: Theme.of(context).colorScheme.secondary,
+          onTap: () {},
+          rightSide: false,
+        ),
+        // SlideActionButton(
+        //   icon: MdiIcons.folderRemove,
+        //   label: 'Ungroup',
+        //   color: Theme.of(context).colorScheme.secondary,
+        //   onTap: () {},
+        //   rightSide: false,
+        // ),
+      ],
+      secondaryActions: [
+        SlideActionButton(
+          icon: MdiIcons.formTextbox,
+          label: 'Rename',
+          color: Theme.of(context).colorScheme.secondary,
+          onTap: _handleRename,
+        ),
+        SlideActionButton(
+          icon: MdiIcons.trashCanOutline,
+          label: 'Delete',
+          color: Colors.red,
+          onTap: widget.canDelete ? _handleDelete : null,
+        ),
+      ],
+      child: content,
     );
   }
 
