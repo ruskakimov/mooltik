@@ -1,2 +1,2 @@
-- Quickly adjust animation speed
-- Improve frame/scene duration label
+- Option to remove audio clip
+- Fix name collision of duplicated images
