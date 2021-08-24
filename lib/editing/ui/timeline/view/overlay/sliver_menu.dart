@@ -4,7 +4,6 @@ import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/ui/frame_window.dart';
-import 'package:mooltik/editing/data/editor_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/animated_scene_preview.dart';
 import 'package:provider/provider.dart';
@@ -13,12 +12,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class SliverMenu extends StatelessWidget {
   const SliverMenu({
     Key? key,
+    required this.showEditScene,
+    required this.showDuplicate,
   }) : super(key: key);
+
+  final bool showEditScene;
+  final bool showDuplicate;
 
   @override
   Widget build(BuildContext context) {
     final timelineView = context.watch<TimelineViewModel>();
-    final editor = context.watch<EditorModel>();
 
     return Material(
       clipBehavior: Clip.antiAlias,
@@ -35,19 +38,20 @@ class SliverMenu extends StatelessWidget {
               durationLabel: timelineView.selectedSliverDurationLabel,
             ),
             SizedBox(width: 8),
-            if (!timelineView.isEditingScene && editor.isTimelineView)
+            if (showEditScene)
               LabeledIconButton(
                 icon: FontAwesomeIcons.film,
                 label: 'Edit scene',
                 color: Theme.of(context).colorScheme.onPrimary,
                 onTap: timelineView.editScene,
               ),
-            LabeledIconButton(
-              icon: FontAwesomeIcons.copy,
-              label: 'Duplicate',
-              color: Theme.of(context).colorScheme.onPrimary,
-              onTap: timelineView.duplicateSelected,
-            ),
+            if (showDuplicate)
+              LabeledIconButton(
+                icon: FontAwesomeIcons.copy,
+                label: 'Duplicate',
+                color: Theme.of(context).colorScheme.onPrimary,
+                onTap: timelineView.duplicateSelected,
+              ),
             LabeledIconButton(
               icon: FontAwesomeIcons.trashAlt,
               label: 'Delete',

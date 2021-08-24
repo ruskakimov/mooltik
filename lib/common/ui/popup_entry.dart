@@ -3,7 +3,7 @@ import 'package:flutter_portal/flutter_portal.dart';
 
 const _popupAnimationDuration = Duration(milliseconds: 150);
 
-class PopupEntry extends StatelessWidget {
+class PopupEntry extends StatefulWidget {
   const PopupEntry({
     Key? key,
     required this.visible,
@@ -24,36 +24,53 @@ class PopupEntry extends StatelessWidget {
   final VoidCallback? onDragOutside;
 
   @override
+  _PopupEntryState createState() => _PopupEntryState();
+}
+
+class _PopupEntryState extends State<PopupEntry> {
+  Widget? _popup;
+
+  @override
+  void didUpdateWidget(covariant PopupEntry oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Don't update popup configuration when popup is fading out.
+    if (widget.visible) {
+      _popup = widget.popup;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PortalEntry(
-      visible: visible,
+      visible: widget.visible,
       portal: Listener(
         behavior: HitTestBehavior.translucent,
         onPointerUp: (_) {
-          onTapOutside?.call();
+          widget.onTapOutside?.call();
         },
         onPointerMove: (_) {
-          onDragOutside?.call();
+          widget.onDragOutside?.call();
         },
       ),
       child: PortalEntry(
-        visible: visible,
+        visible: widget.visible,
         closeDuration: _popupAnimationDuration,
         portal: TweenAnimationBuilder<double>(
           duration: _popupAnimationDuration,
-          tween: Tween(begin: 0, end: visible ? 1 : 0),
+          tween: Tween(begin: 0, end: widget.visible ? 1 : 0),
           builder: (context, progress, child) => Opacity(
             opacity: progress,
             child: child,
           ),
-          child: popup,
+          child: _popup,
         ),
-        portalAnchor: popupAnchor,
+        portalAnchor: widget.popupAnchor,
         child: IgnorePointer(
-          ignoring: visible,
-          child: child,
+          ignoring: widget.visible,
+          child: widget.child,
         ),
-        childAnchor: childAnchor,
+        childAnchor: widget.childAnchor,
       ),
     );
   }
