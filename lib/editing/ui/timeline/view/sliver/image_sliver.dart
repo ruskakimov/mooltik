@@ -8,24 +8,24 @@ class ImageSliver extends Sliver {
   ImageSliver({
     required Rect area,
     required this.thumbnail,
-    required SliverId? id,
-    this.opacity = 1,
-  }) : super(area, id);
+    this.ghost = false,
+  }) : super(area);
 
   final ui.Image? thumbnail;
-  final double opacity;
+  final bool ghost;
 
   @override
   void paint(Canvas canvas) {
+    final opacity = ghost ? 0.3 : 1.0;
+
     final backgroundColor =
         frostedGlassColor.withOpacity(frostedGlassColor.opacity * opacity);
-    final backgroundPaint = Paint()..color = backgroundColor;
-    canvas.drawRRect(rrect, backgroundPaint);
+    canvas.drawRRect(rrect, Paint()..color = backgroundColor);
 
-    if (thumbnail != null) _paintThumbnail(canvas);
+    if (thumbnail != null) _paintThumbnail(canvas, opacity);
   }
 
-  void _paintThumbnail(Canvas canvas) {
+  void _paintThumbnail(Canvas canvas, double opacity) {
     canvas.save();
     canvas.clipRRect(rrect);
     canvas.translate(area.left, area.top);

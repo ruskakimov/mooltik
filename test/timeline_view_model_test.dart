@@ -9,7 +9,6 @@ import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
-import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 
 void main() {
   group('TimelineViewModel', () {
@@ -61,7 +60,7 @@ void main() {
         sharedPreferences: null,
       );
 
-      timelineView.selectSliver(SliverId(0, 0));
+      timelineView.selectSliver(SliverCoord(0, 0));
       timelineView.editScene();
 
       timeline.jumpTo(singleFrameDuration * 50);

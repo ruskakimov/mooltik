@@ -26,7 +26,7 @@ class TimelinePainter extends CustomPainter {
     // Selection.
     if (selectedSliverId != null) {
       final selectedSliver =
-          rows[selectedSliverId.rowIndex][selectedSliverId.spanIndex];
+          rows[selectedSliverId.rowIndex][selectedSliverId.colIndex];
 
       if (selectedSliver.area.overlaps(canvasArea)) {
         _paintSelection(canvas, selectedSliver.rrect);
