@@ -126,7 +126,6 @@ class TimelineViewModel extends ChangeNotifier {
 
   List<SceneLayer> get sceneLayers => _timeline.currentScene.layers;
 
-  // TODO: Sound sequence support
   List<Sequence<TimeSpan>> get sequenceRows => isEditingScene
       ? sceneLayers.map((layer) => layer.frameSeq).toList()
       : [_timeline.sceneSeq];
@@ -318,14 +317,25 @@ class TimelineViewModel extends ChangeNotifier {
   double get selectedSliverMidY => rowMiddle(_selectedSliverCoord!.rowIndex);
 
   bool get showResizeStartHandle =>
-      showSliverMenu && _selectedSliverCoord!.colIndex != 0;
+      showSliverMenu &&
+      _selectedSliverCoord!.colIndex != 0 &&
+      !hasSelectedSoundClip;
 
-  bool get showResizeEndHandle => showSliverMenu;
+  bool get showResizeEndHandle => showSliverMenu && !hasSelectedSoundClip;
 
-  TimeSpan? get selectedSpan => _selectedSliverCoord != null
-      ? sequenceRows[_selectedSliverCoord!.rowIndex]
-          [_selectedSliverCoord!.colIndex]
-      : null;
+  TimeSpan? get selectedSpan {
+    final coord = _selectedSliverCoord;
+    if (coord == null) return null;
+
+    if (coord.rowIndex < sequenceRows.length) {
+      return sequenceRows[coord.rowIndex][coord.colIndex];
+    } else if (coord.rowIndex == sequenceRows.length) {
+      // Sound row.
+      return _soundClips[coord.colIndex];
+    }
+  }
+
+  bool get hasSelectedSoundClip => selectedSpan is SoundClip;
 
   Frame? get selectedFrame => selectedSpan as Frame?;
   Scene? get selectedScene => selectedSpan as Scene?;
@@ -378,9 +388,13 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get canDeleteSelected => selectedSliverSequence != null
-      ? selectedSliverSequence!.length > 1
-      : false;
+  bool get canDeleteSelected {
+    if (hasSelectedSoundClip) return true;
+
+    return selectedSliverSequence != null
+        ? selectedSliverSequence!.length > 1
+        : false;
+  }
 
   void deleteSelected() {
     if (_selectedSliverCoord == null) return;
