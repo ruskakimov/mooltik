@@ -14,38 +14,31 @@ class TimelinePainter extends CustomPainter {
     final rows = timelineView.getSliverRows();
     final selectedSliverId = timelineView.selectedSliverId;
 
+    // Slivers.
     for (var row in rows) {
       for (var sliver in row) {
         if (sliver.area.overlaps(canvasArea)) {
           sliver.paint(canvas);
-
-          if (selectedSliverId != null && selectedSliverId == sliver.id) {
-            paintSelection(canvas, sliver.rrect);
-          }
         }
       }
     }
 
+    // Selection.
+    if (selectedSliverId != null) {
+      final selectedSliver =
+          rows[selectedSliverId.rowIndex][selectedSliverId.spanIndex];
+
+      if (selectedSliver.area.overlaps(canvasArea)) {
+        _paintSelection(canvas, selectedSliver.rrect);
+      }
+    }
+
+    // Curtains.
     if (timelineView.isEditingScene) {
-      final fogPaint = Paint()..color = Colors.black45;
-      canvas.drawRect(
-        Rect.fromLTRB(
-          0,
-          0,
-          timelineView.xFromTime(timelineView.sceneStart),
-          size.height,
-        ),
-        fogPaint,
-      );
-      canvas.drawRect(
-        Rect.fromLTRB(
-          timelineView.xFromTime(timelineView.sceneEnd),
-          0,
-          size.width,
-          size.height,
-        ),
-        fogPaint,
-      );
+      final sceneStartX = timelineView.xFromTime(timelineView.sceneStart);
+      final sceneEndX = timelineView.xFromTime(timelineView.sceneEnd);
+
+      _paintCurtains(canvas, size, sceneStartX, sceneEndX);
     }
   }
 
@@ -56,7 +49,7 @@ class TimelinePainter extends CustomPainter {
   bool shouldRebuildSemantics(TimelinePainter oldDelegate) => false;
 }
 
-void paintSelection(Canvas canvas, RRect rect) {
+void _paintSelection(Canvas canvas, RRect rect) {
   canvas.drawRRect(
     rect,
     Paint()
@@ -70,5 +63,22 @@ void paintSelection(Canvas canvas, RRect rect) {
       ..color = Colors.amber
       ..style = PaintingStyle.stroke
       ..strokeWidth = 4,
+  );
+}
+
+void _paintCurtains(
+  Canvas canvas,
+  Size size,
+  double sceneStartX,
+  double sceneEndX,
+) {
+  final curtainPaint = Paint()..color = Colors.black45;
+  canvas.drawRect(
+    Rect.fromLTRB(0, 0, sceneStartX, size.height),
+    curtainPaint,
+  );
+  canvas.drawRect(
+    Rect.fromLTRB(sceneEndX, 0, size.width, size.height),
+    curtainPaint,
   );
 }
