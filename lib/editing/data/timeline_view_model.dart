@@ -412,6 +412,11 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteSoundClips() {
+    _soundClips.clear();
+    notifyListeners();
+  }
+
   Future<void> duplicateSelected() async {
     if (_selectedSliverCoord == null) return;
     final duplicate = isEditingScene

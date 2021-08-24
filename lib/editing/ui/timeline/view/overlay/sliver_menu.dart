@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/scene.dart';
+import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
@@ -73,6 +74,12 @@ class SliverMenu extends StatelessWidget {
     final selectedSliverId = timelineView.selectedSliverId;
 
     timelineView.removeSliverSelection();
+
+    // TODO: Handle deleting individual sound clips
+    if (selected is SoundClip) {
+      timelineView.deleteSoundClips();
+      return;
+    }
 
     final deleteConfirmed = await openDeleteConfirmationDialog(
       context: context,
