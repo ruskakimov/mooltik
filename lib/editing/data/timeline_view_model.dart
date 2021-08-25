@@ -179,7 +179,6 @@ class TimelineViewModel extends ChangeNotifier {
           ),
           frames: frames,
           numberOfRealFrames: layer.frameSeq.length,
-          rowIndex: rowIndex,
         ).toList();
 
         addRow(frameRow);
@@ -193,7 +192,6 @@ class TimelineViewModel extends ChangeNotifier {
           bottom: rowBottom(rowIndex),
         ),
         scenes: sceneSeq.iterable,
-        rowIndex: rowIndex,
       ).toList();
 
       addRow(sceneRow);
@@ -214,7 +212,6 @@ class TimelineViewModel extends ChangeNotifier {
     required Iterable<Rect> areas,
     required Iterable<Frame> frames,
     required int numberOfRealFrames,
-    required int rowIndex,
   }) sync* {
     int frameIndex = 0;
     final areaIt = areas.iterator;
@@ -238,7 +235,6 @@ class TimelineViewModel extends ChangeNotifier {
   Iterable<VideoSliver> sceneSliverRow({
     required Iterable<Rect> areas,
     required Iterable<Scene> scenes,
-    required int rowIndex,
   }) sync* {
     final areaIt = areas.iterator;
     final sceneIt = scenes.iterator;
