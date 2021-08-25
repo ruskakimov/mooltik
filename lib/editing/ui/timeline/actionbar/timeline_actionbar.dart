@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/popup_entry.dart';
+import 'package:mooltik/editing/data/editor_model.dart';
 import 'package:mooltik/editing/data/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/add_scene_button.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/import_audio_button.dart';
@@ -17,6 +18,7 @@ class TimelineActionbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timelineView = context.watch<TimelineViewModel>();
+    final editor = context.watch<EditorModel>();
 
     return SizedBox(
       height: 48,
@@ -30,7 +32,12 @@ class TimelineActionbar extends StatelessWidget {
             visible: timelineView.showSliverMenu,
             childAnchor: Alignment.center,
             popupAnchor: Alignment.center,
-            popup: SliverMenu(),
+            popup: SliverMenu(
+              showEditScene: editor.isTimelineView &&
+                  !timelineView.isEditingScene &&
+                  !timelineView.hasSelectedSoundClip,
+              showDuplicate: !timelineView.hasSelectedSoundClip,
+            ),
             child: PlayButton(),
             onTapOutside: () {
               timelineView.removeSliverSelection();
