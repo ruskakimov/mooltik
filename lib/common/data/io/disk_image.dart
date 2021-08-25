@@ -33,7 +33,7 @@ class DiskImage with EquatableMixin {
   }
 
   Future<DiskImage> duplicate() async {
-    var duplicatePath = makeFreeDuplicatePath(file.path);
+    final duplicatePath = makeFreeDuplicatePath(file.path);
     final duplicateFile = await file.copy(duplicatePath);
 
     return DiskImage(
