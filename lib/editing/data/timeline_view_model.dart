@@ -329,6 +329,7 @@ class TimelineViewModel extends ChangeNotifier {
       // Sound row.
       return _soundClips[coord.colIndex];
     }
+    return null;
   }
 
   bool get hasSelectedSoundClip => selectedSpan is SoundClip;
