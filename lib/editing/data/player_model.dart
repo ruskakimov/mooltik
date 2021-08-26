@@ -38,7 +38,7 @@ class PlayerModel extends ChangeNotifier {
     super.dispose();
   }
 
-  final AudioPlayer _player;
+  AudioPlayer _player;
 
   /// List of sound clips to play.
   final List<SoundClip>? soundClips;
@@ -48,7 +48,11 @@ class PlayerModel extends ChangeNotifier {
 
   /// Prepare player for playing from current playhead position.
   Future<void> prepare() async {
-    if (soundClips!.isEmpty) return;
+    if (soundClips!.isEmpty) {
+      _player.dispose();
+      _player = AudioPlayer();
+      return;
+    }
 
     await _player.setFilePath(
       soundClips!.first.path,

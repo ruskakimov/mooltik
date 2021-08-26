@@ -1,8 +1,23 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
+
+/// Returns an unoccupied duplicate path.
+String makeFreeDuplicatePath(String originalPath) {
+  var duplicatePath = makeDuplicatePath(originalPath);
+
+  while (File(duplicatePath).existsSync()) {
+    duplicatePath = makeDuplicatePath(duplicatePath);
+  }
+
+  return duplicatePath;
+}
 
 /// Returns a new path for a duplicate file.
 /// `example/path/image.png` -> `example/path/image_1.png`
 /// `example/path/image_1.png` -> `example/path/image_2.png`
+@visibleForTesting
 String makeDuplicatePath(String path) {
   final dir = p.dirname(path);
   final name = p.basenameWithoutExtension(path);
