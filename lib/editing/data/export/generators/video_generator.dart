@@ -53,7 +53,7 @@ class VideoGenerator extends Generator {
         _ffmpegProgressCallback,
       );
     } catch (e, stack) {
-      FirebaseCrashlytics.instance.recordError(e, stack);
+      await FirebaseCrashlytics.instance.recordError(e, stack);
     } finally {
       _isRunningFfmpeg = false;
     }
