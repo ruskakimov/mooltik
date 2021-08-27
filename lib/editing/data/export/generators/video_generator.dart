@@ -10,6 +10,9 @@ import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 
+const _imagesProgressFraction = 0.5;
+const _ffmpegProgressFraction = 1.0 - _imagesProgressFraction;
+
 class VideoGenerator extends Generator {
   VideoGenerator({
     required this.videoName,
@@ -62,8 +65,9 @@ class VideoGenerator extends Generator {
   }
 
   void _ffmpegProgressCallback(double ffmpegProgress) {
-    // Fills the last 50% percent.
-    return progressCallback(0.5 + ffmpegProgress / 2);
+    return progressCallback(
+      _imagesProgressFraction + ffmpegProgress * _ffmpegProgressFraction,
+    );
   }
 
   @override
@@ -77,26 +81,37 @@ class VideoGenerator extends Generator {
     Iterable<CompositeFrame> frames,
   ) async {
     List<Slide>? result;
+    int countDone = 0;
+
+    final cancelledException = Exception('Cancelled.');
 
     try {
       result = await Future.wait(
         frames.mapIndexed((frame, i) async {
-          if (isCancelled) throw Exception('Cancelled.');
           final file = makeTemporaryFile('$i.png');
 
-          if (isCancelled) throw Exception('Cancelled.');
           final image = await frame.toImage();
+          FirebaseCrashlytics.instance.log('Generated image $i in memory');
 
-          if (isCancelled) throw Exception('Cancelled.');
-          print('Schedule writing PNG to ${file.path}');
+          if (isCancelled) throw cancelledException;
+
           await pngWrite(file, image);
-          print('Finished writing PNG to ${file.path}');
+
+          countDone++;
+          progressCallback(_imagesProgressFraction * countDone / frames.length);
+
+          FirebaseCrashlytics.instance
+              .log('$countDone/${frames.length}, wrote to ${file.path}');
 
           return Slide(file, frame.duration);
         }),
         eagerError: true,
       );
-    } catch (e) {
+    } catch (e, stack) {
+      if (e != cancelledException) {
+        FirebaseCrashlytics.instance.recordError(e, stack);
+      }
+
       result = null;
     }
 
