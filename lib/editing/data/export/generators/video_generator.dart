@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:mooltik/editing/data/export/generators/generator.dart';
 import 'package:mooltik/common/data/extensions/iterable_methods.dart';
@@ -33,17 +34,36 @@ class VideoGenerator extends Generator {
     final slides = await _slidesFromFrames(frames);
 
     if (isCancelled || slides == null) return null;
-    _isRunningFfmpeg = true;
-    final success = await mp4Write(
-      videoFile,
-      slides,
-      soundClips,
-      temporaryDirectory,
-      progressCallback,
-    );
-    _isRunningFfmpeg = false;
+
+    final success = await _runFFmpeg(videoFile, slides);
 
     return success && !isCancelled ? videoFile : null;
+  }
+
+  Future<bool> _runFFmpeg(File videoFile, List<Slide> slides) async {
+    _isRunningFfmpeg = true;
+    var success = false;
+
+    try {
+      success = await mp4Write(
+        videoFile,
+        slides,
+        soundClips,
+        temporaryDirectory,
+        _ffmpegProgressCallback,
+      );
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack);
+    } finally {
+      _isRunningFfmpeg = false;
+    }
+
+    return success;
+  }
+
+  void _ffmpegProgressCallback(double ffmpegProgress) {
+    // Fills the last 50% percent.
+    return progressCallback(0.5 + ffmpegProgress / 2);
   }
 
   @override
