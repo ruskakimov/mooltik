@@ -9,6 +9,9 @@ import 'package:mooltik/common/data/io/mp4/ffmpeg_helpers.dart';
 
 typedef void ProgressCallback(double progress);
 
+const int _successCode = 0;
+const int _cancelCode = 255;
+
 /// Constructs mp4 from slides and returns `true` if it was successful.
 Future<bool> mp4Write(
   File mp4File,
@@ -53,9 +56,14 @@ Future<bool> mp4Write(
 
   FirebaseCrashlytics.instance.log('FFmpeg exit code: $code');
 
-  // TODO: Report error to crashlytics
+  if (code != _successCode && code != _cancelCode) {
+    await FirebaseCrashlytics.instance.recordError(
+      Exception('Failed to export video. Exit code: $code'),
+      null,
+    );
+  }
 
-  return code == 0;
+  return code == _successCode;
 }
 
 extension StatisticsLog on Statistics {
