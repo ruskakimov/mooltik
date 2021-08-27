@@ -38,7 +38,10 @@ Future<bool> mp4Write(
   );
 
   config.enableStatisticsCallback((Statistics stats) {
-    progressCallback.call(stats.time / videoDuration.inMilliseconds);
+    final progress = stats.time / videoDuration.inMilliseconds;
+    progressCallback.call(progress);
+
+    FirebaseCrashlytics.instance.log('FFmpeg progress: $progress');
     FirebaseCrashlytics.instance.log(stats.toLog());
   });
 
