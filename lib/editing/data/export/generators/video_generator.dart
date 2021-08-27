@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:mooltik/editing/data/export/generators/generator.dart';
-import 'package:mooltik/common/data/extensions/iterable_methods.dart';
 import 'package:mooltik/common/data/io/mp4/mp4.dart';
 import 'package:mooltik/common/data/io/mp4/slide.dart';
 import 'package:mooltik/common/data/io/png.dart';
@@ -34,7 +33,7 @@ class VideoGenerator extends Generator {
     final videoFile = makeTemporaryFile('$videoName.mp4');
 
     if (isCancelled) return null;
-    final slides = await _slidesFromFrames(frames);
+    final slides = await _slidesFromFrames(frames.toList());
 
     if (isCancelled || slides == null) return null;
 
@@ -78,43 +77,30 @@ class VideoGenerator extends Generator {
   }
 
   Future<List<Slide>?> _slidesFromFrames(
-    Iterable<CompositeFrame> frames,
+    List<CompositeFrame> frames,
   ) async {
-    List<Slide>? result;
-    int countDone = 0;
+    final slides = <Slide>[];
 
-    final cancelledException = Exception('Cancelled.');
+    for (int i = 0; i < frames.length; i++) {
+      final file = makeTemporaryFile('$i.png');
 
-    try {
-      result = await Future.wait(
-        frames.mapIndexed((frame, i) async {
-          final file = makeTemporaryFile('$i.png');
+      final image = await frames[i].toImage();
+      FirebaseCrashlytics.instance.log('Generated image $i in memory');
 
-          final image = await frame.toImage();
-          FirebaseCrashlytics.instance.log('Generated image $i in memory');
-
-          if (isCancelled) throw cancelledException;
-
-          await pngWrite(file, image);
-
-          countDone++;
-          progressCallback(_imagesProgressFraction * countDone / frames.length);
-
-          FirebaseCrashlytics.instance
-              .log('$countDone/${frames.length}, wrote to ${file.path}');
-
-          return Slide(file, frame.duration);
-        }),
-        eagerError: true,
-      );
-    } catch (e, stack) {
-      if (e != cancelledException) {
-        FirebaseCrashlytics.instance.recordError(e, stack);
+      if (isCancelled) {
+        image.dispose();
+        return null;
       }
 
-      result = null;
+      await pngWrite(file, image);
+      image.dispose();
+
+      progressCallback(_imagesProgressFraction * i / frames.length);
+      FirebaseCrashlytics.instance.log('$i/${frames.length} ${file.path}');
+
+      slides.add(Slide(file, frames[i].duration));
     }
 
-    return result;
+    return slides;
   }
 }
