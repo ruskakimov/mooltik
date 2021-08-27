@@ -20,7 +20,11 @@ Future<bool> mp4Write(
   assert(slides.isNotEmpty);
 
   final concatFile = File(p.join(tempDir.path, 'concat.txt'));
-  await concatFile.writeAsString(ffmpegSlideshowConcatDemuxer(slides));
+  final concatContent = ffmpegSlideshowConcatDemuxer(slides);
+
+  FirebaseCrashlytics.instance.log(concatContent);
+
+  await concatFile.writeAsString(concatContent);
 
   final config = FlutterFFmpegConfig();
   config.resetStatistics();
