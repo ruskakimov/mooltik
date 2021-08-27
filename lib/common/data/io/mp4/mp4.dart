@@ -47,7 +47,7 @@ Future<bool> mp4Write(
 
   final code = await FlutterFFmpeg().execute(command);
 
-  // TODO: Record code to key
+  FirebaseCrashlytics.instance.log('FFmpeg exit code: $code');
 
   // TODO: Report error to crashlytics
 
