@@ -35,19 +35,23 @@ Future<bool> mp4Write(
     FirebaseCrashlytics.instance.log(stats.toLog());
   });
 
-  final code = await FlutterFFmpeg().execute(ffmpegCommand(
+  final command = ffmpegCommand(
     concatDemuxerPath: concatFile.path,
     soundClipPath: soundClips.isNotEmpty ? soundClips.first.file.path : null,
     soundClipOffset: soundClips.isNotEmpty ? soundClips.first.startTime : null,
     outputPath: mp4File.path,
     videoDuration: videoDuration,
-  ));
+  );
+
+  FirebaseCrashlytics.instance.log(command);
+
+  final code = await FlutterFFmpeg().execute(command);
 
   // TODO: Record code to key
 
   // TODO: Report error to crashlytics
 
-  return 2 == 0;
+  return code == 0;
 }
 
 extension StatisticsLog on Statistics {
