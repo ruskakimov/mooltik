@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:flutter_ffmpeg/statistics.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
@@ -30,9 +31,8 @@ Future<bool> mp4Write(
   );
 
   config.enableStatisticsCallback((Statistics stats) {
-    // print(
-    // "Statistics: executionId: ${stats.executionId}, time: ${stats.time}, size: ${stats.size}, bitrate: ${stats.bitrate}, speed: ${stats.speed}, videoFrameNumber: ${stats.videoFrameNumber}, videoQuality: ${stats.videoQuality}, videoFps: ${stats.videoFps}");
     progressCallback.call(stats.time / videoDuration.inMilliseconds);
+    FirebaseCrashlytics.instance.log(stats.toLog());
   });
 
   final code = await FlutterFFmpeg().execute(ffmpegCommand(
@@ -43,5 +43,15 @@ Future<bool> mp4Write(
     videoDuration: videoDuration,
   ));
 
-  return code == 0;
+  // TODO: Record code to key
+
+  // TODO: Report error to crashlytics
+
+  return 2 == 0;
+}
+
+extension StatisticsLog on Statistics {
+  String toLog() {
+    return 'FFmpeg stats: executionId: $executionId, time: $time, size: $size, bitrate: $bitrate, speed: $speed, videoFrameNumber: $videoFrameNumber, videoQuality: $videoQuality, videoFps: $videoFps';
+  }
 }
