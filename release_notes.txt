@@ -1,2 +1,1 @@
-- Option to remove audio clip
-- Fix name collision of duplicated images
+- Optimise video export
