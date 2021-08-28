@@ -82,6 +82,8 @@ class VideoGenerator extends Generator {
     final slides = <Slide>[];
 
     for (int i = 0; i < frames.length; i++) {
+      if (isCancelled) return null;
+
       final file = makeTemporaryFile('$i.png');
 
       final image = await frames[i].toImage();
