@@ -25,18 +25,7 @@ class LayerSheet extends StatelessWidget {
             child: Stack(
               children: [
                 LayerList(),
-                Positioned(
-                  left: 16,
-                  bottom: _rowHeight * 3,
-                  height: _rowHeight * 3,
-                  width: 4,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
+                _buildLine(1, 3),
               ],
             ),
           ),
@@ -45,7 +34,18 @@ class LayerSheet extends StatelessWidget {
     );
   }
 
-  Row _buildHeader() {
+  /// Draws a group line starting from [topRowIndex] (inclusive) and spanning [rowCount] rows.
+  Positioned _buildLine(int topRowIndex, int rowCount) {
+    return Positioned(
+      left: 16,
+      top: _rowHeight * topRowIndex,
+      height: _rowHeight * rowCount,
+      width: 4,
+      child: _LayerGroupLine(),
+    );
+  }
+
+  Widget _buildHeader() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -54,6 +54,22 @@ class LayerSheet extends StatelessWidget {
         AddLayerButton(),
         SizedBox(width: 8),
       ],
+    );
+  }
+}
+
+class _LayerGroupLine extends StatelessWidget {
+  const _LayerGroupLine({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: BorderRadius.circular(2),
+      ),
     );
   }
 }
