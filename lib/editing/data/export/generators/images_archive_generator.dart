@@ -5,7 +5,6 @@ import 'package:path/path.dart' as p;
 import 'package:archive/archive_io.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
-import 'package:mooltik/common/data/extensions/iterable_methods.dart';
 import 'package:mooltik/editing/data/export/generators/generator.dart';
 
 /// Makes an archive from images with the following structure.
@@ -42,33 +41,31 @@ class ImagesArchiveGenerator extends Generator {
     final imagesDir = Directory(p.join(temporaryDirectory.path, archiveName))
       ..createSync();
 
-    try {
-      await Future.wait(
-        framesSceneByScene.mapIndexed((sceneFrames, sceneIndex) async {
-          final sceneNumber = sceneIndex + 1;
-          final sceneDir =
-              Directory(p.join(imagesDir.path, 'scene_$sceneNumber'))
-                ..createSync();
+    for (var sceneIndex = 0;
+        sceneIndex < framesSceneByScene.length;
+        sceneIndex++) {
+      if (isCancelled) return null;
 
-          for (var i = 0; i < sceneFrames.length; i++) {
-            final file = makeTemporaryFile(
-              'scene_${sceneNumber}_${i + 1}.png',
-              sceneDir,
-            );
+      final sceneFrames = framesSceneByScene[sceneIndex];
+      final sceneNumber = sceneIndex + 1;
+      final sceneDir = Directory(p.join(imagesDir.path, 'scene_$sceneNumber'))
+        ..createSync();
 
-            if (isCancelled) throw Exception('Cancelled.');
-            print('Schedule writing PNG to ${file.path}');
-            await pngWrite(file, await sceneFrames[i].toImage());
-            print('Finished writing PNG to ${file.path}');
+      for (var i = 0; i < sceneFrames.length; i++) {
+        final file = makeTemporaryFile(
+          'scene_${sceneNumber}_${i + 1}.png',
+          sceneDir,
+        );
 
-            _generatedImages++;
-            progressCallback(_calcProgress());
-          }
-        }),
-        eagerError: true,
-      );
-    } catch (e) {
-      return null;
+        final image = await sceneFrames[i].toImage();
+        await pngWrite(file, image);
+        image.dispose();
+
+        if (isCancelled) return null;
+
+        _generatedImages++;
+        progressCallback(_calcProgress());
+      }
     }
 
     if (isCancelled) return null;

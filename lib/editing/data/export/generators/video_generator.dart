@@ -1,13 +1,16 @@
 import 'dart:io';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:mooltik/editing/data/export/generators/generator.dart';
-import 'package:mooltik/common/data/extensions/iterable_methods.dart';
 import 'package:mooltik/common/data/io/mp4/mp4.dart';
 import 'package:mooltik/common/data/io/mp4/slide.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
+
+const _imagesProgressFraction = 0.5;
+const _ffmpegProgressFraction = 1.0 - _imagesProgressFraction;
 
 class VideoGenerator extends Generator {
   VideoGenerator({
@@ -30,20 +33,40 @@ class VideoGenerator extends Generator {
     final videoFile = makeTemporaryFile('$videoName.mp4');
 
     if (isCancelled) return null;
-    final slides = await _slidesFromFrames(frames);
+    final slides = await _slidesFromFrames(frames.toList());
 
     if (isCancelled || slides == null) return null;
-    _isRunningFfmpeg = true;
-    final success = await mp4Write(
-      videoFile,
-      slides,
-      soundClips,
-      temporaryDirectory,
-      progressCallback,
-    );
-    _isRunningFfmpeg = false;
+
+    final success = await _runFFmpeg(videoFile, slides);
 
     return success && !isCancelled ? videoFile : null;
+  }
+
+  Future<bool> _runFFmpeg(File videoFile, List<Slide> slides) async {
+    _isRunningFfmpeg = true;
+    var success = false;
+
+    try {
+      success = await mp4Write(
+        videoFile,
+        slides,
+        soundClips,
+        temporaryDirectory,
+        _ffmpegProgressCallback,
+      );
+    } catch (e, stack) {
+      await FirebaseCrashlytics.instance.recordError(e, stack);
+    } finally {
+      _isRunningFfmpeg = false;
+    }
+
+    return success;
+  }
+
+  void _ffmpegProgressCallback(double ffmpegProgress) {
+    return progressCallback(
+      _imagesProgressFraction + ffmpegProgress * _ffmpegProgressFraction,
+    );
   }
 
   @override
@@ -54,32 +77,32 @@ class VideoGenerator extends Generator {
   }
 
   Future<List<Slide>?> _slidesFromFrames(
-    Iterable<CompositeFrame> frames,
+    List<CompositeFrame> frames,
   ) async {
-    List<Slide>? result;
+    final slides = <Slide>[];
 
-    try {
-      result = await Future.wait(
-        frames.mapIndexed((frame, i) async {
-          if (isCancelled) throw Exception('Cancelled.');
-          final file = makeTemporaryFile('$i.png');
+    for (int i = 0; i < frames.length; i++) {
+      if (isCancelled) return null;
 
-          if (isCancelled) throw Exception('Cancelled.');
-          final image = await frame.toImage();
+      final file = makeTemporaryFile('$i.png');
 
-          if (isCancelled) throw Exception('Cancelled.');
-          print('Schedule writing PNG to ${file.path}');
-          await pngWrite(file, image);
-          print('Finished writing PNG to ${file.path}');
+      final image = await frames[i].toImage();
+      FirebaseCrashlytics.instance.log('Generated image $i in memory');
 
-          return Slide(file, frame.duration);
-        }),
-        eagerError: true,
-      );
-    } catch (e) {
-      result = null;
+      if (isCancelled) {
+        image.dispose();
+        return null;
+      }
+
+      await pngWrite(file, image);
+      image.dispose();
+
+      progressCallback(_imagesProgressFraction * i / frames.length);
+      FirebaseCrashlytics.instance.log('$i/${frames.length} ${file.path}');
+
+      slides.add(Slide(file, frames[i].duration));
     }
 
-    return result;
+    return slides;
   }
 }
