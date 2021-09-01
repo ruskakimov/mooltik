@@ -7,7 +7,7 @@ import 'package:mooltik/common/data/project/project_save_data.dart';
 void main() {
   group('ProjectSaveData should', () {
     test('decode and encode back A', () {
-      final rawSaveData = File('./test/project_data/a_v1_17.json')
+      final rawSaveData = File('./test/project_data/a_v1_18.json')
           .readAsStringSync()
           .replaceAll(RegExp(r'\s'), '');
 
@@ -16,7 +16,7 @@ void main() {
     });
 
     test('decode and encode back B', () {
-      final rawSaveData = File('./test/project_data/b_v1_17.json')
+      final rawSaveData = File('./test/project_data/b_v1_18.json')
           .readAsStringSync()
           .replaceAll(RegExp(r'\s'), '');
 

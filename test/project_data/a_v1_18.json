@@ -1,0 +1,35 @@
+{
+    "width": 1280,
+    "height": 720,
+    "scenes": [
+        {
+            "layers": [
+                {
+                    "frames": [
+                        {
+                            "file_name": "frame0.png",
+                            "duration": "0:00:03.000000"
+                        },
+                        {
+                            "file_name": "frame1.png",
+                            "duration": "0:00:01.000000"
+                        }
+                    ],
+                    "play_mode": 1,
+                    "visible": true,
+                    "name": "layer 1",
+                    "group": null
+                }
+            ],
+            "duration": "0:00:04.000000",
+            "description": ""
+        }
+    ],
+    "sounds": [
+        {
+            "file_name": "01234.mp3",
+            "start_time": "0:00:01.000000",
+            "duration": "0:00:02.000000"
+        }
+    ]
+}
