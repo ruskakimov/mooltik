@@ -20,9 +20,11 @@ class SceneLayer {
     PlayMode playMode = PlayMode.extendLast,
     bool? visible = true,
     String? name,
+    bool? groupedWithNext,
   ])  : _playMode = playMode,
         _visible = visible ?? true,
-        _name = name;
+        _name = name,
+        _groupedWithNext = groupedWithNext ?? false;
 
   final Sequence<Frame> frameSeq;
 
@@ -34,6 +36,9 @@ class SceneLayer {
 
   String? get name => _name;
   String? _name;
+
+  bool get groupedWithNext => _groupedWithNext;
+  bool _groupedWithNext;
 
   /// Frame at a given playhead position.
   Frame frameAt(Duration playhead) {
@@ -125,6 +130,7 @@ class SceneLayer {
         PlayMode.values[json[_playModeKey] as int? ?? 0],
         json[_visibilityKey] as bool?,
         json[_nameKey] as String?,
+        json[_groupedWithNextKey] as bool?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -132,6 +138,7 @@ class SceneLayer {
         _playModeKey: playMode.index,
         _visibilityKey: visible,
         _nameKey: name,
+        _groupedWithNextKey: _groupedWithNext,
       };
 
   @override
@@ -149,3 +156,4 @@ const String _framesKey = 'frames';
 const String _playModeKey = 'play_mode';
 const String _visibilityKey = 'visible';
 const String _nameKey = 'name';
+const String _groupedWithNextKey = 'grouped_with_next';

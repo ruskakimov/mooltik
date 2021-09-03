@@ -29,7 +29,7 @@ void main() {
           .readAsStringSync()
           .replaceAll(RegExp(r'\s'), '');
 
-      final expectedData = File('./test/project_data/b_v1_17.json')
+      final expectedData = File('./test/project_data/b_v1_18.json')
           .readAsStringSync()
           .replaceAll(RegExp(r'\s'), '');
 
