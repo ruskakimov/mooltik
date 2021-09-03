@@ -1,0 +1,16 @@
+{
+    "frames": [
+        {
+            "file_name": "b_0.png",
+            "duration": "0:00:03.000000"
+        },
+        {
+            "file_name": "b_1.png",
+            "duration": "0:00:01.000000"
+        }
+    ],
+    "play_mode": 0,
+    "visible": true,
+    "name": "layer b",
+    "grouped_with_next": false
+}
