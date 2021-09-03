@@ -22,5 +22,16 @@ void main() {
       expect(jsonEncode(aL), a);
       expect(jsonEncode(bL), b);
     });
+
+    test('2: appends frames to secondary if primary is longer', () {
+      final a = raw(2, 'a');
+      final b = raw(2, 'b');
+      final aL = SceneLayer.fromJson(jsonDecode(a), '');
+      final bL = SceneLayer.fromJson(jsonDecode(b), '');
+      syncLayers(aL, bL);
+      expect(jsonEncode(aL), a);
+      expect(jsonEncode(bL), raw(2, 'b2'));
+      // TODO: Check if appended frames in bL are empty
+    });
   });
 }
