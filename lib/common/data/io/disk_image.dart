@@ -23,6 +23,8 @@ class DiskImage with EquatableMixin {
 
   int? get height => _snapshot?.height;
 
+  bool get loaded => _snapshot != null;
+
   Future<void> loadSnapshot() async {
     _snapshot = await pngRead(file);
   }
