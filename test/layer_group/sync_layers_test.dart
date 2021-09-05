@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mooltik/common/data/extensions/duration_methods.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/project/fps_config.dart';
 import 'package:mooltik/common/data/project/layer_group/sync_layers.dart';
@@ -25,17 +26,12 @@ SceneLayer layer(
   );
 }
 
-bool matches(SceneLayer layer, List<int> frameCounts) {
-  if (frameCounts.length != layer.frameSeq.length) return false;
-
-  for (int i = 0; i < frameCounts.length; i++) {
-    final expectedDuration = singleFrameDuration * frameCounts[i];
-    final actualDuration = layer.frameSeq[i].duration;
-
-    if (actualDuration != expectedDuration) return false;
-  }
-
-  return true;
+List<int> frameCounts(SceneLayer layer) {
+  return layer.frameSeq.iterable.map((frame) {
+    final count = frame.duration / singleFrameDuration;
+    if (count % 1 == 0) return count.toInt();
+    return -1;
+  }).toList();
 }
 
 void main() {
@@ -62,12 +58,21 @@ void main() {
       expect(areSynced(a, b), true);
     });
 
+    test('adjusts secondary timing to match primary', () {
+      final a = layer([1, 2, 3]);
+      final b = layer([1, 1, 1]);
+      syncLayers(a, b);
+      expect(frameCounts(a), [1, 2, 3]);
+      expect(frameCounts(b), [1, 2, 3]);
+      expect(areSynced(a, b), true);
+    });
+
     test('appends frames to secondary if primary is longer', () {
       final a = layer([1, 2, 3, 4, 5]);
       final b = layer([1, 2, 3]);
       syncLayers(a, b);
-      expect(matches(a, [1, 2, 3, 4, 5]), true);
-      expect(matches(b, [1, 2, 3, 4, 5]), true);
+      expect(frameCounts(a), [1, 2, 3, 4, 5]);
+      expect(frameCounts(b), [1, 2, 3, 4, 5]);
       expect(areSynced(a, b), true);
     });
   });
