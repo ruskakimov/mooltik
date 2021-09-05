@@ -11,7 +11,7 @@ class CanvasPainter extends CustomPainter {
   });
 
   final ui.Image? image;
-  final List<Stroke?>? strokes;
+  final List<Stroke>? strokes;
   final ColorFilter? filter;
 
   bool get hasStrokes => strokes != null && strokes!.isNotEmpty;
@@ -46,7 +46,7 @@ class CanvasPainter extends CustomPainter {
         ..filterQuality = FilterQuality.low,
     );
 
-    strokes?.forEach((stroke) => stroke!.paintOn(canvas));
+    strokes?.forEach((stroke) => stroke.paintOn(canvas));
 
     if (hasStrokes) {
       // Flatten layer. Combine drawing lines with erasing lines.

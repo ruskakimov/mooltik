@@ -301,7 +301,7 @@ class LassoModel extends ChangeNotifier {
     final snapshot = await generateImage(
       CanvasPainter(
         image: _easel.frame.image.snapshot,
-        strokes: [selectionStroke],
+        strokes: [selectionStroke!],
       ),
       _easel.frame.image.width!.toInt(),
       _easel.frame.image.height!.toInt(),
