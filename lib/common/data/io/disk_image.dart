@@ -36,7 +36,11 @@ class DiskImage with EquatableMixin {
 
   Future<DiskImage> duplicate() async {
     final duplicatePath = makeFreeDuplicatePath(file.path);
-    final duplicateFile = await file.copy(duplicatePath);
+
+    // Test file might not exist.
+    final duplicateFile = file.existsSync()
+        ? await file.copy(duplicatePath)
+        : File(duplicatePath);
 
     return DiskImage(
       file: duplicateFile,

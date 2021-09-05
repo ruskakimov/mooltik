@@ -50,27 +50,27 @@ void main() {
   });
 
   group('syncLayers', () {
-    test('does nothing if layers are synced', () {
+    test('does nothing if layers are synced', () async {
       final a = layer([1, 2, 3]);
       final b = layer([1, 2, 3]);
       expect(areSynced(a, b), true, reason: 'Are initially synced');
-      syncLayers(a, b);
+      await syncLayers(a, b);
       expect(areSynced(a, b), true);
     });
 
-    test('adjusts secondary timing to match primary', () {
+    test('adjusts secondary timing to match primary', () async {
       final a = layer([1, 2, 3]);
       final b = layer([1, 1, 1]);
-      syncLayers(a, b);
+      await syncLayers(a, b);
       expect(frameCounts(a), [1, 2, 3]);
       expect(frameCounts(b), [1, 2, 3]);
       expect(areSynced(a, b), true);
     });
 
-    test('appends frames to secondary if primary is longer', () {
+    test('appends frames to secondary if primary is longer', () async {
       final a = layer([1, 2, 3, 4, 5]);
       final b = layer([1, 2, 3]);
-      syncLayers(a, b);
+      await syncLayers(a, b);
       expect(frameCounts(a), [1, 2, 3, 4, 5]);
       expect(frameCounts(b), [1, 2, 3, 4, 5]);
       expect(areSynced(a, b), true);

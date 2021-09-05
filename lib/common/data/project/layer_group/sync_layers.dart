@@ -3,13 +3,22 @@ import 'package:mooltik/common/data/project/scene_layer.dart';
 /// Synchronizes frame count and timing between 2 layers.
 /// Preserves [primary] frame timing and playmode.
 /// Appends empty frames to the shortest layer.
-void syncLayers(SceneLayer primary, SceneLayer secondary) {
+Future<void> syncLayers(SceneLayer primary, SceneLayer secondary) async {
+  while (secondary.frameSeq.length < primary.frameSeq.length) {
+    await _appendFrame(secondary);
+  }
+
   if (primary.frameSeq.length == secondary.frameSeq.length) {
     for (int i = 0; i < primary.frameSeq.length; i++) {
       final primaryDuration = primary.frameSeq[i].duration;
       secondary.frameSeq.changeSpanDurationAt(i, primaryDuration);
     }
   }
+}
+
+Future<void> _appendFrame(SceneLayer layer) async {
+  final emptyFrame = await layer.frameSeq.last.duplicate();
+  layer.frameSeq.insert(layer.frameSeq.length, emptyFrame);
 }
 
 /// Whether 2 layers have identical frame count and timing.
