@@ -259,11 +259,7 @@ class Project extends ChangeNotifier {
   }
 
   Future<Frame> createNewFrame() async {
-    final image = await generateImage(
-      null,
-      width,
-      height,
-    );
+    final image = await generateEmptyImage(width, height);
     final file = _getFrameFile(DateTime.now().millisecondsSinceEpoch);
     await pngWrite(file, image);
     return Frame(

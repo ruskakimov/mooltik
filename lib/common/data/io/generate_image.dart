@@ -15,3 +15,6 @@ Future<Image> generateImage(
   picture.dispose();
   return image;
 }
+
+Future<Image> generateEmptyImage(int width, int height) =>
+    generateImage(null, width, height);
