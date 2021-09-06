@@ -6,10 +6,12 @@ import 'package:mooltik/drawing/data/frame/frame.dart';
 /// Layer with the highest frame count "wins".
 /// If both are equal length, then the first "wins".
 Future<void> syncLayers(SceneLayer a, SceneLayer b) async {
-  final aIsLong = a.frameSeq.length >= b.frameSeq.length;
+  if (a.frameSeq.length < b.frameSeq.length) {
+    return syncLayers(b, a);
+  }
 
-  final long = aIsLong ? a.frameSeq : b.frameSeq;
-  final short = aIsLong ? b.frameSeq : a.frameSeq;
+  final long = a.frameSeq;
+  final short = b.frameSeq;
 
   await _appendEmptyFrames(short, long.length - short.length);
 

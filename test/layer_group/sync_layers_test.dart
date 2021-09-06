@@ -86,5 +86,6 @@ void main() {
     });
 
     // TODO: Write a test that checks whether the appended image is empty 🙏
+    // TODO: Write a test that checks that A play mode is applied 🙏
   });
 }
