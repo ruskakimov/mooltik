@@ -84,5 +84,7 @@ void main() {
       expect(frameCounts(b), [1, 2, 3]);
       expect(areSynced(a, b), true);
     });
+
+    // TODO: Write a test that checks whether the appended image is empty 🙏
   });
 }
