@@ -15,18 +15,21 @@ Future<void> syncLayers(SceneLayer a, SceneLayer b) async {
     short = temp;
   }
 
-  while (short.length < long.length) {
-    await _appendFrame(short);
-  }
+  await _appendEmptyFrames(short, long.length - short.length);
 
   for (int i = 0; i < long.length; i++) {
     short.changeSpanDurationAt(i, long[i].duration);
   }
 }
 
-Future<void> _appendFrame(Sequence<Frame> seq) async {
-  final emptyFrame = await seq.last.duplicate();
-  seq.insert(seq.length, emptyFrame);
+Future<void> _appendEmptyFrames(Sequence<Frame> seq, int frameCount) async {
+  if (frameCount == 0) return;
+
+  for (int i = 0; i < frameCount; i++) {
+    // TODO: Should actually be an empty image, not a duplicate image.
+    final emptyFrame = await seq.last.duplicate();
+    seq.insert(seq.length, emptyFrame);
+  }
 }
 
 /// Whether 2 layers have identical frame count and timing.
