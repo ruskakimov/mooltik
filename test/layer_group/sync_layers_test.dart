@@ -58,21 +58,30 @@ void main() {
       expect(areSynced(a, b), true);
     });
 
-    test('adjusts secondary timing to match primary', () async {
+    test('syncs to A if A is longer', () async {
+      final a = layer([1, 2, 3, 4, 5]);
+      final b = layer([2, 2]);
+      await syncLayers(a, b);
+      expect(frameCounts(a), [1, 2, 3, 4, 5]);
+      expect(frameCounts(b), [1, 2, 3, 4, 5]);
+      expect(areSynced(a, b), true);
+    });
+
+    test('syncs to B if B is longer', () async {
+      final a = layer([3, 4, 4]);
+      final b = layer([2, 2, 2, 2, 2, 2, 2]);
+      await syncLayers(a, b);
+      expect(frameCounts(a), [2, 2, 2, 2, 2, 2, 2]);
+      expect(frameCounts(b), [2, 2, 2, 2, 2, 2, 2]);
+      expect(areSynced(a, b), true);
+    });
+
+    test('syncs to A if both have equal frame count', () async {
       final a = layer([1, 2, 3]);
       final b = layer([1, 1, 1]);
       await syncLayers(a, b);
       expect(frameCounts(a), [1, 2, 3]);
       expect(frameCounts(b), [1, 2, 3]);
-      expect(areSynced(a, b), true);
-    });
-
-    test('appends frames to secondary if primary is longer', () async {
-      final a = layer([1, 2, 3, 4, 5]);
-      final b = layer([1, 2, 3]);
-      await syncLayers(a, b);
-      expect(frameCounts(a), [1, 2, 3, 4, 5]);
-      expect(frameCounts(b), [1, 2, 3, 4, 5]);
       expect(areSynced(a, b), true);
     });
   });
