@@ -33,16 +33,21 @@ Future<void> _appendEmptyFrames(Sequence<Frame> seq, int frameCount) async {
   final frameWidth = seq.last.image.width;
   final frameHeight = seq.last.image.height;
 
+  final emptySnapshot = await generateEmptyImage(frameWidth, frameHeight);
+
   for (int i = 0; i < frameCount; i++) {
     final lastFile = seq.last.image.file;
     final emptyImage = DiskImage(
       file: File(makeFreeDuplicatePath(lastFile.path)),
       width: frameWidth,
       height: frameHeight,
+      snapshot: emptySnapshot.clone(),
     );
 
     seq.insert(seq.length, Frame(image: emptyImage));
   }
+
+  emptySnapshot.dispose();
 }
 
 /// Whether 2 layers have identical frame count and timing.

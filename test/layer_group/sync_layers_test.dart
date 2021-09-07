@@ -17,7 +17,11 @@ SceneLayer layer(
     Sequence<Frame>(
       frameCounts
           .map((frameCount) => Frame(
-                image: DiskImage(file: File('image.png')),
+                image: DiskImage(
+                  file: File('image.png'),
+                  width: 800,
+                  height: 600,
+                ),
                 duration: singleFrameDuration * frameCount,
               ))
           .toList(),
