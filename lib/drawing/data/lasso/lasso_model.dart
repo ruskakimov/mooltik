@@ -214,8 +214,8 @@ class LassoModel extends ChangeNotifier {
         transform: imageTransform,
         background: _easel.frame.image.snapshot,
       ),
-      _easel.frame.image.width!.toInt(),
-      _easel.frame.image.height!.toInt(),
+      _easel.frame.image.width.toInt(),
+      _easel.frame.image.height.toInt(),
     );
 
     // Remove snapshot with erased original used during transform.
@@ -303,8 +303,8 @@ class LassoModel extends ChangeNotifier {
         image: _easel.frame.image.snapshot,
         strokes: [selectionStroke!],
       ),
-      _easel.frame.image.width!.toInt(),
-      _easel.frame.image.height!.toInt(),
+      _easel.frame.image.width.toInt(),
+      _easel.frame.image.height.toInt(),
     );
     _easel.pushSnapshot(snapshot);
   }
