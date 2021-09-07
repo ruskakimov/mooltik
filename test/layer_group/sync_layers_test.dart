@@ -85,7 +85,33 @@ void main() {
       expect(areSynced(a, b), true);
     });
 
+    test('uses playmode of A if A is longer', () async {
+      final a = layer([1, 1, 1, 1, 1], PlayMode.pingPong);
+      final b = layer([4]);
+      await syncLayers(a, b);
+      expect(a.playMode, PlayMode.pingPong);
+      expect(b.playMode, PlayMode.pingPong);
+      expect(areSynced(a, b), true);
+    });
+
+    test('uses playmode of B if B is longer', () async {
+      final a = layer([4]);
+      final b = layer([1, 1, 1, 1, 1], PlayMode.pingPong);
+      await syncLayers(a, b);
+      expect(a.playMode, PlayMode.pingPong);
+      expect(b.playMode, PlayMode.pingPong);
+      expect(areSynced(a, b), true);
+    });
+
+    test('uses playmode of A if both have equal frame count', () async {
+      final a = layer([1, 2, 3], PlayMode.loop);
+      final b = layer([1, 1, 1], PlayMode.pingPong);
+      await syncLayers(a, b);
+      expect(a.playMode, PlayMode.loop);
+      expect(b.playMode, PlayMode.loop);
+      expect(areSynced(a, b), true);
+    });
+
     // TODO: Write a test that checks whether the appended image is empty 🙏
-    // TODO: Write a test that checks that A play mode is applied 🙏
   });
 }

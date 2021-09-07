@@ -10,6 +10,8 @@ Future<void> syncLayers(SceneLayer a, SceneLayer b) async {
     return syncLayers(b, a);
   }
 
+  b.setPlayMode(a.playMode);
+
   final long = a.frameSeq;
   final short = b.frameSeq;
 

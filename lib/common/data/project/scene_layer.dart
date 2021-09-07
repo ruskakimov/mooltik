@@ -107,6 +107,10 @@ class SceneLayer {
     _playMode = PlayMode.values[(playMode.index + 1) % PlayMode.values.length];
   }
 
+  void setPlayMode(PlayMode value) {
+    _playMode = value;
+  }
+
   void setVisibility(bool value) {
     _visible = value;
   }
