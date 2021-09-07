@@ -33,7 +33,7 @@ class DiskImage with EquatableMixin {
     if (file.existsSync()) {
       _snapshot = await pngRead(file);
     } else {
-      _loadEmptySnapshot();
+      await _loadEmptySnapshot();
     }
   }
 

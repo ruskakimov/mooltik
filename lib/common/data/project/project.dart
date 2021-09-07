@@ -259,13 +259,13 @@ class Project extends ChangeNotifier {
   }
 
   Future<Frame> createNewFrame() async {
-    return Frame(
-      image: DiskImage(
-        file: _getFrameFile(DateTime.now().millisecondsSinceEpoch),
-        width: width,
-        height: height,
-      ),
+    final image = DiskImage(
+      file: _getFrameFile(DateTime.now().millisecondsSinceEpoch),
+      width: width,
+      height: height,
     );
+    await image.loadSnapshot();
+    return Frame(image: image);
   }
 
   Future<Scene> createNewScene() async {
