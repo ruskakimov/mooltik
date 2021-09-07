@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:mooltik/common/data/io/disk_image.dart';
+import 'package:mooltik/common/data/io/generate_image.dart';
+import 'package:mooltik/common/data/io/make_duplicate_path.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
@@ -25,10 +30,18 @@ Future<void> syncLayers(SceneLayer a, SceneLayer b) async {
 Future<void> _appendEmptyFrames(Sequence<Frame> seq, int frameCount) async {
   if (frameCount == 0) return;
 
+  final frameWidth = seq.last.image.width;
+  final frameHeight = seq.last.image.height;
+
   for (int i = 0; i < frameCount; i++) {
-    // TODO: Should actually be an empty image, not a duplicate image.
-    final emptyFrame = await seq.last.duplicate();
-    seq.insert(seq.length, emptyFrame);
+    final lastFile = seq.last.image.file;
+    final emptyImage = DiskImage(
+      file: File(makeFreeDuplicatePath(lastFile.path)),
+      width: frameWidth,
+      height: frameHeight,
+    );
+
+    seq.insert(seq.length, Frame(image: emptyImage));
   }
 }
 

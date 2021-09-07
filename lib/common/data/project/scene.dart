@@ -94,10 +94,15 @@ class Scene extends TimeSpan {
     return copyWith(layers: duplicateLayers);
   }
 
-  factory Scene.fromJson(Map<String, dynamic> json, String frameDirPath) =>
+  factory Scene.fromJson(
+    Map<String, dynamic> json,
+    String frameDirPath,
+    int width,
+    int height,
+  ) =>
       Scene(
         layers: (json[_layersKey] as List<dynamic>)
-            .map((d) => SceneLayer.fromJson(d, frameDirPath))
+            .map((d) => SceneLayer.fromJson(d, frameDirPath, width, height))
             .toList(),
         duration: (json[_durationKey] as String).parseDuration(),
         description: json[_descriptionKey] as String?,

@@ -126,10 +126,15 @@ class SceneLayer {
     return SceneLayer(Sequence(duplicateFrames), playMode);
   }
 
-  factory SceneLayer.fromJson(Map<String, dynamic> json, String frameDirPath) =>
+  factory SceneLayer.fromJson(
+    Map<String, dynamic> json,
+    String frameDirPath,
+    int width,
+    int height,
+  ) =>
       SceneLayer(
         Sequence<Frame>((json[_framesKey] as List<dynamic>)
-            .map((d) => Frame.fromJson(d, frameDirPath))
+            .map((d) => Frame.fromJson(d, frameDirPath, width, height))
             .toList()),
         PlayMode.values[json[_playModeKey] as int? ?? 0],
         json[_visibilityKey] as bool?,

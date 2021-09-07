@@ -145,10 +145,7 @@ class EaselModel extends ChangeNotifier {
 
   void _updateFrame() {
     _frame = _frame.copyWith(
-      image: DiskImage(
-        file: _frame.image.file,
-        snapshot: _historyStack.currentSnapshot,
-      ),
+      image: _frame.image.copyWith(snapshot: _historyStack.currentSnapshot),
     );
     _diskWriteDebouncer.debounce(() => _frame.image.saveSnapshot());
     onChanged(_frame);

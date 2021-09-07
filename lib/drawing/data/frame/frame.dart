@@ -20,10 +20,17 @@ class Frame extends TimeSpan with EquatableMixin {
     return this.copyWith(image: await image.duplicate());
   }
 
-  factory Frame.fromJson(Map<String, dynamic> json, String frameDirPath) =>
+  factory Frame.fromJson(
+    Map<String, dynamic> json,
+    String frameDirPath,
+    int width,
+    int height,
+  ) =>
       Frame(
         image: DiskImage(
           file: File(p.join(frameDirPath, json[_fileNameKey])),
+          width: width,
+          height: height,
         ),
         duration: (json[_durationKey] as String).parseDuration(),
       );
