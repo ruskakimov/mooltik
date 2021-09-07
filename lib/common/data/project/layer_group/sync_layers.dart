@@ -37,10 +37,8 @@ Future<void> _appendEmptyFrames(Sequence<Frame> seq, int frameCount) async {
 
   for (int i = 0; i < frameCount; i++) {
     final lastFile = seq.last.image.file;
-    final emptyImage = DiskImage(
+    final emptyImage = DiskImage.loaded(
       file: File(makeFreeDuplicatePath(lastFile.path)),
-      width: frameWidth,
-      height: frameHeight,
       snapshot: emptySnapshot.clone(),
     );
 
