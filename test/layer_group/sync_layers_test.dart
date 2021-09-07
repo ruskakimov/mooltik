@@ -112,6 +112,17 @@ void main() {
       expect(areSynced(a, b), true);
     });
 
-    // TODO: Write a test that checks whether the appended image is empty 🙏
+    test('appends fully-transparent frames', () async {
+      final a = layer([1, 1]);
+      final b = layer([1]);
+      await syncLayers(a, b);
+      final appendedSnapshot = b.frameSeq.last.image.snapshot;
+      expect(appendedSnapshot, isNotNull);
+      final byteData = await appendedSnapshot!.toByteData();
+      expect(
+        byteData!.buffer.asUint8List().every((byte) => byte == 0),
+        true,
+      );
+    });
   });
 }
