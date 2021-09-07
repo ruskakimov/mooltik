@@ -36,27 +36,13 @@ class DiskImage with EquatableMixin {
 
   Future<DiskImage> duplicate() async {
     final duplicatePath = makeFreeDuplicatePath(file.path);
-
-    // Test file might not exist.
-    final duplicateFile = file.existsSync()
-        ? await file.copy(duplicatePath)
-        : File(duplicatePath);
+    final duplicateFile = await file.copy(duplicatePath);
 
     return DiskImage(
       file: duplicateFile,
       snapshot: snapshot?.clone(),
     );
   }
-
-  factory DiskImage.fromJson(Map<String, dynamic> json) => DiskImage(
-        file: File(json[_filePathKey]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        _filePathKey: file.path,
-      };
-
-  static const String _filePathKey = 'path';
 
   @override
   List<Object?> get props => [file.path];

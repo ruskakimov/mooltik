@@ -27,24 +27,6 @@ class CompositeImage with EquatableMixin {
 
   @override
   List<Object?> get props => [width, height, layers];
-
-  factory CompositeImage.fromJson(Map<String, dynamic> json) => CompositeImage(
-        width: json[_widthKey],
-        height: json[_heightKey],
-        layers: (json[_layersKey] as List)
-            .map((json) => DiskImage.fromJson(json))
-            .toList(),
-      );
-
-  Map<String, dynamic> toJson() => {
-        _widthKey: width,
-        _heightKey: height,
-        _layersKey: layers.map((layer) => layer.toJson()).toList(),
-      };
-
-  static const String _widthKey = 'width';
-  static const String _heightKey = 'height';
-  static const String _layersKey = 'layers';
 }
 
 extension CompositeImageDrawing on Canvas {
