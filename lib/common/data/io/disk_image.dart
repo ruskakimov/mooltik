@@ -17,6 +17,13 @@ class DiskImage with EquatableMixin {
             snapshot.width == width && snapshot.height == height),
         _snapshot = snapshot;
 
+  DiskImage.loaded({
+    required this.file,
+    required Image snapshot,
+  })  : width = snapshot.width,
+        height = snapshot.height,
+        _snapshot = snapshot;
+
   final File file;
 
   final int width;

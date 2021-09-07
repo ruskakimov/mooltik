@@ -17,11 +17,11 @@ void main() async {
       final sceneLayer = SceneLayer(
         Sequence<Frame>([
           Frame(
-            image: DiskImage(file: File('1.png'), snapshot: imageA),
+            image: DiskImage.loaded(file: File('1.png'), snapshot: imageA),
             duration: Duration(seconds: 2),
           ),
           Frame(
-            image: DiskImage(file: File('2.png'), snapshot: imageB),
+            image: DiskImage.loaded(file: File('2.png'), snapshot: imageB),
             duration: Duration(seconds: 2),
           ),
         ]),
@@ -38,11 +38,11 @@ void main() async {
       final sceneLayer = SceneLayer(
         Sequence<Frame>([
           Frame(
-            image: DiskImage(file: File('1.png'), snapshot: imageA),
+            image: DiskImage.loaded(file: File('1.png'), snapshot: imageA),
             duration: Duration(seconds: 2),
           ),
           Frame(
-            image: DiskImage(file: File('2.png'), snapshot: imageB),
+            image: DiskImage.loaded(file: File('2.png'), snapshot: imageB),
             duration: Duration(seconds: 2),
           ),
         ]),
@@ -64,15 +64,15 @@ void main() async {
       final sceneLayer = SceneLayer(
         Sequence<Frame>([
           Frame(
-            image: DiskImage(file: File('1.png'), snapshot: imageA),
+            image: DiskImage.loaded(file: File('1.png'), snapshot: imageA),
             duration: Duration(seconds: 1),
           ),
           Frame(
-            image: DiskImage(file: File('2.png'), snapshot: imageB),
+            image: DiskImage.loaded(file: File('2.png'), snapshot: imageB),
             duration: Duration(seconds: 1),
           ),
           Frame(
-            image: DiskImage(file: File('3.png'), snapshot: imageC),
+            image: DiskImage.loaded(file: File('3.png'), snapshot: imageC),
             duration: Duration(seconds: 1),
           ),
         ]),
@@ -103,11 +103,11 @@ void main() async {
         final sceneLayer = SceneLayer(
           Sequence<Frame>([
             Frame(
-              image: DiskImage(file: File('1.png')),
+              image: DiskImage(width: 100, height: 100, file: File('1.png')),
               duration: Duration(seconds: 1),
             ),
             Frame(
-              image: DiskImage(file: File('2.png')),
+              image: DiskImage(width: 100, height: 100, file: File('2.png')),
               duration: Duration(seconds: 2),
             ),
           ]),
@@ -116,15 +116,15 @@ void main() async {
         final duration = Duration(seconds: 10);
         expect(sceneLayer.getExportFrames(duration).toList(), [
           Frame(
-            image: DiskImage(file: File('1.png')),
+            image: DiskImage(width: 100, height: 100, file: File('1.png')),
             duration: Duration(seconds: 1),
           ),
           Frame(
-            image: DiskImage(file: File('2.png')),
+            image: DiskImage(width: 100, height: 100, file: File('2.png')),
             duration: Duration(seconds: 2),
           ),
           Frame(
-            image: DiskImage(file: File('2.png')),
+            image: DiskImage(width: 100, height: 100, file: File('2.png')),
             duration: Duration(seconds: 7),
           ),
         ]);
@@ -134,11 +134,11 @@ void main() async {
         final sceneLayer = SceneLayer(
           Sequence<Frame>([
             Frame(
-              image: DiskImage(file: File('1.png')),
+              image: DiskImage(width: 100, height: 100, file: File('1.png')),
               duration: Duration(seconds: 1),
             ),
             Frame(
-              image: DiskImage(file: File('2.png')),
+              image: DiskImage(width: 100, height: 100, file: File('2.png')),
               duration: Duration(seconds: 2),
             ),
           ]),
@@ -147,31 +147,31 @@ void main() async {
         final duration = Duration(seconds: 10);
         expect(sceneLayer.getExportFrames(duration).toList(), [
           Frame(
-            image: DiskImage(file: File('1.png')),
+            image: DiskImage(width: 100, height: 100, file: File('1.png')),
             duration: Duration(seconds: 1),
           ),
           Frame(
-            image: DiskImage(file: File('2.png')),
+            image: DiskImage(width: 100, height: 100, file: File('2.png')),
             duration: Duration(seconds: 2),
           ),
           Frame(
-            image: DiskImage(file: File('1.png')),
+            image: DiskImage(width: 100, height: 100, file: File('1.png')),
             duration: Duration(seconds: 1),
           ),
           Frame(
-            image: DiskImage(file: File('2.png')),
+            image: DiskImage(width: 100, height: 100, file: File('2.png')),
             duration: Duration(seconds: 2),
           ),
           Frame(
-            image: DiskImage(file: File('1.png')),
+            image: DiskImage(width: 100, height: 100, file: File('1.png')),
             duration: Duration(seconds: 1),
           ),
           Frame(
-            image: DiskImage(file: File('2.png')),
+            image: DiskImage(width: 100, height: 100, file: File('2.png')),
             duration: Duration(seconds: 2),
           ),
           Frame(
-            image: DiskImage(file: File('1.png')),
+            image: DiskImage(width: 100, height: 100, file: File('1.png')),
             duration: Duration(seconds: 1),
           ),
         ]);
@@ -181,15 +181,15 @@ void main() async {
         final sceneLayer = SceneLayer(
           Sequence<Frame>([
             Frame(
-              image: DiskImage(file: File('1.png')),
+              image: DiskImage(width: 100, height: 100, file: File('1.png')),
               duration: Duration(seconds: 1),
             ),
             Frame(
-              image: DiskImage(file: File('2.png')),
+              image: DiskImage(width: 100, height: 100, file: File('2.png')),
               duration: Duration(seconds: 2),
             ),
             Frame(
-              image: DiskImage(file: File('3.png')),
+              image: DiskImage(width: 100, height: 100, file: File('3.png')),
               duration: Duration(seconds: 3),
             ),
           ]),
@@ -198,51 +198,51 @@ void main() async {
         final duration = Duration(seconds: 24);
         expect(sceneLayer.getExportFrames(duration).toList(), [
           Frame(
-            image: DiskImage(file: File('1.png')),
+            image: DiskImage(width: 100, height: 100, file: File('1.png')),
             duration: Duration(seconds: 1),
           ),
           Frame(
-            image: DiskImage(file: File('2.png')),
+            image: DiskImage(width: 100, height: 100, file: File('2.png')),
             duration: Duration(seconds: 2),
           ),
           Frame(
-            image: DiskImage(file: File('3.png')),
+            image: DiskImage(width: 100, height: 100, file: File('3.png')),
             duration: Duration(seconds: 3),
           ),
           Frame(
-            image: DiskImage(file: File('3.png')),
+            image: DiskImage(width: 100, height: 100, file: File('3.png')),
             duration: Duration(seconds: 3),
           ),
           Frame(
-            image: DiskImage(file: File('2.png')),
+            image: DiskImage(width: 100, height: 100, file: File('2.png')),
             duration: Duration(seconds: 2),
           ),
           Frame(
-            image: DiskImage(file: File('1.png')),
+            image: DiskImage(width: 100, height: 100, file: File('1.png')),
             duration: Duration(seconds: 1),
           ),
           Frame(
-            image: DiskImage(file: File('1.png')),
+            image: DiskImage(width: 100, height: 100, file: File('1.png')),
             duration: Duration(seconds: 1),
           ),
           Frame(
-            image: DiskImage(file: File('2.png')),
+            image: DiskImage(width: 100, height: 100, file: File('2.png')),
             duration: Duration(seconds: 2),
           ),
           Frame(
-            image: DiskImage(file: File('3.png')),
+            image: DiskImage(width: 100, height: 100, file: File('3.png')),
             duration: Duration(seconds: 3),
           ),
           Frame(
-            image: DiskImage(file: File('3.png')),
+            image: DiskImage(width: 100, height: 100, file: File('3.png')),
             duration: Duration(seconds: 3),
           ),
           Frame(
-            image: DiskImage(file: File('2.png')),
+            image: DiskImage(width: 100, height: 100, file: File('2.png')),
             duration: Duration(seconds: 2),
           ),
           Frame(
-            image: DiskImage(file: File('1.png')),
+            image: DiskImage(width: 100, height: 100, file: File('1.png')),
             duration: Duration(seconds: 1),
           ),
         ]);

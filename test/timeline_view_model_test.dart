@@ -18,11 +18,11 @@ void main() {
           SceneLayer(
             Sequence<Frame>([
               Frame(
-                image: DiskImage(file: File('1.png')),
+                image: DiskImage(width: 10, height: 10, file: File('1.png')),
                 duration: Duration(seconds: 2),
               ),
               Frame(
-                image: DiskImage(file: File('2.png')),
+                image: DiskImage(width: 10, height: 10, file: File('2.png')),
                 duration: Duration(seconds: 2),
               ),
             ]),
@@ -36,11 +36,11 @@ void main() {
           SceneLayer(
             Sequence<Frame>([
               Frame(
-                image: DiskImage(file: File('3.png')),
+                image: DiskImage(width: 10, height: 10, file: File('3.png')),
                 duration: Duration(seconds: 1),
               ),
               Frame(
-                image: DiskImage(file: File('4.png')),
+                image: DiskImage(width: 10, height: 10, file: File('4.png')),
                 duration: Duration(seconds: 1),
               ),
             ]),
