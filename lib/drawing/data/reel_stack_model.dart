@@ -105,8 +105,13 @@ class ReelStackModel extends ChangeNotifier {
   bool isVisible(int layerIndex) => _scene.layers[layerIndex].visible;
 
   bool isGrouped(int layerIndex) =>
-      _scene.layers[layerIndex].groupedWithNext ||
+      isGroupedWithAbove(layerIndex) || isGroupedWithBelow(layerIndex);
+
+  bool isGroupedWithAbove(int layerIndex) =>
       layerIndex > 0 && _scene.layers[layerIndex - 1].groupedWithNext;
+
+  bool isGroupedWithBelow(int layerIndex) =>
+      _scene.layers[layerIndex].groupedWithNext;
 
   void setLayerVisibility(int layerIndex, bool value) {
     _scene.layers[layerIndex].setVisibility(value);
