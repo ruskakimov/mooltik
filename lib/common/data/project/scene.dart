@@ -1,6 +1,7 @@
 import 'package:mooltik/common/data/extensions/duration_methods.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
+import 'package:mooltik/common/data/project/layer_group/layer_group_info.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
@@ -86,6 +87,27 @@ class Scene extends TimeSpan {
 
       elapsed += frameDuration;
     }
+  }
+
+  List<LayerGroupInfo> get layerGroups {
+    final groups = <LayerGroupInfo>[];
+
+    bool inGroup = false;
+    int groupStart = -1;
+
+    for (var i = 0; i < layers.length; i++) {
+      // Group start.
+      if (layers[i].groupedWithNext && !inGroup) {
+        inGroup = true;
+        groupStart = i;
+      }
+      // Group end.
+      if (!layers[i].groupedWithNext && inGroup) {
+        groups.add(LayerGroupInfo(groupStart, i));
+        inGroup = false;
+      }
+    }
+    return groups;
   }
 
   Future<Scene> duplicate() async {
