@@ -116,6 +116,7 @@ class LayerList extends StatelessWidget {
     final name = reelStack.getLayerName(index);
     final selected = reel == reelStack.activeReel;
     final visible = reelStack.isVisible(index);
+    final grouped = reelStack.isGrouped(index);
 
     Widget rowContent = LayerRow(
       reel: reel,
@@ -125,7 +126,7 @@ class LayerList extends StatelessWidget {
       canDelete: reelStack.canDeleteLayer,
     );
 
-    if (!visible) {
+    if (grouped) {
       rowContent = Padding(
         padding: const EdgeInsets.only(left: 8.0),
         child: rowContent,
