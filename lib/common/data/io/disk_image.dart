@@ -15,14 +15,18 @@ class DiskImage with EquatableMixin {
     Image? snapshot,
   })  : assert(snapshot == null ||
             snapshot.width == width && snapshot.height == height),
-        _snapshot = snapshot;
+        _snapshot = snapshot {
+    file.createSync();
+  }
 
   DiskImage.loaded({
     required this.file,
     required Image snapshot,
   })  : width = snapshot.width,
         height = snapshot.height,
-        _snapshot = snapshot;
+        _snapshot = snapshot {
+    file.createSync();
+  }
 
   final File file;
 
@@ -36,27 +40,29 @@ class DiskImage with EquatableMixin {
 
   bool get loaded => _snapshot != null;
 
+  Future<bool> get isFileEmpty async =>
+      !file.existsSync() || (await file.length()) == 0;
+
   Future<void> loadSnapshot() async {
-    if (file.existsSync()) {
-      _snapshot = await pngRead(file);
-    } else {
+    if (await isFileEmpty) {
       await _loadEmptySnapshot();
+    } else {
+      _snapshot = await pngRead(file);
     }
   }
 
   Future<void> _loadEmptySnapshot() async {
+    _snapshot?.dispose();
     _snapshot = await generateEmptyImage(width, height);
   }
 
   Future<void> saveSnapshot() async {
-    final fileExists = file.existsSync();
-
-    if (_snapshot == null && fileExists) {
-      throw Exception('Snapshot is not loaded.');
-    }
-
-    if (_snapshot == null && !fileExists) {
-      _loadEmptySnapshot();
+    if (_snapshot == null) {
+      if (await isFileEmpty) {
+        _loadEmptySnapshot();
+      } else {
+        throw Exception('Cannot save empty snapshot if file is not empty.');
+      }
     }
 
     await pngWrite(file, _snapshot!);
