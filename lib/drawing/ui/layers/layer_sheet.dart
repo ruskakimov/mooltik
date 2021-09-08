@@ -26,6 +26,7 @@ class LayerSheet extends StatelessWidget {
               children: [
                 LayerList(),
                 _buildLine(1, 3),
+                _buildLine(4, 2),
               ],
             ),
           ),
@@ -37,7 +38,7 @@ class LayerSheet extends StatelessWidget {
   /// Draws a group line starting from [topRowIndex] (inclusive) and spanning [rowCount] rows.
   Positioned _buildLine(int topRowIndex, int rowCount) {
     return Positioned(
-      left: 16,
+      left: 0,
       top: _rowHeight * topRowIndex,
       height: _rowHeight * rowCount,
       width: 4,
@@ -70,7 +71,10 @@ class _LayerGroupLine extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary,
-          borderRadius: BorderRadius.circular(2),
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(4),
+            bottomRight: Radius.circular(4),
+          ),
         ),
       ),
     );
@@ -123,7 +127,7 @@ class LayerList extends StatelessWidget {
 
     if (!visible) {
       rowContent = Padding(
-        padding: const EdgeInsets.only(left: 16.0),
+        padding: const EdgeInsets.only(left: 8.0),
         child: rowContent,
       );
     }
