@@ -105,17 +105,6 @@ class ReelStackModel extends ChangeNotifier {
 
   bool isVisible(int layerIndex) => _scene.layers[layerIndex].visible;
 
-  bool isGrouped(int layerIndex) =>
-      isGroupedWithAbove(layerIndex) || isGroupedWithBelow(layerIndex);
-
-  bool isGroupedWithAbove(int layerIndex) =>
-      layerIndex > 0 && _scene.layers[layerIndex - 1].groupedWithNext;
-
-  bool isGroupedWithBelow(int layerIndex) =>
-      _scene.layers[layerIndex].groupedWithNext;
-
-  List<LayerGroupInfo> get layerGroups => _scene.layerGroups;
-
   void setLayerVisibility(int layerIndex, bool value) {
     _scene.layers[layerIndex].setVisibility(value);
     notifyListeners();
@@ -127,6 +116,37 @@ class ReelStackModel extends ChangeNotifier {
   void setLayerName(int layerIndex, String value) {
     _scene.layers[layerIndex].setName(value);
     notifyListeners();
+  }
+
+  // ============
+  // Group state:
+  // ============
+
+  List<LayerGroupInfo> get layerGroups => _scene.layerGroups;
+
+  bool isGrouped(int layerIndex) =>
+      isGroupedWithAbove(layerIndex) || isGroupedWithBelow(layerIndex);
+
+  bool isGroupedWithAbove(int layerIndex) =>
+      layerIndex > 0 && _scene.layers[layerIndex - 1].groupedWithNext;
+
+  bool isGroupedWithBelow(int layerIndex) =>
+      _scene.layers[layerIndex].groupedWithNext;
+
+  void groupLayerWithAbove(int layerIndex) {
+    if (layerIndex == 0) throw Exception('Cannot group first layer with above');
+    _scene.layers[layerIndex - 1].setGroupedWithNext(true);
+  }
+
+  void groupLayerWithBelow(int layerIndex) {
+    if (layerIndex == _scene.layers.length - 1)
+      throw Exception('Cannot group last layer with below');
+    _scene.layers[layerIndex].setGroupedWithNext(true);
+  }
+
+  void ungroupLayer(int layerIndex) {
+    if (layerIndex > 0) _scene.layers[layerIndex - 1].setGroupedWithNext(false);
+    _scene.layers[layerIndex].setGroupedWithNext(false);
   }
 }
 

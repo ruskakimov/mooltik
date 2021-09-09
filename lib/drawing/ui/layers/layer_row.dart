@@ -67,23 +67,35 @@ class _LayerRowState extends State<LayerRow> {
           icon: MdiIcons.folderUpload,
           label: 'Group',
           color: Theme.of(context).colorScheme.secondary,
-          onTap: () {},
+          onTap: () {
+            final reelStack = context.read<ReelStackModel>();
+            final layerIndex = reelStack.reels.indexOf(widget.reel);
+            reelStack.groupLayerWithAbove(layerIndex);
+          },
           rightSide: false,
         ),
         SlideActionButton(
           icon: MdiIcons.folderDownload,
           label: 'Group',
           color: Theme.of(context).colorScheme.secondary,
-          onTap: () {},
+          onTap: () {
+            final reelStack = context.read<ReelStackModel>();
+            final layerIndex = reelStack.reels.indexOf(widget.reel);
+            reelStack.groupLayerWithBelow(layerIndex);
+          },
           rightSide: false,
         ),
-        // SlideActionButton(
-        //   icon: MdiIcons.folderRemove,
-        //   label: 'Ungroup',
-        //   color: Theme.of(context).colorScheme.secondary,
-        //   onTap: () {},
-        //   rightSide: false,
-        // ),
+        SlideActionButton(
+          icon: MdiIcons.folderRemove,
+          label: 'Ungroup',
+          color: Theme.of(context).colorScheme.secondary,
+          onTap: () {
+            final reelStack = context.read<ReelStackModel>();
+            final layerIndex = reelStack.reels.indexOf(widget.reel);
+            reelStack.ungroupLayer(layerIndex);
+          },
+          rightSide: false,
+        ),
       ],
       secondaryActions: [
         SlideActionButton(

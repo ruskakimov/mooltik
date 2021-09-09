@@ -119,6 +119,10 @@ class SceneLayer {
     _name = value;
   }
 
+  void setGroupedWithNext(bool value) {
+    _groupedWithNext = value;
+  }
+
   Future<SceneLayer> duplicate() async {
     final duplicateFrames = await Future.wait(
       frameSeq.iterable.map((frame) => frame.duplicate()),
