@@ -22,13 +22,20 @@ class LayerRow extends StatefulWidget {
     required this.selected,
     required this.visible,
     required this.canDelete,
+    required this.canGroupWithAbove,
+    required this.canGroupWithBelow,
+    required this.canUngroup,
   }) : super(key: key);
 
   final FrameReelModel reel;
   final String name;
   final bool selected;
   final bool visible;
+
   final bool canDelete;
+  final bool canGroupWithAbove;
+  final bool canGroupWithBelow;
+  final bool canUngroup;
 
   @override
   _LayerRowState createState() => _LayerRowState();
@@ -63,39 +70,42 @@ class _LayerRowState extends State<LayerRow> {
       actionPane: SlidableDrawerActionPane(),
       closeOnScroll: true,
       actions: [
-        SlideActionButton(
-          icon: MdiIcons.folderUpload,
-          label: 'Group',
-          color: Theme.of(context).colorScheme.secondary,
-          onTap: () {
-            final reelStack = context.read<ReelStackModel>();
-            final layerIndex = reelStack.reels.indexOf(widget.reel);
-            reelStack.groupLayerWithAbove(layerIndex);
-          },
-          rightSide: false,
-        ),
-        SlideActionButton(
-          icon: MdiIcons.folderDownload,
-          label: 'Group',
-          color: Theme.of(context).colorScheme.secondary,
-          onTap: () {
-            final reelStack = context.read<ReelStackModel>();
-            final layerIndex = reelStack.reels.indexOf(widget.reel);
-            reelStack.groupLayerWithBelow(layerIndex);
-          },
-          rightSide: false,
-        ),
-        SlideActionButton(
-          icon: MdiIcons.folderRemove,
-          label: 'Ungroup',
-          color: Theme.of(context).colorScheme.secondary,
-          onTap: () {
-            final reelStack = context.read<ReelStackModel>();
-            final layerIndex = reelStack.reels.indexOf(widget.reel);
-            reelStack.ungroupLayer(layerIndex);
-          },
-          rightSide: false,
-        ),
+        if (widget.canGroupWithAbove)
+          SlideActionButton(
+            icon: MdiIcons.folderUpload,
+            label: 'Group',
+            color: Theme.of(context).colorScheme.secondary,
+            onTap: () {
+              final reelStack = context.read<ReelStackModel>();
+              final layerIndex = reelStack.reels.indexOf(widget.reel);
+              reelStack.groupLayerWithAbove(layerIndex);
+            },
+            rightSide: false,
+          ),
+        if (widget.canGroupWithBelow)
+          SlideActionButton(
+            icon: MdiIcons.folderDownload,
+            label: 'Group',
+            color: Theme.of(context).colorScheme.secondary,
+            onTap: () {
+              final reelStack = context.read<ReelStackModel>();
+              final layerIndex = reelStack.reels.indexOf(widget.reel);
+              reelStack.groupLayerWithBelow(layerIndex);
+            },
+            rightSide: false,
+          ),
+        if (widget.canUngroup)
+          SlideActionButton(
+            icon: MdiIcons.folderRemove,
+            label: 'Ungroup',
+            color: Theme.of(context).colorScheme.secondary,
+            onTap: () {
+              final reelStack = context.read<ReelStackModel>();
+              final layerIndex = reelStack.reels.indexOf(widget.reel);
+              reelStack.ungroupLayer(layerIndex);
+            },
+            rightSide: false,
+          ),
       ],
       secondaryActions: [
         SlideActionButton(

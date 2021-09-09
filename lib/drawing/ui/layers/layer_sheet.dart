@@ -129,6 +129,9 @@ class LayerList extends StatelessWidget {
       selected: selected,
       visible: visible,
       canDelete: reelStack.canDeleteLayer,
+      canGroupWithAbove: reelStack.canGroupWithAbove(index),
+      canGroupWithBelow: reelStack.canGroupWithBelow(index),
+      canUngroup: reelStack.isGrouped(index),
     );
 
     if (grouped) {
