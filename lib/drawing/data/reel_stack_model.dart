@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/layer_group/layer_group_info.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
@@ -112,6 +113,8 @@ class ReelStackModel extends ChangeNotifier {
 
   bool isGroupedWithBelow(int layerIndex) =>
       _scene.layers[layerIndex].groupedWithNext;
+
+  List<LayerGroupInfo> get layerGroups => _scene.layerGroups;
 
   void setLayerVisibility(int layerIndex, bool value) {
     _scene.layers[layerIndex].setVisibility(value);

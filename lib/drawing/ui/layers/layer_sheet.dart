@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/common/data/project/layer_group/layer_group_info.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/sheet_title.dart';
@@ -16,6 +17,10 @@ class LayerSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final layerGroups = context.select<ReelStackModel, List<LayerGroupInfo>>(
+      (reelStack) => reelStack.layerGroups,
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -25,8 +30,8 @@ class LayerSheet extends StatelessWidget {
             child: Stack(
               children: [
                 LayerList(),
-                _buildLine(1, 3),
-                _buildLine(4, 2),
+                for (var group in layerGroups)
+                  _buildLine(group.lastLayerIndex, group.layerCount)
               ],
             ),
           ),
