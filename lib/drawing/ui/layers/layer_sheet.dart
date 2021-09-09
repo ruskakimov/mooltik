@@ -119,7 +119,7 @@ class LayerList extends StatelessWidget {
   ) {
     final reel = reelStack.reels[index];
     final name = reelStack.getLayerName(index);
-    final selected = reel == reelStack.activeReel;
+    final selected = reelStack.isActive(index);
     final visible = reelStack.isVisible(index);
     final grouped = reelStack.isGrouped(index);
 

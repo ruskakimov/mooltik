@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/layer_group/frame_reel_group.dart';
 import 'package:mooltik/common/data/project/layer_group/layer_group_info.dart';
+import 'package:mooltik/common/data/project/layer_group/sync_layers.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
@@ -32,7 +34,15 @@ class ReelStackModel extends ChangeNotifier {
   Iterable<FrameReelModel> get visibleReels => reels
       .where((reel) => isVisible(reels.indexOf(reel)) || reel == activeReel);
 
-  FrameReelModel get activeReel => reels[_activeReelIndex];
+  bool isActive(int layerIndex) => _activeReelIndex == layerIndex;
+
+  FrameReelModel get activeReel => isGrouped(_activeReelIndex)
+      ? FrameReelGroup(
+          activeReel: reels[_activeReelIndex],
+          group: reelGroupOf(_activeReelIndex),
+        )
+      : reels[_activeReelIndex];
+
   int _activeReelIndex = 0;
 
   void changeActiveReel(FrameReelModel reel) {
@@ -124,6 +134,19 @@ class ReelStackModel extends ChangeNotifier {
 
   List<LayerGroupInfo> get layerGroups => _scene.layerGroups;
 
+  List<FrameReelModel> reelGroupOf(int layerIndex) {
+    if (!isGrouped(layerIndex)) return [];
+
+    final groupInfo = layerGroups.firstWhere((groupInfo) =>
+        groupInfo.firstLayerIndex <= layerIndex &&
+        layerIndex <= groupInfo.lastLayerIndex);
+
+    return reels.sublist(
+      groupInfo.firstLayerIndex,
+      groupInfo.lastLayerIndex + 1,
+    );
+  }
+
   bool isGrouped(int layerIndex) =>
       isGroupedWithAbove(layerIndex) || isGroupedWithBelow(layerIndex);
 
@@ -141,14 +164,26 @@ class ReelStackModel extends ChangeNotifier {
 
   void groupLayerWithAbove(int layerIndex) {
     if (layerIndex == 0) throw Exception('Cannot group first layer with above');
-    _scene.layers[layerIndex - 1].setGroupedWithNext(true);
-    notifyListeners();
+    groupLayerWithBelow(layerIndex - 1);
   }
 
   void groupLayerWithBelow(int layerIndex) {
     if (layerIndex == _scene.layers.length - 1)
       throw Exception('Cannot group last layer with below');
-    _scene.layers[layerIndex].setGroupedWithNext(true);
+
+    final a = _scene.layers[layerIndex];
+    final b = _scene.layers[layerIndex + 1];
+
+    a.setGroupedWithNext(true);
+
+    // TODO: A or B or both can be in a group
+    syncLayers(a, b);
+
+    // Sync selected frames to top layer.
+    reelGroupOf(layerIndex + 1).forEach(
+      (reel) => reel.setCurrent(reels[layerIndex].currentIndex),
+    );
+
     notifyListeners();
   }
 
