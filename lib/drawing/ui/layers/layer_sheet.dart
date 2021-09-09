@@ -31,7 +31,7 @@ class LayerSheet extends StatelessWidget {
               children: [
                 LayerList(),
                 for (var group in layerGroups)
-                  _buildLine(group.lastLayerIndex, group.layerCount)
+                  _buildLine(group.firstLayerIndex, group.layerCount)
               ],
             ),
           ),

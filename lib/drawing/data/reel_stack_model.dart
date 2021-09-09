@@ -136,17 +136,20 @@ class ReelStackModel extends ChangeNotifier {
   void groupLayerWithAbove(int layerIndex) {
     if (layerIndex == 0) throw Exception('Cannot group first layer with above');
     _scene.layers[layerIndex - 1].setGroupedWithNext(true);
+    notifyListeners();
   }
 
   void groupLayerWithBelow(int layerIndex) {
     if (layerIndex == _scene.layers.length - 1)
       throw Exception('Cannot group last layer with below');
     _scene.layers[layerIndex].setGroupedWithNext(true);
+    notifyListeners();
   }
 
   void ungroupLayer(int layerIndex) {
     if (layerIndex > 0) _scene.layers[layerIndex - 1].setGroupedWithNext(false);
     _scene.layers[layerIndex].setGroupedWithNext(false);
+    notifyListeners();
   }
 }
 
