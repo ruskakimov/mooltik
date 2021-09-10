@@ -7,6 +7,32 @@ import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 
+/// Syncs all layers to one timing and frame count.
+/// Group layers must already be synchronized.
+Future<void> mergeGroups(
+  List<SceneLayer> aGroup,
+  List<SceneLayer> bGroup,
+) async {
+  assert(aGroup.isNotEmpty && bGroup.isNotEmpty);
+  assert(isGroupSynced(aGroup));
+  assert(isGroupSynced(bGroup));
+
+  if (aGroup.first.frameSeq.length < bGroup.first.frameSeq.length) {
+    return mergeGroups(bGroup, aGroup);
+  }
+
+  for (var bLayer in bGroup) {
+    await syncLayers(aGroup.first, bLayer);
+  }
+}
+
+bool isGroupSynced(List<SceneLayer> groupLayers) {
+  for (int i = 1; i < groupLayers.length; i++) {
+    if (!areSynced(groupLayers[i - 1], groupLayers[i])) return false;
+  }
+  return true;
+}
+
 /// Synchronizes frame count and timing between 2 layers.
 /// Layer with the highest frame count "wins".
 /// If both are equal length, then the first "wins".

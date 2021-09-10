@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mooltik/common/data/extensions/duration_methods.dart';
+import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/project/fps_config.dart';
 import 'package:mooltik/common/data/project/layer_group/sync_layers.dart';
@@ -39,6 +40,73 @@ List<int> frameCounts(SceneLayer layer) {
 }
 
 void main() {
+  tearDown(() async {
+    await deleteFilesWhere(
+      Directory.current,
+      (path) => path.contains('image') && path.endsWith('.png'),
+    );
+  });
+
+  group('mergeGroups', () {
+    test('merges correctly if A is winner', () async {
+      final a = [
+        layer([2, 2, 2, 3]),
+        layer([2, 2, 2, 3]),
+      ];
+      final b = [
+        layer([1, 1]),
+        layer([1, 1]),
+        layer([1, 1]),
+      ];
+      await mergeGroups(a, b);
+      expect(
+        a.map((aL) => frameCounts(aL)).toList(),
+        [
+          [2, 2, 2, 3],
+          [2, 2, 2, 3],
+        ],
+      );
+      expect(
+        b.map((bL) => frameCounts(bL)).toList(),
+        [
+          [2, 2, 2, 3],
+          [2, 2, 2, 3],
+          [2, 2, 2, 3],
+        ],
+      );
+      expect(isGroupSynced([...a, ...b]), true);
+    });
+
+    test('merges correctly if B is winner', () async {
+      final a = [
+        layer([1, 1]),
+        layer([1, 1]),
+        layer([1, 1]),
+      ];
+      final b = [
+        layer([2, 2, 2, 3]),
+        layer([2, 2, 2, 3]),
+      ];
+      await mergeGroups(a, b);
+      expect(
+        a.map((aL) => frameCounts(aL)).toList(),
+        [
+          [2, 2, 2, 3],
+          [2, 2, 2, 3],
+          [2, 2, 2, 3],
+        ],
+      );
+      expect(
+        b.map((bL) => frameCounts(bL)).toList(),
+        [
+          [2, 2, 2, 3],
+          [2, 2, 2, 3],
+        ],
+      );
+      expect(isGroupSynced([...a, ...b]), true);
+    });
+  });
+
   group('areSynced', () {
     test('returns true if layers are synced', () {
       final a = layer([1, 2, 2, 10]);

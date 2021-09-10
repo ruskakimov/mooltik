@@ -147,6 +147,19 @@ class ReelStackModel extends ChangeNotifier {
     );
   }
 
+  List<SceneLayer> layerGroupOf(int layerIndex) {
+    if (!isGrouped(layerIndex)) return [];
+
+    final groupInfo = layerGroups.firstWhere((groupInfo) =>
+        groupInfo.firstLayerIndex <= layerIndex &&
+        layerIndex <= groupInfo.lastLayerIndex);
+
+    return _scene.layers.sublist(
+      groupInfo.firstLayerIndex,
+      groupInfo.lastLayerIndex + 1,
+    );
+  }
+
   bool isGrouped(int layerIndex) =>
       isGroupedWithAbove(layerIndex) || isGroupedWithBelow(layerIndex);
 
@@ -171,17 +184,19 @@ class ReelStackModel extends ChangeNotifier {
     if (layerIndex == _scene.layers.length - 1)
       throw Exception('Cannot group last layer with below');
 
-    final a = _scene.layers[layerIndex];
-    final b = _scene.layers[layerIndex + 1];
+    final aIndex = layerIndex;
+    final bIndex = layerIndex + 1;
 
+    final aGroupLayers = layerGroupOf(aIndex);
+    final bGroupLayers = layerGroupOf(bIndex);
+    mergeGroups(aGroupLayers, bGroupLayers);
+
+    final a = _scene.layers[aIndex];
     a.setGroupedWithNext(true);
 
-    // TODO: A or B or both can be in a group
-    syncLayers(a, b);
-
-    // Sync selected frames to top layer.
-    reelGroupOf(layerIndex + 1).forEach(
-      (reel) => reel.setCurrent(reels[layerIndex].currentIndex),
+    // Sync current frames in B to A.
+    reelGroupOf(bIndex).forEach(
+      (reel) => reel.setCurrent(reels[aIndex].currentIndex),
     );
 
     notifyListeners();
