@@ -135,7 +135,7 @@ class ReelStackModel extends ChangeNotifier {
   List<LayerGroupInfo> get layerGroups => _scene.layerGroups;
 
   List<FrameReelModel> reelGroupOf(int layerIndex) {
-    if (!isGrouped(layerIndex)) return [];
+    if (!isGrouped(layerIndex)) return [reels[layerIndex]];
 
     final groupInfo = layerGroups.firstWhere((groupInfo) =>
         groupInfo.firstLayerIndex <= layerIndex &&
@@ -148,7 +148,7 @@ class ReelStackModel extends ChangeNotifier {
   }
 
   List<SceneLayer> layerGroupOf(int layerIndex) {
-    if (!isGrouped(layerIndex)) return [];
+    if (!isGrouped(layerIndex)) return [_scene.layers[layerIndex]];
 
     final groupInfo = layerGroups.firstWhere((groupInfo) =>
         groupInfo.firstLayerIndex <= layerIndex &&
@@ -175,12 +175,12 @@ class ReelStackModel extends ChangeNotifier {
   bool canGroupWithBelow(int layerIndex) =>
       layerIndex < _scene.layers.length - 1 && !isGroupedWithBelow(layerIndex);
 
-  void groupLayerWithAbove(int layerIndex) {
+  Future<void> groupLayerWithAbove(int layerIndex) async {
     if (layerIndex == 0) throw Exception('Cannot group first layer with above');
-    groupLayerWithBelow(layerIndex - 1);
+    await groupLayerWithBelow(layerIndex - 1);
   }
 
-  void groupLayerWithBelow(int layerIndex) {
+  Future<void> groupLayerWithBelow(int layerIndex) async {
     if (layerIndex == _scene.layers.length - 1)
       throw Exception('Cannot group last layer with below');
 
@@ -189,7 +189,7 @@ class ReelStackModel extends ChangeNotifier {
 
     final aGroupLayers = layerGroupOf(aIndex);
     final bGroupLayers = layerGroupOf(bIndex);
-    mergeGroups(aGroupLayers, bGroupLayers);
+    await mergeGroups(aGroupLayers, bGroupLayers);
 
     final a = _scene.layers[aIndex];
     a.setGroupedWithNext(true);
