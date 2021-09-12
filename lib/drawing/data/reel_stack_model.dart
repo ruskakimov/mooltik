@@ -38,6 +38,7 @@ class ReelStackModel extends ChangeNotifier {
         )
       : reels[_activeReelIndex];
 
+  int get activeReelIndex => _activeReelIndex;
   int _activeReelIndex = 0;
 
   void changeActiveReel(FrameReelModel reel) {
