@@ -68,6 +68,11 @@ class ReelStackModel extends ChangeNotifier {
     if (!canDeleteLayer) return;
     if (layerIndex < 0 || layerIndex >= reels.length) return;
 
+    if (isGroupedWithAbove(layerIndex) && !isGroupedWithBelow(layerIndex)) {
+      final above = _scene.layers[layerIndex - 1];
+      above.setGroupedWithNext(false);
+    }
+
     reels.removeAt(layerIndex);
     final removedLayer = _scene.layers.removeAt(layerIndex);
 
