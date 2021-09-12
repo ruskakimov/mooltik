@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mooltik/common/data/io/disk_image.dart';
+import 'package:mooltik/common/data/project/layer_group/layer_group_info.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
@@ -79,6 +80,41 @@ void main() {
         stack.setActiveReelIndex(1);
         stack.deleteLayer(0);
         expect(stack.activeReelIndex, 0);
+      });
+
+      test('dissolves group of 2 when first is removed', () {
+        final stack = reelStack([
+          ...layerGroup(2),
+          layer(),
+        ]);
+        stack.deleteLayer(0);
+        expect(stack.layerGroups, []);
+      });
+
+      test('dissolves group of 2 when second is removed', () {
+        final stack = reelStack([
+          ...layerGroup(2),
+          layer(),
+        ]);
+        stack.deleteLayer(1);
+        expect(stack.layerGroups, []);
+      });
+
+      test('keeps group when middle is removed', () {
+        final stack = reelStack([
+          ...layerGroup(3),
+        ]);
+        stack.deleteLayer(1);
+        expect(stack.layerGroups, [LayerGroupInfo(0, 1)]);
+      });
+
+      test('shortens the group when last is removed', () {
+        final stack = reelStack([
+          ...layerGroup(3),
+          layer(),
+        ]);
+        stack.deleteLayer(2);
+        expect(stack.layerGroups, [LayerGroupInfo(0, 1)]);
       });
     });
   });
