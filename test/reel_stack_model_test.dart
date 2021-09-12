@@ -27,15 +27,56 @@ ReelStackModel reelStack(List<SceneLayer> layers) => ReelStackModel(
 void main() {
   group('ReelStackModel', () {
     group('deleteLayer', () {
+      test('retains active layer when deleted before', () {
+        final stack = reelStack([
+          layer(),
+          layer(),
+          layer(),
+        ]);
+        stack.setActiveReelIndex(1);
+        stack.deleteLayer(0);
+        expect(stack.activeReelIndex, 0);
+      });
+
+      test('retains active layer when deleted after', () {
+        final stack = reelStack([
+          layer(),
+          layer(),
+          layer(),
+        ]);
+        stack.setActiveReelIndex(1);
+        stack.deleteLayer(2);
+        expect(stack.activeReelIndex, 1);
+      });
+
+      test('makes next layer active when active is deleted', () {
+        final stack = reelStack([
+          layer(),
+          layer(),
+          layer(),
+        ]);
+        stack.setActiveReelIndex(1);
+        stack.deleteLayer(1);
+        expect(stack.activeReelIndex, 1);
+      });
+
+      test('makes last layer active when active is deleted and is last', () {
+        final stack = reelStack([
+          layer(),
+          layer(),
+          layer(),
+        ]);
+        stack.setActiveReelIndex(2);
+        stack.deleteLayer(2);
+        expect(stack.activeReelIndex, 1);
+      });
+
       test('retains active layer when it is part of a group', () {
         final stack = reelStack([
           layer(),
           ...layerGroup(2),
         ]);
-
-        stack.changeActiveReel(stack.reels[1]);
-        expect(stack.activeReelIndex, 1);
-
+        stack.setActiveReelIndex(1);
         stack.deleteLayer(0);
         expect(stack.activeReelIndex, 0);
       });

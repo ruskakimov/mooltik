@@ -41,12 +41,14 @@ class ReelStackModel extends ChangeNotifier {
   int get activeReelIndex => _activeReelIndex;
   int _activeReelIndex = 0;
 
+  void setActiveReelIndex(int index) {
+    _activeReelIndex = index.clamp(0, reels.length - 1);
+    notifyListeners();
+  }
+
   void changeActiveReel(FrameReelModel reel) {
     final index = reels.indexOf(reel);
-    if (index != -1) {
-      _activeReelIndex = index;
-      notifyListeners();
-    }
+    setActiveReelIndex(index);
   }
 
   void addLayerAboveActive(SceneLayer layer) {
@@ -66,8 +68,6 @@ class ReelStackModel extends ChangeNotifier {
     if (!canDeleteLayer) return;
     if (layerIndex < 0 || layerIndex >= reels.length) return;
 
-    final activeReelBefore = activeReel;
-
     reels.removeAt(layerIndex);
     final removedLayer = _scene.layers.removeAt(layerIndex);
 
@@ -76,11 +76,9 @@ class ReelStackModel extends ChangeNotifier {
       () => removedLayer.dispose(),
     );
 
-    if (layerIndex == _activeReelIndex) {
-      _activeReelIndex = _activeReelIndex.clamp(0, reels.length - 1);
-    } else {
-      _activeReelIndex = reels.indexOf(activeReelBefore);
-    }
+    setActiveReelIndex(
+      layerIndex < _activeReelIndex ? _activeReelIndex - 1 : _activeReelIndex,
+    );
     notifyListeners();
   }
 
