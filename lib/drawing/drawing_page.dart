@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/project.dart';
+import 'package:mooltik/drawing/data/drawing_page_options_model.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
@@ -25,6 +26,11 @@ class DrawingPage extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
+          create: (context) => DrawingPageOptionsModel(
+            context.read<SharedPreferences>(),
+          ),
+        ),
+        ChangeNotifierProvider(
           create: (context) => ToolboxModel(
             context.read<SharedPreferences>(),
           ),
@@ -37,7 +43,6 @@ class DrawingPage extends StatelessWidget {
 
             return ReelStackModel(
               scene: context.read<TimelineModel>().currentScene,
-              sharedPreferences: context.read<SharedPreferences>(),
               createNewFrame: context.read<Project>().createNewFrame,
             );
           },
@@ -116,7 +121,7 @@ class DrawingPage extends StatelessWidget {
                     right: safePadding.right,
                     child: FitToScreenButton(),
                   ),
-                  if (reelStack.showFrameReel)
+                  if (context.watch<DrawingPageOptionsModel>().showFrameReel)
                     Positioned(
                       bottom: safePadding.bottom,
                       left: 0,

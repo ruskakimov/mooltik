@@ -6,18 +6,14 @@ import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 /// Manages a stack of frame reels.
 class ReelStackModel extends ChangeNotifier {
   ReelStackModel({
     required Scene scene,
-    required SharedPreferences sharedPreferences,
     required CreateNewFrame createNewFrame,
   })  : _scene = scene,
-        _sharedPreferences = sharedPreferences,
         _createNewFrame = createNewFrame,
-        _showFrameReel = sharedPreferences.getBool(_showFrameReelKey) ?? true,
         reels = scene.layers
             .map((layer) => FrameReelModel(
                   frameSeq: layer.frameSeq,
@@ -26,7 +22,6 @@ class ReelStackModel extends ChangeNotifier {
             .toList();
 
   final Scene _scene;
-  SharedPreferences _sharedPreferences;
   final CreateNewFrame _createNewFrame;
 
   final List<FrameReelModel> reels;
@@ -51,16 +46,6 @@ class ReelStackModel extends ChangeNotifier {
       _activeReelIndex = index;
       notifyListeners();
     }
-  }
-
-  /// Whether frame reel UI is visible.
-  bool get showFrameReel => _showFrameReel;
-  bool _showFrameReel;
-
-  Future<void> toggleFrameReelVisibility() async {
-    _showFrameReel = !_showFrameReel;
-    notifyListeners();
-    await _sharedPreferences.setBool(_showFrameReelKey, _showFrameReel);
   }
 
   void addLayerAboveActive(SceneLayer layer) {
@@ -208,5 +193,3 @@ class ReelStackModel extends ChangeNotifier {
     notifyListeners();
   }
 }
-
-const _showFrameReelKey = 'frame_reel_visible';
