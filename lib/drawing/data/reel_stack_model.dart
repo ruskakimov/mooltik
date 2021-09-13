@@ -52,6 +52,9 @@ class ReelStackModel extends ChangeNotifier {
   }
 
   void addLayerAboveActive(SceneLayer layer) {
+    // Add to group if inserting between group members.
+    layer.setGroupedWithNext(isGroupedWithAbove(_activeReelIndex));
+
     _scene.layers.insert(_activeReelIndex, layer);
     reels.insert(
         _activeReelIndex,

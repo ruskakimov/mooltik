@@ -28,7 +28,7 @@ ReelStackModel reelStack(List<SceneLayer> layers) => ReelStackModel(
 void main() {
   group('ReelStackModel', () {
     group('addLayerAboveActive', () {
-      test('adds to group if sandwiched between group members', () {
+      test('adds to group if inserting between group members', () {
         final stack = reelStack([
           layer(),
           ...layerGroup(2),
