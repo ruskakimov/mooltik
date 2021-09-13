@@ -1,42 +1,61 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mooltik/common/data/io/delete_files_where.dart';
 
 import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/project/layer_group/layer_group_info.dart';
+import 'package:mooltik/common/data/project/layer_group/sync_layers.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
 
-SceneLayer layer() => SceneLayer(Sequence<Frame>([]));
+Frame frame() => Frame(
+      image: DiskImage(file: File('test.png'), width: 100, height: 100),
+    );
 
-List<SceneLayer> layerGroup(int length) => [
-      for (int i = 0; i < length - 1; i++)
-        SceneLayer(Sequence<Frame>([]), PlayMode.extendLast, true, '', true),
-      layer(),
+SceneLayer layer([int frames = 1, bool groupedWithNext = false]) => SceneLayer(
+      Sequence<Frame>([
+        for (int i = 0; i < frames; i++) frame(),
+      ]),
+      PlayMode.extendLast,
+      true,
+      '',
+      groupedWithNext,
+    );
+
+List<SceneLayer> layerGroup(int length, [int frames = 1]) => [
+      for (int i = 0; i < length - 1; i++) layer(frames, true),
+      layer(frames),
     ];
 
 ReelStackModel reelStack(List<SceneLayer> layers) => ReelStackModel(
-      createNewFrame: () async => Frame(
-        image: DiskImage(file: File(''), width: 100, height: 100),
-      ),
+      createNewFrame: () async => frame(),
       scene: Scene(layers: layers),
     );
 
 void main() {
+  tearDown(() async {
+    await deleteFilesWhere(
+      Directory.current,
+      (path) => path.endsWith('.png'),
+    );
+  });
+
   group('ReelStackModel', () {
     group('addLayerAboveActive', () {
       test('adds to group if inserting between group members', () {
         final stack = reelStack([
           layer(),
-          ...layerGroup(2),
+          ...layerGroup(2, 3),
           layer(),
         ]);
         stack.setActiveReelIndex(2);
         stack.addLayerAboveActive(layer());
         expect(stack.layerGroups, [LayerGroupInfo(1, 3)]);
+        expect(isGroupSynced(stack.layerGroupOf(1)), true);
       });
     });
 
