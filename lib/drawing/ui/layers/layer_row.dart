@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -8,7 +9,6 @@ import 'package:mooltik/common/ui/edit_text_dialog.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/common/ui/slide_action_button.dart';
 import 'package:mooltik/drawing/ui/frame_window.dart';
-import 'package:mooltik/drawing/ui/reel/frame_number_box.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
@@ -54,7 +54,10 @@ class _LayerRowState extends State<LayerRow> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CurrentCel(reel: widget.reel),
+            CurrentCel(
+              reel: widget.reel,
+              showNumber: widget.selected,
+            ),
             SizedBox(width: 4),
             Expanded(child: _buildLabel()),
             VisibilitySwitch(
@@ -199,12 +202,17 @@ class CurrentCel extends StatelessWidget {
   const CurrentCel({
     Key? key,
     required this.reel,
+    required this.showNumber,
   }) : super(key: key);
 
   final FrameReelModel reel;
+  final bool showNumber;
 
   @override
   Widget build(BuildContext context) {
+    final current = reel.currentIndex + 1;
+    final length = reel.frameSeq.length;
+
     return Container(
       margin: const EdgeInsets.all(8.0),
       clipBehavior: Clip.antiAlias,
@@ -214,15 +222,35 @@ class CurrentCel extends StatelessWidget {
       child: Stack(
         children: [
           FrameWindow(frame: reel.currentFrame),
-          Positioned(
-            top: 4,
-            left: 4,
-            child: FrameNumberBox(
-              selected: true,
-              number: reel.currentIndex + 1,
+          if (showNumber && length > 1)
+            Positioned(
+              top: 4,
+              left: 4,
+              child: _buildBox('$current / $length'),
             ),
-          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBox(String text) {
+    return Container(
+      height: 20,
+      padding: const EdgeInsets.symmetric(horizontal: 6),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.grey[900],
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            fontFeatures: [FontFeature.tabularFigures()],
+          ),
+        ),
       ),
     );
   }
