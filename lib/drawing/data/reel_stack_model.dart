@@ -51,10 +51,7 @@ class ReelStackModel extends ChangeNotifier {
     setActiveReelIndex(index);
   }
 
-  void addLayerAboveActive(SceneLayer layer) {
-    // Add to group if inserting between group members.
-    layer.setGroupedWithNext(isGroupedWithAbove(_activeReelIndex));
-
+  Future<void> addLayerAboveActive(SceneLayer layer) async {
     _scene.layers.insert(_activeReelIndex, layer);
     reels.insert(
         _activeReelIndex,
@@ -62,6 +59,15 @@ class ReelStackModel extends ChangeNotifier {
           frameSeq: layer.frameSeq,
           createNewFrame: _createNewFrame,
         ));
+
+    // Add to group if inserting between group members.
+    if (isGroupedWithAbove(_activeReelIndex)) {
+      // No longer synced.
+      _scene.layers[_activeReelIndex - 1].setGroupedWithNext(false);
+
+      await groupLayerWithAbove(_activeReelIndex);
+      await groupLayerWithBelow(_activeReelIndex);
+    }
     notifyListeners();
   }
 

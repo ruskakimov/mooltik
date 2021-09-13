@@ -46,14 +46,14 @@ void main() {
 
   group('ReelStackModel', () {
     group('addLayerAboveActive', () {
-      test('adds to group if inserting between group members', () {
+      test('adds to group if inserting between group members', () async {
         final stack = reelStack([
           layer(),
           ...layerGroup(2, 3),
           layer(),
         ]);
         stack.setActiveReelIndex(2);
-        stack.addLayerAboveActive(layer());
+        await stack.addLayerAboveActive(layer());
         expect(stack.layerGroups, [LayerGroupInfo(1, 3)]);
         expect(isGroupSynced(stack.layerGroupOf(1)), true);
       });

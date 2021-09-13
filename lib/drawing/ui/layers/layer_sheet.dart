@@ -184,7 +184,9 @@ class AddLayerButton extends StatelessWidget {
         final reelStack = context.read<ReelStackModel>();
         final project = context.read<Project>();
 
-        reelStack.addLayerAboveActive(await project.createNewSceneLayer());
+        await reelStack.addLayerAboveActive(
+          await project.createNewSceneLayer(),
+        );
       },
     );
   }
