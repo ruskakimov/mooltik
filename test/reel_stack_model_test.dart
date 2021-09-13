@@ -27,6 +27,19 @@ ReelStackModel reelStack(List<SceneLayer> layers) => ReelStackModel(
 
 void main() {
   group('ReelStackModel', () {
+    group('addLayerAboveActive', () {
+      test('adds to group if sandwiched between group members', () {
+        final stack = reelStack([
+          layer(),
+          ...layerGroup(2),
+          layer(),
+        ]);
+        stack.setActiveReelIndex(2);
+        stack.addLayerAboveActive(layer());
+        expect(stack.layerGroups, [LayerGroupInfo(1, 3)]);
+      });
+    });
+
     group('deleteLayer', () {
       test('retains active layer when deleted before', () {
         final stack = reelStack([
