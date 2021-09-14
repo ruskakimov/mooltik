@@ -172,24 +172,41 @@ class LayerList extends StatelessWidget {
   }
 }
 
-class AddLayerButton extends StatelessWidget {
+class AddLayerButton extends StatefulWidget {
   const AddLayerButton({
     Key? key,
   }) : super(key: key);
 
   @override
+  _AddLayerButtonState createState() => _AddLayerButtonState();
+}
+
+class _AddLayerButtonState extends State<AddLayerButton> {
+  bool _inProgress = false;
+
+  @override
   Widget build(BuildContext context) {
     return AppIconButton(
       icon: FontAwesomeIcons.plus,
-      onTap: () async {
-        // TODO: Wait to finish before calling again
-        final reelStack = context.read<ReelStackModel>();
-        final project = context.read<Project>();
-
-        await reelStack.addLayerAboveActive(
-          await project.createNewSceneLayer(),
-        );
-      },
+      onTap: _inProgress ? null : _addLayer,
     );
+  }
+
+  Future<void> _addLayer() async {
+    if (_inProgress) return;
+
+    setState(() => _inProgress = true);
+    try {
+      final reelStack = context.read<ReelStackModel>();
+      final project = context.read<Project>();
+
+      await reelStack.addLayerAboveActive(
+        await project.createNewSceneLayer(),
+      );
+    } catch (e) {
+      rethrow;
+    } finally {
+      setState(() => _inProgress = false);
+    }
   }
 }
