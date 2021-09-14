@@ -184,6 +184,16 @@ void main() {
 
         test('member is moved outside the group', () {
           final stack = reelStack([
+            ...layerGroup(3),
+            layer(),
+            layer(),
+          ]);
+          stack.onLayerReorder(0, 4);
+          expect(stack.layerGroups, [LayerGroupInfo(0, 1)]);
+        });
+
+        test('member is moved outside the group of 2', () {
+          final stack = reelStack([
             ...layerGroup(2),
             layer(),
           ]);
