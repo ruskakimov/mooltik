@@ -149,5 +149,48 @@ void main() {
         expect(stack.layerGroups, [LayerGroupInfo(0, 1)]);
       });
     });
+
+    group('onLayerReorder', () {
+      group('maintains the group when', () {
+        test('last member is moved into a different position', () {
+          final stack = reelStack([
+            ...layerGroup(3),
+          ]);
+          expect(stack.layerGroups, [LayerGroupInfo(0, 2)]);
+          stack.onLayerReorder(2, 0);
+          expect(stack.layerGroups, [LayerGroupInfo(0, 2)]);
+        });
+
+        test('non-last member is moved into the last position', () {
+          final stack = reelStack([
+            ...layerGroup(3),
+          ]);
+          expect(stack.layerGroups, [LayerGroupInfo(0, 2)]);
+          stack.onLayerReorder(0, 3);
+          expect(stack.layerGroups, [LayerGroupInfo(0, 2)]);
+        });
+      });
+
+      group('breaks the group ties when', () {
+        test('non-member is moved between members', () {
+          final stack = reelStack([
+            layer(),
+            ...layerGroup(2),
+          ]);
+          expect(stack.layerGroups, [LayerGroupInfo(1, 2)]);
+          stack.onLayerReorder(0, 2);
+          expect(stack.layerGroups, []);
+        });
+
+        test('member is moved outside the group', () {
+          final stack = reelStack([
+            ...layerGroup(2),
+            layer(),
+          ]);
+          stack.onLayerReorder(1, 3);
+          expect(stack.layerGroups, []);
+        });
+      });
+    });
   });
 }
