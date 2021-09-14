@@ -98,7 +98,22 @@ class ReelStackModel extends ChangeNotifier {
 
   void onLayerReorder(int oldIndex, int newIndex) {
     if (oldIndex < newIndex) newIndex -= 1;
+    if (oldIndex == newIndex) return;
+
     final activeReelBefore = activeReel;
+
+    final groupInfo = groupInfoOf(oldIndex);
+
+    if (groupInfo != null && oldIndex == groupInfo.lastLayerIndex) {
+      // Last member of the group
+      if (groupInfo.contains(newIndex)) {
+        // is moved within the group
+        final last = _scene.layers[oldIndex];
+        last.setGroupedWithNext(true);
+        final newLast = _scene.layers[groupInfo.lastLayerIndex - 1];
+        newLast.setGroupedWithNext(false);
+      }
+    }
 
     final reel = reels.removeAt(oldIndex);
     reels.insert(newIndex, reel);
@@ -132,12 +147,19 @@ class ReelStackModel extends ChangeNotifier {
 
   List<LayerGroupInfo> get layerGroups => _scene.layerGroups;
 
-  List<FrameReelModel> reelGroupOf(int layerIndex) {
-    if (!isGrouped(layerIndex)) return [reels[layerIndex]];
+  LayerGroupInfo? groupInfoOf(int layerIndex) {
+    if (!isGrouped(layerIndex)) return null;
 
-    final groupInfo = layerGroups.firstWhere((groupInfo) =>
-        groupInfo.firstLayerIndex <= layerIndex &&
-        layerIndex <= groupInfo.lastLayerIndex);
+    return layerGroups
+        .firstWhere((groupInfo) => groupInfo.contains(layerIndex));
+  }
+
+  List<FrameReelModel> reelGroupOf(int layerIndex) {
+    final groupInfo = groupInfoOf(layerIndex);
+
+    if (groupInfo == null) {
+      return [reels[layerIndex]];
+    }
 
     return reels.sublist(
       groupInfo.firstLayerIndex,
@@ -146,11 +168,11 @@ class ReelStackModel extends ChangeNotifier {
   }
 
   List<SceneLayer> layerGroupOf(int layerIndex) {
-    if (!isGrouped(layerIndex)) return [_scene.layers[layerIndex]];
+    final groupInfo = groupInfoOf(layerIndex);
 
-    final groupInfo = layerGroups.firstWhere((groupInfo) =>
-        groupInfo.firstLayerIndex <= layerIndex &&
-        layerIndex <= groupInfo.lastLayerIndex);
+    if (groupInfo == null) {
+      return [_scene.layers[layerIndex]];
+    }
 
     return _scene.layers.sublist(
       groupInfo.firstLayerIndex,
