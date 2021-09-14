@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -101,7 +102,7 @@ class LayerList extends StatelessWidget {
         padding: EdgeInsets.only(
           left: 8,
           right: 8,
-          bottom: MediaQuery.of(context).padding.bottom,
+          bottom: max(MediaQuery.of(context).padding.bottom, 24),
         ),
         proxyDecorator: _proxyDecorator,
         onReorder: reelStack.onLayerReorder,
@@ -181,6 +182,7 @@ class AddLayerButton extends StatelessWidget {
     return AppIconButton(
       icon: FontAwesomeIcons.plus,
       onTap: () async {
+        // TODO: Wait to finish before calling again
         final reelStack = context.read<ReelStackModel>();
         final project = context.read<Project>();
 
