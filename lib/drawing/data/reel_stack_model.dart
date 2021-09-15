@@ -100,7 +100,7 @@ class ReelStackModel extends ChangeNotifier {
     if (oldIndex < newIndex) newIndex -= 1;
     if (oldIndex == newIndex) return;
 
-    final activeReelBefore = activeReel;
+    final activeLayerBefore = _scene.layers[_activeReelIndex];
 
     final movedLayerGroup = groupInfoOf(oldIndex);
 
@@ -121,7 +121,7 @@ class ReelStackModel extends ChangeNotifier {
 
     if (movedWithinGroup) _fixGroupTies(movedLayerGroup!);
 
-    _activeReelIndex = reels.indexOf(activeReelBefore);
+    _activeReelIndex = _scene.layers.indexOf(activeLayerBefore);
 
     notifyListeners();
   }

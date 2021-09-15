@@ -151,6 +151,16 @@ void main() {
     });
 
     group('onLayerReorder', () {
+      test('preserves active group-member layer', () {
+        final stack = reelStack([
+          ...layerGroup(2),
+          layer(),
+        ]);
+        expect(stack.activeReelIndex, 0);
+        stack.onLayerReorder(2, 0);
+        expect(stack.activeReelIndex, 1);
+      });
+
       group('maintains the group when', () {
         test('last member is moved into a different position', () {
           final stack = reelStack([
