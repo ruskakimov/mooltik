@@ -113,11 +113,7 @@ class ReelStackModel extends ChangeNotifier {
     reels.insert(newIndex, reel);
 
     final layer = _scene.layers.removeAt(oldIndex);
-
-    if (isGroupedWithAbove(newIndex)) {
-      _scene.layers[newIndex - 1].setGroupedWithNext(false);
-    }
-
+    _severTopTie(newIndex);
     _scene.layers.insert(newIndex, layer);
 
     if (movedLayerGroup != null) {
@@ -229,9 +225,17 @@ class ReelStackModel extends ChangeNotifier {
   }
 
   void ungroupLayer(int layerIndex) {
-    if (layerIndex > 0) _scene.layers[layerIndex - 1].setGroupedWithNext(false);
-    _scene.layers[layerIndex].setGroupedWithNext(false);
+    _severTopTie(layerIndex);
+    _severBottomTie(layerIndex);
     notifyListeners();
+  }
+
+  void _severTopTie(int layerIndex) {
+    if (layerIndex > 0) _scene.layers[layerIndex - 1].setGroupedWithNext(false);
+  }
+
+  void _severBottomTie(int layerIndex) {
+    _scene.layers[layerIndex].setGroupedWithNext(false);
   }
 
   void _fixGroupTies(LayerGroupInfo groupInfo) {
