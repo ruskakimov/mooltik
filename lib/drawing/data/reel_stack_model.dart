@@ -26,6 +26,8 @@ class ReelStackModel extends ChangeNotifier {
 
   final List<FrameReelModel> reels;
 
+  List<SceneLayer> get _layers => _scene.layers;
+
   Iterable<FrameReelModel> get visibleReels => reels
       .where((reel) => isVisible(reels.indexOf(reel)) || reel == activeReel);
 
@@ -52,7 +54,7 @@ class ReelStackModel extends ChangeNotifier {
   }
 
   Future<void> addLayerAboveActive(SceneLayer layer) async {
-    _scene.layers.insert(_activeReelIndex, layer);
+    _layers.insert(_activeReelIndex, layer);
     reels.insert(
         _activeReelIndex,
         FrameReelModel(
@@ -63,7 +65,7 @@ class ReelStackModel extends ChangeNotifier {
     // Add to group if inserting between group members.
     if (isGroupedWithAbove(_activeReelIndex)) {
       // No longer synced.
-      _scene.layers[_activeReelIndex - 1].setGroupedWithNext(false);
+      _layers[_activeReelIndex - 1].setGroupedWithNext(false);
 
       await groupLayerWithAbove(_activeReelIndex);
       await groupLayerWithBelow(_activeReelIndex);
@@ -78,12 +80,12 @@ class ReelStackModel extends ChangeNotifier {
     if (layerIndex < 0 || layerIndex >= reels.length) return;
 
     if (isGroupedWithAbove(layerIndex) && !isGroupedWithBelow(layerIndex)) {
-      final above = _scene.layers[layerIndex - 1];
+      final above = _layers[layerIndex - 1];
       above.setGroupedWithNext(false);
     }
 
     reels.removeAt(layerIndex);
-    final removedLayer = _scene.layers.removeAt(layerIndex);
+    final removedLayer = _layers.removeAt(layerIndex);
 
     Future.delayed(
       Duration(seconds: 1),
@@ -100,7 +102,7 @@ class ReelStackModel extends ChangeNotifier {
     if (oldIndex < newIndex) newIndex -= 1;
     if (oldIndex == newIndex) return;
 
-    final activeLayerBefore = _scene.layers[_activeReelIndex];
+    final activeLayerBefore = _layers[_activeReelIndex];
 
     final movedLayerGroup = groupInfoOf(oldIndex);
 
@@ -112,32 +114,31 @@ class ReelStackModel extends ChangeNotifier {
     final reel = reels.removeAt(oldIndex);
     reels.insert(newIndex, reel);
 
-    final layer = _scene.layers.removeAt(oldIndex);
+    final layer = _layers.removeAt(oldIndex);
     _severTopTie(newIndex);
-    _scene.layers.insert(newIndex, layer);
+    _layers.insert(newIndex, layer);
 
     final movedWithinGroup =
         movedLayerGroup != null && movedLayerGroup.contains(newIndex);
 
     if (movedWithinGroup) _fixGroupTies(movedLayerGroup!);
 
-    _activeReelIndex = _scene.layers.indexOf(activeLayerBefore);
+    _activeReelIndex = _layers.indexOf(activeLayerBefore);
 
     notifyListeners();
   }
 
-  bool isVisible(int layerIndex) => _scene.layers[layerIndex].visible;
+  bool isVisible(int layerIndex) => _layers[layerIndex].visible;
 
   void setLayerVisibility(int layerIndex, bool value) {
-    _scene.layers[layerIndex].setVisibility(value);
+    _layers[layerIndex].setVisibility(value);
     notifyListeners();
   }
 
-  String getLayerName(int layerIndex) =>
-      _scene.layers[layerIndex].name ?? 'Untitled';
+  String getLayerName(int layerIndex) => _layers[layerIndex].name ?? 'Untitled';
 
   void setLayerName(int layerIndex, String value) {
-    _scene.layers[layerIndex].setName(value);
+    _layers[layerIndex].setName(value);
     notifyListeners();
   }
 
@@ -171,10 +172,10 @@ class ReelStackModel extends ChangeNotifier {
     final groupInfo = groupInfoOf(layerIndex);
 
     if (groupInfo == null) {
-      return [_scene.layers[layerIndex]];
+      return [_layers[layerIndex]];
     }
 
-    return _scene.layers.sublist(
+    return _layers.sublist(
       groupInfo.firstLayerIndex,
       groupInfo.lastLayerIndex + 1,
     );
@@ -184,16 +185,16 @@ class ReelStackModel extends ChangeNotifier {
       isGroupedWithAbove(layerIndex) || isGroupedWithBelow(layerIndex);
 
   bool isGroupedWithAbove(int layerIndex) =>
-      layerIndex > 0 && _scene.layers[layerIndex - 1].groupedWithNext;
+      layerIndex > 0 && _layers[layerIndex - 1].groupedWithNext;
 
   bool isGroupedWithBelow(int layerIndex) =>
-      _scene.layers[layerIndex].groupedWithNext;
+      _layers[layerIndex].groupedWithNext;
 
   bool canGroupWithAbove(int layerIndex) =>
       layerIndex > 0 && !isGroupedWithAbove(layerIndex);
 
   bool canGroupWithBelow(int layerIndex) =>
-      layerIndex < _scene.layers.length - 1 && !isGroupedWithBelow(layerIndex);
+      layerIndex < _layers.length - 1 && !isGroupedWithBelow(layerIndex);
 
   Future<void> groupLayerWithAbove(int layerIndex) async {
     if (layerIndex == 0) throw Exception('Cannot group first layer with above');
@@ -201,7 +202,7 @@ class ReelStackModel extends ChangeNotifier {
   }
 
   Future<void> groupLayerWithBelow(int layerIndex) async {
-    if (layerIndex == _scene.layers.length - 1)
+    if (layerIndex == _layers.length - 1)
       throw Exception('Cannot group last layer with below');
 
     final aIndex = layerIndex;
@@ -211,7 +212,7 @@ class ReelStackModel extends ChangeNotifier {
     final bGroupLayers = layerGroupOf(bIndex);
     await mergeGroups(aGroupLayers, bGroupLayers);
 
-    final a = _scene.layers[aIndex];
+    final a = _layers[aIndex];
     a.setGroupedWithNext(true);
 
     // Sync current frames in B to A.
@@ -229,18 +230,18 @@ class ReelStackModel extends ChangeNotifier {
   }
 
   void _severTopTie(int layerIndex) {
-    if (layerIndex > 0) _scene.layers[layerIndex - 1].setGroupedWithNext(false);
+    if (layerIndex > 0) _layers[layerIndex - 1].setGroupedWithNext(false);
   }
 
   void _severBottomTie(int layerIndex) {
-    _scene.layers[layerIndex].setGroupedWithNext(false);
+    _layers[layerIndex].setGroupedWithNext(false);
   }
 
   void _fixGroupTies(LayerGroupInfo groupInfo) {
     for (int i = groupInfo.firstLayerIndex;
         i <= groupInfo.lastLayerIndex;
         i++) {
-      _scene.layers[i].setGroupedWithNext(i != groupInfo.lastLayerIndex);
+      _layers[i].setGroupedWithNext(i != groupInfo.lastLayerIndex);
     }
   }
 }
