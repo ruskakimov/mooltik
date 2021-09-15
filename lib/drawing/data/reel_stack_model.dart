@@ -107,13 +107,7 @@ class ReelStackModel extends ChangeNotifier {
     // Moving outside the group.
     if (movedLayerGroupInfo != null &&
         !movedLayerGroupInfo.contains(newIndex)) {
-      final moving = _scene.layers[oldIndex];
-      if (moving.groupedWithNext) {
-        // Moving non-last
-        moving.setGroupedWithNext(false);
-      } else {
-        _scene.layers[oldIndex - 1].setGroupedWithNext(false);
-      }
+      ungroupLayer(oldIndex);
     }
 
     final reel = reels.removeAt(oldIndex);
