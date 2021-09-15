@@ -75,7 +75,7 @@ class _LayerRowState extends State<LayerRow> {
       actions: [
         if (widget.canGroupWithAbove)
           SlideActionButton(
-            icon: MdiIcons.folderUpload,
+            icon: MdiIcons.arrowUpCircle,
             label: 'Group',
             color: Theme.of(context).colorScheme.secondary,
             onTap: () {
@@ -87,7 +87,7 @@ class _LayerRowState extends State<LayerRow> {
           ),
         if (widget.canGroupWithBelow)
           SlideActionButton(
-            icon: MdiIcons.folderDownload,
+            icon: MdiIcons.arrowDownCircle,
             label: 'Group',
             color: Theme.of(context).colorScheme.secondary,
             onTap: () {
@@ -99,7 +99,7 @@ class _LayerRowState extends State<LayerRow> {
           ),
         if (widget.canUngroup)
           SlideActionButton(
-            icon: MdiIcons.folderRemove,
+            icon: MdiIcons.closeCircle,
             label: 'Ungroup',
             color: Theme.of(context).colorScheme.secondary,
             onTap: () {
