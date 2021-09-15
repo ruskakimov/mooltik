@@ -104,10 +104,10 @@ class ReelStackModel extends ChangeNotifier {
 
     final movedLayerGroup = groupInfoOf(oldIndex);
 
-    // Moving outside the group.
-    if (movedLayerGroup != null && !movedLayerGroup.contains(newIndex)) {
-      ungroupLayer(oldIndex);
-    }
+    final movingOutOfGroup =
+        movedLayerGroup != null && !movedLayerGroup.contains(newIndex);
+
+    if (movingOutOfGroup) ungroupLayer(oldIndex);
 
     final reel = reels.removeAt(oldIndex);
     reels.insert(newIndex, reel);
@@ -116,12 +116,10 @@ class ReelStackModel extends ChangeNotifier {
     _severTopTie(newIndex);
     _scene.layers.insert(newIndex, layer);
 
-    if (movedLayerGroup != null) {
-      if (movedLayerGroup.contains(newIndex)) {
-        // Moved inside the group.
-        _fixGroupTies(movedLayerGroup);
-      }
-    }
+    final movedWithinGroup =
+        movedLayerGroup != null && movedLayerGroup.contains(newIndex);
+
+    if (movedWithinGroup) _fixGroupTies(movedLayerGroup!);
 
     _activeReelIndex = reels.indexOf(activeReelBefore);
 
