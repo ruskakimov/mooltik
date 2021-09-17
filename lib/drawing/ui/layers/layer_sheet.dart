@@ -45,9 +45,9 @@ class LayerSheet extends StatelessWidget {
   Positioned _buildLine(int topRowIndex, int rowCount) {
     return Positioned(
       left: 0,
-      top: _rowHeight * topRowIndex,
-      height: _rowHeight * rowCount,
-      width: 4,
+      top: _rowHeight * topRowIndex + 16,
+      height: _rowHeight * rowCount - 32,
+      width: 12,
       child: _LayerGroupLine(),
     );
   }
@@ -74,17 +74,31 @@ class _LayerGroupLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(4),
-            bottomRight: Radius.circular(4),
-          ),
-        ),
+      child: CustomPaint(
+        painter: LinePainter(Theme.of(context).colorScheme.primary),
       ),
     );
   }
+}
+
+class LinePainter extends CustomPainter {
+  LinePainter(this.color);
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = color;
+    canvas.drawRect(Rect.fromLTWH(0, 0, 4, size.height), paint);
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, 4), paint);
+    canvas.drawRect(Rect.fromLTWH(0, size.height - 4, size.width, 4), paint);
+  }
+
+  @override
+  bool shouldRepaint(LinePainter oldDelegate) => false;
+
+  @override
+  bool shouldRebuildSemantics(LinePainter oldDelegate) => false;
 }
 
 class LayerList extends StatelessWidget {
