@@ -166,6 +166,7 @@ class LayerList extends StatelessWidget {
         return Transform.scale(
           scale: scale,
           child: Material(
+            type: MaterialType.transparency,
             child: child,
             elevation: elevation,
           ),
