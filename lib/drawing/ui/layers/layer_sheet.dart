@@ -135,18 +135,16 @@ class LayerList extends StatelessWidget {
       canUngroup: reelStack.isGrouped(index),
     );
 
-    if (grouped) {
-      rowContent = Padding(
-        padding: const EdgeInsets.only(left: 8.0),
-        child: rowContent,
-      );
-    }
-
     return SizedBox(
       key: Key(reel.currentFrame.image.file.path),
       height: _rowHeight,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2),
+      child: AnimatedPadding(
+        duration: Duration(milliseconds: 250),
+        padding: EdgeInsets.only(
+          top: 2,
+          bottom: 2,
+          left: grouped ? 16 : 0,
+        ),
         child: rowContent,
       ),
     );
