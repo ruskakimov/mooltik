@@ -14,8 +14,15 @@ import 'package:mooltik/drawing/data/reel_stack_model.dart';
 
 const double _rowHeight = 80;
 
-class LayerSheet extends StatelessWidget {
+class LayerSheet extends StatefulWidget {
   const LayerSheet({Key? key}) : super(key: key);
+
+  @override
+  _LayerSheetState createState() => _LayerSheetState();
+}
+
+class _LayerSheetState extends State<LayerSheet> {
+  bool _reordering = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +38,13 @@ class LayerSheet extends StatelessWidget {
           child: SingleChildScrollView(
             child: Stack(
               children: [
-                LayerList(),
-                for (var group in layerGroups)
-                  _buildLine(group.firstLayerIndex, group.layerCount)
+                LayerList(
+                  onReorderingStart: () => setState(() => _reordering = true),
+                  onReorderingEnd: () => setState(() => _reordering = false),
+                ),
+                if (!_reordering)
+                  for (var group in layerGroups)
+                    _buildLine(group.firstLayerIndex, group.layerCount)
               ],
             ),
           ),
@@ -69,7 +80,14 @@ class LayerSheet extends StatelessWidget {
 }
 
 class LayerList extends StatelessWidget {
-  const LayerList({Key? key}) : super(key: key);
+  const LayerList({
+    Key? key,
+    required this.onReorderingStart,
+    required this.onReorderingEnd,
+  }) : super(key: key);
+
+  final VoidCallback onReorderingStart;
+  final VoidCallback onReorderingEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +104,10 @@ class LayerList extends StatelessWidget {
           bottom: max(MediaQuery.of(context).padding.bottom, 24),
         ),
         proxyDecorator: _proxyDecorator,
-        onReorder: reelStack.onLayerReorder,
+        onReorder: (i, j) {
+          reelStack.onLayerReorder(i, j);
+          onReorderingEnd();
+        },
         itemCount: reelStack.reels.length,
         itemBuilder: (context, index) =>
             _buildLayerRow(context, index, reelStack),
@@ -132,6 +153,10 @@ class LayerList extends StatelessWidget {
   }
 
   Widget _proxyDecorator(Widget child, int index, Animation<double> animation) {
+    if (animation.status == AnimationStatus.forward) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) => onReorderingStart());
+    }
+
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, Widget? child) {
