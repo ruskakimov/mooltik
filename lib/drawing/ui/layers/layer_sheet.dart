@@ -7,6 +7,7 @@ import 'package:mooltik/common/data/project/layer_group/layer_group_info.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/sheet_title.dart';
+import 'package:mooltik/drawing/ui/layers/group_line.dart';
 import 'package:mooltik/drawing/ui/layers/layer_row.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
@@ -43,12 +44,14 @@ class LayerSheet extends StatelessWidget {
 
   /// Draws a group line starting from [topRowIndex] (inclusive) and spanning [rowCount] rows.
   Positioned _buildLine(int topRowIndex, int rowCount) {
+    final verticalPadding = 16;
+
     return Positioned(
       left: 0,
-      top: _rowHeight * topRowIndex + 16,
-      height: _rowHeight * rowCount - 32,
+      top: _rowHeight * topRowIndex + verticalPadding,
+      height: _rowHeight * rowCount - verticalPadding * 2,
       width: 12,
-      child: _LayerGroupLine(),
+      child: GroupLine(),
     );
   }
 
@@ -63,42 +66,6 @@ class LayerSheet extends StatelessWidget {
       ],
     );
   }
-}
-
-class _LayerGroupLine extends StatelessWidget {
-  const _LayerGroupLine({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: CustomPaint(
-        painter: LinePainter(Theme.of(context).colorScheme.primary),
-      ),
-    );
-  }
-}
-
-class LinePainter extends CustomPainter {
-  LinePainter(this.color);
-
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color;
-    canvas.drawRect(Rect.fromLTWH(0, 0, 4, size.height), paint);
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, 4), paint);
-    canvas.drawRect(Rect.fromLTWH(0, size.height - 4, size.width, 4), paint);
-  }
-
-  @override
-  bool shouldRepaint(LinePainter oldDelegate) => false;
-
-  @override
-  bool shouldRebuildSemantics(LinePainter oldDelegate) => false;
 }
 
 class LayerList extends StatelessWidget {
