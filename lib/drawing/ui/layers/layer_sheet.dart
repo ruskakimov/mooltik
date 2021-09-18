@@ -43,36 +43,12 @@ class _LayerSheetState extends State<LayerSheet> {
                   onReorderingStart: () => setState(() => _reordering = true),
                   onReorderingEnd: () => setState(() => _reordering = false),
                 ),
-                Positioned.fill(
-                  child: AnimatedOpacity(
-                    opacity: _reordering ? 0 : 1,
-                    duration: const Duration(milliseconds: 300),
-                    child: Stack(
-                      children: [
-                        for (var group in layerGroups)
-                          _buildLine(group.firstLayerIndex, group.layerCount)
-                      ],
-                    ),
-                  ),
-                ),
+                _buildGroupLinesLayer(layerGroups),
               ],
             ),
           ),
         ),
       ],
-    );
-  }
-
-  /// Draws a group line starting from [topRowIndex] (inclusive) and spanning [rowCount] rows.
-  Positioned _buildLine(int topRowIndex, int rowCount) {
-    final verticalPadding = 16;
-
-    return Positioned(
-      left: 0,
-      top: _rowHeight * topRowIndex + verticalPadding,
-      height: _rowHeight * rowCount - verticalPadding * 2,
-      width: 12,
-      child: GroupLine(),
     );
   }
 
@@ -85,6 +61,34 @@ class _LayerSheetState extends State<LayerSheet> {
         AddLayerButton(),
         SizedBox(width: 8),
       ],
+    );
+  }
+
+  Positioned _buildGroupLinesLayer(List<LayerGroupInfo> layerGroups) {
+    return Positioned.fill(
+      child: AnimatedOpacity(
+        opacity: _reordering ? 0 : 1,
+        duration: const Duration(milliseconds: 300),
+        child: Stack(
+          children: [
+            for (var group in layerGroups)
+              _buildGroupLine(group.firstLayerIndex, group.layerCount)
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Draws a group line starting from [topRowIndex] (inclusive) and spanning [rowCount] rows.
+  Positioned _buildGroupLine(int topRowIndex, int rowCount) {
+    final verticalPadding = 16;
+
+    return Positioned(
+      left: 0,
+      top: _rowHeight * topRowIndex + verticalPadding,
+      height: _rowHeight * rowCount - verticalPadding * 2,
+      width: 12,
+      child: GroupLine(),
     );
   }
 }
