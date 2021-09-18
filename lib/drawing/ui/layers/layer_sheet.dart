@@ -7,6 +7,7 @@ import 'package:mooltik/common/data/project/layer_group/layer_group_info.dart';
 import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/sheet_title.dart';
+import 'package:mooltik/drawing/ui/layers/all_fingers_lifted_listener.dart';
 import 'package:mooltik/drawing/ui/layers/group_line.dart';
 import 'package:mooltik/drawing/ui/layers/layer_row.dart';
 import 'package:provider/provider.dart';
@@ -42,6 +43,7 @@ class _LayerSheetState extends State<LayerSheet> {
                   onReorderingStart: () => setState(() => _reordering = true),
                   onReorderingEnd: () => setState(() => _reordering = false),
                 ),
+                // TODO: Fade line in/out
                 if (!_reordering)
                   for (var group in layerGroups)
                     _buildLine(group.firstLayerIndex, group.layerCount)
@@ -93,24 +95,30 @@ class LayerList extends StatelessWidget {
   Widget build(BuildContext context) {
     final reelStack = context.watch<ReelStackModel>();
 
-    return ClipRect(
-      child: ReorderableListView.builder(
-        primary: false,
-        shrinkWrap: true,
-        clipBehavior: Clip.none,
-        padding: EdgeInsets.only(
-          left: 8,
-          right: 8,
-          bottom: max(MediaQuery.of(context).padding.bottom, 24),
+    return AllFingersLiftedListener(
+      onAllFingersLifted: () {
+        // Wait for reordering animation to settle.
+        Future.delayed(
+          Duration(milliseconds: 300),
+          onReorderingEnd,
+        );
+      },
+      child: ClipRect(
+        child: ReorderableListView.builder(
+          primary: false,
+          shrinkWrap: true,
+          clipBehavior: Clip.none,
+          padding: EdgeInsets.only(
+            left: 8,
+            right: 8,
+            bottom: max(MediaQuery.of(context).padding.bottom, 24),
+          ),
+          proxyDecorator: _proxyDecorator,
+          onReorder: reelStack.onLayerReorder,
+          itemCount: reelStack.reels.length,
+          itemBuilder: (context, index) =>
+              _buildLayerRow(context, index, reelStack),
         ),
-        proxyDecorator: _proxyDecorator,
-        onReorder: (i, j) {
-          reelStack.onLayerReorder(i, j);
-          onReorderingEnd();
-        },
-        itemCount: reelStack.reels.length,
-        itemBuilder: (context, index) =>
-            _buildLayerRow(context, index, reelStack),
       ),
     );
   }
