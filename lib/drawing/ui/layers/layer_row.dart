@@ -76,7 +76,7 @@ class _LayerRowState extends State<LayerRow> {
         if (widget.canGroupWithAbove)
           SlideActionButton(
             icon: MdiIcons.arrowUpCircle,
-            label: 'Group',
+            label: 'Sync',
             color: Theme.of(context).colorScheme.secondary,
             onTap: () {
               final reelStack = context.read<ReelStackModel>();
@@ -88,7 +88,7 @@ class _LayerRowState extends State<LayerRow> {
         if (widget.canGroupWithBelow)
           SlideActionButton(
             icon: MdiIcons.arrowDownCircle,
-            label: 'Group',
+            label: 'Sync',
             color: Theme.of(context).colorScheme.secondary,
             onTap: () {
               final reelStack = context.read<ReelStackModel>();
@@ -100,7 +100,7 @@ class _LayerRowState extends State<LayerRow> {
         if (widget.canUngroup)
           SlideActionButton(
             icon: MdiIcons.closeCircle,
-            label: 'Ungroup',
+            label: 'Detach',
             color: Theme.of(context).colorScheme.secondary,
             onTap: () {
               final reelStack = context.read<ReelStackModel>();
