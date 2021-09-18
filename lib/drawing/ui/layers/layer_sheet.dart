@@ -24,6 +24,24 @@ class LayerSheet extends StatefulWidget {
 
 class _LayerSheetState extends State<LayerSheet> {
   bool _reordering = false;
+  double _scrollOffset = 0;
+  ScrollController _controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      setState(() {
+        _scrollOffset = _controller.offset;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +54,25 @@ class _LayerSheetState extends State<LayerSheet> {
       children: [
         _buildHeader(),
         Expanded(
-          child: SingleChildScrollView(
-            child: Stack(
-              children: [
-                LayerList(
-                  onReorderingStart: () => setState(() => _reordering = true),
-                  onReorderingEnd: () => setState(() => _reordering = false),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              _LayerList(
+                controller: _controller,
+                onReorderingStart: () => setState(() => _reordering = true),
+                onReorderingEnd: () => setState(() => _reordering = false),
+              ),
+              IgnorePointer(
+                child: AnimatedOpacity(
+                  opacity: _reordering ? 0 : 1,
+                  duration: const Duration(milliseconds: 300),
+                  child: _GroupLinesLayer(
+                    layerGroups: layerGroups,
+                    scrollOffset: _scrollOffset,
+                  ),
                 ),
-                _buildGroupLinesLayer(layerGroups),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],
@@ -63,19 +90,25 @@ class _LayerSheetState extends State<LayerSheet> {
       ],
     );
   }
+}
 
-  Positioned _buildGroupLinesLayer(List<LayerGroupInfo> layerGroups) {
-    return Positioned.fill(
-      child: AnimatedOpacity(
-        opacity: _reordering ? 0 : 1,
-        duration: const Duration(milliseconds: 300),
-        child: Stack(
-          children: [
-            for (var group in layerGroups)
-              _buildGroupLine(group.firstLayerIndex, group.layerCount)
-          ],
-        ),
-      ),
+class _GroupLinesLayer extends StatelessWidget {
+  const _GroupLinesLayer({
+    Key? key,
+    required this.layerGroups,
+    required this.scrollOffset,
+  }) : super(key: key);
+
+  final List<LayerGroupInfo> layerGroups;
+  final double scrollOffset;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        for (var group in layerGroups)
+          _buildGroupLine(group.firstLayerIndex, group.layerCount)
+      ],
     );
   }
 
@@ -85,7 +118,7 @@ class _LayerSheetState extends State<LayerSheet> {
 
     return Positioned(
       left: 0,
-      top: _rowHeight * topRowIndex + verticalPadding,
+      top: _rowHeight * topRowIndex + verticalPadding - scrollOffset,
       height: _rowHeight * rowCount - verticalPadding * 2,
       width: 12,
       child: GroupLine(),
@@ -93,13 +126,15 @@ class _LayerSheetState extends State<LayerSheet> {
   }
 }
 
-class LayerList extends StatelessWidget {
-  const LayerList({
+class _LayerList extends StatelessWidget {
+  const _LayerList({
     Key? key,
+    required this.controller,
     required this.onReorderingStart,
     required this.onReorderingEnd,
   }) : super(key: key);
 
+  final ScrollController controller;
   final VoidCallback onReorderingStart;
   final VoidCallback onReorderingEnd;
 
@@ -117,6 +152,7 @@ class LayerList extends StatelessWidget {
       },
       child: ClipRect(
         child: ReorderableListView.builder(
+          scrollController: controller,
           primary: false,
           shrinkWrap: true,
           clipBehavior: Clip.none,
