@@ -27,6 +27,8 @@ class _LayerSheetState extends State<LayerSheet> {
   double _scrollOffset = 0;
   ScrollController _controller = ScrollController();
 
+  Orientation? _orientation;
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +37,20 @@ class _LayerSheetState extends State<LayerSheet> {
         _scrollOffset = _controller.offset;
       });
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final orientation = MediaQuery.of(context).orientation;
+    _orientation ??= orientation;
+
+    // Hack to force update scroll offset on rotation.
+    if (orientation != _orientation) {
+      Future.delayed(Duration.zero, _controller.notifyListeners);
+      _orientation = orientation;
+    }
   }
 
   @override
