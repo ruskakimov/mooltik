@@ -43,10 +43,18 @@ class _LayerSheetState extends State<LayerSheet> {
                   onReorderingStart: () => setState(() => _reordering = true),
                   onReorderingEnd: () => setState(() => _reordering = false),
                 ),
-                // TODO: Fade line in/out
-                if (!_reordering)
-                  for (var group in layerGroups)
-                    _buildLine(group.firstLayerIndex, group.layerCount)
+                Positioned.fill(
+                  child: AnimatedOpacity(
+                    opacity: _reordering ? 0 : 1,
+                    duration: const Duration(milliseconds: 300),
+                    child: Stack(
+                      children: [
+                        for (var group in layerGroups)
+                          _buildLine(group.firstLayerIndex, group.layerCount)
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
