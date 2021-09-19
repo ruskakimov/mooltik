@@ -35,7 +35,7 @@ class ImageSliver extends Sliver {
     final sliverWidth = rrect.width / scaleFactor;
     final paint = Paint()..color = Colors.black.withOpacity(opacity);
 
-    if (thumbnail!.width > sliverWidth) {
+    if (thumbnail!.width.toDouble() > sliverWidth) {
       // Center thumbnail if it overflows sliver.
       final xOffset = (sliverWidth - thumbnail!.width) / 2;
       canvas.drawImage(thumbnail!, Offset(xOffset, 0), paint);
