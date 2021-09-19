@@ -24,34 +24,7 @@ class LayerSheet extends StatefulWidget {
 
 class _LayerSheetState extends State<LayerSheet> {
   bool _reordering = false;
-  double _scrollOffset = 0;
   ScrollController _controller = ScrollController();
-
-  Orientation? _orientation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller.addListener(() {
-      setState(() {
-        _scrollOffset = _controller.offset;
-      });
-    });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    final orientation = MediaQuery.of(context).orientation;
-    _orientation ??= orientation;
-
-    // Hack to force update scroll offset on rotation.
-    if (orientation != _orientation) {
-      Future.delayed(Duration.zero, _controller.notifyListeners);
-      _orientation = orientation;
-    }
-  }
 
   @override
   void dispose() {
@@ -64,6 +37,7 @@ class _LayerSheetState extends State<LayerSheet> {
     final layerGroups = context.select<ReelStackModel, List<LayerGroupInfo>>(
       (reelStack) => reelStack.layerGroups,
     );
+    final scrollOffset = _controller.hasClients ? _controller.offset : 0.0;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,10 +47,24 @@ class _LayerSheetState extends State<LayerSheet> {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              _LayerList(
-                controller: _controller,
-                onReorderingStart: () => setState(() => _reordering = true),
-                onReorderingEnd: () => setState(() => _reordering = false),
+              NotificationListener<ScrollNotification>(
+                onNotification: (notification) {
+                  setState(() {});
+                  return true;
+                },
+                // Listen when `maxScrollExtent` changes that causes offset change,
+                // e.g. when screen is rotated or layer is deleted.
+                child: NotificationListener<ScrollMetricsNotification>(
+                  onNotification: (notification) {
+                    setState(() {});
+                    return true;
+                  },
+                  child: _LayerList(
+                    controller: _controller,
+                    onReorderingStart: () => setState(() => _reordering = true),
+                    onReorderingEnd: () => setState(() => _reordering = false),
+                  ),
+                ),
               ),
               IgnorePointer(
                 child: AnimatedOpacity(
@@ -84,7 +72,7 @@ class _LayerSheetState extends State<LayerSheet> {
                   duration: const Duration(milliseconds: 300),
                   child: _GroupLinesLayer(
                     layerGroups: layerGroups,
-                    scrollOffset: _scrollOffset,
+                    scrollOffset: scrollOffset,
                   ),
                 ),
               ),
