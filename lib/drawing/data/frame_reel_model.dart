@@ -1,19 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 
 class FrameReelModel extends ChangeNotifier {
   FrameReelModel({
     required this.frameSeq,
-    required CreateNewFrame createNewFrame,
-  })  : _currentIndex = frameSeq.currentIndex,
-        _createNewFrame = createNewFrame;
+  }) : _currentIndex = frameSeq.currentIndex;
 
   final Sequence<Frame> frameSeq;
-  final CreateNewFrame _createNewFrame;
 
   Frame get currentFrame => frameSeq[_currentIndex];
 
@@ -27,29 +23,26 @@ class FrameReelModel extends ChangeNotifier {
   }
 
   Future<void> appendFrame() async {
-    final frame = await _createNewFrame();
     frameSeq.insert(
       frameSeq.length,
-      frame.copyWith(duration: frameSeq.last.duration),
+      await frameSeq.current.cloneEmpty(),
     );
     notifyListeners();
   }
 
   Future<void> addBeforeCurrent() async {
-    final frame = await _createNewFrame();
     frameSeq.insert(
       _currentIndex,
-      frame.copyWith(duration: frameSeq.current.duration),
+      await frameSeq.current.cloneEmpty(),
     );
     _currentIndex++;
     notifyListeners();
   }
 
   Future<void> addAfterCurrent() async {
-    final frame = await _createNewFrame();
     frameSeq.insert(
       _currentIndex + 1,
-      frame.copyWith(duration: frameSeq.current.duration),
+      await frameSeq.current.cloneEmpty(),
     );
     notifyListeners();
   }

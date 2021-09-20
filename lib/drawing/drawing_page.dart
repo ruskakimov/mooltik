@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/drawing/data/drawing_page_options_model.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
@@ -43,7 +42,6 @@ class DrawingPage extends StatelessWidget {
 
             return ReelStackModel(
               scene: context.read<TimelineModel>().currentScene,
-              createNewFrame: context.read<Project>().createNewFrame,
             );
           },
         ),

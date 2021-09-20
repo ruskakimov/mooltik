@@ -80,6 +80,19 @@ class DiskImage with EquatableMixin {
     );
   }
 
+  /// Creates an empty image with the same dimensions.
+  Future<DiskImage> cloneEmpty() async {
+    final freePath = makeFreeDuplicatePath(file.path);
+    final image = DiskImage(
+      file: File(freePath),
+      width: width,
+      height: height,
+    );
+
+    await image.loadSnapshot();
+    return image;
+  }
+
   DiskImage copyWith({Image? snapshot}) => DiskImage(
         file: file,
         width: width,

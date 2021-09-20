@@ -2,28 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/layer_group/frame_reel_group.dart';
 import 'package:mooltik/common/data/project/layer_group/layer_group_info.dart';
 import 'package:mooltik/common/data/project/layer_group/sync_layers.dart';
-import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 
 /// Manages a stack of frame reels.
 class ReelStackModel extends ChangeNotifier {
-  ReelStackModel({
-    required Scene scene,
-    required CreateNewFrame createNewFrame,
-  })  : _scene = scene,
-        _createNewFrame = createNewFrame,
+  ReelStackModel({required Scene scene})
+      : _scene = scene,
         reels = scene.layers
-            .map((layer) => FrameReelModel(
-                  frameSeq: layer.frameSeq,
-                  createNewFrame: createNewFrame,
-                ))
+            .map((layer) => FrameReelModel(frameSeq: layer.frameSeq))
             .toList();
 
   final Scene _scene;
-  final CreateNewFrame _createNewFrame;
-
   final List<FrameReelModel> reels;
 
   List<SceneLayer> get _layers => _scene.layers;
@@ -55,12 +46,7 @@ class ReelStackModel extends ChangeNotifier {
 
   Future<void> addLayerAboveActive(SceneLayer layer) async {
     _layers.insert(_activeReelIndex, layer);
-    reels.insert(
-        _activeReelIndex,
-        FrameReelModel(
-          frameSeq: layer.frameSeq,
-          createNewFrame: _createNewFrame,
-        ));
+    reels.insert(_activeReelIndex, FrameReelModel(frameSeq: layer.frameSeq));
 
     // Add to group if inserting between group members.
     if (isGroupedWithAbove(_activeReelIndex)) {

@@ -32,7 +32,6 @@ List<SceneLayer> layerGroup(int length, [int frames = 1]) => [
     ];
 
 ReelStackModel reelStack(List<SceneLayer> layers) => ReelStackModel(
-      createNewFrame: () async => frame(),
       scene: Scene(layers: layers),
     );
 

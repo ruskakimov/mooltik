@@ -108,6 +108,7 @@ class _GroupLinesLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: This can be optimized
     return Stack(
       children: [
         for (var group in layerGroups)

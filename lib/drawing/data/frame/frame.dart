@@ -20,6 +20,11 @@ class Frame extends TimeSpan with EquatableMixin {
     return this.copyWith(image: await image.duplicate());
   }
 
+  /// Creates an empty frame with the same dimensions and duration.
+  Future<Frame> cloneEmpty() async {
+    return this.copyWith(image: await image.cloneEmpty());
+  }
+
   factory Frame.fromJson(
     Map<String, dynamic> json,
     String frameDirPath,
