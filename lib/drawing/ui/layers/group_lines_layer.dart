@@ -15,11 +15,13 @@ class GroupLinesLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: _BracketsPainter(
-        bracketAreas: layerGroups.map((group) => _getBracketArea(group)),
-        color: Theme.of(context).colorScheme.primary,
-        strokeWidth: 4,
+    return ClipRect(
+      child: CustomPaint(
+        painter: _BracketsPainter(
+          bracketAreas: layerGroups.map((group) => _getBracketArea(group)),
+          color: Theme.of(context).colorScheme.primary,
+          strokeWidth: 4,
+        ),
       ),
     );
   }
