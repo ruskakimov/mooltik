@@ -8,7 +8,7 @@ import 'package:mooltik/common/data/project/project.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/common/ui/sheet_title.dart';
 import 'package:mooltik/drawing/ui/layers/all_fingers_lifted_listener.dart';
-import 'package:mooltik/drawing/ui/layers/group_line.dart';
+import 'package:mooltik/drawing/ui/layers/group_lines_layer.dart';
 import 'package:mooltik/drawing/ui/layers/layer_row.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
@@ -70,9 +70,10 @@ class _LayerSheetState extends State<LayerSheet> {
                 child: AnimatedOpacity(
                   opacity: _reordering ? 0 : 1,
                   duration: const Duration(milliseconds: 300),
-                  child: _GroupLinesLayer(
+                  child: GroupLinesLayer(
                     layerGroups: layerGroups,
                     scrollOffset: scrollOffset,
+                    rowHeight: _rowHeight,
                   ),
                 ),
               ),
@@ -92,41 +93,6 @@ class _LayerSheetState extends State<LayerSheet> {
         AddLayerButton(),
         SizedBox(width: 8),
       ],
-    );
-  }
-}
-
-class _GroupLinesLayer extends StatelessWidget {
-  const _GroupLinesLayer({
-    Key? key,
-    required this.layerGroups,
-    required this.scrollOffset,
-  }) : super(key: key);
-
-  final List<LayerGroupInfo> layerGroups;
-  final double scrollOffset;
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: This can be optimized
-    return Stack(
-      children: [
-        for (var group in layerGroups)
-          _buildGroupLine(group.firstLayerIndex, group.layerCount)
-      ],
-    );
-  }
-
-  /// Draws a group line starting from [topRowIndex] (inclusive) and spanning [rowCount] rows.
-  Positioned _buildGroupLine(int topRowIndex, int rowCount) {
-    final verticalPadding = 16;
-
-    return Positioned(
-      left: 0,
-      top: _rowHeight * topRowIndex + verticalPadding - scrollOffset,
-      height: _rowHeight * rowCount - verticalPadding * 2,
-      width: 12,
-      child: GroupLine(),
     );
   }
 }
