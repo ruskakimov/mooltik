@@ -33,9 +33,6 @@ class TimelineView extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               GestureDetector(
-                onScaleStart: timelineView.onScaleStart,
-                onScaleUpdate: timelineView.onScaleUpdate,
-                onScaleEnd: timelineView.onScaleEnd,
                 onTapUp: timelineView.onTapUp,
                 child: CustomPaint(
                   painter: TimelinePainter(timelineView),
@@ -50,6 +47,12 @@ class TimelineView extends StatelessWidget {
                 ResizeStartHandle(timelineView: timelineView),
               if (timelineView.showResizeEndHandle)
                 ResizeEndHandle(timelineView: timelineView),
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onScaleStart: timelineView.onScaleStart,
+                onScaleUpdate: timelineView.onScaleUpdate,
+                onScaleEnd: timelineView.onScaleEnd,
+              ),
             ],
           ),
         ),
