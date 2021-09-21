@@ -40,7 +40,7 @@ class TimelineView extends StatelessWidget {
               ),
               Playhead(),
               if (timelineView.isEditingScene) ...[
-                ..._buildLayerActionButtons(timelineView.sceneLayers.length),
+                ..._buildLayerActionButtons(timelineView.sceneLayerCount),
                 SceneEndHandle(),
               ],
               if (timelineView.showResizeStartHandle)

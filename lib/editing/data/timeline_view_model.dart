@@ -124,10 +124,10 @@ class TimelineViewModel extends ChangeNotifier {
   int get sliverRows =>
       isEditingScene ? _timeline.currentScene.layers.length + 1 : 2;
 
-  List<SceneLayer> get sceneLayers => _timeline.currentScene.layers;
+  List<SceneLayer> get _sceneLayers => _timeline.currentScene.layers;
 
   List<Sequence<TimeSpan>> get sequenceRows => isEditingScene
-      ? sceneLayers.map((layer) => layer.frameSeq).toList()
+      ? _sceneLayers.map((layer) => layer.frameSeq).toList()
       : [_timeline.sceneSeq];
 
   double get viewHeight =>
@@ -373,17 +373,42 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // =====================
+  // Scene layers methods:
+  // =====================
+
+  int get sceneLayerCount => _sceneLayers.length;
+
+  List<Frame> layerFrames(int layerIndex) =>
+      _sceneLayers[layerIndex].frameSeq.iterable.toList();
+
+  void setLayerSpeed(int layerIndex, Duration frameDuration) {
+    final frameSeq = _sceneLayers[layerIndex].frameSeq;
+
+    for (var i = 0; i < frameSeq.length; i++) {
+      frameSeq.changeSpanDurationAt(i, frameDuration);
+    }
+  }
+
+  PlayMode layerPlayMode(int layerIndex) => _sceneLayers[layerIndex].playMode;
+
   void nextScenePlayModeForLayer(int layerIndex) {
-    final layer = sceneLayers[layerIndex];
+    final layer = _sceneLayers[layerIndex];
     layer.nextPlayMode();
     notifyListeners();
   }
 
+  bool isLayerVisible(int layerIndex) => _sceneLayers[layerIndex].visible;
+
   void toggleLayerVisibility(int layerIndex) {
-    final layer = sceneLayers[layerIndex];
+    final layer = _sceneLayers[layerIndex];
     layer.setVisibility(!layer.visible);
     notifyListeners();
   }
+
+  // ===============
+  // Sliver methods:
+  // ===============
 
   bool get canDeleteSelected {
     if (hasSelectedSoundClip) return true;

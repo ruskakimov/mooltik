@@ -17,7 +17,7 @@ class PlayModeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timelineView = context.watch<TimelineViewModel>();
-    final playMode = timelineView.sceneLayers[rowIndex].playMode;
+    final playMode = timelineView.layerPlayMode(rowIndex);
 
     return SliverActionButton(
       iconData: _getIcon(playMode),
