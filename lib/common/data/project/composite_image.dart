@@ -1,10 +1,11 @@
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
+import 'package:mooltik/common/data/image_interface.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
 
 /// Stack of images of the same size.
-class CompositeImage with EquatableMixin {
+class CompositeImage with EquatableMixin implements ImageInterface {
   CompositeImage({
     required this.width,
     required this.height,
@@ -27,12 +28,17 @@ class CompositeImage with EquatableMixin {
 
   @override
   List<Object?> get props => [width, height, layers];
+
+  @override
+  void draw(Canvas canvas, Offset offset, Paint paint) {
+    canvas.drawCompositeImage(this, offset, paint);
+  }
 }
 
 extension CompositeImageDrawing on Canvas {
   void drawCompositeImage(CompositeImage image, Offset offset, Paint paint) {
     for (final layer in image.layers.reversed) {
-      drawImage(layer.snapshot!, offset, paint);
+      layer.draw(this, offset, paint);
     }
   }
 }

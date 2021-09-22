@@ -2,12 +2,13 @@ import 'dart:ui';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:mooltik/common/data/image_interface.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/io/make_duplicate_path.dart';
 import 'package:mooltik/common/data/io/png.dart';
 
 /// Manages a single image file.
-class DiskImage with EquatableMixin {
+class DiskImage with EquatableMixin implements ImageInterface {
   DiskImage({
     required this.file,
     required this.width,
@@ -105,5 +106,11 @@ class DiskImage with EquatableMixin {
 
   void dispose() {
     _snapshot?.dispose();
+  }
+
+  @override
+  void draw(Canvas canvas, Offset offset, Paint paint) {
+    final image = _snapshot;
+    if (image != null) canvas.drawImage(image, offset, paint);
   }
 }
