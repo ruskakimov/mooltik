@@ -224,7 +224,7 @@ class TimelineViewModel extends ChangeNotifier {
 
       yield ImageSliver(
         area: area,
-        thumbnail: frame.image.snapshot,
+        image: frame.image,
         ghost: isGhostFrame,
       );
 
