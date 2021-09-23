@@ -121,8 +121,7 @@ class TimelineViewModel extends ChangeNotifier {
   double get sliverHeight => 56;
   double get sliverGap => 8;
 
-  int get sliverRows =>
-      isEditingScene ? _timeline.currentScene.layers.length + 1 : 2;
+  int get sliverRows => isEditingScene ? _sceneLayers.length + 1 : 2;
 
   List<SceneLayer> get _sceneLayers => _timeline.currentScene.layers;
 
@@ -166,7 +165,7 @@ class TimelineViewModel extends ChangeNotifier {
     }
 
     if (isEditingScene) {
-      for (final layer in _timeline.currentScene.layers) {
+      for (final layer in _sceneLayers) {
         final frames = layer.frameSeq.iterable.followedBy(
           layer.getGhostFrames(_timeline.currentScene.duration),
         );
