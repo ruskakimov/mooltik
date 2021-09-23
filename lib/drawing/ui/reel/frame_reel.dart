@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/ui/reel/frame_menu.dart';
-import 'package:mooltik/drawing/ui/frame_window.dart';
+import 'package:mooltik/drawing/ui/painted_glass.dart';
 import 'package:mooltik/drawing/ui/reel/frame_number_box.dart';
 import 'package:provider/provider.dart';
 
@@ -127,7 +127,7 @@ class __FrameReelItemListState extends State<_FrameReelItemList> {
             final item = _FrameReelItem(
               selected: selected,
               number: index + 1,
-              child: FrameWindow(frame: frame),
+              child: PaintedGlass(image: frame.image),
               onTap: selected ? _openPopup : () => scrollTo(index),
             );
 

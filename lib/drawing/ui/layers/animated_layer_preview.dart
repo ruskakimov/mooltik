@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/fps_config.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
-import 'package:mooltik/drawing/ui/frame_window.dart';
+import 'package:mooltik/drawing/ui/painted_glass.dart';
 
 class AnimatedLayerPreview extends StatefulWidget {
   AnimatedLayerPreview({
@@ -65,6 +65,6 @@ class AnimatedLayerPreviewState extends State<AnimatedLayerPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return FrameWindow(frame: widget.frames[_frameIndex]);
+    return PaintedGlass(image: widget.frames[_frameIndex].image);
   }
 }

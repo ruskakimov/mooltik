@@ -8,7 +8,7 @@ import 'package:mooltik/drawing/ui/layers/animated_layer_preview.dart';
 import 'package:mooltik/common/ui/edit_text_dialog.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/common/ui/slide_action_button.dart';
-import 'package:mooltik/drawing/ui/frame_window.dart';
+import 'package:mooltik/drawing/ui/painted_glass.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
@@ -179,7 +179,7 @@ class _LayerRowState extends State<LayerRow> {
       name: isAnimatedLayer ? 'animated layer' : 'layer',
       preview: isAnimatedLayer
           ? AnimatedLayerPreview(frames: widget.reel.frameSeq.iterable.toList())
-          : FrameWindow(frame: widget.reel.currentFrame),
+          : PaintedGlass(image: widget.reel.currentFrame.image),
     );
 
     if (deleteConfirmed == true) {
@@ -221,7 +221,7 @@ class CurrentCel extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          FrameWindow(frame: reel.currentFrame),
+          PaintedGlass(image: reel.currentFrame.image),
           if (showNumber && length > 1)
             Positioned(
               top: 4,
