@@ -6,12 +6,13 @@ import 'package:mooltik/common/data/io/disk_image.dart';
 
 /// Stack of images of the same size.
 class CompositeImage with EquatableMixin implements ImageInterface {
-  CompositeImage({
-    required this.width,
-    required this.height,
-    required this.layers,
-  }) : assert(layers
-            .every((image) => image.height == height && image.width == width));
+  CompositeImage(this.layers)
+      : width = layers.first.width,
+        height = layers.first.height,
+        assert(layers.isNotEmpty &&
+            layers.every((image) =>
+                image.height == layers.first.height &&
+                image.width == layers.first.width));
 
   CompositeImage.empty({
     required this.width,

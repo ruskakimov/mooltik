@@ -66,20 +66,12 @@ void main() async {
         );
 
         final aOnGreen = CompositeFrame(
-          CompositeImage(
-            width: imageA.width,
-            height: imageA.height,
-            layers: [a, green],
-          ),
+          CompositeImage([a, green]),
           Duration(milliseconds: 240),
         );
 
         final bOnGreen = CompositeFrame(
-          CompositeImage(
-            width: imageB.width,
-            height: imageB.height,
-            layers: [b, green],
-          ),
+          CompositeImage([b, green]),
           Duration(milliseconds: 240),
         );
 
@@ -127,11 +119,7 @@ void main() async {
 
         CompositeFrame composite(foreground, background, duration) =>
             CompositeFrame(
-              CompositeImage(
-                width: foreground.width,
-                height: foreground.height,
-                layers: [foreground, background],
-              ),
+              CompositeImage([foreground, background]),
               duration,
             );
 
