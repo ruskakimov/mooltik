@@ -4,11 +4,12 @@ import 'package:equatable/equatable.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/extensions/duration_methods.dart';
 import 'package:mooltik/common/data/project/fps_config.dart';
+import 'package:mooltik/common/data/project/frame_interface.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:path/path.dart' as p;
 
 /// Single image with duration.
-class Frame extends TimeSpan with EquatableMixin {
+class Frame extends TimeSpan with EquatableMixin implements FrameInterface {
   Frame({
     required this.image,
     Duration duration = const Duration(milliseconds: singleFrameMs * 5),

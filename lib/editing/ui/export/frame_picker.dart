@@ -212,7 +212,7 @@ class SceneFramesPicker extends StatelessWidget {
 
               return _SceneFrameThumbnail(
                 width: _thumbnailSize.width,
-                thumbnail: frame.compositeImage,
+                thumbnail: frame.image,
                 selected: selected,
                 onTap: selected ? () => deselect(frame) : () => select(frame),
               );

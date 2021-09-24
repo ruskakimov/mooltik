@@ -58,8 +58,7 @@ class ExporterModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  CompositeImage get videoPreviewImage =>
-      videoExportFrames.first.compositeImage;
+  CompositeImage get videoPreviewImage => videoExportFrames.first.image;
 
   /// Value between 0 and 1 that indicates video export progress.
   double get progress => _progress;

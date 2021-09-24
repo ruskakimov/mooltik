@@ -109,7 +109,7 @@ class Project extends ChangeNotifier {
       _scenes!.iterable.map((scene) {
         final seenFrames = Set<CompositeImage>();
         return scene.getExportFrames().where((frame) {
-          final notDuplicate = seenFrames.add(frame.compositeImage);
+          final notDuplicate = seenFrames.add(frame.image);
           return notDuplicate;
         }).toList();
       }).toList();
@@ -195,7 +195,7 @@ class Project extends ChangeNotifier {
 
     // Write thumbnail.
     final image = await generateImage(
-      CompositeImagePainter(videoExportFrames.first.compositeImage),
+      CompositeImagePainter(videoExportFrames.first.image),
       width,
       height,
     );
