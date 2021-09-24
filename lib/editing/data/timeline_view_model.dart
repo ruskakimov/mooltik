@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/extensions/duration_methods.dart';
 import 'package:mooltik/common/data/project/fps_config.dart';
+import 'package:mooltik/common/data/project/frame_interface.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
@@ -123,6 +124,8 @@ class TimelineViewModel extends ChangeNotifier {
 
   int get sliverRows => isEditingScene ? _sceneLayers.length + 1 : 2;
 
+  // TODO: Use another getter where grouped layers are combined
+  // TODO: List of `SceneLayerInterface` or `TimelineSceneLayerInterface` with only neccessary API
   List<SceneLayer> get _sceneLayers => _timeline.currentScene.layers;
 
   List<Sequence<TimeSpan>> get sequenceRows => isEditingScene
@@ -207,7 +210,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   Iterable<ImageSliver> frameSliverRow({
     required Iterable<Rect> areas,
-    required Iterable<Frame> frames,
+    required Iterable<FrameInterface> frames,
     required int numberOfRealFrames,
   }) sync* {
     int frameIndex = 0;
@@ -376,7 +379,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   int get sceneLayerCount => _sceneLayers.length;
 
-  List<Frame> layerFrames(int layerIndex) =>
+  List<FrameInterface> layerFrames(int layerIndex) =>
       _sceneLayers[layerIndex].frameSeq.iterable.toList();
 
   void setLayerSpeed(int layerIndex, Duration frameDuration) {

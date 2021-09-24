@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/fps_config.dart';
-import 'package:mooltik/drawing/data/frame/frame.dart';
+import 'package:mooltik/common/data/project/frame_interface.dart';
 import 'package:mooltik/drawing/ui/painted_glass.dart';
 
 class AnimatedLayerPreview extends StatefulWidget {
@@ -13,7 +13,7 @@ class AnimatedLayerPreview extends StatefulWidget {
     this.pingPong = false,
   }) : super(key: key);
 
-  final List<Frame> frames;
+  final List<FrameInterface> frames;
   final Duration frameDuration;
   final bool pingPong;
 
