@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/image_interface.dart';
+import 'package:mooltik/common/data/project/image_interface.dart';
 
 const frostedGlassColor = Color(0x88A09F9F);
 

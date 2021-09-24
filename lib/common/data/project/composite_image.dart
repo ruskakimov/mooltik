@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
-import 'package:mooltik/common/data/image_interface.dart';
+import 'package:mooltik/common/data/project/image_interface.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
 
 /// Stack of images of the same size.

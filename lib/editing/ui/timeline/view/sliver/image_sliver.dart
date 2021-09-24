@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/image_interface.dart';
+import 'package:mooltik/common/data/project/image_interface.dart';
 import 'package:mooltik/drawing/ui/painted_glass.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 

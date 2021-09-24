@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
-import 'package:mooltik/common/data/image_interface.dart';
+import 'package:mooltik/common/data/project/image_interface.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/io/make_duplicate_path.dart';
 import 'package:mooltik/common/data/io/png.dart';
