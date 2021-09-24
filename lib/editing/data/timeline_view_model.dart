@@ -166,9 +166,7 @@ class TimelineViewModel extends ChangeNotifier {
 
     if (isEditingScene) {
       for (final layer in _sceneLayers) {
-        final frames = layer.frameSeq.iterable.followedBy(
-          layer.getGhostFrames(_timeline.currentScene.duration),
-        );
+        final frames = layer.getExportFrames(_timeline.currentScene.duration);
         final frameRow = frameSliverRow(
           areas: timeSpanAreas(
             timeSpans: frames,

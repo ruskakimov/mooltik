@@ -61,9 +61,6 @@ class SceneLayer {
     return frameSeq.current;
   }
 
-  Iterable<Frame> getGhostFrames(Duration totalDuration) =>
-      getExportFrames(totalDuration).skip(frameSeq.length);
-
   Iterable<Frame> getExportFrames(Duration totalDuration) sync* {
     var elapsed = Duration.zero;
     var i = 0;
