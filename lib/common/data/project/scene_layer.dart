@@ -170,37 +170,29 @@ class SceneLayer implements TimelineSceneLayerInterface {
     frameSeq.iterable.forEach((frame) => frame.dispose());
   }
 
-  @override
   void deleteAt(int realFrameIndex) {
-    // TODO: implement deleteAt
+    frameSeq.removeAt(realFrameIndex);
   }
 
-  @override
-  void duplicateAt(int realFrameIndex) {
-    // TODO: implement duplicateAt
+  Future<void> duplicateAt(int realFrameIndex) async {
+    final duplicate = await frameSeq[realFrameIndex].duplicate();
+    frameSeq.insert(realFrameIndex, duplicate);
   }
 
-  @override
-  void changeDurationAt(int realFrameIndex) {
-    // TODO: implement changeDurationAt
+  void changeDurationAt(int realFrameIndex, Duration newDuration) {
+    frameSeq.changeSpanDurationAt(realFrameIndex, newDuration);
   }
 
-  @override
   void changeAllFramesDuration(Duration newFrameDuration) {
-    // TODO: implement changeAllFramesDuration
+    for (var i = 0; i < frameSeq.length; i++) {
+      frameSeq.changeSpanDurationAt(i, newFrameDuration);
+    }
   }
 
-  @override
-  Duration startTimeOf(int realFrameIndex) {
-    // TODO: implement startTimeOf
-    throw UnimplementedError();
-  }
+  Duration startTimeOf(int realFrameIndex) =>
+      frameSeq.startTimeOf(realFrameIndex);
 
-  @override
-  Duration endTimeOf(int realFrameIndex) {
-    // TODO: implement endTimeOf
-    throw UnimplementedError();
-  }
+  Duration endTimeOf(int realFrameIndex) => frameSeq.endTimeOf(realFrameIndex);
 }
 
 const String _framesKey = 'frames';

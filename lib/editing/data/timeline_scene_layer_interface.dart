@@ -15,8 +15,8 @@ abstract class TimelineSceneLayerInterface {
   Iterable<FrameInterface> getPlayFrames(Duration totalDuration);
 
   void deleteAt(int realFrameIndex);
-  void duplicateAt(int realFrameIndex);
-  void changeDurationAt(int realFrameIndex);
+  Future<void> duplicateAt(int realFrameIndex);
+  void changeDurationAt(int realFrameIndex, Duration newDuration);
   void changeAllFramesDuration(Duration newFrameDuration);
   Duration startTimeOf(int realFrameIndex);
   Duration endTimeOf(int realFrameIndex);
