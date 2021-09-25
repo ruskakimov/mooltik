@@ -114,7 +114,7 @@ void main() async {
           PlayMode.extendLast,
         );
         final duration = Duration(seconds: 10);
-        expect(sceneLayer.getFrames(duration).toList(), [
+        expect(sceneLayer.getPlayFrames(duration).toList(), [
           Frame(
             image: DiskImage(width: 100, height: 100, file: File('1.png')),
             duration: Duration(seconds: 1),
@@ -145,7 +145,7 @@ void main() async {
           PlayMode.loop,
         );
         final duration = Duration(seconds: 10);
-        expect(sceneLayer.getFrames(duration).toList(), [
+        expect(sceneLayer.getPlayFrames(duration).toList(), [
           Frame(
             image: DiskImage(width: 100, height: 100, file: File('1.png')),
             duration: Duration(seconds: 1),
@@ -196,7 +196,7 @@ void main() async {
           PlayMode.pingPong,
         );
         final duration = Duration(seconds: 24);
-        expect(sceneLayer.getFrames(duration).toList(), [
+        expect(sceneLayer.getPlayFrames(duration).toList(), [
           Frame(
             image: DiskImage(width: 100, height: 100, file: File('1.png')),
             duration: Duration(seconds: 1),

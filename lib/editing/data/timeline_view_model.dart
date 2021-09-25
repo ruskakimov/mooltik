@@ -169,7 +169,7 @@ class TimelineViewModel extends ChangeNotifier {
 
     if (isEditingScene) {
       for (final layer in _sceneLayers) {
-        final frames = layer.getFrames(_timeline.currentScene.duration);
+        final frames = layer.getPlayFrames(_timeline.currentScene.duration);
         final frameRow = frameSliverRow(
           areas: timeSpanAreas(
             timeSpans: frames,
@@ -394,7 +394,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   void nextScenePlayModeForLayer(int layerIndex) {
     final layer = _sceneLayers[layerIndex];
-    layer.nextPlayMode();
+    layer.changePlayMode();
     notifyListeners();
   }
 

@@ -48,7 +48,7 @@ class Scene extends TimeSpan {
     }
 
     final tracks =
-        visibleLayers.map((layer) => layer.getFrames(duration)).toList();
+        visibleLayers.map((layer) => layer.getPlayFrames(duration)).toList();
 
     final trackIterators =
         tracks.map((frames) => frames.iterator..moveNext()).toList();

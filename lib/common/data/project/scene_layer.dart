@@ -1,6 +1,8 @@
 import 'package:mooltik/common/data/extensions/duration_methods.dart';
+import 'package:mooltik/common/data/project/frame_interface.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
+import 'package:mooltik/editing/data/timeline_scene_layer_interface.dart';
 
 /// Play behaviour when scene duration is longer than the total duration of frames.
 enum PlayMode {
@@ -14,7 +16,7 @@ enum PlayMode {
   pingPong,
 }
 
-class SceneLayer {
+class SceneLayer implements TimelineSceneLayerInterface {
   SceneLayer(
     this.frameSeq, [
     PlayMode playMode = PlayMode.extendLast,
@@ -27,6 +29,9 @@ class SceneLayer {
         _groupedWithNext = groupedWithNext ?? false;
 
   final Sequence<Frame> frameSeq;
+
+  int get realFrameCount => frameSeq.length;
+  Iterable<FrameInterface> get realFrames => frameSeq.iterable;
 
   PlayMode get playMode => _playMode;
   PlayMode _playMode;
@@ -61,7 +66,7 @@ class SceneLayer {
     return frameSeq.current;
   }
 
-  Iterable<Frame> getFrames(Duration totalDuration) sync* {
+  Iterable<Frame> getPlayFrames(Duration totalDuration) sync* {
     var elapsed = Duration.zero;
     var i = 0;
 
@@ -100,16 +105,20 @@ class SceneLayer {
     return frameSeq[i];
   }
 
-  void nextPlayMode() {
-    _playMode = PlayMode.values[(playMode.index + 1) % PlayMode.values.length];
-  }
-
   void setPlayMode(PlayMode value) {
     _playMode = value;
   }
 
+  void changePlayMode() {
+    _playMode = PlayMode.values[(playMode.index + 1) % PlayMode.values.length];
+  }
+
   void setVisibility(bool value) {
     _visible = value;
+  }
+
+  void toggleVisibility() {
+    _visible = !_visible;
   }
 
   void setName(String value) {
@@ -159,6 +168,38 @@ class SceneLayer {
 
   void dispose() {
     frameSeq.iterable.forEach((frame) => frame.dispose());
+  }
+
+  @override
+  void deleteAt(int realFrameIndex) {
+    // TODO: implement deleteAt
+  }
+
+  @override
+  void duplicateAt(int realFrameIndex) {
+    // TODO: implement duplicateAt
+  }
+
+  @override
+  void changeDurationAt(int realFrameIndex) {
+    // TODO: implement changeDurationAt
+  }
+
+  @override
+  void changeAllFramesDuration(Duration newFrameDuration) {
+    // TODO: implement changeAllFramesDuration
+  }
+
+  @override
+  Duration startTimeOf(int realFrameIndex) {
+    // TODO: implement startTimeOf
+    throw UnimplementedError();
+  }
+
+  @override
+  Duration endTimeOf(int realFrameIndex) {
+    // TODO: implement endTimeOf
+    throw UnimplementedError();
   }
 }
 
