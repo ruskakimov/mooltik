@@ -11,7 +11,7 @@ import 'package:mooltik/drawing/ui/fit_to_screen_button.dart';
 import 'package:mooltik/drawing/ui/lasso/lasso_menu.dart';
 import 'package:mooltik/drawing/ui/reel/frame_reel.dart';
 import 'package:mooltik/drawing/ui/layers/layer_button.dart';
-import 'package:mooltik/editing/data/timeline_model.dart';
+import 'package:mooltik/editing/data/timeline/timeline_model.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/ui/easel/easel.dart';
 import 'package:provider/provider.dart';

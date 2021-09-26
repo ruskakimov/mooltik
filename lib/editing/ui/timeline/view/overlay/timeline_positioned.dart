@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:mooltik/editing/data/timeline/timeline_view_model.dart';
 import 'package:provider/provider.dart';
 
 typedef TimelinePositionedDragUpdate(Duration updatedTimestamp);

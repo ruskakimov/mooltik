@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
-import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:mooltik/editing/data/timeline/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/sliver_action_buttons/sliver_action_button.dart';
 import 'package:provider/provider.dart';
 

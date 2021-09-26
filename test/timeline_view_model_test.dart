@@ -7,8 +7,8 @@ import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
-import 'package:mooltik/editing/data/timeline_model.dart';
-import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:mooltik/editing/data/timeline/timeline_model.dart';
+import 'package:mooltik/editing/data/timeline/timeline_view_model.dart';
 
 void main() {
   group('TimelineViewModel', () {

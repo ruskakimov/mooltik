@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:mooltik/editing/data/timeline/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/sliver_action_buttons/play_mode_button.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/playhead.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_end_handle.dart';

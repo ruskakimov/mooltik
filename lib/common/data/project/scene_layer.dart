@@ -1,7 +1,7 @@
 import 'package:mooltik/common/data/extensions/duration_methods.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
-import 'package:mooltik/editing/data/timeline_scene_layer_interface.dart';
+import 'package:mooltik/editing/data/timeline/timeline_scene_layer_interface.dart';
 
 /// Play behaviour when scene duration is longer than the total duration of frames.
 enum PlayMode {
