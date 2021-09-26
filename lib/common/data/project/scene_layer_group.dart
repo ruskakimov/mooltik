@@ -4,7 +4,7 @@ import 'package:mooltik/common/data/project/frame_interface.dart';
 import 'package:mooltik/common/data/project/layer_group/sync_layers.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
-import 'package:mooltik/editing/data/timeline/timeline_scene_layer_interface.dart';
+import 'package:mooltik/editing/data/timeline/timeline_row_interfaces.dart';
 
 class SceneLayerGroup implements TimelineSceneLayerInterface {
   SceneLayerGroup(List<SceneLayer> layers)

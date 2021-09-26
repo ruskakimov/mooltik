@@ -11,7 +11,7 @@ import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/editing/data/timeline/convert.dart';
 import 'package:mooltik/editing/data/timeline/timeline_model.dart';
-import 'package:mooltik/editing/data/timeline/timeline_scene_layer_interface.dart';
+import 'package:mooltik/editing/data/timeline/timeline_row_interfaces.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/image_sliver.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sound_sliver.dart';
