@@ -1,4 +1,5 @@
 import 'package:mooltik/common/data/project/frame_interface.dart';
+import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 
@@ -7,14 +8,24 @@ abstract class TimelineRowInterface {
   Iterable<TimeSpan> get clips;
 
   TimeSpan clipAt(int index);
-  void deleteAt(int index);
+  TimeSpan deleteAt(int index);
   Future<void> duplicateAt(int index);
   void changeDurationAt(int index, Duration newDuration);
   Duration startTimeOf(int index);
   Duration endTimeOf(int index);
 }
 
-abstract class TimelineSceneLayerInterface implements TimelineRowInterface {
+abstract class TimelineSceneRowInterface extends TimelineRowInterface {
+  @override
+  Iterable<Scene> get clips;
+
+  @override
+  Scene clipAt(int index);
+
+  void insertClipAfter(int index);
+}
+
+abstract class TimelineSceneLayerInterface extends TimelineRowInterface {
   @override
   Iterable<FrameInterface> get clips;
 

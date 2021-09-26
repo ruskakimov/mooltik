@@ -183,8 +183,8 @@ class SceneLayer implements TimelineSceneLayerInterface {
   }
 
   @override
-  void deleteAt(int realFrameIndex) {
-    frameSeq.removeAt(realFrameIndex);
+  Frame deleteAt(int realFrameIndex) {
+    return frameSeq.removeAt(realFrameIndex);
   }
 
   @override
