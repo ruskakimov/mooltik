@@ -179,7 +179,7 @@ class TimelineViewModel extends ChangeNotifier {
             start: sceneStart,
           ),
           frames: frames,
-          realFrameCount: layer.realFrameCount,
+          realFrameCount: layer.clipCount,
         ).toList();
 
         addRow(frameRow);
@@ -381,7 +381,7 @@ class TimelineViewModel extends ChangeNotifier {
   int get sceneLayerCount => _sceneLayers.length;
 
   List<FrameInterface> layerFrames(int layerIndex) =>
-      _sceneLayers[layerIndex].realFrames.toList();
+      _sceneLayers[layerIndex].clips.toList();
 
   void setLayerSpeed(int layerIndex, Duration frameDuration) {
     _sceneLayers[layerIndex].changeAllFramesDuration(frameDuration);

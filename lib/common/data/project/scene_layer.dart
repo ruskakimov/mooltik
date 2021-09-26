@@ -29,12 +29,17 @@ class SceneLayer implements TimelineSceneLayerInterface {
 
   final Sequence<Frame> frameSeq;
 
-  int get realFrameCount => frameSeq.length;
-  Iterable<Frame> get realFrames => frameSeq.iterable;
+  @override
+  int get clipCount => frameSeq.length;
 
+  @override
+  Iterable<Frame> get clips => frameSeq.iterable;
+
+  @override
   PlayMode get playMode => _playMode;
   PlayMode _playMode;
 
+  @override
   bool get visible => _visible;
   bool _visible;
 
@@ -65,6 +70,7 @@ class SceneLayer implements TimelineSceneLayerInterface {
     return frameSeq.current;
   }
 
+  @override
   Iterable<Frame> getPlayFrames(Duration totalDuration) sync* {
     var elapsed = Duration.zero;
     var i = 0;
@@ -108,6 +114,7 @@ class SceneLayer implements TimelineSceneLayerInterface {
     _playMode = value;
   }
 
+  @override
   void changePlayMode() {
     _playMode = PlayMode.values[(playMode.index + 1) % PlayMode.values.length];
   }
@@ -116,6 +123,7 @@ class SceneLayer implements TimelineSceneLayerInterface {
     _visible = value;
   }
 
+  @override
   void toggleVisibility() {
     _visible = !_visible;
   }
@@ -169,28 +177,39 @@ class SceneLayer implements TimelineSceneLayerInterface {
     frameSeq.iterable.forEach((frame) => frame.dispose());
   }
 
+  @override
+  Frame clipAt(int index) {
+    return frameSeq[index];
+  }
+
+  @override
   void deleteAt(int realFrameIndex) {
     frameSeq.removeAt(realFrameIndex);
   }
 
+  @override
   Future<void> duplicateAt(int realFrameIndex) async {
     final duplicate = await frameSeq[realFrameIndex].duplicate();
     frameSeq.insert(realFrameIndex, duplicate);
   }
 
+  @override
   void changeDurationAt(int realFrameIndex, Duration newDuration) {
     frameSeq.changeSpanDurationAt(realFrameIndex, newDuration);
   }
 
+  @override
   void changeAllFramesDuration(Duration newFrameDuration) {
     for (var i = 0; i < frameSeq.length; i++) {
       frameSeq.changeSpanDurationAt(i, newFrameDuration);
     }
   }
 
+  @override
   Duration startTimeOf(int realFrameIndex) =>
       frameSeq.startTimeOf(realFrameIndex);
 
+  @override
   Duration endTimeOf(int realFrameIndex) => frameSeq.endTimeOf(realFrameIndex);
 }
 

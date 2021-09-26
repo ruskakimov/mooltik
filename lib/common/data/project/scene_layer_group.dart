@@ -7,56 +7,77 @@ import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/editing/data/timeline/timeline_scene_layer_interface.dart';
 
 class SceneLayerGroup implements TimelineSceneLayerInterface {
-  SceneLayerGroup(this.layers) : assert(isGroupSynced(layers));
+  SceneLayerGroup(List<SceneLayer> layers)
+      : assert(isGroupSynced(layers)),
+        _layers = layers;
 
-  final List<SceneLayer> layers;
+  final List<SceneLayer> _layers;
 
-  int get realFrameCount => layers.first.realFrameCount;
+  @override
+  int get clipCount => _layers.first.clipCount;
 
-  Iterable<FrameInterface> get realFrames => _combineFrameSequences(
-        layers.map((layer) => layer.realFrames),
+  @override
+  Iterable<FrameInterface> get clips => _combineFrameSequences(
+        _layers.map((layer) => layer.clips),
       );
 
-  PlayMode get playMode => layers.first.playMode;
+  @override
+  PlayMode get playMode => _layers.first.playMode;
 
+  @override
   void changePlayMode() {
-    layers.forEach((layer) => layer.changePlayMode());
+    _layers.forEach((layer) => layer.changePlayMode());
   }
 
-  bool get visible => layers.any((layer) => layer.visible);
+  @override
+  bool get visible => _layers.any((layer) => layer.visible);
 
+  @override
   void toggleVisibility() {
-    layers.forEach((layer) => layer.setVisibility(!visible));
+    _layers.forEach((layer) => layer.setVisibility(!visible));
   }
 
+  @override
   Iterable<FrameInterface> getPlayFrames(Duration totalDuration) =>
       _combineFrameSequences(
-        layers.map((layer) => layer.getPlayFrames(totalDuration)),
+        _layers.map((layer) => layer.getPlayFrames(totalDuration)),
       );
 
+  @override
+  CompositeFrame clipAt(int index) => _combineFrames(
+        _layers.map((layer) => layer.clipAt(index)),
+      );
+
+  @override
   void deleteAt(int realFrameIndex) {
-    layers.forEach((layer) => layer.deleteAt(realFrameIndex));
+    _layers.forEach((layer) => layer.deleteAt(realFrameIndex));
   }
 
+  @override
   Future<void> duplicateAt(int realFrameIndex) async {
-    await Future.wait(layers.map((layer) => layer.duplicateAt(realFrameIndex)));
+    await Future.wait(
+        _layers.map((layer) => layer.duplicateAt(realFrameIndex)));
   }
 
+  @override
   void changeDurationAt(int realFrameIndex, Duration newDuration) {
-    layers.forEach(
+    _layers.forEach(
       (layer) => layer.changeDurationAt(realFrameIndex, newDuration),
     );
   }
 
+  @override
   void changeAllFramesDuration(Duration newFrameDuration) {
-    layers.forEach((layer) => layer.changeAllFramesDuration(newFrameDuration));
+    _layers.forEach((layer) => layer.changeAllFramesDuration(newFrameDuration));
   }
 
+  @override
   Duration startTimeOf(int realFrameIndex) =>
-      layers.first.startTimeOf(realFrameIndex);
+      _layers.first.startTimeOf(realFrameIndex);
 
+  @override
   Duration endTimeOf(int realFrameIndex) =>
-      layers.first.endTimeOf(realFrameIndex);
+      _layers.first.endTimeOf(realFrameIndex);
 }
 
 CompositeFrame _combineFrames(Iterable<Frame> frames) {
