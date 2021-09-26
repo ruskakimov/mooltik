@@ -189,8 +189,8 @@ class SceneLayer implements TimelineSceneLayerInterface {
 
   @override
   Future<void> duplicateAt(int realFrameIndex) async {
-    final duplicate = await frameSeq[realFrameIndex].duplicate();
-    frameSeq.insert(realFrameIndex, duplicate);
+    final duplicate = await clipAt(realFrameIndex).duplicate();
+    frameSeq.insert(realFrameIndex + 1, duplicate);
   }
 
   @override

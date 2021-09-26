@@ -22,7 +22,7 @@ abstract class TimelineSceneRowInterface extends TimelineRowInterface {
   @override
   Scene clipAt(int index);
 
-  void insertClipAfter(int index);
+  void insertSceneAfter(int index, Scene newScene);
 }
 
 abstract class TimelineSceneLayerInterface extends TimelineRowInterface {
