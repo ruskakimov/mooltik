@@ -1,5 +1,4 @@
 import 'package:mooltik/common/data/extensions/duration_methods.dart';
-import 'package:mooltik/common/data/project/frame_interface.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/editing/data/timeline_scene_layer_interface.dart';
@@ -31,7 +30,7 @@ class SceneLayer implements TimelineSceneLayerInterface {
   final Sequence<Frame> frameSeq;
 
   int get realFrameCount => frameSeq.length;
-  Iterable<FrameInterface> get realFrames => frameSeq.iterable;
+  Iterable<Frame> get realFrames => frameSeq.iterable;
 
   PlayMode get playMode => _playMode;
   PlayMode _playMode;

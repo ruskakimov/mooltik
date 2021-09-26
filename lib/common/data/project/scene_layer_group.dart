@@ -1,84 +1,80 @@
-// import 'package:mooltik/common/data/project/composite_frame.dart';
-// import 'package:mooltik/common/data/project/composite_image.dart';
-// import 'package:mooltik/common/data/project/scene_layer.dart';
-// import 'package:mooltik/drawing/data/frame/frame.dart';
-// import 'package:mooltik/common/data/sequence/sequence.dart';
+import 'package:mooltik/common/data/project/composite_frame.dart';
+import 'package:mooltik/common/data/project/composite_image.dart';
+import 'package:mooltik/common/data/project/frame_interface.dart';
+import 'package:mooltik/common/data/project/layer_group/sync_layers.dart';
+import 'package:mooltik/common/data/project/scene_layer.dart';
+import 'package:mooltik/drawing/data/frame/frame.dart';
+import 'package:mooltik/editing/data/timeline_scene_layer_interface.dart';
 
-// class SceneLayerGroup implements SceneLayer {
-//   SceneLayerGroup(this.layers);
+class SceneLayerGroup implements TimelineSceneLayerInterface {
+  SceneLayerGroup(this.layers) : assert(isGroupSynced(layers));
 
-//   final Iterable<SceneLayer> layers;
+  final List<SceneLayer> layers;
 
-//   @override
-//   // TODO: implement frameSeq
-//   Sequence<CompositeFrame> get frameSeq => throw UnimplementedError();
+  int get realFrameCount => layers.first.realFrameCount;
 
-//   @override
-//   // TODO: Return composite frame
-//   CompositeFrame frameAt(Duration playhead) {
-//     final frames = layers.map((layer) => layer.frameAt(playhead));
-//     final images = frames.map((frame) => frame.image).toList();
-//     return CompositeFrame(CompositeImage(images), frames.first.duration);
-//   }
+  Iterable<FrameInterface> get realFrames => _combineFrameSequences(
+        layers.map((layer) => layer.realFrames),
+      );
 
-//   @override
-//   // TODO: Return composite frames
-//   Iterable<Frame> getPlayFrames(Duration totalDuration) {
-//     // TODO: implement getExportFrames
-//     throw UnimplementedError();
-//   }
+  PlayMode get playMode => layers.first.playMode;
 
-//   @override
-//   // TODO: implement playMode
-//   PlayMode get playMode => throw UnimplementedError();
+  void changePlayMode() {
+    layers.forEach((layer) => layer.changePlayMode());
+  }
 
-//   @override
-//   void changePlayMode() {
-//     // TODO: implement nextPlayMode
-//     throw UnimplementedError();
-//   }
+  bool get visible => layers.any((layer) => layer.visible);
 
-//   @override
-//   void setPlayMode(PlayMode value) {
-//     // TODO: implement setPlayMode
-//     throw UnimplementedError();
-//   }
+  void toggleVisibility() {
+    layers.forEach((layer) => layer.setVisibility(!visible));
+  }
 
-//   @override
-//   // TODO: implement visible
-//   bool get visible => throw UnimplementedError();
+  Iterable<FrameInterface> getPlayFrames(Duration totalDuration) =>
+      _combineFrameSequences(
+        layers.map((layer) => layer.getPlayFrames(totalDuration)),
+      );
 
-//   @override
-//   void setVisibility(bool value) {
-//     // TODO: implement setVisibility
-//     throw UnimplementedError();
-//   }
+  void deleteAt(int realFrameIndex) {
+    layers.forEach((layer) => layer.deleteAt(realFrameIndex));
+  }
 
-//   @override
-//   String? get name =>
-//       throw UnsupportedError('Refer to individual layers instead.');
+  Future<void> duplicateAt(int realFrameIndex) async {
+    await Future.wait(layers.map((layer) => layer.duplicateAt(realFrameIndex)));
+  }
 
-//   @override
-//   void setName(String value) =>
-//       throw UnsupportedError('Rename individual layers instead.');
+  void changeDurationAt(int realFrameIndex, Duration newDuration) {
+    layers.forEach(
+      (layer) => layer.changeDurationAt(realFrameIndex, newDuration),
+    );
+  }
 
-//   @override
-//   bool get groupedWithNext =>
-//       throw UnsupportedError('Refer to individual layers instead.');
+  void changeAllFramesDuration(Duration newFrameDuration) {
+    layers.forEach((layer) => layer.changeAllFramesDuration(newFrameDuration));
+  }
 
-//   @override
-//   void setGroupedWithNext(bool value) =>
-//       throw UnsupportedError('Group individual layers instead.');
+  Duration startTimeOf(int realFrameIndex) =>
+      layers.first.startTimeOf(realFrameIndex);
 
-//   @override
-//   Future<SceneLayer> duplicate() =>
-//       throw UnsupportedError('Duplicate individual layers instead.');
+  Duration endTimeOf(int realFrameIndex) =>
+      layers.first.endTimeOf(realFrameIndex);
+}
 
-//   @override
-//   Map<String, dynamic> toJson() =>
-//       throw UnsupportedError('Group relationships are stored separately.');
+CompositeFrame _combineFrames(Iterable<Frame> frames) {
+  assert(frames.isNotEmpty);
+  assert(frames.every((frame) => frame.duration == frames.first.duration));
 
-//   @override
-//   void dispose() =>
-//       throw UnsupportedError('Dispose individual layers instead.');
-// }
+  final images = frames.map((frame) => frame.image).toList();
+  return CompositeFrame(CompositeImage(images), frames.first.duration);
+}
+
+Iterable<CompositeFrame> _combineFrameSequences(
+  Iterable<Iterable<Frame>> frameSequences,
+) sync* {
+  assert(frameSequences.isNotEmpty);
+
+  final iterators = frameSequences.map((sequence) => sequence.iterator);
+
+  do {
+    yield _combineFrames(iterators.map((iterator) => iterator.current));
+  } while (iterators.every((iterator) => iterator.moveNext()));
+}
