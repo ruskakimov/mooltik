@@ -11,6 +11,7 @@ import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/editing/data/convert.dart';
 import 'package:mooltik/editing/data/timeline_model.dart';
+import 'package:mooltik/editing/data/timeline_scene_layer_interface.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/image_sliver.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sound_sliver.dart';
@@ -125,8 +126,8 @@ class TimelineViewModel extends ChangeNotifier {
   int get sliverRows => isEditingScene ? _sceneLayers.length + 1 : 2;
 
   // TODO: Use another getter where grouped layers are combined
-  // TODO: List of `SceneLayerInterface` or `TimelineSceneLayerInterface` with only neccessary API
-  List<SceneLayer> get _sceneLayers => _timeline.currentScene.layers;
+  List<TimelineSceneLayerInterface> get _sceneLayers =>
+      _timeline.currentScene.layers;
 
   List<Sequence<TimeSpan>> get sequenceRows => isEditingScene
       ? _sceneLayers.map((layer) => layer.frameSeq).toList()
@@ -172,13 +173,13 @@ class TimelineViewModel extends ChangeNotifier {
         final frames = layer.getPlayFrames(_timeline.currentScene.duration);
         final frameRow = frameSliverRow(
           areas: timeSpanAreas(
-            timeSpans: frames,
+            timeSpans: frames.map((frame) => frame.duration),
             top: rowTop(rowIndex),
             bottom: rowBottom(rowIndex),
             start: sceneStart,
           ),
           frames: frames,
-          numberOfRealFrames: layer.frameSeq.length,
+          realFrameCount: layer.realFrameCount,
         ).toList();
 
         addRow(frameRow);
@@ -187,7 +188,7 @@ class TimelineViewModel extends ChangeNotifier {
       final sceneSeq = _timeline.sceneSeq;
       final sceneRow = sceneSliverRow(
         areas: timeSpanAreas(
-          timeSpans: sceneSeq.iterable,
+          timeSpans: sceneSeq.iterable.map((scene) => scene.duration),
           top: rowTop(rowIndex),
           bottom: rowBottom(rowIndex),
         ),
@@ -211,7 +212,7 @@ class TimelineViewModel extends ChangeNotifier {
   Iterable<ImageSliver> frameSliverRow({
     required Iterable<Rect> areas,
     required Iterable<FrameInterface> frames,
-    required int numberOfRealFrames,
+    required int realFrameCount,
   }) sync* {
     int frameIndex = 0;
     final areaIt = areas.iterator;
@@ -220,7 +221,7 @@ class TimelineViewModel extends ChangeNotifier {
     while (areaIt.moveNext() && frameIt.moveNext()) {
       final area = areaIt.current;
       final frame = frameIt.current;
-      final isGhostFrame = frameIndex >= numberOfRealFrames;
+      final isGhostFrame = frameIndex >= realFrameCount;
 
       yield ImageSliver(
         area: area,
@@ -268,19 +269,19 @@ class TimelineViewModel extends ChangeNotifier {
   }
 
   Iterable<Rect> timeSpanAreas({
-    required Iterable<TimeSpan> timeSpans,
+    required Iterable<Duration> timeSpans,
     required double top,
     required double bottom,
     Duration start = Duration.zero,
   }) sync* {
     for (final timeSpan in timeSpans) {
-      final end = start + timeSpan.duration;
+      final end = start + timeSpan;
       final left = xFromTime(start);
       final right = xFromTime(end);
 
       yield Rect.fromLTRB(left, top, right, bottom);
 
-      start += timeSpan.duration;
+      start += timeSpan;
     }
   }
 
@@ -380,29 +381,24 @@ class TimelineViewModel extends ChangeNotifier {
   int get sceneLayerCount => _sceneLayers.length;
 
   List<FrameInterface> layerFrames(int layerIndex) =>
-      _sceneLayers[layerIndex].frameSeq.iterable.toList();
+      _sceneLayers[layerIndex].realFrames.toList();
 
   void setLayerSpeed(int layerIndex, Duration frameDuration) {
-    final frameSeq = _sceneLayers[layerIndex].frameSeq;
-
-    for (var i = 0; i < frameSeq.length; i++) {
-      frameSeq.changeSpanDurationAt(i, frameDuration);
-    }
+    _sceneLayers[layerIndex].changeAllFramesDuration(frameDuration);
+    notifyListeners();
   }
 
   PlayMode layerPlayMode(int layerIndex) => _sceneLayers[layerIndex].playMode;
 
   void nextScenePlayModeForLayer(int layerIndex) {
-    final layer = _sceneLayers[layerIndex];
-    layer.changePlayMode();
+    _sceneLayers[layerIndex].changePlayMode();
     notifyListeners();
   }
 
   bool isLayerVisible(int layerIndex) => _sceneLayers[layerIndex].visible;
 
   void toggleLayerVisibility(int layerIndex) {
-    final layer = _sceneLayers[layerIndex];
-    layer.setVisibility(!layer.visible);
+    _sceneLayers[layerIndex].toggleVisibility();
     notifyListeners();
   }
 
