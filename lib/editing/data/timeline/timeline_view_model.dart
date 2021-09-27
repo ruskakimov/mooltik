@@ -431,7 +431,7 @@ class TimelineViewModel extends ChangeNotifier {
 
   Future<void> duplicateSelected() async {
     if (_selectedSliverCoord == null) return;
-    selectedSliverRow!.duplicateAt(_selectedSliverCoord!.colIndex);
+    await selectedSliverRow!.duplicateAt(_selectedSliverCoord!.colIndex);
     removeSliverSelection();
     notifyListeners();
   }
