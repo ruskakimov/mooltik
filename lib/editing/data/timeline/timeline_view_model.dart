@@ -125,7 +125,7 @@ class TimelineViewModel extends ChangeNotifier {
   double get sliverHeight => 56;
   double get sliverGap => 8;
 
-  int get sliverRows => isEditingScene ? _sceneLayers.length + 1 : 2;
+  int get rowCount => isEditingScene ? _sceneLayers.length + 1 : 2;
 
   // TODO: Use another getter where grouped layers are combined
   List<TimelineSceneLayerInterface> get _sceneLayers =>
@@ -134,8 +134,7 @@ class TimelineViewModel extends ChangeNotifier {
   List<TimelineRowInterface> get sequenceRows =>
       isEditingScene ? _sceneLayers : [_sceneRow];
 
-  double get viewHeight =>
-      sliverRows * sliverHeight + (sliverRows + 1) * sliverGap;
+  double get viewHeight => rowCount * sliverHeight + (rowCount + 1) * sliverGap;
 
   double rowTop(int rowIndex) =>
       (rowIndex + 1) * sliverGap + rowIndex * sliverHeight;
