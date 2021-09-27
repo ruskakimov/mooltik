@@ -34,7 +34,8 @@ class SceneLayerGroup implements TimelineSceneLayerInterface {
 
   @override
   void toggleVisibility() {
-    _layers.forEach((layer) => layer.setVisibility(!visible));
+    final groupVisibleBefore = visible;
+    _layers.forEach((layer) => layer.setVisibility(!groupVisibleBefore));
   }
 
   @override
