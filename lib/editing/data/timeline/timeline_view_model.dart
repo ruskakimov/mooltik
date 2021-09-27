@@ -10,6 +10,7 @@ import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/editing/data/timeline/convert.dart';
 import 'package:mooltik/editing/data/timeline/timeline_model.dart';
 import 'package:mooltik/editing/data/timeline/timeline_row_interfaces.dart';
+import 'package:mooltik/editing/data/timeline/timeline_scene_row.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/image_sliver.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sound_sliver.dart';
@@ -24,6 +25,7 @@ class TimelineViewModel extends ChangeNotifier {
     required List<SoundClip>? soundClips,
     required SharedPreferences? sharedPreferences,
   })  : _timeline = timeline,
+        _sceneRow = TimelineSceneRow(timeline.sceneSeq),
         _soundClips = soundClips ?? [],
         _preferences = sharedPreferences,
         _msPerPx = sharedPreferences?.getDouble(_msPerPxKey) ?? 10 {
@@ -39,6 +41,8 @@ class TimelineViewModel extends ChangeNotifier {
 
   SharedPreferences? _preferences;
   final TimelineModel _timeline;
+
+  final TimelineSceneRow _sceneRow;
   final List<SoundClip> _soundClips;
 
   bool get isEditingScene => _sceneEdit;
@@ -128,7 +132,7 @@ class TimelineViewModel extends ChangeNotifier {
       _timeline.currentScene.layers;
 
   List<TimelineRowInterface> get sequenceRows =>
-      isEditingScene ? _sceneLayers : [_timeline.sceneSeq];
+      isEditingScene ? _sceneLayers : [_sceneRow];
 
   double get viewHeight =>
       sliverRows * sliverHeight + (sliverRows + 1) * sliverGap;
