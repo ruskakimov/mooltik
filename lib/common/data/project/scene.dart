@@ -3,8 +3,10 @@ import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/common/data/project/layer_group/layer_group_info.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
+import 'package:mooltik/common/data/project/scene_layer_group.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
+import 'package:mooltik/editing/data/timeline/timeline_row_interfaces.dart';
 
 class Scene extends TimeSpan {
   Scene({
@@ -103,6 +105,31 @@ class Scene extends TimeSpan {
       }
     }
     return groups;
+  }
+
+  /// For timeline rows where grouped layers are combined into one row.
+  List<TimelineSceneLayerInterface> get timelineLayers {
+    final timelineLayers = <TimelineSceneLayerInterface>[];
+    final groups = layerGroups;
+
+    for (var i = 0; i < layers.length; i++) {
+      if (groups.isNotEmpty && groups.first.contains(i)) {
+        // In group
+        if (i == groups.first.lastLayerIndex) {
+          final groupLayers = layers.sublist(
+            groups.first.firstLayerIndex,
+            groups.first.lastLayerIndex + 1,
+          );
+          groups.removeAt(0);
+          timelineLayers.add(SceneLayerGroup(groupLayers));
+        }
+      } else {
+        // Not in group
+        timelineLayers.add(layers[i]);
+      }
+    }
+
+    return timelineLayers;
   }
 
   Future<Scene> duplicate() async {

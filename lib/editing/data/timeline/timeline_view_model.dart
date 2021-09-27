@@ -127,9 +127,8 @@ class TimelineViewModel extends ChangeNotifier {
 
   int get rowCount => isEditingScene ? _sceneLayers.length + 1 : 2;
 
-  // TODO: Use another getter where grouped layers are combined
   List<TimelineSceneLayerInterface> get _sceneLayers =>
-      _timeline.currentScene.layers;
+      _timeline.currentScene.timelineLayers;
 
   List<TimelineRowInterface> get sequenceRows =>
       isEditingScene ? _sceneLayers : [_sceneRow];

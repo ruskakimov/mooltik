@@ -95,9 +95,10 @@ Iterable<CompositeFrame> _combineFrameSequences(
 ) sync* {
   assert(frameSequences.isNotEmpty);
 
-  final iterators = frameSequences.map((sequence) => sequence.iterator);
+  final iterators =
+      frameSequences.map((sequence) => sequence.iterator).toList();
 
-  do {
+  while (iterators.every((iterator) => iterator.moveNext())) {
     yield _combineFrames(iterators.map((iterator) => iterator.current));
-  } while (iterators.every((iterator) => iterator.moveNext()));
+  }
 }
