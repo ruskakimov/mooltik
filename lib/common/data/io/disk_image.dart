@@ -1,18 +1,14 @@
 import 'dart:ui';
 import 'dart:io';
 
-import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
-import 'package:mooltik/common/data/project/image_interface.dart';
+import 'package:mooltik/common/data/project/base_image.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/io/make_duplicate_path.dart';
 import 'package:mooltik/common/data/io/png.dart';
 
 /// Manages a single image file.
 /// Notifies listeners when image changes.
-class DiskImage extends ChangeNotifier
-    with EquatableMixin
-    implements ImageInterface {
+class DiskImage extends BaseImage {
   DiskImage({
     required this.file,
     required this.width,
@@ -40,8 +36,6 @@ class DiskImage extends ChangeNotifier
 
   Image? get snapshot => _snapshot;
   Image? _snapshot;
-
-  Size get size => Size(width.toDouble(), height.toDouble());
 
   bool get loaded => _snapshot != null;
 

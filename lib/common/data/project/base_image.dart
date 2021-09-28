@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-abstract class ImageInterface implements ChangeNotifier {
+abstract class BaseImage extends ChangeNotifier with EquatableMixin {
   int get width;
   int get height;
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/image_interface.dart';
+import 'package:mooltik/common/data/project/base_image.dart';
 import 'package:mooltik/drawing/ui/painted_glass.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 
@@ -10,7 +10,7 @@ class ImageSliver extends Sliver {
     this.ghost = false,
   }) : super(area);
 
-  final ImageInterface image;
+  final BaseImage image;
   final bool ghost;
 
   @override

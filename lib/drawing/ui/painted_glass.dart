@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/image_interface.dart';
+import 'package:mooltik/common/data/project/base_image.dart';
 
 const frostedGlassColor = Color(0x88A09F9F);
 
@@ -9,7 +9,7 @@ class PaintedGlass extends StatelessWidget {
     required this.image,
   }) : super(key: key);
 
-  final ImageInterface image;
+  final BaseImage image;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class PaintedGlass extends StatelessWidget {
 class _ImagePainter extends CustomPainter {
   _ImagePainter(this.image);
 
-  final ImageInterface image;
+  final BaseImage image;
 
   @override
   void paint(Canvas canvas, Size size) {
