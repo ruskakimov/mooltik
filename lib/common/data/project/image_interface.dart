@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-abstract class ImageInterface {
+abstract class ImageInterface implements ChangeNotifier {
   int get width;
   int get height;
 

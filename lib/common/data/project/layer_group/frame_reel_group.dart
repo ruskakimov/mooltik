@@ -60,11 +60,4 @@ class FrameReelGroup extends ChangeNotifier implements FrameReelModel {
     group.forEach((reel) => reel.deleteCurrent());
     notifyListeners();
   }
-
-  @override
-  void replaceCurrentFrame(Frame newFrame) {
-    assert(newFrame.duration == activeReel.currentFrame.duration);
-    activeReel.replaceCurrentFrame(newFrame);
-    notifyListeners();
-  }
 }

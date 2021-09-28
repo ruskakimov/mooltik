@@ -10,7 +10,7 @@ class ImageHistoryStack {
   ImageHistoryStack({
     required this.maxCount,
     Image? initialSnapshot,
-  }) : _snapshots = [initialSnapshot];
+  }) : _snapshots = [initialSnapshot?.clone()];
 
   /// Maximum number of historical snapshots in the stack.
   final int maxCount;
@@ -69,6 +69,7 @@ class ImageHistoryStack {
   }
 
   void dispose() {
+    // TODO: Check if current can be disposed too
     _snapshots.removeAt(_currentSnapshotIndex);
     _snapshots.forEach((image) => image?.dispose());
   }

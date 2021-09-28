@@ -1,11 +1,15 @@
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/image_interface.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
 
 /// Stack of images of the same size.
-class CompositeImage with EquatableMixin implements ImageInterface {
+/// TODO: Notify listeners when any of the underlying layers update
+class CompositeImage extends ChangeNotifier
+    with EquatableMixin
+    implements ImageInterface {
   CompositeImage(this.layers)
       : width = layers.first.width,
         height = layers.first.height,

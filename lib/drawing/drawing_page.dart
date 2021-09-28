@@ -79,9 +79,6 @@ class DrawingPage extends StatelessWidget {
                   create: (context) => EaselModel(
                     frame: context.read<FrameReelModel>().currentFrame,
                     selectedTool: context.read<ToolboxModel>().selectedTool,
-                    onChanged: (Frame frame) {
-                      context.read<FrameReelModel>().replaceCurrentFrame(frame);
-                    },
                     sharedPreferences: context.read<SharedPreferences>(),
                   ),
                   update: (_, reel, toolbox, easel) => easel!

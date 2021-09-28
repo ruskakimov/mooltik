@@ -4,7 +4,6 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/debouncer.dart';
-import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/task_queue.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
@@ -24,9 +23,9 @@ const _allowDrawingWithFingerKey = 'allow_drawing_with_finger';
 
 class EaselModel extends ChangeNotifier {
   EaselModel({
+    // TODO: Just pass the image
     required Frame frame,
     required Tool? selectedTool,
-    required this.onChanged,
     required SharedPreferences sharedPreferences,
   })  : _frame = frame,
         _historyStack = ImageHistoryStack(
@@ -44,8 +43,6 @@ class EaselModel extends ChangeNotifier {
 
   Tool? get selectedTool => _selectedTool;
   Tool? _selectedTool;
-
-  final ValueChanged<Frame> onChanged;
 
   Size get frameSize => _frame.image.size;
 
@@ -144,11 +141,8 @@ class EaselModel extends ChangeNotifier {
   }
 
   void _updateFrame() {
-    _frame = _frame.copyWith(
-      image: _frame.image.copyWith(snapshot: _historyStack.currentSnapshot),
-    );
+    _frame.image.changeSnapshot(_historyStack.currentSnapshot);
     _diskWriteDebouncer.debounce(() => _frame.image.saveSnapshot());
-    onChanged(_frame);
   }
 
   bool get isFittedToScreen => _fittedToScreen;

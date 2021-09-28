@@ -2,13 +2,17 @@ import 'dart:ui';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mooltik/common/data/project/image_interface.dart';
 import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/io/make_duplicate_path.dart';
 import 'package:mooltik/common/data/io/png.dart';
 
 /// Manages a single image file.
-class DiskImage with EquatableMixin implements ImageInterface {
+/// Notifies listeners when image changes.
+class DiskImage extends ChangeNotifier
+    with EquatableMixin
+    implements ImageInterface {
   DiskImage({
     required this.file,
     required this.width,
@@ -16,7 +20,7 @@ class DiskImage with EquatableMixin implements ImageInterface {
     Image? snapshot,
   })  : assert(snapshot == null ||
             snapshot.width == width && snapshot.height == height),
-        _snapshot = snapshot {
+        _snapshot = snapshot?.clone() {
     file.createSync();
   }
 
@@ -25,7 +29,7 @@ class DiskImage with EquatableMixin implements ImageInterface {
     required Image snapshot,
   })  : width = snapshot.width,
         height = snapshot.height,
-        _snapshot = snapshot {
+        _snapshot = snapshot.clone() {
     file.createSync();
   }
 
@@ -48,19 +52,32 @@ class DiskImage with EquatableMixin implements ImageInterface {
     if (await isFileEmpty) {
       await _loadEmptySnapshot();
     } else {
-      _snapshot = await pngRead(file);
+      await _loadFromFile();
     }
   }
 
   Future<void> _loadEmptySnapshot() async {
     _snapshot?.dispose();
     _snapshot = await generateEmptyImage(width, height);
+    notifyListeners();
+  }
+
+  Future<void> _loadFromFile() async {
+    _snapshot?.dispose();
+    _snapshot = await pngRead(file);
+    notifyListeners();
+  }
+
+  void changeSnapshot(Image? newSnapshot) {
+    _snapshot?.dispose();
+    _snapshot = newSnapshot?.clone();
+    notifyListeners();
   }
 
   Future<void> saveSnapshot() async {
     if (_snapshot == null) {
       if (await isFileEmpty) {
-        _loadEmptySnapshot();
+        await _loadEmptySnapshot();
       } else {
         throw Exception('Cannot save empty snapshot if file is not empty.');
       }
@@ -94,18 +111,13 @@ class DiskImage with EquatableMixin implements ImageInterface {
     return image;
   }
 
-  DiskImage copyWith({Image? snapshot}) => DiskImage(
-        file: file,
-        width: width,
-        height: height,
-        snapshot: snapshot ?? this.snapshot,
-      );
-
   @override
   List<Object?> get props => [file.path];
 
+  @override
   void dispose() {
     _snapshot?.dispose();
+    super.dispose();
   }
 
   @override

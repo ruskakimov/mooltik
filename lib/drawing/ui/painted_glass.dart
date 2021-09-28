@@ -21,10 +21,15 @@ class PaintedGlass extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.cover,
             clipBehavior: Clip.hardEdge,
-            child: CustomPaint(
-              size: image.size,
-              isComplex: true,
-              painter: _ImagePainter(image),
+            child: AnimatedBuilder(
+              animation: image,
+              builder: (context, child) {
+                return CustomPaint(
+                  size: image.size,
+                  isComplex: true,
+                  painter: _ImagePainter(image),
+                );
+              },
             ),
           ),
         ),
@@ -50,7 +55,7 @@ class _ImagePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_ImagePainter oldDelegate) => image != oldDelegate.image;
+  bool shouldRepaint(_ImagePainter oldDelegate) => true;
 
   @override
   bool shouldRebuildSemantics(_ImagePainter oldDelegate) => false;
