@@ -69,8 +69,6 @@ class ImageHistoryStack {
   }
 
   void dispose() {
-    // TODO: Check if current can be disposed too
-    _snapshots.removeAt(_currentSnapshotIndex);
     _snapshots.forEach((image) => image?.dispose());
   }
 }
