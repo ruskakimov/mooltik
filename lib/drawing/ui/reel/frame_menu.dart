@@ -77,7 +77,7 @@ class FrameMenu extends StatelessWidget {
                   closePopup();
                   final easel = context.read<EaselModel>();
                   final newSnapshot = await copyPaster.pasteOn(
-                    easel.frame.image.snapshot!,
+                    easel.image.snapshot!,
                   );
                   easel.pushSnapshot(newSnapshot);
                 }

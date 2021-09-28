@@ -167,7 +167,7 @@ class LassoModel extends ChangeNotifier {
 
     if (eraseOriginal) {
       _eraseSelection();
-      _framePathWithErasedOriginal = _easel.frame.image.file.path;
+      _framePathWithErasedOriginal = _easel.image.file.path;
     }
 
     // Position box:
@@ -182,7 +182,7 @@ class LassoModel extends ChangeNotifier {
   Future<void> _setTransformImage() async {
     _transformImage = await generateImage(
       MaskedImagePainter(
-        original: _easel.frame.image.snapshot,
+        original: _easel.image.snapshot,
         mask: selectionStroke!.path,
       ),
       _transformBoxSize.width.toInt(),
@@ -212,14 +212,14 @@ class LassoModel extends ChangeNotifier {
       TransformedImagePainter(
         transformedImage: transformImage,
         transform: imageTransform,
-        background: _easel.frame.image.snapshot,
+        background: _easel.image.snapshot,
       ),
-      _easel.frame.image.width.toInt(),
-      _easel.frame.image.height.toInt(),
+      _easel.image.width.toInt(),
+      _easel.image.height.toInt(),
     );
 
     // Remove snapshot with erased original used during transform.
-    if (_framePathWithErasedOriginal == _easel.frame.image.file.path &&
+    if (_framePathWithErasedOriginal == _easel.image.file.path &&
         _easel.undoAvailable) {
       _easel.undo();
       _framePathWithErasedOriginal = null;
@@ -300,11 +300,11 @@ class LassoModel extends ChangeNotifier {
   Future<void> _applySelectionStrokeToFrame() async {
     final snapshot = await generateImage(
       CanvasPainter(
-        image: _easel.frame.image.snapshot,
+        image: _easel.image.snapshot,
         strokes: [selectionStroke!],
       ),
-      _easel.frame.image.width.toInt(),
-      _easel.frame.image.height.toInt(),
+      _easel.image.width.toInt(),
+      _easel.image.height.toInt(),
     );
     _easel.pushSnapshot(snapshot);
   }

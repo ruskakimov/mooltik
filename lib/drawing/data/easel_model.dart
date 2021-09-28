@@ -4,8 +4,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/debouncer.dart';
+import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/task_queue.dart';
-import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
@@ -23,14 +23,13 @@ const _allowDrawingWithFingerKey = 'allow_drawing_with_finger';
 
 class EaselModel extends ChangeNotifier {
   EaselModel({
-    // TODO: Just pass the image
-    required Frame frame,
+    required DiskImage image,
     required Tool? selectedTool,
     required SharedPreferences sharedPreferences,
-  })  : _frame = frame,
+  })  : _image = image,
         _historyStack = ImageHistoryStack(
           maxCount: maxUndos + 1,
-          initialSnapshot: frame.image.snapshot,
+          initialSnapshot: image.snapshot,
         ),
         _selectedTool = selectedTool,
         _preferences = sharedPreferences,
@@ -38,13 +37,13 @@ class EaselModel extends ChangeNotifier {
             sharedPreferences.getBool(_allowDrawingWithFingerKey) ?? true,
         _paintingQueue = TaskQueue();
 
-  Frame get frame => _frame;
-  Frame _frame;
+  DiskImage get image => _image;
+  DiskImage _image;
 
   Tool? get selectedTool => _selectedTool;
   Tool? _selectedTool;
 
-  Size get frameSize => _frame.image.size;
+  Size get frameSize => image.size;
 
   Size? _easelSize;
 
@@ -93,19 +92,19 @@ class EaselModel extends ChangeNotifier {
   }
 
   /// Used by provider to update dependency.
-  void updateFrame(Frame frame) {
-    if (frame.image.file == _frame.image.file) return;
+  void updateImage(DiskImage newImage) {
+    if (newImage == _image) return;
 
     if (_diskWriteDebouncer.isActive) {
       _diskWriteDebouncer.cancel();
-      _frame.image.saveSnapshot();
+      _image.saveSnapshot();
     }
 
-    _frame = frame;
+    _image = newImage;
     _historyStack.dispose();
     _historyStack = ImageHistoryStack(
       maxCount: maxUndos + 1,
-      initialSnapshot: frame.image.snapshot,
+      initialSnapshot: newImage.snapshot,
     );
     notifyListeners();
   }
@@ -130,19 +129,19 @@ class EaselModel extends ChangeNotifier {
 
   void undo() {
     _historyStack.undo();
-    _updateFrame();
+    _flushChanges();
     notifyListeners();
   }
 
   void redo() {
     _historyStack.redo();
-    _updateFrame();
+    _flushChanges();
     notifyListeners();
   }
 
-  void _updateFrame() {
-    _frame.image.changeSnapshot(_historyStack.currentSnapshot);
-    _diskWriteDebouncer.debounce(() => _frame.image.saveSnapshot());
+  void _flushChanges() {
+    image.changeSnapshot(_historyStack.currentSnapshot);
+    _diskWriteDebouncer.debounce(() => image.saveSnapshot());
   }
 
   bool get isFittedToScreen => _fittedToScreen;
@@ -246,7 +245,7 @@ class EaselModel extends ChangeNotifier {
 
   void pushSnapshot(ui.Image snapshot) {
     _historyStack.push(snapshot);
-    _updateFrame();
+    _flushChanges();
     notifyListeners();
   }
 
