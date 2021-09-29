@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/frame_interface.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 
@@ -12,6 +13,8 @@ class FrameReelModel extends ChangeNotifier {
   final Sequence<Frame> frameSeq;
 
   Frame get currentFrame => frameSeq[_currentIndex];
+
+  FrameInterface get deleteDialogFrame => currentFrame;
 
   int get currentIndex => _currentIndex;
   int _currentIndex;

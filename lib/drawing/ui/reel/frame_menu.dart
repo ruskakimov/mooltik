@@ -93,7 +93,7 @@ class FrameMenu extends StatelessWidget {
                   final deleteConfirmed = await openDeleteConfirmationDialog(
                     context: context,
                     name: 'cel',
-                    preview: PaintedGlass(image: reel.currentFrame.image),
+                    preview: PaintedGlass(image: reel.deleteDialogFrame.image),
                   );
                   if (deleteConfirmed == true) {
                     reel.deleteCurrent();

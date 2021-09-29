@@ -1,9 +1,8 @@
 import 'package:mooltik/common/data/project/composite_frame.dart';
-import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/common/data/project/frame_interface.dart';
+import 'package:mooltik/common/data/project/layer_group/combine_frames.dart';
 import 'package:mooltik/common/data/project/layer_group/sync_layers.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
-import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/editing/data/timeline/timeline_row_interfaces.dart';
 
 class SceneLayerGroup implements TimelineSceneLayerInterface {
@@ -17,7 +16,7 @@ class SceneLayerGroup implements TimelineSceneLayerInterface {
   int get clipCount => _layers.first.clipCount;
 
   @override
-  Iterable<FrameInterface> get clips => _combineFrameSequences(
+  Iterable<FrameInterface> get clips => combineFrameSequences(
         _layers.map((layer) => layer.clips),
       );
 
@@ -40,12 +39,12 @@ class SceneLayerGroup implements TimelineSceneLayerInterface {
 
   @override
   Iterable<FrameInterface> getPlayFrames(Duration totalDuration) =>
-      _combineFrameSequences(
+      combineFrameSequences(
         _layers.map((layer) => layer.getPlayFrames(totalDuration)),
       );
 
   @override
-  CompositeFrame clipAt(int index) => _combineFrames(
+  CompositeFrame clipAt(int index) => combineFrames(
         _layers.map((layer) => layer.clipAt(index)),
       );
 
@@ -81,25 +80,4 @@ class SceneLayerGroup implements TimelineSceneLayerInterface {
   @override
   Duration endTimeOf(int realFrameIndex) =>
       _layers.first.endTimeOf(realFrameIndex);
-}
-
-CompositeFrame _combineFrames(Iterable<Frame> frames) {
-  assert(frames.isNotEmpty);
-  assert(frames.every((frame) => frame.duration == frames.first.duration));
-
-  final images = frames.map((frame) => frame.image).toList();
-  return CompositeFrame(CompositeImage(images), frames.first.duration);
-}
-
-Iterable<CompositeFrame> _combineFrameSequences(
-  Iterable<Iterable<Frame>> frameSequences,
-) sync* {
-  assert(frameSequences.isNotEmpty);
-
-  final iterators =
-      frameSequences.map((sequence) => sequence.iterator).toList();
-
-  while (iterators.every((iterator) => iterator.moveNext())) {
-    yield _combineFrames(iterators.map((iterator) => iterator.current));
-  }
 }

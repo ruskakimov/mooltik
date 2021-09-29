@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/frame_interface.dart';
+import 'package:mooltik/common/data/project/layer_group/combine_frames.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
@@ -18,6 +20,10 @@ class FrameReelGroup extends ChangeNotifier implements FrameReelModel {
 
   @override
   Frame get currentFrame => activeReel.currentFrame;
+
+  @override
+  FrameInterface get deleteDialogFrame =>
+      combineFrames(group.map((reel) => reel.currentFrame));
 
   @override
   int get currentIndex => activeReel.currentIndex;
