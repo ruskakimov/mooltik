@@ -140,16 +140,16 @@ class EaselCanvas extends StatelessWidget {
   List<Widget> _buildLayers() {
     final finalLayers = <Widget>[];
 
-    for (final frame in layers) {
-      if (frame == active) {
+    for (final layer in layers) {
+      if (layer == active) {
         finalLayers.addAll(_activeLayer(
-          active: frame,
+          active: layer,
           before: onionBefore,
           after: onionAfter,
           strokes: strokes,
         ));
       } else {
-        finalLayers.add(_inactiveLayer(frame));
+        finalLayers.add(_inactiveLayer(layer));
       }
     }
 
