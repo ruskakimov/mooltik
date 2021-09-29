@@ -16,7 +16,7 @@ class PaintBrush extends Brush {
   BlendMode get blendMode => BlendMode.srcOver;
 
   @override
-  double get minStrokeWidth => 5;
+  double get minStrokeWidth => 1;
 
   @override
   double get maxStrokeWidth => 100;

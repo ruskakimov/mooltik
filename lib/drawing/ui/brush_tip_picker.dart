@@ -29,7 +29,7 @@ class BrushTipPicker extends StatelessWidget {
         children: [
           for (var i = 0; i < brushTips.length; i++)
             BrushTipButton(
-              canvasSize: Size.square(maxStrokeWidth * 2),
+              canvasSize: Size.square(maxStrokeWidth * 1.3),
               brushTip: brushTips[i],
               selected: i == selectedIndex,
               onTap: () {
