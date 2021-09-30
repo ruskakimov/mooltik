@@ -153,28 +153,26 @@ class _LayerList extends StatelessWidget {
     final visible = reelStack.isVisible(index);
     final grouped = reelStack.isGrouped(index);
 
-    Widget rowContent = LayerRow(
-      reel: reel,
-      name: name,
-      selected: selected,
-      visible: visible,
-      canDelete: reelStack.canDeleteLayer,
-      canGroupWithAbove: reelStack.canGroupWithAbove(index),
-      canGroupWithBelow: reelStack.canGroupWithBelow(index),
-      canUngroup: reelStack.isGrouped(index),
-    );
-
     return SizedBox(
       key: Key(reel.currentFrame.image.file.path),
       height: _rowHeight,
       child: AnimatedPadding(
-        duration: Duration(milliseconds: 250),
+        duration: const Duration(milliseconds: 250),
         padding: EdgeInsets.only(
           top: 2,
           bottom: 2,
           left: grouped ? 16 : 0,
         ),
-        child: rowContent,
+        child: LayerRow(
+          reel: reel,
+          name: name,
+          selected: selected,
+          visible: visible,
+          canDelete: reelStack.canDeleteLayer,
+          canGroupWithAbove: reelStack.canGroupWithAbove(index),
+          canGroupWithBelow: reelStack.canGroupWithBelow(index),
+          canUngroup: reelStack.isGrouped(index),
+        ),
       ),
     );
   }
