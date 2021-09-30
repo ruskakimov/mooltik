@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
+import 'package:mooltik/drawing/data/drawing_page_options_model.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
@@ -28,6 +29,8 @@ class _EaselState extends State<Easel> {
     final onion = context.watch<OnionModel>();
     final reelStack = context.watch<ReelStackModel>();
     final selectedTool = context.watch<ToolboxModel>().selectedTool;
+    final allowDrawingWithFinger =
+        context.watch<DrawingPageOptionsModel>().allowDrawingWithFinger;
 
     return LayoutBuilder(builder: (context, constraints) {
       easel.updateSize(constraints.biggest);
@@ -42,7 +45,7 @@ class _EaselState extends State<Easel> {
             onStrokeCancel: easel.onStrokeCancel,
             onScaleStart: easel.onScaleStart,
             onScaleUpdate: easel.onScaleUpdate,
-            allowDrawingWithFinger: easel.allowDrawingWithFinger,
+            allowDrawingWithFinger: allowDrawingWithFinger,
             child: Stack(
               fit: StackFit.expand,
               children: [

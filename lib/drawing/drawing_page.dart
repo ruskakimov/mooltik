@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/drawing/data/drawing_page_options_model.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
-import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/data/lasso/lasso_model.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
@@ -79,7 +78,6 @@ class DrawingPage extends StatelessWidget {
                   create: (context) => EaselModel(
                     image: context.read<FrameReelModel>().currentFrame.image,
                     selectedTool: context.read<ToolboxModel>().selectedTool,
-                    sharedPreferences: context.read<SharedPreferences>(),
                   ),
                   update: (_, reel, toolbox, easel) => easel!
                     ..updateImage(reel.currentFrame.image)

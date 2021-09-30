@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
 
@@ -9,7 +8,6 @@ import 'package:mooltik/common/data/task_queue.dart';
 import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 /// Maximum number of consecutive undos.
 const int maxUndos = 25;
@@ -19,22 +17,16 @@ const Duration diskWriteTimeout = Duration(seconds: 2);
 
 const twoPi = pi * 2;
 
-const _allowDrawingWithFingerKey = 'allow_drawing_with_finger';
-
 class EaselModel extends ChangeNotifier {
   EaselModel({
     required DiskImage image,
     required Tool? selectedTool,
-    required SharedPreferences sharedPreferences,
   })  : _image = image,
         _historyStack = ImageHistoryStack(
           maxCount: maxUndos + 1,
           initialSnapshot: image.snapshot?.clone(),
         ),
         _selectedTool = selectedTool,
-        _preferences = sharedPreferences,
-        _allowDrawingWithFinger =
-            sharedPreferences.getBool(_allowDrawingWithFingerKey) ?? true,
         _paintingQueue = TaskQueue();
 
   DiskImage get image => _image;
@@ -247,25 +239,6 @@ class EaselModel extends ChangeNotifier {
     _historyStack.push(snapshot);
     _flushChanges();
     notifyListeners();
-  }
-
-  // ==================
-  // Easel preferences:
-  // ==================
-
-  SharedPreferences _preferences;
-
-  bool get allowDrawingWithFinger => _allowDrawingWithFinger;
-  bool _allowDrawingWithFinger;
-
-  Future<void> toggleDrawingWithFinger() async {
-    _allowDrawingWithFinger = !_allowDrawingWithFinger;
-    notifyListeners();
-
-    await _preferences.setBool(
-      _allowDrawingWithFingerKey,
-      _allowDrawingWithFinger,
-    );
   }
 
   @override
