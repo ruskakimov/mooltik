@@ -88,7 +88,7 @@ class DiskImage extends BaseImage {
       file: duplicateFile,
       width: width,
       height: height,
-      snapshot: snapshot?.clone(),
+      snapshot: snapshot,
     );
   }
 
