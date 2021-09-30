@@ -8,7 +8,7 @@ abstract class TimelineRowInterface {
   Iterable<TimeSpan> get clips;
 
   TimeSpan clipAt(int index);
-  TimeSpan deleteAt(int index);
+  void deleteAt(int index);
   Future<void> duplicateAt(int index);
   void changeDurationAt(int index, Duration newDuration);
   Duration startTimeOf(int index);

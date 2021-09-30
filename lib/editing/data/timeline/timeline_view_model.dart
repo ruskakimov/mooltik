@@ -412,14 +412,7 @@ class TimelineViewModel extends ChangeNotifier {
     if (_selectedSliverCoord == null) return;
     if (!canDeleteSelected) return;
 
-    final removedSliver =
-        selectedSliverRow!.deleteAt(_selectedSliverCoord!.colIndex);
-
-    Future.delayed(
-      Duration(seconds: 1),
-      () => removedSliver.dispose(),
-    );
-
+    selectedSliverRow!.deleteAt(_selectedSliverCoord!.colIndex);
     removeSliverSelection();
     notifyListeners();
   }

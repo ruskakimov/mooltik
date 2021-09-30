@@ -33,9 +33,4 @@ class CompositeFrame extends TimeSpan
 
   @override
   List<Object?> get props => [width, height, image, duration];
-
-  @override
-  void dispose() {
-    image.layers.forEach((layerImage) => layerImage.dispose());
-  }
 }

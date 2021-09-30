@@ -49,10 +49,8 @@ class SceneLayerGroup implements TimelineSceneLayerInterface {
       );
 
   @override
-  CompositeFrame deleteAt(int realFrameIndex) {
-    final deleted = clipAt(realFrameIndex);
+  void deleteAt(int realFrameIndex) {
     _layers.forEach((layer) => layer.deleteAt(realFrameIndex));
-    return deleted;
   }
 
   @override
