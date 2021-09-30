@@ -10,7 +10,7 @@ class ImageHistoryStack {
   ImageHistoryStack({
     required this.maxCount,
     Image? initialSnapshot,
-  }) : _snapshots = [initialSnapshot?.clone()];
+  }) : _snapshots = [initialSnapshot];
 
   /// Maximum number of historical snapshots in the stack.
   final int maxCount;

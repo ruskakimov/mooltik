@@ -29,7 +29,7 @@ class EaselModel extends ChangeNotifier {
   })  : _image = image,
         _historyStack = ImageHistoryStack(
           maxCount: maxUndos + 1,
-          initialSnapshot: image.snapshot,
+          initialSnapshot: image.snapshot?.clone(),
         ),
         _selectedTool = selectedTool,
         _preferences = sharedPreferences,
@@ -104,7 +104,7 @@ class EaselModel extends ChangeNotifier {
     _historyStack.dispose();
     _historyStack = ImageHistoryStack(
       maxCount: maxUndos + 1,
-      initialSnapshot: newImage.snapshot,
+      initialSnapshot: newImage.snapshot?.clone(),
     );
     notifyListeners();
   }

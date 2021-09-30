@@ -34,6 +34,9 @@ class DiskImage extends BaseImage {
   final int width;
   final int height;
 
+  /// Current memory snapshot owned by this image.
+  /// Will be disposed of when image updates.
+  /// Call `clone` if you want to keep the reference to this particular snapshot in time.
   Image? get snapshot => _snapshot;
   Image? _snapshot;
 
