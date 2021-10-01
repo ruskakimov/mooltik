@@ -56,7 +56,6 @@ class Frame extends TimeSpan with EquatableMixin implements FrameInterface {
         duration: duration ?? this.duration,
       );
 
-  @override
   void dispose() {
     image.dispose();
   }
