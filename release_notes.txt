@@ -1,1 +1,1 @@
-- Optimise video export
+- Fix a bug where short strokes with minimal blurring disappear

@@ -179,7 +179,11 @@ class BrushTip {
     ..style = PaintingStyle.stroke
     ..strokeCap = StrokeCap.round
     ..strokeJoin = StrokeJoin.round
-    ..maskFilter = MaskFilter.blur(BlurStyle.normal, blur * strokeWidth / 4);
+    ..maskFilter = blur > 0
+        // Small sigma values result in short strokes disappearing during rasterization.
+        // Issue: https://github.com/flutter/flutter/issues/60601
+        ? MaskFilter.blur(BlurStyle.normal, 1 + blur * strokeWidth / 4)
+        : null;
 
   factory BrushTip.fromJson(Map<String, dynamic> json) => BrushTip(
         strokeWidth: json[_strokeWidthKey] as double,
