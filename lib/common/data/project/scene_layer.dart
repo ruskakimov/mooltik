@@ -140,7 +140,13 @@ class SceneLayer implements TimelineSceneLayerInterface {
     final duplicateFrames = await Future.wait(
       frameSeq.iterable.map((frame) => frame.duplicate()),
     );
-    return SceneLayer(Sequence(duplicateFrames), playMode);
+    return SceneLayer(
+      Sequence(duplicateFrames),
+      playMode,
+      visible,
+      name,
+      groupedWithNext,
+    );
   }
 
   factory SceneLayer.fromJson(
