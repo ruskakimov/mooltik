@@ -13,10 +13,14 @@ import 'package:mooltik/drawing/data/frame/frame.dart';
 
 void main() async {
   tearDown(() async {
-    await deleteFilesWhere(
-      Directory.current,
-      (path) => path.endsWith('.png'),
-    );
+    try {
+      await deleteFilesWhere(
+        Directory.current,
+        (path) => path.endsWith('.png'),
+      );
+    } catch (e) {
+      print(e);
+    }
   });
 
   final imageA = await pngRead(File('./test/test_images/rabbit_black.png'));
