@@ -16,94 +16,77 @@ void main() async {
     );
   });
 
-  final imageA = await pngRead(File('./test/test_images/rabbit_black.png'));
-  final imageB = await pngRead(File('./test/test_images/rabbit_pink.png'));
-  final imageC = await pngRead(File('./test/test_images/rabbit_yellow.png'));
+  final snapshotA = await pngRead(File('./test/test_images/rabbit_black.png'));
+  final snapshotB = await pngRead(File('./test/test_images/rabbit_pink.png'));
+  final snapshotC = await pngRead(File('./test/test_images/rabbit_yellow.png'));
+
+  final imageA = DiskImage.loaded(file: File('a.png'), snapshot: snapshotA);
+  final imageB = DiskImage.loaded(file: File('b.png'), snapshot: snapshotB);
+  final imageC = DiskImage.loaded(file: File('c.png'), snapshot: snapshotC);
 
   group('SceneLayer', () {
     test('handles extend last mode', () {
       final sceneLayer = SceneLayer(
         Sequence<Frame>([
-          Frame(
-            image: DiskImage.loaded(file: File('1.png'), snapshot: imageA),
-            duration: Duration(seconds: 2),
-          ),
-          Frame(
-            image: DiskImage.loaded(file: File('2.png'), snapshot: imageB),
-            duration: Duration(seconds: 2),
-          ),
+          Frame(image: imageA, duration: Duration(seconds: 2)),
+          Frame(image: imageB, duration: Duration(seconds: 2)),
         ]),
         PlayMode.extendLast,
       );
-      expect(sceneLayer.frameAt(Duration(seconds: 1)).image.snapshot, imageA);
-      expect(sceneLayer.frameAt(Duration(seconds: 4)).image.snapshot, imageB);
-      expect(sceneLayer.frameAt(Duration(seconds: 5)).image.snapshot, imageB);
-      expect(sceneLayer.frameAt(Duration(seconds: 10)).image.snapshot, imageB);
-      expect(sceneLayer.frameAt(Duration(seconds: 20)).image.snapshot, imageB);
+      expect(sceneLayer.frameAt(Duration(seconds: 1)).image, imageA);
+      expect(sceneLayer.frameAt(Duration(seconds: 4)).image, imageB);
+      expect(sceneLayer.frameAt(Duration(seconds: 5)).image, imageB);
+      expect(sceneLayer.frameAt(Duration(seconds: 10)).image, imageB);
+      expect(sceneLayer.frameAt(Duration(seconds: 20)).image, imageB);
     });
 
     test('handles loop mode', () {
       final sceneLayer = SceneLayer(
         Sequence<Frame>([
-          Frame(
-            image: DiskImage.loaded(file: File('1.png'), snapshot: imageA),
-            duration: Duration(seconds: 2),
-          ),
-          Frame(
-            image: DiskImage.loaded(file: File('2.png'), snapshot: imageB),
-            duration: Duration(seconds: 2),
-          ),
+          Frame(image: imageA, duration: Duration(seconds: 2)),
+          Frame(image: imageB, duration: Duration(seconds: 2)),
         ]),
         PlayMode.loop,
       );
-      expect(sceneLayer.frameAt(Duration(seconds: 1)).image.snapshot, imageA);
-      expect(sceneLayer.frameAt(Duration(seconds: 2)).image.snapshot, imageB);
-      expect(sceneLayer.frameAt(Duration(seconds: 3)).image.snapshot, imageB);
-      expect(sceneLayer.frameAt(Duration(seconds: 4)).image.snapshot, imageA);
-      expect(sceneLayer.frameAt(Duration(seconds: 5)).image.snapshot, imageA);
-      expect(sceneLayer.frameAt(Duration(seconds: 6)).image.snapshot, imageB);
-      expect(sceneLayer.frameAt(Duration(seconds: 7)).image.snapshot, imageB);
-      expect(sceneLayer.frameAt(Duration(seconds: 8)).image.snapshot, imageA);
-      expect(sceneLayer.frameAt(Duration(seconds: 10)).image.snapshot, imageB);
-      expect(sceneLayer.frameAt(Duration(seconds: 20)).image.snapshot, imageA);
+      expect(sceneLayer.frameAt(Duration(seconds: 1)).image, imageA);
+      expect(sceneLayer.frameAt(Duration(seconds: 2)).image, imageB);
+      expect(sceneLayer.frameAt(Duration(seconds: 3)).image, imageB);
+      expect(sceneLayer.frameAt(Duration(seconds: 4)).image, imageA);
+      expect(sceneLayer.frameAt(Duration(seconds: 5)).image, imageA);
+      expect(sceneLayer.frameAt(Duration(seconds: 6)).image, imageB);
+      expect(sceneLayer.frameAt(Duration(seconds: 7)).image, imageB);
+      expect(sceneLayer.frameAt(Duration(seconds: 8)).image, imageA);
+      expect(sceneLayer.frameAt(Duration(seconds: 10)).image, imageB);
+      expect(sceneLayer.frameAt(Duration(seconds: 20)).image, imageA);
     });
 
     test('handles ping-pong mode', () {
       final sceneLayer = SceneLayer(
         Sequence<Frame>([
-          Frame(
-            image: DiskImage.loaded(file: File('1.png'), snapshot: imageA),
-            duration: Duration(seconds: 1),
-          ),
-          Frame(
-            image: DiskImage.loaded(file: File('2.png'), snapshot: imageB),
-            duration: Duration(seconds: 1),
-          ),
-          Frame(
-            image: DiskImage.loaded(file: File('3.png'), snapshot: imageC),
-            duration: Duration(seconds: 1),
-          ),
+          Frame(image: imageA, duration: Duration(seconds: 1)),
+          Frame(image: imageB, duration: Duration(seconds: 1)),
+          Frame(image: imageC, duration: Duration(seconds: 1)),
         ]),
         PlayMode.pingPong,
       );
 
-      expect(sceneLayer.frameAt(Duration(seconds: 0)).image.snapshot, imageA);
-      expect(sceneLayer.frameAt(Duration(seconds: 1)).image.snapshot, imageB);
-      expect(sceneLayer.frameAt(Duration(seconds: 2)).image.snapshot, imageC);
-      expect(sceneLayer.frameAt(Duration(seconds: 3)).image.snapshot, imageC);
-      expect(sceneLayer.frameAt(Duration(seconds: 4)).image.snapshot, imageB);
-      expect(sceneLayer.frameAt(Duration(seconds: 5)).image.snapshot, imageA);
-      expect(sceneLayer.frameAt(Duration(seconds: 6)).image.snapshot, imageA);
-      expect(sceneLayer.frameAt(Duration(seconds: 7)).image.snapshot, imageB);
-      expect(sceneLayer.frameAt(Duration(seconds: 8)).image.snapshot, imageC);
-      expect(sceneLayer.frameAt(Duration(seconds: 9)).image.snapshot, imageC);
-      expect(sceneLayer.frameAt(Duration(seconds: 10)).image.snapshot, imageB);
-      expect(sceneLayer.frameAt(Duration(seconds: 11)).image.snapshot, imageA);
-      expect(sceneLayer.frameAt(Duration(seconds: 12)).image.snapshot, imageA);
-      expect(sceneLayer.frameAt(Duration(seconds: 13)).image.snapshot, imageB);
-      expect(sceneLayer.frameAt(Duration(seconds: 14)).image.snapshot, imageC);
-      expect(sceneLayer.frameAt(Duration(seconds: 15)).image.snapshot, imageC);
-      expect(sceneLayer.frameAt(Duration(seconds: 16)).image.snapshot, imageB);
+      expect(sceneLayer.frameAt(Duration(seconds: 0)).image, imageA);
+      expect(sceneLayer.frameAt(Duration(seconds: 1)).image, imageB);
+      expect(sceneLayer.frameAt(Duration(seconds: 2)).image, imageC);
+      expect(sceneLayer.frameAt(Duration(seconds: 3)).image, imageC);
+      expect(sceneLayer.frameAt(Duration(seconds: 4)).image, imageB);
+      expect(sceneLayer.frameAt(Duration(seconds: 5)).image, imageA);
+      expect(sceneLayer.frameAt(Duration(seconds: 6)).image, imageA);
+      expect(sceneLayer.frameAt(Duration(seconds: 7)).image, imageB);
+      expect(sceneLayer.frameAt(Duration(seconds: 8)).image, imageC);
+      expect(sceneLayer.frameAt(Duration(seconds: 9)).image, imageC);
+      expect(sceneLayer.frameAt(Duration(seconds: 10)).image, imageB);
+      expect(sceneLayer.frameAt(Duration(seconds: 11)).image, imageA);
+      expect(sceneLayer.frameAt(Duration(seconds: 12)).image, imageA);
+      expect(sceneLayer.frameAt(Duration(seconds: 13)).image, imageB);
+      expect(sceneLayer.frameAt(Duration(seconds: 14)).image, imageC);
+      expect(sceneLayer.frameAt(Duration(seconds: 15)).image, imageC);
+      expect(sceneLayer.frameAt(Duration(seconds: 16)).image, imageB);
     });
 
     group('returns correct export frames', () {
