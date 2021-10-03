@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
@@ -8,6 +9,13 @@ import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 
 void main() async {
+  tearDown(() async {
+    await deleteFilesWhere(
+      Directory.current,
+      (path) => path.endsWith('.png'),
+    );
+  });
+
   final imageA = await pngRead(File('./test/test_images/rabbit_black.png'));
   final imageB = await pngRead(File('./test/test_images/rabbit_pink.png'));
   final imageC = await pngRead(File('./test/test_images/rabbit_yellow.png'));
