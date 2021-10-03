@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mooltik/common/data/io/delete_files_where.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/io/png.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
@@ -11,6 +12,13 @@ import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 
 void main() async {
+  tearDown(() async {
+    await deleteFilesWhere(
+      Directory.current,
+      (path) => path.endsWith('.png'),
+    );
+  });
+
   final imageA = await pngRead(File('./test/test_images/rabbit_black.png'));
   final imageB = await pngRead(File('./test/test_images/rabbit_pink.png'));
   final imageC = await pngRead(File('./test/test_images/rabbit_yellow.png'));
@@ -19,27 +27,27 @@ void main() async {
   final bgRed = await pngRead(File('./test/test_images/bg_red.png'));
 
   final a = DiskImage.loaded(
-    file: File('a'),
+    file: File('a.png'),
     snapshot: imageA,
   );
 
   final b = DiskImage.loaded(
-    file: File('b'),
+    file: File('b.png'),
     snapshot: imageB,
   );
 
   final c = DiskImage.loaded(
-    file: File('c'),
+    file: File('c.png'),
     snapshot: imageC,
   );
 
   final green = DiskImage.loaded(
-    file: File('bg-green'),
+    file: File('bg-green.png'),
     snapshot: bgGreen,
   );
 
   final red = DiskImage.loaded(
-    file: File('bg-red'),
+    file: File('bg-red.png'),
     snapshot: bgRed,
   );
 
