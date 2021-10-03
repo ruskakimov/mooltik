@@ -109,7 +109,7 @@ class Project extends ChangeNotifier {
       _scenes!.iterable.map((scene) {
         final seenFrames = Set<CompositeImage>();
         return scene.getExportFrames().where((frame) {
-          final notDuplicate = seenFrames.add(frame.compositeImage);
+          final notDuplicate = seenFrames.add(frame.image);
           return notDuplicate;
         }).toList();
       }).toList();
@@ -195,7 +195,7 @@ class Project extends ChangeNotifier {
 
     // Write thumbnail.
     final image = await generateImage(
-      CompositeImagePainter(videoExportFrames.first.compositeImage),
+      CompositeImagePainter(videoExportFrames.first.image),
       width,
       height,
     );
@@ -259,16 +259,13 @@ class Project extends ChangeNotifier {
   }
 
   Future<Frame> createNewFrame() async {
-    final image = await generateImage(
-      null,
-      width,
-      height,
+    final image = DiskImage(
+      file: _getFrameFile(DateTime.now().millisecondsSinceEpoch),
+      width: width,
+      height: height,
     );
-    final file = _getFrameFile(DateTime.now().millisecondsSinceEpoch);
-    await pngWrite(file, image);
-    return Frame(
-      image: DiskImage(file: file, snapshot: image),
-    );
+    await image.loadSnapshot();
+    return Frame(image: image);
   }
 
   Future<Scene> createNewScene() async {

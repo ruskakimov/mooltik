@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/io/disk_image.dart';
+import 'package:mooltik/drawing/data/drawing_page_options_model.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
-import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
@@ -28,6 +29,8 @@ class _EaselState extends State<Easel> {
     final onion = context.watch<OnionModel>();
     final reelStack = context.watch<ReelStackModel>();
     final selectedTool = context.watch<ToolboxModel>().selectedTool;
+    final allowDrawingWithFinger =
+        context.watch<DrawingPageOptionsModel>().allowDrawingWithFinger;
 
     return LayoutBuilder(builder: (context, constraints) {
       easel.updateSize(constraints.biggest);
@@ -42,7 +45,7 @@ class _EaselState extends State<Easel> {
             onStrokeCancel: easel.onStrokeCancel,
             onScaleStart: easel.onScaleStart,
             onScaleUpdate: easel.onScaleUpdate,
-            allowDrawingWithFinger: easel.allowDrawingWithFinger,
+            allowDrawingWithFinger: allowDrawingWithFinger,
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -56,14 +59,14 @@ class _EaselState extends State<Easel> {
                     angle: easel.canvasRotation,
                     child: EaselCanvas(
                       size: easel.frameSize,
-                      frames: reelStack.visibleReels
-                          .map((reel) => reel.currentFrame)
+                      layers: reelStack.visibleReels
+                          .map((reel) => reel.currentFrame.image)
                           .toList()
                           .reversed
                           .toList(),
-                      activeFrame: easel.frame,
-                      beforeActiveFrame: onion.frameBefore,
-                      afterActiveFrame: onion.frameAfter,
+                      active: easel.image,
+                      onionBefore: onion.frameBefore?.image,
+                      onionAfter: onion.frameAfter?.image,
                       strokes: easel.unrasterizedStrokes,
                     ),
                   ),
@@ -91,18 +94,18 @@ class EaselCanvas extends StatelessWidget {
   const EaselCanvas({
     Key? key,
     required this.size,
-    required this.frames,
-    required this.activeFrame,
-    required this.beforeActiveFrame,
-    required this.afterActiveFrame,
+    required this.layers,
+    required this.active,
+    required this.onionBefore,
+    required this.onionAfter,
     required this.strokes,
   }) : super(key: key);
 
   final Size size;
-  final List<Frame> frames;
-  final Frame activeFrame;
-  final Frame? beforeActiveFrame;
-  final Frame? afterActiveFrame;
+  final List<DiskImage> layers;
+  final DiskImage active;
+  final DiskImage? onionBefore;
+  final DiskImage? onionAfter;
   final List<Stroke> strokes;
 
   @override
@@ -138,37 +141,37 @@ class EaselCanvas extends StatelessWidget {
   }
 
   List<Widget> _buildLayers() {
-    final layers = <Widget>[];
+    final finalLayers = <Widget>[];
 
-    for (final frame in frames) {
-      if (frame == activeFrame) {
-        layers.addAll(_activeLayer(
-          frame: frame,
-          before: beforeActiveFrame,
-          after: afterActiveFrame,
+    for (final layer in layers) {
+      if (layer == active) {
+        finalLayers.addAll(_activeLayer(
+          active: layer,
+          before: onionBefore,
+          after: onionAfter,
           strokes: strokes,
         ));
       } else {
-        layers.add(_inactiveLayer(frame));
+        finalLayers.add(_inactiveLayer(layer));
       }
     }
 
-    return layers;
+    return finalLayers;
   }
 
   List<Widget> _activeLayer({
-    required Frame frame,
-    Frame? before,
-    Frame? after,
+    required DiskImage active,
+    DiskImage? before,
+    DiskImage? after,
     List<Stroke>? strokes,
   }) {
     return [
       if (before != null)
         CustomPaint(
           isComplex: true,
-          size: before.image.size,
+          size: before.size,
           foregroundPainter: CanvasPainter(
-            image: before.image.snapshot,
+            image: before.snapshot,
             filter: ColorFilter.mode(
               Colors.red.withOpacity(0.2),
               BlendMode.srcIn,
@@ -178,9 +181,9 @@ class EaselCanvas extends StatelessWidget {
       if (after != null)
         CustomPaint(
           isComplex: true,
-          size: after.image.size,
+          size: after.size,
           foregroundPainter: CanvasPainter(
-            image: after.image.snapshot,
+            image: after.snapshot,
             filter: ColorFilter.mode(
               Colors.green.withOpacity(0.2),
               BlendMode.srcIn,
@@ -189,21 +192,23 @@ class EaselCanvas extends StatelessWidget {
         ),
       CustomPaint(
         isComplex: true,
-        size: frame.image.size,
-        foregroundPainter:
-            CanvasPainter(image: frame.image.snapshot, strokes: strokes),
+        size: active.size,
+        foregroundPainter: CanvasPainter(
+          image: active.snapshot,
+          strokes: strokes,
+        ),
       ),
       TransformedImageLayer(
-        frameSize: frame.image.size,
+        frameSize: active.size,
       ),
     ];
   }
 
-  CustomPaint _inactiveLayer(Frame frame) {
+  CustomPaint _inactiveLayer(DiskImage image) {
     return CustomPaint(
       isComplex: true,
-      size: frame.image.size,
-      foregroundPainter: CanvasPainter(image: frame.image.snapshot),
+      size: image.size,
+      foregroundPainter: CanvasPainter(image: image.snapshot),
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:mooltik/editing/data/timeline/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/sliver_action_buttons/sliver_action_button.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/sliver_action_buttons/speed_dialog.dart';
 import 'package:provider/provider.dart';
@@ -26,20 +26,15 @@ class SpeedButton extends StatelessWidget {
 
   void _openSpeedDialog(BuildContext context) {
     final timelineView = context.read<TimelineViewModel>();
-    final layer = timelineView.sceneLayers[rowIndex];
-    final frames = layer.frameSeq.iterable.toList();
 
     Navigator.of(context).push(
       MaterialPageRoute(
         fullscreenDialog: true,
         builder: (context) => SpeedDialog(
-          frames: frames,
-          playMode: layer.playMode,
-          onSubmit: (celDuration) {
-            for (var i = 0; i < frames.length; i++) {
-              layer.frameSeq.changeSpanDurationAt(i, celDuration);
-            }
-          },
+          frames: timelineView.layerFrames(rowIndex),
+          playMode: timelineView.layerPlayMode(rowIndex),
+          onSubmit: (frameDuration) =>
+              timelineView.setLayerSpeed(rowIndex, frameDuration),
         ),
       ),
     );

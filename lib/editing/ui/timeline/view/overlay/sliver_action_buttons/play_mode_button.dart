@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
-import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:mooltik/editing/data/timeline/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/sliver_action_buttons/sliver_action_button.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +17,7 @@ class PlayModeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timelineView = context.watch<TimelineViewModel>();
-    final playMode = timelineView.sceneLayers[rowIndex].playMode;
+    final playMode = timelineView.layerPlayMode(rowIndex);
 
     return SliverActionButton(
       iconData: _getIcon(playMode),

@@ -1,22 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:mooltik/common/data/project/project.dart';
+import 'package:mooltik/common/data/project/frame_interface.dart';
 import 'package:mooltik/common/data/sequence/sequence.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
 
 class FrameReelModel extends ChangeNotifier {
   FrameReelModel({
     required this.frameSeq,
-    required CreateNewFrame createNewFrame,
-  })  : _currentIndex = frameSeq.currentIndex,
-        _createNewFrame = createNewFrame;
+  }) : _currentIndex = frameSeq.currentIndex;
 
   final Sequence<Frame> frameSeq;
-  final CreateNewFrame _createNewFrame;
 
   Frame get currentFrame => frameSeq[_currentIndex];
+
+  FrameInterface get deleteDialogFrame => currentFrame;
 
   int get currentIndex => _currentIndex;
   int _currentIndex;
@@ -28,29 +26,26 @@ class FrameReelModel extends ChangeNotifier {
   }
 
   Future<void> appendFrame() async {
-    final frame = await _createNewFrame();
     frameSeq.insert(
       frameSeq.length,
-      frame.copyWith(duration: frameSeq.last.duration),
+      await frameSeq.current.cloneEmpty(),
     );
     notifyListeners();
   }
 
   Future<void> addBeforeCurrent() async {
-    final frame = await _createNewFrame();
     frameSeq.insert(
       _currentIndex,
-      frame.copyWith(duration: frameSeq.current.duration),
+      await frameSeq.current.cloneEmpty(),
     );
     _currentIndex++;
     notifyListeners();
   }
 
   Future<void> addAfterCurrent() async {
-    final frame = await _createNewFrame();
     frameSeq.insert(
       _currentIndex + 1,
-      frame.copyWith(duration: frameSeq.current.duration),
+      await frameSeq.current.cloneEmpty(),
     );
     notifyListeners();
   }
@@ -76,12 +71,6 @@ class FrameReelModel extends ChangeNotifier {
     );
 
     _currentIndex = _currentIndex.clamp(0, frameSeq.length - 1);
-    notifyListeners();
-  }
-
-  /// Used by easel to update the frame image.
-  void replaceCurrentFrame(Frame newFrame) {
-    frameSeq[_currentIndex] = newFrame;
     notifyListeners();
   }
 }

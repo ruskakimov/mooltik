@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
 import 'package:mooltik/common/ui/composite_image_painter.dart';
 import 'package:mooltik/drawing/drawing_page.dart';
-import 'package:mooltik/editing/data/timeline_model.dart';
+import 'package:mooltik/editing/data/timeline/timeline_model.dart';
 import 'package:mooltik/common/data/project/project.dart';
-import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:mooltik/editing/data/timeline/timeline_view_model.dart';
 import 'package:provider/provider.dart';
 
 class Preview extends StatelessWidget {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/project/project.dart';
+import 'package:mooltik/drawing/data/drawing_page_options_model.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
-import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/data/lasso/lasso_model.dart';
 import 'package:mooltik/drawing/data/reel_stack_model.dart';
@@ -11,7 +10,7 @@ import 'package:mooltik/drawing/ui/fit_to_screen_button.dart';
 import 'package:mooltik/drawing/ui/lasso/lasso_menu.dart';
 import 'package:mooltik/drawing/ui/reel/frame_reel.dart';
 import 'package:mooltik/drawing/ui/layers/layer_button.dart';
-import 'package:mooltik/editing/data/timeline_model.dart';
+import 'package:mooltik/editing/data/timeline/timeline_model.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/ui/easel/easel.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +24,11 @@ class DrawingPage extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
+          create: (context) => DrawingPageOptionsModel(
+            context.read<SharedPreferences>(),
+          ),
+        ),
+        ChangeNotifierProvider(
           create: (context) => ToolboxModel(
             context.read<SharedPreferences>(),
           ),
@@ -37,8 +41,6 @@ class DrawingPage extends StatelessWidget {
 
             return ReelStackModel(
               scene: context.read<TimelineModel>().currentScene,
-              sharedPreferences: context.read<SharedPreferences>(),
-              createNewFrame: context.read<Project>().createNewFrame,
             );
           },
         ),
@@ -74,15 +76,11 @@ class DrawingPage extends StatelessWidget {
                 ChangeNotifierProxyProvider2<FrameReelModel, ToolboxModel,
                     EaselModel>(
                   create: (context) => EaselModel(
-                    frame: context.read<FrameReelModel>().currentFrame,
+                    image: context.read<FrameReelModel>().currentFrame.image,
                     selectedTool: context.read<ToolboxModel>().selectedTool,
-                    onChanged: (Frame frame) {
-                      context.read<FrameReelModel>().replaceCurrentFrame(frame);
-                    },
-                    sharedPreferences: context.read<SharedPreferences>(),
                   ),
                   update: (_, reel, toolbox, easel) => easel!
-                    ..updateFrame(reel.currentFrame)
+                    ..updateImage(reel.currentFrame.image)
                     ..updateSelectedTool(toolbox.selectedTool),
                 ),
                 ChangeNotifierProxyProvider<EaselModel, LassoModel>(
@@ -116,7 +114,7 @@ class DrawingPage extends StatelessWidget {
                     right: safePadding.right,
                     child: FitToScreenButton(),
                   ),
-                  if (reelStack.showFrameReel)
+                  if (context.watch<DrawingPageOptionsModel>().showFrameReel)
                     Positioned(
                       bottom: safePadding.bottom,
                       left: 0,

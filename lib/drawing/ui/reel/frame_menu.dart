@@ -6,7 +6,7 @@ import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
-import 'package:mooltik/drawing/ui/frame_window.dart';
+import 'package:mooltik/drawing/ui/painted_glass.dart';
 import 'package:provider/provider.dart';
 
 class FrameMenu extends StatelessWidget {
@@ -77,7 +77,7 @@ class FrameMenu extends StatelessWidget {
                   closePopup();
                   final easel = context.read<EaselModel>();
                   final newSnapshot = await copyPaster.pasteOn(
-                    easel.frame.image.snapshot!,
+                    easel.image.snapshot!,
                   );
                   easel.pushSnapshot(newSnapshot);
                 }
@@ -93,7 +93,7 @@ class FrameMenu extends StatelessWidget {
                   final deleteConfirmed = await openDeleteConfirmationDialog(
                     context: context,
                     name: 'cel',
-                    preview: FrameWindow(frame: reel.currentFrame),
+                    preview: PaintedGlass(image: reel.deleteDialogFrame.image),
                   );
                   if (deleteConfirmed == true) {
                     reel.deleteCurrent();

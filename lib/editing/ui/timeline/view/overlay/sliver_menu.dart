@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/project/frame_interface.dart';
 import 'package:mooltik/common/data/project/scene.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
-import 'package:mooltik/drawing/data/frame/frame.dart';
-import 'package:mooltik/drawing/ui/frame_window.dart';
-import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:mooltik/drawing/ui/painted_glass.dart';
+import 'package:mooltik/editing/data/timeline/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/animated_scene_preview.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -86,7 +86,7 @@ class SliverMenu extends StatelessWidget {
       name: selected is Scene ? 'scene' : 'cel',
       preview: selected is Scene
           ? AnimatedScenePreview(scene: selected)
-          : FrameWindow(frame: selected as Frame),
+          : PaintedGlass(image: (selected as FrameInterface).image),
     );
 
     if (deleteConfirmed == true) {

@@ -11,10 +11,8 @@ class CanvasPainter extends CustomPainter {
   });
 
   final ui.Image? image;
-  final List<Stroke?>? strokes;
+  final List<Stroke>? strokes;
   final ColorFilter? filter;
-
-  bool get hasStrokes => strokes != null && strokes!.isNotEmpty;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -29,7 +27,11 @@ class CanvasPainter extends CustomPainter {
     // Scale image to fit the given size.
     canvas.scale(size.width / img.width, size.height / img.height);
 
-    if (hasStrokes) {
+    final shouldBlendLayers = strokes != null &&
+        strokes!.isNotEmpty &&
+        strokes!.any((stroke) => stroke.paint.blendMode != BlendMode.srcOver);
+
+    if (shouldBlendLayers) {
       // Save layer to erase paintings on it with `BlendMode.clear`.
       canvas.saveLayer(
         Rect.fromLTWH(0, 0, img.width.toDouble(), img.height.toDouble()),
@@ -46,9 +48,9 @@ class CanvasPainter extends CustomPainter {
         ..filterQuality = FilterQuality.low,
     );
 
-    strokes?.forEach((stroke) => stroke!.paintOn(canvas));
+    strokes?.forEach((stroke) => stroke.paintOn(canvas));
 
-    if (hasStrokes) {
+    if (shouldBlendLayers) {
       // Flatten layer. Combine drawing lines with erasing lines.
       canvas.restore();
     }

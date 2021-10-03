@@ -18,27 +18,27 @@ void main() async {
   final bgGreen = await pngRead(File('./test/test_images/bg_green.png'));
   final bgRed = await pngRead(File('./test/test_images/bg_red.png'));
 
-  final a = DiskImage(
+  final a = DiskImage.loaded(
     file: File('a'),
     snapshot: imageA,
   );
 
-  final b = DiskImage(
+  final b = DiskImage.loaded(
     file: File('b'),
     snapshot: imageB,
   );
 
-  final c = DiskImage(
+  final c = DiskImage.loaded(
     file: File('c'),
     snapshot: imageC,
   );
 
-  final green = DiskImage(
+  final green = DiskImage.loaded(
     file: File('bg-green'),
     snapshot: bgGreen,
   );
 
-  final red = DiskImage(
+  final red = DiskImage.loaded(
     file: File('bg-red'),
     snapshot: bgRed,
   );
@@ -66,20 +66,12 @@ void main() async {
         );
 
         final aOnGreen = CompositeFrame(
-          CompositeImage(
-            width: imageA.width,
-            height: imageA.height,
-            layers: [a, green],
-          ),
+          CompositeImage([a, green]),
           Duration(milliseconds: 240),
         );
 
         final bOnGreen = CompositeFrame(
-          CompositeImage(
-            width: imageB.width,
-            height: imageB.height,
-            layers: [b, green],
-          ),
+          CompositeImage([b, green]),
           Duration(milliseconds: 240),
         );
 
@@ -127,11 +119,7 @@ void main() async {
 
         CompositeFrame composite(foreground, background, duration) =>
             CompositeFrame(
-              CompositeImage(
-                width: foreground.width,
-                height: foreground.height,
-                layers: [foreground, background],
-              ),
+              CompositeImage([foreground, background]),
               duration,
             );
 

@@ -1,34 +1,85 @@
 import 'dart:ui';
 import 'dart:io';
 
-import 'package:equatable/equatable.dart';
+import 'package:mooltik/common/data/project/base_image.dart';
+import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/io/make_duplicate_path.dart';
 import 'package:mooltik/common/data/io/png.dart';
 
 /// Manages a single image file.
-class DiskImage with EquatableMixin {
+/// Notifies listeners when image changes.
+class DiskImage extends BaseImage {
   DiskImage({
     required this.file,
+    required this.width,
+    required this.height,
     Image? snapshot,
-  }) : _snapshot = snapshot;
+  })  : assert(snapshot == null ||
+            snapshot.width == width && snapshot.height == height),
+        _snapshot = snapshot?.clone() {
+    file.createSync();
+  }
+
+  DiskImage.loaded({
+    required this.file,
+    required Image snapshot,
+  })  : width = snapshot.width,
+        height = snapshot.height,
+        _snapshot = snapshot.clone() {
+    file.createSync();
+  }
 
   final File file;
 
+  final int width;
+  final int height;
+
+  /// Current memory snapshot owned by this image.
+  /// Will be disposed of when image updates.
+  /// Call `clone` if you want to keep the reference to this particular snapshot in time.
   Image? get snapshot => _snapshot;
   Image? _snapshot;
 
-  Size get size => Size(width!.toDouble(), height!.toDouble());
+  bool get loaded => _snapshot != null;
 
-  int? get width => _snapshot?.width;
-
-  int? get height => _snapshot?.height;
+  Future<bool> get isFileEmpty async =>
+      !file.existsSync() || (await file.length()) == 0;
 
   Future<void> loadSnapshot() async {
+    if (await isFileEmpty) {
+      await _loadEmptySnapshot();
+    } else {
+      await _loadFromFile();
+    }
+  }
+
+  Future<void> _loadEmptySnapshot() async {
+    _snapshot?.dispose();
+    _snapshot = await generateEmptyImage(width, height);
+    notifyListeners();
+  }
+
+  Future<void> _loadFromFile() async {
+    _snapshot?.dispose();
     _snapshot = await pngRead(file);
+    notifyListeners();
+  }
+
+  void changeSnapshot(Image? newSnapshot) {
+    _snapshot?.dispose();
+    _snapshot = newSnapshot?.clone();
+    notifyListeners();
   }
 
   Future<void> saveSnapshot() async {
-    if (_snapshot == null) throw Exception('Snapshot is missing.');
+    if (_snapshot == null) {
+      if (await isFileEmpty) {
+        await _loadEmptySnapshot();
+      } else {
+        throw Exception('Cannot save empty snapshot if file is not empty.');
+      }
+    }
+
     await pngWrite(file, _snapshot!);
   }
 
@@ -38,24 +89,37 @@ class DiskImage with EquatableMixin {
 
     return DiskImage(
       file: duplicateFile,
-      snapshot: snapshot?.clone(),
+      width: width,
+      height: height,
+      snapshot: snapshot,
     );
   }
 
-  factory DiskImage.fromJson(Map<String, dynamic> json) => DiskImage(
-        file: File(json[_filePathKey]),
-      );
+  /// Creates an empty image with the same dimensions.
+  Future<DiskImage> cloneEmpty() async {
+    final freePath = makeFreeDuplicatePath(file.path);
+    final image = DiskImage(
+      file: File(freePath),
+      width: width,
+      height: height,
+    );
 
-  Map<String, dynamic> toJson() => {
-        _filePathKey: file.path,
-      };
-
-  static const String _filePathKey = 'path';
+    await image.loadSnapshot();
+    return image;
+  }
 
   @override
   List<Object?> get props => [file.path];
 
+  @override
   void dispose() {
     _snapshot?.dispose();
+    super.dispose();
+  }
+
+  @override
+  void draw(Canvas canvas, Offset offset, Paint paint) {
+    final image = _snapshot;
+    if (image != null) canvas.drawImage(image, offset, paint);
   }
 }

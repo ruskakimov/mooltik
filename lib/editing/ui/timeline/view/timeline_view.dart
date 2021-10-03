@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:mooltik/editing/data/timeline/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/sliver_action_buttons/play_mode_button.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/playhead.dart';
 import 'package:mooltik/editing/ui/timeline/view/overlay/resize_end_handle.dart';
@@ -33,9 +33,6 @@ class TimelineView extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               GestureDetector(
-                onScaleStart: timelineView.onScaleStart,
-                onScaleUpdate: timelineView.onScaleUpdate,
-                onScaleEnd: timelineView.onScaleEnd,
                 onTapUp: timelineView.onTapUp,
                 child: CustomPaint(
                   painter: TimelinePainter(timelineView),
@@ -43,13 +40,19 @@ class TimelineView extends StatelessWidget {
               ),
               Playhead(),
               if (timelineView.isEditingScene) ...[
-                ..._buildLayerActionButtons(timelineView.sceneLayers.length),
+                ..._buildLayerActionButtons(timelineView.sceneLayerCount),
                 SceneEndHandle(),
               ],
               if (timelineView.showResizeStartHandle)
                 ResizeStartHandle(timelineView: timelineView),
               if (timelineView.showResizeEndHandle)
                 ResizeEndHandle(timelineView: timelineView),
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onScaleStart: timelineView.onScaleStart,
+                onScaleUpdate: timelineView.onScaleUpdate,
+                onScaleEnd: timelineView.onScaleEnd,
+              ),
             ],
           ),
         ),

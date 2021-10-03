@@ -4,11 +4,12 @@ import 'package:equatable/equatable.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/extensions/duration_methods.dart';
 import 'package:mooltik/common/data/project/fps_config.dart';
+import 'package:mooltik/common/data/project/frame_interface.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:path/path.dart' as p;
 
 /// Single image with duration.
-class Frame extends TimeSpan with EquatableMixin {
+class Frame extends TimeSpan with EquatableMixin implements FrameInterface {
   Frame({
     required this.image,
     Duration duration = const Duration(milliseconds: singleFrameMs * 5),
@@ -20,10 +21,22 @@ class Frame extends TimeSpan with EquatableMixin {
     return this.copyWith(image: await image.duplicate());
   }
 
-  factory Frame.fromJson(Map<String, dynamic> json, String frameDirPath) =>
+  /// Creates an empty frame with the same dimensions and duration.
+  Future<Frame> cloneEmpty() async {
+    return this.copyWith(image: await image.cloneEmpty());
+  }
+
+  factory Frame.fromJson(
+    Map<String, dynamic> json,
+    String frameDirPath,
+    int width,
+    int height,
+  ) =>
       Frame(
         image: DiskImage(
           file: File(p.join(frameDirPath, json[_fileNameKey])),
+          width: width,
+          height: height,
         ),
         duration: (json[_durationKey] as String).parseDuration(),
       );
@@ -43,7 +56,6 @@ class Frame extends TimeSpan with EquatableMixin {
         duration: duration ?? this.duration,
       );
 
-  @override
   void dispose() {
     image.dispose();
   }

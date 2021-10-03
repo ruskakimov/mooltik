@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mooltik/drawing/data/easel_model.dart';
-import 'package:mooltik/drawing/data/reel_stack_model.dart';
+import 'package:mooltik/drawing/data/drawing_page_options_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
 
@@ -46,21 +45,21 @@ class DrawingMenu extends StatelessWidget {
   }
 
   _MenuTile _buildFrameReelToggle(BuildContext context) {
-    final reelStack = context.watch<ReelStackModel>();
+    final options = context.watch<DrawingPageOptionsModel>();
 
     return _MenuTile(
       icon: FontAwesomeIcons.film,
       title: 'Frame reel',
       trailing: Switch(
-        value: reelStack.showFrameReel,
-        onChanged: (_) => reelStack.toggleFrameReelVisibility(),
+        value: options.showFrameReel,
+        onChanged: (_) => options.toggleFrameReelVisibility(),
       ),
-      onTap: () => reelStack.toggleFrameReelVisibility(),
+      onTap: () => options.toggleFrameReelVisibility(),
     );
   }
 
   _MenuTile _buildFingerDrawToggle(BuildContext context) {
-    final easel = context.watch<EaselModel>();
+    final easel = context.watch<DrawingPageOptionsModel>();
 
     return _MenuTile(
       icon: FontAwesomeIcons.handPointUp,

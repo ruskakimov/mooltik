@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:mooltik/common/data/project/sound_clip.dart';
-import 'package:mooltik/editing/data/timeline_model.dart';
+import 'package:mooltik/editing/data/timeline/timeline_model.dart';
 
 Future<Duration?> getSoundFileDuration(File soundFile) async {
   final player = AudioPlayer();

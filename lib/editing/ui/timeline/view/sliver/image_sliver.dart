@@ -1,17 +1,16 @@
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
-import 'package:mooltik/drawing/ui/frame_window.dart';
+import 'package:mooltik/common/data/project/base_image.dart';
+import 'package:mooltik/drawing/ui/painted_glass.dart';
 import 'package:mooltik/editing/ui/timeline/view/sliver/sliver.dart';
 
 class ImageSliver extends Sliver {
   ImageSliver({
     required Rect area,
-    required this.thumbnail,
+    required this.image,
     this.ghost = false,
   }) : super(area);
 
-  final ui.Image? thumbnail;
+  final BaseImage image;
   final bool ghost;
 
   @override
@@ -22,29 +21,27 @@ class ImageSliver extends Sliver {
         frostedGlassColor.withOpacity(frostedGlassColor.opacity * opacity);
     canvas.drawRRect(rrect, Paint()..color = backgroundColor);
 
-    if (thumbnail != null) _paintThumbnail(canvas, opacity);
+    _paintThumbnail(canvas, opacity);
   }
 
   void _paintThumbnail(Canvas canvas, double opacity) {
     canvas.save();
     canvas.clipRRect(rrect);
     canvas.translate(area.left, area.top);
-    final double scaleFactor = area.height / thumbnail!.height;
+    final double scaleFactor = area.height / image.height;
     canvas.scale(scaleFactor);
 
     final sliverWidth = rrect.width / scaleFactor;
     final paint = Paint()..color = Colors.black.withOpacity(opacity);
 
-    if (thumbnail!.width > sliverWidth) {
+    if (image.width.toDouble() > sliverWidth) {
       // Center thumbnail if it overflows sliver.
-      final xOffset = (sliverWidth - thumbnail!.width) / 2;
-      canvas.drawImage(thumbnail!, Offset(xOffset, 0), paint);
+      final xOffset = (sliverWidth - image.width) / 2;
+      image.draw(canvas, Offset(xOffset, 0), paint);
     } else {
       // Repeat thumbnails until overflow.
-      for (double xOffset = 0;
-          xOffset < sliverWidth;
-          xOffset += thumbnail!.width) {
-        canvas.drawImage(thumbnail!, Offset(xOffset, 0), paint);
+      for (double xOffset = 0; xOffset < sliverWidth; xOffset += image.width) {
+        image.draw(canvas, Offset(xOffset, 0), paint);
       }
     }
 

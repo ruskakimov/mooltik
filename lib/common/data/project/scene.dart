@@ -1,9 +1,12 @@
 import 'package:mooltik/common/data/extensions/duration_methods.dart';
 import 'package:mooltik/common/data/project/composite_frame.dart';
 import 'package:mooltik/common/data/project/composite_image.dart';
+import 'package:mooltik/common/data/project/layer_group/layer_group_info.dart';
 import 'package:mooltik/common/data/project/scene_layer.dart';
+import 'package:mooltik/common/data/project/scene_layer_group.dart';
 import 'package:mooltik/common/data/sequence/time_span.dart';
 import 'package:mooltik/drawing/data/frame/frame.dart';
+import 'package:mooltik/editing/data/timeline/timeline_row_interfaces.dart';
 
 class Scene extends TimeSpan {
   Scene({
@@ -18,17 +21,14 @@ class Scene extends TimeSpan {
   Iterable<SceneLayer> get visibleLayers =>
       layers.where((layer) => layer.visible);
 
-  int? get frameWidth => allFrames.first.image.width;
-  int? get frameHeight => allFrames.first.image.height;
+  int get frameWidth => allFrames.first.image.width;
+  int get frameHeight => allFrames.first.image.height;
 
   /// Visible image at a given playhead position.
   CompositeImage imageAt(Duration playhead) {
     playhead = playhead.clamp(Duration.zero, duration);
     return CompositeImage(
-      width: frameWidth!,
-      height: frameHeight!,
-      layers:
-          visibleLayers.map((layer) => layer.frameAt(playhead).image).toList(),
+      visibleLayers.map((layer) => layer.frameAt(playhead).image).toList(),
     );
   }
 
@@ -43,14 +43,14 @@ class Scene extends TimeSpan {
   Iterable<CompositeFrame> getExportFrames() sync* {
     if (visibleLayers.isEmpty) {
       yield CompositeFrame(
-        CompositeImage.empty(width: frameWidth!, height: frameHeight!),
+        CompositeImage.empty(width: frameWidth, height: frameHeight),
         duration,
       );
       return;
     }
 
     final tracks =
-        visibleLayers.map((layer) => layer.getExportFrames(duration)).toList();
+        visibleLayers.map((layer) => layer.getPlayFrames(duration)).toList();
 
     final trackIterators =
         tracks.map((frames) => frames.iterator..moveNext()).toList();
@@ -66,9 +66,7 @@ class Scene extends TimeSpan {
 
     while (elapsed < duration) {
       final compositeImage = CompositeImage(
-        width: frameWidth!,
-        height: frameHeight!,
-        layers: trackIterators.map((it) => it.current.image).toList(),
+        trackIterators.map((it) => it.current.image).toList(),
       );
 
       final iteratorEndTimes = getIteratorEndTimes();
@@ -88,16 +86,67 @@ class Scene extends TimeSpan {
     }
   }
 
+  List<LayerGroupInfo> get layerGroups {
+    final groups = <LayerGroupInfo>[];
+
+    bool inGroup = false;
+    int groupStart = -1;
+
+    for (var i = 0; i < layers.length; i++) {
+      // Group start.
+      if (layers[i].groupedWithNext && !inGroup) {
+        inGroup = true;
+        groupStart = i;
+      }
+      // Group end.
+      if (!layers[i].groupedWithNext && inGroup) {
+        groups.add(LayerGroupInfo(groupStart, i));
+        inGroup = false;
+      }
+    }
+    return groups;
+  }
+
+  /// For timeline rows where grouped layers are combined into one row.
+  List<TimelineSceneLayerInterface> get timelineLayers {
+    final timelineLayers = <TimelineSceneLayerInterface>[];
+    final groups = layerGroups;
+
+    for (var i = 0; i < layers.length; i++) {
+      if (groups.isNotEmpty && groups.first.contains(i)) {
+        // In group
+        if (i == groups.first.lastLayerIndex) {
+          final groupLayers = layers.sublist(
+            groups.first.firstLayerIndex,
+            groups.first.lastLayerIndex + 1,
+          );
+          groups.removeAt(0);
+          timelineLayers.add(SceneLayerGroup(groupLayers));
+        }
+      } else {
+        // Not in group
+        timelineLayers.add(layers[i]);
+      }
+    }
+
+    return timelineLayers;
+  }
+
   Future<Scene> duplicate() async {
     final duplicateLayers =
         await Future.wait(layers.map((layer) => layer.duplicate()));
     return copyWith(layers: duplicateLayers);
   }
 
-  factory Scene.fromJson(Map<String, dynamic> json, String frameDirPath) =>
+  factory Scene.fromJson(
+    Map<String, dynamic> json,
+    String frameDirPath,
+    int width,
+    int height,
+  ) =>
       Scene(
         layers: (json[_layersKey] as List<dynamic>)
-            .map((d) => SceneLayer.fromJson(d, frameDirPath))
+            .map((d) => SceneLayer.fromJson(d, frameDirPath, width, height))
             .toList(),
         duration: (json[_durationKey] as String).parseDuration(),
         description: json[_descriptionKey] as String?,

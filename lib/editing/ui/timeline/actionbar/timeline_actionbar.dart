@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/popup_entry.dart';
 import 'package:mooltik/editing/data/editor_model.dart';
-import 'package:mooltik/editing/data/timeline_view_model.dart';
+import 'package:mooltik/editing/data/timeline/timeline_view_model.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/add_scene_button.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/import_audio_button.dart';
 import 'package:mooltik/editing/ui/timeline/actionbar/play_button.dart';

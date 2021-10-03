@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
 
@@ -6,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:mooltik/common/data/debouncer.dart';
 import 'package:mooltik/common/data/io/disk_image.dart';
 import 'package:mooltik/common/data/task_queue.dart';
-import 'package:mooltik/drawing/data/frame/frame.dart';
 import 'package:mooltik/drawing/data/frame/image_history_stack.dart';
 import 'package:mooltik/drawing/data/frame/stroke.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 /// Maximum number of consecutive undos.
 const int maxUndos = 25;
@@ -20,34 +17,25 @@ const Duration diskWriteTimeout = Duration(seconds: 2);
 
 const twoPi = pi * 2;
 
-const _allowDrawingWithFingerKey = 'allow_drawing_with_finger';
-
 class EaselModel extends ChangeNotifier {
   EaselModel({
-    required Frame frame,
+    required DiskImage image,
     required Tool? selectedTool,
-    required this.onChanged,
-    required SharedPreferences sharedPreferences,
-  })  : _frame = frame,
+  })  : _image = image,
         _historyStack = ImageHistoryStack(
           maxCount: maxUndos + 1,
-          initialSnapshot: frame.image.snapshot,
+          initialSnapshot: image.snapshot?.clone(),
         ),
         _selectedTool = selectedTool,
-        _preferences = sharedPreferences,
-        _allowDrawingWithFinger =
-            sharedPreferences.getBool(_allowDrawingWithFingerKey) ?? true,
         _paintingQueue = TaskQueue();
 
-  Frame get frame => _frame;
-  Frame _frame;
+  DiskImage get image => _image;
+  DiskImage _image;
 
   Tool? get selectedTool => _selectedTool;
   Tool? _selectedTool;
 
-  final ValueChanged<Frame> onChanged;
-
-  Size get frameSize => _frame.image.size;
+  Size get frameSize => image.size;
 
   Size? _easelSize;
 
@@ -96,19 +84,19 @@ class EaselModel extends ChangeNotifier {
   }
 
   /// Used by provider to update dependency.
-  void updateFrame(Frame frame) {
-    if (frame.image.file == _frame.image.file) return;
+  void updateImage(DiskImage newImage) {
+    if (newImage == _image) return;
 
     if (_diskWriteDebouncer.isActive) {
       _diskWriteDebouncer.cancel();
-      _frame.image.saveSnapshot();
+      _image.saveSnapshot();
     }
 
-    _frame = frame;
+    _image = newImage;
     _historyStack.dispose();
     _historyStack = ImageHistoryStack(
       maxCount: maxUndos + 1,
-      initialSnapshot: frame.image.snapshot,
+      initialSnapshot: newImage.snapshot?.clone(),
     );
     notifyListeners();
   }
@@ -133,25 +121,19 @@ class EaselModel extends ChangeNotifier {
 
   void undo() {
     _historyStack.undo();
-    _updateFrame();
+    _flushChanges();
     notifyListeners();
   }
 
   void redo() {
     _historyStack.redo();
-    _updateFrame();
+    _flushChanges();
     notifyListeners();
   }
 
-  void _updateFrame() {
-    _frame = _frame.copyWith(
-      image: DiskImage(
-        file: _frame.image.file,
-        snapshot: _historyStack.currentSnapshot,
-      ),
-    );
-    _diskWriteDebouncer.debounce(() => _frame.image.saveSnapshot());
-    onChanged(_frame);
+  void _flushChanges() {
+    image.changeSnapshot(_historyStack.currentSnapshot);
+    _diskWriteDebouncer.debounce(() => image.saveSnapshot());
   }
 
   bool get isFittedToScreen => _fittedToScreen;
@@ -255,27 +237,8 @@ class EaselModel extends ChangeNotifier {
 
   void pushSnapshot(ui.Image snapshot) {
     _historyStack.push(snapshot);
-    _updateFrame();
+    _flushChanges();
     notifyListeners();
-  }
-
-  // ==================
-  // Easel preferences:
-  // ==================
-
-  SharedPreferences _preferences;
-
-  bool get allowDrawingWithFinger => _allowDrawingWithFinger;
-  bool _allowDrawingWithFinger;
-
-  Future<void> toggleDrawingWithFinger() async {
-    _allowDrawingWithFinger = !_allowDrawingWithFinger;
-    notifyListeners();
-
-    await _preferences.setBool(
-      _allowDrawingWithFingerKey,
-      _allowDrawingWithFinger,
-    );
   }
 
   @override

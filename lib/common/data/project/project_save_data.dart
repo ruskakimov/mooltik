@@ -16,7 +16,12 @@ class ProjectSaveData {
   )   : width = (json[widthKey] as num).toInt(),
         height = (json[heightKey] as num).toInt(),
         scenes = (json[scenesKey] as List<dynamic>)
-            .map((d) => Scene.fromJson(d, frameDirPath))
+            .map((d) => Scene.fromJson(
+                  d,
+                  frameDirPath,
+                  (json[widthKey] as num).toInt(),
+                  (json[heightKey] as num).toInt(),
+                ))
             .toList(),
         sounds = json[soundsKey] != null
             ? (json[soundsKey] as List<dynamic>)
