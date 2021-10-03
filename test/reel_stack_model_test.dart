@@ -37,10 +37,14 @@ ReelStackModel reelStack(List<SceneLayer> layers) => ReelStackModel(
 
 void main() {
   tearDown(() async {
-    await deleteFilesWhere(
-      Directory.current,
-      (path) => path.endsWith('.png'),
-    );
+    try {
+      await deleteFilesWhere(
+        Directory.current,
+        (path) => path.endsWith('.png'),
+      );
+    } catch (e) {
+      print(e);
+    }
   });
 
   group('ReelStackModel', () {

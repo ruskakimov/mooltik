@@ -41,10 +41,14 @@ List<int> frameCounts(SceneLayer layer) {
 
 void main() {
   tearDown(() async {
-    await deleteFilesWhere(
-      Directory.current,
-      (path) => path.contains('image') && path.endsWith('.png'),
-    );
+    try {
+      await deleteFilesWhere(
+        Directory.current,
+        (path) => path.contains('image') && path.endsWith('.png'),
+      );
+    } catch (e) {
+      print(e);
+    }
   });
 
   group('mergeGroups', () {
