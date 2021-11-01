@@ -27,9 +27,12 @@ class Scene extends TimeSpan {
   /// Visible image at a given playhead position.
   CompositeImage imageAt(Duration playhead) {
     playhead = playhead.clamp(Duration.zero, duration);
-    return CompositeImage(
-      visibleLayers.map((layer) => layer.frameAt(playhead).image).toList(),
-    );
+    final imageLayers =
+        visibleLayers.map((layer) => layer.frameAt(playhead).image).toList();
+
+    return imageLayers.isNotEmpty
+        ? CompositeImage(imageLayers)
+        : CompositeImage.empty(width: frameWidth, height: frameHeight);
   }
 
   /// All unique frames in this scene.
