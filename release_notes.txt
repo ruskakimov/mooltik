@@ -1,4 +1,1 @@
-- Sync layers (for separating sketch/line/fill)
-- Add smaller brush sizes
-- Fix a bug where short strokes with slight blur disappear
-- Improve timeline zoom responsiveness
+- Fix a preview bug when all layers are invisible
