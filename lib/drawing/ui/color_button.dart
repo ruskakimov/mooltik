@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/ui/popup_with_arrow.dart';
+import 'package:mooltik/common/ui/open_side_sheet.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/color_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 
-class ColorButton extends StatefulWidget {
+class ColorButton extends StatelessWidget {
   const ColorButton({Key? key}) : super(key: key);
-
-  @override
-  _ColorButtonState createState() => _ColorButtonState();
-}
-
-class _ColorButtonState extends State<ColorButton> {
-  bool _pickerOpen = false;
 
   @override
   Widget build(BuildContext context) {
@@ -22,44 +15,33 @@ class _ColorButtonState extends State<ColorButton> {
     final selectedColor =
         selectedTool is ToolWithColor ? selectedTool.color : Colors.black;
 
-    return PopupWithArrowEntry(
-      visible: _pickerOpen,
-      arrowSide: ArrowSide.top,
-      arrowAnchor: const Alignment(0, 0.8),
-      arrowSidePosition: ArrowSidePosition.middle,
-      popupBody: ColorPicker(
-        selectedColor: selectedColor,
-        onSelected: (Color color) {
-          toolbox.changeToolColor(color);
-          _closePicker();
+    return SizedBox(
+      width: 52,
+      height: 44,
+      child: InkWell(
+        splashColor: Colors.transparent,
+        onTap: () {
+          if (selectedTool is ToolWithColor && selectedTool is! Eraser) {
+            openSideSheet(
+              context: context,
+              builder: (context) => ColorPicker(
+                selectedColor: selectedColor,
+                onSelected: (Color color) {
+                  toolbox.changeToolColor(color);
+                },
+              ),
+              side: MediaQuery.of(context).orientation == Orientation.landscape
+                  ? Side.top
+                  : Side.right,
+              transitionDuration: const Duration(milliseconds: 100),
+            );
+          }
         },
-      ),
-      onTapOutside: _closePicker,
-      onDragOutside: _closePicker,
-      child: SizedBox(
-        width: 52,
-        height: 44,
-        child: InkWell(
-          splashColor: Colors.transparent,
-          onTap: () {
-            if (selectedTool is ToolWithColor && selectedTool is! Eraser) {
-              _openPicker();
-            }
-          },
-          child: Center(
-            child: _ColorIndicator(color: selectedColor),
-          ),
+        child: Center(
+          child: _ColorIndicator(color: selectedColor),
         ),
       ),
     );
-  }
-
-  void _openPicker() {
-    setState(() => _pickerOpen = true);
-  }
-
-  void _closePicker() {
-    setState(() => _pickerOpen = false);
   }
 }
 

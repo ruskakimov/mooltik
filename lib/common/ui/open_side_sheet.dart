@@ -26,6 +26,7 @@ openSideSheet({
   required BuildContext context,
   required Widget Function(BuildContext) builder,
   Side side = Side.right,
+  Duration transitionDuration = const Duration(milliseconds: 250),
 }) {
   showGeneralDialog(
     barrierLabel: "Sheet Barrier",
@@ -68,7 +69,7 @@ openSideSheet({
         ),
       );
     },
-    transitionDuration: const Duration(milliseconds: 250),
+    transitionDuration: transitionDuration,
     transitionBuilder: (context, animation1, animation2, child) {
       return SlideTransition(
         position: Tween(
