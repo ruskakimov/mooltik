@@ -1,10 +1,31 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
+enum Side {
+  left,
+  top,
+  right,
+  bottom,
+}
+
+const sideAlignments = [
+  Alignment.centerLeft,
+  Alignment.topCenter,
+  Alignment.centerRight,
+  Alignment.bottomCenter,
+];
+
+const hiddenOffset = [
+  Offset(-1, 0),
+  Offset(0, -1),
+  Offset(1, 0),
+  Offset(0, 1),
+];
+
 openSideSheet({
   required BuildContext context,
   required Widget Function(BuildContext) builder,
-  bool rightSide = true,
+  Side side = Side.right,
 }) {
   showGeneralDialog(
     barrierLabel: "Sheet Barrier",
@@ -12,33 +33,46 @@ openSideSheet({
     barrierColor: Colors.black.withOpacity(0.5),
     context: context,
     pageBuilder: (context, animation1, animation2) {
-      final sheetWidth = min(320.0, MediaQuery.of(context).size.width - 56);
+      final horizontalSide = side.index % 2 == 0;
+      final screenEstate = horizontalSide
+          ? MediaQuery.of(context).size.width
+          : MediaQuery.of(context).size.height;
+
+      var sheetExtent = min(320.0, screenEstate - 56);
 
       final safePadding = MediaQuery.of(context).padding;
-      final safeSidePadding = rightSide ? safePadding.right : safePadding.left;
+      final safeSidePadding = [
+        safePadding.left,
+        safePadding.top,
+        safePadding.right,
+        safePadding.bottom
+      ][side.index];
+
+      sheetExtent += safeSidePadding;
 
       return Align(
-        alignment: (rightSide ? Alignment.centerRight : Alignment.centerLeft),
+        alignment: sideAlignments[side.index],
         child: SizedBox(
-          height: double.infinity,
-          width: sheetWidth + safeSidePadding,
+          height: horizontalSide ? double.infinity : sheetExtent,
+          width: !horizontalSide ? double.infinity : sheetExtent,
           child: Material(
             color: Theme.of(context).colorScheme.surface,
             child: SafeArea(
-              left: !rightSide,
-              right: rightSide,
-              bottom: false,
+              left: side == Side.left,
+              top: side == Side.top,
+              right: side == Side.right,
+              bottom: side == Side.bottom,
               child: builder(context),
             ),
           ),
         ),
       );
     },
-    transitionDuration: Duration(milliseconds: 250),
+    transitionDuration: const Duration(milliseconds: 250),
     transitionBuilder: (context, animation1, animation2, child) {
       return SlideTransition(
         position: Tween(
-          begin: Offset((rightSide ? 1 : -1), 0),
+          begin: hiddenOffset[side.index],
           end: Offset(0, 0),
         ).chain(CurveTween(curve: Curves.ease)).animate(animation1),
         child: child,
