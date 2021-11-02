@@ -17,10 +17,16 @@ class ColorWheel extends StatelessWidget {
           final innerRadius = outerRadius - _hueWheelWidth;
 
           return CustomPaint(
+            isComplex: true,
+            willChange: false,
             painter: WheelPainter(
               hue: 0,
               outerRadius: outerRadius,
               innerRadius: innerRadius,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(_hueWheelWidth * 2),
+              child: Container(color: Colors.red),
             ),
           );
         }),
@@ -51,23 +57,27 @@ class WheelPainter extends CustomPainter {
       center,
       outerRadius,
       Paint()
-        ..shader = ui.Gradient.sweep(center, [
-          Color(0xFFFF0000), // Red
-          Color(0xFFFF00FF), // Magenta
-          Color(0xFF0000FF), // Blue
-          Color(0xFF00FFFF), // Cyan
-          Color(0xFF00FF00), // Green
-          Color(0xFFFFFF00), // Yellow
-          Color(0xFFFF0000), // Red
-        ], [
-          0.000,
-          0.166,
-          0.333,
-          0.499,
-          0.666,
-          0.833,
-          0.999
-        ]),
+        ..shader = ui.Gradient.sweep(
+          center,
+          [
+            Color(0xFFFF0000), // Red
+            Color(0xFFFF00FF), // Magenta
+            Color(0xFF0000FF), // Blue
+            Color(0xFF00FFFF), // Cyan
+            Color(0xFF00FF00), // Green
+            Color(0xFFFFFF00), // Yellow
+            Color(0xFFFF0000), // Red
+          ],
+          [
+            0,
+            1 / 6,
+            2 / 6,
+            3 / 6,
+            4 / 6,
+            5 / 6,
+            1,
+          ],
+        ),
     );
 
     canvas.drawCircle(

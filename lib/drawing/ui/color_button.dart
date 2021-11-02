@@ -33,7 +33,6 @@ class ColorButton extends StatelessWidget {
               side: MediaQuery.of(context).orientation == Orientation.landscape
                   ? Side.top
                   : Side.right,
-              transitionDuration: const Duration(milliseconds: 100),
             );
           }
         },
