@@ -28,7 +28,19 @@ class ColorWheel extends StatelessWidget {
           final squareWidth = innerRadius * 2 / sqrt2 - 8;
           final squarePadding = (outerRadius - squareWidth / 2).ceilToDouble();
 
-          final shadePointerHandler = (e) {
+          final huePointerHandler = (PointerEvent e) {
+            final x = e.localPosition.dx - outerRadius;
+            final y = e.localPosition.dy - outerRadius;
+            final distanceFromCenter = sqrt(pow(x, 2) + pow(y, 2));
+            final cosAngle = x / distanceFromCenter;
+            var angle = acos(cosAngle) * 180 / pi;
+            if (y > 0) angle = 360 - angle;
+            onSelected?.call(
+              hsv.withHue(angle).toColor(),
+            );
+          };
+
+          final shadePointerHandler = (PointerEvent e) {
             final newSaturation =
                 e.localPosition.dx.clamp(0, squareWidth) / squareWidth;
             final newValue =
@@ -38,20 +50,26 @@ class ColorWheel extends StatelessWidget {
             );
           };
 
-          final colorLayer = CustomPaint(
-            isComplex: true,
-            willChange: false,
-            painter: HueWheelPainter(
-              outerRadius: outerRadius,
-              innerRadius: innerRadius,
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(squarePadding),
-              child: Listener(
-                onPointerDown: shadePointerHandler,
-                onPointerMove: shadePointerHandler,
-                child: CustomPaint(painter: ShadeSquarePainter(hue: hsv.hue)),
+          final hueWheelLayer = Listener(
+            onPointerDown: huePointerHandler,
+            onPointerMove: huePointerHandler,
+            child: CustomPaint(
+              isComplex: true,
+              willChange: false,
+              painter: HueWheelPainter(
+                outerRadius: outerRadius,
+                innerRadius: innerRadius,
               ),
+            ),
+          );
+
+          final shadeSquareLayer = Padding(
+            padding: EdgeInsets.all(squarePadding),
+            child: Listener(
+              behavior: HitTestBehavior.opaque,
+              onPointerDown: shadePointerHandler,
+              onPointerMove: shadePointerHandler,
+              child: CustomPaint(painter: ShadeSquarePainter(hue: hsv.hue)),
             ),
           );
 
@@ -67,7 +85,8 @@ class ColorWheel extends StatelessWidget {
           return Stack(
             fit: StackFit.expand,
             children: [
-              colorLayer,
+              hueWheelLayer,
+              shadeSquareLayer,
               Positioned(
                 left: xHue,
                 top: yHue,
