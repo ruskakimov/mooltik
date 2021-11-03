@@ -1,13 +1,23 @@
+import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 const _hueWheelWidth = 36.0;
 
 class ColorWheel extends StatelessWidget {
-  const ColorWheel({Key? key}) : super(key: key);
+  const ColorWheel({
+    Key? key,
+    required this.selectedColor,
+    this.onSelected,
+  }) : super(key: key);
+
+  final Color selectedColor;
+  final void Function(Color)? onSelected;
 
   @override
   Widget build(BuildContext context) {
+    final hsv = HSVColor.fromColor(selectedColor);
+
     return AspectRatio(
       aspectRatio: 1,
       child: Padding(
@@ -15,6 +25,8 @@ class ColorWheel extends StatelessWidget {
         child: LayoutBuilder(builder: (context, constraints) {
           final outerRadius = constraints.maxWidth / 2;
           final innerRadius = outerRadius - _hueWheelWidth;
+          final squarePadding =
+              (outerRadius - innerRadius / sqrt2).ceilToDouble();
 
           return CustomPaint(
             isComplex: true,
@@ -24,8 +36,8 @@ class ColorWheel extends StatelessWidget {
               innerRadius: innerRadius,
             ),
             child: Padding(
-              padding: const EdgeInsets.all(_hueWheelWidth * 2),
-              child: CustomPaint(painter: ShadeSquarePainter(hue: 0)),
+              padding: EdgeInsets.all(squarePadding),
+              child: CustomPaint(painter: ShadeSquarePainter(hue: hsv.hue)),
             ),
           );
         }),

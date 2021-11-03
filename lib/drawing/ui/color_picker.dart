@@ -19,7 +19,10 @@ class ColorPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ColorWheel(),
+        ColorWheel(
+          selectedColor: selectedColor,
+          onSelected: onSelected,
+        ),
       ],
     );
   }
