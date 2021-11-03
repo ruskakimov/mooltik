@@ -100,16 +100,18 @@ class _Indicator extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = _hueWheelWidth - 8;
 
-    return Transform.translate(
-      offset: Offset(-size / 2, -size / 2),
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          color: color,
-          border: Border.all(color: Colors.white, width: 2),
-          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 2)],
-          shape: BoxShape.circle,
+    return IgnorePointer(
+      child: Transform.translate(
+        offset: Offset(-size / 2, -size / 2),
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: color,
+            border: Border.all(color: Colors.white, width: 2),
+            boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 2)],
+            shape: BoxShape.circle,
+          ),
         ),
       ),
     );
