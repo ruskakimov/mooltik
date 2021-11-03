@@ -19,14 +19,14 @@ class ColorWheel extends StatelessWidget {
           return CustomPaint(
             isComplex: true,
             willChange: false,
-            painter: WheelPainter(
+            painter: HueWheelPainter(
               hue: 0,
               outerRadius: outerRadius,
               innerRadius: innerRadius,
             ),
             child: Padding(
               padding: const EdgeInsets.all(_hueWheelWidth * 2),
-              child: Container(color: Colors.red),
+              child: CustomPaint(painter: ShadeSquarePainter(hue: 0)),
             ),
           );
         }),
@@ -35,8 +35,8 @@ class ColorWheel extends StatelessWidget {
   }
 }
 
-class WheelPainter extends CustomPainter {
-  WheelPainter({
+class HueWheelPainter extends CustomPainter {
+  HueWheelPainter({
     required this.hue,
     required this.outerRadius,
     required this.innerRadius,
@@ -48,17 +48,16 @@ class WheelPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = Offset(outerRadius, outerRadius);
     final bounds = Offset.zero & size;
 
     canvas.saveLayer(bounds, Paint());
 
     canvas.drawCircle(
-      center,
+      bounds.center,
       outerRadius,
       Paint()
         ..shader = ui.Gradient.sweep(
-          center,
+          bounds.center,
           [
             Color(0xFFFF0000), // Red
             Color(0xFFFF00FF), // Magenta
@@ -81,7 +80,7 @@ class WheelPainter extends CustomPainter {
     );
 
     canvas.drawCircle(
-      center,
+      bounds.center,
       innerRadius,
       Paint()..blendMode = BlendMode.clear,
     );
@@ -90,8 +89,48 @@ class WheelPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(WheelPainter oldDelegate) => false;
+  bool shouldRepaint(HueWheelPainter oldDelegate) => false;
 
   @override
-  bool shouldRebuildSemantics(WheelPainter oldDelegate) => false;
+  bool shouldRebuildSemantics(HueWheelPainter oldDelegate) => false;
+}
+
+class ShadeSquarePainter extends CustomPainter {
+  ShadeSquarePainter({required this.hue});
+
+  final double hue;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final bounds = Offset.zero & size;
+
+    final fullySaturated = HSVColor.fromAHSV(1, hue, 1, 1).toColor();
+    final fullyDesaturated = HSVColor.fromAHSV(1, hue, 0, 1).toColor();
+
+    canvas.drawRect(
+      bounds,
+      Paint()
+        ..shader = ui.Gradient.linear(
+          bounds.centerLeft,
+          bounds.centerRight,
+          [fullyDesaturated, fullySaturated],
+        ),
+    );
+
+    canvas.drawRect(
+      bounds,
+      Paint()
+        ..shader = ui.Gradient.linear(
+          bounds.topLeft,
+          bounds.bottomLeft,
+          [Colors.transparent, Colors.black],
+        ),
+    );
+  }
+
+  @override
+  bool shouldRepaint(ShadeSquarePainter oldDelegate) => hue != oldDelegate.hue;
+
+  @override
+  bool shouldRebuildSemantics(ShadeSquarePainter oldDelegate) => false;
 }
