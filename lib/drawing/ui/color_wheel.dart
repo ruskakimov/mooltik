@@ -25,8 +25,8 @@ class ColorWheel extends StatelessWidget {
         child: LayoutBuilder(builder: (context, constraints) {
           final outerRadius = constraints.maxWidth / 2;
           final innerRadius = outerRadius - _hueWheelWidth;
-          final squarePadding =
-              (outerRadius - innerRadius / sqrt2).ceilToDouble();
+          final squareWidth = innerRadius * 2 / sqrt2;
+          final squarePadding = (outerRadius - squareWidth / 2).ceilToDouble();
 
           final colorLayer = CustomPaint(
             isComplex: true,
@@ -47,6 +47,9 @@ class ColorWheel extends StatelessWidget {
           final xHue = (midRadius * cosHue) + outerRadius;
           final yHue = (midRadius * sinHue) + outerRadius;
 
+          final xSaturation = squarePadding + squareWidth * hsv.saturation;
+          final yValue = squarePadding + squareWidth * hsv.value;
+
           return Stack(
             fit: StackFit.expand,
             children: [
@@ -59,8 +62,8 @@ class ColorWheel extends StatelessWidget {
                 ),
               ),
               Positioned(
-                left: 100,
-                top: 100,
+                left: xSaturation,
+                top: yValue,
                 child: _Indicator(color: selectedColor),
               ),
             ],
