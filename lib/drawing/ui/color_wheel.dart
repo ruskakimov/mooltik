@@ -20,7 +20,6 @@ class ColorWheel extends StatelessWidget {
             isComplex: true,
             willChange: false,
             painter: HueWheelPainter(
-              hue: 0,
               outerRadius: outerRadius,
               innerRadius: innerRadius,
             ),
@@ -37,14 +36,25 @@ class ColorWheel extends StatelessWidget {
 
 class HueWheelPainter extends CustomPainter {
   HueWheelPainter({
-    required this.hue,
     required this.outerRadius,
     required this.innerRadius,
   });
 
-  final double hue;
   final double outerRadius;
   final double innerRadius;
+
+  static const shader = SweepGradient(
+    center: Alignment.center,
+    colors: <Color>[
+      Color.fromARGB(255, 255, 0, 0),
+      Color.fromARGB(255, 255, 0, 255),
+      Color.fromARGB(255, 0, 0, 255),
+      Color.fromARGB(255, 0, 255, 255),
+      Color.fromARGB(255, 0, 255, 0),
+      Color.fromARGB(255, 255, 255, 0),
+      Color.fromARGB(255, 255, 0, 0),
+    ],
+  );
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -55,30 +65,10 @@ class HueWheelPainter extends CustomPainter {
     canvas.drawCircle(
       bounds.center,
       outerRadius,
-      Paint()
-        ..shader = ui.Gradient.sweep(
-          bounds.center,
-          [
-            Color(0xFFFF0000), // Red
-            Color(0xFFFF00FF), // Magenta
-            Color(0xFF0000FF), // Blue
-            Color(0xFF00FFFF), // Cyan
-            Color(0xFF00FF00), // Green
-            Color(0xFFFFFF00), // Yellow
-            Color(0xFFFF0000), // Red
-          ],
-          [
-            0,
-            1 / 6,
-            2 / 6,
-            3 / 6,
-            4 / 6,
-            5 / 6,
-            1,
-          ],
-        ),
+      Paint()..shader = shader.createShader(bounds),
     );
 
+    // Erase inner circle.
     canvas.drawCircle(
       bounds.center,
       innerRadius,
