@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/open_side_sheet.dart';
-import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/color_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
@@ -11,9 +10,6 @@ class ColorButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
-    final selectedTool = toolbox.selectedTool;
-    final selectedColor =
-        selectedTool is ToolWithColor ? selectedTool.color : Colors.black;
 
     return SizedBox(
       width: 52,
@@ -21,26 +17,24 @@ class ColorButton extends StatelessWidget {
       child: InkWell(
         splashColor: Colors.transparent,
         onTap: () {
-          if (selectedTool is ToolWithColor && selectedTool is! Eraser) {
-            openSideSheet(
-              context: context,
-              builder: (context) => ChangeNotifierProvider.value(
-                value: toolbox,
-                child: ColorPicker(
-                  selectedColor: selectedColor,
-                  onSelected: (Color color) {
-                    toolbox.changeToolColor(color);
-                  },
-                ),
+          openSideSheet(
+            context: context,
+            builder: (context) => ChangeNotifierProvider.value(
+              value: toolbox,
+              child: ColorPicker(
+                selectedColor: toolbox.color,
+                onSelected: (HSVColor color) {
+                  toolbox.changeColor(color);
+                },
               ),
-              side: MediaQuery.of(context).orientation == Orientation.landscape
-                  ? Side.top
-                  : Side.right,
-            );
-          }
+            ),
+            side: MediaQuery.of(context).orientation == Orientation.landscape
+                ? Side.top
+                : Side.right,
+          );
         },
         child: Center(
-          child: _ColorIndicator(color: selectedColor),
+          child: _ColorIndicator(color: toolbox.color),
         ),
       ),
     );

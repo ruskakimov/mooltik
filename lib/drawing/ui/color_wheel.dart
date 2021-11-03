@@ -11,13 +11,11 @@ class ColorWheel extends StatelessWidget {
     this.onSelected,
   }) : super(key: key);
 
-  final Color selectedColor;
-  final void Function(Color)? onSelected;
+  final HSVColor selectedColor;
+  final void Function(HSVColor)? onSelected;
 
   @override
   Widget build(BuildContext context) {
-    final hsv = HSVColor.fromColor(selectedColor);
-
     return AspectRatio(
       aspectRatio: 1,
       child: Padding(
@@ -36,7 +34,7 @@ class ColorWheel extends StatelessWidget {
             var angle = acos(cosAngle) * 180 / pi;
             if (y > 0) angle = 360 - angle;
             onSelected?.call(
-              hsv.withHue(angle).toColor(),
+              selectedColor.withHue(angle),
             );
           };
 
@@ -46,7 +44,7 @@ class ColorWheel extends StatelessWidget {
             final newValue =
                 1.0 - e.localPosition.dy.clamp(0, squareWidth) / squareWidth;
             onSelected?.call(
-              hsv.withSaturation(newSaturation).withValue(newValue).toColor(),
+              selectedColor.withSaturation(newSaturation).withValue(newValue),
             );
           };
 
@@ -69,18 +67,22 @@ class ColorWheel extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               onPointerDown: shadePointerHandler,
               onPointerMove: shadePointerHandler,
-              child: CustomPaint(painter: ShadeSquarePainter(hue: hsv.hue)),
+              child: CustomPaint(
+                painter: ShadeSquarePainter(hue: selectedColor.hue),
+              ),
             ),
           );
 
           final midRadius = (outerRadius + innerRadius) / 2;
-          final cosHue = cos(-hsv.hue * pi / 180);
-          final sinHue = sin(-hsv.hue * pi / 180);
+          final cosHue = cos(-selectedColor.hue * pi / 180);
+          final sinHue = sin(-selectedColor.hue * pi / 180);
           final xHue = (midRadius * cosHue) + outerRadius;
           final yHue = (midRadius * sinHue) + outerRadius;
 
-          final xSaturation = squarePadding + squareWidth * hsv.saturation;
-          final yValue = squarePadding + squareWidth * (1 - hsv.value);
+          final xSaturation =
+              squarePadding + squareWidth * selectedColor.saturation;
+          final yValue =
+              squarePadding + squareWidth * (1 - selectedColor.value);
 
           return Stack(
             fit: StackFit.expand,
@@ -91,13 +93,14 @@ class ColorWheel extends StatelessWidget {
                 left: xHue,
                 top: yHue,
                 child: _Indicator(
-                  color: HSVColor.fromAHSV(1, hsv.hue, 1, 1).toColor(),
+                  color:
+                      HSVColor.fromAHSV(1, selectedColor.hue, 1, 1).toColor(),
                 ),
               ),
               Positioned(
                 left: xSaturation,
                 top: yValue,
-                child: _Indicator(color: selectedColor),
+                child: _Indicator(color: selectedColor.toColor()),
               ),
             ],
           );

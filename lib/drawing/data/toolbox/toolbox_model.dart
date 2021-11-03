@@ -4,14 +4,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'tools/tools.dart';
 
+const _startHsvColor = HSVColor.fromAHSV(1, 0, 0, 0);
+
 class ToolboxModel extends ChangeNotifier {
   ToolboxModel(SharedPreferences sharedPreferences)
       : _bucket = Bucket(sharedPreferences),
         _paintBrush = PaintBrush(sharedPreferences),
         _eraser = Eraser(sharedPreferences),
-        _lasso = Lasso(sharedPreferences) {
+        _lasso = Lasso(sharedPreferences),
+        _hsvColor = _startHsvColor {
     _selectedTool = _paintBrush;
+    // TODO: Persist color
+    // _hsvColor = sharedPreferences.containsKey(_hsvColorKey)
+    //     ? sharedPreferences.getString(_hsvColorKey)
+    //     : _startHsvColor;
   }
+
+  Color get color => _hsvColor.toColor();
+  HSVColor get hsvColor => _hsvColor;
+  HSVColor _hsvColor;
 
   Bucket get bucket => _bucket;
   final Bucket _bucket;
@@ -33,10 +44,10 @@ class ToolboxModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeToolColor(Color color) {
-    if (selectedTool is ToolWithColor) {
-      (selectedTool as ToolWithColor).color = color;
-      notifyListeners();
-    }
+  void changeColor(HSVColor hsvColor) {
+    _hsvColor = hsvColor;
+    notifyListeners();
   }
+
+  static const String _hsvColorKey = 'hsv_color';
 }
