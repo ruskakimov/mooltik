@@ -28,7 +28,7 @@ class ColorWheel extends StatelessWidget {
           final squarePadding =
               (outerRadius - innerRadius / sqrt2).ceilToDouble();
 
-          return CustomPaint(
+          final colorLayer = CustomPaint(
             isComplex: true,
             willChange: false,
             painter: HueWheelPainter(
@@ -40,7 +40,60 @@ class ColorWheel extends StatelessWidget {
               child: CustomPaint(painter: ShadeSquarePainter(hue: hsv.hue)),
             ),
           );
+
+          final midRadius = (outerRadius + innerRadius) / 2;
+          final cosHue = cos(-hsv.hue * pi / 180);
+          final sinHue = sin(-hsv.hue * pi / 180);
+          final xHue = (midRadius * cosHue) + outerRadius;
+          final yHue = (midRadius * sinHue) + outerRadius;
+
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              colorLayer,
+              Positioned(
+                left: xHue,
+                top: yHue,
+                child: _Indicator(
+                  color: HSVColor.fromAHSV(1, hsv.hue, 1, 1).toColor(),
+                ),
+              ),
+              Positioned(
+                left: 100,
+                top: 100,
+                child: _Indicator(color: selectedColor),
+              ),
+            ],
+          );
         }),
+      ),
+    );
+  }
+}
+
+class _Indicator extends StatelessWidget {
+  const _Indicator({
+    Key? key,
+    required this.color,
+  }) : super(key: key);
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = _hueWheelWidth - 8;
+
+    return Transform.translate(
+      offset: Offset(-size / 2, -size / 2),
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: color,
+          border: Border.all(color: Colors.white, width: 2),
+          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 2)],
+          shape: BoxShape.circle,
+        ),
       ),
     );
   }
