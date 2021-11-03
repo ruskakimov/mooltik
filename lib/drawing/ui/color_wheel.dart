@@ -79,7 +79,9 @@ class HueWheelPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(HueWheelPainter oldDelegate) => false;
+  bool shouldRepaint(HueWheelPainter oldDelegate) =>
+      outerRadius != oldDelegate.outerRadius ||
+      innerRadius != oldDelegate.innerRadius;
 
   @override
   bool shouldRebuildSemantics(HueWheelPainter oldDelegate) => false;
