@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/extensions/color_methods.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/bucket.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,17 +9,16 @@ const _startHsvColor = HSVColor.fromAHSV(1, 0, 0, 0);
 
 class ToolboxModel extends ChangeNotifier {
   ToolboxModel(SharedPreferences sharedPreferences)
-      : _bucket = Bucket(sharedPreferences),
+      : _preferences = sharedPreferences,
+        _bucket = Bucket(sharedPreferences),
         _paintBrush = PaintBrush(sharedPreferences),
         _eraser = Eraser(sharedPreferences),
         _lasso = Lasso(sharedPreferences),
-        _hsvColor = _startHsvColor {
+        _hsvColor = restoreHSVColorState(sharedPreferences) {
     _selectedTool = _paintBrush;
-    // TODO: Persist color
-    // _hsvColor = sharedPreferences.containsKey(_hsvColorKey)
-    //     ? sharedPreferences.getString(_hsvColorKey)
-    //     : _startHsvColor;
   }
+
+  final SharedPreferences _preferences;
 
   Color get color => _hsvColor.toColor();
   HSVColor get hsvColor => _hsvColor;
@@ -47,6 +47,15 @@ class ToolboxModel extends ChangeNotifier {
   void changeColor(HSVColor hsvColor) {
     _hsvColor = hsvColor;
     notifyListeners();
+    _preferences.setString(_hsvColorKey, _hsvColor.toStr());
+  }
+
+  static HSVColor restoreHSVColorState(SharedPreferences sharedPreferences) {
+    if (sharedPreferences.containsKey(_hsvColorKey)) {
+      final raw = sharedPreferences.getString(_hsvColorKey);
+      if (raw != null) return raw.parseHSVColor();
+    }
+    return _startHsvColor;
   }
 
   static const String _hsvColorKey = 'hsv_color';
