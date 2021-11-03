@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
-const _hueWheelWidth = 36.0;
+const _hueWheelWidth = 32.0;
 
 class ColorWheel extends StatelessWidget {
   const ColorWheel({
@@ -25,8 +25,18 @@ class ColorWheel extends StatelessWidget {
         child: LayoutBuilder(builder: (context, constraints) {
           final outerRadius = constraints.maxWidth / 2;
           final innerRadius = outerRadius - _hueWheelWidth;
-          final squareWidth = innerRadius * 2 / sqrt2;
+          final squareWidth = innerRadius * 2 / sqrt2 - 8;
           final squarePadding = (outerRadius - squareWidth / 2).ceilToDouble();
+
+          final shadePointerHandler = (e) {
+            final newSaturation =
+                e.localPosition.dx.clamp(0, squareWidth) / squareWidth;
+            final newValue =
+                1.0 - e.localPosition.dy.clamp(0, squareWidth) / squareWidth;
+            onSelected?.call(
+              hsv.withSaturation(newSaturation).withValue(newValue).toColor(),
+            );
+          };
 
           final colorLayer = CustomPaint(
             isComplex: true,
@@ -37,7 +47,11 @@ class ColorWheel extends StatelessWidget {
             ),
             child: Padding(
               padding: EdgeInsets.all(squarePadding),
-              child: CustomPaint(painter: ShadeSquarePainter(hue: hsv.hue)),
+              child: Listener(
+                onPointerDown: shadePointerHandler,
+                onPointerMove: shadePointerHandler,
+                child: CustomPaint(painter: ShadeSquarePainter(hue: hsv.hue)),
+              ),
             ),
           );
 
@@ -48,7 +62,7 @@ class ColorWheel extends StatelessWidget {
           final yHue = (midRadius * sinHue) + outerRadius;
 
           final xSaturation = squarePadding + squareWidth * hsv.saturation;
-          final yValue = squarePadding + squareWidth * hsv.value;
+          final yValue = squarePadding + squareWidth * (1 - hsv.value);
 
           return Stack(
             fit: StackFit.expand,
