@@ -24,11 +24,14 @@ class ColorButton extends StatelessWidget {
           if (selectedTool is ToolWithColor && selectedTool is! Eraser) {
             openSideSheet(
               context: context,
-              builder: (context) => ColorPicker(
-                selectedColor: selectedColor,
-                onSelected: (Color color) {
-                  toolbox.changeToolColor(color);
-                },
+              builder: (context) => ChangeNotifierProvider.value(
+                value: toolbox,
+                child: ColorPicker(
+                  selectedColor: selectedColor,
+                  onSelected: (Color color) {
+                    toolbox.changeToolColor(color);
+                  },
+                ),
               ),
               side: MediaQuery.of(context).orientation == Orientation.landscape
                   ? Side.top
