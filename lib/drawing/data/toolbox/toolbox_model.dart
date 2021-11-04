@@ -16,6 +16,7 @@ class ToolboxModel extends ChangeNotifier {
         _lasso = Lasso(sharedPreferences),
         _hsvColor = restoreHSVColorState(sharedPreferences) {
     _selectedTool = _paintBrush;
+    _applyColorOnTools();
   }
 
   final SharedPreferences _preferences;
@@ -23,6 +24,13 @@ class ToolboxModel extends ChangeNotifier {
   Color get color => _hsvColor.toColor();
   HSVColor get hsvColor => _hsvColor;
   HSVColor _hsvColor;
+
+  List<Tool> get tools => [
+        bucket,
+        paintBrush,
+        eraser,
+        lasso,
+      ];
 
   Bucket get bucket => _bucket;
   final Bucket _bucket;
@@ -46,8 +54,15 @@ class ToolboxModel extends ChangeNotifier {
 
   void changeColor(HSVColor hsvColor) {
     _hsvColor = hsvColor;
+    _applyColorOnTools();
     notifyListeners();
     _preferences.setString(_hsvColorKey, _hsvColor.toStr());
+  }
+
+  void _applyColorOnTools() {
+    for (final tool in tools) {
+      if (tool is ToolWithColor) tool.applyColor(color);
+    }
   }
 
   static HSVColor restoreHSVColorState(SharedPreferences sharedPreferences) {
