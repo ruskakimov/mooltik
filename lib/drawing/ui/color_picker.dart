@@ -20,12 +20,44 @@ class ColorPicker extends StatelessWidget {
     final toolbox = context.watch<ToolboxModel>();
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ColorWheel(
-          selectedColor: toolbox.hsvColor,
-          onSelected: onSelected,
+        SizedBox(height: 16),
+        Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: ColorWheel(
+                selectedColor: toolbox.hsvColor,
+                onSelected: onSelected,
+              ),
+            ),
+            _buildColorComparer(toolbox),
+          ],
         ),
       ],
+    );
+  }
+
+  Widget _buildColorComparer(ToolboxModel toolbox) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      height: 52,
+      width: 52,
+      decoration: BoxDecoration(
+        color: selectedColor,
+        gradient: LinearGradient(
+          colors: [
+            selectedColor,
+            selectedColor,
+            toolbox.color,
+            toolbox.color,
+          ],
+          stops: [0, 0.5, 0.5, 1],
+        ),
+        shape: BoxShape.circle,
+        // borderRadius: BorderRadius.circular(24),
+      ),
     );
   }
 }
