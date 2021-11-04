@@ -32,13 +32,13 @@ class ColorPicker extends StatelessWidget {
             _buildColorComparer(toolbox),
           ],
         ),
-        SizedBox(height: 16),
+        Divider(height: 0),
         Expanded(
           child: GridView.count(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            crossAxisCount: 10,
+            padding: const EdgeInsets.all(16),
+            crossAxisCount: 6,
             children: [
-              for (var i = 0; i < 30; i++)
+              for (var i = 0; i < 90; i++)
                 Container(
                   margin: const EdgeInsets.all(2),
                   decoration: BoxDecoration(

@@ -28,11 +28,9 @@ class ColorButton extends StatelessWidget {
                 },
               ),
             ),
-            side: Side.top,
-            maxExtent:
-                MediaQuery.of(context).orientation == Orientation.landscape
-                    ? 320
-                    : 640,
+            side: MediaQuery.of(context).orientation == Orientation.landscape
+                ? Side.top
+                : Side.right,
           );
         },
         child: Center(
