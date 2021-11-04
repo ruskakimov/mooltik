@@ -14,7 +14,8 @@ class ToolboxModel extends ChangeNotifier {
         _paintBrush = PaintBrush(sharedPreferences),
         _eraser = Eraser(sharedPreferences),
         _lasso = Lasso(sharedPreferences),
-        _hsvColor = restoreHSVColorState(sharedPreferences) {
+        _hsvColor = restoreHSVColorState(sharedPreferences),
+        _palette = List.filled(90, null) {
     _selectedTool = _paintBrush;
     _applyColorOnTools();
   }
@@ -24,6 +25,21 @@ class ToolboxModel extends ChangeNotifier {
   Color get color => _hsvColor.toColor();
   HSVColor get hsvColor => _hsvColor;
   HSVColor _hsvColor;
+
+  List<HSVColor?> get palette => _palette;
+  final List<HSVColor?> _palette;
+
+  void fillPaletteCellWithCurrentColor(int cellIndex) {
+    _palette[cellIndex] = _hsvColor;
+    notifyListeners();
+    // TODO: Persist
+  }
+
+  void emptyPaletteCell(int cellIndex) {
+    _palette[cellIndex] = null;
+    notifyListeners();
+    // TODO: Persist
+  }
 
   List<Tool> get tools => [
         bucket,

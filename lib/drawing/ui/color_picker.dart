@@ -45,23 +45,9 @@ class ColorPicker extends StatelessWidget {
         SizedBox(width: 8),
         VerticalDivider(width: 0),
         Expanded(
-          child: Center(
-            child: GridView.count(
-              scrollDirection: axis,
-              shrinkWrap: true,
-              padding: const EdgeInsets.all(16),
-              crossAxisCount: 6,
-              children: [
-                for (var i = 0; i < 90; i++)
-                  Container(
-                    margin: const EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white10, width: 1),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-              ],
-            ),
+          child: ColorPalette(
+            axis: axis,
+            colors: toolbox.palette,
           ),
         ),
       ],
@@ -88,5 +74,61 @@ class ColorPicker extends StatelessWidget {
         // borderRadius: BorderRadius.circular(24),
       ),
     );
+  }
+}
+
+class ColorPalette extends StatelessWidget {
+  const ColorPalette({
+    Key? key,
+    required this.axis,
+    required this.colors,
+  }) : super(key: key);
+
+  final Axis axis;
+  final List<HSVColor?> colors;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: GridView.count(
+        scrollDirection: axis,
+        shrinkWrap: true,
+        padding: const EdgeInsets.all(16),
+        crossAxisCount: 6,
+        children: [
+          for (var i = 0; i < colors.length; i++)
+            _buildCell(context, i, colors[i]),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCell(BuildContext context, int i, HSVColor? color) {
+    final color = colors[i];
+
+    return GestureDetector(
+      onTap:
+          color == null ? () => _fill(context, i) : () => _take(context, color),
+      child: Container(
+        margin: const EdgeInsets.all(2),
+        decoration: BoxDecoration(
+          color: color?.toColor(),
+          border: Border.all(color: Colors.white10, width: 1),
+          shape: BoxShape.circle,
+        ),
+      ),
+    );
+  }
+
+  void _take(BuildContext context, HSVColor color) {
+    context.read<ToolboxModel>().changeColor(color);
+  }
+
+  void _fill(BuildContext context, int cellIndex) {
+    context.read<ToolboxModel>().fillPaletteCellWithCurrentColor(cellIndex);
+  }
+
+  void _empty(BuildContext context, int cellIndex) {
+    context.read<ToolboxModel>().emptyPaletteCell(cellIndex);
   }
 }
