@@ -32,6 +32,23 @@ class ColorPicker extends StatelessWidget {
             _buildColorComparer(toolbox),
           ],
         ),
+        SizedBox(height: 16),
+        Expanded(
+          child: GridView.count(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            crossAxisCount: 10,
+            children: [
+              for (var i = 0; i < 30; i++)
+                Container(
+                  margin: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+            ],
+          ),
+        ),
       ],
     );
   }

@@ -26,7 +26,7 @@ openSideSheet({
   required BuildContext context,
   required Widget Function(BuildContext) builder,
   Side side = Side.right,
-  double maxSize = 320,
+  double maxExtent = 320,
   Duration transitionDuration = const Duration(milliseconds: 250),
 }) {
   showGeneralDialog(
@@ -40,17 +40,19 @@ openSideSheet({
           ? MediaQuery.of(context).size.width
           : MediaQuery.of(context).size.height;
 
-      var sheetExtent = min(maxSize, screenEstate - 56);
-
       final safePadding = MediaQuery.of(context).padding;
-      final safeSidePadding = [
+      final sideSafePadding = [
         safePadding.left,
         safePadding.top,
         safePadding.right,
         safePadding.bottom
       ][side.index];
 
-      sheetExtent += safeSidePadding;
+      final contentEstate = horizontalSide
+          ? screenEstate - safePadding.horizontal
+          : screenEstate - safePadding.vertical;
+
+      final sheetExtent = min(maxExtent, contentEstate - 56) + sideSafePadding;
 
       return Align(
         alignment: sideAlignments[side.index],
