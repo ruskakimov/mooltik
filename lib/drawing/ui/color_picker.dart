@@ -25,12 +25,9 @@ class ColorPicker extends StatelessWidget {
         SizedBox(height: 16),
         Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: ColorWheel(
-                selectedColor: toolbox.hsvColor,
-                onSelected: onSelected,
-              ),
+            ColorWheel(
+              selectedColor: toolbox.hsvColor,
+              onSelected: onSelected,
             ),
             _buildColorComparer(toolbox),
           ],
@@ -42,8 +39,8 @@ class ColorPicker extends StatelessWidget {
   Widget _buildColorComparer(ToolboxModel toolbox) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      height: 52,
-      width: 52,
+      height: 56,
+      width: 56,
       decoration: BoxDecoration(
         color: selectedColor,
         gradient: LinearGradient(

@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
-const _hueWheelWidth = 32.0;
+const _hueWheelWidth = 36.0;
 
 class ColorWheel extends StatelessWidget {
   const ColorWheel({
