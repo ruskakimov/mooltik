@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/ui/color_wheel.dart';
@@ -107,8 +108,10 @@ class ColorPalette extends StatelessWidget {
     final color = colors[i];
 
     return GestureDetector(
-      onTap:
-          color == null ? () => _fill(context, i) : () => _take(context, color),
+      onTap: color == null
+          ? () => _fillCell(context, i)
+          : () => _takeColorFromCell(context, color),
+      onLongPress: () => _emptyCell(context, i),
       child: Container(
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
@@ -120,15 +123,16 @@ class ColorPalette extends StatelessWidget {
     );
   }
 
-  void _take(BuildContext context, HSVColor color) {
+  void _takeColorFromCell(BuildContext context, HSVColor color) {
     context.read<ToolboxModel>().changeColor(color);
   }
 
-  void _fill(BuildContext context, int cellIndex) {
+  void _fillCell(BuildContext context, int cellIndex) {
     context.read<ToolboxModel>().fillPaletteCellWithCurrentColor(cellIndex);
   }
 
-  void _empty(BuildContext context, int cellIndex) {
+  void _emptyCell(BuildContext context, int cellIndex) {
     context.read<ToolboxModel>().emptyPaletteCell(cellIndex);
+    HapticFeedback.heavyImpact();
   }
 }
