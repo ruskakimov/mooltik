@@ -18,35 +18,50 @@ class ColorPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final toolbox = context.watch<ToolboxModel>();
+    final axis = MediaQuery.of(context).orientation == Orientation.landscape
+        ? Axis.horizontal
+        : Axis.vertical;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Flex(
+      direction: axis,
       children: [
-        SizedBox(height: 16),
+        SizedBox(width: 8),
         Stack(
           children: [
-            ColorWheel(
-              selectedColor: toolbox.hsvColor,
-              onSelected: onSelected,
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0, bottom: 8.0),
+              child: ColorWheel(
+                selectedColor: toolbox.hsvColor,
+                onSelected: onSelected,
+              ),
             ),
-            _buildColorComparer(toolbox),
+            Positioned(
+              top: 16,
+              child: _buildColorComparer(toolbox),
+            ),
           ],
         ),
         Divider(height: 0),
+        SizedBox(width: 8),
+        VerticalDivider(width: 0),
         Expanded(
-          child: GridView.count(
-            padding: const EdgeInsets.all(16),
-            crossAxisCount: 6,
-            children: [
-              for (var i = 0; i < 90; i++)
-                Container(
-                  margin: const EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white10, width: 1),
-                    shape: BoxShape.circle,
+          child: Center(
+            child: GridView.count(
+              scrollDirection: axis,
+              shrinkWrap: true,
+              padding: const EdgeInsets.all(16),
+              crossAxisCount: 6,
+              children: [
+                for (var i = 0; i < 90; i++)
+                  Container(
+                    margin: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white10, width: 1),
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
@@ -56,8 +71,8 @@ class ColorPicker extends StatelessWidget {
   Widget _buildColorComparer(ToolboxModel toolbox) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      height: 56,
-      width: 56,
+      height: 44,
+      width: 44,
       decoration: BoxDecoration(
         color: selectedColor,
         gradient: LinearGradient(
