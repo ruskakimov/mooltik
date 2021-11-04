@@ -42,7 +42,7 @@ class ColorPicker extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.all(2),
                   decoration: BoxDecoration(
-                    color: Colors.black54,
+                    border: Border.all(color: Colors.white10, width: 1),
                     shape: BoxShape.circle,
                   ),
                 ),
