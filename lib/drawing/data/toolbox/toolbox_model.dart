@@ -27,10 +27,10 @@ class ToolboxModel extends ChangeNotifier {
   List<HSVColor?> get palette => _palette;
   final List<HSVColor?> _palette;
 
-  void fillPaletteCell(int cellIndex, HSVColor? color) {
+  void setPaletteCell(int cellIndex, HSVColor? color) {
     _palette[cellIndex] = color;
     notifyListeners();
-    // TODO: Persist
+    _savePalette();
   }
 
   List<Tool> get tools => [
@@ -82,11 +82,22 @@ class ToolboxModel extends ChangeNotifier {
   }
 
   static List<HSVColor?> _restorePalette(SharedPreferences sharedPreferences) {
-    // if (sharedPreferences.containsKey(_hsvPaletteKey)) {
-    //   final raw = sharedPreferences.getString(_hsvColorKey);
-    //   if (raw != null) return raw.parseHSVColor();
-    // }
+    if (sharedPreferences.containsKey(_hsvPaletteKey)) {
+      final raws = sharedPreferences.getStringList(_hsvPaletteKey);
+      if (raws != null && raws.length == _paletteCellCount) {
+        return raws
+            .map((str) => str != '' ? str.parseHSVColor() : null)
+            .toList();
+      }
+    }
     return _generateStartPalette();
+  }
+
+  void _savePalette() {
+    _preferences.setStringList(
+      _hsvPaletteKey,
+      _palette.map((color) => color != null ? color.toStr() : '').toList(),
+    );
   }
 
   static List<HSVColor?> _generateStartPalette() {

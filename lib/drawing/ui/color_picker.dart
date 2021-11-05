@@ -142,7 +142,7 @@ class _ColorPaletteState extends State<ColorPalette> {
 
   void _fillCell(BuildContext context, int cellIndex) {
     final toolbox = context.read<ToolboxModel>();
-    toolbox.fillPaletteCell(cellIndex, toolbox.hsvColor);
+    toolbox.setPaletteCell(cellIndex, toolbox.hsvColor);
   }
 
   void _takeColorFromCell(BuildContext context, HSVColor color) {
@@ -152,14 +152,14 @@ class _ColorPaletteState extends State<ColorPalette> {
 
   void _refillCell(BuildContext context, int cellIndex) {
     final toolbox = context.read<ToolboxModel>();
-    toolbox.fillPaletteCell(cellIndex, _prevColors[cellIndex]);
+    toolbox.setPaletteCell(cellIndex, _prevColors[cellIndex]);
     HapticFeedback.lightImpact();
   }
 
   void _emptyCell(BuildContext context, int cellIndex) {
     final toolbox = context.read<ToolboxModel>();
     _prevColors[cellIndex] = toolbox.palette[cellIndex];
-    toolbox.fillPaletteCell(cellIndex, null);
+    toolbox.setPaletteCell(cellIndex, null);
     HapticFeedback.heavyImpact();
   }
 }
