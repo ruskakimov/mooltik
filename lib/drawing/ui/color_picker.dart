@@ -116,7 +116,9 @@ class ColorPalette extends StatelessWidget {
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
           color: color?.toColor(),
-          border: Border.all(color: Colors.white10, width: 1),
+          border: color == null
+              ? Border.all(color: Colors.white10, width: 1)
+              : null,
           shape: BoxShape.circle,
         ),
       ),

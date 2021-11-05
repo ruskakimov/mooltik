@@ -5,8 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'tools/tools.dart';
 
-const _startHsvColor = HSVColor.fromAHSV(1, 0, 0, 0);
-
 class ToolboxModel extends ChangeNotifier {
   ToolboxModel(SharedPreferences sharedPreferences)
       : _preferences = sharedPreferences,
@@ -14,8 +12,8 @@ class ToolboxModel extends ChangeNotifier {
         _paintBrush = PaintBrush(sharedPreferences),
         _eraser = Eraser(sharedPreferences),
         _lasso = Lasso(sharedPreferences),
-        _hsvColor = restoreHSVColorState(sharedPreferences),
-        _palette = List.filled(90, null) {
+        _hsvColor = _restoreHSVColor(sharedPreferences),
+        _palette = _restorePalette(sharedPreferences) {
     _selectedTool = _paintBrush;
     _applyColorOnTools();
   }
@@ -81,7 +79,7 @@ class ToolboxModel extends ChangeNotifier {
     }
   }
 
-  static HSVColor restoreHSVColorState(SharedPreferences sharedPreferences) {
+  static HSVColor _restoreHSVColor(SharedPreferences sharedPreferences) {
     if (sharedPreferences.containsKey(_hsvColorKey)) {
       final raw = sharedPreferences.getString(_hsvColorKey);
       if (raw != null) return raw.parseHSVColor();
@@ -89,5 +87,62 @@ class ToolboxModel extends ChangeNotifier {
     return _startHsvColor;
   }
 
+  static List<HSVColor?> _restorePalette(SharedPreferences sharedPreferences) {
+    // if (sharedPreferences.containsKey(_hsvPaletteKey)) {
+    //   final raw = sharedPreferences.getString(_hsvColorKey);
+    //   if (raw != null) return raw.parseHSVColor();
+    // }
+    return _generateStartPalette();
+  }
+
+  static List<HSVColor?> _generateStartPalette() {
+    final List<HSVColor?> colors = List.filled(_paletteCellCount, null);
+    int i = _paletteCellCount - 1;
+    for (var color in _materialColors.reversed) {
+      for (var shade in _shades.reversed) {
+        colors[i] = HSVColor.fromColor(color[shade]!);
+        i--;
+      }
+    }
+    return colors;
+  }
+
+  static const HSVColor _startHsvColor = HSVColor.fromAHSV(1, 0, 0, 0);
+  static const int _paletteCellCount = 90;
+
   static const String _hsvColorKey = 'hsv_color';
+  static const String _hsvPaletteKey = 'hsv_palette';
 }
+
+const _customGreyMaterial = MaterialColor(
+  0xFF9E9E9E,
+  <int, Color>{
+    100: Colors.white,
+    200: Color(0xFFEEEEEE),
+    300: Color(0xFFE0E0E0),
+    400: Color(0xFFBDBDBD),
+    500: Color(0xFF9E9E9E),
+    600: Color(0xFF757575),
+    700: Color(0xFF616161),
+    800: Color(0xFF424242),
+    900: Colors.black,
+  },
+);
+
+const _materialColors = <MaterialColor>[
+  _customGreyMaterial,
+  Colors.blueGrey,
+  Colors.brown,
+  Colors.orange,
+  Colors.yellow,
+  Colors.lime,
+  Colors.green,
+  Colors.teal,
+  Colors.blue,
+  Colors.indigo,
+  Colors.purple,
+  Colors.pink,
+  Colors.red,
+];
+
+const _shades = [100, 300, 400, 500, 700, 900];
