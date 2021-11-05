@@ -27,14 +27,8 @@ class ToolboxModel extends ChangeNotifier {
   List<HSVColor?> get palette => _palette;
   final List<HSVColor?> _palette;
 
-  void fillPaletteCellWithCurrentColor(int cellIndex) {
-    _palette[cellIndex] = _hsvColor;
-    notifyListeners();
-    // TODO: Persist
-  }
-
-  void emptyPaletteCell(int cellIndex) {
-    _palette[cellIndex] = null;
+  void fillPaletteCell(int cellIndex, HSVColor? color) {
+    _palette[cellIndex] = color;
     notifyListeners();
     // TODO: Persist
   }

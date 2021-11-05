@@ -78,7 +78,7 @@ class ColorPicker extends StatelessWidget {
   }
 }
 
-class ColorPalette extends StatelessWidget {
+class ColorPalette extends StatefulWidget {
   const ColorPalette({
     Key? key,
     required this.axis,
@@ -89,29 +89,44 @@ class ColorPalette extends StatelessWidget {
   final List<HSVColor?> colors;
 
   @override
+  State<ColorPalette> createState() => _ColorPaletteState();
+}
+
+class _ColorPaletteState extends State<ColorPalette> {
+  late final List<HSVColor?> _prevColors;
+
+  @override
+  void initState() {
+    super.initState();
+    _prevColors = List.filled(widget.colors.length, null);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Center(
       child: GridView.count(
-        scrollDirection: axis,
+        scrollDirection: widget.axis,
         shrinkWrap: true,
         padding: const EdgeInsets.all(16),
         crossAxisCount: 6,
         children: [
-          for (var i = 0; i < colors.length; i++)
-            _buildCell(context, i, colors[i]),
+          for (var i = 0; i < widget.colors.length; i++)
+            _buildCell(context, i, widget.colors[i]),
         ],
       ),
     );
   }
 
   Widget _buildCell(BuildContext context, int i, HSVColor? color) {
-    final color = colors[i];
+    final color = widget.colors[i];
 
     return GestureDetector(
       onTap: color == null
           ? () => _fillCell(context, i)
           : () => _takeColorFromCell(context, color),
-      onLongPress: () => _emptyCell(context, i),
+      onLongPress: color == null
+          ? () => _refillCell(context, i)
+          : () => _emptyCell(context, i),
       child: Container(
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
@@ -125,16 +140,26 @@ class ColorPalette extends StatelessWidget {
     );
   }
 
-  void _takeColorFromCell(BuildContext context, HSVColor color) {
-    context.read<ToolboxModel>().changeColor(color);
+  void _fillCell(BuildContext context, int cellIndex) {
+    final toolbox = context.read<ToolboxModel>();
+    toolbox.fillPaletteCell(cellIndex, toolbox.hsvColor);
   }
 
-  void _fillCell(BuildContext context, int cellIndex) {
-    context.read<ToolboxModel>().fillPaletteCellWithCurrentColor(cellIndex);
+  void _takeColorFromCell(BuildContext context, HSVColor color) {
+    final toolbox = context.read<ToolboxModel>();
+    toolbox.changeColor(color);
+  }
+
+  void _refillCell(BuildContext context, int cellIndex) {
+    final toolbox = context.read<ToolboxModel>();
+    toolbox.fillPaletteCell(cellIndex, _prevColors[cellIndex]);
+    HapticFeedback.lightImpact();
   }
 
   void _emptyCell(BuildContext context, int cellIndex) {
-    context.read<ToolboxModel>().emptyPaletteCell(cellIndex);
+    final toolbox = context.read<ToolboxModel>();
+    _prevColors[cellIndex] = toolbox.palette[cellIndex];
+    toolbox.fillPaletteCell(cellIndex, null);
     HapticFeedback.heavyImpact();
   }
 }
