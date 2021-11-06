@@ -94,17 +94,30 @@ class ColorPalette extends StatefulWidget {
 
 class _ColorPaletteState extends State<ColorPalette> {
   late final List<HSVColor?> _prevColors;
+  late ScrollController _controller;
 
   @override
   void initState() {
     super.initState();
     _prevColors = List.filled(widget.colors.length, null);
+
+    final toolbox = context.read<ToolboxModel>();
+    _controller = ScrollController(
+      initialScrollOffset: toolbox.paletteScollOffset,
+    )..addListener(() => toolbox.paletteScollOffset = _controller.offset);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: GridView.count(
+        controller: _controller,
         scrollDirection: widget.axis,
         shrinkWrap: true,
         padding: const EdgeInsets.all(16),

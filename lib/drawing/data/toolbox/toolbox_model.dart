@@ -26,6 +26,7 @@ class ToolboxModel extends ChangeNotifier {
 
   List<HSVColor?> get palette => _palette;
   final List<HSVColor?> _palette;
+  double paletteScollOffset = 0; // For restoring scroll offset on reopening.
 
   void setPaletteCell(int cellIndex, HSVColor? color) {
     _palette[cellIndex] = color;
