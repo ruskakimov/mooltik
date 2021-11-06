@@ -22,7 +22,7 @@ class ColorButton extends StatelessWidget {
             builder: (context) => ChangeNotifierProvider.value(
               value: toolbox,
               child: ColorPicker(
-                selectedColor: toolbox.color,
+                initialColor: toolbox.hsvColor,
                 onSelected: (HSVColor color) {
                   toolbox.changeColor(color);
                 },

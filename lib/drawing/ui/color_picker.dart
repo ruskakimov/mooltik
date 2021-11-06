@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
@@ -9,11 +7,11 @@ import 'package:mooltik/drawing/ui/color_wheel.dart';
 class ColorPicker extends StatelessWidget {
   const ColorPicker({
     Key? key,
-    required this.selectedColor,
+    required this.initialColor,
     this.onSelected,
   }) : super(key: key);
 
-  final Color selectedColor;
+  final HSVColor initialColor;
   final void Function(HSVColor)? onSelected;
 
   @override
@@ -38,7 +36,10 @@ class ColorPicker extends StatelessWidget {
             ),
             Positioned(
               top: 16,
-              child: _buildColorComparer(toolbox),
+              child: GestureDetector(
+                onTap: () => toolbox.changeColor(initialColor),
+                child: _buildColorComparer(toolbox),
+              ),
             ),
           ],
         ),
@@ -61,11 +62,10 @@ class ColorPicker extends StatelessWidget {
       height: 44,
       width: 44,
       decoration: BoxDecoration(
-        color: selectedColor,
         gradient: LinearGradient(
           colors: [
-            selectedColor,
-            selectedColor,
+            initialColor.toColor(),
+            initialColor.toColor(),
             toolbox.color,
             toolbox.color,
           ],
