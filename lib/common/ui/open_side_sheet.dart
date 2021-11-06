@@ -25,7 +25,8 @@ const hiddenOffset = [
 openSideSheet({
   required BuildContext context,
   required Widget Function(BuildContext) builder,
-  Side side = Side.right,
+  Side portraitSide = Side.right,
+  Side landscapeSide = Side.right,
   double maxExtent = 320,
   Duration transitionDuration = const Duration(milliseconds: 250),
 }) {
@@ -35,6 +36,10 @@ openSideSheet({
     barrierColor: Colors.black.withOpacity(0.5),
     context: context,
     pageBuilder: (context, animation1, animation2) {
+      final side = MediaQuery.of(context).orientation == Orientation.portrait
+          ? portraitSide
+          : landscapeSide;
+
       final horizontalSide = side.index % 2 == 0;
       final screenEstate = horizontalSide
           ? MediaQuery.of(context).size.width
@@ -74,6 +79,10 @@ openSideSheet({
     },
     transitionDuration: transitionDuration,
     transitionBuilder: (context, animation1, animation2, child) {
+      final side = MediaQuery.of(context).orientation == Orientation.portrait
+          ? portraitSide
+          : landscapeSide;
+
       return SlideTransition(
         position: Tween(
           begin: hiddenOffset[side.index],
