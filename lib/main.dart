@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'dart:isolate';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:mooltik/common/data/copy_paster_model.dart';
+import 'package:mooltik/common/ui/orientation_listener.dart';
 import 'package:mooltik/home/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,8 +17,27 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Remove system top bar.
-  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+  void setPreferredSystemUI() {
+    final window = WidgetsBinding.instance!.window;
+    final size = window.physicalSize / window.devicePixelRatio;
+    final isPortrait = size.width < size.height;
+    final isMobile = size.width < 600;
+    final isIPad = Platform.isIOS && !isMobile;
+    final isIPhone = Platform.isIOS && isMobile;
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [
+        // Show top system bar:
+        // - to not build UI under multitasking dots in iPadOS 15
+        // - notch area cannot be utilized by UI anyway on iPhone
+        if (isIPad || (isIPhone && isPortrait)) SystemUiOverlay.top,
+        SystemUiOverlay.bottom,
+      ],
+    );
+  }
+
+  setPreferredSystemUI();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
   await Firebase.initializeApp();
@@ -34,9 +55,14 @@ void main() async {
       originalOnError?.call(errorDetails);
     };
 
-    runApp(App(
-      sharedPreferences: await SharedPreferences.getInstance(),
-    ));
+    runApp(
+      OrientationListener(
+        onOrientationChanged: (_) => setPreferredSystemUI(),
+        child: App(
+          sharedPreferences: await SharedPreferences.getInstance(),
+        ),
+      ),
+    );
   }, FirebaseCrashlytics.instance.recordError);
 
   // Catch errors that happen outside of the Flutter context.
