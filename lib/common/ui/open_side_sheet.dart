@@ -68,7 +68,7 @@ openSideSheet({
             color: Theme.of(context).colorScheme.surface,
             child: SafeArea(
               left: side == Side.left,
-              top: side == Side.top,
+              top: true,
               right: side == Side.right,
               bottom: side == Side.bottom,
               child: builder(context),

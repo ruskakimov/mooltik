@@ -26,10 +26,7 @@ class ColorPicker extends StatelessWidget {
     return Flex(
       direction: axis,
       children: [
-        SizedBox(
-          width: 8 + safePadding.left,
-          height: safePadding.top,
-        ),
+        SizedBox(width: 8 + safePadding.left),
         Stack(
           children: [
             Padding(
