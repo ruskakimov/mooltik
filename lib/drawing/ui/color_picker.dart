@@ -21,10 +21,15 @@ class ColorPicker extends StatelessWidget {
         ? Axis.horizontal
         : Axis.vertical;
 
+    final safePadding = MediaQuery.of(context).padding;
+
     return Flex(
       direction: axis,
       children: [
-        SizedBox(width: 8),
+        SizedBox(
+          width: 8 + safePadding.left,
+          height: safePadding.top,
+        ),
         Stack(
           children: [
             Padding(
@@ -115,12 +120,18 @@ class _ColorPaletteState extends State<ColorPalette> {
 
   @override
   Widget build(BuildContext context) {
+    final safePadding = MediaQuery.of(context).padding;
+
     return Center(
       child: GridView.count(
         controller: _controller,
         scrollDirection: widget.axis,
         shrinkWrap: true,
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16) +
+            EdgeInsets.only(
+              right: safePadding.right,
+              bottom: safePadding.bottom,
+            ),
         crossAxisCount: 6,
         children: [
           for (var i = 0; i < widget.colors.length; i++)
