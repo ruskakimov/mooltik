@@ -87,8 +87,8 @@ class ColorWheel extends StatelessWidget {
           return Stack(
             fit: StackFit.expand,
             children: [
-              hueWheelLayer,
-              shadeSquareLayer,
+              RepaintBoundary(child: hueWheelLayer),
+              RepaintBoundary(child: shadeSquareLayer),
               Positioned(
                 left: xHue,
                 top: yHue,
