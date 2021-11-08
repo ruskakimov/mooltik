@@ -74,7 +74,6 @@ class ColorPicker extends StatelessWidget {
           stops: [0, 0.5, 0.5, 1],
         ),
         shape: BoxShape.circle,
-        // borderRadius: BorderRadius.circular(24),
       ),
     );
   }
