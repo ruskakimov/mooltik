@@ -1,146 +1,185 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-
-const _buttonWidth = 36.0;
-
-const _customGreyMaterial = MaterialColor(
-  0xFF9E9E9E,
-  <int, Color>{
-    100: Colors.white,
-    200: Color(0xFFEEEEEE),
-    300: Color(0xFFE0E0E0),
-    400: Color(0xFFBDBDBD),
-    500: Color(0xFF9E9E9E),
-    600: Color(0xFF757575),
-    700: Color(0xFF616161),
-    800: Color(0xFF424242),
-    900: Colors.black,
-  },
-);
-
-const _materialColors = <MaterialColor>[
-  _customGreyMaterial,
-  Colors.blueGrey,
-  Colors.brown,
-  Colors.orange,
-  Colors.yellow,
-  Colors.lime,
-  Colors.green,
-  Colors.teal,
-  Colors.blue,
-  Colors.indigo,
-  Colors.purple,
-  Colors.pink,
-  Colors.red,
-];
-
-const _shades = [100, 300, 400, 500, 700, 900];
+import 'package:flutter/services.dart';
+import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
+import 'package:provider/provider.dart';
+import 'package:mooltik/drawing/ui/color_wheel.dart';
 
 class ColorPicker extends StatelessWidget {
   const ColorPicker({
     Key? key,
-    required this.selectedColor,
+    required this.initialColor,
     this.onSelected,
   }) : super(key: key);
 
-  final Color selectedColor;
-  final void Function(Color)? onSelected;
+  final HSVColor initialColor;
+  final void Function(HSVColor)? onSelected;
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(builder: (context, orientation) {
-      final columns = orientation == Orientation.portrait
-          ? _shades.length
-          : _materialColors.length;
+    final toolbox = context.watch<ToolboxModel>();
+    final axis = MediaQuery.of(context).orientation == Orientation.landscape
+        ? Axis.horizontal
+        : Axis.vertical;
 
-      return Container(
-        margin: const EdgeInsets.all(8),
-        width: _buttonWidth * columns,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: GridView.count(
-          primary: false,
-          crossAxisCount: columns,
-          shrinkWrap: true,
+    final safePadding = MediaQuery.of(context).padding;
+
+    return Flex(
+      direction: axis,
+      children: [
+        SizedBox(width: 8 + safePadding.left),
+        Stack(
           children: [
-            if (orientation == Orientation.portrait)
-              for (var color in _materialColors)
-                for (var shade in _shades)
-                  _ColorOption(
-                    color: color[shade]!,
-                    selected: color[shade]!.value == selectedColor.value,
-                    onSelected: onSelected,
-                  ),
-            if (orientation == Orientation.landscape)
-              for (var shade in _shades)
-                for (var color in _materialColors.reversed)
-                  _ColorOption(
-                    color: color[shade]!,
-                    selected: color[shade]!.value == selectedColor.value,
-                    onSelected: onSelected,
-                  ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0, bottom: 8.0),
+              child: ColorWheel(
+                selectedColor: toolbox.hsvColor,
+                onSelected: onSelected,
+              ),
+            ),
+            Positioned(
+              top: 16,
+              child: GestureDetector(
+                onTap: () => toolbox.changeColor(initialColor),
+                child: _buildColorComparer(toolbox),
+              ),
+            ),
           ],
         ),
-      );
-    });
+        Divider(height: 0),
+        SizedBox(width: 8),
+        VerticalDivider(width: 0),
+        Expanded(
+          child: ColorPalette(
+            axis: axis,
+            colors: toolbox.palette,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildColorComparer(ToolboxModel toolbox) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      height: 44,
+      width: 44,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            initialColor.toColor(),
+            initialColor.toColor(),
+            toolbox.color,
+            toolbox.color,
+          ],
+          stops: [0, 0.5, 0.5, 1],
+        ),
+        shape: BoxShape.circle,
+      ),
+    );
   }
 }
 
-class _ColorOption extends StatelessWidget {
-  const _ColorOption({
+class ColorPalette extends StatefulWidget {
+  const ColorPalette({
     Key? key,
-    required this.color,
-    required this.selected,
-    required this.onSelected,
+    required this.axis,
+    required this.colors,
   }) : super(key: key);
 
-  final Color color;
-  final bool selected;
-  final void Function(Color)? onSelected;
+  final Axis axis;
+  final List<HSVColor?> colors;
+
+  @override
+  State<ColorPalette> createState() => _ColorPaletteState();
+}
+
+class _ColorPaletteState extends State<ColorPalette> {
+  late final List<HSVColor?> _prevColors;
+  late ScrollController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _prevColors = List.filled(widget.colors.length, null);
+
+    final toolbox = context.read<ToolboxModel>();
+    _controller = ScrollController(
+      initialScrollOffset: toolbox.paletteScollOffset,
+    )..addListener(() => toolbox.paletteScollOffset = _controller.offset);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Listener(
-      onPointerDown: (_) {
-        onSelected?.call(color);
-      },
-      child: SizedBox(
-        width: _buttonWidth,
-        height: _buttonWidth,
-        child: selected
-            ? _addSelectionRing(ColoredBox(color: color))
-            : ColoredBox(color: color),
+    final safePadding = MediaQuery.of(context).padding;
+
+    return Center(
+      child: GridView.count(
+        controller: _controller,
+        scrollDirection: widget.axis,
+        shrinkWrap: true,
+        padding: EdgeInsets.all(16) +
+            EdgeInsets.only(
+              right: safePadding.right,
+              bottom: safePadding.bottom,
+            ),
+        crossAxisCount: 6,
+        children: [
+          for (var i = 0; i < widget.colors.length; i++)
+            _buildCell(context, i, widget.colors[i]),
+        ],
       ),
     );
   }
 
-  Widget _addSelectionRing(Widget child) => Stack(
-        fit: StackFit.expand,
-        children: [
-          child,
-          Container(
-            margin: const EdgeInsets.all(2),
-            foregroundDecoration: BoxDecoration(
-              border: Border.all(
-                width: 8,
-                color: Colors.black38,
-              ),
-              shape: BoxShape.circle,
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.all(4),
-            foregroundDecoration: BoxDecoration(
-              border: Border.all(
-                width: 4,
-                color: Colors.white,
-              ),
-              shape: BoxShape.circle,
-            ),
-          ),
-        ],
-      );
+  Widget _buildCell(BuildContext context, int i, HSVColor? color) {
+    final color = widget.colors[i];
+
+    return GestureDetector(
+      onTap: color == null
+          ? () => _fillCell(context, i)
+          : () => _takeColorFromCell(context, color),
+      onLongPress: color == null
+          ? () => _refillCell(context, i)
+          : () => _emptyCell(context, i),
+      child: Container(
+        margin: const EdgeInsets.all(2),
+        decoration: BoxDecoration(
+          color: color?.toColor(),
+          border: color == null
+              ? Border.all(color: Colors.white10, width: 1)
+              : null,
+          shape: BoxShape.circle,
+        ),
+      ),
+    );
+  }
+
+  void _fillCell(BuildContext context, int cellIndex) {
+    final toolbox = context.read<ToolboxModel>();
+    toolbox.setPaletteCell(cellIndex, toolbox.hsvColor);
+  }
+
+  void _takeColorFromCell(BuildContext context, HSVColor color) {
+    final toolbox = context.read<ToolboxModel>();
+    toolbox.changeColor(color);
+  }
+
+  void _refillCell(BuildContext context, int cellIndex) {
+    final toolbox = context.read<ToolboxModel>();
+    toolbox.setPaletteCell(cellIndex, _prevColors[cellIndex]);
+    HapticFeedback.lightImpact();
+  }
+
+  void _emptyCell(BuildContext context, int cellIndex) {
+    final toolbox = context.read<ToolboxModel>();
+    _prevColors[cellIndex] = toolbox.palette[cellIndex];
+    toolbox.setPaletteCell(cellIndex, null);
+    HapticFeedback.heavyImpact();
+  }
 }

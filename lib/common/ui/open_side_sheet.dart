@@ -1,10 +1,34 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
+enum Side {
+  left,
+  top,
+  right,
+  bottom,
+}
+
+const sideAlignments = [
+  Alignment.centerLeft,
+  Alignment.topCenter,
+  Alignment.centerRight,
+  Alignment.bottomCenter,
+];
+
+const hiddenOffset = [
+  Offset(-1, 0),
+  Offset(0, -1),
+  Offset(1, 0),
+  Offset(0, 1),
+];
+
 openSideSheet({
   required BuildContext context,
   required Widget Function(BuildContext) builder,
-  bool rightSide = true,
+  Side portraitSide = Side.right,
+  Side landscapeSide = Side.right,
+  double maxExtent = 320,
+  Duration transitionDuration = const Duration(milliseconds: 250),
 }) {
   showGeneralDialog(
     barrierLabel: "Sheet Barrier",
@@ -12,33 +36,56 @@ openSideSheet({
     barrierColor: Colors.black.withOpacity(0.5),
     context: context,
     pageBuilder: (context, animation1, animation2) {
-      final sheetWidth = min(320.0, MediaQuery.of(context).size.width - 56);
+      final side = MediaQuery.of(context).orientation == Orientation.portrait
+          ? portraitSide
+          : landscapeSide;
+
+      final horizontalSide = side.index % 2 == 0;
+      final screenEstate = horizontalSide
+          ? MediaQuery.of(context).size.width
+          : MediaQuery.of(context).size.height;
 
       final safePadding = MediaQuery.of(context).padding;
-      final safeSidePadding = rightSide ? safePadding.right : safePadding.left;
+      final sideSafePadding = [
+        safePadding.left,
+        safePadding.top,
+        safePadding.right,
+        safePadding.bottom
+      ][side.index];
+
+      final contentEstate = horizontalSide
+          ? screenEstate - safePadding.horizontal
+          : screenEstate - safePadding.vertical;
+
+      final sheetExtent = min(maxExtent, contentEstate - 56) + sideSafePadding;
 
       return Align(
-        alignment: (rightSide ? Alignment.centerRight : Alignment.centerLeft),
+        alignment: sideAlignments[side.index],
         child: SizedBox(
-          height: double.infinity,
-          width: sheetWidth + safeSidePadding,
+          height: horizontalSide ? double.infinity : sheetExtent,
+          width: !horizontalSide ? double.infinity : sheetExtent,
           child: Material(
             color: Theme.of(context).colorScheme.surface,
             child: SafeArea(
-              left: !rightSide,
-              right: rightSide,
-              bottom: false,
+              left: side == Side.left,
+              top: true,
+              right: side == Side.right,
+              bottom: side == Side.bottom,
               child: builder(context),
             ),
           ),
         ),
       );
     },
-    transitionDuration: Duration(milliseconds: 250),
+    transitionDuration: transitionDuration,
     transitionBuilder: (context, animation1, animation2, child) {
+      final side = MediaQuery.of(context).orientation == Orientation.portrait
+          ? portraitSide
+          : landscapeSide;
+
       return SlideTransition(
         position: Tween(
-          begin: Offset((rightSide ? 1 : -1), 0),
+          begin: hiddenOffset[side.index],
           end: Offset(0, 0),
         ).chain(CurveTween(curve: Curves.ease)).animate(animation1),
         child: child,

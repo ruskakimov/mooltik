@@ -26,25 +26,12 @@ abstract class Tool {
 }
 
 abstract class ToolWithColor extends Tool {
-  ToolWithColor(SharedPreferences sharedPreferences)
-      : super(sharedPreferences) {
-    // Restore selected color.
-    if (sharedPreferences.containsKey(_colorKey)) {
-      _color = Color(sharedPreferences.getInt(_colorKey)!);
-    }
-  }
+  ToolWithColor(SharedPreferences sharedPreferences) : super(sharedPreferences);
 
-  /// Tool color.
   Color get color => _color;
   Color _color = Colors.black;
-  set color(Color color) {
+
+  void applyColor(Color color) {
     _color = color;
-    sharedPreferences.setInt(_colorKey, _color.value);
   }
-
-  // ========================
-  // Shared preferences keys:
-  // ========================
-
-  String get _colorKey => name + '_color';
 }

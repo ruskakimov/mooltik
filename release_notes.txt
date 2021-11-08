@@ -1,1 +1,2 @@
-- Fix a preview bug when all layers are invisible
+- Wheel color picker!
+- Color is now global across all tools (color will not change when switching tools)
