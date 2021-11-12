@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mooltik/common/ui/menu_tile.dart';
 import 'package:mooltik/drawing/data/drawing_page_options_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/drawing/data/onion_model.dart';
@@ -30,10 +31,10 @@ class DrawingMenu extends StatelessWidget {
     );
   }
 
-  _MenuTile _buildOnionToggle(BuildContext context) {
+  MenuTile _buildOnionToggle(BuildContext context) {
     final onion = context.watch<OnionModel>();
 
-    return _MenuTile(
+    return MenuTile(
       icon: FontAwesomeIcons.lightbulb,
       title: 'Onion skinning',
       trailing: Switch(
@@ -44,10 +45,10 @@ class DrawingMenu extends StatelessWidget {
     );
   }
 
-  _MenuTile _buildFrameReelToggle(BuildContext context) {
+  MenuTile _buildFrameReelToggle(BuildContext context) {
     final options = context.watch<DrawingPageOptionsModel>();
 
-    return _MenuTile(
+    return MenuTile(
       icon: FontAwesomeIcons.film,
       title: 'Frame reel',
       trailing: Switch(
@@ -58,10 +59,10 @@ class DrawingMenu extends StatelessWidget {
     );
   }
 
-  _MenuTile _buildFingerDrawToggle(BuildContext context) {
+  MenuTile _buildFingerDrawToggle(BuildContext context) {
     final easel = context.watch<DrawingPageOptionsModel>();
 
-    return _MenuTile(
+    return MenuTile(
       icon: FontAwesomeIcons.handPointUp,
       title: 'Draw with finger',
       trailing: Switch(
@@ -69,43 +70,6 @@ class DrawingMenu extends StatelessWidget {
         onChanged: (_) => easel.toggleDrawingWithFinger(),
       ),
       onTap: () => easel.toggleDrawingWithFinger(),
-    );
-  }
-}
-
-class _MenuTile extends StatelessWidget {
-  const _MenuTile({
-    Key? key,
-    required this.icon,
-    required this.title,
-    this.trailing,
-    this.onTap,
-  }) : super(key: key);
-
-  final IconData icon;
-  final String title;
-  final Widget? trailing;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Transform.translate(
-        offset: Offset(0, 1),
-        child: Icon(icon, size: 20),
-      ),
-      title: Transform.translate(
-        offset: Offset(-18, 0),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-      trailing: trailing,
-      onTap: onTap,
     );
   }
 }

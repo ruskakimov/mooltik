@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mooltik/common/ui/app_slider.dart';
+import 'package:mooltik/common/ui/menu_tile.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/brush.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +8,8 @@ import 'package:mooltik/common/ui/app_icon_button.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/brush_tip_picker.dart';
+
+const double _popupWidth = 204;
 
 class ToolButton extends StatefulWidget {
   const ToolButton({
@@ -32,12 +35,18 @@ class _ToolButtonState extends State<ToolButton> {
   @override
   Widget build(BuildContext context) {
     Widget? popupBody;
+    var arrowPosition = ArrowSidePosition.middle;
 
     if (widget.tool is Brush) {
       popupBody = BrushPopup(
         brush: widget.tool as Brush,
         onDone: _closePicker,
       );
+    } else if (widget.tool is Lasso) {
+      popupBody = LassoPopup(
+        onDone: _closePicker,
+      );
+      arrowPosition = ArrowSidePosition.end;
     }
 
     final button = AppIconButton(
@@ -56,22 +65,25 @@ class _ToolButtonState extends State<ToolButton> {
       },
     );
 
-    return popupBody != null ? _wrapWithPopupEntry(popupBody, button) : button;
+    return popupBody != null
+        ? _wrapWithPopupEntry(button, popupBody, arrowPosition)
+        : button;
   }
 
   PopupWithArrowEntry _wrapWithPopupEntry(
+    Widget child,
     Widget popupBody,
-    AppIconButton button,
+    ArrowSidePosition arrowPosition,
   ) {
     return PopupWithArrowEntry(
       visible: _pickerOpen && widget.selected,
       arrowSide: ArrowSide.top,
       arrowAnchor: const Alignment(0, 0.8),
-      arrowSidePosition: ArrowSidePosition.middle,
+      arrowSidePosition: arrowPosition,
       popupBody: popupBody,
       onTapOutside: _closePicker,
       onDragOutside: _closePicker,
-      child: button,
+      child: child,
     );
   }
 
@@ -102,7 +114,7 @@ class _BrushPopupState extends State<BrushPopup> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 204,
+      width: _popupWidth,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -147,6 +159,29 @@ class _BrushPopupState extends State<BrushPopup> {
           ),
           SizedBox(height: 4),
         ],
+      ),
+    );
+  }
+}
+
+class LassoPopup extends StatelessWidget {
+  const LassoPopup({
+    Key? key,
+    this.onDone,
+  }) : super(key: key);
+
+  final VoidCallback? onDone;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: _popupWidth,
+      child: MenuTile(
+        icon: Icons.image_rounded,
+        title: 'Import image',
+        onTap: () {
+          onDone?.call();
+        },
       ),
     );
   }
