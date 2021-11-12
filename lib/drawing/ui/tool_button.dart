@@ -31,46 +31,47 @@ class _ToolButtonState extends State<ToolButton> {
 
   @override
   Widget build(BuildContext context) {
+    Widget? popupBody;
+
     if (widget.tool is Brush) {
-      return PopupWithArrowEntry(
-        visible: _pickerOpen && widget.selected,
-        arrowSide: ArrowSide.top,
-        arrowAnchor: const Alignment(0, 0.8),
-        arrowSidePosition: ArrowSidePosition.middle,
-        popupBody: BrushPopup(
-          brush: widget.tool as Brush,
-          onDone: _closePicker,
-        ),
-        onTapOutside: _closePicker,
-        onDragOutside: _closePicker,
-        child: AppIconButton(
-          icon: widget.tool.icon,
-          iconSize: 26,
-          iconTransform: widget.iconTransform,
-          selected: widget.selected,
-          onTap: () {
-            final toolbox = context.read<ToolboxModel>();
-            if (widget.selected) {
-              _openPicker();
-            } else {
-              toolbox.selectTool(widget.tool);
-            }
-            widget.onTap?.call();
-          },
-        ),
+      popupBody = BrushPopup(
+        brush: widget.tool as Brush,
+        onDone: _closePicker,
       );
     }
 
-    return AppIconButton(
+    final button = AppIconButton(
       icon: widget.tool.icon,
       iconSize: 26,
       iconTransform: widget.iconTransform,
       selected: widget.selected,
       onTap: () {
         final toolbox = context.read<ToolboxModel>();
-        toolbox.selectTool(widget.tool);
+        if (widget.selected) {
+          _openPicker();
+        } else {
+          toolbox.selectTool(widget.tool);
+        }
         widget.onTap?.call();
       },
+    );
+
+    return popupBody != null ? _wrapWithPopupEntry(popupBody, button) : button;
+  }
+
+  PopupWithArrowEntry _wrapWithPopupEntry(
+    Widget popupBody,
+    AppIconButton button,
+  ) {
+    return PopupWithArrowEntry(
+      visible: _pickerOpen && widget.selected,
+      arrowSide: ArrowSide.top,
+      arrowAnchor: const Alignment(0, 0.8),
+      arrowSidePosition: ArrowSidePosition.middle,
+      popupBody: popupBody,
+      onTapOutside: _closePicker,
+      onDragOutside: _closePicker,
+      child: button,
     );
   }
 
