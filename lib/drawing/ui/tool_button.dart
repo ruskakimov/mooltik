@@ -1,7 +1,10 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:mooltik/common/data/io/image.dart';
 import 'package:mooltik/common/ui/app_slider.dart';
 import 'package:mooltik/common/ui/menu_tile.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
+import 'package:mooltik/drawing/data/lasso/lasso_model.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/brush.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
@@ -179,7 +182,20 @@ class LassoPopup extends StatelessWidget {
       child: MenuTile(
         icon: Icons.image_rounded,
         title: 'Import image',
-        onTap: () {
+        onTap: () async {
+          final result = await FilePicker.platform.pickFiles(
+            type: FileType.image,
+            withData: true,
+          );
+          final lassoModel = context.read<LassoModel>();
+
+          // Convert picked image to ui.Image
+          if (result != null) {
+            final file = result.files.single;
+            final image = await imageFromFileBytes(file.bytes!);
+            lassoModel.importImage(image);
+          }
+
           onDone?.call();
         },
       ),

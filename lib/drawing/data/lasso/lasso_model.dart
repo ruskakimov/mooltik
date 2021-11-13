@@ -179,6 +179,17 @@ class LassoModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void importImage(ui.Image image) {
+    // Position box:
+    _transformBoxCenterOffset = Offset.zero;
+    _transformBoxSize = Size(image.width.toDouble(), image.height.toDouble());
+    _transformBoxRotation = 0;
+
+    _transformImage = image;
+    _isTransformMode = true;
+    notifyListeners();
+  }
+
   Future<void> _setTransformImage() async {
     _transformImage = await generateImage(
       MaskedImagePainter(

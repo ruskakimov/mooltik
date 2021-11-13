@@ -38,7 +38,7 @@ Future<ui.Image?> floodFill(
 
   if (resultByteData == null) return null;
 
-  return imageFromBytes(resultByteData, source.width, source.height);
+  return imageFromRawBytes(resultByteData, source.width, source.height);
 }
 
 class _FillIsolateParams {

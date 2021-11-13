@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:mooltik/common/data/io/image.dart';
+
 Future<Image> pngRead(File pngFile) async {
   final bytes = await pngFile.readAsBytes();
-  final codec = await instantiateImageCodec(bytes);
-  final frame = await codec.getNextFrame();
-  return frame.image;
+  return imageFromFileBytes(bytes);
 }
 
 Future<void> pngWrite(File pngFile, Image image) async {
