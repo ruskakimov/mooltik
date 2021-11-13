@@ -190,11 +190,7 @@ class LassoModel extends ChangeNotifier {
     final imageSize = Size(image.width.toDouble(), image.height.toDouble());
 
     _transformBoxCenterOffset = frameSize.center(Offset.zero);
-    _transformBoxSize = imageSize *
-        math.min(
-          frameSize.height / imageSize.height,
-          frameSize.width / imageSize.width,
-        );
+    _transformBoxSize = _fittedSize(imageSize, frameSize);
     _transformBoxRotation = 0;
 
     _transformImage = image;
@@ -262,13 +258,36 @@ class LassoModel extends ChangeNotifier {
   }
 
   void onKnobDrag(Alignment knobPosition, DragUpdateDetails details) {
-    final dx = knobPosition.x * details.delta.dx * 2 / _easel.scale;
-    final dy = knobPosition.y * details.delta.dy * 2 / _easel.scale;
+    final isCorner = knobPosition.x != 0 && knobPosition.y != 0;
 
-    _transformBoxSize = Size(
-      _transformBoxSize.width + dx * _xDragDirection,
-      _transformBoxSize.height + dy * _yDragDirection,
-    );
+    if (isCorner) {
+      final fingerEaselPoint = _toEaselPoint(details.globalPosition);
+      final fingerFramePoint = _easel.toFramePoint(fingerEaselPoint);
+
+      final d2 = (fingerFramePoint - _transformBoxCenterOffset).distanceSquared;
+      final a = _transformBoxSize.aspectRatio;
+
+      // x^2 + y^2 = d^2
+      // x/y = a
+      // x = ay
+      // a^2 * y^2 + y^2 = d^2
+      // y^2 (a^2 + 1) = d^2
+      // y = sqrt(d^2 / (a^2 + 1))
+      // Size(x*2, y*2)
+
+      final y = math.sqrt(d2 / (a * a + 1));
+      final x = a * y;
+
+      _transformBoxSize = Size(x * 2, y * 2);
+      // _transformBoxSize = Size(d / math.sqrt2 * 2, d / math.sqrt2 * 2);
+    } else {
+      final dx = knobPosition.x * details.delta.dx * 2 / _easel.scale;
+      final dy = knobPosition.y * details.delta.dy * 2 / _easel.scale;
+      _transformBoxSize = Size(
+        _transformBoxSize.width + dx * _xDragDirection,
+        _transformBoxSize.height + dy * _yDragDirection,
+      );
+    }
     notifyListeners();
   }
 
@@ -322,3 +341,11 @@ class LassoModel extends ChangeNotifier {
     _easel.pushSnapshot(snapshot);
   }
 }
+
+/// Size of the [innerBox] if it was fitted inside the [outerBox] while keeping the [innerBox] aspect ratio constant.
+Size _fittedSize(Size innerBox, Size outerBox) =>
+    innerBox *
+    math.min(
+      outerBox.height / innerBox.height,
+      outerBox.width / innerBox.width,
+    );
