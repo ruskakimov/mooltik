@@ -180,9 +180,15 @@ class LassoModel extends ChangeNotifier {
   }
 
   void importImage(ui.Image image) {
-    // Position box:
-    _transformBoxCenterOffset = Offset.zero;
-    _transformBoxSize = Size(image.width.toDouble(), image.height.toDouble());
+    final frameSize = _easel.frameSize;
+    final imageSize = Size(image.width.toDouble(), image.height.toDouble());
+
+    _transformBoxCenterOffset = frameSize.center(Offset.zero);
+    _transformBoxSize = imageSize *
+        math.min(
+          frameSize.height / imageSize.height,
+          frameSize.width / imageSize.width,
+        );
     _transformBoxRotation = 0;
 
     _transformImage = image;
