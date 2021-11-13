@@ -79,16 +79,14 @@ class LassoModel extends ChangeNotifier {
   /// Erases original image and transforms a copy.
   void transformSelection() {
     if (!finishedSelection) return;
-    _launchTransformMode(true);
-    _lasso.removeSelection();
+    _startSelectionTransform(true);
     notifyListeners();
   }
 
   /// Keeps original image and transforms a copy.
   void duplicateSelection() {
     if (!finishedSelection) return;
-    _launchTransformMode(false);
-    _lasso.removeSelection();
+    _startSelectionTransform(false);
     notifyListeners();
   }
 
@@ -159,7 +157,7 @@ class LassoModel extends ChangeNotifier {
 
   String? _framePathWithErasedOriginal;
 
-  Future<void> _launchTransformMode(bool eraseOriginal) async {
+  Future<void> _startSelectionTransform(bool eraseOriginal) async {
     if (isTransformMode) return;
 
     _isTransformMode = true;
@@ -175,11 +173,19 @@ class LassoModel extends ChangeNotifier {
     _transformBoxSize = selectionStroke!.boundingRect.size;
     _transformBoxRotation = 0;
 
-    await _setTransformImage();
+    _transformImage = await generateImage(
+      MaskedImagePainter(
+        original: _easel.image.snapshot,
+        mask: selectionStroke!.path,
+      ),
+      _transformBoxSize.width.toInt(),
+      _transformBoxSize.height.toInt(),
+    );
+    _lasso.removeSelection();
     notifyListeners();
   }
 
-  void importImage(ui.Image image) {
+  void startImportedImageTransform(ui.Image image) {
     final frameSize = _easel.frameSize;
     final imageSize = Size(image.width.toDouble(), image.height.toDouble());
 
@@ -193,18 +199,8 @@ class LassoModel extends ChangeNotifier {
 
     _transformImage = image;
     _isTransformMode = true;
+    _lasso.removeSelection();
     notifyListeners();
-  }
-
-  Future<void> _setTransformImage() async {
-    _transformImage = await generateImage(
-      MaskedImagePainter(
-        original: _easel.image.snapshot,
-        mask: selectionStroke!.path,
-      ),
-      _transformBoxSize.width.toInt(),
-      _transformBoxSize.height.toInt(),
-    );
   }
 
   Future<void> endTransformMode() async {

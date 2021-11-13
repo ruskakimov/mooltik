@@ -193,7 +193,7 @@ class LassoPopup extends StatelessWidget {
           if (result != null) {
             final file = result.files.single;
             final image = await imageFromFileBytes(file.bytes!);
-            lassoModel.importImage(image);
+            lassoModel.startImportedImageTransform(image);
           }
 
           onDone?.call();
