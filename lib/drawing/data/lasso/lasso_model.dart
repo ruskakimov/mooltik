@@ -252,41 +252,30 @@ class LassoModel extends ChangeNotifier {
   double _xDragDirection = 1;
   double _yDragDirection = 1;
 
+  Size _dragSize = Size.zero;
+
   void onKnobStart(Alignment knobPosition) {
     _xDragDirection = _transformBoxSize.width.sign;
     _yDragDirection = _transformBoxSize.height.sign;
+    _dragSize = _transformBoxSize;
   }
 
   void onKnobDrag(Alignment knobPosition, DragUpdateDetails details) {
     final isCorner = knobPosition.x != 0 && knobPosition.y != 0;
-
+    final dx = knobPosition.x * details.delta.dx * 2 / _easel.scale;
+    final dy = knobPosition.y * details.delta.dy * 2 / _easel.scale;
+    _dragSize = Size(
+      _dragSize.width + dx * _xDragDirection,
+      _dragSize.height + dy * _yDragDirection,
+    );
     if (isCorner) {
-      final fingerEaselPoint = _toEaselPoint(details.globalPosition);
-      final fingerFramePoint = _easel.toFramePoint(fingerEaselPoint);
-
-      final d2 = (fingerFramePoint - _transformBoxCenterOffset).distanceSquared;
-      final a = _transformBoxSize.aspectRatio;
-
-      // x^2 + y^2 = d^2
-      // x/y = a
-      // x = ay
-      // a^2 * y^2 + y^2 = d^2
-      // y^2 (a^2 + 1) = d^2
-      // y = sqrt(d^2 / (a^2 + 1))
-      // Size(x*2, y*2)
-
-      final y = math.sqrt(d2 / (a * a + 1));
-      final x = a * y;
-
-      _transformBoxSize = Size(x * 2, y * 2);
-      // _transformBoxSize = Size(d / math.sqrt2 * 2, d / math.sqrt2 * 2);
-    } else {
-      final dx = knobPosition.x * details.delta.dx * 2 / _easel.scale;
-      final dy = knobPosition.y * details.delta.dy * 2 / _easel.scale;
+      final fit = _fittedSize(_transformBoxSize, _dragSize);
       _transformBoxSize = Size(
-        _transformBoxSize.width + dx * _xDragDirection,
-        _transformBoxSize.height + dy * _yDragDirection,
+        fit.width.abs() * _dragSize.width.sign,
+        fit.height.abs() * _dragSize.height.sign,
       );
+    } else {
+      _transformBoxSize = _dragSize;
     }
     notifyListeners();
   }
