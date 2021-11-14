@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:mooltik/common/data/copy_paster_model.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
@@ -33,6 +34,8 @@ class FrameMenu extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          _buildImageRow(context),
+          _buildSeparator(),
           _buildFirstRow(context, reel, copyPaster),
           _buildSeparator(),
           _buildSecondRow(context, reel),
@@ -46,6 +49,41 @@ class FrameMenu extends StatelessWidget {
       width: 150,
       height: 1,
       color: Colors.black12,
+    );
+  }
+
+  Row _buildImageRow(
+    BuildContext context,
+  ) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        LabeledIconButton(
+          icon: MdiIcons.arrowUpDown,
+          label: 'Flip Vert.',
+          color: Theme.of(context).colorScheme.onPrimary,
+          onTap: () {
+            closePopup();
+          },
+        ),
+        LabeledIconButton(
+          icon: Icons.image_outlined,
+          iconTransform: Matrix4Transform().scale(1.1, origin: Offset(9, 0)).m,
+          label: 'Add image',
+          color: Theme.of(context).colorScheme.onPrimary,
+          onTap: () {
+            closePopup();
+          },
+        ),
+        LabeledIconButton(
+          icon: MdiIcons.arrowLeftRight,
+          label: 'Flip Horiz.',
+          color: Theme.of(context).colorScheme.onPrimary,
+          onTap: () {
+            closePopup();
+          },
+        ),
+      ],
     );
   }
 
