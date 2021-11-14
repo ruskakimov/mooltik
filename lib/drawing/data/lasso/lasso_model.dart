@@ -203,6 +203,7 @@ class LassoModel extends ChangeNotifier {
     if (!isTransformMode) return;
 
     _isTransformMode = false;
+    _lasso.removeSelection();
     notifyListeners();
 
     await _pasteTransformedImage();
