@@ -1,12 +1,16 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:mooltik/common/data/copy_paster_model.dart';
+import 'package:mooltik/common/data/io/image.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
 import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
+import 'package:mooltik/drawing/data/lasso/lasso_model.dart';
+import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/ui/painted_glass.dart';
 import 'package:provider/provider.dart';
 
@@ -73,18 +77,20 @@ class FrameMenu extends StatelessWidget {
           iconTransform: _materialIconTransform,
           label: 'Add image',
           onTap: () async {
-            // final result = await FilePicker.platform.pickFiles(
-            //   type: FileType.image,
-            //   withData: true,
-            // );
-            // final lassoModel = context.read<LassoModel>();
+            final result = await FilePicker.platform.pickFiles(
+              type: FileType.image,
+              withData: true,
+            );
+            final lassoModel = context.read<LassoModel>();
+            final toolbox = context.read<ToolboxModel>();
 
-            // // Convert picked image to ui.Image
-            // if (result != null) {
-            //   final file = result.files.single;
-            //   final image = await imageFromFileBytes(file.bytes!);
-            //   lassoModel.startImportedImageTransform(image);
-            // }
+            // Convert picked image to ui.Image
+            if (result != null) {
+              final file = result.files.single;
+              final image = await imageFromFileBytes(file.bytes!);
+              toolbox.selectTool(toolbox.lasso);
+              lassoModel.startImportedImageTransform(image);
+            }
 
             closePopup();
           },
