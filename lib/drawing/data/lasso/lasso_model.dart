@@ -251,7 +251,6 @@ class LassoModel extends ChangeNotifier {
 
   double _xDragDirection = 1;
   double _yDragDirection = 1;
-
   Size _dragSize = Size.zero;
 
   void onKnobStart(Alignment knobPosition) {
@@ -264,19 +263,13 @@ class LassoModel extends ChangeNotifier {
     final isCorner = knobPosition.x != 0 && knobPosition.y != 0;
     final dx = knobPosition.x * details.delta.dx * 2 / _easel.scale;
     final dy = knobPosition.y * details.delta.dy * 2 / _easel.scale;
+
     _dragSize = Size(
       _dragSize.width + dx * _xDragDirection,
       _dragSize.height + dy * _yDragDirection,
     );
-    if (isCorner) {
-      final fit = _fittedSize(_transformBoxSize, _dragSize);
-      _transformBoxSize = Size(
-        fit.width.abs() * _dragSize.width.sign,
-        fit.height.abs() * _dragSize.height.sign,
-      );
-    } else {
-      _transformBoxSize = _dragSize;
-    }
+    _transformBoxSize =
+        isCorner ? _fittedSize(_transformBoxSize, _dragSize) : _dragSize;
     notifyListeners();
   }
 
@@ -332,9 +325,13 @@ class LassoModel extends ChangeNotifier {
 }
 
 /// Size of the [innerBox] if it was fitted inside the [outerBox] while keeping the [innerBox] aspect ratio constant.
-Size _fittedSize(Size innerBox, Size outerBox) =>
-    innerBox *
-    math.min(
-      outerBox.height / innerBox.height,
-      outerBox.width / innerBox.width,
-    );
+Size _fittedSize(Size innerBox, Size outerBox) {
+  return Size(
+        innerBox.width.abs() * outerBox.width.sign,
+        innerBox.height.abs() * outerBox.height.sign,
+      ) *
+      math.min(
+        (outerBox.width / innerBox.width).abs(),
+        (outerBox.height / innerBox.height).abs(),
+      );
+}
