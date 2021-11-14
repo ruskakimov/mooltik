@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:mooltik/common/data/copy_paster_model.dart';
+import 'package:mooltik/common/data/io/generate_image.dart';
 import 'package:mooltik/common/data/io/image.dart';
 import 'package:mooltik/common/ui/labeled_icon_button.dart';
 import 'package:mooltik/common/ui/open_delete_confirmation_dialog.dart';
@@ -11,6 +12,7 @@ import 'package:mooltik/drawing/data/easel_model.dart';
 import 'package:mooltik/drawing/data/frame_reel_model.dart';
 import 'package:mooltik/drawing/data/lasso/lasso_model.dart';
 import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
+import 'package:mooltik/drawing/ui/lasso/transformed_image_painter.dart';
 import 'package:mooltik/drawing/ui/painted_glass.dart';
 import 'package:provider/provider.dart';
 
@@ -68,8 +70,23 @@ class FrameMenu extends StatelessWidget {
         LabeledIconButton(
           icon: MdiIcons.arrowUpDown,
           label: 'Flip Vert.',
-          onTap: () {
+          onTap: () async {
             closePopup();
+            final easel = context.read<EaselModel>();
+            final original = easel.image.snapshot!;
+            final frameCenter = easel.frameSize.center(Offset.zero);
+
+            final newSnapshot = await generateImage(
+              TransformedImagePainter(
+                transformedImage: original,
+                transform: Matrix4Transform()
+                    .flipVertically(origin: frameCenter)
+                    .matrix4,
+              ),
+              original.width,
+              original.height,
+            );
+            easel.pushSnapshot(newSnapshot);
           },
         ),
         LabeledIconButton(
@@ -98,8 +115,23 @@ class FrameMenu extends StatelessWidget {
         LabeledIconButton(
           icon: MdiIcons.arrowLeftRight,
           label: 'Flip Horiz.',
-          onTap: () {
+          onTap: () async {
             closePopup();
+            final easel = context.read<EaselModel>();
+            final original = easel.image.snapshot!;
+            final frameCenter = easel.frameSize.center(Offset.zero);
+
+            final newSnapshot = await generateImage(
+              TransformedImagePainter(
+                transformedImage: original,
+                transform: Matrix4Transform()
+                    .flipHorizontally(origin: frameCenter)
+                    .matrix4,
+              ),
+              original.width,
+              original.height,
+            );
+            easel.pushSnapshot(newSnapshot);
           },
         ),
       ],
