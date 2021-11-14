@@ -36,9 +36,9 @@ class FrameMenu extends StatelessWidget {
         children: [
           _buildImageRow(context),
           _buildSeparator(),
-          _buildFirstRow(context, reel, copyPaster),
+          _buildActionRow(context, reel, copyPaster),
           _buildSeparator(),
-          _buildSecondRow(context, reel),
+          _buildFrameRow(context, reel),
         ],
       ),
     );
@@ -87,7 +87,7 @@ class FrameMenu extends StatelessWidget {
     );
   }
 
-  Row _buildFirstRow(
+  Row _buildActionRow(
     BuildContext context,
     FrameReelModel reel,
     CopyPasterModel copyPaster,
@@ -143,7 +143,7 @@ class FrameMenu extends StatelessWidget {
     );
   }
 
-  Row _buildSecondRow(BuildContext context, FrameReelModel reel) {
+  Row _buildFrameRow(BuildContext context, FrameReelModel reel) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
