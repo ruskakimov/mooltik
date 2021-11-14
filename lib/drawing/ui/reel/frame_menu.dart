@@ -73,20 +73,7 @@ class FrameMenu extends StatelessWidget {
           onTap: () async {
             closePopup();
             final easel = context.read<EaselModel>();
-            final original = easel.image.snapshot!;
-            final frameCenter = easel.frameSize.center(Offset.zero);
-
-            final newSnapshot = await generateImage(
-              TransformedImagePainter(
-                transformedImage: original,
-                transform: Matrix4Transform()
-                    .flipVertically(origin: frameCenter)
-                    .matrix4,
-              ),
-              original.width,
-              original.height,
-            );
-            easel.pushSnapshot(newSnapshot);
+            await _flipFrame(easel, FlipDirection.vertical);
           },
         ),
         LabeledIconButton(
@@ -118,20 +105,7 @@ class FrameMenu extends StatelessWidget {
           onTap: () async {
             closePopup();
             final easel = context.read<EaselModel>();
-            final original = easel.image.snapshot!;
-            final frameCenter = easel.frameSize.center(Offset.zero);
-
-            final newSnapshot = await generateImage(
-              TransformedImagePainter(
-                transformedImage: original,
-                transform: Matrix4Transform()
-                    .flipHorizontally(origin: frameCenter)
-                    .matrix4,
-              ),
-              original.width,
-              original.height,
-            );
-            easel.pushSnapshot(newSnapshot);
+            await _flipFrame(easel, FlipDirection.horizontal);
           },
         ),
       ],
@@ -238,4 +212,27 @@ class FrameMenu extends StatelessWidget {
       ],
     );
   }
+}
+
+enum FlipDirection {
+  vertical,
+  horizontal,
+}
+
+Future<void> _flipFrame(EaselModel easel, FlipDirection direction) async {
+  final original = easel.image.snapshot!;
+  final frameCenter = easel.frameSize.center(Offset.zero);
+  final transform = direction == FlipDirection.vertical
+      ? Matrix4Transform().flipVertically(origin: frameCenter)
+      : Matrix4Transform().flipHorizontally(origin: frameCenter);
+
+  final newSnapshot = await generateImage(
+    TransformedImagePainter(
+      transformedImage: original,
+      transform: transform.matrix4,
+    ),
+    original.width,
+    original.height,
+  );
+  easel.pushSnapshot(newSnapshot);
 }
