@@ -72,7 +72,20 @@ class FrameMenu extends StatelessWidget {
           icon: Icons.image_outlined,
           iconTransform: _materialIconTransform,
           label: 'Add image',
-          onTap: () {
+          onTap: () async {
+            // final result = await FilePicker.platform.pickFiles(
+            //   type: FileType.image,
+            //   withData: true,
+            // );
+            // final lassoModel = context.read<LassoModel>();
+
+            // // Convert picked image to ui.Image
+            // if (result != null) {
+            //   final file = result.files.single;
+            //   final image = await imageFromFileBytes(file.bytes!);
+            //   lassoModel.startImportedImageTransform(image);
+            // }
+
             closePopup();
           },
         ),

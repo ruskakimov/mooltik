@@ -1,10 +1,6 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:mooltik/common/data/io/image.dart';
 import 'package:mooltik/common/ui/app_slider.dart';
-import 'package:mooltik/common/ui/menu_tile.dart';
 import 'package:mooltik/common/ui/popup_with_arrow.dart';
-import 'package:mooltik/drawing/data/lasso/lasso_model.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/brush.dart';
 import 'package:provider/provider.dart';
 import 'package:mooltik/common/ui/app_icon_button.dart';
@@ -38,18 +34,12 @@ class _ToolButtonState extends State<ToolButton> {
   @override
   Widget build(BuildContext context) {
     Widget? popupBody;
-    var arrowPosition = ArrowSidePosition.middle;
 
     if (widget.tool is Brush) {
       popupBody = BrushPopup(
         brush: widget.tool as Brush,
         onDone: _closePicker,
       );
-    } else if (widget.tool is Lasso) {
-      popupBody = LassoPopup(
-        onDone: _closePicker,
-      );
-      arrowPosition = ArrowSidePosition.end;
     }
 
     final button = AppIconButton(
@@ -68,21 +58,15 @@ class _ToolButtonState extends State<ToolButton> {
       },
     );
 
-    return popupBody != null
-        ? _wrapWithPopupEntry(button, popupBody, arrowPosition)
-        : button;
+    return popupBody != null ? _wrapWithPopupEntry(button, popupBody) : button;
   }
 
-  PopupWithArrowEntry _wrapWithPopupEntry(
-    Widget child,
-    Widget popupBody,
-    ArrowSidePosition arrowPosition,
-  ) {
+  PopupWithArrowEntry _wrapWithPopupEntry(Widget child, Widget popupBody) {
     return PopupWithArrowEntry(
       visible: _pickerOpen && widget.selected,
       arrowSide: ArrowSide.top,
       arrowAnchor: const Alignment(0, 0.8),
-      arrowSidePosition: arrowPosition,
+      arrowSidePosition: ArrowSidePosition.middle,
       popupBody: popupBody,
       onTapOutside: _closePicker,
       onDragOutside: _closePicker,
@@ -162,42 +146,6 @@ class _BrushPopupState extends State<BrushPopup> {
           ),
           SizedBox(height: 4),
         ],
-      ),
-    );
-  }
-}
-
-class LassoPopup extends StatelessWidget {
-  const LassoPopup({
-    Key? key,
-    this.onDone,
-  }) : super(key: key);
-
-  final VoidCallback? onDone;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: _popupWidth,
-      child: MenuTile(
-        icon: Icons.image_rounded,
-        title: 'Import image',
-        onTap: () async {
-          final result = await FilePicker.platform.pickFiles(
-            type: FileType.image,
-            withData: true,
-          );
-          final lassoModel = context.read<LassoModel>();
-
-          // Convert picked image to ui.Image
-          if (result != null) {
-            final file = result.files.single;
-            final image = await imageFromFileBytes(file.bytes!);
-            lassoModel.startImportedImageTransform(image);
-          }
-
-          onDone?.call();
-        },
       ),
     );
   }
