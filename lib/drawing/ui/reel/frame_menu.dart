@@ -24,6 +24,9 @@ class FrameMenu extends StatelessWidget {
 
   static const Duration scrollDelay = Duration(milliseconds: 100);
 
+  static Matrix4 _materialIconTransform =
+      Matrix4Transform().scale(1.1, origin: Offset(9, 0)).m;
+
   @override
   Widget build(BuildContext context) {
     final reel = context.watch<FrameReelModel>();
@@ -61,16 +64,14 @@ class FrameMenu extends StatelessWidget {
         LabeledIconButton(
           icon: MdiIcons.arrowUpDown,
           label: 'Flip Vert.',
-          color: Theme.of(context).colorScheme.onPrimary,
           onTap: () {
             closePopup();
           },
         ),
         LabeledIconButton(
           icon: Icons.image_outlined,
-          iconTransform: Matrix4Transform().scale(1.1, origin: Offset(9, 0)).m,
+          iconTransform: _materialIconTransform,
           label: 'Add image',
-          color: Theme.of(context).colorScheme.onPrimary,
           onTap: () {
             closePopup();
           },
@@ -78,7 +79,6 @@ class FrameMenu extends StatelessWidget {
         LabeledIconButton(
           icon: MdiIcons.arrowLeftRight,
           label: 'Flip Horiz.',
-          color: Theme.of(context).colorScheme.onPrimary,
           onTap: () {
             closePopup();
           },
@@ -97,9 +97,8 @@ class FrameMenu extends StatelessWidget {
       children: [
         LabeledIconButton(
           icon: Icons.copy_rounded,
-          iconTransform: Matrix4Transform().scale(1.1, origin: Offset(9, 0)).m,
+          iconTransform: _materialIconTransform,
           label: 'Copy',
-          color: Theme.of(context).colorScheme.onPrimary,
           onTap: () {
             copyPaster.copyImage(reel.currentFrame.image.snapshot);
             closePopup();
@@ -107,9 +106,8 @@ class FrameMenu extends StatelessWidget {
         ),
         LabeledIconButton(
           icon: Icons.paste_rounded,
-          iconTransform: Matrix4Transform().scale(1.1, origin: Offset(9, 0)).m,
+          iconTransform: _materialIconTransform,
           label: 'Paste',
-          color: Theme.of(context).colorScheme.onPrimary,
           onTap: copyPaster.canPaste
               ? () async {
                   closePopup();
@@ -124,7 +122,6 @@ class FrameMenu extends StatelessWidget {
         LabeledIconButton(
           icon: FontAwesomeIcons.trashAlt,
           label: 'Delete',
-          color: Theme.of(context).colorScheme.onPrimary,
           onTap: reel.canDeleteCurrent
               ? () async {
                   closePopup();
@@ -150,7 +147,6 @@ class FrameMenu extends StatelessWidget {
         LabeledIconButton(
           icon: FontAwesomeIcons.plusSquare,
           label: 'Add before',
-          color: Theme.of(context).colorScheme.onPrimary,
           onTap: () async {
             await reel.addBeforeCurrent();
             jumpTo(reel.currentIndex); // Keep current centered.
@@ -165,7 +161,6 @@ class FrameMenu extends StatelessWidget {
         LabeledIconButton(
           icon: FontAwesomeIcons.copy,
           label: 'Duplicate',
-          color: Theme.of(context).colorScheme.onPrimary,
           onTap: () async {
             await reel.duplicateCurrent();
             closePopup();
@@ -179,7 +174,6 @@ class FrameMenu extends StatelessWidget {
         LabeledIconButton(
           icon: FontAwesomeIcons.plusSquare,
           label: 'Add after',
-          color: Theme.of(context).colorScheme.onPrimary,
           onTap: () async {
             await reel.addAfterCurrent();
             closePopup();

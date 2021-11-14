@@ -43,20 +43,17 @@ class SliverMenu extends StatelessWidget {
               LabeledIconButton(
                 icon: FontAwesomeIcons.film,
                 label: 'Edit scene',
-                color: Theme.of(context).colorScheme.onPrimary,
                 onTap: timelineView.editScene,
               ),
             if (showDuplicate)
               LabeledIconButton(
                 icon: FontAwesomeIcons.copy,
                 label: 'Duplicate',
-                color: Theme.of(context).colorScheme.onPrimary,
                 onTap: timelineView.duplicateSelected,
               ),
             LabeledIconButton(
               icon: FontAwesomeIcons.trashAlt,
               label: 'Delete',
-              color: Theme.of(context).colorScheme.onPrimary,
               onTap: timelineView.canDeleteSelected
                   ? () => _handleDelete(context)
                   : null,
