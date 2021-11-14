@@ -81,18 +81,18 @@ class FrameMenu extends StatelessWidget {
               type: FileType.image,
               withData: true,
             );
-            final lassoModel = context.read<LassoModel>();
-            final toolbox = context.read<ToolboxModel>();
+            closePopup();
 
-            // Convert picked image to ui.Image
             if (result != null) {
               final file = result.files.single;
               final image = await imageFromFileBytes(file.bytes!);
+
+              final toolbox = context.read<ToolboxModel>();
+              final lassoModel = context.read<LassoModel>();
+
               toolbox.selectTool(toolbox.lasso);
               lassoModel.startImportedImageTransform(image);
             }
-
-            closePopup();
           },
         ),
         LabeledIconButton(
