@@ -53,48 +53,54 @@ class DrawingPage extends StatelessWidget {
 
         final safePadding = MediaQuery.of(context).padding;
 
-        return WillPopScope(
-          // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
-          onWillPop: () async => true,
-          child: Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.background,
-            body: MultiProvider(
-              providers: [
-                ChangeNotifierProvider<FrameReelModel>.value(
-                  value: reelStack.activeReel,
-                ),
-                ChangeNotifierProxyProvider<FrameReelModel, OnionModel>(
-                  update: (context, reel, model) => model!
-                    ..updateFrames(reel.frameSeq)
-                    ..updateSelectedIndex(reel.currentIndex),
-                  create: (context) => OnionModel(
-                    frames: context.read<FrameReelModel>().frameSeq,
-                    selectedIndex: context.read<FrameReelModel>().currentIndex,
-                    sharedPreferences: context.read<SharedPreferences>(),
-                  ),
-                ),
-                ChangeNotifierProxyProvider2<FrameReelModel, ToolboxModel,
-                    EaselModel>(
-                  create: (context) => EaselModel(
-                    image: context.read<FrameReelModel>().currentFrame.image,
-                    selectedTool: context.read<ToolboxModel>().selectedTool,
-                  ),
-                  update: (_, reel, toolbox, easel) => easel!
-                    ..updateImage(reel.currentFrame.image)
-                    ..updateSelectedTool(toolbox.selectedTool),
-                ),
-                ChangeNotifierProxyProvider<EaselModel, LassoModel>(
-                  create: (context) => LassoModel(
-                    lasso: context.read<ToolboxModel>().lasso,
-                    easel: context.read<EaselModel>(),
-                    headerHeight: headerHeight,
-                  ),
-                  update: (_, easel, lasso) => lasso!
-                    ..updateEasel(easel)
-                    ..updateHeaderHeight(headerHeight),
-                ),
-              ],
-              child: Stack(
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider<FrameReelModel>.value(
+              value: reelStack.activeReel,
+            ),
+            ChangeNotifierProxyProvider<FrameReelModel, OnionModel>(
+              update: (context, reel, model) => model!
+                ..updateFrames(reel.frameSeq)
+                ..updateSelectedIndex(reel.currentIndex),
+              create: (context) => OnionModel(
+                frames: context.read<FrameReelModel>().frameSeq,
+                selectedIndex: context.read<FrameReelModel>().currentIndex,
+                sharedPreferences: context.read<SharedPreferences>(),
+              ),
+            ),
+            ChangeNotifierProxyProvider2<FrameReelModel, ToolboxModel,
+                EaselModel>(
+              create: (context) => EaselModel(
+                image: context.read<FrameReelModel>().currentFrame.image,
+                selectedTool: context.read<ToolboxModel>().selectedTool,
+              ),
+              update: (_, reel, toolbox, easel) => easel!
+                ..updateImage(reel.currentFrame.image)
+                ..updateSelectedTool(toolbox.selectedTool),
+            ),
+            ChangeNotifierProxyProvider<EaselModel, LassoModel>(
+              create: (context) => LassoModel(
+                lasso: context.read<ToolboxModel>().lasso,
+                easel: context.read<EaselModel>(),
+                headerHeight: headerHeight,
+              ),
+              update: (_, easel, lasso) => lasso!
+                ..updateEasel(easel)
+                ..updateHeaderHeight(headerHeight),
+            ),
+          ],
+          builder: (context, child) => WillPopScope(
+            // Disables iOS swipe back gesture. (https://github.com/flutter/flutter/issues/14203)
+            onWillPop: () async {
+              final lassoModel = context.read<LassoModel>();
+              if (lassoModel.isTransformMode) {
+                await lassoModel.endTransformMode();
+              }
+              return true;
+            },
+            child: Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.background,
+              body: Stack(
                 children: [
                   Positioned.fill(
                     top: headerHeight,
