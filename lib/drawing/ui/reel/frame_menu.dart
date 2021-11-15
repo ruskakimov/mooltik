@@ -87,7 +87,7 @@ class FrameMenu extends StatelessWidget {
             );
             closePopup();
 
-            if (result != null) {
+            if (result != null && result.files.isNotEmpty) {
               final file = result.files.single;
               final image = await imageFromFileBytes(file.bytes!);
 
