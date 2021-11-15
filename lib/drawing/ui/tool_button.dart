@@ -8,6 +8,8 @@ import 'package:mooltik/drawing/data/toolbox/toolbox_model.dart';
 import 'package:mooltik/drawing/data/toolbox/tools/tools.dart';
 import 'package:mooltik/drawing/ui/brush_tip_picker.dart';
 
+const double _popupWidth = 204;
+
 class ToolButton extends StatefulWidget {
   const ToolButton({
     Key? key,
@@ -31,46 +33,44 @@ class _ToolButtonState extends State<ToolButton> {
 
   @override
   Widget build(BuildContext context) {
+    Widget? popupBody;
+
     if (widget.tool is Brush) {
-      return PopupWithArrowEntry(
-        visible: _pickerOpen && widget.selected,
-        arrowSide: ArrowSide.top,
-        arrowAnchor: const Alignment(0, 0.8),
-        arrowSidePosition: ArrowSidePosition.middle,
-        popupBody: BrushPopup(
-          brush: widget.tool as Brush,
-          onDone: _closePicker,
-        ),
-        onTapOutside: _closePicker,
-        onDragOutside: _closePicker,
-        child: AppIconButton(
-          icon: widget.tool.icon,
-          iconSize: 26,
-          iconTransform: widget.iconTransform,
-          selected: widget.selected,
-          onTap: () {
-            final toolbox = context.read<ToolboxModel>();
-            if (widget.selected) {
-              _openPicker();
-            } else {
-              toolbox.selectTool(widget.tool);
-            }
-            widget.onTap?.call();
-          },
-        ),
+      popupBody = BrushPopup(
+        brush: widget.tool as Brush,
+        onDone: _closePicker,
       );
     }
 
-    return AppIconButton(
+    final button = AppIconButton(
       icon: widget.tool.icon,
       iconSize: 26,
       iconTransform: widget.iconTransform,
       selected: widget.selected,
       onTap: () {
         final toolbox = context.read<ToolboxModel>();
-        toolbox.selectTool(widget.tool);
+        if (widget.selected) {
+          _openPicker();
+        } else {
+          toolbox.selectTool(widget.tool);
+        }
         widget.onTap?.call();
       },
+    );
+
+    return popupBody != null ? _wrapWithPopupEntry(button, popupBody) : button;
+  }
+
+  PopupWithArrowEntry _wrapWithPopupEntry(Widget child, Widget popupBody) {
+    return PopupWithArrowEntry(
+      visible: _pickerOpen && widget.selected,
+      arrowSide: ArrowSide.top,
+      arrowAnchor: const Alignment(0, 0.8),
+      arrowSidePosition: ArrowSidePosition.middle,
+      popupBody: popupBody,
+      onTapOutside: _closePicker,
+      onDragOutside: _closePicker,
+      child: child,
     );
   }
 
@@ -101,7 +101,7 @@ class _BrushPopupState extends State<BrushPopup> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 204,
+      width: _popupWidth,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

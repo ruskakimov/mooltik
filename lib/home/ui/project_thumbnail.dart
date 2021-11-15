@@ -103,19 +103,16 @@ class _ProjectThumbnailState extends State<ProjectThumbnail> {
           LabeledIconButton(
             icon: FontAwesomeIcons.copy,
             label: 'Duplicate',
-            color: Theme.of(context).colorScheme.onPrimary,
             onTap: _duplicate,
           ),
           LabeledIconButton(
             icon: FontAwesomeIcons.fileArchive,
             label: 'Backup',
-            color: Theme.of(context).colorScheme.onPrimary,
             onTap: _exportBackup,
           ),
           LabeledIconButton(
             icon: FontAwesomeIcons.trashAlt,
             label: 'Move to Bin',
-            color: Theme.of(context).colorScheme.onPrimary,
             onTap: _moveToBin,
           ),
         ],

@@ -7,7 +7,7 @@ class LabeledIconButton extends StatelessWidget {
     this.iconSize,
     this.iconTransform,
     required this.label,
-    required this.color,
+    this.color,
     this.onTap,
   }) : super(key: key);
 
@@ -15,7 +15,7 @@ class LabeledIconButton extends StatelessWidget {
   final double? iconSize;
   final Matrix4? iconTransform;
   final String label;
-  final Color color;
+  final Color? color;
   final VoidCallback? onTap;
 
   @override
@@ -39,7 +39,7 @@ class LabeledIconButton extends StatelessWidget {
                   child: Icon(
                     icon,
                     size: iconSize ?? 18,
-                    color: color,
+                    color: color ?? Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
                 SizedBox(height: 6),
@@ -48,7 +48,7 @@ class LabeledIconButton extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
-                    color: color,
+                    color: color ?? Theme.of(context).colorScheme.onPrimary,
                   ),
                   textAlign: TextAlign.center,
                   softWrap: false,

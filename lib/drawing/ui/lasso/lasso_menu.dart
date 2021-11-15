@@ -37,13 +37,11 @@ class LassoMenu extends StatelessWidget {
                 LabeledIconButton(
                   icon: MdiIcons.vectorSquare,
                   label: 'Transform',
-                  color: Theme.of(context).colorScheme.onPrimary,
                   onTap: lassoModel.transformSelection,
                 ),
                 LabeledIconButton(
                   icon: MdiIcons.vectorCombine,
                   label: 'Duplicate',
-                  color: Theme.of(context).colorScheme.onPrimary,
                   onTap: lassoModel.duplicateSelection,
                 ),
                 LabeledIconButton(
@@ -52,13 +50,11 @@ class LassoMenu extends StatelessWidget {
                     ..scale(1.3)
                     ..translate(-2.0),
                   label: 'Fill',
-                  color: Theme.of(context).colorScheme.onPrimary,
                   onTap: lassoModel.fillSelection,
                 ),
                 LabeledIconButton(
                   icon: MdiIcons.eraser,
                   label: 'Erase',
-                  color: Theme.of(context).colorScheme.onPrimary,
                   onTap: lassoModel.eraseSelection,
                 ),
                 const SizedBox(width: 8, height: 8),

@@ -41,7 +41,7 @@ class DrawingActionbar extends StatelessWidget {
                     AppIconButton(
                       icon: FontAwesomeIcons.arrowLeft,
                       onTap: () {
-                        Navigator.pop(context);
+                        Navigator.maybePop(context);
                       },
                     ),
                     MenuButton(),

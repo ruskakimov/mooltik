@@ -79,16 +79,14 @@ class LassoModel extends ChangeNotifier {
   /// Erases original image and transforms a copy.
   void transformSelection() {
     if (!finishedSelection) return;
-    _launchTransformMode(true);
-    _lasso.removeSelection();
+    _startSelectionTransform(true);
     notifyListeners();
   }
 
   /// Keeps original image and transforms a copy.
   void duplicateSelection() {
     if (!finishedSelection) return;
-    _launchTransformMode(false);
-    _lasso.removeSelection();
+    _startSelectionTransform(false);
     notifyListeners();
   }
 
@@ -159,7 +157,7 @@ class LassoModel extends ChangeNotifier {
 
   String? _framePathWithErasedOriginal;
 
-  Future<void> _launchTransformMode(bool eraseOriginal) async {
+  Future<void> _startSelectionTransform(bool eraseOriginal) async {
     if (isTransformMode) return;
 
     _isTransformMode = true;
@@ -175,11 +173,6 @@ class LassoModel extends ChangeNotifier {
     _transformBoxSize = selectionStroke!.boundingRect.size;
     _transformBoxRotation = 0;
 
-    await _setTransformImage();
-    notifyListeners();
-  }
-
-  Future<void> _setTransformImage() async {
     _transformImage = await generateImage(
       MaskedImagePainter(
         original: _easel.image.snapshot,
@@ -188,12 +181,29 @@ class LassoModel extends ChangeNotifier {
       _transformBoxSize.width.toInt(),
       _transformBoxSize.height.toInt(),
     );
+    _lasso.removeSelection();
+    notifyListeners();
+  }
+
+  void startImportedImageTransform(ui.Image image) {
+    final frameSize = _easel.frameSize;
+    final imageSize = Size(image.width.toDouble(), image.height.toDouble());
+
+    _transformBoxCenterOffset = frameSize.center(Offset.zero);
+    _transformBoxSize = _fittedSize(imageSize, frameSize);
+    _transformBoxRotation = 0;
+
+    _transformImage = image;
+    _isTransformMode = true;
+    _lasso.removeSelection();
+    notifyListeners();
   }
 
   Future<void> endTransformMode() async {
     if (!isTransformMode) return;
 
     _isTransformMode = false;
+    _lasso.removeSelection();
     notifyListeners();
 
     await _pasteTransformedImage();
@@ -242,20 +252,25 @@ class LassoModel extends ChangeNotifier {
 
   double _xDragDirection = 1;
   double _yDragDirection = 1;
+  Size _dragSize = Size.zero;
 
   void onKnobStart(Alignment knobPosition) {
     _xDragDirection = _transformBoxSize.width.sign;
     _yDragDirection = _transformBoxSize.height.sign;
+    _dragSize = _transformBoxSize;
   }
 
   void onKnobDrag(Alignment knobPosition, DragUpdateDetails details) {
+    final isCorner = knobPosition.x != 0 && knobPosition.y != 0;
     final dx = knobPosition.x * details.delta.dx * 2 / _easel.scale;
     final dy = knobPosition.y * details.delta.dy * 2 / _easel.scale;
 
-    _transformBoxSize = Size(
-      _transformBoxSize.width + dx * _xDragDirection,
-      _transformBoxSize.height + dy * _yDragDirection,
+    _dragSize = Size(
+      _dragSize.width + dx * _xDragDirection,
+      _dragSize.height + dy * _yDragDirection,
     );
+    _transformBoxSize =
+        isCorner ? _fittedSize(_transformBoxSize, _dragSize) : _dragSize;
     notifyListeners();
   }
 
@@ -308,4 +323,16 @@ class LassoModel extends ChangeNotifier {
     );
     _easel.pushSnapshot(snapshot);
   }
+}
+
+/// Size of the [innerBox] if it was fitted inside the [outerBox] while keeping the [innerBox] aspect ratio constant.
+Size _fittedSize(Size innerBox, Size outerBox) {
+  return Size(
+        innerBox.width.abs() * outerBox.width.sign,
+        innerBox.height.abs() * outerBox.height.sign,
+      ) *
+      math.min(
+        (outerBox.width / innerBox.width).abs(),
+        (outerBox.height / innerBox.height).abs(),
+      );
 }

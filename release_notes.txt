@@ -1,2 +1,4 @@
-- Wheel color picker!
-- Color is now global across all tools (color will not change when switching tools)
+- Image import!
+- Flip frame vertically or horizontally
+- Dragging corner of the transform box doesn't change the aspect ratio
+- Fix a bug where an unfinished transformed image was lost on exit
