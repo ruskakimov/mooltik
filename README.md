@@ -13,6 +13,10 @@
   
   [![Codemagic build status](https://api.codemagic.io/apps/60363e65c9d4d7cf9b10cfc0/default-workflow/status_badge.svg)](https://codemagic.io/apps/60363e65c9d4d7cf9b10cfc0/default-workflow/latest_build)
 
+## Features:
+
+<img width="auto" height="auto" src="https://github.com/ruskakimov/mooltik/blob/master/assets/readme_screenshots.png">
+
 ## Useful commands:
 
 #### Extract app data
