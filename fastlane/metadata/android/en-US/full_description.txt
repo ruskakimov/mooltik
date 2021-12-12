@@ -1,0 +1,18 @@
+Think of it as a combination of a video editor and a drawing app.
+Perfect for a short cartoon, movie animatic, or a music video storyboard.
+
+Some artists say this is the EASIEST way to make a quick storyboard animation out there. But don't take others' words as gospel truth, give it a try and find it out yourself!
+
+Features:
+- Simple drawing tools
+- Precisely time the duration of each scene and frame
+- Loop animations
+- Layers acting as independent timelines (e.g. action in the background can be animated separately from the main action)
+- Annotate scenes with dialog or other description
+- Import music (for now only a single soundtrack)
+- Export animatic as an mp4
+
+This app is under active development.
+Email me (kakimov.dev@gmail.com) about features you would like to see and any issues you have faced.
+
+More features are coming...
