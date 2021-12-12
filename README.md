@@ -10,8 +10,11 @@
 </p>
 
 <br />
-  
-  [![Codemagic build status](https://api.codemagic.io/apps/60363e65c9d4d7cf9b10cfc0/default-workflow/status_badge.svg)](https://codemagic.io/apps/60363e65c9d4d7cf9b10cfc0/default-workflow/latest_build)
+
+[![Codemagic build status](https://api.codemagic.io/apps/60363e65c9d4d7cf9b10cfc0/default-workflow/status_badge.svg)](https://codemagic.io/apps/60363e65c9d4d7cf9b10cfc0/default-workflow/latest_build)
+<a href="https://github.com/Solido/awesome-flutter">
+   <img alt="Awesome Flutter" src="https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square" />
+</a>
 
 ## Features:
 
