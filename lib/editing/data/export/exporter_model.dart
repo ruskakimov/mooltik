@@ -7,7 +7,7 @@ import 'package:mooltik/editing/data/export/generators/generator.dart';
 import 'package:mooltik/editing/data/export/generators/images_archive_generator.dart';
 import 'package:mooltik/editing/data/export/save_video_to_gallery.dart';
 import 'package:mooltik/editing/data/export/generators/video_generator.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_file_safe/open_file_safe.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:mooltik/common/data/project/sound_clip.dart';
