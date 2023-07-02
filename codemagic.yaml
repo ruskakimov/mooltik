@@ -3,7 +3,7 @@
 workflows:
   default-workflow:
     name: Config Workflow
-    instance_type: mac_mini
+    instance_type: mac_mini_m1
     max_build_duration: 60
     environment:
       vars:
@@ -23,11 +23,11 @@ workflows:
       events:
         - tag
       branch_patterns:
-        - pattern: '*'
+        - pattern: "*"
           include: true
           source: true
       tag_patterns:
-        - pattern: '*'
+        - pattern: "*"
           include: true
     scripts:
       - name: Set up key.properties
@@ -42,10 +42,10 @@ workflows:
 
       - name: Set up local.properties
         script: echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
-      
+
       - name: Get Flutter packages
         script: flutter packages pub get
-      
+
       - name: Flutter analyze
         script: flutter analyze
         ignore_failure: true
@@ -54,11 +54,11 @@ workflows:
         script: |
           cmake image_library/CMakeLists.txt -B build/test
           make --directory=build/test
-      
+
       - name: Flutter unit tests
         script: flutter test
         ignore_failure: false
-      
+
       - name: Build for Android
         script: |
           flutter build appbundle --release --build-number=$(($PROJECT_BUILD_NUMBER + 4))
