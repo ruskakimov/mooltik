@@ -5,8 +5,8 @@
 </p>
 <br />
 <p align="center">
-  <a href="https://play.google.com/store/apps/details?id=com.kakimov.mooltik&utm_source=github&utm_medium=link"><img alt="Get it on Google Play" src="https://gitjournal.io/images/android-store-badge.png" height="75px"/></a>
-  <a href="https://apps.apple.com/us/app/mooltik-animation-studio/id1551518290"><img alt="Download on the App Store" src="https://gitjournal.io/images/ios-store-badge.svg" height="75px"/></a>
+  <a href="https://play.google.com/store/apps/details?id=com.kakimov.mooltik&utm_source=github&utm_medium=link"><img alt="Get it on Google Play" src="https://gitjournal.io/images/android-store-badge.png" height="40px"/></a>
+  <!-- <a href="https://apps.apple.com/us/app/mooltik-animation-studio/id1551518290"><img alt="Download on the App Store" src="https://gitjournal.io/images/ios-store-badge.svg" height="40px"/></a> -->
 </p>
 
 <br />
